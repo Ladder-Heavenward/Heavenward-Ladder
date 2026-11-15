@@ -17037,6 +17037,107 @@ QP.push({id:'7·phys.work',step:'7·phys',mode:'work',label:'series and parallel
       ['e6',[['P = IV,\\ \\ V = IR','given'],['P = I^2 R','substitution']],2,0,'P = I(IR).'],
       ['e7',[['an ideal switch, open','given'],['it spends energy','the whole voltage is across its gap']],2,1,'Open, I = 0, so P = I \u00b7 V = 0.'],
       ['e8',[['current in at a joint: 3 A','given'],['current out: 3 A','the junction law']],2,0,'Charge cannot pile up at a point in a steady circuit.']],[]); }});
+/* ----- annex 8·comp Why is 0.1 + 0.2 not 0.3 on a computer: Work, Word Problems, Check Proofs ----- */
+const STAX=(p,q,s)=>{ let n=0; while(Math.pow(2,n)>p/q) n--; while(Math.pow(2,n+1)<=p/q) n++; const e=s-1-n, t=p*Math.pow(2,e)/q; let m=Math.floor(t); const fr=t-m; if(fr>0.5+1e-12||(Math.abs(fr-0.5)<1e-12&&m%2)) m++; return {m,e,n,t}; };
+const KFAX=(m,e)=>e>=0?m+'/'+Math.pow(2,e):String(m*Math.pow(2,-e));
+QP.push({id:'8·comp.work',step:'8·comp',mode:'work',label:'the kept number',open:()=>measured('8·comp'),make(){
+    const F=[[1,10],[1,5],[3,10],[1,3],[2,3],[7,10],[2,5],[3,5],[1,6],[5,6],[7,3],[9,10],[11,10],[13,10],[17,10],[5,3]][rnd(16)], [p,q]=F, s=5, ask=rnd(2);
+    const r=STAX(p,q,s); if(ask){ const g=n=>KFAX(1,s-1-n); const right=g(r.n), wrong=UQAX(right,[g(r.n+1),g(r.n-1),g(r.n-2),'1/'+Math.pow(2,s),'1/'+q*2],3); if(wrong.length<3) return null;
+      return {index:'q:8·comp.work[g;'+p+';'+q+']', lines:[['x = '+p+'/'+q,'on a 5-bit machine']], ask:'What is the gap at x?', right, opts:shuffle([right,...wrong]), lead:'', why:'2^'+String(r.n).replace('-','−')+' ≤ '+p+'/'+q+' < 2^'+String(r.n+1).replace('-','−')+', so n = '+String(r.n).replace('-','−')+' and the gap is 2^(n + 1 − 5) = '+right+'.'}; }
+    const right=KFAX(r.m,r.e), lo=KFAX(Math.floor(r.t)===r.m?r.m+1:r.m-1,r.e), wrong=UQAX(right,[lo,KFAX(r.m+(Math.floor(r.t)===r.m?2:-2),r.e),KFAX(r.m,r.e+1),p+'/'+q],3); if(wrong.length<3) return null;
+    return {index:'q:8·comp.work[st;'+p+';'+q+']', lines:[['x = '+p+'/'+q,'on a 5-bit machine']], ask:'Which number does the machine keep for x?', right, opts:shuffle([right,...wrong]), lead:'', why:'The gap at x is '+KFAX(1,r.e)+', and x = '+(Math.round(r.t*1000)/1000)+'/'+Math.pow(2,r.e)+' lies between '+KFAX(Math.floor(r.t),r.e)+' and '+KFAX(Math.floor(r.t)+1,r.e)+'. st(x) is the nearer: '+right+'. '+p+'/'+q+' itself is not kept: no-ending-twos.'}; }},
+  {id:'8·comp.word',step:'8·comp',mode:'word',label:'an ending numeral in twos',open:()=>measured('8·comp'),make(){
+    const p=1+rnd(15), q=[2,3,4,5,6,8,10,12,16,20,25,32,40,64,100][rnd(15)], g=GCDAX(p,q), a=p/g, b=q/g; if(b===1) return null;
+    let t=b; while(t%2===0) t/=2; const ends=t===1;
+    const right=ends?'yes: it ends, as '+a+'/'+b:'no: its bottom has a prime other than 2', wrong=ends?['no: its bottom has a prime other than 2','no: no fraction ends in twos','only on a machine with more bits']:['yes: it ends, as '+a+'/'+b,'yes, on a machine with enough bits','yes: every fraction ending in tens ends in twos'];
+    const W=[['a price of $'+(p/q).toFixed(2)+' per item',(p/q).toFixed(2)],['a tolerance of '+(p/q)+' mm',String(p/q)],['a step of '+p+'/'+q+' of a second',p+'/'+q]][rnd(3)];
+    if(W[1].indexOf('/')<0&&(Math.abs(parseFloat(W[1])-p/q)>1e-9||W[1].length>7)) return null;
+    return {index:'q:8·comp.word['+p+';'+q+']', a3:['8·comp.word',DASH,DASH], story:'A program stores '+W[0]+(W[1]===a+'/'+b?'.':', which is '+a+'/'+b+' in lowest terms.'), lines:[], ask:'Can a machine with a fixed count of bits keep it exactly?', right, opts:shuffle([right,...wrong]), lead:'', why:ends?b+' is a power of two, so '+a+'/'+b+' is a number over a power of two: its numeral in twos ends, and a machine with enough bits keeps it.':'No-ending-twos, run with '+t+' in place of 5: if m/2^k = '+a+'/'+b+', then '+t+' divides a power of 2. No count of bits holds it.'}; }},
+  {id:'8·comp.line',step:'8·comp',mode:'proof',label:'what the machine licenses',open:()=>measured('8·comp'),make(){
+    return line28('8·comp.line',[
+      ['b1',[['\\mathrm{st}(a) + \\mathrm{st}(b)','given'],['= \\mathrm{st}(a + b)','storing keeps sums']],2,1,'On 5 bits: 26/256 + 26/128 = 0.3046875, while st(0.3) = 0.296875.'],
+      ['b2',[['\\mathrm{st}(0.1) \\text{ prints as } 0.1','given'],['\\mathrm{st}(0.1) = 0.1','what it prints']],2,1,'Printing rounds again, to the shortest decimal that keeps the same number.'],
+      ['b3',[['10m = 2^k','supposed'],['5 \\mid 2','prime-divides-a-list']],2,0,'5 divides 10m, so 5 divides the product of a list of 2s, so 5 divides 2.'],
+      ['b4',[['\\text{a machine with more bits}','given'],['0.1 \\text{ is kept exactly}','more bits']],2,1,'No-ending-twos: no count of bits holds 1/10.'],
+      ['b5',[['|\\mathrm{st}(x) - x| \\le g/2','the nearer end'],['\\le 2^{-s}\\,x','2^n \\le x']],2,0,'Half-gap: g/2 = 2^(n − s) = 2^(−s) · 2^n.'],
+      ['b6',[['0.1 + 0.2 + 0.3','left to right'],['\\text{the same as right to left}','grouping']],2,1,'Left to right prints 0.6000000000000001; right to left, 0.6.'],
+      ['b7',[['\\text{the gap between 1 and 2 is } \\tfrac1{16}','5-bit'],['\\text{the gap between 2 and 4 is } \\tfrac1{16}','the gap is the same everywhere']],2,1,'It doubles at each power of two: 1/8.'],
+      ['b8',[['|p - x| \\le d_1,\\ \\ |q - x| \\le d_2','given'],['|p - q| \\le d_1 + d_2','near-enough']],2,0,'Triangle and size-of-a-negative.']],[]); }});
+/* ----- annex 8·econ What does a price really say: Work, Word Problems, Check Proofs ----- */
+const PCAX=v=>{ const r=Math.round(v*100)/100; return (r<0?'−':'')+String(Math.abs(r))+'%'; };
+QP.push({id:'8·econ.work',step:'8·econ',mode:'work',label:'changes multiply',open:()=>measured('8·econ'),make(){
+    const ask=rnd(3);
+    if(ask<2){ const u=[5,8,10,12,15,20,25,30,40,50][rnd(10)], d=ask?u:[5,10,15,20,25][rnd(5)], f=(1+u/100)*(1-d/100), net=(f-1)*100;
+      const right=(net>=0?'up ':'down ')+PCAX(Math.abs(net)), wrong=UQAX(right,[(u-d>=0?'up ':'down ')+PCAX(Math.abs(u-d)),'up '+PCAX(Math.abs(net)*(net<0?1:2)),'down '+PCAX(Math.abs(net)+1),'down '+PCAX(Math.abs(net)/2),'up '+PCAX(u)],3); if(wrong.length<3) return null;
+      return {index:'q:8·econ.work[ud;'+u+';'+d+']', lines:[['\\text{up } '+u+'\\%,\\ \\text{then down } '+d+'\\%','a price']], ask:'What is the change, start to end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Changes multiply: '+(1+u/100)+' · '+(1-d/100)+' = '+(Math.round(f*10000)/10000)+', so '+right+'.'+(u===d?' Up-and-down: the same rate up and down always leaves less.':'')}; }
+    const d=[10,20,25,40,50,60,75][rnd(7)], up=d/(100-d)*100;
+    const right=PCAX(Math.round(up*100)/100), wrong=UQAX(right,[PCAX(d),PCAX(d*2),PCAX(Math.round(up*100)/100+5),PCAX(100-d)],3); if(wrong.length<3) return null;
+    return {index:'q:8·econ.work[undo;'+d+']', lines:[['\\text{down } '+d+'\\%','a price']], ask:'What rise brings it back to where it started?', right, opts:shuffle([right,...wrong]), lead:'', why:'After the fall the price is '+(1-d/100)+' of the start. To come back, divide by '+(1-d/100)+', that is, multiply by about '+(Math.round(10000/(100-d))/100)+': up about '+right+'.'}; }},
+  {id:'8·econ.word',step:'8·econ',mode:'word',label:'a price per unit',open:()=>measured('8·econ'),make(){
+    const G=[['salsa','oz'],['olive oil','fl oz'],['rice','lb'],['coffee','oz'],['detergent','fl oz']][rnd(5)], a=[8,12,16][rnd(3)], b=a*[2,3,4][rnd(3)], pa=(2+rnd(500)/100), pb=Math.round(pa*b/a*(0.7+rnd(60)/100)*100)/100;
+    const ua=pa/a, ub=pb/b; if(Math.abs(ua-ub)/ua<0.03) return null; const cheap=ub<ua?'the '+b+' '+G[1]+' one':'the '+a+' '+G[1]+' one';
+    const right=cheap+', by about '+Math.round(Math.abs(ua-ub)/Math.max(ua,ub)*100)+'% a unit', other=(ub<ua?'the '+a+' '+G[1]+' one':'the '+b+' '+G[1]+' one');
+    const wrong=UQAX(right,[other+', by about '+Math.round(Math.abs(ua-ub)/Math.max(ua,ub)*100)+'% a unit','the '+a+' '+G[1]+' one, since it costs less','they cost the same per '+G[1],cheap+', by about '+Math.round(Math.abs(pb-pa)/pb*100)+'% a unit'],3); if(wrong.length<3) return null;
+    return {index:'q:8·econ.word['+G[0]+';'+a+';'+b+';'+pa+';'+pb+']', a3:['8·econ.word',DASH,DASH], story:'A shelf in Salinas has '+G[0]+' at $'+pa.toFixed(2)+' for '+a+' '+G[1]+' and $'+pb.toFixed(2)+' for '+b+' '+G[1]+'.', lines:[], ask:'Which is cheaper?', right, opts:shuffle([right,...wrong]), lead:'', why:'Compare per unit: $'+pa.toFixed(2)+'/'+a+' ≈ $'+ua.toFixed(4)+' and $'+pb.toFixed(2)+'/'+b+' ≈ $'+ub.toFixed(4)+' per '+G[1]+'. '+cheap[0].toUpperCase()+cheap.slice(1)+' is cheaper.'}; }},
+  {id:'8·econ.line',step:'8·econ',mode:'proof',label:'what a price licenses',open:()=>measured('8·econ'),make(){
+    return line28('8·econ.line',[
+      ['x1',[['+10\\%,\\ \\text{then } -10\\%','a price'],['0\\%','they cancel']],2,1,'Changes multiply: 1.1 · 0.9 = 0.99, down 1%.'],
+      ['x2',[['\\text{down } 25\\%','given'],['\\text{undone by up } 25\\%','the same rate']],2,1,'0.75 · 1.25 = 0.9375; it takes about 33%.'],
+      ['x3',[['\\text{a total factor of } 1.2270 \\text{ in 5 years}','an index'],['\\text{a steady rate of } 1.2270^{1/5} - 1','steady-rate']],2,0,'Exactly one positive 5th root: about 4.18% a year.'],
+      ['x4',[['\\text{a rate from } 4\\% \\text{ to } 5\\%','given'],['\\text{up } 1\\%','take away']],2,1,'Up 1 percentage point, which is up 25%.'],
+      ['x5',[['250\\ \\text{USD} \\cdot \\tfrac{1.39\\ \\text{CAD}}{1\\ \\text{USD}}','a chain of ones'],['347.50\\ \\text{CAD}','dollars cancel']],2,0,'A rate is one amount written two ways.'],
+      ['x6',[['\\$16 \\text{ is a third more than } \\$12','given'],['\\text{it buys a third more}','the wage']],2,1,'Divide by the price level: about 8.7% more.'],
+      ['x7',[['\\text{the big jar costs more}','given'],['\\text{it is dearer}','the price']],2,1,'Compare per unit: it may be cheaper per ounce.'],
+      ['x8',[['\\text{buy at } 1.36,\\ \\text{sell at } 1.42','a booth'],['\\$100 \\text{ comes home as } \\$100','a round trip']],2,1,'100 · 1.36/1.42 ≈ 95.77: the rates are not reciprocals.']],[]); }});
+/* ----- annex 8·eng How close is close enough: Work, Word Problems, Check Proofs ----- */
+const MMAX=v=>{ const r=Math.round(v*10000)/10000; return (r<0?'−':'')+Math.abs(r).toFixed(Math.max(2,(String(Math.abs(r)).split('.')[1]||'').length)); };
+QP.push({id:'8·eng.work',step:'8·eng',mode:'work',label:'tolerances add',open:()=>measured('8·eng'),make(){
+    const k=2+rnd(6), p=[5,10,12.5,20,25][rnd(5)], d=[0.01,0.02,0.05,0.1][rnd(4)], two=rnd(2);
+    if(two){ const a=[30,40,50,60][rnd(4)], b=a-[2,5,10,15][rnd(4)], da=[0.01,0.02,0.05][rnd(3)], db=[0.01,0.02,0.03][rnd(3)];
+      const right=MMAX(a-b)+' ± '+MMAX(da+db)+' mm', wrong=UQAX(right,[MMAX(a-b)+' ± '+MMAX(Math.abs(da-db)||da/2)+' mm',MMAX(a-b)+' ± '+MMAX(Math.max(da,db))+' mm',MMAX(a-b)+' ± '+MMAX((da+db)/2)+' mm',MMAX(a+b)+' ± '+MMAX(da+db)+' mm'],3); if(wrong.length<3) return null;
+      return {index:'q:8·eng.work[g;'+a+';'+b+';'+da+';'+db+']', lines:[[a+' \\pm '+da+'\\ \\text{mm}','a slot'],[b+' \\pm '+db+'\\ \\text{mm}','the block in it']], ask:'What is the gap, slot less block, with its tolerance?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tolerances-add: subtracting adds tolerances too, '+da+' + '+db+' = '+MMAX(da+db)+'. The gap is '+right+'.'}; }
+    const right=MMAX(k*p)+' ± '+MMAX(k*d)+' mm', wrong=UQAX(right,[MMAX(k*p)+' ± '+MMAX(d)+' mm',MMAX(k*p)+' ± '+MMAX(d*(k-1))+' mm',MMAX(k*p)+' ± '+MMAX(d/k)+' mm',MMAX(k*p)+' ± '+MMAX(2*k*d)+' mm'],3); if(wrong.length<3) return null;
+    return {index:'q:8·eng.work[s;'+k+';'+p+';'+d+']', lines:[[k+'\\text{ spacers, each }'+p+' \\pm '+d+'\\ \\text{mm}','end to end']], ask:'What does the stack promise, for every set of good spacers?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tolerances-add, '+k+' times: '+k+' · '+d+' = '+MMAX(k*d)+'. It is reached: if every spacer is '+MMAX(p+d)+' mm, the stack is '+MMAX(k*(p+d))+' mm.'}; }},
+  {id:'8·eng.word',step:'8·eng',mode:'word',label:'the guard band',open:()=>measured('8·eng'),make(){
+    const n=[12,20,25,30,40][rnd(5)], d=[0.01,0.02,0.025,0.05,0.1][rnd(5)], T=[['a dial caliper',0.02],['a micrometer',0.002],['a steel rule',0.25],['a digital caliper',0.01]][rnd(4)], e=T[1], b=d-e; if(Math.abs(b)<1e-9) return null;
+    const right=b>0?'readings within '+MMAX(b)+' mm of '+n+' mm':'no reading: the tool is too coarse', wrong=UQAX(right,shuffle(['readings within '+MMAX(d)+' mm of '+n+' mm','readings within '+MMAX(d+e)+' mm of '+n+' mm',b>0?'no reading: the tool is too coarse':'readings within '+MMAX(e)+' mm of '+n+' mm','readings within '+MMAX(d/2)+' mm of '+n+' mm']),3); if(wrong.length<3) return null;
+    return {index:'q:8·eng.word['+n+';'+d+';'+e+']', a3:['8·eng.word',DASH,DASH], story:'A shaft is drawn '+n+' ± '+d+' mm. The shop checks it with '+T[0]+' that reads within '+e+' mm of the true size.', lines:[], ask:'Which readings prove the shaft is good?', right, opts:shuffle([right,...wrong]), lead:'', why:'Guard-band: a reading proves the part good only within d − e = '+d+' − '+e+' = '+MMAX(b)+' mm of the drawing'+(b>0?'.':'; that is below 0, so no reading can. Use a tool about ten times finer than the tolerance.')}; }},
+  {id:'8·eng.line',step:'8·eng',mode:'proof',label:'what a tolerance licenses',open:()=>measured('8·eng'),make(){
+    return line28('8·eng.line',[
+      ['t1',[['(20 \\pm 0.01) - (19.99 \\pm 0.01)','given'],['0.01 \\pm 0','the tolerances cancel']],2,1,'Subtracting adds tolerances: 0.01 ± 0.02.'],
+      ['t2',[['\\text{five parts of } \\pm 0.05','end to end'],['\\text{a stack of } \\pm 0.05','the same tolerance']],2,1,'The tolerances add: ±0.25.'],
+      ['t3',[['|x - a| \\le d,\\ \\ |y - b| \\le e','given'],['|(x + y) - (a + b)| \\le d + e','triangle technique']],2,0,'Regroup, then the triangle technique and same-direction-add.'],
+      ['t4',[['the reading is within tolerance','a caliper'],['the part is within tolerance','the reading']],2,1,'Only if the reading is within d − e of the drawing: guard-band.'],
+      ['t5',[['two readings agree','given'],['both are exact','measure twice']],2,1,'Agreement within 2e is all two readings can show.'],
+      ['t6',[['20.000 \\le h \\le 20.021,\\ \\ 19.980 \\le s \\le 19.993','the drawings'],['0.007 \\le h - s \\le 0.041','same-direction-add with −s']],2,0,'Least with least, greatest with greatest, after the order turns about for −s.'],
+      ['t7',[['|x - y|','given'],['\\le |x| - |y|','triangle technique']],2,1,'The triangle technique runs the other way: |x − y| ≤ |x| + |y|.'],
+      ['t8',[['two readings differ by more than 2e','given'],['one of them is wrong','|r_1 - r_2| \\le 2e']],2,0,'Each is within e of the true size, so honest readings are within 2e.']],[]); }});
+/* ----- annex 8·phys How big and how small do things get: Work, Word Problems, Check Proofs ----- */
+const SCIAX=(u,n)=>{ while(u>=10-1e-9){ u/=10; n++; } while(u<1-1e-9){ u*=10; n--; } u=Math.round(u*100)/100; return '$'+String(u)+' \\cdot 10^{'+n+'}$'; };
+const MAX=v=>String(v).replace('-','\u2212');
+QP.push({id:'8·phys.work',step:'8·phys',mode:'work',label:'scientific form',open:()=>measured('8·phys'),make(){
+    const a=[2,3,4,5,6,8,1.5,2.5][rnd(8)], b=[2,3,4,5,6,8,1.5,2.5][rnd(8)], m=rnd(25)-12, n=rnd(25)-12, div=rnd(3)===0;
+    const u=div?a/b:a*b, e=div?m-n:m+n; if(div&&Math.abs(u*100-Math.round(u*100))>1e-9) return null;
+    const right=SCIAX(u,e), wrong=UQAX(right,[SCIAX(u,div?m+n:m-n),'$'+String(Math.round(u*100)/100)+' \\cdot 10^{'+e+'}$',SCIAX(u,e+1),SCIAX(u,e-1),SCIAX(u,div?m*n:m*n)],3); if(wrong.length<3) return null;
+    const L=a+' \\cdot 10^{'+m+'}'+(div?' \\div ':' \\cdot ')+'('+b+' \\cdot 10^{'+n+'})';
+    return {index:'q:8·phys.work['+a+';'+b+';'+m+';'+n+';'+div+']', lines:[[L,'given']], ask:'Which is it in scientific form, 1 \u2264 u < 10?', right, opts:shuffle([right,...wrong]), lead:'', why:'Whole-exponent techniques: '+(div?'exponents take away, '+MAX(m)+' \u2212 ('+MAX(n)+') = '+MAX(e):'exponents add, '+MAX(m)+' + ('+MAX(n)+') = '+MAX(e))+', and '+a+(div?' \u00f7 ':' \u00b7 ')+b+' = '+(Math.round(u*1000)/1000)+'. Tidy so that 1 \u2264 u < 10: '+right+'.'}; }},
+  {id:'8·phys.word',step:'8·phys',mode:'word',label:'how many times bigger',open:()=>measured('8·phys'),make(){
+    const T=[['a grain of sand',0.5,-3,'0.5 mm'],['a human hair',70,-6,'70 \u03bcm'],['a red blood cell',8,-6,'8 \u03bcm'],['a hydrogen atom',0.11,-9,'0.11 nm'],['a virus',100,-9,'100 nm'],['a proton',1.7,-15,'1.7 \u00b7 10\u207b\u00b9\u2075 m'],['Earth',1.3,7,'1.3 \u00b7 10\u2077 m'],['a person',1.7,0,'1.7 m'],['a city block',100,0,'100 m'],['the Moon\u2019s distance',3.8,8,'3.8 \u00b7 10\u2078 m']];
+    let i=rnd(10), j=rnd(10); if(i===j) return null; let A=T[i],B=T[j]; const va=A[1]*Math.pow(10,A[2]), vb=B[1]*Math.pow(10,B[2]); if(va<vb) [A,B]=[B,A];
+    const r=Math.max(va,vb)/Math.min(va,vb), k=Math.round(Math.log10(r)); if(k<2) return null;
+    const P=x=>'about $10^{'+x+'}$', right=P(k), wrong=UQAX(right,[P(k+3),P(k-3>0?k-3:k+6),P(k+1),P(k-1)],3); if(wrong.length<3) return null;
+    return {index:'q:8·phys.word['+A[0]+';'+B[0]+']', a3:['8·phys.word',DASH,DASH], story:'Sizes, roughly: '+A[0]+', '+A[3]+'; '+B[0]+', '+B[3]+'.', lines:[], ask:'About how many times the size of '+B[0]+' is '+A[0]+', to the nearest power of ten?', right, opts:shuffle([right,...wrong]), lead:'', why:'Convert both to metres first: $'+A[1]+' \\cdot 10^{'+A[2]+'}$ m and $'+B[1]+' \\cdot 10^{'+B[2]+'}$ m. Divide: about '+(r>=1e4?'$'+r.toExponential(1).replace(/e\+?(-?\d+)/,' \\cdot 10^{$1}')+'$':Math.round(r))+', so about $10^{'+k+'}$.'}; }},
+  {id:'8·phys.line',step:'8·phys',mode:'proof',label:'what powers of ten license',open:()=>measured('8·phys'),make(){
+    return line28('8·phys.line',[
+      ['f1',[['10^3 + 10^3','given'],['10^6','exponents add']],2,1,'2 \u00b7 10\u00b3: exponents add when you multiply, not when you add.'],
+      ['f2',[['10^3 \\cdot 10^2','given'],['10^6','exponents multiply']],2,1,'10\u2075; exponents multiply only for a power of a power.'],
+      ['f3',[['(5 \\cdot 10^{3})^2','given'],['2.5 \\cdot 10^{7}','25 = 2.5 \\cdot 10']],2,0,'25 \u00b7 10\u2076, tidied: the point moves left, the exponent goes up one.'],
+      ['f4',[['25 \\cdot 10^6','given'],['2.5 \\cdot 10^6','tidy']],2,1,'Off by ten: it is 2.5 \u00b7 10\u2077.'],
+      ['f5',[['2.4\\ \\text{m/s for } 3.15\\ \\text{s}','measured'],['7.56\\ \\text{m}','multiply']],2,1,'The third figure is noise: 7.6 m.'],
+      ['f6',[['12.3 + 0.456 = 12.756','given'],['\\approx 12.8','places of the least precise term']],2,0,'The first is known only to tenths.'],
+      ['f7',[['\\tfrac{70\\ \\mu\\text{m}}{0.11\\ \\text{nm}}','given'],['= \\tfrac{70}{0.11}','divide the numbers']],2,1,'\u03bcm and nm differ by 10\u00b3: convert both to metres first.'],
+      ['f8',[['a light-year','given'],['a time','a year']],2,1,'A length: how far light goes in a year.'],
+      ['f9',[['0.00520','a measurement'],['three significant figures','from the first digit not 0']],2,0,'5, 2 and the final 0.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
