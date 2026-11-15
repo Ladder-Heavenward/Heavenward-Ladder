@@ -431,7 +431,7 @@ function packLadder(){
     const royal=complete&&annex.length>0&&annex.every(done);
     sec.classList.toggle('complete',complete);
     sec.classList.toggle('royal',royal);
-    if(complete) crown(sec,th,core,royal);
+    if(complete) crown(sec,th,core,royal,annex);
     else { sec.classList.remove('folded','rfin','rfin-blue','rfin-gold','rfin-wings'); const c=th.querySelector(':scope>.rfin-line'); if(c) c.remove(); }
   });
 }
@@ -442,7 +442,7 @@ function rfinTiers(){ let U=null; try{ U=window.__starUnits&&window.__starUnits(
     const tier=U.wings.includes(r)?'wings':U.gold.includes(r)?'gold':'blue';
     sec.classList.remove('rfin-blue','rfin-gold','rfin-wings'); sec.classList.add('rfin-'+tier);
     const c=sec.querySelector('.rfin-line'); if(c) c.setAttribute('title',tier==='wings'?'finished: gold star with wings':tier==='gold'?'finished: gold star':'finished: blue star'); }); }
-function crown(sec,th,built,royal){ /* rfinish (Andrew 2026-11-13): the math line and the star earned: blue, gold, or gold with wings */
+function crown(sec,th,built,royal,annex){ /* rfinish (Andrew 2026-11-13): the math line and the star earned: blue, gold, or gold with wings */
   const label=th.querySelector(':scope>.n').textContent.trim();
   if(!sec.classList.contains('rfin')) sec.classList.add('rfin','rfin-blue');
   clearTimeout(crown.tq); crown.tq=setTimeout(rfinTiers,0); /* the star counts are defined later in this file: colour the stars once they are */
@@ -476,7 +476,18 @@ function crown(sec,th,built,royal){ /* rfinish (Andrew 2026-11-13): the math lin
     const rkey='R:'+label;
     if(L&&!L.st[rkey]){ L.st[rkey]=true; L.save(rkey); const calm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches; if(!calm){ rc.classList.add('drop'); setTimeout(()=>rc.classList.remove('drop'),2600); } }
   } else if(!royal&&rc) rc.remove();
+  /* annex crown jewels (Andrew 2026-11-15 05:19Z): passed annexes earn the crown; an annex with its gold star, wings and crosswalk x too sets a purple jewel in it */
+  let jw=wrap&&wrap.querySelector('.rc-jw'); const jn=royal?jewels(annex||[]):0;
+  if(jn&&wrap){ if(!jw){ jw=document.createElement('span'); jw.className='rc-jw'; wrap.appendChild(jw); }
+    if(+jw.dataset.n!==jn){ jw.dataset.n=jn; const sz=Math.min(.3,1.05/jn).toFixed(3); jw.innerHTML=('<i style="width:'+sz+'rem;height:'+sz+'rem"></i>').repeat(jn);
+      const all=jn===(annex||[]).length; jw.title=jn+' of '+(annex||[]).length+' annexes with every mark'+(all?': all of them':''); jw.setAttribute('aria-label',jw.title); if(rc) rc.title='every annex passed; '+jw.title; } }
+  else if(jw) jw.remove();
 }
+function jewels(annex){ let P={}, X={}; try{ P=JSON.parse(LS.getItem('pages:done')||'{}')||{}; X=JSON.parse(LS.getItem('cards:x')||'{}')||{}; }catch(e){}
+  const CMx=window.LADDER_CARDMAP||{};
+  return annex.filter(li=>{ const a=li.querySelector('.t a'); const s=a?hstem(a.getAttribute('href')):''; if(!s) return false; const p=P[s]||{};
+    const gold=!!certRead(s), wings=!(+p.cn)||(+p.cd||0)>=(+p.cn), x=!(CMx[s]&&CMx[s][2]>0)||!!X[s];
+    return !!p.v&&gold&&wings&&x; }).length; }
 function unpack(sec,animate){
   if(!sec) return;
   const th=sec.querySelector('li.k-theory'); const subs=[...sec.querySelectorAll('ol.ladder>li')].filter(li=>li!==th);
@@ -2558,6 +2569,15 @@ function stickSection(scope,key){
   if(scope==='rung'){ const R=rungOf(key); return R?{steps:R.core.concat(R.annex).map(stickTag),norm:'r'+key}:null; }
   if(scope==='floor'){ const F=floorOf(key); if(!F) return null; const st=[]; F.rungs.forEach(r=>{ const R=rungOf(r); if(R) R.core.concat(R.annex).forEach(s=>st.push(stickTag(s))); }); return {steps:st,norm:'f'+key}; }
   return null; }
+/* annexstick (Andrew 2026-11-15 05:12Z): where a section has none of the four Laundry kinds (most annexes), its stick deals
+   eight from its own crosswalk cards and technique questions, the other Laundry pools the step opens, turn about */
+async function annexQs(tags){ const M=window.LADDER_CARDMAP||{}, stems=Object.keys(M).filter(s=>tags.includes(M[s][0]));
+  const ok=x=>x&&x.a&&(x.w||[]).filter(w=>w&&w!==x.a).length>=3; let tq=[], cq=[];
+  for(const s of stems){ try{ tq=tq.concat(await stepTech(s)); }catch(e){} try{ cq=cq.concat(await cardsOf(s)); }catch(e){} }
+  const seenT=new Set(); tq=shuffle(tq.filter(ok)).filter(x=>{ const k=x.id.replace(/[nw]$/,''); if(seenT.has(k)) return false; seenT.add(k); return true; }); cq=shuffle(cq.filter(ok));
+  const out=[]; while(out.length<8&&(tq.length||cq.length)){ const want=out.length%2?tq:cq, src=want.length?want:(tq.length?tq:cq), x=src.pop(), L=String(x.q).split('\n'), w=shuffle(x.w.filter(v=>v&&v!==x.a)).slice(0,3);
+    out.push({mode:src===tq?'tech':'cards', index:x.id, ask:L[0], lines:L.length>1?[[L.slice(1).join(' '),null]]:[], right:x.a, opts:shuffle([x.a].concat(w)), why:x.why||'', lead:src===tq?'':'It is '+x.a+'. '}); }
+  return out; }
 /* the sitting */
 let box=null;
 function close(){ if(box){ box.remove(); box=null; document.body.classList.remove('stickopen'); } }
@@ -2570,11 +2590,12 @@ async function sit(scope,key,opts){ opts=opts||{}; close();
      each 2 sd of complexity above the norm; the first is dealt the moment it is drawn, the rest are drawn while the climber works */
   await maps(); await rand().catch(()=>null); const Rz=window.LadderRandomizer, me=box, sec=stickSection(scope,key);
   const plan=(Rz&&Rz.stickPlan&&sec)?Rz.stickPlan(sec.steps):[];
-  if(!plan.length){ box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">This section has no Laundry pools yet, so its measuring stick cannot be sat.</p></div>'; wire(); return; }
+  const fb=(!plan.length&&sec)?await annexQs(sec.steps):null; /* annexstick */
+  if(!plan.length&&!(fb&&fb.length)){ box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">This section has no Laundry pools yet, so its measuring stick cannot be sat.</p></div>'; wire(); return; }
   try{ Rz.style&&Rz.style(); }catch(e){}
-  const N=plan.length, got=new Array(N), seenIdx=new Set(), KL={}; (Rz.MODES||[]).forEach(M=>{ KL[M.id]=M.label; });
+  const N=fb?fb.length:plan.length, got=fb?fb.slice():new Array(N), seenIdx=new Set(), KL={cards:'Crosswalk',tech:'Techniques'}; (Rz.MODES||[]).forEach(M=>{ KL[M.id]=M.label; });
   let i=0, right=0, asked=0, waiting=false;
-  plan.reduce((ch,m,k)=>ch.then(()=>box===me?Rz.stickDraw(m,sec.steps,sec.norm,seenIdx):null).then(q=>{ got[k]=q||{none:1}; if(box===me&&waiting&&k===i){ waiting=false; show(); } }),Promise.resolve());
+  if(!fb) plan.reduce((ch,m,k)=>ch.then(()=>box===me?Rz.stickDraw(m,sec.steps,sec.norm,seenIdx):null).then(q=>{ got[k]=q||{none:1}; if(box===me&&waiting&&k===i){ waiting=false; show(); } }),Promise.resolve());
   const total=()=>N-got.filter(g=>g&&g.none).length, need=()=>Math.ceil(total()*0.8);
   const show=()=>{ if(box!==me) return; while(i<N&&got[i]&&got[i].none) i++; if(i>=N) return end();
     const c=got[i];
