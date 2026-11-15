@@ -16714,6 +16714,75 @@ QP.push({id:'46l.unbuild',step:'46l',label:'what can’t be built, by hand',open
       ['l3',[['x⁴ − x − 1 has degree 4','given'],['its roots can be built','the unbuildable-test technique']],2,1,'Its group has 24 members.'],
       ['l4',[['8x³ − 6x − 1 is irreducible over ℚ','checked'],['cos 20° cannot be built','the unbuildable-test technique']],2,0,'Degree 3 is not a power of 2.']],[]); }});
 /* ===== Rung pools end ===== */
+/* ===== Annex pools (Andrew 2026-11-15) ===== */
+/* ----- annex pools: shared helpers ----- */
+const UQAX=(right,c,n)=>{ const o=[]; c.forEach(x=>{ x=String(x); if(x!==String(right)&&!o.includes(x)&&o.length<(n||3)) o.push(x); }); return o; };
+const PTAILAX=(m,s)=>{ let t=Math.exp(-m), c=t; for(let k=1;k<=s;k++){ t*=m/k; c+=t; } return 1-c; }; /* the chance of more than s, for a rare count with average m */
+const SHELFAX=(m,a)=>{ let s=0; while(PTAILAX(m,s)>a&&s<2000) s++; return s; };
+/* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
+    const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
+    const right=String(shelf), wrong=UQAX(right,[A,Math.ceil(avg+w),Math.ceil(avg+4*w),Math.ceil(avg+2*Math.sqrt(avg)),Math.ceil(avg+2*n*p*(1-p)/10)],3); if(wrong.length<3) return null;
+    return {index:'q:32·bio.work['+[n,D].join(';')+']', lines:[[n+' people, each on one pack that lasts '+D+' days','given'],['in a week each comes in with chance 7/'+D,'one for each person']], ask:'What is the shelf of packs, for a short-chance of about 2 in 100?', right, opts:shuffle([right,...wrong]), lead:'', why:'Large-count technique: average '+n+' · 7/'+D+' = '+avg.toFixed(1)+', spread width √('+n+' · (7/'+D+')(1 − 7/'+D+')) = '+w.toFixed(1)+', and the shelf is the average plus two widths: '+shelf+'.'}; }},
+  {id:'32·bio.word',step:'32·bio',mode:'word',label:'a shelf for rare arrivals',open:()=>measured('32·bio'),make(){
+    const N=pick([5000,8000,10000,12000,15000,20000,30000]), M=pick([5000,10000,20000]), d=pick([1,2,3,7]), m=N/M*d; if(m<0.5||m>25) return null;
+    const shelf=SHELFAX(m,0.02), mm=Math.round(m), right=String(shelf), wrong=UQAX(right,[mm,shelf-1,shelf+2,Math.ceil(m+2*Math.sqrt(m))===shelf?shelf+1:Math.ceil(m+2*Math.sqrt(m)),Math.ceil(2*m)],3); if(wrong.length<3) return null;
+    const what=pick(['a sprained ankle','a burn that needs a dressing','a bee sting that needs cream','a broken wrist']);
+    return {index:'q:32·bio.word['+[N,M,d].join(';')+']', a3:['32·bio.word',DASH,DASH], story:'A town of '+N.toLocaleString('en')+' people has one pharmacy. Each person has a chance of 1 in '+M.toLocaleString('en')+' a day of '+what+', which needs one course of medicine, and one person’s case does not make another’s more likely. The van comes every '+(d===1?'day':d+' days')+'.', lines:[], ask:'What is the least shelf of courses with a short-chance of at most 0.02?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rare-events technique: the need until the van is a rare count with average '+(Math.round(m*100)/100)+'. Shelf technique for rare arrivals: the least s whose chance of more is at most 0.02 is '+shelf+' (chance '+PTAILAX(m,shelf).toFixed(3)+'; with '+(shelf-1)+' it is '+PTAILAX(m,shelf-1).toFixed(3)+').'}; }},
+  {id:'32·bio.line',step:'32·bio',mode:'proof',label:'what a shelf licenses',open:()=>measured('32·bio'),make(){
+    const a=4+rnd(10), w=1+rnd(4);
+    return line28('32·bio.line',[
+      ['b1',[['broken bones arrive one by one, independently, average 14 a week','given'],['the shelf is 14 courses','the average need']],2,1,'Stocking the average runs short in 43 weeks out of 100. The shelf technique gives 22.'],
+      ['b2',[['the people who need the vial can be listed: 2 of them, 1 vial a week each','given'],['the need is 2 vials a week','the count-first technique']],2,0,'Listed people, an every over weeks: nothing here is a chance.'],
+      ['b3',[['a town has average need '+a+'0 packs and spread width '+w+'0','given'],['a town twice the size has spread width '+(2*w)+'0','twice the town']],2,1,'The average doubles; the spread doubles, so the width grows by √2: about '+(Math.round(w*14.14))+'.'],
+      ['b4',[['influenza weeks are quiet (average 7) 9 weeks in 10 and waves (average 70) 1 in 10','given'],['the average need is 13.3','the whole-chance technique, on averages']],2,0,'0.9 · 7 + 0.1 · 70 = 13.3.'],
+      ['b5',[['influenza and broken bones both average near 14 a week','given'],['they need the same shelf','the shelf technique for rare arrivals']],2,1,'That technique needs independent arrivals. Cases that bring cases need 77, not 22.'],
+      ['b6',[['asthma attacks are not caught from anyone','given'],['the attacks are independent','no case causes another']],2,1,'A shared cause, bad air, raises everyone’s chance at once. Not catching is not independent.'],
+      ['b7',[['in a bad-air week each of 1,600 needs a relieving inhaler with chance 1/4','given'],['the average need that week is 400','the average-adds technique']],2,0,'1600 · 1/4 = 400.']],[]); }});
+/* ----- annex 38·chem What Shape Is an Electron's Cloud?: Work, Word Problems, Check Proofs ----- */
+const ORDAX=(()=>{ const o=[]; for(let s=1;s<=8;s++) for(let n=1;n<=s;n++){ const l=s-n; if(l<n&&l<=3) o.push([n,l]); } return o; })(); /* n + ℓ order, ties to the smaller n */
+const LETAX='spdf', MISSAX=[24,29,41,42,44,45,46,47,57,58,64,78,79]; /* fillings the rule misses, as measured: left out */
+const FILLAX=Z=>{ const out=[]; let left=Z; for(const [n,l] of ORDAX){ if(left<=0) break; const k=Math.min(left,2*(2*l+1)); out.push([n,l,k]); left-=k; } return out; };
+QP.push({id:'38·chem.work',step:'38·chem',mode:'work',label:'filling by n + ℓ',open:()=>measured('38·chem'),make(){
+    const Z=3+rnd(54); if(MISSAX.includes(Z)) return null; const F=FILLAX(Z), sh=F.filter(x=>x[0]>1||x[1]>0), [n,l,k]=pick(sh.slice(-3)); const name=n+LETAX[l];
+    const right=String(k), wrong=UQAX(right,[2*(2*l+1),k-1,k+1,k+2,Math.max(0,k-2),Z%10],3); if(wrong.length<3) return null;
+    return {index:'q:38·chem.work['+Z+';'+name+']', lines:[['an atom with '+Z+' electrons','given'],['it fills by the n-plus-ℓ order','the n-plus-ℓ technique']], ask:'How many electrons sit in '+name+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'In n + ℓ order: '+F.map(([a,b,c])=>a+LETAX[b]+'('+c+')').join(' ')+'.'}; }},
+  {id:'38·chem.word',step:'38·chem',mode:'word',label:'where a cloud is thickest',open:()=>measured('38·chem'),make(){
+    const n=1+rnd(4), l=n-1, r=(n*n*0.0529), E=13.6/(n*n), two=rnd(2), name=n+LETAX[l];
+    const MN=x=>String(x).replace(/^-/,'−'), right=two?MN((-E).toFixed(2))+' eV':r.toFixed(3)+' nm', wrong=two?UQAX(right,[MN((-13.6/n).toFixed(2))+' eV',MN((-13.6/((n+1)*(n+1))).toFixed(2))+' eV',MN((-13.6*n*n).toFixed(1))+' eV',MN((-13.6/(l*l||4)).toFixed(2))+' eV'],3):UQAX(right,[(n*0.0529).toFixed(3)+' nm',((n+1)*(n+1)*0.0529).toFixed(3)+' nm',(2*n*n*0.0529).toFixed(3)+' nm',(0).toFixed(3)+' nm'],3); if(wrong.length<3) return null;
+    return {index:'q:38·chem.word['+n+';'+two+']', a3:['38·chem.word',DASH,DASH], story:'A hydrogen atom’s electron is in the '+name+' shape, p · e^(−r/'+n+'r₀) with p a still polynomial of degree '+l+'. Take r₀ = 0.0529 nm.', lines:[], ask:two?'What is its energy?':'At what distance from the nucleus is the chance per unit distance largest?', right, opts:shuffle([right,...wrong]), lead:'', why:two?'Times-a-fade technique: a = (ℓ + 1) r₀ and E = −13.6 eV/(ℓ + 1)² = −13.6/'+(n*n)+' = '+MN((-E).toFixed(2))+' eV.':'Thickest-distance technique: r = n² r₀ = '+(n*n)+' · 0.0529 = '+r.toFixed(3)+' nm, not 0, since the shell 4πr² is tiny near the centre.'}; }},
+  {id:'38·chem.line',step:'38·chem',mode:'proof',label:'what a cloud licenses',open:()=>measured('38·chem'),make(){
+    const n=2+rnd(4), l=rnd(n);
+    return line28('38·chem.line',[
+      ['o1',[['a shape of level '+n+' and type ℓ = '+l,'given'],['it has '+(n-l-1)+' still spheres and '+l+' still surfaces through the centre','the still-surface technique']],2,0,'n − ℓ − 1 spheres and ℓ surfaces through the centre, n − 1 in all.'],
+      ['o2',[['there are six terms of degree 2 in x, y, z','given'],['there are six d shapes','one shape for each term']],2,1,'x² + y² + z² is not still: Δ of it is 6. The still-count technique gives 2ℓ + 1 = 5.'],
+      ['o3',[['|φ|² is largest at the centre for 1s','given'],['the electron is most likely found at r = 0','the largest chance per point']],2,1,'Per unit distance the shell 4πr² counts: the thickest distance is r₀.'],
+      ['o4',[['p = xy has every term of degree 2 and Δp = 0','given'],['xy · e^(−r/3r₀) is a shape of hydrogen with E = −1.51 eV','the times-a-fade technique']],2,0,'a = (ℓ + 1) r₀ = 3r₀, and −13.6/9 = −1.51 eV.'],
+      ['o5',[['chromium has 24 electrons','given'],['chromium is [Ar] 3d⁴ 4s², as measured','the n-plus-ℓ technique']],2,1,'The rule gives 3d⁴ 4s², but measured chromium is 3d⁵ 4s¹: the rule is a summary, and here it misses.'],
+      ['o6',[['h_u = ½(s + √3 p_u) and h_v = ½(s + √3 p_v), each of size 1','given'],['h_u and h_v are at right angles exactly when u · v = −1/3','the four-arm technique']],2,0,'⟨h_u, h_v⟩ = ¼(1 + 3 u · v).'],
+      ['o7',[['the 2p_z shape has two lobes, + above and − below','given'],['each lobe holds one of its two electrons','one electron to each lobe']],2,1,'The two lobes are one shape and one state, with opposite signs.']],[]); }});
+/* ----- annex 39·chem Why Is a Chip Made of Sand?: Work, Word Problems, Check Proofs ----- */
+const SUPAX=k=>String(k).split('').map(c=>c==='-'?'⁻':'⁰¹²³⁴⁵⁶⁷⁸⁹'[+c]).join('');
+QP.push({id:'39·chem.work',step:'39·chem',mode:'work',label:'electrons and holes in balance',open:()=>measured('39·chem'),make(){
+    const k=13+rnd(6), don=rnd(2), two=rnd(2), mu=(0.0259*Math.log(10)*(k-10));
+    const right=two?mu.toFixed(3)+' eV':'10'+SUPAX(20-k), wrong=two?UQAX(right,[(0.0259*(k-10)).toFixed(3)+' eV',(2*mu).toFixed(3)+' eV',(0.0259*Math.log(10)*k).toFixed(3)+' eV',(mu/2).toFixed(3)+' eV'],3):UQAX(right,['10'+SUPAX(10),'10'+SUPAX(k),'10'+SUPAX(k-10),'10'+SUPAX(20+k)],3); if(wrong.length<3) return null;
+    const kind=don?'phosphorus (donor)':'boron (acceptor)', maj=don?'n':'p', mino=don?'p':'n';
+    return {index:'q:39·chem.work['+[k,don,two].join(';')+']', lines:[['silicon at 300 K, nᵢ = 10¹⁰ per cm³','given'],['10'+SUPAX(k)+' atoms of '+kind+' per cm³, every one freed','so '+maj+' = 10'+SUPAX(k)]], ask:two?'How far is μ from μᵢ?':'What is '+mino+'?', right, opts:shuffle([right,...wrong]), lead:'', why:two?'One-level technique: kT ln('+maj+'/nᵢ) = 0.0259 · ln 10'+SUPAX(k-10)+' = '+mu.toFixed(3)+' eV, '+(don?'above':'below')+' the middle.':'Fixed-product technique: '+mino+' = nᵢ²/'+maj+' = 10²⁰/10'+SUPAX(k)+' = 10'+SUPAX(20-k)+'.'}; }},
+  {id:'39·chem.word',step:'39·chem',mode:'word',label:'freezing out the dirt',open:()=>measured('39·chem'),make(){
+    const [nm,kk]=pick([['boron',0.8],['phosphorus',0.35],['aluminium',0.002]]), f=pick([0.25,0.5,0.75,0.9]), C0=pick([10,20,50,100]), cs=kk*C0*Math.pow(1-f,kk-1);
+    const fmt=x=>x>=10?x.toFixed(1):x>=1?x.toFixed(2):x.toPrecision(2), right=fmt(cs)+' parts per million', wrong=UQAX(right,[fmt(kk*C0)+' parts per million',fmt(C0)+' parts per million',fmt(kk*C0*Math.pow(1-f,kk))+' parts per million',fmt(C0*Math.pow(1-f,kk-1))+' parts per million'],3); if(wrong.length<3) return null;
+    return {index:'q:39·chem.word['+[nm,f,C0].join(';')+']', a3:['39·chem.word',DASH,DASH], story:'Molten silicon holds '+C0+' parts per million of '+nm+', whose keep-share is '+kk+'. It freezes slowly from one end, staying mixed.', lines:[], ask:'What share of '+nm+' does the solid hold at the point where '+Math.round(f*100)+'% has frozen?', right, opts:shuffle([right,...wrong]), lead:'', why:'Freeze-out technique: C_S = k C₀ (1 − f)^(k − 1) = '+kk+' · '+C0+' · '+(Math.round((1-f)*100)/100)+'^('+String(Math.round((kk-1)*1000)/1000).replace('-','−')+') = '+fmt(cs)+'.'}; }},
+  {id:'39·chem.line',step:'39·chem',mode:'proof',label:'what the crystal licenses',open:()=>measured('39·chem'),make(){
+    const k=14+rnd(4);
+    return line28('39·chem.line',[
+      ['s1',[['silicon with n = 10'+SUPAX(k)+' per cm³ at 300 K','given'],['p = 10'+SUPAX(20-k),'the fixed-product technique']],2,0,'n p = nᵢ² = 10²⁰.'],
+      ['s2',[['donors are added to silicon','given'],['the holes stay at 10¹⁰','donors add electrons only']],2,1,'n p = nᵢ²: as n rises the holes fall.'],
+      ['s3',[['each freed electron leaves its donor charged +','given'],['doped silicon has a net charge','the electrons are extra']],2,1,'Every free electron is matched by its charged donor: the crystal stays neutral.'],
+      ['s4',[['indium is in column 13, like boron','given'],['indium makes p-type silicon as well as boron does','the one-column-over technique']],2,1,'The column gives the sign. Indium binds its hole at 0.16 eV and frees few.'],
+      ['s5',[['gallium is in column 13 and arsenic in column 15','given'],['GaAs can build silicon’s crystal','the eight-a-pair technique']],2,0,'3 + 5 = 8 outer electrons between the pair.'],
+      ['s6',[['boron’s keep-share is 0.8','given'],['one more freeze cleans the boron out','the freeze-out technique']],2,1,'Each pass keeps 0.8 of its share: boron has to come out by chemistry.'],
+      ['s7',[['n-type and p-type silicon are joined, each doped 10¹⁶','given'],['the bands bend by 0.716 V and μ is one level throughout','the one-level technique']],2,0,'0.358 + 0.358 = 0.716 V; joined materials in balance have one μ.']],[]); }});
+/* ===== Annex pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 
