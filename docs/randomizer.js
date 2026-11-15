@@ -19246,6 +19246,83 @@ QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a lar
       ['b5',[['influenza and broken bones both average near 14 a week','given'],['they need the same shelf','the shelf technique for rare arrivals']],2,1,'That technique needs independent arrivals. Cases that bring cases need 77, not 22.'],
       ['b6',[['asthma attacks are not caught from anyone','given'],['the attacks are independent','no case causes another']],2,1,'A shared cause, bad air, raises everyone’s chance at once. Not catching is not independent.'],
       ['b7',[['in a bad-air week each of 1,600 needs a relieving inhaler with chance 1/4','given'],['the average need that week is 400','the average-adds technique']],2,0,'1600 · 1/4 = 400.']],[]); }});
+/* ----- annex 32·chem How do X-rays see inside a crystal: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·chem.work',step:'32·chem',mode:'work',label:'where the spots fall',open:()=>measured('32·chem'),make(){
+    const ask=rnd(2), L=[0.1,0.15,0.2][rnd(3)], dg=180/Math.PI;
+    if(ask){ const t=[10,15,20,30][rnd(4)], d=L/(2*Math.sin(t/dg)), right=DECAX(d,3)+' nm', wrong=UQAX(right,[DECAX(L/(2*Math.sin(2*t/dg)),3)+' nm',DECAX(L/Math.sin(t/dg),3)+' nm',DECAX(L*Math.sin(t/dg)/2,4)+' nm',DECAX(L/(2*Math.cos(t/dg)),3)+' nm'],3); if(wrong.length<3) return null;
+      return {index:'q:32·chem.work[d;'+L+';'+t+']', lines:[['\\lambda = '+L+' \\text{ nm}','the X-rays'],['\\text{the ray is turned through } '+(2*t)+'^\\circ','the first spot']], ask:'What is the spacing d of the planes?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spot-condition: θ is half the turn, '+t+'°, and d = λ ÷ (2 sin θ) = '+L+' ÷ (2 sin '+t+'°) ≈ '+right+'.'}; }
+    const d=[0.2,0.25,0.3,0.4][rnd(4)], s=L/(2*d); if(s>=1) return null; const t=Math.asin(s)*dg, right=DECAX(2*t,1)+'°', wrong=UQAX(right,[DECAX(t,1)+'°',DECAX(2*Math.asin(L/d)*dg,1)+'°',DECAX(4*t,1)+'°',DECAX(Math.asin(s/2)*dg*2,1)+'°'],3); if(wrong.length<3) return null;
+    return {index:'q:32·chem.work[t;'+L+';'+d+']', lines:[['\\lambda = '+L+' \\text{ nm}','the X-rays'],['d = '+d+' \\text{ nm}','planes of atoms']], ask:'Through what angle is the ray turned at the first spot?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spot-condition: sin θ = λ ÷ 2d = '+DECAX(s,4)+', θ ≈ '+DECAX(t,1)+'°, and the ray turns through 2θ ≈ '+right+'.'}; }},
+  {id:'32·chem.word',step:'32·chem',mode:'word',label:'the spots of salt',open:()=>measured('32·chem'),make(){
+    const h=rnd(4), k=rnd(4), l=rnd(4); if(h+k+l===0) return null; const ev=[h,k,l].map(x=>x%2), all0=ev.every(x=>x===0), all1=ev.every(x=>x===1);
+    const A='bright: F = 4f(Na) + 4f(Cl)', B='faint: F = 4f(Na) − 4f(Cl)', C='missing: the cell cancels itself', right=all0?A:all1?B:C, wrong=[A,B,C,'every spot equally bright'].filter(x=>x!==right);
+    return {index:'q:32·chem.word['+h+k+l+']', a3:['32·chem.word',DASH,DASH], story:'A student in a crystal lab shines X-rays on a grain of table salt, sodium and chlorine on alternate places of a cube, and looks for the spot ('+h+', '+k+', '+l+').', lines:[], ask:'What does she find there?', right, opts:shuffle([right,...wrong.slice(0,3)]), lead:'', why:'Cell-sum: all even, every turning is 1; all odd, the Cl places turn by −1; mixed odd and even, the four places of each kind cancel. ('+h+', '+k+', '+l+') is '+(all0?'all even':all1?'all odd':'mixed')+'.'}; }},
+  {id:'32·chem.line',step:'32·chem',mode:'proof',label:'what the spots license',open:()=>measured('32·chem'),make(){
+    return line28('32·chem.line',[
+      ['x1',[['\\text{the pattern of spots}','seen'],['\\text{a picture of the atoms}','spots']],2,1,'They are the sizes of the crystal’s coefficients.'],
+      ['x2',[['\\text{a triple } (h, k, l)','given'],['\\text{it gives a spot}','every triple']],2,1,'The cell can cancel itself: salt’s mixed spots are missing.'],
+      ['x3',[['\\text{the brightness of a spot}','measured'],['F_{hkl}','the coefficient']],2,1,'It gives |F|²; the turn is lost.'],
+      ['x4',[['\\text{the ray turned through } 2\\theta','a spot'],['2d\\sin 2\\theta = \\lambda','spot-condition']],2,1,'θ is half the angle the ray turns through.'],
+      ['x5',[['(2,0,0) \\text{ in salt}','all even'],['F = 4f_{\\text{Na}} + 4f_{\\text{Cl}}','cell-sum']],2,0,'Every turning is e^(−2πi × whole) = 1.'],
+      ['x6',[['\\text{a spot at angle } \\theta','seen'],['2d\\sin\\theta = \\lambda','spot-condition']],2,0,'The cells agree only there.']],[]); }});
+/* ----- annex 32·comp How does a photo shrink to a small file: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·comp.work',step:'32·comp',mode:'work',label:'rounding the amounts',open:()=>measured('32·comp'),make(){
+    const ask=rnd(2);
+    if(ask){ const a=[1,2,3,4,5,6].map(()=>rnd(5)*(rnd(2)?1:-1)), E=a.reduce((s,x)=>s+x*x,0); if(E===0) return null; const S=E>99?null:1; if(!S) return null;
+      const right=DECAX(Math.sqrt(E/8),2), wrong=UQAX(right,[DECAX(Math.sqrt(E),2),DECAX(E/8,2),String(E),DECAX(a.reduce((s,x)=>s+Math.abs(x),0)/8,2)],3); if(wrong.length<3) return null;
+      return {index:'q:32·comp.work[e;'+a.join(';')+']', lines:[['\\text{moves of six amounts: } '+a.join(',\\ ').replace(/-/g,'−'),'rounding, a row of 8 pixels'],['\\text{the other two amounts not moved}','']], ask:'What is the error per pixel, as the root of its average square?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rounding-error: the energy of the error in the row is the sum of the squared moves, '+E+'; spread over 8 pixels, √('+E+' ÷ 8) ≈ '+right+'.'}; }
+    const q=[2,4,8,10,16][rnd(5)], right=DECAX(q/2,1), wrong=UQAX(right,[String(q),DECAX(q/4,1),DECAX(q*q/4,1),DECAX(q/Math.sqrt(8),2)],3); if(wrong.length<3) return null;
+    return {index:'q:32·comp.work[q;'+q+']', lines:[['q_k = '+q,'the step for one cosine']], ask:'At most how far does rounding move that cosine’s amount?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rounding-error: to the nearest whole multiple of q, the move is at most q/2 = '+right+'.'}; }},
+  {id:'32·comp.word',step:'32·comp',mode:'word',label:'saving the photo',open:()=>measured('32·comp'),make(){
+    const F=rnd(2);
+    const right=F?'the rounding of the amounts, most fast ones to zero':'its energy is the sum of the squared moves of the amounts', wrong=F?['splitting into eight cosines','storing eight amounts in place of eight pixels','the cosines being at right angles']:['it is at most one step per pixel','it is the largest single move','it is zero, since cosines are exact'];
+    return {index:'q:32·comp.word['+F+']', a3:['32·comp.word',DASH,DASH], story:'A phone saves a photo of the Skagit Valley: it reflects each row of eight pixels end to end, writes it as eight cosines, and rounds each amount to a step, coarse for the fast cosines.', lines:[], ask:F?'Which step makes the file small?':'What is true of the error in the row?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Eight pixels become eight amounts: no saving yet. The rounding sends most fast amounts to zero, which costs almost nothing to store.':'Rounding-error: the cosines are at right angles with size 1, so the books balance in energy: the error’s energy is exactly the sum of the squared moves.'}; }},
+  {id:'32·comp.line',step:'32·comp',mode:'proof',label:'what the cosines license',open:()=>measured('32·comp'),make(){
+    return line28('32·comp.line',[
+      ['c1',[['\\text{a row split into cosines}','mirrored-row'],['\\text{the file is smaller}','split']],2,1,'Eight pixels become eight amounts; the rounding shrinks it.'],
+      ['c2',[['\\text{a picture of noise}','given'],['\\text{its energy sits in the first few cosines}','the law']],2,1,'A law of photos, false for noise.'],
+      ['c3',[['\\text{amounts rounded to steps}','rounding'],['\\text{error at most one step per pixel}','bound']],2,1,'Its energy is the sum of the squared moves of the amounts.'],
+      ['c4',[['\\text{saved twice}','given'],['\\text{the same pixels as after once}','saving']],2,1,'Each saving rounds again, and the errors can grow.'],
+      ['c5',[['\\text{squared moves total } 144','8 pixels'],['\\text{about } 4.2 \\text{ grey levels per pixel}','rounding-error']],2,0,'√(144/8) ≈ 4.2.'],
+      ['c6',[['\\text{a row reflected end to end}','mirrored'],['\\text{energy of row} = \\text{energy of amounts}','mirrored-row']],2,0,'The cosines are at right angles, with sizes set to 1.']],[]); }});
+/* ----- annex 32·eng How can headphones cancel noise: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·eng.work',step:'32·eng',mode:'work',label:'what the delay leaves',open:()=>measured('32·eng'),make(){
+    const ask=rnd(2), tau=[25,50,100][rnd(3)];
+    if(ask){ const right=DECAX(1e6/(6*tau),0)+' Hz', wrong=UQAX(right,[DECAX(1e6/(2*tau),0)+' Hz',DECAX(1e6/tau,0)+' Hz',DECAX(1e6/(4*tau),0)+' Hz',DECAX(6e6/tau,0)+' Hz'],3); if(wrong.length<3) return null;
+      return {index:'q:32·eng.work[f;'+tau+']', lines:[['\\tau = '+tau+'\\ \\mu\\text{s}','the delay of the negative']], ask:'Above what frequency does the anti-noise make the sound louder?', right, opts:shuffle([right,...wrong]), lead:'', why:'Delay-residue: 2 sin(πfτ) passes 1 at πfτ = π/6, f = 1/(6τ) ≈ '+right+'.'}; }
+    const f=[50,100,200,500,1000,2000][rnd(6)], v=2*Math.abs(Math.sin(Math.PI*f*tau*1e-6)), right=DECAX(v,3), wrong=UQAX(right,[DECAX(Math.abs(Math.sin(Math.PI*f*tau*1e-6)),3),DECAX(2*Math.abs(Math.cos(Math.PI*f*tau*1e-6)),3),DECAX(Math.PI*f*tau*1e-6,3),'0'],3); if(wrong.length<3) return null;
+    return {index:'q:32·eng.work[r;'+tau+';'+f+']', lines:[['\\tau = '+tau+'\\ \\mu\\text{s}','the delay'],['f = '+f+' \\text{ Hz}','a turning of the noise']], ask:'By what factor is that turning’s size multiplied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Delay-residue: 2|sin(πfτ)| = 2|sin(π · '+f+' · '+DECAX(tau*1e-6,6)+')| ≈ '+right+'.'}; }},
+  {id:'32·eng.word',step:'32·eng',mode:'word',label:'the roar on the plane',open:()=>measured('32·eng'),make(){
+    const F=rnd(2);
+    const right=F?'yes: play the negative of what was heard one repeat earlier':'no: only noise that repeats, or can be predicted, is cancelled ahead', wrong=F?['no: the delay always leaves some','yes: play a copy of the roar half a repeat late','no: the cups must block it']:['yes: any noise, once heard','yes: if the delay is short enough','no: no noise can be cancelled'];
+    return {index:'q:32·eng.word['+F+']', a3:['32·eng.word',DASH,DASH], story:F?'A traveller’s headphones hear an engine roar that repeats every 20 ms, while their delay is 50 μs.':'A traveller’s headphones hear a crowd talking, with no repeat to it.', lines:[], ask:F?'Can the roar be cancelled exactly, delay and all?':'Can the chatter be cancelled exactly ahead of time?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Repeat-ahead: the next repeat is known from the last, and 20 ms is longer than the delay.':'Repeat-ahead needs a repeat; chatter has none, so only the delay-residue cancelling of low notes is left.'}; }},
+  {id:'32·eng.line',step:'32·eng',mode:'proof',label:'what the anti-noise licenses',open:()=>measured('32·eng'),make(){
+    return line28('32·eng.line',[
+      ['a1',[['\\text{a copy of the noise half a repeat late}','given'],['\\text{the noise is cancelled}','anti-turning']],2,1,'For one frequency only; the speaker must play the negative.'],
+      ['a2',[['\\text{a short delay } \\tau','given'],['\\text{every frequency cancels a little less}','delay']],2,1,'Above 1/(6τ) it makes them louder.'],
+      ['a3',[['\\text{noise-cancelling headphones}','given'],['\\text{they work by blocking the sound}','headphones']],2,1,'They add the negative; the cups block the highs.'],
+      ['a4',[['\\text{a sound and its negative, in time}','added'],['\\text{silence}','anti-turning']],2,0,'Every frequency at once.'],
+      ['a5',[['\\text{the negative } \\tau \\text{ late}','given'],['\\text{each turning survives at } 2|\\sin(\\pi f\\tau)|','delay-residue']],2,0,'Small when fτ is small: low notes cancel well.'],
+      ['a6',[['\\text{any noise}','given'],['\\text{it can be cancelled ahead of time}','repeat-ahead']],2,1,'Only one that repeats, or can otherwise be predicted.']],[]); }});
+/* ----- annex 32·nav How can tides be predicted years ahead: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'32·nav.work',step:'32·nav',mode:'work',label:'turnings that drift apart',open:()=>measured('32·nav'),make(){
+    const ask=rnd(2);
+    if(ask){ const P=[[12,12.4206],[12.4206,12.6583],[23.9345,25.8193],[12,11.9672]][rnd(4)], v=1/Math.abs(1/P[0]-1/P[1])/24, right=DECAX(v,2)+' days', wrong=UQAX(right,[DECAX(Math.abs(P[1]-P[0]),2)+' h',DECAX(v*24,1)+' days',DECAX((P[0]+P[1])/48,2)+' days',DECAX(v/2,2)+' days'],3); if(wrong.length<3) return null;
+      return {index:'q:32·nav.work[b;'+P[0]+';'+P[1]+']', lines:[['\\text{two turnings, repeating every } '+P[0]+' \\text{ h and } '+P[1]+' \\text{ h}','the tide']], ask:'How long do they take to drift one whole turn apart?', right, opts:shuffle([right,...wrong]), lead:'', why:'2π/Δω = 1 ÷ |1/'+P[0]+' − 1/'+P[1]+'| h ≈ '+DECAX(v*24,1)+' h, or '+right+'. A record must be long against that to tell them apart.'}; }
+    const A=[1.07,0.9,1.2][rnd(3)], B=[0.21,0.3,0.5][rnd(3)], right=DECAX(A+B,2)+' m and '+DECAX(A-B,2)+' m', wrong=UQAX(right,[DECAX(A+B,2)+' m and 0 m',DECAX(A,2)+' m and '+DECAX(B,2)+' m',DECAX(Math.sqrt(A*A+B*B),2)+' m and '+DECAX(A-B,2)+' m',DECAX(2*A,2)+' m and '+DECAX(2*B,2)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:32·nav.work[s;'+A+';'+B+']', lines:[['A_1 = '+A+' \\text{ m},\\ \\ A_2 = '+B+' \\text{ m}','two turnings close in speed']], ask:'What are the largest and smallest sizes of their sum over a beat?', right, opts:shuffle([right,...wrong]), lead:'', why:'In step the sizes add, '+DECAX(A+B,2)+' m; half a beat later they oppose, '+DECAX(A-B,2)+' m: springs and neaps.'}; }},
+  {id:'32·nav.word',step:'32·nav',mode:'word',label:'the tide table',open:()=>measured('32·nav'),make(){
+    const F=rnd(2);
+    const right=F?'about 15 days, the time the two drift a whole turn apart':'at full and new moon, when the lunar and solar turnings are in step', wrong=F?['about 12 hours, one tide','about a week','about a year']:['when the Moon is nearest the Earth','at the half moons','at noon each day'];
+    return {index:'q:32·nav.word['+F+']', a3:['32·nav.word',DASH,DASH], story:'A harbour office keeps a record of the water level to build its tide table. The main lunar turning repeats every 12.42 h and the main solar every 12 h.', lines:[], ask:F?'How long a record does it need to tell the solar size from the lunar?':'When do the spring tides, the largest, come?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Long-record: the product of the two has size at most 2/(|Δω|T), small only once T is long against 2π/Δω = 14.77 days.':'The two turnings beat; their sizes add when they are in step, which is at full and new moon.'}; }},
+  {id:'32·nav.line',step:'32·nav',mode:'proof',label:'what the record licenses',open:()=>measured('32·nav'),make(){
+    return line28('32·nav.line',[
+      ['t1',[['\\text{the tide at a port}','given'],['\\text{it repeats every } 12 \\text{ hours}','repeat']],2,1,'The main lunar turning repeats every 12.42 h, the solar every 12; no one repeat fits.'],
+      ['t2',[['\\text{a week of record}','given'],['\\text{the main solar size is found}','shadow']],2,1,'Separating it from the lunar needs about 15 days.'],
+      ['t3',[['\\text{the Moon at its nearest}','given'],['\\text{spring tides}','springs']],2,1,'They come at full and new moon, when the turnings are in step.'],
+      ['t4',[['\\text{the table is exact}','given'],['\\text{the water will reach it}','the table']],2,1,'A law with exceptions: storms add a surge.'],
+      ['t5',[['T \\gg 2\\pi/|\\Delta\\omega|','a long record'],['\\text{each size is its shadow}','long-record']],2,0,'The product of two turnings has size at most 2/(|Δω|T).'],
+      ['t6',[['\\text{speeds fixed by the Moon and Sun}','known'],['\\text{only sizes and timings need measuring}','the tide']],2,0,'The turnings’ speeds are known in advance.']],[]); }});
 /* ----- annex 38·chem What Shape Is an Electron's Cloud?: Work, Word Problems, Check Proofs ----- */
 const ORDAX=(()=>{ const o=[]; for(let s=1;s<=8;s++) for(let n=1;n<=s;n++){ const l=s-n; if(l<n&&l<=3) o.push([n,l]); } return o; })(); /* n + ℓ order, ties to the smaller n */
 const LETAX='spdf', MISSAX=[24,29,41,42,44,45,46,47,57,58,64,78,79]; /* fillings the rule misses, as measured: left out */
