@@ -423,7 +423,7 @@ let lastIn=s1; s1.addEventListener('focus',()=>lastIn=s1); s2.addEventListener('
 const keys=document.getElementById('skeys');
 ['d','b','c','t','∅','∪','∩','∖','(',')'].forEach(k=>{ const b=document.createElement('button'); b.textContent=k; b.type='button'; b.onmousedown=e=>e.preventDefault(); b.onclick=()=>{ const inp=lastIn, a=inp.selectionStart??inp.value.length, z=inp.selectionEnd??a; inp.setRangeText(/[∪∩∖]/.test(k)?' '+k+' ':k,a,z,'end'); drawSets(); }; keys.appendChild(b); });
 const bs=document.createElement('button'); bs.className='w'; bs.textContent='⌫'; bs.setAttribute('aria-label','delete'); bs.onmousedown=e=>e.preventDefault(); bs.onclick=()=>{ const inp=lastIn, a=inp.selectionStart??inp.value.length, z=inp.selectionEnd??a; if(a===z&&a>0) inp.setRangeText('',a-1,a,'end'); else inp.setRangeText('',a,z,'end'); drawSets(); }; keys.appendChild(bs);
-document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const [x,y]=b.dataset.p.split('|'); s1.value=x; s2.value=y; drawSets(); });
+document.querySelectorAll('[data-p]:not(#desk [data-p])').forEach(b=>b.onclick=()=>{ const [x,y]=b.dataset.p.split('|'); s1.value=x; s2.value=y; drawSets(); });
 new ResizeObserver(drawSets).observe(cv1);
 if(window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawSets);
 
