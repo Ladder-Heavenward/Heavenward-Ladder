@@ -17679,6 +17679,94 @@ QP.push({id:'16·phys.work',step:'16·phys',mode:'work',label:'work is an area',
       ['q4',[['\\textstyle\\int_R^\\infty GMm/r^2\\,dr','escape'],['= \\infty','the region is endless']],2,1,'Out-to-forever with p = 2: it converges, to GMm/R.'],
       ['q5',[['F = p\', \\text{ continuous}','given'],['p(t_2) - p(t_1) = \\textstyle\\int_{t_1}^{t_2} F\\,dt','impulse']],2,0,'Area-is-a-change, with p as the antiderivative of F.'],
       ['q6',[['F(x(t)) = m v\'(t)','given'],['\\textstyle\\int F\\,dx = \\Delta(\\tfrac12 m v^2)','substitution']],2,0,'The slope of \u00bdmv\u00b2 along the motion is m v v\u2032 = F v.']],[]); }});
+/* ----- annex 17·bio Can a population double forever: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'17·bio.work',step:'17·bio',mode:'work',label:'the logistic curve',open:()=>measured('17·bio'),make(){
+    const K=[500,1000,2000,5000][rnd(4)], P0=K/[2,4,5,10,20][rnd(5)], r=[0.1,0.2,0.3,0.5][rnd(4)], C=(K-P0)/P0, ask=rnd(2);
+    if(ask){ const t=Math.log(C)/r; if(C<=1) return null; const right=DECAX(t,2), wrong=UQAX(right,[DECAX(C/r,2),DECAX(Math.log(C),2),DECAX(Math.log(K/2)/r,2),'0'],3); if(wrong.length<3) return null;
+      return {index:'q:17·bio.work[t;'+K+';'+P0+';'+r+']', lines:[['P\' = '+r+'P(1 - P/'+K+')','logistic'],['P_0 = '+P0,'']], ask:'At what time is the growth fastest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Fastest-growth: at P = K/2 = '+(K/2)+', which happens at t = ln C / r, with C = (K \u2212 P\u2080)/P\u2080 = '+DECAX(C,3)+': ln '+DECAX(C,3)+' \u00f7 '+r+' \u2248 '+right+'. Not at the start.'}; }
+    const right=String(C), wrong=UQAX(right,[String(P0/(K-P0)),String(K/P0),String(K-P0),String((K+P0)/P0)].map(x=>String(Math.round(+x*1000)/1000)),3); if(wrong.length<3) return null;
+    return {index:'q:17·bio.work[C;'+K+';'+P0+']', lines:[['P(t) = K/(1 + Ce^{-rt})','logistic-solution'],['K = '+K+',\\ \\ P_0 = '+P0,'']], ask:'What is C?', right, opts:shuffle([right,...wrong]), lead:'', why:'At t = 0, P\u2080 = K/(1 + C), so C = (K \u2212 P\u2080)/P\u2080 = '+(K-P0)+'/'+P0+' = '+right+'.'}; }},
+  {id:'17·bio.word',step:'17·bio',mode:'word',label:'a ceiling',open:()=>measured('17·bio'),make(){
+    const K=[400,600,800,1200][rnd(4)], P0=[20,40,50,100][rnd(4)], r=[0.2,0.4,0.5][rnd(3)], t=[2,5,10][rnd(3)], C=(K-P0)/P0, P=K/(1+C*Math.exp(-r*t)); if(P0>=K/2) return null;
+    const S=['sea otters in a bay','deer on an island','trout in a lake','elk in a valley'][rnd(4)];
+    const right=String(Math.round(P)), wrong=UQAX(right,[String(Math.round(P0*Math.exp(r*t))),String(K),String(Math.round(K/2)),String(Math.round(K/(1+C*Math.exp(r*t))))],3); if(wrong.length<3) return null;
+    return {index:'q:17·bio.word['+K+';'+P0+';'+r+';'+t+']', a3:['17·bio.word',DASH,DASH], story:'A count of '+S+' starts at '+P0+'. Their growth is modelled as P\u2032 = '+r+'P(1 \u2212 P/'+K+'), with t in years.', lines:[], ask:'About how many are there after '+t+' years?', right, opts:shuffle([right,...wrong]), lead:'', why:'Logistic-solution: C = ('+K+' \u2212 '+P0+')/'+P0+' = '+DECAX(C,3)+', and P('+t+') = '+K+'/(1 + '+DECAX(C,3)+' e^(\u2212'+DECAX(r*t,2)+')) \u2248 '+right+'. Unchecked growth would give about '+Math.round(P0*Math.exp(r*t))+'.'}; }},
+  {id:'17·bio.line',step:'17·bio',mode:'proof',label:'what the logistic licenses',open:()=>measured('17·bio'),make(){
+    return line28('17·bio.line',[
+      ['l1',[['P\' = rP(1 - P/K),\\ P_0 \\text{ small}','given'],['\\text{growth is fastest at the start}','the start']],2,1,'It is fastest at P = K/2; the start is slow when P\u2080 is small.'],
+      ['l2',[['P(t) \\to K','as t grows'],['P = K \\text{ at some time}','the limit']],2,1,'Ce^(\u2212rt) > 0 for every t: K is approached, not reached.'],
+      ['l3',[['\\text{a fit to a few early years}','given'],['\\text{the curve gives } K','the fit']],2,1,'Early on the logistic and the exponential look alike; K is barely seen.'],
+      ['l4',[['P_0 \\gt K','given'],['\\text{logistic-solution fails}','P_0 < K needed']],2,1,'The same steps work with ln(P \u2212 K); P falls toward K from above.'],
+      ['l5',[['P = K/(1 + Ce^{-rt})','logistic-solution'],['P(0) = K/(1 + C)','e^0 = 1']],2,0,'So C = (K \u2212 P\u2080)/P\u2080.'],
+      ['l6',[['P\' = rP(1 - P/K)','a parabola in P'],['P\' \\text{ greatest at } P = K/2','its top']],2,0,'rP \u2212 rP\u00b2/K has slope r \u2212 2rP/K, zero at K/2.']],[]); }});
+/* ----- annex 17·comp What is the quickest way to sort a list: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'17·comp.work',step:'17·comp',mode:'work',label:'counting comparisons',open:()=>measured('17·comp'),make(){
+    const ask=rnd(4), n=[8,10,16,20,32,50,64,100][rnd(8)];
+    if(ask===0){ const right=String(n*(n-1)/2), wrong=UQAX(right,[String(n*n),String(n-1),String(n*(n-1)),String(n*(n-1)/4)],3); if(wrong.length<3) return null;
+      return {index:'q:17·comp.work[s;'+n+']', lines:[['n = '+n,'a list']], ask:'How many comparisons does selection sort make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Selection-count: n(n \u2212 1)/2 = '+n+' \u00b7 '+(n-1)+'/2 = '+right+', on every list.'}; }
+    if(ask===1){ const sorted=rnd(2), right=String(sorted?n-1:n*(n-1)/2), wrong=UQAX(right,[String(sorted?n*(n-1)/2:n-1),String(n*(n-1)/4),String(n),String(n*n)],3); if(wrong.length<3) return null;
+      return {index:'q:17·comp.work[i;'+n+';'+sorted+']', lines:[['n = '+n,sorted?'a list already sorted':'a list in falling order']], ask:'How many comparisons does insertion sort make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Insertion-range: '+(sorted?'n \u2212 1 on a sorted list: '+right+'.':'n(n \u2212 1)/2 on a falling list: '+right+'.')}; }
+    if(ask===2){ const m=[8,16,32,64,128,256,1024][rnd(7)], k=Math.log2(m), M=m*k-m+1, right=String(M), wrong=UQAX(right,[String(m*k),String(m*(m-1)/2),String(m*k+m-1),String(2*m)],3); if(wrong.length<3) return null;
+      return {index:'q:17·comp.work[m;'+m+']', lines:[['n = '+m+' = 2^{'+k+'}','a list']], ask:'At most how many comparisons does merge sort make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Merge-count: n log\u2082 n \u2212 n + 1 = '+m+' \u00b7 '+k+' \u2212 '+m+' + 1 = '+right+'.'}; }
+    const right=String(n*(n-1)/4), wrong=UQAX(right,[String(n*(n-1)/2),String(n-1),String(n*n/4),String(n*(n-1)/8)],3); if(wrong.length<3) return null;
+    return {index:'q:17·comp.work[a;'+n+']', lines:[['n = '+n,'different items, every order alike']], ask:'What is the average number of inversions?', right, opts:shuffle([right,...wrong]), lead:'', why:'Insertion-average: n(n \u2212 1)/4 = '+right+'. Each pair is out of order in half the orders.'}; }},
+  {id:'17·comp.word',step:'17·comp',mode:'word',label:'splitting the work',open:()=>measured('17·comp'),make(){
+    const p=[0.5,0.75,0.8,0.9,0.95][rnd(5)], N=[2,4,8,16,64][rnd(5)], S=1/((1-p)+p/N), cap=1/(1-p), ask=rnd(2);
+    const right=ask?'never more than '+DECAX(cap,2)+' times as fast':DECAX(S,2)+' times as fast', wrong=UQAX(right,ask?['as fast as you like, with enough processors','never more than '+DECAX(1/p,2)+' times as fast','never more than '+DECAX(N*p,2)+' times as fast','never more than '+DECAX(cap*2,2)+' times as fast']:[N+' times as fast',DECAX(N*p,2)+' times as fast',DECAX(cap,2)+' times as fast',DECAX(1/(p+(1-p)/N),2)+' times as fast'],3); if(wrong.length<3) return null;
+    return {index:'q:17·comp.word['+p+';'+N+';'+ask+']', a3:['17·comp.word',DASH,DASH], story:'A weather model spends '+(p*100)+'% of its time on work that can be shared evenly among processors; the rest cannot be shared.', lines:[], ask:ask?'How fast can it ever run, however many processors?':'How fast does it run on '+N+' processors?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speed-up-limit: S(N) = 1/((1 \u2212 p) + p/N)'+(ask?', always below 1/(1 \u2212 p) = '+DECAX(cap,2)+'.':' = 1/('+DECAX(1-p,2)+' + '+DECAX(p/N,4)+') \u2248 '+DECAX(S,2)+'. Not '+N+'.')}; }},
+  {id:'17·comp.line',step:'17·comp',mode:'proof',label:'what the counts license',open:()=>measured('17·comp'),make(){
+    return line28('17·comp.line',[
+      ['s1',[['\\text{insertion sort on a nearly sorted list}','given'],['n(n-1)/2 \\text{ comparisons}','insertion sort']],2,1,'Only on a falling list; a nearly sorted list costs nearly n \u2212 1.'],
+      ['s2',[['M(n) = n\\log_2 n - n + 1','merge-count'],['\\text{for every } n','the formula']],2,1,'Proved for powers of 2; other n split unevenly.'],
+      ['s3',[['N \\text{ processors}','given'],['N \\text{ times faster}','sharing']],2,1,'Only when p = 1; speed-up-limit caps it at 1/(1 \u2212 p).'],
+      ['s4',[['\\text{fewer comparisons}','given'],['\\text{faster on every list}','the count']],2,1,'For small n a simple method\u2019s lighter steps can win.'],
+      ['s5',[['M(1) = 0,\\ M(2n) = 2M(n) + 2n - 1','merge sort'],['M(4) = 5','M(2) = 1']],2,0,'M(2) = 0 + 1 = 1, M(4) = 2 + 3 = 5.'],
+      ['s6',[['(n-1) + (n-2) + \\cdots + 1','selection sort'],['= n(n-1)/2','the sum']],2,0,'The first n \u2212 1 numbers add to n(n \u2212 1)/2.']],[]); }});
+/* ----- annex 17·crypt How long would it take to guess a password: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'17·crypt.work',step:'17·crypt',mode:'work',label:'bits',open:()=>measured('17·crypt'),make(){
+    const A=[[10,'digits'],[26,'small letters'],[36,'small letters and digits'],[52,'letters of both cases'],[62,'letters and digits'],[95,'printable symbols']][rnd(6)], L=[4,6,8,10,12,16][rnd(6)], b=L*Math.log2(A[0]);
+    const right=DECAX(b,1)+' bits', wrong=UQAX(right,[DECAX(Math.pow(Math.log2(A[0]),2)*L/2,1)+' bits',DECAX(Math.log2(A[0])+L,1)+' bits',DECAX(A[0]*L/8,1)+' bits',DECAX(b/2,1)+' bits'],3); if(wrong.length<3) return null;
+    return {index:'q:17·crypt.work['+A[0]+';'+L+']', lines:[['A = '+A[0]+',\\ \\ L = '+L,A[1]+', chosen at random']], ask:'How many bits does the password have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bits: log\u2082(A^L) = L log\u2082 A = '+L+' \u00b7 '+DECAX(Math.log2(A[0]),3)+' \u2248 '+right+'.'}; }},
+  {id:'17·crypt.word',step:'17·crypt',mode:'word',label:'length beats symbols',open:()=>measured('17·crypt'),make(){
+    const ask=rnd(2);
+    if(ask){ const P=[[8,95,12,26],[8,95,14,26],[10,62,16,10],[6,95,10,26],[8,62,12,36]][rnd(5)], b1=P[0]*Math.log2(P[1]), b2=P[2]*Math.log2(P[3]); if(Math.abs(b1-b2)<0.5) return null;
+      const W=b2>b1?'the '+P[2]+' from '+P[3]:'the '+P[0]+' from '+P[1], O=b2>b1?'the '+P[0]+' from '+P[1]:'the '+P[2]+' from '+P[3];
+      const right=W+', by about '+DECAX(Math.abs(b1-b2),1)+' bits', wrong=[O+', by about '+DECAX(Math.abs(b1-b2),1)+' bits','they are the same strength',O+': more kinds of symbol always win'];
+      return {index:'q:17·crypt.word[c;'+P.join(',')+']', a3:['17·crypt.word',DASH,DASH], story:'Two passwords are chosen at random: '+P[0]+' symbols from '+P[1]+' kinds, or '+P[2]+' from '+P[3]+'.', lines:[], ask:'Which is harder to guess?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bits: '+P[0]+' log\u2082 '+P[1]+' \u2248 '+DECAX(b1,1)+' against '+P[2]+' log\u2082 '+P[3]+' \u2248 '+DECAX(b2,1)+'. Length adds a whole symbol\u2019s bits; a bigger alphabet adds only the log of the ratio.'}; }
+    const b=[40,50,56,60,64,72][rnd(6)], g=[1e9,1e10,1e12][rnd(3)], s=Math.pow(2,b-1)/g, Y=s/3.16e7;
+    const T=v=>v<3600?DECAX(v,1)+' seconds':v<86400*2?DECAX(v/3600,1)+' hours':v<3.16e7*2?DECAX(v/86400,1)+' days':v<3.16e10?DECAX(v/3.16e7,1)+' years':'about '+Number((v/3.16e7).toPrecision(2)).toExponential(1).replace(/e\+?(\d+)/,' \u00d7 10^$1')+' years';
+    const right=T(s), wrong=UQAX(right,[T(s*2),T(s/1024),T(s*1024),T(b/g*1e9)],3); if(wrong.length<3) return null;
+    const G={1e9:'a billion',1e10:'ten billion',1e12:'a trillion'}[g];
+    return {index:'q:17·crypt.word[y;'+b+';'+g+']', a3:['17·crypt.word',DASH,DASH], story:'A guesser can try '+G+' passwords a second against a password of '+b+' random bits.', lines:[], ask:'On average, how long does it take to find it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Years technique: about 2^(b \u2212 1)/g = 2^'+(b-1)+' \u00f7 '+g.toExponential(0).replace('e+',' \u00d7 10^')+' s \u2248 '+right+'. On average half the count, not all of it.'}; }},
+  {id:'17·crypt.line',step:'17·crypt',mode:'proof',label:'what the bits license',open:()=>measured('17·crypt'),make(){
+    return line28('17·crypt.line',[
+      ['b1',[['8 \\text{ from } 95;\\ 12 \\text{ from } 26','two passwords'],['\\text{the first is stronger}','more kinds of symbol']],2,1,'52.6 bits against 56.4 bits: length wins.'],
+      ['b2',[['\\log_2 (A^L)','given'],['= (\\log_2 A)^L','log-of-a-power']],2,1,'Log-of-a-power: L log\u2082 A.'],
+      ['b3',[['\\log_2 (26 + 26)','given'],['= \\log_2 26 + \\log_2 26','logs and adding']],2,1,'Logs turn multiplying into adding, not adding: log\u2082 52 \u2248 5.70.'],
+      ['b4',[['\\text{twice the bits}','given'],['\\text{twice the time}','the count']],2,1,'The count is 2^b: twice the bits squares the count.'],
+      ['b5',[['N \\text{ passwords}','given'],['\\text{the guesser needs all } N','the worst case']],2,1,'About N/2 on average, and possibly the first.'],
+      ['b6',[['L \\to L + 1','one more symbol'],['+\\log_2 A \\text{ bits}','length-beats-symbols']],2,0,'log\u2082(A^(L+1)) \u2212 log\u2082(A^L) = log\u2082 A.']],[]); }});
+/* ----- annex 17·phys Is light a dot or a flow: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'17·phys.work',step:'17·phys',mode:'work',label:'the peak, and the fourth power',open:()=>measured('17·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const S=[['the Sun\u2019s surface',5800],['a red dwarf star',3000],['a tungsten filament',3000],['Sirius',9900],['a person\u2019s skin',305],['an electric stove ring',1000]][rnd(6)], lam=2.898e-3/S[1];
+      const F=v=>v<1e-6?DECAX(v*1e9,0)+' nm':DECAX(v*1e6,2)+' \u03bcm', right=F(lam), wrong=UQAX(right,[F(lam*10),F(lam/10),F(2.898e-3*S[1]/1e7),F(lam*2)],3); if(wrong.length<3) return null;
+      return {index:'q:17·phys.work[p;'+S[1]+']', lines:[['\\lambda_{\\max} T = 2.898 \\times 10^{-3}\\ \\text{m\u00b7K}','peak-moves'],['T = '+S[1]+'\\ \\text{K}',S[0]]], ask:'Where does its glow peak?', right, opts:shuffle([right,...wrong]), lead:'', why:'\u03bb_max = 2.898 \u00d7 10\u207b\u00b3 \u00f7 '+S[1]+' m \u2248 '+right+'.'}; }
+    const k=[2,3,1.5,0.5][rnd(4)], right='\u00d7 '+DECAX(Math.pow(k,4),4), wrong=UQAX(right,['\u00d7 '+DECAX(k,4),'\u00d7 '+DECAX(k*k,4),'\u00d7 '+DECAX(Math.pow(k,3),4),'\u00d7 '+DECAX(4*k,4)],3); if(wrong.length<3) return null;
+    return {index:'q:17·phys.work[t;'+k+']', lines:[['\\textstyle\\int_0^\\infty u\\,d\\lambda = \\text{const} \\cdot T^4','fourth-power']], ask:'The temperature is multiplied by '+k+'. By what is the total glow multiplied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Fourth-power: the total goes as T\u2074, so '+k+'\u2074 = '+DECAX(Math.pow(k,4),4)+'.'}; }},
+  {id:'17·phys.word',step:'17·phys',mode:'word',label:'the photoelectric effect',open:()=>measured('17·phys'),make(){
+    const M=[['sodium',2.3],['potassium',2.3],['zinc',4.3],['copper',4.7],['caesium',2.1]][rnd(5)], L=[['red light at 700 nm',700],['green light at 530 nm',530],['violet light at 400 nm',400],['ultraviolet at 250 nm',250]][rnd(4)];
+    const E=1240/L[1], K=E-M[1], right=K>0?DECAX(K,2)+' eV':'none: no electron is freed', wrong=K>0?UQAX(right,[DECAX(E,2)+' eV',DECAX(E+M[1],2)+' eV',DECAX(M[1],2)+' eV','none: no electron is freed'],3):['some, if the light is bright enough',DECAX(E,2)+' eV',DECAX(M[1]-E,2)+' eV'];
+    if(wrong.length<3) return null;
+    return {index:'q:17·phys.word['+M[0]+';'+L[1]+']', a3:['17·phys.word',DASH,DASH], story:'Light shines on clean '+M[0]+', whose electrons need at least \u03c6 = '+M[1]+' eV to leave. The light is '+L[0]+'; a photon of wavelength \u03bb nm carries about 1240/\u03bb eV.', lines:[], ask:'What is the most energy a freed electron can have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each photon carries hf \u2248 1240 \u00f7 '+L[1]+' \u2248 '+DECAX(E,2)+' eV. Photoelectric: K_max = hf \u2212 \u03c6 = '+DECAX(K,2)+' eV'+(K>0?'.':'; below 0, so none is freed, however bright the light: brightness counts photons.')}; }},
+  {id:'17·phys.line',step:'17·phys',mode:'proof',label:'what the lump law licenses',open:()=>measured('17·phys'),make(){
+    return line28('17·phys.line',[
+      ['h1',[['\\text{brighter red light}','given'],['\\text{faster freed electrons}','more energy']],2,1,'Brightness counts photons; each still carries hf < \u03c6.'],
+      ['h2',[['\\textstyle\\int_0^{\\lambda_1} C kT \\lambda^{-4}\\,d\\lambda','the classical count'],['\\text{diverges}','endless-glow']],2,0,'Near 0, \u03bb\u207b\u2074 has an endless area.'],
+      ['h3',[['\\text{a peak per unit frequency at } f_{\\max}','given'],['\\lambda_{\\max} = c/f_{\\max}','the peak']],2,1,'The two peaks are at different places.'],
+      ['h4',[['\\text{a greenhouse layer}','given'],['T_s = T_e + \\text{a term for each gas}','adding']],2,1,'The layer enters through T\u2074, under a fourth root: T_s = T_e (2/(2 \u2212 \u03b5))^(1/4).'],
+      ['h5',[['E \\in \\{0, hf, 2hf, \\dots\\}','lumps'],['\\text{the average is less than } kT','lumpy-average']],2,0,'hf/(e^(hf/kT) \u2212 1) < kT.'],
+      ['h6',[['T \\times 2','given'],['\\text{the total glow} \\times 16','fourth-power']],2,0,'2\u2074 = 16.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
