@@ -19157,6 +19157,75 @@ QP.push({id:'30·stat.work',step:'30·stat',mode:'work',label:'between and withi
       ['t5',[['\\text{each mix once in each field}','blocks'],['\\text{the field effects cancel}','same-field']],2,0,'β̄ is in both averages and drops from the difference.'],
       ['t6',[['\\text{five plots to a mix found no difference}','a small trial'],['\\text{the mixes are alike}','no pass']],2,1,'A trial that small has low power.'],
       ['t7',[['\\text{laid out in fields}','blocks'],['\\text{shuffle the labels over all fifteen plots}','label-shuffle']],2,1,'Count only the splits the draw could make: inside each field.']],[]); }});
+/* ----- annex 31·eng Why does a tall building sway: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'31·eng.work',step:'31·eng',mode:'work',label:'ways of shaking',open:()=>measured('31·eng'),make(){
+    const ask=rnd(2);
+    if(ask){ const a=1+rnd(9), b=1+rnd(9), v=(3*a+4*b)/5, right=DECAX(v,2), wrong=UQAX(right,[DECAX((4*a+3*b)/5,2),String(a+b),DECAX((3*a+4*b)/25,2),DECAX(Math.sqrt(a*a+b*b),2)],3); if(wrong.length<3) return null;
+      return {index:'q:31·eng.work[f;'+a+';'+b+']', lines:[['F = ('+a+', '+b+')','a push on two floors'],['e_1 = (\\tfrac35, \\tfrac45)','the first way of shaking']], ask:'What part of the push drives the first way?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shared-push: only the reading F · e₁ = (3 · '+a+' + 4 · '+b+') ÷ 5 = '+right+' drives it.'}; }
+    const m=[2,4,5,10][rnd(4)], w=[1,1.5,2,3][rnd(4)], L=m*w*w, right=DECAX(w,2), wrong=UQAX(right,[DECAX(L/m,2),DECAX(Math.sqrt(L),2),DECAX(Math.sqrt(m/L),2),DECAX(Math.sqrt(L*m),2)],3); if(wrong.length<3) return null;
+    return {index:'q:31·eng.work[w;'+m+';'+w+']', lines:[['m\\,x\'\' = -Kx,\\ \\ m = '+m,'the pulls between floors'],['\\lambda_1 = '+DECAX(L,2),'a stretch of K']], ask:'At what pace ω does that way swing?', right, opts:shuffle([right,...wrong]), lead:'', why:'Symmetric-sway: ω = √(λ ÷ m) = √('+DECAX(L,2)+' ÷ '+m+') = '+right+'.'}; }},
+  {id:'31·eng.word',step:'31·eng',mode:'word',label:'the tower in the wind',open:()=>measured('31·eng'),make(){
+    const k=[2,4,9,16][rnd(4)], right=DECAX(4/Math.sqrt(k),2)+' s', wrong=UQAX(right,[DECAX(4/k,2)+' s',DECAX(4*Math.sqrt(k),2)+' s',DECAX(4*k,2)+' s','4 s'],3); if(wrong.length<3) return null;
+    return {index:'q:31·eng.word['+k+']', a3:['31·eng.word',DASH,DASH], story:'A tower in Seattle sways once every 4 seconds in its first way of shaking. Engineers make every pull between floors '+k+' times as stiff, with the same floors.', lines:[], ask:'What is the new time of one sway?', right, opts:shuffle([right,...wrong]), lead:'', why:'Symmetric-sway: each stretch λ is '+k+' times as large, ω = √(λ/m) grows by √'+k+', and the time 2π/ω shrinks by √'+k+'. A stiffer tower moves its paces; it may move one onto the wind’s.'}; }},
+  {id:'31·eng.line',step:'31·eng',mode:'proof',label:'what the sway licenses',open:()=>measured('31·eng'),make(){
+    return line28('31·eng.line',[
+      ['e1',[['M x\'\' = -Kx,\\ \\text{masses differ}','given'],['M^{-1}K \\text{ has right-angled axes}','symmetric']],2,1,'It is not symmetric when the masses differ; weigh by the roots of the masses first.'],
+      ['e2',[['\\text{the tower is made stiffer}','given'],['\\text{it sways less in every wind}','stiffer']],2,1,'It moves its paces, and may move one onto the wind’s.'],
+      ['e3',[['F \\cdot e_k = 0','the push'],['\\text{the push never starts way } k','shared-push']],2,0,'m yₖ″ = −λₖyₖ + F · eₖ, and the push term is 0.'],
+      ['e4',[['\\text{a push on every floor}','given'],['\\text{every way starts}','pushed']],2,1,'Only those it is not at right angles to.'],
+      ['e5',[['K \\text{ symmetric},\\ \\tfrac12 x^{\\mathsf T}Kx \\gt 0','the grid'],['\\text{right-angled ways, each with } \\omega_k = \\sqrt{\\lambda_k/m}','symmetric-sway']],2,0,'A symmetric grid with positive energy has right-angled axes with stretches above 0.'],
+      ['e6',[['\\text{a building that does not sway}','given'],['\\text{it is safest}','stiff']],2,1,'It cannot bend, so it cannot store a gust’s energy, and it cracks.']],[]); }});
+/* ----- annex 31·logi Should every counter have its own line: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'31·logi.work',step:'31·logi',mode:'work',label:'the wait near full use',open:()=>measured('31·logi'),make(){
+    const ask=rnd(2), r=[0.5,0.75,0.8,0.9,0.95,0.99][rnd(6)];
+    if(ask){ const right=DECAX(r/(1-r),2), wrong=UQAX(right,[DECAX(1/(1-r),2),String(r),DECAX((1-r)/r,2),DECAX(r*r/(1-r),2)],3); if(wrong.length<3) return null;
+      return {index:'q:31·logi.work[n;'+r+']', lines:[['\\rho = \\lambda/\\mu = '+r,'one counter']], ask:'How many service times does a person wait, on average, before being served?', right, opts:shuffle([right,...wrong]), lead:'', why:'Near-full: ρ ÷ (1 − ρ) = '+r+' ÷ '+DECAX(1-r,2)+' = '+right+'.'}; }
+    const s=DECAX(2*r/(1-r),2), right=DECAX(2*r*r/(1-r*r),2)+' min', wrong=UQAX(right,[s+' min',DECAX(r*r/(1-r*r),2)+' min',DECAX(r/(1-r),2)+' min',DECAX(2*r*r/(1-r),2)+' min'],3); if(wrong.length<3) return null;
+    return {index:'q:31·logi.work[s;'+r+']', lines:[['\\text{two clerks, one shared line}','each serves 30 an hour'],['\\rho = '+r,'each busy that share']], ask:'What is the average wait before service?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shared-line: ρ² ÷ (μ(1 − ρ²)), with 1/μ = 2 min: 2 · '+DECAX(r*r,4)+' ÷ '+DECAX(1-r*r,4)+' ≈ '+right+'. Separate lines give '+s+' min.'}; }},
+  {id:'31·logi.word',step:'31·logi',mode:'word',label:'the post office at noon',open:()=>measured('31·logi'),make(){
+    const r=[0.5,0.6,0.75,0.8,0.9][rnd(5)], v=2*(1-r)*r*r, right=DECAX(100*v,1)+'%', wrong=UQAX(right,['0%',DECAX(100*(1-r),1)+'%',DECAX(100*(1-r)*r*r,1)+'%',DECAX(100*r*r,1)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:31·logi.word['+r+']', a3:['31·logi.word',DASH,DASH], story:'A post office in Olympia paints two lines, one to each counter. People pick a line at random, and each clerk is busy a share '+r+' of the time.', lines:[], ask:'What is the chance that a clerk idles while someone waits at the other counter?', right, opts:shuffle([right,...wrong]), lead:'', why:'Idle-waste: one clerk free and the other with someone waiting, either way round: 2(1 − ρ)ρ² = '+right+'. With one shared line it is 0.'}; }},
+  {id:'31·logi.line',step:'31·logi',mode:'proof',label:'what the lines license',open:()=>measured('31·logi'),make(){
+    return line28('31·logi.line',[
+      ['q1',[['\\text{same clerks, same arrivals}','given'],['\\text{the same wait either plan}','averages match']],2,1,'The waste of idle clerks does not match.'],
+      ['q2',[['\\rho = 0.99','one counter'],['\\text{only a little worse than } \\rho = 0.9','near']],2,1,'The wait is 99 services against 9.'],
+      ['q3',[['\\rho = 1','full use'],['\\text{a long but steady line}','steady-line']],2,1,'The steady-line technique needs ρ below 1.'],
+      ['q4',[['\\text{two counters, one line, each busy } \\rho','shared'],['\\text{wait} = \\text{separate wait} \\times \\tfrac{\\rho}{1 + \\rho}','shared-line']],2,0,'ρ²/(μ(1 − ρ²)) against ρ/(μ(1 − ρ)).'],
+      ['q5',[['\\text{one shared line}','built'],['\\text{no clerk idles while someone waits}','idle-waste']],2,0,'A free clerk takes the next person.'],
+      ['q6',[['\\text{two lines, people switch to the shorter}','given'],['\\text{as good as one shared line}','switching']],2,1,'A free clerk can still idle beside a line one service long.']],[]); }});
+/* ----- annex 31·now How can a picture be stored small: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'31·now.work',step:'31·now',mode:'work',label:'keep the largest readings',open:()=>measured('31·now'),make(){
+    const R=shuffle([9,7,5,4,3,2,1,1].map((x,i)=>x*(rnd(2)?1:-1))).slice(0,6), m=2+rnd(2), S=R.map(Math.abs).sort((a,b)=>b-a), miss=S.slice(m).reduce((s,x)=>s+x*x,0), first=R.slice(m).reduce((s,x)=>s+x*x,0), right=String(miss), wrong=UQAX(right,[String(first),String(S[m]*S[m]),String(S[m]),String(S.slice(m).reduce((s,x)=>s+x,0))],3); if(wrong.length<3) return null;
+    return {index:'q:31·now.work['+R.join(';')+';'+m+']', lines:[['\\text{readings: } '+R.join(',\\ ').replace(/-/g,'−'),'along a right-angled basis'],['\\text{keep } '+m,'']], ask:'What is the smallest squared miss with '+m+' basis lists?', right, opts:shuffle([right,...wrong]), lead:'', why:'Largest-readings: keep the '+m+' largest in size, and the miss is the total of the squares dropped: '+S.slice(m).map(x=>x+'²').join(' + ')+' = '+right+'.'}; }},
+  {id:'31·now.word',step:'31·now',mode:'word',label:'one roof against the sky',open:()=>measured('31·now'),make(){
+    const J=[3,4,6,8,10,12][rnd(6)], N=Math.pow(2,J), right=String(J+1), wrong=UQAX(right,[String(N),String(N/2),String(J),'1'],3); if(wrong.length<3) return null;
+    return {index:'q:31·now.word['+J+']', a3:['31·now.word',DASH,DASH], story:'A row of '+N.toLocaleString('en').replace(/,/g,' ')+' dots in a photo of the Skagit Valley is pale sky, then dark roof: constant except for one jump.', lines:[], ask:'At most how many of its readings along the brief waves are not 0?', right, opts:shuffle([right,...wrong]), lead:'', why:'Edge-count: 2^'+J+' dots, so one reading at each of the '+J+' sizes, plus the constant: '+right+'.'}; }},
+  {id:'31·now.line',step:'31·now',mode:'proof',label:'what the readings license',open:()=>measured('31·now'),make(){
+    return line28('31·now.line',[
+      ['b1',[['\\text{store } m \\text{ readings}','given'],['\\text{keep the first } m','the list']],2,1,'Keep the m largest; the order of the list is not their size.'],
+      ['b2',[['\\text{readings dropped}','largest kept'],['\\text{the miss is the largest dropped}','miss']],2,1,'It is the total of the squares of all dropped.'],
+      ['b3',[['\\text{a basis that is not right-angled}','given'],['\\text{dropping small readings costs their squares}','miss']],2,1,'Only in a right-angled one; otherwise the misses mix.'],
+      ['b4',[['\\text{a right-angled basis}','given'],['\\text{the } m \\text{ largest readings give the closest picture}','largest-readings']],2,0,'The squared miss is the total of the squares dropped.'],
+      ['b5',[['\\text{brief waves}','a basis'],['\\text{best for every picture}','brief-wave']],2,1,'A picture of fine stripes is cheaper in turnings.'],
+      ['b6',[['\\text{a small squared miss}','given'],['\\text{the picture looks the same}','the eye']],2,1,'The eye weighs edges and textures in its own way.']],[]); }});
+/* ----- annex 31·phys How do polarized sunglasses cut glare: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'31·phys.work',step:'31·phys',mode:'work',label:'the filter as a shadow map',open:()=>measured('31·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const N=[['water',1.33],['glass',1.5],['a diamond',2.42]][rnd(3)], n=N[1], d=180/Math.PI, right=DECAX(Math.atan(n)*d,1)+'°', wrong=UQAX(right,[DECAX(Math.asin(1/n)*d,1)+'°',DECAX(Math.atan(1/n)*d,1)+'°',DECAX(Math.acos(1/n)*d,1)+'°','45°'],3); if(wrong.length<3) return null;
+      return {index:'q:31·phys.work[b;'+n+']', lines:[['n = '+n,N[0]]], ask:'At what angle from straight down does light off '+N[0]+' shake only level?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level-glare: tan θ = n, so θ = arctan '+n+' ≈ '+right+'.'}; }
+    const t=[20,30,45,60,70][rnd(5)], c=Math.cos(t*Math.PI/180), right=DECAX(100*c*c,1)+'%', wrong=UQAX(right,[DECAX(100*c,1)+'%','50%',DECAX(50*c*c,1)+'%',DECAX(100*(1-c*c),1)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:31·phys.work[m;'+t+']', lines:[['\\text{light shaking along one line}','glare'],['\\theta = '+t+'^\\circ \\text{ to the filter’s line}','']], ask:'What share of its brightness passes?', right, opts:shuffle([right,...wrong]), lead:'', why:'Filter-shadow: |PE|² = |E|² cos²θ = cos² '+t+'° ≈ '+right+'.'}; }},
+  {id:'31·phys.word',step:'31·phys',mode:'word',label:'three filters at the lake',open:()=>measured('31·phys'),make(){
+    const t=[15,30,45,60][rnd(4)], a=t*Math.PI/180, v=0.5*Math.pow(Math.cos(a)*Math.sin(a),2), right=DECAX(100*v,2)+'%', wrong=UQAX(right,['0%',DECAX(50*Math.pow(Math.cos(a),2),2)+'%',DECAX(100*Math.pow(Math.cos(a)*Math.sin(a),2),2)+'%','50%'],3); if(wrong.length<3) return null;
+    return {index:'q:31·phys.word['+t+']', a3:['31·phys.word',DASH,DASH], story:'An angler on Lake Tahoe holds two polarized lenses crossed, one line upright and one level, against the sun. Then she slips a third between them, its line '+t+'° from upright.', lines:[], ask:'What share of the sunlight now comes through?', right, opts:shuffle([right,...wrong]), lead:'', why:'Mixed-light, then the stack: ½ · cos² '+t+'° · cos² '+(90-t)+'° ≈ '+right+'. The middle filter adds no light; it lets through part of what the crossed pair throws away whole.'}; }},
+  {id:'31·phys.line',step:'31·phys',mode:'proof',label:'what the filters license',open:()=>measured('31·phys'),make(){
+    return line28('31·phys.line',[
+      ['p1',[['\\text{sunlight through a filter}','given'],['\\text{it keeps } \\cos^2\\theta','filter-shadow']],2,1,'Sunlight has no one θ; it keeps ½.'],
+      ['p2',[['P = dd^{\\mathsf T}','filter-shadow'],['P^2 = P','twice as once']],2,0,'dᵀd = 1, so ddᵀddᵀ = ddᵀ.'],
+      ['p3',[['\\text{two filters at } 30^\\circ','given'],['P_1P_2 = P_2P_1','either order']],2,1,'Only at 0° or 90°; otherwise the light leaves along the last line.'],
+      ['p4',[['\\text{a second filter}','given'],['\\text{it undoes the first}','undo']],2,1,'A shadow map has determinant 0; the part across is gone.'],
+      ['p5',[['\\tan\\theta = 1.33','water'],['\\text{the glare shakes only level}','level-glare']],2,0,'At that angle the reflected light shakes level.'],
+      ['p6',[['\\text{glare off water at any angle}','given'],['\\text{it is all level}','glare']],2,1,'Only at tan θ = n; at other angles it is mostly level.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
