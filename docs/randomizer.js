@@ -755,7 +755,7 @@ K({id:'tangent',step:'13a',steps:['13a','13k'],title:'a slope off the tangent li
   const a=pk([1,-1,0.5,-0.5]), sft=ri(-1,1), lift=a>0?ri(-3,-1):ri(1,3), F=x=>a*(x-sft)*(x-sft)/2+lift; /* slope a(x − sft) */
   const cs=[-3,-2,-1,1,2,3].map(c=>c+sft).filter(c=>c>=-3&&c<=3&&Math.abs(F(c))<=4&&a*(c-sft)!==0&&Number.isInteger(a*(c-sft))); if(!cs.length) return null;
   const c=pk(cs), m=a*(c-sft), y0=F(c), tl=x=>m*(x-c)+y0, p2=c+(c<3?1:-1), right=sg(m);
-  const ws=uniq(right,[dec(y0),frac(1,m),sg(-m),sg(2*m),sg(m+1)]).slice(0,3); if(ws.length<3) return null;
+  const ws=uniq(right,[dec(y0),frac(1,m),sg(-m),sg(2*m),sg(m+1),dec(tl(p2)),sg(m-1)]).slice(0,3); if(ws.length<3) return null;
   return card(this,{ix:[a,sft,lift,c].join(','), fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f:F,from:-4.5,to:4.5},{t:'fn',f:tl,from:-4.5,to:4.5,dash:1,k:'b'},{t:'dots',pts:[[c,y0],[p2,tl(p2)]]}],alt:'a curve and its tangent line at one point'}),
     ask:'The dashed line is the tangent to the curve y = f(x) at x = '+sg(c)+'. What is f′('+sg(c)+')?', right, opts:sh([right,...ws]),
     why:'The slope at a point is the slope of the tangent line there. The line passes through ('+sg(c)+', '+dec(y0)+') and ('+sg(p2)+', '+dec(tl(p2))+'): a rise of '+dec(tl(p2)-y0)+' over a run of '+sg(p2-c)+', so '+right+'. The height f('+sg(c)+') = '+dec(y0)+' is not the slope.'}); }});
@@ -1142,7 +1142,7 @@ const deg=(n,E)=>{ const d=Array(n).fill(0); E.forEach(([a,b])=>{ d[a]++; d[b]++
 
 /* which dots a walk from a reaches: a network read back as a set (2·, 42a walk-to-path) */
 G.K({id:'reach',step:'42a',title:'the dots a walk can reach',make(){
-  const n=pk([6,7]), E=net(n,ri(4,6),false); if(!E) return null; const C=comps(n,E), st=rn(n), mine=C.find(c=>c.includes(st));
+  const n=pk([6,7]), E=net(n,ri(4,6),false); if(!E) return null; const C=comps(n,E), st=pk(C.filter(c=>c.length>=2).flat()), mine=C.find(c=>c.includes(st)); /* start on a dot with a line */
   if(mine.length<2) return null; const right=setS(mine.map(i=>NAMES[i])), nb=[...new Set(E.filter(e=>e.includes(st)).flat())].map(i=>NAMES[i]);
   const ws=uniq(right,[setS(nb),setS(mine.filter(i=>i!==st).map(i=>NAMES[i])),setS(NAMES.slice(0,n)),setS(C.filter(c=>c!==mine).flat().map(i=>NAMES[i]).concat([NAMES[st]]))]).slice(0,3); if(ws.length<3) return null;
   return card(this,{seed:'net',ix:n+':'+E.map(e=>e.join('')).join('.')+';'+st,links:['42a.walk','2e.sift'], fig:netsvg(n,E), steps:['2e','42a'],
@@ -1470,8 +1470,8 @@ redo('circle',function(){ const k=pk(ANGS), turns=pk([0,0,0,1,-1]), what=pk(['co
 redo('wave',function(){ const P=pk([2,4,6,8,10,12]), A=pk([1,2,3]), h=pk([0,0,1,2,P/4,P/2].filter(Number.isInteger)), d=pk([0,0,-1,1,2,-2]), fl=R()<0.3, what=pk(['period','height','midline']);
   const f=x=>(fl?-1:1)*A*Math.sin(2*Math.PI*(x-h)/P)+d, lo=d-A-1, hi=d+A+1;
   let right, ws; if(what==='period'){ right=String(P); ws=uniq(right,[String(P/2),String(2*P),String(P+h||P+1),String(A),String(P+2)]); }
-  else if(what==='height'){ right=String(A); ws=uniq(right,[String(2*A),String(A+Math.abs(d)||A+1),String(A+d),String(A+1),String(A===1?3:A-1)].filter(x=>+x>0)); }
-  else { right='y = '+sg(d); ws=uniq(right,['y = '+sg(d+A),'y = '+sg(d-A),'y = 0','y = '+sg(-d),'y = '+sg(d+1)]); }
+  else if(what==='height'){ right=String(A); ws=uniq(right,[String(2*A),String(A+Math.abs(d)||A+1),String(A+d),String(A+1),String(A===1?3:A-1),String(A+2),String(A+3)].filter(x=>+x>0)); }
+  else { right='y = '+sg(d); ws=uniq(right,['y = '+sg(d+A),'y = '+sg(d-A),'y = 0','y = '+sg(-d),'y = '+sg(d+1),'y = '+sg(d+2*A),'y = '+sg(d-1)]); }
   if(ws.length<3) return null; const links=[]; if(h) links.push('20i.slide('+h+')'); if(d) links.push('20i.lift('+d+')'); if(fl) links.push('20i.flip'); links.push('21g.'+what);
   return card(this,{ix:[P,A,h,d,fl?1:0,what].join(','),links, fig:svg({x:[0,2*P],y:[lo,hi],sx:P/4>=1?P/4:1,sy:1,lx:P/2,xl:'x',yl:'y',parts:[{t:'fn',f,from:0,to:2*P,n:200}],alt:'a wave'}),
     ask:'The wave is a sine wave'+(links.length>1?' that has been moved':'')+'. What is its '+(what==='period'?'period, the length before it repeats':what==='height'?'height A above its midline':'midline, the level it swings about')+'?', right, opts:sh([right,...ws.slice(0,3)]),
@@ -1484,7 +1484,7 @@ redo('halving',function(){ const h=pk([1,2,3,4,5,6]), y0=pk([32,48,64,80,96,112,
   let right, ws, ask, why;
   if(what==='half'){ right=h+' '+unit; ws=uniq(right,[(h*2)+' '+unit,(h/2)+' '+unit,T+' '+unit,(h+1)+' '+unit]); ask='How long does it take to halve?';
     why='It falls from '+y0+' to '+(y0/2)+' between t = 0 and t = '+h+', and from '+(y0/2)+' to '+(y0/4)+' between '+h+' and '+(2*h)+'. By doubling-time it halves every '+h+' '+unit+', wherever the clock starts.'; }
-  else if(what==='left'){ right=dec(y0/Math.pow(2,n)); ws=uniq(right,[dec(y0/n),dec(y0/2),dec(y0-n*y0/4),dec(y0/Math.pow(2,n+1))]); ask='How much is left at t = '+(n*h)+'?';
+  else if(what==='left'){ right=dec(y0/Math.pow(2,n)); ws=uniq(right,[dec(y0/n),dec(y0/2),dec(y0-n*y0/4),dec(y0/Math.pow(2,n+1)),dec(y0-y0/Math.pow(2,n)),dec(y0/Math.pow(2,2*n))]); ask='How much is left at t = '+(n*h)+'?';
     why=(n*h)+' '+unit+' is '+n+' halving times of '+h+', so '+y0+' is halved '+n+' times: '+right+'. Halving is by a factor, not by a fixed amount.'; }
   else { right=(2*h)+' '+unit; ws=uniq(right,[h+' '+unit,(4*h)+' '+unit,(3*h)+' '+unit,(2*h+1)+' '+unit]); ask='How long does it take to fall to a quarter of where it starts?';
     why='A quarter is a half of a half: two halving times of '+h+', so '+(2*h)+' '+unit+', not four.'; }
@@ -1684,7 +1684,7 @@ K({id:'rows',step:'1g',title:'rows against letters',make(){ const n=ri(3,7), bac
 
 /* 2h: pairs in order, a shaded grid */
 K({id:'grid',step:'2h',steps:['2h'],title:'a set of pairs on a grid',make(){ const A=[1,2,3,4].slice(0,ri(3,4)), B=['a','b','c','d'].slice(0,ri(3,4));
-  const S=A.filter(()=>R()<0.55), Tt=B.filter(()=>R()<0.55); if(!S.length||!Tt.length||(S.length===A.length&&Tt.length===B.length)) return null;
+  const S0=A.filter(()=>R()<0.55), T0=B.filter(()=>R()<0.55), S=S0.length?S0:[A[rn(A.length)]], T1=T0.length?T0:[B[rn(B.length)]], Tt=S.length===A.length&&T1.length===B.length?(k=>T1.filter((_,i)=>i!==k))(rn(T1.length)):T1; /* each side has a member, and the pairs are not the whole grid */
   const W=60+A.length*40, H=40+B.length*36; let b=''; A.forEach((x,i)=>{ b+=T(60+i*40+20,H-8,String(x),'rg-tag','middle'); }); B.forEach((y,j)=>{ b+=T(40,H-34-j*36+4,y,'rg-tag','end'); });
   A.forEach((x,i)=>B.forEach((y,j)=>{ const on=S.includes(x)&&Tt.includes(y); b+=Re(48+i*40,H-50-j*36,36,32,on?'rg-shade':'rg-uni'); }));
   const st=a=>'{'+a.join(', ')+'}', right=st(S)+' × '+st(Tt), o=four(right,[st(Tt)+' × '+st(S),st(A.filter(x=>!S.includes(x)).length?A.filter(x=>!S.includes(x)):A)+' × '+st(Tt),st(S)+' × '+st(B),st(A)+' × '+st(Tt),st(S)+' × '+st(B.filter(y=>!Tt.includes(y)).length?B.filter(y=>!Tt.includes(y)):B)]);
@@ -1751,7 +1751,7 @@ K({id:'choices',step:'4k',title:'counting the leaves of a tree of choices',make(
 
 /* 4·stat: a bar chart of tallies */
 K({id:'tally',step:'4·stat',title:'a bar chart of tallies',make(){ const cats=sh([['apple','pear','plum','fig','lime'],['red','blue','green','gold','grey'],['bus','bike','walk','car','train']][rn(3)]).slice(0,ri(4,5));
-  const v=cats.map(()=>ri(1,12)), mx=Math.max(...v); if(v.filter(x=>x===mx).length>1) return null; const what=pk(['total','most','diff']);
+  const v=cats.map(()=>ri(1,12)), m0=Math.max(...v), tied=v.map((x,k)=>x===m0?k:-1).filter(k=>k>=0), keep=pk(tied); /* one tallest bar: the others tied with it come down one */ tied.forEach(k=>{ if(k!==keep&&m0>1) v[k]=m0-1; }); if(m0===1&&tied.length>1) v[keep]=2; const mx=Math.max(...v); const what=pk(['total','most','diff']);
   const i=rn(cats.length); let j=rn(cats.length); if(j===i) j=(i+1)%cats.length;
   const parts=[{t:'bars',bins:v.map((h,k)=>[k+0.15,k+0.85,h])}], fig=svg({x:[0,cats.length],y:[0,13],sx:1,sy:1,lx:20,ly:2,yl:'count',parts,alt:'a bar chart'}).replace('</svg>',cats.map((c,k)=>T(34+(k+0.5)*(274/cats.length),227,c,'rg-lab','middle')).join('')+'</svg>');
   let right, ask, o;
@@ -1772,7 +1772,7 @@ K({id:'gears',step:'5·eng',title:'how gears change speed',make(F__){ const T__=
 
 /* 5b and 5c: pairs on a grid name one integer (same difference) or one fraction (same ratio) */
 K({id:'pairline',step:'5c',steps:['5b','5c'],title:'pairs that name the same number',make(){ const fr=R()<0.5;
-  if(fr){ const p=ri(1,4), q=ri(1,4); if(p===q&&R()<0.7) return null; const g=(a,b)=>b?g(b,a%b):a; if(g(p,q)!==1) return null; const pts=[1,2,3].map(k=>[k*p,k*q]).filter(([x,y])=>x<=9&&y<=9); if(pts.length<2) return null;
+  if(fr){ const g=(a,b)=>b?g(b,a%b):a, [p,q]=pk(LVC('g.pairline',()=>LX(LRG(1,4),LRG(1,4)).filter(([p,q])=>g(p,q)===1))); /* a fraction in lowest terms */ const pts=[1,2,3].map(k=>[k*p,k*q]).filter(([x,y])=>x<=9&&y<=9); if(pts.length<2) return null;
     const right=frac(p,q), o=four(right,[frac(q,p),frac(p+q,q),String(p*q),frac(p,q+1),frac(p+1,q)]); if(!o) return null;
     return card(this,{ix:'f'+p+'/'+q,links:['5c.same-fraction'], fig:svg({x:[0,9.5],y:[0,9.5],xl:'first',yl:'second',parts:[{t:'fn',f:x=>x*q/p,from:0,to:9.5,dash:1},{t:'dots',pts}],alt:'pairs on a line through 0'}),
       ask:'Each dot is a pair (first, second) read as the fraction first/second. All the dots name the same fraction. Which?', right, opts:o,
@@ -1914,7 +1914,7 @@ K({id:'hole',step:'10e',steps:['10a','10e'],title:'limits at a jump or a hole',m
   const f1=x=>L1+m1*(x-a), f2=x=>L2+m2*(x-a), what=pk(['left','right','both','value']);
   const parts=[{t:'fn',f:f1,from:-4.5,to:a},{t:'fn',f:f2,from:a,to:4.5},{t:'dots',pts:[[a,L1]],open:1},{t:'dots',pts:[[a,L2]],open:1},{t:'dots',pts:[[a,v]]}];
   const nl='no limit', V={left:sg(L1),right:sg(L2),both:L1===L2?sg(L1):nl,value:sg(v)}, right=V[what];
-  const o=four(right,[sg(L1),sg(L2),sg(v),nl,sg(a),sg(L1+1)]); if(!o) return null;
+  const o=four(right,[sg(L1),sg(L2),sg(v),nl,sg(a),sg(L1+1),sg(L2+1),sg(-L1),sg(L1-1)]); if(!o) return null;
   const ask={left:'What is the limit as x heads to '+sg(a)+' from the left?',right:'What is the limit as x heads to '+sg(a)+' from the right?',both:'What is the limit as x heads to '+sg(a)+'?',value:'What is f('+sg(a)+')?'}[what];
   return card(this,{ix:[a,L1,L2,v,m1,m2,what].join(','),links:['10e.two-sides-agree','10a.limit'], fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts,alt:'a graph with a jump or hole'}), ask:'Open dots are left out; the filled dot is the value. '+ask, right, opts:o,
     why:'From the left the curve heads to '+sg(L1)+', from the right to '+sg(L2)+'. '+(L1===L2?'They agree, so the limit is '+sg(L1)+'.':'They differ, so there is no limit there (two-sides-agree).')+' The value f('+sg(a)+') = '+sg(v)+' plays no part in the limit.'}); }});
@@ -1990,7 +1990,7 @@ K({id:'ivt',step:'12a',title:'where a root must be',make(){ const z=ri(-3,2)+pk(
 K({id:'extreme',step:'12c',title:'where the top is reached',make(){ const zs=sh([-3,-2,-1,0,1,2,3]).slice(0,2).sort((a,b)=>a-b), c=fit4(rootsPoly(zs,pk([1,-1]))), F=[0,...c.map((v,i)=>v/(i+1))], a=ri(-4,-1), b=ri(1,4);
   let best=a,bv=-1e9; for(let x=a;x<=b+1e-9;x+=0.01){ const v=pval(F,x); if(v>bv){ bv=v; best=x; } } const bx=Math.round(best*100)/100; if(Math.abs(bx-Math.round(bx))>0.02) return null;
   const sc=4/Math.max(...[...Array(81)].map((_,i)=>Math.abs(pval(F,-4+i*0.1)))), f=x=>pval(F,x)*sc;
-  const right='x = '+sg(Math.round(bx)), o=four(right,['x = '+sg(a),'x = '+sg(b),...zs.map(z=>'x = '+sg(z)),'x = 0']); if(!o) return null;
+  const right='x = '+sg(Math.round(bx)), o=four(right,['x = '+sg(a),'x = '+sg(b),...zs.map(z=>'x = '+sg(z)),'x = 0','x = '+sg(Math.round((a+b)/2)),'x = '+sg(-Math.round(bx))]); if(!o) return null;
   return card(this,{ix:zs.join(',')+';'+a+','+b,links:['12c.highest-and-lowest','14a.candidates'], fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f,from:-4.5,to:4.5,dash:1},{t:'fn',f,from:a,to:b},{t:'dots',pts:[[a,f(a)],[b,f(b)]]}],alt:'a curve on a closed interval'}),
     ask:'The curve is taken only from x = '+sg(a)+' to x = '+sg(b)+' (solid). Where on that stretch is it highest?', right, opts:o,
     why:'A continuous curve on a closed stretch reaches a top (highest-and-lowest). It is at a flat point inside or at an end: compare them and the highest is at '+right+'.'}); }});
@@ -2113,8 +2113,8 @@ K({id:'centroid',step:'15·phys',title:'the balance point of a plate',make(F__){
     why:'Each piece balances at its middle, weighted by its area: ('+A1+'·'+dec(w1/2)+' + '+A2+'·'+dec(w1+w2/2)+')/('+A1+' + '+A2+') = '+dec(cx)+' (plate-pieces). The middle of the whole width ignores which side is heavier.'}); }});
 
 /* 16·econ: buyers' gain under the demand line */
-K({id:'surplus',step:'16·econ',title:'who gains from a trade',make(){ const a=ri(8,14), b=pk([0.5,1,2]), Pp=ri(2,a-3), Q=(a-Pp)/b; if(!Number.isInteger(Q*2)||Q>12) return null; const g=Q*(a-Pp)/2;
-  const right=dec(g), o=four(right,[dec(Q*(a-Pp)),dec(Q*Pp),dec(Q*a/2),dec(g+Q),dec((a-Pp)*(a-Pp))]); if(!o) return null;
+K({id:'surplus',step:'16·econ',title:'who gains from a trade',make(){ const [a,b,Pp]=pk(LVC('g.surplus',()=>{ const o=[]; LRG(8,14).forEach(a=>[0.5,1,2].forEach(b=>LRG(2,a-3).forEach(Pp=>{ const Q=(a-Pp)/b; if(Number.isInteger(Q*2)&&Q<=12) o.push([a,b,Pp]); }))); return o; })), Q=(a-Pp)/b; /* a buyers' count in halves that fits the chart */ const g=Q*(a-Pp)/2;
+  const right=dec(g), o=four(right,[dec(Q*(a-Pp)),dec(Q*Pp),dec(Q*a/2),dec(g+Q),dec((a-Pp)*(a-Pp)),dec(Pp*Q/2),dec(g/2)]); if(!o) return null;
   return card(this,{ix:[a,b,Pp].join(','),links:['16·econ.total-gain','16g.area-between'], fig:svg({x:[0,13],y:[0,15],sx:1,sy:1,lx:2,ly:3,xl:'quantity',yl:'price',parts:[{t:'fn',f:q=>a-b*q,from:0,to:13},{t:'line',pts:[[0,Pp],[13,Pp]],k:'b',dash:1},{t:'line',pts:[[0,a],[Q,Pp],[0,Pp],[0,a]],k:'b'}],alt:'demand and a price line'}),
     ask:'Buyers pay '+Pp+' each; the line is how much each next buyer would have paid. What is the buyers’ total gain, the outlined area?', right, opts:o,
     why:'Each buyer gains what they would have paid less '+Pp+'. Adding over the '+dec(Q)+' who buy gives the triangle ½ · '+dec(Q)+' · ('+a+' − '+Pp+') = '+right+' (total-gain).'}); }});
@@ -2199,7 +2199,7 @@ function paraMake(){ const m=pk(SL), b=ri(-3,3); if(R()<0.4){ const rel=pk(['par
     return card(this,{ix:[m,b,m2,b2].join(','),links:['18g.line','18g.line','18g.'+rel], fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f:x=>m*x+b,from:-4.5,to:4.5},{t:'fn',f:x=>m2*x+b2,from:-4.5,to:4.5,dash:1,k:'b'}],alt:'two lines'}),
       ask:'The lines '+lineS(m,b)+' and '+lineS(m2,b2)+' are drawn. How do they stand to each other?', right, opts:o,
       why:'Their slopes are '+half(m)+' and '+half(m2)+'. Equal slopes mean parallel (the same line if they share a point); slopes that multiply to −1 mean perpendicular. '+(rel==='perp'?half(m)+' · '+half(m2)+' = −1.':'')}); }
-  const px=ri(-3,3), py=ri(-3,3); if(near(py,m*px+b)) return null; const perp=R()<0.5, m2=perp?-1/m:m, b2=py-m2*px; if(!isNice(b2)) return null;
+  const perp=R()<0.5, m2=perp?-1/m:m, PXY=LX(LRG(-3,3),LRG(-3,3)).filter(([x,y])=>!near(y,m*x+b)&&isNice(y-m2*x)); if(!PXY.length) return null; const [px,py]=pk(PXY), b2=py-m2*px; /* a point off the line whose new line crosses at a readable height */
   const right=lineS(m2,b2), o=four(right,[lineS(perp?m:-1/m,py-(perp?m:-1/m)*px),lineS(perp?-m:m,perp?py+m*px:b),lineS(perp?1/m:m,py-(perp?1/m:m)*px),lineS(m2,b),lineS(m2,b2+1)]); if(!o) return null;
   return card(this,{ix:[m,b,px,py,perp?1:0].join(','),links:['18g.line','18g.'+(perp?'perp':'para')+'('+P(px,py)+')'], fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f:x=>m*x+b,from:-4.5,to:4.5},{t:'dots',pts:[[px,py]]}],alt:'a line and a point'}),
     ask:'The line '+lineS(m,b)+' and the point '+P(px,py)+' are drawn. Which line passes through the point '+(perp?'perpendicular':'parallel')+' to the drawn one?', right, opts:o,
@@ -2232,7 +2232,12 @@ function normalMake(){ const S=SEEDS.sq.make(); for(let t=0;t<20;t++){ const x0=
   return null; }
 
 /* ---------- link: area under a curve, between a curve and a line ---------- */
-function areaMake(between){ return function(){ const S=SEEDS[between?'sq':pk(['sq','line'])].make();
+/* the windows [a, b] where a curve stays above the axis and its area reads in sixths with four different options */
+function areaAB__(S){ const op=(a,b)=>{ const A=S.F(b)-S.F(a), right=half(A); return [half(S.f(b)*(b-a)),half(S.f(a)*(b-a)),half((S.f(a)+S.f(b))*(b-a)/2)===right?half(A+1):half((S.f(a)+S.f(b))*(b-a)/2),half(S.F(b)),half(A+2)]; };
+  return LX(LRG(-3,2),LRG(1,3)).map(([a,d])=>[a,a+d]).filter(([a,b])=>{ if(b>4) return false; for(let x=a;x<=b;x+=0.05) if(S.f(x)<-1e-9) return false; const A=S.F(b)-S.F(a); return near(A*6,Math.round(A*6))&&!!four(half(A),op(a,b)); }); }
+function areaMake(between){ return function(){ let S=SEEDS[between?'sq':pk(['sq','line'])].make();
+  /* a curve under the axis all across the window has no area to ask about: then one of up to 60 curves kept that have a window is drawn */
+  if(!between&&!areaAB__(S).length) S=pk(LVC('g.areaunder.S',()=>{ const o=[]; for(let i=0;i<200&&o.length<60;i++){ const s=SEEDS[pk(['sq','line'])].make(); if(s&&areaAB__(s).length) o.push(s); } return o; }));
   if(between){ const xs=sh([-3,-2,-1,0,1,2,3]).filter(x=>inWin(x,S.f(x))&&Number.isInteger(S.f(x))); if(xs.length<2) return null; const [a,b]=xs.slice(0,2).sort((p,q)=>p-q), m=(S.f(b)-S.f(a))/(b-a), c=S.f(a)-m*a; if(!isNice(m)||!isNice(c)) return null;
     const A=Math.abs(S.a)*Math.pow(b-a,3)/6, right=half(A), o=four(right,[half(A*2),half(Math.abs(S.a)*Math.pow(b-a,3)/3),half(A+1),half((b-a)*Math.abs(S.f(a)+S.f(b))/2||A+2),half(A/2)]); if(!o) return null;
     const lo=x=>Math.min(S.f(x),m*x+c), hi=x=>Math.max(S.f(x),m*x+c), shade=[]; for(let x=a;x<=b+1e-9;x+=(b-a)/20) shade.push([x,hi(x)]); for(let x=b;x>=a-1e-9;x-=(b-a)/20) shade.push([x,lo(x)]);
@@ -2286,7 +2291,7 @@ const plane=(parts,alt,w)=>svg(Object.assign({},w||W9,{parts,alt}));
 
 /* ================= Floor 4 ================= */
 /* 17a: ln x as the area under 1/t */
-K({id:'lnarea',step:'17a',title:'the log as an area',make(){ const b=ri(2,8), a=pk([1,1,2,3,4]); if(b<=a) return null; const A=Math.log(b/a), right=a===1?'ln '+b:'ln '+b+' − ln '+a+' = ln '+frac(b,a);
+K({id:'lnarea',step:'17a',title:'the log as an area',make(){ const a=pk([1,1,2,3,4]), b=ri(Math.max(2,a+1),8); const A=Math.log(b/a), right=a===1?'ln '+b:'ln '+b+' − ln '+a+' = ln '+frac(b,a);
   const shade=[[a,0]]; for(let t=a;t<=b+1e-9;t+=(b-a)/30) shade.push([t,1/t]); shade.push([b,0],[a,0]);
   const o=four(right,[a===1?'ln '+(b-1):'ln '+(b-a),a===1?'1/'+b:'ln '+(b*a),a===1?'ln '+(b+1):'ln '+b,a===1?String(b-1):'1/'+a+' − 1/'+b]); if(!o) return null;
   return card(this,{ix:a+','+b,links:['17a.log-as-area'], fig:plane([{t:'fn',f:t=>1/t,from:0.2,to:8.5},{t:'line',pts:shade,k:'b'}],'the curve 1/t with an area outlined',{x:[0,8.5],y:[0,2.5],sx:1,sy:0.5,lx:1,ly:0.5,xl:'t',yl:'1/t'}),
@@ -2390,14 +2395,14 @@ K({id:'poisson',step:'22·stat',steps:['22j','22·stat'],title:'how many misprin
 /* 23a/23h: a curve and its hugging polynomials */
 K({id:'taylor',step:'23h',steps:['23a','23h'],title:'polynomials that hug a curve',make(){ const fs=[['eˣ',Math.exp,[1,1,1/2,1/6]],['sin x',Math.sin,[0,1,0,-1/6]],['cos x',Math.cos,[1,0,-1/2,0]],['ln(1 + x)',x=>Math.log(1+x),[0,1,-1/2,1/3]],['e⁻ˣ',x=>Math.exp(-x),[1,-1,1/2,-1/6]],['e²ˣ',x=>Math.exp(2*x),[1,2,2,4/3]],['1/(1 − x)',x=>x<0.97?1/(1-x):NaN,[1,1,1,1]],['arctan x',Math.atan,[0,1,0,-1/3]],['√(1 + x)',x=>x>-1?Math.sqrt(1+x):NaN,[1,1/2,-1/8,1/16]],['sin 2x',x=>Math.sin(2*x),[0,2,0,-4/3]]], [nm,f,c]=pk(fs), deg=pk([1,2,3].filter(d=>c[d]!==0)); const cc=c.slice(0,deg+1);
   const p=x=>cc.reduce((s,a,i)=>s+a*Math.pow(x,i),0), fmt=co=>co.map((a,i)=>near(a,0)?'':(i===0?dec(r2(a)):((a<0?' − ':' + ')+(near(Math.abs(a),1)?'':frac(Math.round(Math.abs(a)*48),48)+'·')+(i===1?'x':'x'+['','','²','³'][i])))).join('').replace(/^ \+ /,'').replace(/^ − /,M)||'0';
-  const right=fmt(cc), o=four(right,[fmt(c.slice(0,deg)),fmt(cc.map((a,i)=>i===deg?-a:a)),fmt(cc.map((a,i)=>i?a*i:a)),fmt(c.slice(0,Math.min(4,deg+2)))]); if(!o) return null;
+  const right=fmt(cc), o=four(right,[fmt(c.slice(0,deg)),fmt(cc.map((a,i)=>i===deg?-a:a)),fmt(cc.map((a,i)=>i?a*i:a)),fmt(c.slice(0,Math.min(4,deg+2))),fmt(cc.map(a=>-a)),fmt(cc.map((a,i)=>i===0?a+1:a))]); if(!o) return null;
   return card(this,{ix:nm+';'+deg,links:['23a.match-slopes('+deg+')'], fig:plane([{t:'fn',f,from:nm.startsWith('ln')?-0.95:-3.5,to:3.5,n:160},{t:'fn',f:p,from:-3.5,to:3.5,k:'b',dash:1}],'a curve and a polynomial hugging it at 0',{x:[-3.5,3.5],y:[-3.5,3.5],sx:1,sy:1,lx:1,ly:1,xl:'x',yl:'y'}),
     ask:'The dashed curve is the polynomial of degree '+deg+' that matches '+nm+' and its slopes at 0. Which is it?', right, opts:o,
     why:'Match the value and each slope at 0: the coefficient of xᵏ is the k-th slope at 0 divided by k!. For '+nm+' up to degree '+deg+': '+right+'.'}); }});
 
 /* 23l: trapezoids under a curve */
 K({id:'trap',step:'23l',title:'trapezoids under a curve',make(){ const ys=[...Array(5)].map(()=>ri(1,6)), h=pk([1,2]), A=h*(ys[0]/2+ys[1]+ys[2]+ys[3]+ys[4]/2), right=dec(A);
-  const o=four(right,[dec(h*sumA(ys)),dec(h*sumA(ys.slice(0,4))),dec(A/2),dec(h*sumA(ys.slice(1)))]); if(!o) return null;
+  const o=four(right,[dec(h*sumA(ys)),dec(h*sumA(ys.slice(0,4))),dec(A/2),dec(h*sumA(ys.slice(1))),dec(h*sumA(ys)/2),dec(A+h),dec(h*(ys[0]+ys[4])/2)]); if(!o) return null;
   return card(this,{ix:ys.join('.')+';'+h,links:['23l.trapezoid('+4+')'], fig:plane([{t:'line',pts:ys.map((y,i)=>[i*h,y])},{t:'dots',pts:ys.map((y,i)=>[i*h,y])},...ys.map((y,i)=>({t:'line',pts:[[i*h,0],[i*h,y]],k:'b'}))],'trapezoids under a curve',{x:[0,4*h+0.5],y:[0,7],sx:h,sy:1,lx:h,ly:1,xl:'x',yl:'y'}),
     ask:'Four trapezoids of width '+h+' sit under the readings '+ys.join(', ')+'. What is their total area, the trapezoid estimate?', right, opts:o,
     why:'Each trapezoid is width × (left + right)/2; inside readings count twice, the ends once: '+h+'·('+ys[0]+'/2 + '+ys.slice(1,4).join(' + ')+' + '+ys[4]+'/2) = '+right+'.'}); }});
@@ -2456,10 +2461,10 @@ K({id:'contour',step:'28k',steps:['28a','28k'],title:'a surface read off its con
   const F={bowl:(x,y)=>(x-a)*(x-a)+(y-b)*(y-b),saddle:(x,y)=>(x-a)*(x-a)-(y-b)*(y-b),ridge:(x,y)=>-(x-a)*(x-a),hill2:(x,y)=>-((x-a)*(x-a)+2*(y-b)*(y-b))}[kind];
   const lv=[...Array(9)].map((_,i)=>(i-4)*2), seg=[]; const N=40, X=i=>-4.5+9*i/N; for(let i=0;i<N;i++) for(let j=0;j<N;j++){ const x0=X(i),x1=X(i+1),y0=X(j),y1=X(j+1), v=[F(x0,y0),F(x1,y0),F(x1,y1),F(x0,y1)], P=[[x0,y0],[x1,y0],[x1,y1],[x0,y1]];
       lv.forEach(L=>{ const pts=[]; for(let e=0;e<4;e++){ const p=v[e]-L, q=v[(e+1)%4]-L; if(p*q<0){ const t=p/(p-q); pts.push([P[e][0]+(P[(e+1)%4][0]-P[e][0])*t,P[e][1]+(P[(e+1)%4][1]-P[e][1])*t]); } } if(pts.length===2) seg.push(pts); }); }
-  const parts=seg.map(s=>({t:'line',pts:s})), what=pk(['shape','flat','dir']);
+  const parts=seg.map(s=>({t:'line',pts:s})), what=pk(kind==='ridge'?['shape','dir']:['shape','flat','dir']); /* a ridge is flat along a whole line, not at a point */
   let right, o, ask, why;
   if(what==='shape'){ const nm={bowl:'a bowl, lowest in the middle',saddle:'a saddle, up one way and down the other',ridge:'a ridge, highest along a line',hill2:'a hill, highest in the middle'}; right=nm[kind]; o=four(right,Object.values(nm)); ask='Each loop is a level: points at one height (levels go up by 2; the middle value is '+dec(F(a,b))+'). What is the surface’s shape?'; why='Level loops round a point mean a top or a bottom; crossing lines mean a saddle; parallel lines mean a ridge or valley. Here: '+right+'. Check the heights on each side.'; }
-  else if(what==='flat'){ if(kind==='ridge') return null; right='('+a+', '+b+')'; o=four(right,['('+b+', '+a+')','(0, 0)','('+(-a)+', '+(-b)+')','('+(a+1)+', '+b+')']); ask='At which point is the surface flat in every direction (both partial slopes 0)?'; why='The levels close in on ('+a+', '+b+'): there both partial slopes are 0, the gradient vanishes. Elsewhere the levels are spaced and the gradient points across them.'; }
+  else if(what==='flat'){ if(kind==='ridge') return null; right='('+a+', '+b+')'; o=four(right,['('+b+', '+a+')','(0, 0)','('+(-a)+', '+(-b)+')','('+(a+1)+', '+b+')','('+a+', '+(b+1)+')','('+(a-1)+', '+b+')']); ask='At which point is the surface flat in every direction (both partial slopes 0)?'; why='The levels close in on ('+a+', '+b+'): there both partial slopes are 0, the gradient vanishes. Elsewhere the levels are spaced and the gradient points across them.'; }
   else { const px=a+pk([-2,2]), py=b, gx=kind==='saddle'||kind==='bowl'?2*(px-a):-2*(px-a); right=gx>0?'toward +x (right)':'toward −x (left)'; o=sh([right,gx>0?'toward −x (left)':'toward +x (right)','toward +y (up)','toward −y (down)']); ask='Standing at ('+px+', '+py+'), which way is uphill steepest (the gradient)?'; why='The gradient points across the levels toward higher values, at right angles to the level through the point. Here ∂f/∂x = '+gx+' and ∂f/∂y = 0, so '+right+'.'; }
   if(!o) return null;
   return card(this,{ix:[kind,a,b,what].join(','),links:['28a.keep-one-still','28k.'+(what==='dir'?'gradient':'partials')], fig:svg(Object.assign({},W9,{sx:1,sy:1,lx:1,ly:1,parts,alt:'a contour map'})), ask, right, opts:o, why}); }});
@@ -2503,7 +2508,7 @@ K({id:'eigen',step:'27f',steps:['27d','27f'],title:'arrows a map only stretches'
 /* 29b: a triangle on a sphere: angles add past 180° */
 K({id:'sphere',step:'29b',steps:['29b','29i'],title:'a triangle on a sphere',make(){ const A=pk([30,45,60,75,90,105,120,135,150]), B=90, C=90, sum=A+B+C, area=(sum-180)/720, what=pk(['sum','area']);
   const bd='<circle class="rg-set" cx="110" cy="110" r="90"/><ellipse class="rg-grid" cx="110" cy="110" rx="90" ry="26" fill="none"/>'+Ln(110,20,110,110,'rg-cv')+'<path class="rg-cv" d="M110 110 L'+f1(110+90*Math.cos(Math.PI*(A)/180)*1)+' '+f1(110+26*Math.sin(Math.PI*A/180))+'" />'+Ln(110,20,f1(110+90*Math.cos(Math.PI*A/180)),f1(110+26*Math.sin(Math.PI*A/180)),'rg-cv rg-b')+T(118,40,'90°','rg-lab')+T(116,124,A+'°','rg-lab');
-  const right=what==='sum'?sum+'°':frac(Math.round((sum-180)),720)+' of the sphere', o=four(right,what==='sum'?['180°',(sum-90)+'°','360°',(sum+90)+'°']:[frac(Math.round(sum-180),360)+' of the sphere','1/8 of the sphere',frac(A,360)+' of the sphere','1/2 of the sphere']); if(!o) return null;
+  const right=what==='sum'?sum+'°':frac(Math.round((sum-180)),720)+' of the sphere', o=four(right,what==='sum'?['180°',(sum-90)+'°','360°',(sum+90)+'°',(sum+180)+'°',(sum-180)+'°']:[frac(Math.round(sum-180),360)+' of the sphere','1/8 of the sphere',frac(A,360)+' of the sphere','1/2 of the sphere',frac(A,1440)+' of the sphere']); if(!o) return null;
   return card(this,{ix:A+what,links:['29b.sphere-triangle','29e.curvature'], fig:box(220,220,bd,'a triangle on a sphere from the pole to the equator'), ask:'A triangle on a sphere runs from the north pole down two lines of longitude '+A+'° apart to the equator, then along it. '+(what==='sum'?'What do its three angles add to?':'What share of the whole sphere does it cover?'), right, opts:o,
     why:'Each meridian meets the equator at 90°, and the angle at the pole is '+A+'°: '+sum+'°, past 180°. The excess '+(sum-180)+'° measures the area: '+(sum-180)+'/720 of the sphere.'}); }});
 
@@ -2531,7 +2536,7 @@ K({id:'waiting',step:'30o',title:'waiting and arriving',make(){ const m=pk([2,4,
 
 /* 30i: chance in one function: read a chance off the running total */
 K({id:'cdf',step:'30i',title:'a chance read off the running total',make(){ const vals=[1,2,3,4,5,6], p=vals.map(()=>ri(1,5)), tot=sumA(p), pr=p.map(x=>x/tot); let c=0; const cum=pr.map(x=>(c+=x)); const a=ri(1,4), b=ri(a+1,6);
-  const steps=[[0,0]].concat(vals.map((v,i)=>[v,cum[i]])); const right=frac(Math.round((cum[b-1]-cum[a-1])*tot),tot), o=four(right,[frac(Math.round(cum[b-1]*tot),tot),frac(Math.round((cum[b-1]-(a>1?cum[a-2]:0))*tot),tot),frac(Math.round(pr[b-1]*tot),tot),frac(Math.round((1-cum[b-1])*tot),tot)]); if(!o) return null;
+  const steps=[[0,0]].concat(vals.map((v,i)=>[v,cum[i]])); const right=frac(Math.round((cum[b-1]-cum[a-1])*tot),tot), o=four(right,[frac(Math.round(cum[b-1]*tot),tot),frac(Math.round((cum[b-1]-(a>1?cum[a-2]:0))*tot),tot),frac(Math.round(pr[b-1]*tot),tot),frac(Math.round((1-cum[b-1])*tot),tot),frac(Math.round(cum[a-1]*tot),tot),frac(Math.round((pr[a-1]+pr[b-1])*tot),tot)]); if(!o) return null;
   return card(this,{ix:p.join('')+';'+a+','+b,links:['30i.running-total'], fig:plane([{t:'steps',pts:steps,x1:7}],'a stepped running total of chance',{x:[0,7],y:[0,1.1],sx:1,sy:0.1,lx:1,ly:0.2,xl:'value',yl:'chance up to here'}),
     ask:'The steps are the chance of a value at most x (heights in '+tot+'ths: '+cum.map(c=>Math.round(c*tot)).join(', ')+'). What is the chance the value is more than '+a+' and at most '+b+'?', right, opts:o,
     why:'Chance of a range = total at the top end − total at the bottom end: '+Math.round(cum[b-1]*tot)+'/'+tot+' − '+Math.round(cum[a-1]*tot)+'/'+tot+' = '+right+'. Each step’s height is the chance of that one value.'}); }});
@@ -2612,7 +2617,7 @@ K({id:'overfit',step:'31·stat',steps:['31·stat','31·then'],title:'a model tha
 K({id:'fourier',step:'32h',steps:['32a','32h'],title:'a wave built from turnings',make(){ const kind=pk(['square','saw']), N=pk([1,2,3,5]), f=kind==='square'?(x=>{ let s=0; for(let k=0;k<N;k++){ const n=2*k+1; s+=Math.sin(n*x)/n; } return s*4/Math.PI; }):(x=>{ let s=0; for(let n=1;n<=N;n++) s+=Math.pow(-1,n+1)*Math.sin(n*x)/n; return 2*s; });
   const tgt=kind==='square'?(x=>Math.sign(Math.sin(x))):(x=>{ const y=((x+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI; return y; });
   const list=kind==='square'?[...Array(N)].map((_,k)=>2*k+1):[...Array(N)].map((_,k)=>k+1), right=list.map(n=>n===1?'sin x':'sin '+n+'x').join(', '), alt=kind==='square'?[...Array(N)].map((_,k)=>k+1):[...Array(N)].map((_,k)=>2*k+1);
-  const o=four(right,[alt.map(n=>n===1?'sin x':'sin '+n+'x').join(', '),list.map(n=>n===1?'cos x':'cos '+n+'x').join(', '),list.concat([list[list.length-1]+(kind==='square'?2:1)]).map(n=>n===1?'sin x':'sin '+n+'x').join(', '),list.slice(0,Math.max(1,N-1)).map(n=>n===1?'sin x':'sin '+n+'x').join(', ')+(N===1?', sin 2x':'')]); if(!o) return null;
+  const o=four(right,[alt.map(n=>n===1?'sin x':'sin '+n+'x').join(', '),list.map(n=>n===1?'cos x':'cos '+n+'x').join(', '),list.concat([list[list.length-1]+(kind==='square'?2:1)]).map(n=>n===1?'sin x':'sin '+n+'x').join(', '),list.slice(0,Math.max(1,N-1)).map(n=>n===1?'sin x':'sin '+n+'x').join(', ')+(N===1?', sin 2x':''),list.map(n=>'sin '+(n+1)+'x').join(', ')]); if(!o) return null;
   return card(this,{ix:kind+N,links:['32a.coefficients','32h.partial('+N+')'], fig:plane([{t:'fn',f:tgt,from:-Math.PI*1.99,to:Math.PI*1.99,n:400,dash:1,k:'b'},{t:'fn',f,from:-2*Math.PI,to:2*Math.PI,n:400}],'a wave and a sum of sines approaching it',{x:[-2*Math.PI,2*Math.PI],y:[-4,4],sx:Math.PI/2,sy:1,lx:Math.PI,ly:1,xl:'x',yl:'y'}),
     ask:'The solid curve is a sum of sines heading toward the dashed '+(kind==='square'?'square':'saw')+' wave. Which sines are in it (with their right sizes)?', right, opts:o,
     why:(kind==='square'?'A square wave is odd and has the half-turn symmetry, so only odd harmonics appear, each 1/n as big: ':'A saw wave uses every harmonic, alternating in sign, each 1/n as big: ')+right+'. Count the wiggles on a flat stretch to count the terms.'}); }});
@@ -2724,7 +2729,7 @@ K({id:'bigo',step:'39q',steps:['39k','39q'],title:'how a program’s step count 
     why:(dbl?'At n = 20 the count is about '+dec(r2(f(20)))+', at n = 40 about '+dec(r2(f(40)))+': × '+rt(f0)+'. The program '+say+'. ':'')+'Compare how the count changes when n doubles: '+say+'. Doubling n: n doubles the steps, n² quadruples them, log n adds a fixed amount, n log n a bit more than doubles, 2ⁿ squares them.'}); }});
 
 /* 43d: powers cycling on a clock */
-K({id:'clockpow',step:'43d',steps:['43a','43d'],title:'powers cycling on a clock',make(){ const m=pk([5,7,9,10,11,13]), a=ri(2,m-2), seq=[]; let v=1; for(let i=0;i<m;i++){ v=v*a%m; seq.push(v); } let per=seq.indexOf(1)+1; if(per<=0) return null;
+K({id:'clockpow',step:'43d',steps:['43a','43d'],title:'powers cycling on a clock',make(){ const m=pk([5,7,9,10,11,13]), a=pk(LRG(2,m-2).filter(a=>{ let p=a,q=m; while(q){ const r=p%q; p=q; q=r; } return p===1; })), seq=[]; /* a base that shares nothing with m, so its powers come back to 1 */ let v=1; for(let i=0;i<m;i++){ v=v*a%m; seq.push(v); } let per=seq.indexOf(1)+1; if(per<=0) return null;
   const cx=110,cy=110,rr=80; let bd='<circle class="rg-set" cx="'+cx+'" cy="'+cy+'" r="'+rr+'"/>'; for(let i=0;i<m;i++){ const t=-Math.PI/2+2*Math.PI*i/m; bd+=Ci(cx+rr*Math.cos(t),cy+rr*Math.sin(t),3.5,'rg-open')+T(cx+(rr+15)*Math.cos(t),cy+(rr+15)*Math.sin(t)+4,String(i),'rg-tag','middle'); }
   const P=i=>{ const t=-Math.PI/2+2*Math.PI*i/m; return [cx+rr*Math.cos(t),cy+rr*Math.sin(t)]; }; let prev=1; seq.slice(0,per).forEach(v=>{ const [x1,y1]=P(prev),[x2,y2]=P(v); bd+=Ln(x1,y1,x2,y2,'rg-cv'); prev=v; });
   const right=String(per), o=four(right,[String(m-1),String(m),String(per*2),String(Math.max(1,per-1)),String(per+1)]); if(!o) return null;
@@ -2744,7 +2749,7 @@ const SEEDT=[['x²',x=>x*x/2-1],['x³',x=>x*x*x/6],['|x|',x=>Math.abs(x)-1],['�
 const TR=[['slid 2 right',f=>x=>f(x-2),'20i.slide(2,0)'],['slid 1 up',f=>x=>f(x)+1,'20i.slide(0,1)'],['flipped over the x-axis',f=>x=>-f(x),'20i.flip'],['flipped over the y-axis',f=>x=>f(-x),'20i.flip'],['pulled upright by 2',f=>x=>2*f(x),'20i.pull(2)'],['squeezed sideways by 2',f=>x=>f(2*x),'20i.pull(½)'],
   ['its slope f′',f=>x=>(f(x+1e-4)-f(x-1e-4))/2e-4,'13d.slope'],['its size |f|',f=>x=>Math.abs(f(x)),'8h.size'],['its inverse, mirrored in y = x',null,'9d.swap'],['its square f²',f=>x=>f(x)*f(x)/2,'5d.square']];
 const same2=(g,h)=>{ let n=0; for(let i=0;i<=40;i++){ const x=-4+8*i/40, a=g(x), b=h(x); if(!isFinite(a)&&!isFinite(b)) continue; if(!isFinite(a)||!isFinite(b)||Math.abs(a-b)>1e-3) return false; n++; } return n>5; };
-K({id:'transform',step:'20i',steps:['20i','13d','9d'],title:'which transform takes one graph to the other',make(){ const [snm,f]=pk(SEEDT), tr=pk(TR), opts=[tr];
+K({id:'transform',step:'20i',steps:['20i','13d','9d'],title:'which transform takes one graph to the other',make(){ const [snm,f]=pk(SEEDT), tr=pk(TR.filter(t=>t[1]?!same2(t[1](f),f):['x³','√x','2ˣ'].includes(snm))), opts=[tr]; /* a move that changes this graph; the inverse only for a one-to-one seed */
   const curveOf=t=>t[1]?{t:'fn',f:t[1](f),from:-4.5,to:4.5,n:240,k:'b',dash:1}:{t:'line',pts:[...Array(241)].map((_,i)=>{ const x=-4.5+9*i/240; return [f(x),x]; }).filter(p=>isFinite(p[0])),k:'b',dash:1};
   if(!tr[1]){ /* the inverse needs a one-to-one seed */ if(!['x³','√x','2ˣ'].includes(snm)) return null; }
   const fnOf=t=>t[1]?t[1](f):null, out=fnOf(tr); if(out&&same2(out,f)) return null;
@@ -2829,7 +2834,7 @@ function slopeS(){ const [kx,ky]=pk(SC.filter(([a,b])=>a!==b)); const m=pk([-3,-
     why:'On the grid the line rises '+fm(m)+' squares for each square across.'+tail(kx,ky)+' Slope is rise over run: ('+fm(m)+'·'+fm(ky)+') / '+fm(kx)+' = '+right+'. The squares alone give '+fm(m)+'; the scales upside down give '+fm(m*kx/ky)+'.'}); }
 
 /* ---------- the area of a shape, or under a line, on scaled axes ---------- */
-function areaS(){ const [kx,ky]=pickS(); if(kx*ky===1) return null;
+function areaS(){ const [kx,ky]=pk(SC.filter(([x,y])=>x*y!==1)); /* scales whose square is not still 1 */
   if(R()<0.5){ const w=ri(2,6), hgt=ri(1,4), x0=ri(-4,4-w), y0=ri(-4,4-hgt), tri=R()<0.5, A=tri?w*hgt/2:w*hgt;
     const pts=tri?[[x0,y0],[x0+w,y0],[x0,y0+hgt]]:[[x0,y0],[x0+w,y0],[x0+w,y0+hgt],[x0,y0+hgt]];
     const right=fm(A*kx*ky), o=four(right,[fm(A),fm(A*kx),fm(A*ky),fm(A*kx*kx),fm(A*ky*ky),fm(2*A*kx*ky)]); if(!o) return null;
@@ -2837,16 +2842,16 @@ function areaS(){ const [kx,ky]=pickS(); if(kx*ky===1) return null;
       ask:'What is the area of the '+(tri?'triangle':'rectangle')+', in the axes’ own units?',right,opts:o,
       why:'On the grid it is '+w+' squares across and '+hgt+' up, so '+fm(A)+' squares.'+tail(kx,ky)+' One square holds '+fm(kx)+'·'+fm(ky)+' = '+fm(kx*ky)+', so the area is '+fm(A)+'·'+fm(kx*ky)+' = '+right+'. Scaling only one side, or one side twice, is the slip.'}); }
   const [m,c,a,bb]=pk(LVC('g.scale·area',()=>LX([0.5,1,-0.5,-1],[1,2,3],[-4,-3,-2,-1,0],[2,3,4]).map(([m,c,a,d])=>[m,c,a,a+d]).filter(([m,c,a,bb])=>{ const f=x=>m*x+c; return bb<=4&&f(a)>=0&&f(bb)>=0&&f(a)<=4.5&&f(bb)<=4.5; }))); const f=x=>m*x+c;
-  const A=(f(a)+f(bb))*(bb-a)/2, right=fm(A*kx*ky), o=four(right,[fm(A),fm(A*kx),fm(A*ky),fm(f(bb)*(bb-a)*kx*ky),fm(A*kx*kx)]); if(!o) return null;
+  const A=(f(a)+f(bb))*(bb-a)/2, right=fm(A*kx*ky), o=four(right,[fm(A),fm(A*kx),fm(A*ky),fm(f(bb)*(bb-a)*kx*ky),fm(A*kx*kx),fm(A*ky*ky),fm(2*A*kx*ky),fm(f(a)*(bb-a)*kx*ky)]); if(!o) return null;
   return card(this,{ix:['u',m,c,a,bb,kx,ky].join(','),links:['16c.area-under('+fm(a*kx)+','+fm(bb*kx)+')',sl(kx,ky)],fig:fig(kx,ky,[{t:'fn',f,from:-4.5,to:4.5,n:40},{t:'line',pts:[[a,0],[a,f(a)],[bb,f(bb)],[bb,0],[a,0]],k:'b'}],'a line and a shaded strip on scaled axes'),
     ask:'What is the area under the line from x = '+fm(a*kx)+' to x = '+fm(bb*kx)+' (outlined), in the axes’ own units?',right,opts:o,
     why:'Counted in squares it is a trapezium: ('+fm(f(a))+' + '+fm(f(bb))+')/2 · '+(bb-a)+' = '+fm(A)+' squares.'+tail(kx,ky)+' Each square is worth '+fm(kx*ky)+', so the area is '+right+'.'}); }
 
 /* ---------- the extremity of the transform: which formula, when the axes are stretched ---------- */
-function extremeS(){ const [kx,ky]=pickS(); const a=pk([1,-1,0.5,2,-0.5]), h=ri(-2,2), k=ri(-3,3); if(!h&&!k) return null; const f=x=>a*(x-h)*(x-h)+k;
+function extremeS(){ const [kx,ky]=pickS(); const a=pk([1,-1,0.5,2,-0.5]), [h,k]=pk(LX(LRG(-2,2),LRG(-3,3)).filter(([h,k])=>h||k)); /* a turning point off the origin */ const f=x=>a*(x-h)*(x-h)+k;
   const sq=(A,H,K)=>{ const inn=Math.abs(H)<1e-9?'x²':'(x '+(H>0?'− '+fm(H):'+ '+fm(-H))+')²'; const co=Math.abs(A-1)<1e-12?'':Math.abs(A+1)<1e-12?M:fm(A); return 'y = '+co+inn+(Math.abs(K)<1e-9?'':K>0?' + '+fm(K):' − '+fm(-K)); };
   const A=a*ky/(kx*kx), right=sq(A,h*kx,k*ky);
-  const o=four(right,[sq(a,h,k),sq(a*ky/kx,h*kx,k*ky),sq(A,h,k*ky),sq(A,h*kx,k),sq(a,h*kx,k*ky),sq(a*ky,h*kx,k*ky)]); if(!o) return null;
+  const o=four(right,[sq(a,h,k),sq(a*ky/kx,h*kx,k*ky),sq(A,h,k*ky),sq(A,h*kx,k),sq(a,h*kx,k*ky),sq(a*ky,h*kx,k*ky),sq(a*kx*kx/ky,h*kx,k*ky),sq(A,h/kx,k/ky)]); if(!o) return null;
   return card(this,{ix:[a,h,k,kx,ky].join(','),links:['20i.slide('+fm(h*kx)+','+fm(k*ky)+')','20i.pull('+fm(Math.abs(A))+')',sl(kx,ky)],fig:fig(kx,ky,[{t:'fn',f,from:-4.5,to:4.5,n:200},{t:'dots',pts:[[h,k]]}],'a parabola on scaled axes'),
     ask:'Which formula does the parabola have, in the axes’ own numbers?',right,opts:o,
     why:'Counted in squares it is '+sq(a,h,k)+', with its turning point at '+P(h,k)+'.'+tail(kx,ky)+' So the turning point is really '+P(h*kx,k*ky)+', and the pull becomes '+fm(a)+'·'+fm(ky)+'/'+fm(kx)+'² = '+fm(A)+', because a step of one across is now '+fm(kx)+' and the height grows as its square. The squares alone give '+sq(a,h,k)+'.'}); }
@@ -3105,7 +3110,7 @@ function pathMake(){ if(R()<0.5){ const [T2,L1]=pk([[3,14],[8,52],[15,126]]), c=
     why:'Swept area: ½∫ r² dθ over one trip round. '+(kind==='rose'?'cos² averages ½, so a full turn of θ sweeps ½·'+a*a+'·½·2π = '+S(a*a/2)+'; '+(nm.indexOf('cos 2')>=0||nm.indexOf('cos 4')>=0?'with an even count of petals that is all of them: ':'with an odd count the petals are traced twice in a full turn, so half that: ')+right+'.':kind==='cardioid'?'(1 + cos θ)² averages 1 + ½, so ½·'+a*a+'·3/2·2π = '+right+'.':'The curve is a circle of radius '+a+' through the origin, traced once as θ runs over half a turn: '+right+'.')}); }
 
 /* ---------- 13l and 18·cb13: where a curve given by an equation has an upright or a flat tangent ---------- */
-function implMake(){ const a=pk([2,3,4]), b=pk([1,2,3]); if(a===b&&R()<0.5) return null; const want=pk(['upright','flat']);
+function implMake(){ const a=pk([2,3,4]), b=pk([1,2,3,1,2,3].filter((v,i)=>v!==a||i<3)); /* a circle one time in five */ const want=pk(['upright','flat']);
   const pts=[]; for(let t=0;t<=2*Math.PI+1e-9;t+=0.02) pts.push([a*Math.cos(t),b*Math.sin(t)]);
   const marks=[['A',[a,0]],['B',[0,b]],['C',[a*Math.SQRT1_2,b*Math.SQRT1_2]],['D',[-a,0]],['E',[0,-b]]];
   const fig=svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'line',pts},{t:'dots',pts:marks.map(m=>m[1])}].concat(marks.map(([l,[x,y]])=>({t:'text',at:[x,y],s:l,dx:x>0.1?8:x<-0.1?-14:4,dy:y>0.1?-6:y<-0.1?14:-6}))),alt:'an oval with lettered points'});
@@ -3176,17 +3181,17 @@ function orbMake(){ const what=pk(['which','which','count','fill','set']);
     ord.sort((a,b)=>(a[0]+a[1])-(b[0]+b[1])||a[0]-b[0]); const i=ri(2,ord.length-3), nm=o=>o[0]+LET_L[o[1]], cur=ord[i], nx=ord[i+1];
     const W=320, H=210; let bd=''; for(let n=1;n<=7;n++){ bd+=T(18,22+n*25,String(n),'rg-lab','middle'); for(let l=0;l<4&&l<n;l++){ const x=50+l*62, y=10+n*25; bd+=Re(x,y,50,20,ord.findIndex(o=>o[0]===n&&o[1]===l)<=i?'rg-bar':'rg-uni')+T(x+25,y+15,n+LET_L[l],'rg-lab','middle'); } }
     for(let l=0;l<4;l++) bd+=T(75+l*62,14,LET_L[l],'rg-tag','middle');
-    const right=nm(nx), o=four(right,[nm([cur[0],cur[1]+1<cur[0]&&cur[1]<3?cur[1]+1:cur[1]]),nm([cur[0]+1,cur[1]]),nm([cur[0]+1,0]),nm([nx[0]-1,nx[1]+1<nx[0]-1&&nx[1]<3?nx[1]+1:0]),...(ord[i+2]?[nm(ord[i+2])]:[])].filter(v=>v!==nm(cur))); if(!o) return null;
+    const right=nm(nx), o=four(right,[nm([cur[0],cur[1]+1<cur[0]&&cur[1]<3?cur[1]+1:cur[1]]),nm([cur[0]+1,cur[1]]),nm([cur[0]+1,0]),nm([nx[0]-1,nx[1]+1<nx[0]-1&&nx[1]<3?nx[1]+1:0]),...(ord[i+2]?[nm(ord[i+2])]:[]),...(i>0?[nm(ord[i-1])]:[]),...(ord[i+3]?[nm(ord[i+3])]:[])].filter(v=>v!==nm(cur))); if(!o) return null;
     return card(this,{ix:'f'+nm(cur),links:['38·chem.n-plus-ℓ'],fig:box(W,H+10,bd,'a grid of levels n and shapes s p d f, the filled ones shaded'),ask:'The shaded boxes are filled, up to '+nm(cur)+'. By the n + ℓ order, which fills next?',right,opts:o,
       why:'Fill by n + ℓ, smaller first, and on a tie the smaller n: '+nm(cur)+' has n + ℓ = '+(cur[0]+cur[1])+'; next comes '+right+' with '+(nx[0]+nx[1])+(nx[0]+nx[1]===cur[0]+cur[1]?', a tie broken by the smaller n':'')+'. The order is measured, and a few atoms (chromium, copper) break it.'}); }
-  if(what==='set'){ const l=ri(0,3), right=String(2*l+1), o=four(right,[String(2*l),String(l+1),String(2*(2*l+1)),String(l*l||2),String(4*l+2)]); if(!o) return null;
+  if(what==='set'){ const l=ri(0,3), right=String(2*l+1), o=four(right,[String(2*l),String(l+1),String(2*(2*l+1)),String(l*l||2),String(4*l+2),String(2*l+3)]); if(!o) return null;
     return card(this,{ix:'s'+l,links:['38·chem.still-count'],fig:orbFig('dz2',3),ask:'How many orbitals make up one '+LET_L[l]+' set (ℓ = '+l+')?',right,opts:o,
       why:'A set with ℓ has 2ℓ + 1 orbitals (still-count): 2·'+l+' + 1 = '+right+'. Each holds two electrons, so the set holds '+2*(2*l+1)+'; that is the other number to keep apart.'}); }
   const key=pk(['s','pz','pz','dz2','dxz']), l=SHAPES[key].l, n=ri(l+1,l+3), rad=n-l-1, ang=l, nm=n+LET_L[l];
   if(what==='count'){ const right=rad+' round, '+ang+' flat or cone', o=four(right,[ang+' round, '+rad+' flat or cone',(n-1)+' round, 0 flat or cone',(rad+1)+' round, '+ang+' flat or cone',rad+' round, '+(ang+1)+' flat or cone','0 round, '+(n-1)+' flat or cone']); if(!o) return null;
     return card(this,{ix:'c'+nm+key,links:['38·chem.still-surface'],fig:orbFig(key,n),ask:'How many still surfaces does a '+nm+' cloud have (round ones, and flat planes or cones through the centre)?',right,opts:o,
       why:'A cloud with n and ℓ has ℓ planes or cones through the centre and n − ℓ − 1 spheres (still-surface): for '+nm+', ℓ = '+l+' and '+n+' − '+l+' − 1 = '+rad+'. In all n − 1 = '+(n-1)+'.'}); }
-  const right=nm, cand=[[n+1,l],[n-1,l],[n,l+1],[n,l-1],[n+1,l-1],[n-1,l+1]].filter(([a,b])=>b>=0&&b<a&&b<=3).map(([a,b])=>a+LET_L[b]); const o=four(right,cand); if(!o) return null;
+  const right=nm, cand=[[n+1,l],[n-1,l],[n,l+1],[n,l-1],[n+1,l-1],[n-1,l+1],[n+2,l],[n,l+2],[n+1,l+1]].filter(([a,b])=>b>=0&&b<a&&b<=3).map(([a,b])=>a+LET_L[b]); const o=four(right,cand); if(!o) return null;
   return card(this,{ix:'w'+nm+key,links:['38·chem.still-surface','38·chem.times-a-fade'],fig:orbFig(key,n),ask:'The cut through the centre shows the cloud’s lobes and its still surfaces, dashed (circles are round ones; straight lines are planes or cones seen edge-on). Which orbital is it?',right,opts:o,
     why:'Flat planes or cones through the centre count ℓ: '+ang+', so it is '+LET_L[l]+'. Round still surfaces count n − ℓ − 1: '+rad+', so n = '+rad+' + '+l+' + 1 = '+n+'. It is '+nm+'.'}); }
 function orbFig(key,n){ const S=SHAPES[key], l=S.l, rad=n-l-1, C=110, Rm=82, W=220; let bd='';
@@ -3254,7 +3259,7 @@ function stemFig(vals,lo,hi){ const rows=hi-lo+1, W=240, rh=24, H=rows*rh+44; le
   return box(W,H,bd,'a stemplot with stems '+lo+' to '+hi); }
 const ORD=['first','second','third'];
 K({id:'stemplot',step:'9·stat',steps:['9·stat'],title:'a stemplot: values read back',make(){ const lo=ri(1,6), hi=lo+ri(2,4), n=pk([9,11,13,15]), vals=[]; for(let t=0;t<n;t++) vals.push(ri(lo*10,hi*10+9)); vals.sort((a,b)=>a-b);
-  if(Math.floor(vals[0]/10)!==lo||Math.floor(vals[n-1]/10)!==hi) return null;
+  vals[0]=lo*10+ri(0,9); vals[n-1]=hi*10+ri(0,9); vals.sort((a,b)=>a-b); /* the first and last stems hold a leaf */
   const what=pk(['max','median','atleast','count','range']), med=vals[(n-1)/2]; let ask, right, ws, why, links=['9·stat.stem'];
   if(what==='max'){ ask='What is the largest value in the list?'; right=String(vals[n-1]); const l=vals[n-1]%10; ws=[String(hi*10+9),String(hi+l),String(l*10+hi),String(vals[n-2]),String(hi*10)]; why='The last leaf on the top stem: stem '+hi+', leaf '+l+', so 10·'+hi+' + '+l+' = '+right+'. Each leaf is a value, read back exactly.'; }
   else if(what==='median'){ ask='The plot holds '+n+' values. What is the median?'; right=String(med); ws=[String(vals[(n-1)/2+1]),String(vals[(n-1)/2-1]),String(Math.round((vals[0]+vals[n-1])/2)),String(Math.floor(med/10)*10+5),String(Math.round(vals.reduce((a,b)=>a+b,0)/n))]; why='The rows hold the list already sorted. Count in '+((n+1)/2)+' leaves from either end: '+right+'.'; links=links.concat(['9·stat.median']); }
@@ -3703,7 +3708,7 @@ K({id:'cheaptree',step:'42k',steps:['42b','42k'],title:'the cost of the cheapest
 /* ---------- keys on a ring (45k) ---------- */
 K({id:'keyring',step:'45k',title:'which machine holds a key on the ring',make(){
   const S=32, gaps=[3,3,3,3,3]; for(let i=0;i<17;i++) gaps[rn(5)]++; const ms=[]; let at=rn(S); gaps.forEach(g=>{ ms.push(at%S); at+=g; }); ms.sort((a,b)=>a-b);
-  const key=rn(S); if(ms.includes(key)) return null; const after=ms.find(m=>m>key), holder=after!==undefined?after:ms[0], before=ms.filter(m=>m<key), prevM=before.length?before[before.length-1]:ms[4];
+  const free=LRG(0,S-1).filter(k=>!ms.includes(k)), key=free[rn(free.length)]; /* a key between machines */ const after=ms.find(m=>m>key), holder=after!==undefined?after:ms[0], before=ms.filter(m=>m<key), prevM=before.length?before[before.length-1]:ms[4];
   const lab=m=>'M'+m, right=lab(holder), o=four(right,[lab(prevM),...sh(ms.filter(m=>m!==holder)).map(lab)]); if(!o) return null;
   const cx=160, cy=115, r=86, ang=v=>-Math.PI/2+2*Math.PI*v/S, P=v=>[cx+r*Math.cos(ang(v)),cy+r*Math.sin(ang(v))], [kx,ky]=P(key);
   let bd='<circle class="rg-set" cx="'+cx+'" cy="'+cy+'" r="'+r+'"/><text class="rg-lab" x="'+cx+'" y="'+(cy-4)+'" text-anchor="middle">0 at the top,</text><text class="rg-lab" x="'+cx+'" y="'+(cy+10)+'" text-anchor="middle">clockwise</text>';
@@ -3886,7 +3891,7 @@ function upright(deg,lab,labC){ const A=[80,196], B=[240,196], D=[80,76], C=[240
 
 K({id:'uprighttop',step:'29a',steps:['29a'],title:'the other top angle of the upright figure',make(){
   const [lab,deg]=pk(ANG), right=lab;
-  const o=four(right,sh([COMP[lab],'π/2','it cannot be told','π/4'].filter(x=>x!==right))); if(!o) return null;
+  const o=four(right,sh([COMP[lab],'π/2','it cannot be told','π/4','3π/4','π/3'].filter(x=>x!==right))); if(!o) return null;
   return card(this,{ix:lab,links:['29a.top-angles'],fig:upright(deg,lab),
     ask:'In the upright figure ABCD the legs AD and BC are equal and square to the base AB; the parallel axiom is not used. The top angle at D is '+lab+'. What is the top angle at C?',right,opts:o,
     why:'Top-angles technique: the two top angles of an upright figure are equal (the figure is its own mirror image across the line joining the midpoints of AB and DC). So the angle at C is '+lab+' as well.'}); }});
@@ -4519,11 +4524,11 @@ QP.push({id:'3b.say',step:'3b',mode:'word',label:'necessary and possible in mark
 /* ---------- 3c The Next One ---------- */
 QP.push({id:'3c.next',step:'3c',mode:'work',label:'the next one',open:()=>measured('3c'),make(){
     const v=rnd(4); let x, show, R, cand, why;
-    if(v===0){ const k=rnd(4); x=NUMS[k]; show='S('+k+')'; R=nS(x); cand=[NUMS[k],lset([x]),lset([x,lset([x])]),NUMS[k+2]||NUMS[0]];
+    if(v===0){ const k=rnd(4); x=NUMS[k]; show='S('+k+')'; R=nS(x); cand=[NUMS[k],lset([x]),lset([x,lset([x])]),NUMS[k+2]||NUMS[0],NUMS[k+3]||NUMS[1]];
       const wrong=[...new Set(cand.map(nlist))].filter(o=>o!==nlist(R)).slice(0,3); if(wrong.length<3) return null;
       return {index:'q:3c.next[n'+k+']', lines:[[show,'the next one']], ask:'Which listed set is it?', right:nlist(R), opts:shuffle([nlist(R),...wrong]),
         why:'S(x) = x ∪ {x}: whatever x had in it, together with x itself as a new member. So '+show+' has the members of '+k+' and '+k+' itself: '+nlist(R)+', which is named '+nname(R)+'.'}; }
-    if(v===1){ const a=1+rnd(3), b=rnd(a); x=lset(Math.random()<0.5?[NUMS[a]]:[NUMS[b],NUMS[a]].filter((y,i,ar)=>ar.findIndex(z=>lsame(z,y))===i)); if(NUMS.some(n=>lsame(n,x))) return null;
+    if(v===1){ const a=1+rnd(3), b=rnd(a); x=lset(a===1||Math.random()<0.5?[NUMS[a]]:[NUMS[b],NUMS[a]].filter((y,i,ar)=>ar.findIndex(z=>lsame(z,y))===i)); if(NUMS.some(n=>lsame(n,x))) return null;
       R=nS(x); cand=[lset([x,lset([x])]),lset([x]),lun(x,lset([lset([x])])),lset(x.s.concat(x.s.map(nS)))];
       const wrong=[...new Set(cand.map(nlist))].filter(o=>o!==nlist(R)).slice(0,3); if(wrong.length<3) return null;
       return {index:'q:3c.next[s'+nlist(x)+']', lines:[['S('+nlist(x)+')','the next one']], ask:'Which listed set is it?', right:nlist(R), opts:shuffle([nlist(R),...wrong]),
@@ -4712,7 +4717,7 @@ QP.push({id:'4l.run',step:'4l',mode:'work',label:'the run of an algorithm',open:
 /* ---------- 4m: processes without things ---------- */
 const UNITS=['crates','hours','miles','sacks','days','apples','stones','pages','rows','boxes'];
 QP.push({id:'4m.forgets',step:'4m',mode:'word',label:'the operator forgets the things',open:()=>measured('4m'),make(){
-    const [u1,u2]=take(UNITS,2), a=2+rnd(7), b=2+rnd(7), plus=Math.random()<0.5; if(a===b) return null;
+    const [u1,u2]=take(UNITS,2), a=2+rnd(7), b=2+(a-1+rnd(6))%7, plus=Math.random()<0.5; /* b differs from a */
     const tell=u=>plus?a+' '+u+', and then '+b+' more '+u:a+' lots of '+b+' '+u;
     const right=plus?a+' + '+b+' = '+(a+b):a+' · '+b+' = '+(a*b), wrong=[plus?a+' · '+b+' = '+(a*b):a+' + '+b+' = '+(a+b),a+' + '+a+' = '+(2*a),b+' · '+b+' = '+(b*b)];
     return {index:'q:4m.forgets['+(plus?'+':'·')+';'+a+','+b+';'+u1+','+u2+']', a3:[(plus?'4f.plus':'4g.by')+'['+a+','+b+']',DASH,'units.'+u1+'+'+u2], story:'One story: '+tell(u1)+'. Another story: '+tell(u2)+'.', lines:[],
@@ -4776,7 +4781,7 @@ QP.push({id:'5h.lowest',step:'5h',mode:'work',label:'lowest terms',open:()=>meas
     return {index:'q:5h.lowest['+p+'/'+q+']', lines:[[fraw(p,q),'a fraction, by one of its members']], ask:'Which member names it in lowest terms?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
       why:'Choosing a member: divide the numerator and the denominator by their gcd, '+k*fgcd(f.p,f.q)+'. '+p+' = '+k+' · '+f.p+' and '+q+' = '+k+' · '+f.q+', and '+f.p+' and '+f.q+' share no factor but 1. Taking the same number away from both is not scaling.'}; }},
   {id:'5h.add',step:'5h',mode:'work',label:'adding fractions',open:()=>measured('5h'),make(){
-    const a=frnd(), b=frnd(); if(a.q===b.q) return null; const s=fadd(a,b), right=fshow(s);
+    const FR5=LVC('5h.fr',()=>{ const o=[]; for(let p=1;p<=7;p++) for(let q=2;q<=7;q++){ const f=fr(p,q); if(f.q>1&&!o.some(g=>g.p===f.p&&g.q===f.q)) o.push(f); } return o; }), a=pick(FR5), b=pick(FR5.filter(f=>f.q!==a.q)); /* two different bottoms */ const s=fadd(a,b), right=fshow(s);
     const wrong=uniq(right,[fraw(a.p+b.p,a.q+b.q),fraw(a.p+b.p,a.q*b.q),fraw(a.p*b.q+b.p*a.q,a.q+b.q),fshow(fr(a.p*b.p,a.q*b.q)),fshow(fr(a.p+b.p,Math.max(a.q,b.q)))],3); if(wrong.length<3) return null;
     return {index:'q:5h.add['+fshow(a)+'+'+fshow(b)+']', lines:[[fshow(a)+' + '+fshow(b)+' = ▢','a sum']], ask:'What fills the box ▢, in lowest terms?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ',
       why:'Adding is only easy over one denominator, so rename both first: '+fraw(a.p*b.q,a.q*b.q)+' + '+fraw(b.p*a.q,a.q*b.q)+' = '+fraw(a.p*b.q+b.p*a.q,a.q*b.q)+(fraw(a.p*b.q+b.p*a.q,a.q*b.q)===right?'':' = '+right)+'. Adding numerators and adding denominators gives '+fraw(a.p+b.p,a.q+b.q)+', which lies between the two fractions and is not their sum.'}; }},
@@ -5150,7 +5155,7 @@ QP.push({id:'8a.cut',step:'8a',label:'the four properties of a cut',open:()=>mea
     return null; }},
   {id:'8a.step',step:'8a',mode:'work',label:'the hole’s step',open:()=>measured('8a'),make(){
     const r=pick([fr(1,1),fr(4,3),fr(7,5),fr(3,2),fr(1,2),fr(2,1),fr(5,4),fr(0,1),fr(3,1)]), two=fint(2), s=fmul(fadd(fmul(two,r),two),fr(fadd(r,two).q,fadd(r,two).p)), right=fshow(s);
-    const wrong=uniq(right,[fshow(fmul(fadd(r,two),fr(fadd(fmul(two,r),two).q,fadd(fmul(two,r),two).p))),fshow(fadd(r,fr(1,2))),fshow(fmul(fadd(fmul(two,r),fint(1)),fr(fadd(r,two).q,fadd(r,two).p))),fshow(fadd(r,fint(1))),fshow(fmul(r,r))],3); if(wrong.length<3) return null;
+    const wrong=uniq(right,[fshow(fmul(fadd(r,two),fr(fadd(fmul(two,r),two).q,fadd(fmul(two,r),two).p))),fshow(fadd(r,fr(1,2))),fshow(fmul(fadd(fmul(two,r),fint(1)),fr(fadd(r,two).q,fadd(r,two).p))),fshow(fadd(r,fint(1))),fshow(fmul(r,r)),fshow(fmul(two,r)),fshow(fadd(r,two)),fshow(fadd(fmul(two,r),two))],3); if(wrong.length<3) return null;
     const low=s.p*s.p<2*s.q*s.q;
     return {index:'q:8a.step['+fshow(r)+']', lines:[['r = '+fshow(r),'a fraction, not negative'],['s = (2r + 2)/(r + 2)','the hole’s step']], ask:'Which fraction is s?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'(2 · '+fshow(r)+' + 2)/('+fshow(r)+' + 2) = '+right+'. Its square is '+fshow(fmul(s,s))+', '+(low?'still below 2, and s is above r: the lower heap has no greatest member.':'still above 2, and s is below r: the upper heap has no least member.')}; }});
@@ -5259,7 +5264,7 @@ QP.push({id:'8g.linear',step:'8g',mode:'work',label:'linear inequalities',open:(
 
 /* ---------- 8h Absolute Value and Distance on the Line ---------- */
 QP.push({id:'8h.size',step:'8h',mode:'work',label:'size and distance',open:()=>measured('8h'),make(){
-    const p=rnd(19)-9, q=rnd(19)-9, k=rnd(4); if(p===0||q===0||p===q) return null;
+    const p=pick(LRG(-9,9).filter(v=>v)), q=pick(LRG(-9,9).filter(v=>v&&v!==p)), k=rnd(4);
     const [ex,v,alts,why]=k===0?['|'+sg(p)+' − '+(q<0?'('+sg(q)+')':q)+'|',Math.abs(p-q),[Math.abs(p+q),Math.abs(p)-Math.abs(q),p-q,Math.abs(p)+Math.abs(q)],'|p − q| is the distance between p and q on the line: '+sg(p)+' − '+(q<0?'('+sg(q)+')':q)+' = '+sg(p-q)+', and its size is '+Math.abs(p-q)+'.']
       :k===1?['|'+sg(p)+' · '+(q<0?'('+sg(q)+')':q)+'|',Math.abs(p*q),[p*q,-Math.abs(p*q),Math.abs(p)+Math.abs(q),Math.abs(p+q)],'Size-of-a-product: |pq| = |p| |q| = '+Math.abs(p)+' · '+Math.abs(q)+'.']
       :k===2?['|'+sg(p)+' + '+(q<0?'('+sg(q)+')':q)+'|',Math.abs(p+q),[Math.abs(p)+Math.abs(q),Math.abs(p-q),p+q,-Math.abs(p+q)],'Work inside the bars first: '+sg(p+q)+', whose size is '+Math.abs(p+q)+'. The triangle technique says only that this is at most |p| + |q| = '+(Math.abs(p)+Math.abs(q))+'.']
@@ -5267,7 +5272,7 @@ QP.push({id:'8h.size',step:'8h',mode:'work',label:'size and distance',open:()=>m
     const right=sg(v), wrong=uniq(right,alts.concat([v+1,v+2,v+3]).map(sg),3);
     return {index:'q:8h.size['+ex+']', lines:[[ex,'to be worked']], ask:'Which number is it?', right, opts:shuffle([right,...wrong]), lead:'', why}; }},
   {id:'8h.unpack',step:'8h',mode:'work',label:'unpack the bars',open:()=>measured('8h'),make(){
-    const c=rnd(13)-6, d=1+rnd(6), k=rnd(4), lo=c-d, hi=c+d, bar='|x'+(c===0?'':pm(-c))+'|';
+    const k=rnd(4), [c,d]=(L=>L[rnd(L.length)])(LX(LRG(-6,6),LRG(1,6)).filter(([c,d])=>c!==0&&(k!==2||d!==Math.abs(c)))), lo=c-d, hi=c+d, /* a centre off 0, so the unshifted stretch is a real slip; for = d, neither answer is 0 */ bar='|x'+(c===0?'':pm(-c))+'|';
     const [line,right,wrong,why]=k===0?[bar+' < '+d,'('+sg(lo)+', '+sg(hi)+')',['['+sg(lo)+', '+sg(hi)+']','x < '+sg(lo)+' or '+sg(hi)+' < x','('+sg(-hi)+', '+sg(hi)+')'],'Unpack-the-bars: |p| < d exactly when −d < p < d. So '+sg(-d)+' < x'+(c===0?'':pm(-c))+' < '+d+', and adding '+sg(c)+' throughout gives the stretch.']
       :k===1?[bar+' ≤ '+d,'['+sg(lo)+', '+sg(hi)+']',['('+sg(lo)+', '+sg(hi)+')','x ≤ '+sg(lo)+' or '+sg(hi)+' ≤ x','['+sg(-hi)+', '+sg(hi)+']'],'Unpack-the-bars: |p| ≤ d exactly when −d ≤ p ≤ d. The ends are at distance '+d+' from '+sg(c)+', and are let in.']
       :k===2?[bar+' = '+d,'x = '+sg(lo)+' or x = '+sg(hi),['x = '+sg(hi),'x = '+sg(-hi)+' or x = '+sg(hi),'x = '+sg(lo)],'The two reals at distance '+d+' from '+sg(c)+': one each side.']
@@ -5572,7 +5577,7 @@ QP.push({id:'10a.answer',step:'10a',mode:'proof',label:'does the reach answer',o
       why:'|f(x) − '+par10(m*w+b)+'| = '+Math.abs(m)+' · |x − '+par10(w)+'|, so within δ of '+sg(w)+' the output is within '+Math.abs(m)+' · '+fshow(d)+' = '+fshow(fmul(d,fint(Math.abs(m))))+' of the target. '+(ok?'That is at most ε.':'That is more than ε. The greatest reach that answers is ε/'+Math.abs(m)+' = '+fshow(best)+'.')}; }},
   {id:'10a.dial',step:'10a',mode:'word',label:'how close is close enough',open:()=>measured('10a'),make(){
     const m=pick([2,3,4,5,10]), w=2+rnd(8), e=pick([fr(1,2),fr(1,10),fr(1,5),fr(1,4)]), d=fmul(e,fr(1,m)), [story,unit]=pick([['A saw cuts a plank '+m+' centimetres long for each mark on its dial.','centimetres'],['A pump delivers '+m+' litres for each turn of its wheel.','litres'],['A press makes a sheet '+m+' millimetres thick for each notch of its lever.','millimetres']]);
-    const right='within '+fshow(d), wrong=uniq(right,['within '+fshow(e),'within '+fshow(fmul(e,fint(m))),'within '+fshow(fmul(d,fint(2))),'within '+fshow(fr(1,m))],3); if(wrong.length<3) return null;
+    const right='within '+fshow(d), wrong=uniq(right,['within '+fshow(e),'within '+fshow(fmul(e,fint(m))),'within '+fshow(fmul(d,fint(2))),'within '+fshow(fr(1,m)),'within '+fshow(fmul(d,fr(1,2))),'within '+fshow(fmul(e,fr(1,m*m)))],3); if(wrong.length<3) return null;
     return {index:'q:10a.dial['+m+';'+w+';'+fshow(e)+';'+unit+']', a3:['10a.dial['+m+']',DASH,DASH], story:story+' The output must come within '+fshow(e)+' of '+(m*w)+' '+unit+'.', lines:[], ask:'How close to '+w+' must the setting be? Give the greatest reach.', right, opts:shuffle([right,...wrong]), lead:'',
       why:'The output is '+m+' times the setting, so its distance from '+(m*w)+' is '+m+' times the setting’s distance from '+w+'. The challenge is '+fshow(e)+', and the reach that answers it is ('+fshow(e)+')/'+m+' = '+fshow(d)+'.'}; }},
   {id:'11a.mend',step:'11a',mode:'word',label:'a break in the record',open:()=>measured('11a'),make(){
@@ -5611,7 +5616,7 @@ QP.push({id:'12a.trap',step:'12a',mode:'work',label:'a zero in between',open:()=
 
 /* ---------- 12b Bounded on a Closed Interval ---------- */
 QP.push({id:'12b.bound',step:'12b',mode:'work',label:'a bound for a polynomial',open:()=>measured('12b'),make(){
-    const cs=[pick([1,2,-1,-2]),rnd(9)-4,rnd(9)-4], v=rnd(5)-4, w=v+1+rnd(4), R=Math.max(Math.abs(v),Math.abs(w)), B=Math.abs(cs[0])*R*R+Math.abs(cs[1])*R+Math.abs(cs[2]), right=String(B);
+    const cs=[pick([1,2,-1,-2]),rnd(9)-4,rnd(9)-4], [v,w]=pick(LVC('12b.vw',()=>LX(LRG(-4,0),LRG(1,4)).map(([v,k])=>[v,v+k]).filter(([v,w])=>Math.max(-v,Math.abs(w))>=2))), R=Math.max(Math.abs(v),Math.abs(w)), B=Math.abs(cs[0])*R*R+Math.abs(cs[1])*R+Math.abs(cs[2]), right=String(B);
     const wrong=uniq(right,[Math.abs(ev9(cs,R)),Math.abs(cs[0])+Math.abs(cs[1])+Math.abs(cs[2]),(Math.abs(cs[0])+Math.abs(cs[1])+Math.abs(cs[2]))*R,Math.abs(ev9(cs,w)),Math.abs(cs[0])*R+Math.abs(cs[1])*R+Math.abs(cs[2]),R*R].map(String),3); if(wrong.length<3||R===1) return null;
     return {index:'q:12b.bound['+poly9(cs)+';'+v+';'+w+']', lines:[['p(x) = '+poly9(cs),'on ['+sg(v)+', '+sg(w)+']']], ask:'Which bound does the polynomial-bound technique give for |p(x)| there?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'With R = max(|'+sg(v)+'|, |'+sg(w)+'|) = '+R+', |p(x)| ≤ Σ |u_k| R^k = '+Math.abs(cs[0])+' · '+(R*R)+' + '+Math.abs(cs[1])+' · '+R+' + '+Math.abs(cs[2])+' = '+right+'. Sizes are taken term by term, so signs cannot help by cancelling. It is a bound, not the greatest value.'}; }});
@@ -5624,7 +5629,7 @@ const C12=[
   ['When does f reach its greatest value on A at c?','when c ∈ A and f(c) is the least upper bound of the values of f on A',['when f(c) is an upper bound of the values','when f(c) > 0','when c is an end of A'],'Greatest-is-reached: the sup of the values exists and is itself a value.']];
 QP.push({id:'12c.extremes',step:'12c',mode:'work',label:'highest and lowest on a closed interval',open:()=>measured('12c'),make(){
     const h=rnd(9)-4, k=rnd(9)-4, v=rnd(9)-6, w=v+1+rnd(5), f=x=>(x-h)*(x-h)+k, least=Math.random()<0.5, inside=v<=h&&h<=w, lo=inside?k:Math.min(f(v),f(w)), hi=Math.max(f(v),f(w)), val=least?lo:hi, right=sg(val);
-    const wrong=uniq(right,[sg(least?hi:lo),sg(k),sg(f(v)),sg(f(w)),sg(least?v:w),sg(h)],3); if(wrong.length<3) return null;
+    const wrong=uniq(right,[sg(least?hi:lo),sg(k),sg(f(v)),sg(f(w)),sg(least?v:w),sg(h),sg(least?w:v),sg(f(0)),sg(-val)],3); if(wrong.length<3) return null;
     return {index:'q:12c.extremes['+h+';'+k+';'+v+';'+w+';'+(least?'l':'g')+']', lines:[['f(x) = (x'+(h===0?'':pm(-h))+')²'+(k===0?'':pm(k)),'on ['+sg(v)+', '+sg(w)+']']], ask:least?'What is the least value of f there?':'What is the greatest value of f there?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'A square is never negative, so f is least where x = '+sg(h)+(inside?', which is in the interval: the least value is '+sg(k)+'.':', which is outside the interval: the least value is at the nearer end, '+sg(lo)+'.')+' The greatest value is at the end further from '+sg(h)+': f('+sg(v)+') = '+sg(f(v))+', f('+sg(w)+') = '+sg(f(w))+'.'}; }},
   {id:'12c.closed',step:'12c',label:'why the interval is closed',open:()=>measured('12c'),make(){ return writtenQ('12c.closed',C12); }});
@@ -5643,7 +5648,7 @@ QP.push({id:'12e.bisect',step:'12e',mode:'work',label:'halving a trap',open:()=>
     if(k===0){ let c=fint(lo0), d=fint(lo0+1); const steps=rnd(3); for(let i=0;i<steps;i++){ const m=fhalf(fadd(c,d)); if(m.p*m.p<n*m.q*m.q) c=m; else d=m; } const m=fhalf(fadd(c,d)), low=m.p*m.p<n*m.q*m.q, iv=(a,b)=>'['+fshow(a)+', '+fshow(b)+']', right=low?iv(m,d):iv(c,m);
       return {index:'q:12e.bisect[h;'+n+';'+fshow(c)+';'+fshow(d)+']', lines:[['f(x) = x² − '+n,'continuous'],[iv(c,d),'a trap: f is negative at the left end and positive at the right']], ask:'The middle is '+fshow(m)+'. Which half is the next trap?', right, opts:shuffle([right,low?iv(c,m):iv(m,d),iv(c,d),'neither: the middle is a zero']), lead:'',
         why:'f('+fshow(m)+') = '+fshow(fsub(fmul(m,m),fint(n)))+', which is '+(low?'negative, so the sign change is in the right half.':'positive, so the sign change is in the left half.')+' Middle-of-a-trap: the middle is a zero, or exactly one half is a trap.'}; }
-    if(k===1){ const u=rnd(5), w=u+pick([1,2,4]), h=2+rnd(5), d=fr(w-u,2**h), right=fshow(d), wrong=uniq(right,[fshow(fr(w-u,2*h)),fshow(fr(w-u,2**(h-1))),fshow(fr(w-u,2**(h+1))),fshow(fr(1,h)),fshow(fr(w-u,h*h))],3); if(wrong.length<3) return null;
+    if(k===1){ const u=rnd(5), w=u+pick([1,2,4]), h=2+rnd(5), d=fr(w-u,2**h), right=fshow(d), wrong=uniq(right,[fshow(fr(w-u,2*h)),fshow(fr(w-u,2**(h-1))),fshow(fr(w-u,2**(h+1))),fshow(fr(1,h)),fshow(fr(w-u,h*h)),fshow(fr(w-u,h)),fshow(fr(w-u,2**(h+2))),fshow(fr(2**h,w-u))],3); if(wrong.length<3) return null;
       return {index:'q:12e.bisect[w;'+u+';'+w+';'+h+']', lines:[['['+u+', '+w+']','a trap'],[h+' halvings','no tested middle was a zero']], ask:'How wide is the trap now?', right, opts:shuffle([right,...wrong]), lead:'', why:'Halvings-width: after n halvings the width is (v − u)/2ⁿ = '+(w-u)+'/'+(2**h)+' = '+right+'. Each halving is one more place in twos.'}; }
     const even=[['x² + 1',0],['x⁴ + 3',0],['x⁶ + x² + 1',0],['x² + 2x + 5',0],['x⁴ + x² + 2',0]], odd=[['x³ − 5x + 1',1],['x⁵ + x + 7',1],['x³ + 4',1],['−x³ + 2x² − 9',1],['x⁷ − 3x⁴ + 2',1]], R=pick(odd), W=take(even,3);
     return {index:'q:12e.bisect[odd;'+R[0]+';'+W.map(w=>w[0]).join(';')+']', lines:[], ask:'Which polynomial must have a zero on the line?', right:R[0], opts:shuffle([R,...W]).map(x=>x[0]), lead:'It is '+R[0]+'. ',
@@ -5927,7 +5932,10 @@ QP.push({id:'15b.chain',step:'15b',label:'refining tightens',open:()=>measured('
   {id:'15b.refine',step:'15b',mode:'work',label:'the common refinement',open:()=>measured('15b'),make(){
     const pool=[fr(1,4),fr(1,3),fr(1,2),fr(2,3),fr(3,4)], set=xs=>'{'+[fint(0),...xs.slice().sort((a,b)=>a.p*b.q-b.p*a.q),fint(1)].map(fshow).join(', ')+'}', has=(xs,x)=>xs.some(y=>fsame(x,y));
     const P=take(pool,1+rnd(2)), Q=take(pool,1+rnd(3)), U=P.concat(Q.filter(x=>!has(P,x))), I=P.filter(x=>has(Q,x));
-    if(Math.random()<0.55){ const right=set(U), wrong=uniq(right,[set(I),set(P),set(Q),set(U.slice(1)),set(U.concat(pool.filter(x=>!has(U,x)).slice(0,1))),set(pool)],3); if(wrong.length<3||U.length===P.length||U.length===Q.length) return null;
+    if(Math.random()<0.55){ /* P and Q where neither refines the other, so the refinement is new */
+      const W15=(P,Q)=>{ const U=P.concat(Q.filter(x=>!has(P,x))), I=P.filter(x=>has(Q,x)); return [U,I,uniq(set(U),[set(I),set(P),set(Q),set(U.slice(1)),set(U.concat(pool.filter(x=>!has(U,x)).slice(0,1))),set(pool)],3)]; };
+      const [Pi,Qi]=pick(LVC('15b.pq',()=>{ const sub=n=>LRG(1,31).map(s=>LRG(0,4).filter(i=>s>>i&1)).filter(x=>x.length<=n); return LX(sub(2),sub(3)).filter(([a,b])=>{ const P=a.map(i=>pool[i]), Q=b.map(i=>pool[i]), [U,,w]=W15(P,Q); return U.length>P.length&&U.length>Q.length&&w.length>=3; }); }));
+      const P=shuffle(Pi.map(i=>pool[i])), Q=shuffle(Qi.map(i=>pool[i])), [U,I,wrong]=W15(P,Q), right=set(U); if(wrong.length<3) return null;
       return {index:'q:15b.refine[c;'+set(P)+';'+set(Q)+']', lines:[['P = '+set(P),'a partition of [0, 1]'],['Q = '+set(Q),'a partition of [0, 1]']], ask:'Which is the common refinement of P and Q?', right, opts:shuffle([right,...wrong]), lead:'',
         why:'The common refinement has the points of P and the points of Q together, in increasing order. It refines both, which is what lets every lower sum be compared with every upper sum.'}; }
     const ok=I.length===P.length, opts=['yes: every point of P is a point of Q','no: P has a point that Q lacks','yes: Q has more points','no: Q has fewer points'], right=opts[ok?0:1];
@@ -6372,7 +6380,7 @@ const K17=[
   ['Does straight-factors split 1/(x − 1)² as A/(x − 1) + B/(x − 1)?','no: the technique needs different factors',['yes, with A = B = 1/2','yes, with A = 1 and B = −1','yes, with A = 1 and B = 0'],'The right side is (A + B)/(x − 1), which is never 1/(x − 1)². The cᵢ must be different reals.']];
 QP.push({id:'17k.cover',step:'17k',label:'the cover-up technique',open:()=>measured('17k'),make(){ return writtenQ('17k.cover',K17); }},
   {id:'17k.split',step:'17k',mode:'work',label:'the split, and its logs',open:()=>measured('17k'),make(){
-    const c1=rnd(6)-3, c2=c1+1+rnd(3), A1=pick([-3,-2,-1,1,2,3,4]), A2=pick([-3,-2,-1,1,2,3,4]); if(A1+A2===0) return null;
+    const c1=rnd(6)-3, c2=c1+1+rnd(3), A1=pick([-3,-2,-1,1,2,3,4]), A2=pick([-3,-2,-1,1,2,3,4].filter(v=>v!==-A1));
     const top=lin9(A1+A2,-(A1*c2+A2*c1)), bot=fac14(c1)+fac14(c2), logs=Math.random()<0.5, s1=logs?'ln|'+(c1===0?'x':'x'+pm(-c1))+'|':'/'+fac14(c1), s2=logs?'ln|'+(c2===0?'x':'x'+pm(-c2))+'|':'/'+fac14(c2), form=(a,b)=>two17(a,logs?' '+s1:s1,b,logs?' '+s2:s2).replace(/(^|− |\+ )1 ln/g,'$1ln').replace(/^−1 ln/,'−ln')+(logs?' + C':'');
     const right=form(A1,A2), wrong=uniq(right,[form(A2,A1),form(A1,-A2),form(-A1,A2),form(A1+A2,-(A1*c2+A2*c1)||1),form(A1*(c1-c2),A2*(c2-c1)),form(A2,-A1)],3); if(wrong.length<3) return null;
     return {index:'q:17k.split['+[c1,c2,A1,A2,logs?'l':'s'].join(';')+']', lines:[[(logs?'∫ ':'')+'('+top+')/('+bot+')'+(logs?' dx':''),logs?'on an interval clear of '+sg(c1)+' and '+sg(c2):'to be split into straight pieces']], ask:logs?'Which is it?':'Which split is it?', right, opts:shuffle([right,...wrong]), lead:'',
@@ -6618,7 +6626,7 @@ const B19=[
   ['What is the order of a member a?','the least n ≥ 1 with aⁿ = e',['the number of members of the group','the least n ≥ 0 with aⁿ = e','the place of a in a list of the members'],'It is how soon the move comes back. a⁰ = e for every a, so n = 0 would tell nothing.']];
 QP.push({id:'19b.one',step:'19b',label:'one way to do nothing, one way to undo',open:()=>measured('19b'),make(){ return writtenQ('19b.one',B19); }},
   {id:'19b.solve',step:'19b',mode:'work',label:'one answer',open:()=>measured('19b'),make(){
-    const n=3+rnd(2), a=perm19(n), b=perm19(n), left=Math.random()<0.5; if(sh19(a)===sh19(b)) return null; const ai=inv19(a), x=left?comp19(ai,b):comp19(b,ai), right=sh19(x), wrong=uniq(right,[sh19(left?comp19(b,ai):comp19(ai,b)),sh19(comp19(a,b)),sh19(comp19(b,a)),sh19(comp19(inv19(b),a)),any19(n),any19(n),any19(n),any19(n),any19(n),any19(n),any19(n),any19(n)],3); if(wrong.length<3) return null;
+    const n=3+rnd(2), a=perm19(n), PS19=LVC('19b.p'+n,()=>{ let ps=[[]]; for(let k=1;k<=n;k++) ps=ps.flatMap(p=>LRG(0,p.length).map(i=>p.slice(0,i).concat([k],p.slice(i)))); return ps.filter(p=>!isid19(p)); }), b=pick(PS19.filter(p=>sh19(p)!==sh19(a))), left=Math.random()<0.5; const ai=inv19(a), x=left?comp19(ai,b):comp19(b,ai), right=sh19(x), wrong=uniq(right,[sh19(left?comp19(b,ai):comp19(ai,b)),sh19(comp19(a,b)),sh19(comp19(b,a)),sh19(comp19(inv19(b),a)),any19(n),any19(n),any19(n),any19(n),any19(n),any19(n),any19(n),any19(n)],3); if(wrong.length<3) return null;
     return {index:'q:19b.solve['+[sh19(a),sh19(b),left?'l':'r'].join(';')+']', lines:[['a = '+sh19(a)+' and b = '+sh19(b),'two shuffles'],[left?'ax = b':'xa = b','to be solved for x']], ask:'Which shuffle is x?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'One-answer: x = '+(left?'a⁻¹b':'ba⁻¹')+', with a⁻¹ = '+sh19(ai)+'. That is '+(left?'a⁻¹ after b':'b after a⁻¹')+': '+right+'. Check: '+(left?'a after x':'x after a')+' is '+sh19(left?comp19(a,x):comp19(x,a))+', which is b.'}; }},
   {id:'19b.order',step:'19b',mode:'work',label:'how soon a move comes back',open:()=>measured('19b'),make(){
@@ -6682,8 +6690,8 @@ QP.push({id:'19d.part',step:'19d',label:'groups inside groups',open:()=>measured
     const p=pick([5,7,11,13,17,19,23]), right=String(p), wrong=uniq(right,['1','2',String((p-1)/2),String(2*p),String(p*p)],3);
     return {index:'q:19d.sizes[p;'+p+']', lines:[['a group of '+p+' members','given'],['a is a member, and a is not e','given']], ask:'What is the order of a?', right, opts:shuffle([right,...wrong]), lead:'', why:'Order-divides: the order divides '+p+', a prime, so it is 1 or '+p+'. Only e has the order 1.'}; }},
   {id:'19d.copies',step:'19d',mode:'work',label:'shifted copies on the wheel',open:()=>measured('19d'),make(){
-    const d=pick([2,3,4,6]), H=id19(12/d).map(i=>(i-1)*d), a=1+rnd(11), cp=x=>set19(H.map(h=>(x+h)%12)), k=rnd(3), top=[['the turns of a wheel by twelfths, k for the turn by k twelfths','the group'],['H = '+set19(H),'a part-group']];
-    if(k===0){ const right=cp(a), wrong=uniq(right,[set19(H),cp(a+1),cp(a+d-1),set19(H.map((h,i)=>(a+i)%12)),set19(uniq(-1,H.map(h=>(a*h)%12),12)),cp(a+2)],3); if(wrong.length<3) return null;
+    const k19=rnd(3), d=pick(k19===2?[3,4,6]:[2,3,4,6]), H=id19(12/d).map(i=>(i-1)*d), a=1+rnd(11), cp=x=>set19(H.map(h=>(x+h)%12)), k=k19, top=[['the turns of a wheel by twelfths, k for the turn by k twelfths','the group'],['H = '+set19(H),'a part-group']];
+    if(k===0){ const right=cp(a), wrong=uniq(right,[set19(H),cp(a+1),cp(a+d-1),set19(H.map((h,i)=>(a+i)%12)),set19(uniq(-1,H.map(h=>(a*h)%12),12)),cp(a+2),set19(H.map(h=>a+h)),set19(H.map(h=>(h-a+12)%12))],3); if(wrong.length<3) return null;
       return {index:'q:19d.copies[s;'+d+';'+a+']', lines:top, ask:'Which set is the copy '+a+' + H?', right, opts:shuffle([right,...wrong]), lead:'', why:'Add '+a+' to each member of H, taking away 12 when the sum reaches 12: '+right+'.'+(a%d===0?' Since '+a+' is in H, the copy is H itself.':'')}; }
     if(k===1){ const right=String(d), wrong=uniq(right,[12/d,12,12-12/d,12-d,2*d,11].filter(v=>v>=1).map(String),3);
       return {index:'q:19d.copies[n;'+d+']', lines:top, ask:'How many different copies has H?', right, opts:shuffle([right,...wrong]), lead:'', why:'H has '+(12/d)+' members, every copy has as many, and the copies sort the 12 turns: 12 = '+d+' · '+(12/d)+'.'}; }
@@ -8218,8 +8226,9 @@ QP.push({id:'24j.logi',step:'24j',label:'the logistic statement',open:()=>measur
     const rr=pick([fr(1,2),fint(1),fint(2),fr(1,4)]), P=pick([20,40,50,80,120].map(v=>v*K/100)), R=fadd(fint(P),fmul(fmul(rr,fint(P)),fr(K-P,K))), right=fshow(R), wrong=frs16(right,[fadd(fint(P),fmul(rr,fint(P))),fmul(fmul(rr,fint(P)),fr(K-P,K)),fint(K),fadd(fint(P),fmul(rr,fint(K-P))),fsub(fint(P),fmul(fmul(rr,fint(P)),fr(K-P,K))),fint(P)]); if(wrong.length<3||R.q!==1) return null;
     return {index:'q:24j.solve[w;'+[K,fshow(rr),P].join(';')+']', lines:[['Pₙ₊₁ = Pₙ + '+(rr.q===1?(rr.p===1?'':rr.p):'('+fshow(rr)+')')+'Pₙ(1 − Pₙ/'+K+')','the yearly walk, h = 1'],['P₀ = '+P,'the start']], ask:'What is P₁?', right, opts:shuffle([right,...wrong]), lead:'', why:P+' + '+fshow(rr)+' · '+P+' · (1 − '+P+'/'+K+') = '+P+' + '+fpar22(fmul(fmul(rr,fint(P)),fr(K-P,K)))+' = '+right+'.'+(rr.p>=2?' With hr = 2 the walk no longer pulls starts near '+K+' in.':'')}; }},
   {id:'24j.island',step:'24j',mode:'word',label:'a count a year',open:()=>measured('24j'),make(){
-    const [who,where]=pick([['hares','An island'],['voles','A meadow'],['carp','A pond'],['finches','A wood']]), K=pick([400,1000,2000]), P=pick([1,2,4].map(v=>v*K/5).concat([K/2])), rr=pick([fr(1,2),fint(1),fr(1,4)]), add=fmul(fmul(rr,fint(P)),fr(K-P,K)); if(add.q!==1) return null;
-    const r=P+add.p, right=String(r), wrong=uniq(right,[P+rr.p*P/rr.q,add.p,K,P+rr.p*(K-P)/rr.q,P-add.p,2*P].filter(v=>Number.isInteger(v)&&v!==r&&v>0).map(String),3); if(wrong.length<3) return null;
+    const [who,where]=pick([['hares','An island'],['voles','A meadow'],['carp','A pond'],['finches','A wood']]), W24=(K,P,rr)=>{ const add=fmul(fmul(rr,fint(P)),fr(K-P,K)), r=P+add.p; return [add,r,uniq(String(r),[P+rr.p*P/rr.q,add.p,K,P+rr.p*(K-P)/rr.q,P-add.p,2*P,K-P,P+2*add.p].filter(v=>Number.isInteger(v)&&v!==r&&v>0).map(String),3)]; },
+      [K,P,rr]=pick(LVC('24j.kpr',()=>{ const o=[]; [400,1000,2000].forEach(K=>[1,2,4].map(v=>v*K/5).concat([K/2]).forEach(P=>[fr(1,2),fint(1),fr(1,4)].forEach(rr=>{ const [add,,w]=W24(K,P,rr); if(add.q===1&&w.length>=3) o.push([K,P,rr]); }))); return o; })), [add,r,wrong]=W24(K,P,rr); /* a whole growth with three different slips */
+    const right=String(r); if(wrong.length<3) return null;
     return {index:'q:24j.island['+[who,K,P,fshow(rr)].join(';')+']', a3:['24j.island',DASH,DASH], story:where+' can feed '+K+' '+who+' and no more. Each year the count grows by '+(rr.q===1?'':fshow(rr)+' of ')+'itself times the share of the room still free: Pₙ₊₁ = Pₙ + '+(rr.q===1?'':'('+fshow(rr)+')')+'Pₙ(1 − Pₙ/'+K+'). This year there are '+P+'.', lines:[], ask:'How many are there next year?', right, opts:shuffle([right,...wrong]), lead:'', why:'The share of the room still free is 1 − '+P+'/'+K+' = '+fshow(fr(K-P,K))+'. The count grows by '+fshow(rr)+' · '+P+' · '+fshow(fr(K-P,K))+' = '+add.p+', to '+r+'.'}; }});
 
 /* ---------- 24k Fixed Points, Stability and the Start of Chaos ---------- */
@@ -8738,13 +8747,13 @@ const R2H26=(k,a,b)=>[['e^('+k+'z)/z²',String(k),'e^('+k+'z) = 1 + '+k+'z + ⋯
 QP.push({id:'26h.res',step:'26h',label:'what a residue is',open:()=>measured('26h'),make(){ return writtenQ('26h.res',WH26); }},
   {id:'26h.work',step:'26h',mode:'work',label:'residues by hand',open:()=>measured('26h'),make(){
     const t=rnd(4), a=nz25(4), b=nz25(5), p=nz25(4), q=nz25(4);
-    if(t===0){ if(p===q||a*p+b===0||a*q+b===0) return null; const R=fr(a*p+b,p-q), right=fshow(R), wrong=frs16(right,[fr(a*q+b,q-p),fint(a*p+b),fr(a*p+b,q-p),fr(1,p-q),fint(a)]); if(wrong.length<3) return null;
+    if(t===0){ const PQ=[-4,-3,-2,-1,1,2,3,4].filter(v=>a*v+b!==0), p=pick(PQ), q=pick(PQ.filter(v=>v!==p)); /* two different poles, neither cancelled by the top */ const R=fr(a*p+b,p-q), right=fshow(R), wrong=frs16(right,[fr(a*q+b,q-p),fint(a*p+b),fr(a*p+b,q-p),fr(1,p-q),fint(a)]); if(wrong.length<3) return null;
       return {index:'q:26h.work[s;'+[a,b,p,q].join(';')+']', lines:[['f(z) = ('+cf22(a,'z')+pm(b)+')/((z'+pm(-p)+')(z'+pm(-q)+'))','it has poles of order 1 at '+sg(p)+' and '+sg(q)]], ask:'What is Res(f, '+sg(p)+')?', right, opts:shuffle([right,...wrong]), lead:'', why:'At a pole of order 1, cover the factor z'+pm(-p)+' and put z = '+sg(p)+' in the rest: ('+sg(a*p)+pm(b)+')/('+sg(p)+pm(-q)+') = '+right+'.'}; }
     if(t===1){ const P=1+rnd(2), Q=P+2+rnd(2), R=Math.random()<0.5?P+1:Q+1, s1=s25(), s2=s25(), tot=R>Q?a+b:a;
-      const right=pii26(2*tot,1), wrong=uniq(right,[pii26(2*(a+b),1),pii26(2*a,1),pii26(2*b,1),'0',pii26(tot,1),pi21(2*tot,1)],3); if(wrong.length<3) return null;
+      const right=pii26(2*tot,1), wrong=uniq(right,[pii26(2*(a+b),1),pii26(2*a,1),pii26(2*b,1),'0',pii26(tot,1),pi21(2*tot,1),pii26(-2*tot,1)],3); if(wrong.length<3) return null;
       return {index:'q:26h.work[t;'+[a,b,s1*P,s2*Q,R].join(';')+']', lines:[['f(z) = '+tm25([[a,'/(z'+pm(-s1*P)+')'],[b,'/(z'+pm(-s2*Q)+')']]).replace(/(^|[^0-9])\//g,(m,c)=>c+'1/'),'two poles of order 1'],['C is the circle |z| = '+R+', anticlockwise','a loop']], ask:'What is ∮ round C of f?', right, opts:shuffle([right,...wrong]), lead:'', why:'Residue technique: '+(R>Q?'both poles are inside C, with residues '+sg(a)+' and '+sg(b):'only the pole at '+sg(s1*P)+' is inside C, with residue '+sg(a))+', so the total is 2πi · '+par10(tot)+'.'}; }
     if(t===2){ const rs=[[1,1+rnd(3)],[-3,1+rnd(2)],[5,1+rnd(3)],[-6,1+rnd(2)]].filter(()=>Math.random()<0.8), R=pick([2,4]); if(rs.length<2) return null;
-      const ins=rs.filter(v=>Math.abs(v[0])<R), n=ins.reduce((x,v)=>x+v[1],0), deg=rs.reduce((x,v)=>x+v[1],0), right=String(n), wrong=uniq(right,[String(ins.length),String(deg),String(deg-n),String(rs.length),String(n+1)],3); if(wrong.length<3) return null;
+      const ins=rs.filter(v=>Math.abs(v[0])<R), n=ins.reduce((x,v)=>x+v[1],0), deg=rs.reduce((x,v)=>x+v[1],0), right=String(n), wrong=uniq(right,[String(ins.length),String(deg),String(deg-n),String(rs.length),String(n+1),String(Math.max(0,n-1)),String(2*n)],3); if(wrong.length<3) return null;
       return {index:'q:26h.work[c;'+[rs.join('|'),R].join(';')+']', lines:[['p(z) = '+rs.map(v=>'(z'+pm(-v[0])+')'+(v[1]===1?'':sup15(v[1]))).join(''),'a polynomial, in line factors'],['C is the circle |z| = '+R,'no root of p lies on it']], ask:'What is (1/2πi) ∮ round C of p′/p?', right, opts:shuffle([right,...wrong]), lead:'', why:'Root-count technique: it is the number of roots of p inside C, counted with repeats. '+(ins.length?'Inside are '+ins.map(v=>sg(v[0])+(v[1]===1?'':' ('+v[1]+' times)')).join(' and ')+'.':'No root lies inside.')}; }
     const k=2+rnd(4), [f,right,why]=pick(R2H26(k,a,b)), wrong=uniq(right,shuffle(['0','1','1/2',String(k),sg(a),sg(b),'2','−1',String(k*k)]),3);
     return {index:'q:26h.work[o;'+f+']', lines:[['f(z) = '+f,'it has a pole at 0']], ask:'What is Res(f, 0)?', right, opts:shuffle([right,...wrong]), lead:'', why:why+' The residue is the coefficient of 1/z.'}; }},
@@ -9139,7 +9148,7 @@ QP.push({id:'27h.read',step:'27h',label:'readings',open:()=>measured('27h'),make
       return {index:'q:27h.work[v;'+[a,b,c,d,x,y].join(';')+']', lines:[['B(x, y) = xᵀGy, and G has '+g2(a,b,c,d),'a two-slot reading'],['x = '+v27(x)+' and y = '+v27(y),'two lists']], ask:'What is B(x, y)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-slot technique: Gy = '+v27([a*y[0]+b*y[1],c*y[0]+d*y[1]])+', and x against it gives '+right+'.'}; }
     if(t===1){ const k=nz25(3), p=nz25(4), q=nz25(4), right=sg(p-k*q), wrong=uniq(right,[sg(p),sg(p+k*q),sg(q),sg(p-q),sg(k*p-q)],3); if(wrong.length<3) return null;
       return {index:'q:27h.work[f;'+[k,p,q].join(';')+']', lines:[['v₁ = (1, 0) and v₂ = '+v27([k,1]),'a basis of the plane'],['f₁(v₁) = 1 and f₁(v₂) = 0','a reading']], ask:'What is f₁(x), for x = '+v27([p,q])+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'x = '+par10(p-k*q)+'·v₁ + '+par10(q)+'·v₂, and f₁ reads off the first number. Reading-basis technique.'}; }
-    const right=g2(a,b,c,d), wrong=uniq(right,[g2(a,c,b,d),g2(d,b,c,a),g2(b,a,d,c),g2(d,c,b,a)],3); if(wrong.length<3) return null;
+    const right=g2(a,b,c,d), wrong=uniq(right,[g2(a,c,b,d),g2(d,b,c,a),g2(b,a,d,c),g2(d,c,b,a),g2(c,d,a,b),g2(a,d,b,c),g2(a,d,c,b)],3); if(wrong.length<3) return null;
     return {index:'q:27h.work[g;'+[a,b,c,d].join(';')+']', lines:[['B(e₁, e₁) = '+sg(a)+' and B(e₁, e₂) = '+sg(b),'a two-slot reading'],['B(e₂, e₁) = '+sg(c)+' and B(e₂, e₂) = '+sg(d),'the same reading']], ask:'Which grid G has B(x, y) = xᵀGy?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-slot technique: Gᵢⱼ = B(eᵢ, eⱼ). Row i holds the readings with eᵢ in the first slot.'}; }},
   {id:'27h.line',step:'27h',mode:'proof',label:'straight in each slot',open:()=>measured('27h'),make(){
     const a=nz25(4), b=nz25(4), c=1+rnd(5), k=2+rnd(3), n=2+rnd(5), d=i27(), e=b+1+rnd(2), V=[
@@ -9214,8 +9223,8 @@ QP.push({id:'27j.rows',step:'27j',label:'row moves',open:()=>measured('27j'),mak
     const m=pick([2,3,-2,-3]), e=i27(), f=i27(), R=(p,q,r)=>'['+sg(p)+', '+sg(q)+' | '+sg(r)+']', right=R(0,d-m*b,f-m*e), wrong=uniq(right,[R(2*m*a,d+m*b,f+m*e),R(0,d-m*b,f),R(0,d-b,f-e),R(0,d+m*b,f+m*e)],3); if(wrong.length<3) return null;
     return {index:'q:27j.work[m;'+[a,b,d,m,e,f].join(';')+']', lines:[['row 1 is '+R(a,b,e)+' and row 2 is '+R(m*a,d,f),'the grid [A | b]'],['take '+par10(m)+' times row 1 from row 2','a row move']], ask:'What is the new row 2?', right, opts:shuffle([right,...wrong]), lead:'', why:'Row-move technique. Place by place: '+sg(m*a)+' − '+par10(m)+' · '+par10(a)+' = 0, '+sg(d)+' − '+par10(m)+' · '+par10(b)+' = '+sg(d-m*b)+', and '+sg(f)+' − '+par10(m)+' · '+par10(e)+' = '+sg(f-m*e)+'.'}; }},
   {id:'27j.stall',step:'27j',mode:'word',label:'two purchases',open:()=>measured('27j'),make(){
-    const [X,Y,one]=pick([['apples','pears','one apple'],['pens','pads','one pen'],['nails','hooks','one nail'],['buns','rolls','one bun'],['bulbs','seeds','one bulb']]), p=1+rnd(6), q=1+rnd(6), a=2+rnd(4), b=2+rnd(4), c=2+rnd(4), d=2+rnd(4); if(a*d===b*c) return null;
-    const right=p+(p===1?' coin':' coins'), f=n=>n+(n===1?' coin':' coins'), wrong=uniq(right,[f(q),f(p+1),f(p+q),f(p+2),f(Math.max(1,p-1))],3); if(wrong.length<3) return null;
+    const [X,Y,one]=pick([['apples','pears','one apple'],['pens','pads','one pen'],['nails','hooks','one nail'],['buns','rolls','one bun'],['bulbs','seeds','one bulb']]), p=1+rnd(6), q=1+rnd(6), [a,b,c,d]=pick(LVC('27j.stall',()=>LX(LRG(2,5),LRG(2,5),LRG(2,5),LRG(2,5)).filter(([a,b,c,d])=>a*d!==b*c))); /* the two purchases are not in step */
+    const right=p+(p===1?' coin':' coins'), f=n=>n+(n===1?' coin':' coins'), wrong=uniq(right,[f(q),f(p+1),f(p+q),f(p+2),f(Math.max(1,p-1)),f(Math.round((a*p+b*q)/(a+b))),f(p+3)],3); if(wrong.length<3) return null;
     return {index:'q:27j.stall['+[X,p,q,a,b,c,d].join(';')+']', a3:['27j.stall',DASH,DASH], story:'At a stall, '+a+' '+X+' and '+b+' '+Y+' cost '+(a*p+b*q)+' coins. At the same prices, '+c+' '+X+' and '+d+' '+Y+' cost '+(c*p+d*q)+' coins.', lines:[], ask:'What does '+one+' cost?', right, opts:shuffle([right,...wrong]), lead:'', why:'Write '+a+'x + '+b+'y = '+(a*p+b*q)+' and '+c+'x + '+d+'y = '+(c*p+d*q)+'. Row moves keep the answers and clear one unknown: x = '+p+' and y = '+q+'.'}; }},
   {id:'27j.line',step:'27j',mode:'proof',label:'moves that can be undone',open:()=>measured('27j'),make(){
     const k=2+rnd(4), n=2+rnd(4), V=[
@@ -9274,7 +9283,7 @@ const WL27=[
   ['uₙ₊₁ = p uₙ + q uₙ₋₁. Which are the stretches of the step grid?','the roots of λ² = pλ + q',['p and q','the roots of λ² = qλ + p','p + q and p − q'],'Step-grid technique: M has rows (p, q), (1, 0).']];
 QP.push({id:'27l.sums',step:'27l',label:'stretches by hand',open:()=>measured('27l'),make(){ return writtenQ('27l.sums',WL27); }},
   {id:'27l.work',step:'27l',mode:'work',label:'find the stretches',open:()=>measured('27l'),make(){
-    const t=rnd(5), l=nz25(4), m=nz25(4); if(l===m) return null;
+    const t=rnd(5), l=nz25(4), m=pick([-4,-3,-2,-1,1,2,3,4].filter(v=>v!==l));
     const tr=l+m, d=l*m, right=pr27(l,m);
     if(t<2){ const A=[2*l-m,m-l,2*l-2*m,2*m-l], wrong=uniq(right,[pr27(A[0],A[3]),pr27(-l,-m),pr27(tr,d),pr27(Math.min(l,m),Math.max(l,m)+1),pr27(Math.min(l,m)-1,Math.max(l,m))],3); if(wrong.length<3) return null;
       return {index:'q:27l.work[g'+t+';'+[l,m].join(';')+']', lines:t===0?[['A has '+g2(...A),'a grid']]:[['A is a 2 × 2 grid with middle sum '+sg(tr)+' and det '+sg(d),'given']], ask:'Which are the stretches of A?', right, opts:shuffle([right,...wrong]), lead:'', why:'Middle-sum technique: the middle sum is '+sg(tr)+' and det A is '+sg(d)+', so the stretches are the roots of '+q27(tr,d)+'. They add to '+sg(tr)+' and multiply to '+sg(d)+'.'}; }
@@ -9617,7 +9626,7 @@ QP.push({id:'28j.fields',step:'28j',label:'swirl and spread',open:()=>measured('
     const [p0,q0]=pt28(), [p1,q1]=pt28(), f=(x,y)=>a*x*x+b*y, val=f(p1,q1)-f(p0,q0), right=sg(val), wrong=uniq(right,[sg(-val),sg(f(p1,q1)),sg(f(p1,q1)+f(p0,q0)),sg(f(p0,q0)),sg(2*val),sg(-2*val)],3); if(wrong.length<3||(p0===p1&&q0===q1)) return null;
     return {index:'q:28j.work[u;'+[a,b,p0,q0,p1,q1].join(';')+']', lines:[['F = ∇φ, with φ(x, y) = '+tm25([[a,'x²'],[b,'y']]),'an uphill field'],['a path runs from '+v27([p0,q0])+' to '+v27([p1,q1]),'given']], ask:'What is the circulation of F along the path?', right, opts:shuffle([right,...wrong]), lead:'', why:'Uphill-total technique: φ at the end minus φ at the start, '+sg(f(p1,q1))+' − '+par10(f(p0,q0))+'.'}; }},
   {id:'28j.line',step:'28j',mode:'proof',label:'inside on the left',open:()=>measured('28j'),make(){
-    const a=nz25(3), b=nz25(3), c=nz25(3), d=nz25(3), w=1+rnd(3), h=1+rnd(3), F='F = ('+tm25([[a,'x'],[b,'y']])+', '+tm25([[c,'x'],[d,'y']])+'), and R is a rectangle with sides '+w+' and '+h; if(c===b) return null;
+    const a=nz25(3), b=nz25(3), c=pick([-3,-2,-1,1,2,3].filter(v=>v!==b)), d=nz25(3), w=1+rnd(3), h=1+rnd(3), F='F = ('+tm25([[a,'x'],[b,'y']])+', '+tm25([[c,'x'],[d,'y']])+'), and R is a rectangle with sides '+w+' and '+h; if(c===b) return null;
     const V=[
       ['j1',[['F = ∇φ, and a path starts and ends at one point','given'],['the circulation of F along it is 0','the uphill-total technique']],2,0,'φ at the end minus φ at the start is 0.'],
       ['j2',[['F is a smoothly sloped field, and C is a loop','given'],['the circulation of F round C is 0','the loop closes']],2,1,'Only for uphill fields. (−y, x) circulates 2π round the unit circle.'],
@@ -9673,7 +9682,7 @@ QP.push({id:'28l.test',step:'28l',label:'top, bottom or saddle',open:()=>measure
     const K=2*(1+rnd(3)), h1=1+rnd(3), h2=1+rnd(3), s=h1+h2, f=n=>String(n/100), right=f(K*s*s/2), wrong=uniq(right,[f(K*s*s),f(K*s*5),f(K*s*s/4),f(K*(h1*h1+h2*h2)/2),f(K*s*2)],3); if(wrong.length<3) return null;
     return {index:'q:28l.work[h;'+[K,h1,h2].join(';')+']', lines:[['every second partial slope of f has size at most '+K+' on the disc','given'],['h = (0.'+h1+', 0.'+h2+')','a step from p']], ask:'What ceiling does the hug-ceiling technique give for the error of the tangent sheet at p + h?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hug-ceiling technique: ½K(|h₁| + |h₂|)² = ½ · '+K+' · '+f(s*10)+'² = '+right+'.'}; }},
   {id:'28l.line',step:'28l',mode:'proof',label:'what D decides',open:()=>measured('28l'),make(){
-    const A=1+rnd(4), C=1+rnd(4), B=rnd(3), Bb=Math.ceil(Math.sqrt(A*C))+1+rnd(2), K=2+rnd(5); if(A*C-B*B<=0) return null;
+    const [A,C,B]=pick(LVC('28l.acb',()=>LX(LRG(1,4),LRG(1,4),LRG(0,2)).filter(([A,C,B])=>A*C-B*B>0))), Bb=Math.ceil(Math.sqrt(A*C))+1+rnd(2), K=2+rnd(5);
     const V=[
       ['l1',[['∇f(p) = 0, with A = '+A+', B = '+B+' and C = '+C+' at p','given'],['f has a bottom at p','the grid-test technique: D = '+(A*C-B*B)+' > 0 and A > 0']],2,0,'D = AC − B² = '+A*C+' − '+B*B+'.'],
       ['l2',[['∇f(p) = 0, with fxx = '+A+', fxy = '+Bb+' and fyy = '+C+' at p','given'],['f has a bottom at p','both second slopes are positive']],2,1,'D = AC − B² = '+A*C+' − '+Bb*Bb+' = '+sg(A*C-Bb*Bb)+' < 0: a saddle.'],
@@ -9821,7 +9830,7 @@ QP.push({id:'29a.trial',step:'29a',label:'the other axioms alone',open:()=>measu
     const t=rnd(3), a=2+rnd(4), b=2+rnd(4);
     if(t===0){ const right='at most '+pi21(12-a-b,12), wrong=uniq(right,['exactly '+pi21(12-a-b,12),'at least '+pi21(12-a-b,12),'at most '+pi21(a+b,12),'more than '+pi21(12-a-b,12)],3); if(wrong.length<3) return null;
       return {index:'q:29a.work[s;'+[a,b].join(';')+']', lines:[['two angles of a triangle are '+pi21(a,12)+' and '+pi21(b,12),'given'],['the parallel axiom is not used','the other axioms alone']], ask:'What do the axioms say of the third angle?', right, opts:shuffle([right,...wrong]), lead:'', why:'No-more-than-straight technique: the three add to at most π, and '+pi21(a,12)+' + '+pi21(b,12)+' = '+pi21(a+b,12)+'.'}; }
-    if(t===1){ const m=Math.max(a,b), right='it is larger than '+pi21(m,12), wrong=['it is exactly '+pi21(a+b,12),'it is smaller than '+pi21(Math.min(a,b),12),'it is exactly '+pi21(12-m,12)]; if(a===b||a+b===12-m) return null;
+    if(t===1){ const [a,b]=pick(LVC('29a.o',()=>LX(LRG(2,5),LRG(2,5)).filter(([a,b])=>a!==b&&a+b!==12-Math.max(a,b)))), m=Math.max(a,b), right='it is larger than '+pi21(m,12), wrong=['it is exactly '+pi21(a+b,12),'it is smaller than '+pi21(Math.min(a,b),12),'it is exactly '+pi21(12-m,12)];
       return {index:'q:29a.work[o;'+[a,b].join(';')+']', lines:[['the two inside angles away from an outside angle are '+pi21(a,12)+' and '+pi21(b,12),'given'],['the parallel axiom is not used','the other axioms alone']], ask:'What do the axioms say of the outside angle?', right, opts:shuffle([right,...wrong]), lead:'', why:'Outside-angle technique: it is larger than each of the two inside angles away from it. That it equals their sum needs the parallel axiom.'}; }
     const [th,co]=pick([['π/3','2π/3'],['2π/5','3π/5'],['4π/9','5π/9'],['3π/8','5π/8']]);
     return {index:'q:29a.work[u;'+th+']', lines:[['an upright figure has one top angle '+th,'given']], ask:'What is its other top angle?', right:th, opts:shuffle([th,co,'π/2','it cannot be told']), lead:'', why:'Top-angles technique: the two top angles of an upright figure are equal.'}; }},
@@ -9969,7 +9978,7 @@ const WF29=[
 QP.push({id:'29f.total',step:'29f',label:'total bend',open:()=>measured('29f'),make(){ return writtenQ('29f.total',WF29); }},
   {id:'29f.work',step:'29f',mode:'work',label:'count the holes',open:()=>measured('29f'),make(){
     const t=rnd(4), g=rnd(4), m=20+2*rnd(6), F=2*m, E=3*m, V=2-2*g+m;
-    if(t===0){ const right=pi21(4*(1-g),1), wrong=uniq(right,[pi21(4*g,1),pi21(2*(1-g),1),pi21(4*(1+g),1),pi21(2-2*g,1),pi21(4,1),'0'],3); if(wrong.length<3) return null;
+    if(t===0){ const right=pi21(4*(1-g),1), wrong=uniq(right,[pi21(4*g,1),pi21(2*(1-g),1),pi21(4*(1+g),1),pi21(2-2*g,1),pi21(4,1),'0',pi21(4*(g-1),1),String(2-2*g),pi21(2*g,1)],3); if(wrong.length<3) return null;
       return {index:'q:29f.work[h;'+g+']', lines:[['a closed surface has '+(g===1?'1 hole':g+' holes'),'given']], ask:'What is its total bend?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hole-count technique: 4π(1 − g) = 4π · '+par10(1-g)+'.'}; }
     if(t===1){ const right=String(g), wrong=uniq(right,['0','1','2','3','4'].filter(x=>x!==right),3);
       return {index:'q:29f.work[c;'+[g,m].join(';')+']', lines:[['a closed surface is cut into triangles, with '+V+' corners, '+E+' edges and '+F+' faces','given']], ask:'How many holes has it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Hole-count technique: V − E + F = '+V+' − '+E+' + '+F+' = '+sg(2-2*g)+' = 2 − 2g.'}; }
@@ -10321,11 +10330,11 @@ const WE30=[
 QP.push({id:'30e.order',step:'30e',label:'slices and order',open:()=>measured('30e'),make(){ return writtenQ('30e.order',WE30); }},
   {id:'30e.work',step:'30e',mode:'work',label:'size by slices',open:()=>measured('30e'),make(){
     const t=rnd(4), k=1+rnd(4), a=2*(1+rnd(3)), b=2*(1+rnd(2));
-    if(t===0){ const p=1+rnd(a-1), right=String(k*p), wrong=uniq(right,[String(k*a),String(p),String(k*p*p/2|0),String(k+p),String(2*k*p)],3); if(wrong.length<3) return null;
+    if(t===0){ const p=1+rnd(a-1), right=String(k*p), wrong=uniq(right,[String(k*a),String(p),String(k*p*p/2|0),String(k+p),String(2*k*p),String(k*(a-p)),String(k*p+k)],3); if(wrong.length<3) return null;
       return {index:'q:30e.work[s;'+[k,a,p].join(';')+']', lines:[['E is the set of (x, y) with 0 ≤ x ≤ '+a+' and 0 ≤ y ≤ '+cf22(k,'x'),'a sized set of the plane']], ask:'What is the size of its slice at x = '+p+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'The slice Eₓ is the interval from 0 to '+cf22(k,'x')+', of length '+k+' · '+p+'.'}; }
-    if(t===1){ const right=String(k*a*a/2), wrong=uniq(right,[String(k*a*a),String(k*a),String(a*a/2),String(k*a*a/2+a),String(k*a/2)],3); if(wrong.length<3) return null;
+    if(t===1){ const right=String(k*a*a/2), wrong=uniq(right,[String(k*a*a),String(k*a),String(a*a/2),String(k*a*a/2+a),String(k*a/2),String(k*a*a/2+k),String(k*a*a/4)],3); if(wrong.length<3) return null;
       return {index:'q:30e.work[m;'+[k,a].join(';')+']', lines:[['E is the set of (x, y) with 0 ≤ x ≤ '+a+' and 0 ≤ y ≤ '+cf22(k,'x'),'a sized set of the plane']], ask:'What is m₂(E)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slices technique: m₂(E) = ∫ m(Eₓ) dx = ∫ '+cf22(k,'x')+' dx from 0 to '+a+' = '+(k===1?'':k+' · ')+a+'²/2.'}; }
-    if(t===2){ const h1=1+rnd(4), h2=1+rnd(4), w1=1+rnd(3), w2=1+rnd(3); if(h1===h2) return null; const right=String(h1*w1+h2*w2), wrong=uniq(right,[String((h1+h2)*(w1+w2)),String(h1+h2),String(h1*w2+h2*w1),String(Math.max(h1,h2)*(w1+w2)),String(h1*h2+w1*w2)],3); if(wrong.length<3) return null;
+    if(t===2){ const h1=1+rnd(4), h2=1+(h1+rnd(3))%4, w1=1+rnd(3), w2=1+rnd(3); /* two different heights */ const right=String(h1*w1+h2*w2), wrong=uniq(right,[String((h1+h2)*(w1+w2)),String(h1+h2),String(h1*w2+h2*w1),String(Math.max(h1,h2)*(w1+w2)),String(h1*h2+w1*w2),String(Math.min(h1,h2)*(w1+w2)),String(h1*w1)],3); if(wrong.length<3) return null;
       return {index:'q:30e.work[p;'+[h1,w1,h2,w2].join(';')+']', lines:[['m(Eₓ) = '+h1+' for 0 ≤ x < '+w1+', and '+h2+' for '+w1+' ≤ x ≤ '+(w1+w2),'the slices of a sized set E'],['m(Eₓ) = 0 for every other x','given']], ask:'What is m₂(E)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slices technique: m₂(E) = ∫ m(Eₓ) dx = '+h1+' · '+w1+' + '+h2+' · '+w2+'.'}; }
     const right=String(a*a*b*b/4), wrong=uniq(right,[String(a*b),String(a*a*b*b),String(a*a*b*b/2),String(a*a/2+b*b/2),String(a*b/4)],3); if(wrong.length<3) return null;
     return {index:'q:30e.work[f;'+[a,b].join(';')+']', lines:[['f(x, y) = xy on 0 ≤ x ≤ '+a+', 0 ≤ y ≤ '+b+', and 0 elsewhere','sized, and f ≥ 0']], ask:'What is ∫∫ f dm₂?', right, opts:shuffle([right,...wrong]), lead:'', why:'Either-order-sized technique: ∫ xy dy from 0 to '+b+' is '+b*b/2+'x, and ∫ '+b*b/2+'x dx from 0 to '+a+' is '+b*b/2+' · '+a*a/2+'.'}; }},
@@ -10360,7 +10369,7 @@ QP.push({id:'30f.chance',step:'30f',label:'techniques of chance',open:()=>measur
     return {index:'q:30f.work[i;'+[a,b].join(';')+']', lines:[['A and B are independent','given'],['P(A) = 1/'+a+' and P(B) = 1/'+b,'given']], ask:'What is P(A and not B)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Independent technique: A and not B are independent too. (1/'+a+')(1 − 1/'+b+').'}; }},
   {id:'30f.jars',step:'30f',mode:'word',label:'two jars of beads',open:()=>measured('30f'),make(){
     const col=pick(['red','blue','green','white']), n1=pick([4,5,6,8,10]), n2=pick([4,5,6,8,10]), r1=1+rnd(n1-1), r2=1+rnd(n2-1), back=rnd(2);
-    const tot=fr(r1*n2+r2*n1,2*n1*n2), right=back?F30(r1*n2,r1*n2+r2*n1):fshow(tot), wrong=uniq(right,[F30(r1+r2,n1+n2),F30(r1,n1),F30(r2,n2),'1/2',F30(r1,r1+r2),fshow(tot),F30(r2*n1,r1*n2+r2*n1)],3); if(wrong.length<3) return null;
+    const tot=fr(r1*n2+r2*n1,2*n1*n2), right=back?F30(r1*n2,r1*n2+r2*n1):fshow(tot), wrong=uniq(right,[F30(r1+r2,n1+n2),F30(r1,n1),F30(r2,n2),'1/2',F30(r1,r1+r2),fshow(tot),F30(r2*n1,r1*n2+r2*n1),F30(r1*n2+r2*n1,n1*n2),F30(r1,n1+n2),F30(r1*r2,n1*n2)],3); if(wrong.length<3) return null;
     return {index:'q:30f.jars['+[col,n1,r1,n2,r2,back].join(';')+']', a3:['30f.jars',DASH,DASH], story:'Jar 1 holds '+n1+' beads, '+r1+' of them '+col+'. Jar 2 holds '+n2+' beads, '+r2+' of them '+col+'. A fair coin picks a jar, and one bead is drawn from it, each bead as likely as the next.'+(back?' The bead is '+col+'.':''), lines:[], ask:back?'What is the chance that it came from jar 1?':'What is the chance that the bead is '+col+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Whole-chance technique: P('+col+') = ('+F30(r1,n1)+')(1/2) + ('+F30(r2,n2)+')(1/2) = '+fshow(tot)+'.'+(back?' Turn-around technique: ('+F30(r1,n1)+')(1/2) divided by that.':'')}; }},
   {id:'30f.line',step:'30f',mode:'proof',label:'separate or independent',open:()=>measured('30f'),make(){
     const n=pick([10,12,20]), a=2+rnd(4), b=2+rnd(4), c=1+rnd(Math.min(a,b)-1), V=[
@@ -10450,12 +10459,12 @@ const WI30=[
 QP.push({id:'30i.gen',step:'30i',label:'chance in one function',open:()=>measured('30i'),make(){ return writtenQ('30i.gen',WI30); }},
   {id:'30i.work',step:'30i',mode:'work',label:'read G',open:()=>measured('30i'),make(){
     const t=rnd(4), a=1+rnd(3), b=1+rnd(3), c=1+rnd(3), n=a+b+c, Gs='('+a+' + '+cf22(b,'s')+' + '+cf22(c,'s²')+')/'+n;
-    if(t===0) return W30('30i.work[e;'+[a,b,c].join(';')+']',[['G(s) = '+Gs,'the chance function of X']],'What is E X?',F30(b+2*c,n),['1',F30(b+c,n),F30(c,n),F30(b,n),F30(2*c,n)],'Average-from-G technique: G′(s) = ('+b+' + '+2*c+'s)/'+n+', and E X = G′(1).');
-    if(t===1) return W30('30i.work[p;'+[a,b,c].join(';')+']',[['G(s) = '+Gs,'the chance function of X']],'What is P(X = 1)?',F30(b,n),[F30(a,n),F30(c,n),F30(b+2*c,n),'1',F30(b+c,n)],'Chances-from-G technique: P(X = 1) = G′(0)/1!, and G′(0) = '+F30(b,n)+'.');
+    if(t===0) return W30('30i.work[e;'+[a,b,c].join(';')+']',[['G(s) = '+Gs,'the chance function of X']],'What is E X?',F30(b+2*c,n),['1',F30(b+c,n),F30(c,n),F30(b,n),F30(2*c,n),F30(b+4*c,n)],'Average-from-G technique: G′(s) = ('+b+' + '+2*c+'s)/'+n+', and E X = G′(1).');
+    if(t===1) return W30('30i.work[p;'+[a,b,c].join(';')+']',[['G(s) = '+Gs,'the chance function of X']],'What is P(X = 1)?',F30(b,n),[F30(a,n),F30(c,n),F30(b+2*c,n),'1',F30(b+c,n),F30(b,a+b),F30(b,b+c)],'Chances-from-G technique: P(X = 1) = G′(0)/1!, and G′(0) = '+F30(b,n)+'.');
     if(t===2){ const m=3+rnd(6), p=1+rnd(m-1), q=2*p<m?F30(p,m-p):'1';
-      return W30('30i.work[d;'+[p,m].join(';')+']',[['each member has 0 children with chance '+F30(p,m),'given'],['and 2 children with chance '+F30(m-p,m),'given']],'With what chance does the line die out?',q,[F30(p,m),F30(m-p,m),'1','0',F30(p,m-p),F30(1,2)],'Dying-out technique: G(s) = s holds at s = 1 and at s = '+F30(p,m-p)+'. Take the least s in [0, 1].'); }
+      return W30('30i.work[d;'+[p,m].join(';')+']',[['each member has 0 children with chance '+F30(p,m),'given'],['and 2 children with chance '+F30(m-p,m),'given']],'With what chance does the line die out?',q,[F30(p,m),F30(m-p,m),'1','0',F30(p,m-p),F30(1,2),F30(p*p,m*m)],'Dying-out technique: G(s) = s holds at s = 1 and at s = '+F30(p,m-p)+'. Take the least s in [0, 1].'); }
     const m=2+rnd(4), k=2+rnd(4), x=1+rnd(m-1), y=1+rnd(k-1);
-    return W30('30i.work[s;'+[x,m,y,k].join(';')+']',[['X and Y are independent','given'],['their chance functions are ('+x+' + '+cf22(m-x,'s')+')/'+m+' and ('+y+' + '+cf22(k-y,'s')+')/'+k,'given']],'What is P(X + Y = 0)?',F30(x*y,m*k),[F30(x+y,m+k),F30(x,m),F30(y,k),F30((m-x)*(k-y),m*k),'0'],'Sums-multiply technique: the chance function of X + Y is the product. At s = 0 it is ('+F30(x,m)+')('+F30(y,k)+').'); }},
+    return W30('30i.work[s;'+[x,m,y,k].join(';')+']',[['X and Y are independent','given'],['their chance functions are ('+x+' + '+cf22(m-x,'s')+')/'+m+' and ('+y+' + '+cf22(k-y,'s')+')/'+k,'given']],'What is P(X + Y = 0)?',F30(x*y,m*k),[F30(x+y,m+k),F30(x,m),F30(y,k),F30((m-x)*(k-y),m*k),'0',F30(x*k+y*m,m*k),F30(m*k-(m-x)*(k-y),m*k)],'Sums-multiply technique: the chance function of X + Y is the product. At s = 0 it is ('+F30(x,m)+')('+F30(y,k)+').'); }},
   {id:'30i.line',step:'30i',mode:'proof',label:'what G gives',open:()=>measured('30i'),make(){
     const a=1+rnd(4), b=1+rnd(4), n=a+b, m=5+rnd(5), p=1+rnd(2), G='G(s) = ('+a+' + '+cf22(b,'s')+')/'+n;
     const V=[
@@ -10672,7 +10681,7 @@ QP.push({id:'30p.chain',step:'30p',label:'chance that steps',open:()=>measured('
     return W30('30p.work[m;'+[p,q].join(';')+']',[['P('+p+', '+q+') = ('+p+', '+q+')','given'],['exactly one settled list','every entry of P is above 0']],'What is the settled list?','('+F30(p,p+q)+', '+F30(q,p+q)+')',['('+p+', '+q+')','('+F30(q,p+q)+', '+F30(p,p+q)+')','(1/2, 1/2)','('+F30(1,p)+', '+F30(1,q)+')'],'Any multiple of ('+p+', '+q+') solves Pπ = π. The entries of a chance list add to 1.'); }},
   {id:'30p.lamp',step:'30p',mode:'word',label:'a lamp that flickers',open:()=>measured('30p'),make(){
     const n=pick([4,5,6,8,10]), two=rnd(2), a=1+rnd(n-2), b=two?1+rnd(n-2):(x=>x>=a?x+1:x)(1+rnd(n-3)); /* one rate each way: two different chances */
-    const right=two?F30((n-a)*(n-a)+a*b,n*n):F30(b,a+b), wrong=uniq(right,two?[F30((n-a)*(n-a),n*n),F30(n-a,n),F30(a*b,n*n),F30(b,a+b),F30((n-a)*(n-a)+a*a,n*n)]:[F30(a,a+b),'1/2',F30(n-a,n),F30(b,n),F30(n-a,2*n-a-b)],3); if(wrong.length<3) return null;
+    const right=two?F30((n-a)*(n-a)+a*b,n*n):F30(b,a+b), wrong=uniq(right,two?[F30((n-a)*(n-a),n*n),F30(n-a,n),F30(a*b,n*n),F30(b,a+b),F30((n-a)*(n-a)+a*a,n*n),F30(a,n),F30((n-a)*(n-a)+b*b,n*n)]:[F30(a,a+b),'1/2',F30(n-a,n),F30(b,n),F30(n-a,2*n-a-b),F30(a,n),F30(b,n+b)],3); if(wrong.length<3) return null;
     return {index:'q:30p.lamp['+[a,b,n,two].join(';')+']', a3:['30p.lamp',DASH,DASH], story:'A lamp is on or off. Each minute a lamp that is on goes off with chance '+F30(a,n)+', and a lamp that is off comes on with chance '+F30(b,n)+'.'+(two?' The lamp is on now.':''), lines:[], ask:two?'What is the chance that it is on two minutes from now?':'Over a long run, what share of the minutes is the lamp on?', right, opts:shuffle([right,...wrong]), lead:'', why:two?'Chance-grid technique: stay on twice, or go off and come back on. ('+F30(n-a,n)+')² + ('+F30(a,n)+')('+F30(b,n)+').':'Fading-start technique: the settled list is (β, α)/(α + β). Share-of-time technique: the share of time heads to it.'}; }},
   {id:'30p.line',step:'30p',mode:'proof',label:'settled is not independent',open:()=>measured('30p'),make(){
     const n=10, x=5+rnd(4), y=1+rnd(4), a=1+rnd(4), b=1+rnd(4), p=2+rnd(4), q=1+rnd(5), two=x*x+(n-x)*y;
@@ -11215,7 +11224,7 @@ QP.push({id:'31k.fit',step:'31k',label:'least squares by hand',open:()=>measured
       return W30('31k.work[z;'+[xs,ys].join(';')+']',[['the points are '+xs.map((x,i)=>v27([x,ys[i]])).join(', '),'given'],['fit y ≈ bx','a line through 0']],'What is the best b?',F30(sxy,sxx),[F30(sy,sx),F30(sxx,sxy||1),F30(sxy,sx),F30(sy,xs.length),F30(sxy+1,sxx)],'Through-zero technique: Σxᵢyᵢ / Σxᵢ² = '+sxy+'/'+sxx+'.'); }
     if(t===1){ const [n,len]=pick(N31), f=[nz25(3),nz25(3),nz25(3)], d=f[0]*n[0]+f[1]*n[1]+f[2]*n[2]; if(d===0) return null;
       return W30('31k.work[d;'+[n,f].join(';')+']',[['n = '+v27(n)+', with |n| = '+len,'the normal of a plane through 0'],['f = '+v27(f)+', and f · n = '+sg(d),'given']],'How far is f from the plane?',F30(Math.abs(d),len),[String(Math.abs(d)),F30(Math.abs(d),len*len),F30(d,len),String(Math.abs(d)*len),F30(Math.abs(d)+1,len)],'Through-the-normal technique: |f · n|/|n| = '+Math.abs(d)+'/'+len+'.'); }
-    const s1=1+rnd(4), s2=1+rnd(4), y1=2+rnd(8), y2=2+rnd(8), q=rnd(2); if(y1===y2||s1===s2) return null;
+    const s1=1+rnd(4), s2=1+(s1+rnd(3))%4, y1=2+rnd(8), y2=2+(y1-1+rnd(7))%8, q=rnd(2);
     return W30('31k.work[w;'+[y1,s1,y2,s2,q].join(';')+']',[['two readings of one number: '+y1+' with spread '+s1+', and '+y2+' with spread '+s2,'given'],['weights wᵢ = 1/σᵢ²','one over the spread']],q?'What is the spread of the best single number?':'What is the best single number?',q?F30(s1*s2,s1+s2):F30(y1*s2+y2*s1,s1+s2),q?[F30(s1+s2,2),String(s1+s2),F30(s1+s2,s1*s2),String(Math.min(s1,s2))]:[F30(y1+y2,2),F30(y1*s1+y2*s2,s1+s2),String(s1<s2?y1:y2),F30(y1*s2+y2*s1,s1*s2)],'Weighted-shadow technique: Σwᵢyᵢ / Σwᵢ, with spread 1/Σwᵢ. Σwᵢ = '+F30(s1+s2,s1*s2)+'.'); }},
   {id:'31k.scales',step:'31k',mode:'word',label:'two scales, one stone',open:()=>measured('31k'),make(){
     const s1=1+rnd(4), s2=pick([1,2,3,4].filter(x=>x!==s1)), y1=40+rnd(20), y2=y1+pick([-6,-4,-3,-2,2,3,4,6]);
@@ -11245,15 +11254,15 @@ QP.push({id:'31l.corr',step:'31l',label:'correlation and regression',open:()=>me
   {id:'31l.work',step:'31l',mode:'work',label:'r as an angle',open:()=>measured('31l'),make(){
     const t=rnd(5);
     if(t===0){ const [u,v,p,q]=pick(UV31);
-      return W30('31l.work[c;'+[u,v].join(';')+']',[['the deviation vectors are u = '+v27(u)+' and v = '+v27(v),'given']],'What is r?',F30(p,q),[sg(u[0]*v[0]+u[1]*v[1]),F30(-p,q),F30(p*p,q*q),'1','0',F30(q-Math.abs(p),q)],'Correlation-angle technique: the cosine of the angle, (u · v)/(|u| |v|).'); }
+      return W30('31l.work[c;'+[u,v].join(';')+']',[['the deviation vectors are u = '+v27(u)+' and v = '+v27(v),'given']],'What is r?',F30(p,q),[sg(u[0]*v[0]+u[1]*v[1]),F30(-p,q),F30(p*p,q*q),'1','0',F30(q-Math.abs(p),q),'−1',sg(u[0]*u[0]+u[1]*u[1])],'Correlation-angle technique: the cosine of the angle, (u · v)/(|u| |v|).'); }
     if(t===1){ const a=pick([-9,-8,-7,-6,-5,-4,-3,-2,2,3,4,5,6,7,8,9]);
       return W30('31l.work[s;'+a+']',[['r = '+(a<0?'−':'')+'0.'+Math.abs(a),'given']],'What share of the spread of y does the best line account for?',a*a+'%',[Math.abs(a)*10+'%',(100-a*a)+'%',(100-Math.abs(a)*10)+'%',Math.abs(a)+'%'],'Correlation-angle technique: the share is r² = 0.'+(a*a<10?'0':'')+a*a+'.'); }
     if(t===2){ const [p,q]=pick([[1,2],[1,3],[2,3],[3,4],[1,4]]), [c,d]=pick([[1,2],[1,3],[2,1],[3,2],[1,1]]);
-      return W30('31l.work[t;'+[p,q,c,d].join(';')+']',[['r = '+F30(p,q),'given'],['the line of y on x has slope '+F30(c,d),'given']],'What is the slope of the line of x on y?',F30(p*p*d,q*q*c),[F30(d,c),F30(p*d,q*c),F30(p*p*c,q*q*d),F30(c,d)],'Two-lines technique: the two slopes multiply to r² = '+F30(p*p,q*q)+'.'); }
+      return W30('31l.work[t;'+[p,q,c,d].join(';')+']',[['r = '+F30(p,q),'given'],['the line of y on x has slope '+F30(c,d),'given']],'What is the slope of the line of x on y?',F30(p*p*d,q*q*c),[F30(d,c),F30(p*d,q*c),F30(p*p*c,q*q*d),F30(c,d),F30(p*p,q*q),F30(q*q*d,p*p*c)],'Two-lines technique: the two slopes multiply to r² = '+F30(p*p,q*q)+'.'); }
     if(t===3){ const a=2+rnd(8), k=pick([-3,-2,-1,1,2,3]);
       return W30('31l.work[u;'+[a,k].join(';')+']',[['r = 0.'+a,'given'],['x is '+Math.abs(k)+' of its spread widths '+(k<0?'below':'above')+' its average','in standard units']],'How many of its spread widths from its average does the line of y on x predict for y?',F30(a*Math.abs(k),10)+(k<0?' below':' above'),[Math.abs(k)+(k<0?' below':' above'),F30(a*Math.abs(k),10)+(k<0?' above':' below'),F30(a*a*Math.abs(k),100)+(k<0?' below':' above'),F30(10*Math.abs(k),a)+(k<0?' below':' above')],'Two-lines technique: r times the units of x. The pull is toward the middle.'); }
     const n=pick([12,15,18,21]);
-    return W30('31l.work[o;'+n+']',[['r_xw = 3/5 and r_yw = 4/5','given'],['r_xy = '+F30(n,25),'given']],'What is the correlation of x and y with w taken out?',F30(n-12,12),[F30(n,25),F30(n-12,25),F30(12,25),'0',F30(n,12)].filter((x,i)=>true),'Take-out technique: (r_xy − r_xw r_yw)/√((1 − r_xw²)(1 − r_yw²)) = ('+F30(n,25)+' − 12/25)/(12/25).'); }},
+    return W30('31l.work[o;'+n+']',[['r_xw = 3/5 and r_yw = 4/5','given'],['r_xy = '+F30(n,25),'given']],'What is the correlation of x and y with w taken out?',F30(n-12,12),[F30(n,25),F30(n-12,25),F30(12,25),'0',F30(n,12),F30(n+12,25)].filter((x,i)=>true),'Take-out technique: (r_xy − r_xw r_yw)/√((1 − r_xw²)(1 − r_yw²)) = ('+F30(n,25)+' − 12/25)/(12/25).'); }},
   {id:'31l.quiz',step:'31l',mode:'word',label:'two quizzes',open:()=>measured('31l'),make(){
     const a=1+rnd(9), k=1+rnd(4), dn=rnd(2);
     if(rnd(5)===0){ const right=a*a+'%', wrong=uniq(right,[a*10+'%',(100-a*a)+'%',(100-a*10)+'%',a+'%'],3); if(wrong.length<3) return null;
@@ -12784,7 +12793,7 @@ QP.push({id:'14i.bothzero',step:'14i',mode:'work',label:'a ratio whose top and b
   return null; }},
   {id:'28m.round',step:'28m',mode:'work',label:'a total over a disc, in round measures',open:()=>measured('28m'),make(){
   const k=pick([0,1,2,3,4]), R=pick([1,2,3]), val=[2*Math.pow(R,k+2),k+2], right=BQ_pi(val[0],val[1]), F=k===0?'1':k===1?'√(x² + y²)':k===2?'x² + y²':k===3?'(x² + y²)√(x² + y²)':'(x² + y²)²';
-  const wrong=uniq(right,[BQ_pi(2*Math.pow(R,k+1),k+1),BQ_pi(Math.pow(R,k+2),k+2),BQ_pi(2*Math.pow(R,k+2),1),BQ_pi(Math.pow(R,k+2),1),BQ_pi(2*Math.pow(R,k+1),1)],3); if(wrong.length<3) return null;
+  const wrong=uniq(right,[BQ_pi(2*Math.pow(R,k+1),k+1),BQ_pi(Math.pow(R,k+2),k+2),BQ_pi(2*Math.pow(R,k+2),1),BQ_pi(Math.pow(R,k+2),1),BQ_pi(2*Math.pow(R,k+1),1),BQ_pi(Math.pow(R,k+1),k+1),BQ_pi(2*Math.pow(R,k+2),k+3),BQ_pi(4*Math.pow(R,k+2),k+2)],3); if(wrong.length<3) return null;
   return {index:'q:28m.round['+k+','+R+']', a3:['28h.regions[a disc]','28m.roundSlab',DASH], lines:[['f(x, y) = '+F,'a function'],['x² + y² ≤ '+R*R,'the disc of radius '+R]], ask:'What is the total of f over the disc?', right, opts:shuffle([right,...wrong]), lead:'',
     why:'In round measures f is '+(k===0?'1':'r'+BM_SUP[k])+' and the area scale is r, so the total is ∫ from 0 to 2π of ∫ from 0 to '+R+' of r'+BM_SUP[k+1]+' dr dθ = 2π · '+R+BM_SUP[k+2]+'/'+(k+2)+' = '+right+'. Leaving out the area scale r totals over the rectangle of (r, θ), not over the disc.'}; }},
   {id:'29cb28.swapsign',step:'29·cb28',mode:'work',label:'two forms multiplied the other way round',open:()=>measured('29·cb28'),make(){
@@ -13251,8 +13260,8 @@ const WD33=[
 QP.push({id:'33d.balanced',step:'33d',label:'balanced functions',open:()=>measured('33d'),make(){ return writtenQ('33d.balanced',WD33); }},
   {id:'33d.work',step:'33d',mode:'work',label:'averages and rims',open:()=>measured('33d'),make(){
     const t=rnd(3);
-    if(t===0){ const a=1+rnd(5), b=1+rnd(5), v=2*a-2*b; return W30('33d.work[l;'+[a,b].join(';')+']',[['u = '+(a===1?'':a)+'x² − '+(b===1?'':b)+'y²','given']],'What is u_xx + u_yy?',sg(v),[sg(2*a+2*b),sg(a-b),sg(4*a-4*b),sg(-v)].concat(v===0?['2']:['0']),v===0?'2 · '+a+' − 2 · '+b+' = 0, so this u is balanced.':'2 · '+a+' − 2 · '+b+' = '+sg(v)+', not 0, so this u is not balanced.'); }
-    if(t===1){ const A=rnd(15)-5, r=1+rnd(4); return W30('33d.work[a;'+[A,r].join(';')+']',[['u is balanced on a disc of radius '+(r+1)+' about p','given'],['the average of u round the circle of radius '+r+' about p is '+sg(A),'given']],'What is u(p)?',sg(A),[sg(A*r),fshow(fr(A,r)),'0','it cannot be told'],'Circle-average technique: the value at the centre is the average round the circle.'); }
+    if(t===0){ const a=1+rnd(5), b=1+rnd(5), v=2*a-2*b; return W30('33d.work[l;'+[a,b].join(';')+']',[['u = '+(a===1?'':a)+'x² − '+(b===1?'':b)+'y²','given']],'What is u_xx + u_yy?',sg(v),[sg(2*a+2*b),sg(a-b),sg(4*a-4*b),sg(-v)].concat(v===0?['2']:['0'],[sg(2*a),sg(-2*b)]),v===0?'2 · '+a+' − 2 · '+b+' = 0, so this u is balanced.':'2 · '+a+' − 2 · '+b+' = '+sg(v)+', not 0, so this u is not balanced.'); }
+    if(t===1){ const A=pick(LRG(-5,9).filter(v=>v)), r=1+rnd(4); return W30('33d.work[a;'+[A,r].join(';')+']',[['u is balanced on a disc of radius '+(r+1)+' about p','given'],['the average of u round the circle of radius '+r+' about p is '+sg(A),'given']],'What is u(p)?',sg(A),[sg(A*r),fshow(fr(A,r)),'0','it cannot be told',sg(A*(r+1)),fshow(fr(A,r+1))],'Circle-average technique: the value at the centre is the average round the circle.'); }
     const n=1+rnd(3), a=pick([2,3,4,6,8]), v=fr(a,Math.pow(2,n));
     return W30('33d.work[d;'+[n,a].join(';')+']',[['on the rim of the unit disc, g = '+a+' cos '+(n===1?'':n)+'θ','given']],'What is the balanced function inside, at r = 1/2 and θ = 0?',fshow(v),[String(a),fshow(fr(a,2)),fshow(fr(a,2*n)),fshow(fr(a,Math.pow(2,n+1))),'0'],'Disc-series technique: u = rⁿ · '+a+' cos nθ, and (1/2)'+(n===1?'':'^'+n)+' · '+a+' = '+fshow(v)+'.'); }},
   {id:'33d.line',step:'33d',mode:'proof',label:'what balance licenses',open:()=>measured('33d'),make(){
@@ -13274,10 +13283,10 @@ const WE33=[
 QP.push({id:'33e.riding',step:'33e',label:'riding paths and shocks',open:()=>measured('33e'),make(){ return writtenQ('33e.riding',WE33); }},
   {id:'33e.work',step:'33e',mode:'work',label:'carried starts, breaking times, jump speeds',open:()=>measured('33e'),make(){
     const t=rnd(3);
-    if(t===0){ const c=1+rnd(4), s=1+rnd(4), x=c*s+rnd(9)+1; return W30('33e.work[c;'+[c,s,x].join(';')+']',[['u_t + '+(c===1?'':c)+'u_x = 0, with start f','given']],'What is u at x = '+x+' and t = '+s+'?','f('+(x-c*s)+')',['f('+(x+c*s)+')','f('+x+')','f('+(x-c)+')','f('+(x-s)+')'],'Carried-along technique: u = f(x − ct) = f('+x+' − '+c+' · '+s+').'); }
+    if(t===0){ const c=1+rnd(4), s=1+rnd(4), x=c*s+rnd(9)+1; return W30('33e.work[c;'+[c,s,x].join(';')+']',[['u_t + '+(c===1?'':c)+'u_x = 0, with start f','given']],'What is u at x = '+x+' and t = '+s+'?','f('+(x-c*s)+')',['f('+(x+c*s)+')','f('+x+')','f('+(x-c)+')','f('+(x-s)+')','f('+(c*s-x)+')','f('+(x-c-s)+')'],'Carried-along technique: u = f(x − ct) = f('+x+' − '+c+' · '+s+').'); }
     if(t===1){ const m=pick([2,3,4,5,8,10]); return W30('33e.work[b;'+m+']',[['u_t + u u_x = 0, with start f','given'],['the greatest value of −f′ is '+m,'the steepest fall of the start']],'Until what time has the answer a continuous slope?','until t = 1/'+m,['until t = '+m,'until t = 1/'+m*m,'until t = '+fshow(fr(2,m)),'at every time'],'Breaking-time technique: 1/m.'); }
     const L=2+rnd(6); let R=rnd(L); const s=fr(L+R,2);
-    return W30('33e.work[j;'+[L,R].join(';')+']',[['u_t + (u²/2)_x = 0','the flow is q(u) = u²/2'],['a jump from u = '+L+' on the left to u = '+R+' on the right','given']],'At what speed does the jump move?',fshow(s),[String(L),String(R),fshow(fr(L-R,2)),String(L-R),String(L+R)],'Jump-speed technique: (q('+L+') − q('+R+'))/('+L+' − '+R+') = ('+L*L+'/2 − '+R*R+'/2)/'+(L-R)+' = '+fshow(s)+'.'); }},
+    return W30('33e.work[j;'+[L,R].join(';')+']',[['u_t + (u²/2)_x = 0','the flow is q(u) = u²/2'],['a jump from u = '+L+' on the left to u = '+R+' on the right','given']],'At what speed does the jump move?',fshow(s),[String(L),String(R),fshow(fr(L-R,2)),String(L-R),String(L+R),String(L*L-R*R),fshow(fr(L*L-R*R,2))],'Jump-speed technique: (q('+L+') − q('+R+'))/('+L+' − '+R+') = ('+L*L+'/2 − '+R*R+'/2)/'+(L-R)+' = '+fshow(s)+'.'); }},
   {id:'33e.line',step:'33e',mode:'proof',label:'what riding paths license',open:()=>measured('33e'),make(){
     const c=1+rnd(4), s=1+rnd(3), x=c*s+1+rnd(6), m=pick([2,4,5]), L=3+rnd(5), R=rnd(3), sp=fshow(fr(L+R,2));
     return line28('33e.line',[
@@ -13775,9 +13784,9 @@ const FD35=n=>{ const A=[...Array(n)].map((_,i)=>i+1), f={}; A.forEach(x=>{ f[x]
 QP.push({id:'35c.parts',step:'35c',label:'more parts than members',open:()=>measured('35c'),make(){ return writtenQ('35c.parts',WC35); }},
   {id:'35c.work',step:'35c',mode:'work',label:'parts by hand',open:()=>measured('35c'),make(){
     if(rnd(2)){ const n=2+rnd(5);
-      return W30('35c.work[n;'+n+']',[['A has '+n+' members','given']],'How many parts has A?',String(Math.pow(2,n)),[String(n*n),String(2*n),String(Math.pow(2,n)-1),String(n+1)],'Each member is in a part or out of it: 2'+U35(n)+', counting ∅ and A.'); }
+      return W30('35c.work[n;'+n+']',[['A has '+n+' members','given']],'How many parts has A?',String(Math.pow(2,n)),[String(n*n),String(2*n),String(Math.pow(2,n)-1),String(n+1),String(n),String(n*(n-1)/2)],'Each member is in a part or out of it: 2'+U35(n)+', counting ∅ and A.'); }
     const [A,f,D,In]=FD35(3+rnd(2));
-    return W30('35c.work[f;'+A.map(x=>f[x].join('')).join(';')+']',A.map(x=>['f('+x+') = '+ST35(f[x]),'given']),'Which part is f(x) for no x?',ST35(D),[ST35(In),ST35(f[1]),ST35(f[2]),ST35(A.filter(x=>!D.includes(x))),ST35(A),ST35([])],'Parts-outrun technique: D holds each x not in f(x), so D differs from each f(x) at x.'); }},
+    return W30('35c.work[f;'+A.map(x=>f[x].join('')).join(';')+']',A.map(x=>['f('+x+') = '+ST35(f[x]),'given']),'Which part is f(x) for no x?',ST35(D),[ST35(In),ST35(f[1]),ST35(f[2]),ST35(A.filter(x=>!D.includes(x))),ST35(A),ST35([]),ST35([A[0]]),ST35(A.slice(1)),ST35(f[A[A.length-1]]||[])],'Parts-outrun technique: D holds each x not in f(x), so D differs from each f(x) at x.'); }},
   {id:'35c.line',step:'35c',mode:'proof',label:'what parts license',open:()=>measured('35c'),make(){
     const [A,f,D]=FD35(3);
     return line28('35c.line',[
@@ -13887,7 +13896,7 @@ QP.push({id:'35h.dust',step:'35h',label:'dust and dimension',open:()=>measured('
     if(rnd(2)){ const [N,s]=pick(DIM35);
       return W30('35h.work[d;'+[N,s].join(';')+']',[['A is made of '+N+' copies of itself, each scaled by 1/'+s+', meeting in finitely many points','given']],'What is the dimension of A?','log '+N+' / log '+s,['log '+s+' / log '+N,N+' / '+s,'log '+N+' / '+s,'log '+(N*s)],'Scaled-copies technique: N = '+N+' and s = '+s+'.'); }
     const n=1+rnd(4), t=Math.pow(3,n), p=Math.pow(2,n);
-    return W30('35h.work[l;'+n+']',[['the middle third of each piece is thrown out, '+n+(n===1?' time':' times'),'starting from [0, 1]']],'What length is left?',fshow(fr(p,t)),[fshow(fr(1,t)),fshow(fr(t-p,t)),fshow(fr(2,3*n)),fshow(fr(n,t))],p+' pieces of length 1/'+t+' are left.'); }},
+    return W30('35h.work[l;'+n+']',[['the middle third of each piece is thrown out, '+n+(n===1?' time':' times'),'starting from [0, 1]']],'What length is left?',fshow(fr(p,t)),[fshow(fr(1,t)),fshow(fr(t-p,t)),fshow(fr(2,3*n)),fshow(fr(n,t)),fshow(fr(2*p,3*t)),fshow(fr(p,3*t))],p+' pieces of length 1/'+t+' are left.'); }},
   {id:'35h.line',step:'35h',mode:'proof',label:'what the dust licenses',open:()=>measured('35h'),make(){
     const [N,s]=pick(DIM35);
     return line28('35h.line',[
@@ -14157,7 +14166,7 @@ QP.push({id:'37a.push',step:'37a',label:'the push that travels',open:()=>measure
     if(rnd(2)){ const c=pick([300,320,340,360,400]), f=pick([20,40,50,80,100,200,400]), l=c/f;
       return W30('37a.work[w;'+[c,f].join(';')+']',[['a medium of speed '+c+' m/s','given'],['a steady note of '+f+' Hz','given']],'What is the wavelength, in metres?',String(l),[String(c*f),String(f/c),String(c-f),String(l*2)].filter(x=>!/e/.test(x)&&x.length<9),'Wavelength technique: λ = c/f = '+c+'/'+f+'.'); }
     const c=pick([2,3,4,5,6,7]), r=pick([1,2,4]), K=c*c*r;
-    return W30('37a.work[c;'+[K,r].join(';')+']',[['K = '+K+' and ρ = '+r,'a pipe’s stiffness and density']],'What is c?',String(c),[String(K/r),String(K*r),fshow(fr(r,K)),String(c*c)],'Air-wave technique: c = √(K/ρ) = √('+(K/r)+').'); }},
+    return W30('37a.work[c;'+[K,r].join(';')+']',[['K = '+K+' and ρ = '+r,'a pipe’s stiffness and density']],'What is c?',String(c),[String(K/r),String(K*r),fshow(fr(r,K)),String(c*c),fshow(fr(K,2*r))],'Air-wave technique: c = √(K/ρ) = √('+(K/r)+').'); }},
   {id:'37a.line',step:'37a',mode:'proof',label:'what the push licenses',open:()=>measured('37a'),make(){
     const c=pick([300,340,400]), f=pick([50,100,200]);
     return line28('37a.line',[
@@ -14271,7 +14280,7 @@ const WF37=[
 QP.push({id:'37f.spectral',step:'37f',label:'the spectral view',open:()=>measured('37f'),make(){ return writtenQ('37f.spectral',WF37); }},
   {id:'37f.work',step:'37f',mode:'work',label:'tubes and windows',open:()=>measured('37f'),make(){
     if(rnd(2)){ const c=pick([320,340,360,400]), L=pick([0.5,1,2]), b=c/(4*L), k=1+rnd(4);
-      return W30('37f.work[t;'+[c,L,k].join(';')+']',[['a tube '+L+' m long, closed at one end and open at the other','given'],['the speed of sound in it is '+c+' m/s','given']],'What is the favoured frequency number '+k+'?',((2*k-1)*b)+' Hz',[(k*b)+' Hz',(2*k*b)+' Hz',((2*k-1)*c/(2*L))+' Hz',((2*k+1)*b)+' Hz'],'Tube technique: (2k − 1)c/(4L), the odd multiples of '+b+' Hz.'); }
+      return W30('37f.work[t;'+[c,L,k].join(';')+']',[['a tube '+L+' m long, closed at one end and open at the other','given'],['the speed of sound in it is '+c+' m/s','given']],'What is the favoured frequency number '+k+'?',((2*k-1)*b)+' Hz',[(k*b)+' Hz',(2*k*b)+' Hz',((2*k-1)*c/(2*L))+' Hz',((2*k+1)*b)+' Hz',((2*k-1)*c/L)+' Hz'],'Tube technique: (2k − 1)c/(4L), the odd multiples of '+b+' Hz.'); }
     const T=pick([0.01,0.02,0.05,0.1,0.25]), r=Math.round(1/T);
     return W30('37f.work[w;'+T+']',[['stretches of length '+T+' s','given']],'Two turnings closer than about how many Hz blur into one?',String(r),[String(T),String(2*r),String(r*r),String(Math.round(r/2))],'Window-trade technique: about one over T, which is '+r+' Hz for '+T+' s.'); }},
   {id:'37f.line',step:'37f',mode:'proof',label:'what the spectral view licenses',open:()=>measured('37f'),make(){
@@ -14498,7 +14507,7 @@ const WG38=[
 QP.push({id:'38g.codes',step:'38g',label:'formulas as numbers',open:()=>measured('38g'),make(){ return writtenQ('38g.codes',WG38); }},
   {id:'38g.work',step:'38g',mode:'work',label:'a list in one number',open:()=>measured('38g'),make(){
     const v=pick([2,3,4,5,6]), u=10+rnd(90), i=rnd(3), d=1+(i+1)*v;
-    return W30('38g.work[b;'+[u,v,i].join(';')+']',[['u = '+u+' and v = '+v,'given']],'What is the entry in place '+i+' of the list u and v hold?',String(u%d),[String(u%(1+i*v)),String(u%v),String(Math.floor(u/d)),String(u%(1+(i+2)*v))],'List-in-one-number technique: the remainder of '+u+' on division by 1 + ('+i+' + 1) · '+v+' = '+d+'.'); }},
+    return W30('38g.work[b;'+[u,v,i].join(';')+']',[['u = '+u+' and v = '+v,'given']],'What is the entry in place '+i+' of the list u and v hold?',String(u%d),[String(u%(1+i*v)),String(u%v),String(Math.floor(u/d)),String(u%(1+(i+2)*v)),String(u%((i+1)*v)),String(Math.floor(u/v)),String(d)],'List-in-one-number technique: the remainder of '+u+' on division by 1 + ('+i+' + 1) · '+v+' = '+d+'.'); }},
   {id:'38g.line',step:'38g',mode:'proof',label:'what codes license',open:()=>measured('38g'),make(){
     return line28('38g.line',[
       ['g1',[['φ is a search statement true in N','given'],['PA reaches φ','the search-reached technique']],2,0,'That is the technique.'],
@@ -14877,7 +14886,7 @@ QP.push({id:'39m.divide',step:'39m',label:'divide and conquer',open:()=>measured
     if(rnd(2)){ const c=1+rnd(5), n=4+rnd(7);
       return W30('39m.work[s;'+[c,n].join(';')+']',[['T(1) = '+c+' and T(n) = T(n − 1) + n','given']],'What is T('+n+')?',String(c+n*(n+1)/2-1),[String(c+n*(n+1)/2),String(n*(n+1)/2),String(c*n),String(c+n*n)],'Shrink-by-one technique: '+c+' + 2 + 3 + ⋯ + '+n+'.'); }
     const [a,b]=pick([[[1,5],[1,2]],[[1,4],[1,4]],[[1,3],[1,3]],[[1,5],[2,5]],[[1,10],[1,2]]]), rest=fr(b[1]*a[1]-a[0]*b[1]-b[0]*a[1],a[1]*b[1]), K=fr(rest.q,rest.p);
-    return W30('39m.work[a;'+[a.join('/'),b.join('/')].join(';')+']',[['T(n) ≤ T('+(a[0]===1?'':a[0])+'n/'+a[1]+') + T('+(b[0]===1?'':b[0])+'n/'+b[1]+') + cn','given']],'T(n) is at most how many times cn?',fshow(K),[fshow(rest),fshow(fr(a[0]*b[1]+b[0]*a[1],a[1]*b[1])),'it grows like n log n','2'],'Shares-below-one technique: 1/(1 − α − β), and 1 − α − β = '+fshow(rest)+'.'); }},
+    return W30('39m.work[a;'+[a.join('/'),b.join('/')].join(';')+']',[['T(n) ≤ T('+(a[0]===1?'':a[0])+'n/'+a[1]+') + T('+(b[0]===1?'':b[0])+'n/'+b[1]+') + cn','given']],'T(n) is at most how many times cn?',fshow(K),[fshow(rest),fshow(fr(a[0]*b[1]+b[0]*a[1],a[1]*b[1])),'it grows like n log n','2',fshow(fr(a[1]*b[1]+a[0]*b[1]+b[0]*a[1],a[1]*b[1])),fshow(fr(a[1],a[1]-a[0]))],'Shares-below-one technique: 1/(1 − α − β), and 1 − α − β = '+fshow(rest)+'.'); }},
   {id:'39m.line',step:'39m',mode:'proof',label:'what recurrences license',open:()=>measured('39m'),make(){
     return line28('39m.line',[
       ['m1',[['T(n) ≤ T(n/5) + T(n/2) + cn','given'],['T(n) ≤ 10cn/3','the shares-below-one technique']],2,0,'1 − 1/5 − 1/2 = 3/10.'],
@@ -14922,7 +14931,7 @@ QP.push({id:'39o.remember',step:'39o',label:'remembering answers',open:()=>measu
       const d=ED39(a,b), naive=[...Array(Math.max(a.length,b.length))].filter((_,k)=>a[k]!==b[k]).length;
       return W30('39o.work[e;'+[a,b].join(';')+']',[['the strings '+a+' and '+b,'given']],'What is their distance, the fewest changes?',String(d),[String(naive),String(Math.abs(a.length-b.length)),String(d+1),String(d+2),String(a.length+b.length)],'Alignment-table technique: fill the table of '+(a.length+1)+' × '+(b.length+1)+' cells.'); }
     const [C,v]=pick([[[1,3,4],6],[[1,5,6],10],[[1,4,5],8],[[1,6,9],12],[[1,7,10],14],[[1,3,4],10]]), best=CN39(C,v), g=GR39(C,v);
-    return W30('39o.work[c;'+[C.join(','),v].join(';')+']',[['coins '+C.join(', '),'given']],'What is the fewest coins for '+v+'?',String(best),[String(g),String(v),String(best+1),String(Math.ceil(v/Math.max(...C)))],'Coin-table technique: fill the table from 0 to '+v+'. Taking the biggest coin first gives '+g+'.'); }},
+    return W30('39o.work[c;'+[C.join(','),v].join(';')+']',[['coins '+C.join(', '),'given']],'What is the fewest coins for '+v+'?',String(best),[String(g),String(v),String(best+1),String(Math.ceil(v/Math.max(...C))),String(Math.max(1,best-1)),String(Math.floor(v/Math.max(...C)))],'Coin-table technique: fill the table from 0 to '+v+'. Taking the biggest coin first gives '+g+'.'); }},
   {id:'39o.line',step:'39o',mode:'proof',label:'what kept answers license',open:()=>measured('39o'),make(){
     return line28('39o.line',[
       ['o1',[['coins 1, 3, 4 and the amount 6','given'],['the fewest coins is 2: 3 and 3','the coin-table technique']],2,0,'The table gives 2.'],
@@ -15382,10 +15391,10 @@ const WJ41=[
 QP.push({id:'41j.trace',step:'41j',label:'tape machines by hand',open:()=>measured('41j'),make(){ return writtenQ('41j.trace',WJ41); }},
   {id:'41j.work',step:'41j',mode:'work',label:'one line of a trace',open:()=>measured('41j'),make(){
     const S=['A','B'], T={}; S.forEach(s=>[0,1].forEach(m=>{ T[s+m]=[rnd(2),rnd(2)?'R':'L',S[rnd(2)]]; }));
-    const tp=[0,0,0,rnd(2),rnd(2),rnd(2),0,0,0], h=4, st=S[rnd(2)], m=tp[h], [w,d,nx]=T[st+m];
+    const tp=[0,0,1,rnd(2),rnd(2),rnd(2),1,0,0], h=4, /* a 1 on either side keeps the cell the head moves to on show, so every next line reads differently */ st=S[rnd(2)], m=tp[h], [w,d,nx]=T[st+m];
     const go=(wr,dir,ns)=>{ const t=tp.slice(); t[h]=wr; return CF41(t,h+(dir==='R'?1:-1),ns); };
     const rows=['A0','A1','B0','B1'].map(k=>k+' → '+T[k][0]+T[k][1]+T[k][2]).join(', ');
-    return W30('41j.work[t;'+[tp.join(''),st,JSON.stringify(T)].join(';')+']',[[rows,'the table'],[CF41(tp,h,st),'the configuration']],'What is the next line of the trace?',go(w,d,nx),[go(w,d==='R'?'L':'R',nx),go(m,d,nx),go(w,d,st),go(1-w,d,nx),go(1-w,d==='R'?'L':'R',st)],'Row '+st+m+': write '+w+', step '+(d==='R'?'right':'left')+', and go to '+nx+'.'); }},
+    return W30('41j.work[t;'+[tp.join(''),st,JSON.stringify(T)].join(';')+']',[[rows,'the table'],[CF41(tp,h,st),'the configuration']],'What is the next line of the trace?',go(w,d,nx),[go(w,d==='R'?'L':'R',nx),go(m,d,nx),go(w,d,st),go(1-w,d,nx),go(1-w,d==='R'?'L':'R',st),go(1-w,d,st),go(m,d==='R'?'L':'R',nx),go(w,d==='R'?'L':'R',st)],'Row '+st+m+': write '+w+', step '+(d==='R'?'right':'left')+', and go to '+nx+'.'); }},
   {id:'41j.line',step:'41j',mode:'proof',label:'what tracing licenses',open:()=>measured('41j'),make(){
     return line28('41j.line',[
       ['j1',[['the configuration 1 B 0 appears at step 1 and again at step 3','the trace'],['the machine never stops','back-again, with the one-next technique']],2,0,'Each configuration has one next, so the loop comes round for ever.'],
@@ -15568,7 +15577,7 @@ const WG42=[
   ['What does the equal-prices technique say?','the best plan earns exactly the least price total',['every plan earns the least total','prices and plans are unrelated','the best plan earns twice the least total'],'Equal-prices technique.']];
 QP.push({id:'42g.corner',step:'42g',label:'the best corner',open:()=>measured('42g'),make(){ return writtenQ('42g.corner',WG42); }},
   {id:'42g.work',step:'42g',mode:'work',label:'the best corner',open:()=>measured('42g'),make(){
-    const a=2+rnd(6), b=2+rnd(6), p=1+rnd(a-1), q=1+rnd(b-1), c1=1+rnd(6), c2=1+rnd(6);
+    const a=2+rnd(6), b=2+rnd(6), p=1+rnd(a-1), q=1+rnd(b-1), [c1,c2]=pick(LX(LRG(1,6),LRG(1,6)).filter(([c1,c2])=>{ const V=[[0,0],[a,0],[p,q],[0,b]].map(k=>c1*k[0]+c2*k[1]), bst=Math.max(...V); return V.filter(v=>v===bst).length===1; }))||[1,1]; /* a profit that peaks at one corner only */
     const K=[[0,0],[a,0],[p,q],[0,b]], V=K.map(k=>c1*k[0]+c2*k[1]), best=Math.max(...V);
     if(V.filter(v=>v===best).length>1) return null;
     const P=k=>'('+k[0]+', '+k[1]+')';
@@ -15592,7 +15601,7 @@ const WH42=[
 QP.push({id:'42h.games',step:'42h',label:'games',open:()=>measured('42h'),make(){ return writtenQ('42h.games',WH42); }},
   {id:'42h.work',step:'42h',mode:'work',label:'the mix that makes indifferent',open:()=>measured('42h'),make(){
     const a=3+rnd(7), d=3+rnd(7), b=rnd(3), c=rnd(3), D=a-b-c+d, p=fr(d-c,D);
-    return W30('42h.work[m;'+[a,b,c,d].join(',')+']',[['the row player earns '+a+' or '+b+' on row 1, and '+c+' or '+d+' on row 2, by column','the game'],['no choice is safe','checked']],'With what chance does the best mix play row 1?',fshow(p),[fshow(fr(a-b,D)),'1/2',fshow(fr(d-b,D+1)),fshow(fr(a,a+d))],'Indifference technique: p · '+a+' + (1 − p) · '+c+' = p · '+b+' + (1 − p) · '+d+', so p = '+(d-c)+'/'+D+'.'); }},
+    return W30('42h.work[m;'+[a,b,c,d].join(',')+']',[['the row player earns '+a+' or '+b+' on row 1, and '+c+' or '+d+' on row 2, by column','the game'],['no choice is safe','checked']],'With what chance does the best mix play row 1?',fshow(p),[fshow(fr(a-b,D)),'1/2',fshow(fr(d-b,D+1)),fshow(fr(a,a+d)),fshow(fr(a-c,D)),fshow(fr(d-b,D)),fshow(fr(c,a+c)),fshow(fr(d-c,a+d)),fshow(fr(a,D))],'Indifference technique: p · '+a+' + (1 − p) · '+c+' = p · '+b+' + (1 − p) · '+d+', so p = '+(d-c)+'/'+D+'.'); }},
   {id:'42h.line',step:'42h',mode:'proof',label:'what games license',open:()=>measured('42h'),make(){
     return line28('42h.line',[
       ['h1',[['a game of gain against loss','given'],['the largest over x of the least over y of xᵀMy equals the least over y of the largest over x','the minimax technique']],2,0,'That is the technique.'],
@@ -15804,7 +15813,7 @@ QP.push({id:'43d.powers',step:'43d',label:'powers cycle',open:()=>measured('43d'
     if(rnd(2)){ const n=pick([8,9,10,12,14,15,16,18,20,21,24,25,27,28,30,36]), c=PHI43(n);
       return W30('43d.work[c;'+n+']',[['the clock of '+n,'given']],'How many units has it?',String(c),[String(n-1),String(n/2),String(c+1),String(c-1),String(c*2)].filter(x=>+x>0),'Unit-count technique: the hours from 1 to '+n+' that share nothing with '+n+'.'); }
     const p=pick([5,7,11,13]), a=2+rnd(p-2), k=p+rnd(60), r=PW43(a,k,p);
-    return W30('43d.work[e;'+[a,k,p].join(';')+']',[[a+SUP43(k)+' on the clock of '+p,'given']],'Which hour is it?',String(r),[String(PW43(a,k%p,p)),String(MD43(a*k,p)),String(MD43(r+1,p)),String(PW43(a,MD43(k+1,p-1),p)),String(a)],'Exponent-clock technique: '+k+' ≡ '+(k%(p-1))+' (mod '+(p-1)+'), and '+a+SUP43(k%(p-1))+' ≡ '+r+'.'); }},
+    return W30('43d.work[e;'+[a,k,p].join(';')+']',[[a+SUP43(k)+' on the clock of '+p,'given']],'Which hour is it?',String(r),[String(PW43(a,k%p,p)),String(MD43(a*k,p)),String(MD43(r+1,p)),String(PW43(a,MD43(k+1,p-1),p)),String(a),String(MD43(k,p)),String(k%(p-1))],'Exponent-clock technique: '+k+' ≡ '+(k%(p-1))+' (mod '+(p-1)+'), and '+a+SUP43(k%(p-1))+' ≡ '+r+'.'); }},
   {id:'43d.line',step:'43d',mode:'proof',label:'what cycling powers license',open:()=>measured('43d'),make(){
     return line28('43d.line',[
       ['d1',[['7 is prime and 7 ∤ 3','given'],['3⁶ ≡ 1 (mod 7)','the little technique']],2,0,'p − 1 = 6.'],
@@ -16026,7 +16035,7 @@ const WC44=[
   ['What makes every ideal of F[x] other than {0}?','any member of least degree',['x','1','the largest member'],'One-maker technique.']];
 QP.push({id:'44c.divide',step:'44c',label:'division for polynomials',open:()=>measured('44c'),make(){ return writtenQ('44c.divide',WC44); }},
   {id:'44c.work',step:'44c',mode:'work',label:'the remainder is the value',open:()=>measured('44c'),make(){
-    const a=1+rnd(4), b=rnd(11)-5, c=rnd(11)-5, r=rnd(7)-3; if(r===0) return null; const v=x=>a*x*x+b*x+c;
+    const a=1+rnd(4), b=rnd(11)-5, c=rnd(11)-5, r=pick([-3,-2,-1,1,2,3]); const v=x=>a*x*x+b*x+c;
     return W30('44c.work[v;'+[a,b,c,r].join(',')+']',[['p = '+PQ44(a,b,c),'given'],['divide by x'+SG44(-r),'given']],'What is the remainder?',N44(v(r)).replace(' ',''),[N44(v(-r)).replace(' ',''),N44(c).replace(' ',''),N44(a+b+c).replace(' ',''),N44(v(r)+1).replace(' ',''),N44(v(r)-r).replace(' ',''),N44(v(r)-1).replace(' ','')],'Remainder-is-value technique: p('+N44(r).replace(' ','')+') = '+N44(v(r)).replace(' ','')+'.'); }},
   {id:'44c.line',step:'44c',mode:'proof',label:'what division licenses',open:()=>measured('44c'),make(){
     return line28('44c.line',[
@@ -16046,7 +16055,7 @@ const WD44=[
 QP.push({id:'44d.factor',step:'44d',label:'unique factoring',open:()=>measured('44d'),make(){ return writtenQ('44d.factor',WD44); }},
   {id:'44d.work',step:'44d',mode:'work',label:'finding the wedge prime',open:()=>measured('44d'),make(){
     const l=pick([2,3,5,7]), n=2+rnd(3), lo=Array.from({length:n},()=>l*(rnd(4)));
-    let u0=1+rnd(6); if(u0%l===0) u0++; lo[0]=l*u0;
+    let u0=1+rnd(6); if(u0%l===0) u0++; lo[0]=l*u0; lo[1+rnd(n-1)]=l*pick([1,2,3].filter(k=>![2,3].some(q=>k%q===0&&u0%q===0))); /* one coefficient whose share past l is prime to u0, so no other prime divides them all */
     const works=q=>lo.every(x=>x%q===0)&&lo[0]%(q*q)!==0, C=[2,3,5,7,11], W=C.filter(works); if(W.length!==1) return null;
     const terms=['x'+SUP43(n)]; for(let i=n-1;i>=1;i--) if(lo[i]) terms.push(lo[i]+(i===1?'x':'x'+SUP43(i))); terms.push(String(lo[0]));
     return W30('44d.work[w;'+lo.join(',')+']',[['f = '+terms.join(' + '),'given']],'Which prime shows by the prime-wedge test that f cannot be split?',String(l),C.filter(q=>q!==l).map(String),l+' divides every coefficient but the top, and '+(l*l)+' does not divide '+lo[0]+'.'); }},
@@ -17214,7 +17223,7 @@ QP.push({id:'8·econ.work',step:'8·econ',mode:'work',label:'changes multiply',o
     const right=PCAX(Math.round(up*100)/100), wrong=UQAX(right,[PCAX(d),PCAX(d*2),PCAX(Math.round(up*100)/100+5),PCAX(100-d)],3); if(wrong.length<3) return null;
     return {index:'q:8·econ.work[undo;'+d+']', lines:[['\\text{down } '+d+'\\%','a price']], ask:'What rise brings it back to where it started?', right, opts:shuffle([right,...wrong]), lead:'', why:'After the fall the price is '+(1-d/100)+' of the start. To come back, divide by '+(1-d/100)+', that is, multiply by about '+(Math.round(10000/(100-d))/100)+': up about '+right+'.'}; }},
   {id:'8·econ.word',step:'8·econ',mode:'word',label:'a price per unit',open:()=>measured('8·econ'),make(){
-    const G=[['salsa','oz'],['olive oil','fl oz'],['rice','lb'],['coffee','oz'],['detergent','fl oz']][rnd(5)], a=[8,12,16][rnd(3)], b=a*[2,3,4][rnd(3)], pa=(2+rnd(500)/100), pb=Math.round(pa*b/a*(0.7+rnd(60)/100)*100)/100;
+    const G=[['salsa','oz'],['olive oil','fl oz'],['rice','lb'],['coffee','oz'],['detergent','fl oz']][rnd(5)], a=[8,12,16][rnd(3)], b=a*[2,3,4][rnd(3)], pa=(2+rnd(500)/100), pb=Math.round(pa*b/a*(0.7+pick(LRG(0,59).filter(r=>r<28||r>32))/100)*100)/100; /* the two unit prices differ by 3% or more */
     const ua=pa/a, ub=pb/b; if(Math.abs(ua-ub)/ua<0.03) return null; const cheap=ub<ua?'the '+b+' '+G[1]+' one':'the '+a+' '+G[1]+' one';
     const right=cheap+', by about '+Math.round(Math.abs(ua-ub)/Math.max(ua,ub)*100)+'% a unit', other=(ub<ua?'the '+a+' '+G[1]+' one':'the '+b+' '+G[1]+' one');
     const wrong=UQAX(right,[other+', by about '+Math.round(Math.abs(ua-ub)/Math.max(ua,ub)*100)+'% a unit','the '+a+' '+G[1]+' one, since it costs less','they cost the same per '+G[1],cheap+', by about '+Math.round(Math.abs(pb-pa)/pb*100)+'% a unit'],3); if(wrong.length<3) return null;
@@ -17239,7 +17248,7 @@ QP.push({id:'8·eng.work',step:'8·eng',mode:'work',label:'tolerances add',open:
     const right=MMAX(k*p)+' ± '+MMAX(k*d)+' mm', wrong=UQAX(right,[MMAX(k*p)+' ± '+MMAX(d)+' mm',MMAX(k*p)+' ± '+MMAX(d*(k-1))+' mm',MMAX(k*p)+' ± '+MMAX(d/k)+' mm',MMAX(k*p)+' ± '+MMAX(2*k*d)+' mm'],3); if(wrong.length<3) return null;
     return {index:'q:8·eng.work[s;'+k+';'+p+';'+d+']', lines:[[k+'\\text{ spacers, each }'+p+' \\pm '+d+'\\ \\text{mm}','end to end']], ask:'What does the stack promise, for every set of good spacers?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tolerances-add, '+k+' times: '+k+' · '+d+' = '+MMAX(k*d)+'. It is reached: if every spacer is '+MMAX(p+d)+' mm, the stack is '+MMAX(k*(p+d))+' mm.'}; }},
   {id:'8·eng.word',step:'8·eng',mode:'word',label:'the guard band',open:()=>measured('8·eng'),make(){
-    const n=[12,20,25,30,40][rnd(5)], d=[0.01,0.02,0.025,0.05,0.1][rnd(5)], T=[['a dial caliper',0.02],['a micrometer',0.002],['a steel rule',0.25],['a digital caliper',0.01]][rnd(4)], e=T[1], b=d-e; if(Math.abs(b)<1e-9) return null;
+    const n=[12,20,25,30,40][rnd(5)], T=[['a dial caliper',0.02],['a micrometer',0.002],['a steel rule',0.25],['a digital caliper',0.01]][rnd(4)], e=T[1], d=(L=>L[rnd(L.length)])([0.01,0.02,0.025,0.05,0.1].filter(v=>Math.abs(v-e)>1e-9)), b=d-e; /* a size that is not the tool's own step */
     const right=b>0?'readings within '+MMAX(b)+' mm of '+n+' mm':'no reading: the tool is too coarse', wrong=UQAX(right,shuffle(['readings within '+MMAX(d)+' mm of '+n+' mm','readings within '+MMAX(d+e)+' mm of '+n+' mm',b>0?'no reading: the tool is too coarse':'readings within '+MMAX(e)+' mm of '+n+' mm','readings within '+MMAX(d/2)+' mm of '+n+' mm']),3); if(wrong.length<3) return null;
     return {index:'q:8·eng.word['+n+';'+d+';'+e+']', a3:['8·eng.word',DASH,DASH], story:'A shaft is drawn '+n+' ± '+d+' mm. The shop checks it with '+T[0]+' that reads within '+e+' mm of the true size.', lines:[], ask:'Which readings prove the shaft is good?', right, opts:shuffle([right,...wrong]), lead:'', why:'Guard-band: a reading proves the part good only within d − e = '+d+' − '+e+' = '+MMAX(b)+' mm of the drawing'+(b>0?'.':'; that is below 0, so no reading can. Use a tool about ten times finer than the tolerance.')}; }},
   {id:'8·eng.line',step:'8·eng',mode:'proof',label:'what a tolerance licenses',open:()=>measured('8·eng'),make(){
@@ -17256,14 +17265,14 @@ QP.push({id:'8·eng.work',step:'8·eng',mode:'work',label:'tolerances add',open:
 const SCIAX=(u,n)=>{ while(u>=10-1e-9){ u/=10; n++; } while(u<1-1e-9){ u*=10; n--; } u=Math.round(u*100)/100; return '$'+String(u)+' \\cdot 10^{'+n+'}$'; };
 const MAX=v=>String(v).replace('-','\u2212');
 QP.push({id:'8·phys.work',step:'8·phys',mode:'work',label:'scientific form',open:()=>measured('8·phys'),make(){
-    const a=[2,3,4,5,6,8,1.5,2.5][rnd(8)], b=[2,3,4,5,6,8,1.5,2.5][rnd(8)], m=rnd(25)-12, n=rnd(25)-12, div=rnd(3)===0;
+    const div=rnd(3)===0, [a,b]=pick(LVC('8phys.ab'+div,()=>LX([2,3,4,5,6,8,1.5,2.5],[2,3,4,5,6,8,1.5,2.5]).filter(([a,b])=>!div||Math.abs(a/b*100-Math.round(a/b*100))<=1e-9))), m=rnd(25)-12, n=rnd(25)-12; /* a quotient that ends within two places */
     const u=div?a/b:a*b, e=div?m-n:m+n; if(div&&Math.abs(u*100-Math.round(u*100))>1e-9) return null;
     const right=SCIAX(u,e), wrong=UQAX(right,[SCIAX(u,div?m+n:m-n),'$'+String(Math.round(u*100)/100)+' \\cdot 10^{'+e+'}$',SCIAX(u,e+1),SCIAX(u,e-1),SCIAX(u,div?m*n:m*n)],3); if(wrong.length<3) return null;
     const L=a+' \\cdot 10^{'+m+'}'+(div?' \\div ':' \\cdot ')+'('+b+' \\cdot 10^{'+n+'})';
     return {index:'q:8·phys.work['+a+';'+b+';'+m+';'+n+';'+div+']', lines:[[L,'given']], ask:'Which is it in scientific form, 1 \u2264 u < 10?', right, opts:shuffle([right,...wrong]), lead:'', why:'Whole-exponent techniques: '+(div?'exponents take away, '+MAX(m)+' \u2212 ('+MAX(n)+') = '+MAX(e):'exponents add, '+MAX(m)+' + ('+MAX(n)+') = '+MAX(e))+', and '+a+(div?' \u00f7 ':' \u00b7 ')+b+' = '+(Math.round(u*1000)/1000)+'. Tidy so that 1 \u2264 u < 10: '+right+'.'}; }},
   {id:'8·phys.word',step:'8·phys',mode:'word',label:'how many times bigger',open:()=>measured('8·phys'),make(){
     const T=[['a grain of sand',0.5,-3,'0.5 mm'],['a human hair',70,-6,'70 \u03bcm'],['a red blood cell',8,-6,'8 \u03bcm'],['a hydrogen atom',0.11,-9,'0.11 nm'],['a virus',100,-9,'100 nm'],['a proton',1.7,-15,'1.7 \u00b7 10\u207b\u00b9\u2075 m'],['Earth',1.3,7,'1.3 \u00b7 10\u2077 m'],['a person',1.7,0,'1.7 m'],['a city block',100,0,'100 m'],['the Moon\u2019s distance',3.8,8,'3.8 \u00b7 10\u2078 m']];
-    let i=rnd(10), j=rnd(10); if(i===j) return null; let A=T[i],B=T[j]; const va=A[1]*Math.pow(10,A[2]), vb=B[1]*Math.pow(10,B[2]); if(va<vb) [A,B]=[B,A];
+    let [i,j]=pick(LVC('8phys.word',()=>LX(LRG(0,9),LRG(0,9)).filter(([i,j])=>{ const va=T[i][1]*Math.pow(10,T[i][2]), vb=T[j][1]*Math.pow(10,T[j][2]); return i!==j&&Math.round(Math.log10(Math.max(va,vb)/Math.min(va,vb)))>=2; }))); let A=T[i],B=T[j]; /* sizes at least 100 times apart */ const va=A[1]*Math.pow(10,A[2]), vb=B[1]*Math.pow(10,B[2]); if(va<vb) [A,B]=[B,A];
     const r=Math.max(va,vb)/Math.min(va,vb), k=Math.round(Math.log10(r)); if(k<2) return null;
     const P=x=>'about $10^{'+x+'}$', right=P(k), wrong=UQAX(right,[P(k+3),P(k-3>0?k-3:k+6),P(k+1),P(k-1)],3); if(wrong.length<3) return null;
     return {index:'q:8·phys.word['+A[0]+';'+B[0]+']', a3:['8·phys.word',DASH,DASH], story:'Sizes, roughly: '+A[0]+', '+A[3]+'; '+B[0]+', '+B[3]+'.', lines:[], ask:'About how many times the size of '+B[0]+' is '+A[0]+', to the nearest power of ten?', right, opts:shuffle([right,...wrong]), lead:'', why:'Convert both to metres first: $'+A[1]+' \\cdot 10^{'+A[2]+'}$ m and $'+B[1]+' \\cdot 10^{'+B[2]+'}$ m. Divide: about '+(r>=1e4?'$'+r.toExponential(1).replace(/e\+?(-?\d+)/,' \\cdot 10^{$1}')+'$':Math.round(r))+', so about $10^{'+k+'}$.'}; }},
@@ -17286,7 +17295,7 @@ QP.push({id:'9·bio.work',step:'9·bio',mode:'work',label:'power-law habit',open
     const right=String(r*r*r), wrong=UQAX(right,[String(k),String(r*r),String(Math.round(k*3/4)),String(r*r*r*r/2)],3); if(wrong.length<3) return null;
     return {index:'q:9·bio.work[B;'+k+']', lines:[['B = 70\\,M^{3/4}','the three-quarters law'],['M_2 = '+k+'\\,M_1','a heavier animal']], ask:'By what factor is the heavier animal’s B multiplied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Power-law habit: f(kM) = k^b f(M), so the factor is '+k+'^(3/4). '+k+' = '+r+'⁴, so '+k+'^(3/4) = '+r+'³ = '+right+'.'}; }},
   {id:'9·bio.word',step:'9·bio',mode:'word',label:'the three-quarters law',open:()=>measured('9·bio'),make(){
-    const A=[['a dog',16,2],['a goat',81,3],['a pig',256,4],['a steer',625,5],['a rabbit',1,1],['a sheep',81,3],['a hog',256,4]][rnd(7)], [nm,M,r]=A, B=70*r*r*r, per=rnd(2);
+    const A=[['a dog',16,2],['a goat',81,3],['a pig',256,4],['a steer',625,5],['a sheep',81,3],['a hog',256,4]][rnd(6)] /* not a 1 kg animal: every slip gives 70 there */, [nm,M,r]=A, B=70*r*r*r, per=rnd(2);
     const right=per?String(Math.round(B/M*100)/100)+' kcal/kg/day':B+' kcal/day', wrong=per?UQAX(right,[String(70)+' kcal/kg/day',String(Math.round(70*r*100)/100)+' kcal/kg/day',String(Math.round(B/M*r*100)/100)+' kcal/kg/day',String(Math.round(70/(r*r)*100)/100)+' kcal/kg/day'],3):UQAX(right,[70*M+' kcal/day',Math.round(70*M*3/4)+' kcal/day',70*r*r+' kcal/day',70*r*r*r*r/2+' kcal/day'],3);
     if(wrong.length<3) return null;
     return {index:'q:9·bio.word['+nm+';'+per+']', a3:['9·bio.word',DASH,DASH], story:'Basal metabolism follows B = 70 M^(3/4), with M in kilograms and B in kcal/day. '+nm[0].toUpperCase()+nm.slice(1)+' has a mass of '+M+' kg.', lines:[], ask:per?'What does the law give for its rate per kilogram?':'What does the law give for its basal rate?', right, opts:shuffle([right,...wrong]), lead:'', why:M+' = '+r+'⁴, so '+M+'^(3/4) = '+r+'³ = '+(r*r*r)+', and B = 70 · '+(r*r*r)+' = '+B+' kcal/day.'+(per?' Per kilogram: '+B+'/'+M+' = 70 · '+M+'^(−1/4) = '+right+'.':'')}; }},
@@ -17381,7 +17390,7 @@ QP.push({id:'11·crypt.work',step:'11·crypt',mode:'work',label:'several shifts 
     const right=back?W:c, wrong=UQAX(right,back?[VIGAX(c,K),VIGAX(c,K.split('').reverse().join(''),-1),VIGAX(W,K.slice(1)+K[0]),VIGAX(c,'B',-1)]:[VIGAX(W,K,-1),VIGAX(W,K[0]),VIGAX(W,K.slice(1)+K[0]),VIGAX(W,K.split('').reverse().join(''))],3); if(wrong.length<3) return null;
     return {index:'q:11·crypt.work['+W+';'+K+';'+back+']', lines:[['\\text{keyword } '+K+' = '+K.split('').map(x=>ABCAX.indexOf(x)).join(',\\ '),'L = '+K.length]], ask:back?'The cipher text is '+c+'. What is the plain text?':'What does '+W+' become?', right, opts:shuffle([right,...wrong]), lead:'', why:(back?'Take away the key letter at each place, by remainders on 26: ':'Add the key letter at each place, by remainders on 26: ')+W.split('').map((x,i)=>ABCAX.indexOf(x)+(back?'':'')+' + '+ABCAX.indexOf(K[i%K.length])).join(', ').replace(/^/,back?c+' gives ':'')+(back?', so '+W+'.':' → '+c+'.')}; }},
   {id:'11·crypt.word',step:'11·crypt',mode:'word',label:'repeats give away the length',open:()=>measured('11·crypt'),make(){
-    const L=[3,4,5,6,7][rnd(5)], ks=[2,3,4,5].map(j=>L*j+[0,L,2*L][rnd(3)]), dist=shuffle([...new Set(ks)]).slice(0,3+rnd(2)).sort((a,b)=>a-b), g=dist.reduce((a,b)=>GCDAX(a,b));
+    const L=[3,4,5,6,7][rnd(5)], MS11=pick(LVC('11crypt.ms',()=>{ const o=[]; for(let s=0;s<64;s++){ const m=LRG(2,7).filter((_,i)=>s>>i&1); if(m.length>=3&&m.length<=4&&m.reduce((a,b)=>GCDAX(a,b))===1) o.push(m); } return o; })), dist=MS11.map(m=>m*L), g=dist.reduce((a,b)=>GCDAX(a,b)); /* repeat gaps that share nothing but L */
     if(g!==L||dist.length<3) return null;
     const right=String(L)+', or a divisor of it', wrong=UQAX(right,[String(dist[0]),String(dist.reduce((a,b)=>a+b,0)/dist.length|0),String(L*2),String(L+1)],3); if(wrong.length<3) return null;
     return {index:'q:11·crypt.word['+dist.join(',')+']', a3:['11·crypt.word',DASH,DASH], story:'A codebreaker finds the same stretch of three letters repeated in a keyword cipher text, at distances of '+dist.join(', ')+' letters.', lines:[], ask:'What does the keyword’s length look like?', right, opts:shuffle([right,...wrong]), lead:'', why:'Repeats technique: a repeat whose distance the length divides shows up as a repeat. gcd('+dist.join(', ')+') = '+L+', so the length is likely '+L+', but every divisor of the length divides the distances too: the column test decides.'}; }},
@@ -17399,7 +17408,7 @@ const MKTAX=()=>{ for(let t=0;t<40;t++){ const a=[4000,5000,6000,8000][rnd(4)], 
 QP.push({id:'11·econ.work',step:'11·econ',mode:'work',label:'where they meet',open:()=>measured('11·econ'),make(){
     const M=MKTAX(); if(!M) return null; const {a,b,c,d,p,q}=M, ask=rnd(2);
     const lines=[['D(p) = '+a+' - '+b+'\\,p','demand'],['S(p) = '+(c?c+' + ':'')+d+'\\,p','supply']];
-    if(ask){ const right='$'+p+', '+q+' boxes', wrong=UQAX(right,['$'+((a+c)/(b+d)).toFixed(0)+', '+(a-b*Math.round((a+c)/(b+d)))+' boxes','$'+p+', '+(a+c+(d-b)*p)/2+' boxes','$'+(p+1)+', '+(a-b*(p+1))+' boxes','$'+p+', '+(a-c)+' boxes'],3); if(wrong.length<3) return null;
+    if(ask){ const right='$'+p+', '+q+' boxes', wrong=UQAX(right,['$'+((a+c)/(b+d)).toFixed(0)+', '+(a-b*Math.round((a+c)/(b+d)))+' boxes','$'+p+', '+(a+c+(d-b)*p)/2+' boxes','$'+(p+1)+', '+(a-b*(p+1))+' boxes','$'+p+', '+(a-c)+' boxes','$'+p+', '+(a+b*p)+' boxes','$'+(p-1)+', '+(a-b*(p-1))+' boxes'],3); if(wrong.length<3) return null;
       return {index:'q:11·econ.work[m;'+a+';'+b+';'+c+';'+d+']', lines, ask:'Where do they meet: the price, and the boxes?', right, opts:shuffle([right,...wrong]), lead:'', why:a+' − '+b+'p = '+(c?c+' + ':'')+d+'p gives '+(b+d)+'p = '+(a-c)+', so p* = '+p+', and q* = D('+p+') = '+q+'.'}; }
     const f=p+2+rnd(8), Df=a-b*f, Sf=c+d*f; if(Df<=0) return null;
     const right=String(Sf-Df), wrong=UQAX(right,[String(Df),String(Sf),String((b+d)*(f-p)+b),String(Sf+Df)],3); if(wrong.length<3) return null;
@@ -17425,7 +17434,7 @@ QP.push({id:'12·comp.work',step:'12·comp',mode:'work',label:'the remainder mac
     return {index:'q:12·comp.work['+v+']', lines:[['w = '+w,'a numeral in twos'],['r \\mapsto 2r + d \\bmod 3','each digit d']], ask:'Where does the machine end, from state 0?', right, opts:shuffle([right,...wrong]), lead:'', why:'States after each digit: '+path.join(', ')+'. Remainder-machine: it ends at the remainder of '+v+' by 3, which is '+r+'.'}; }},
   {id:'12·comp.word',step:'12·comp',mode:'word',label:'a sentence, or not',open:()=>measured('12·comp'),make(){
     const n=1+rnd(5), kind=rnd(5); let s;
-    if(kind===0) s='a'.repeat(n)+'b'.repeat(n); else if(kind===1) s='a'.repeat(n+1)+'b'.repeat(n); else if(kind===2) s='a'.repeat(n)+'b'.repeat(n+1); else if(kind===3){ s='a'.repeat(n)+'b'.repeat(n); const i=rnd(s.length-1); s=s.slice(0,i)+s[i+1]+s[i]+s.slice(i+2); if(s==='a'.repeat(n)+'b'.repeat(n)) return null; } else s='a'.repeat(n)+'S'+'b'.repeat(n);
+    if(kind===0) s='a'.repeat(n)+'b'.repeat(n); else if(kind===1) s='a'.repeat(n+1)+'b'.repeat(n); else if(kind===2) s='a'.repeat(n)+'b'.repeat(n+1); else if(kind===3){ s='a'.repeat(n)+'b'.repeat(n); const i=n-1; /* the one swap of neighbours that changes the string */ s=s.slice(0,i)+s[i+1]+s[i]+s.slice(i+2); if(s==='a'.repeat(n)+'b'.repeat(n)) return null; } else s='a'.repeat(n)+'S'+'b'.repeat(n);
     const yes=kind===0;
     const right=yes?'a sentence: a\u207f b\u207f with n = '+n:kind===4?'reachable, but no sentence: it keeps S':'no sentence: it is not a\u207f b\u207f', wrong=yes?['no sentence: it is not a\u207f b\u207f','reachable, but no sentence: it keeps S','a sentence only for a longer string']:UQAX(right,['a sentence: a\u207f b\u207f with n = '+n,'no sentence: it is not a\u207f b\u207f','reachable, but no sentence: it keeps S','a sentence: the techniques go in any order'],3);
     return {index:'q:12·comp.word['+s+']', a3:['12·comp.word',DASH,DASH], story:'A grammar has two techniques: S \u2192 aSb and S \u2192 ab, starting from S.', lines:[], ask:'What is the string '+s+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Sentences technique: the sentences are exactly a\u207f b\u207f with n \u2265 1, plain letters only. '+(yes?s+' is a'+'\u207f b\u207f with n = '+n+': S, then aSb '+(n>2?'and so on ':'')+(n>1?n-1+' time'+(n>2?'s':'')+', then ab.':'once, ab.'):kind===4?s+' is reached on the way, but a sentence has no placeholder.':s+' is not of that form.')}; }},
@@ -17441,8 +17450,9 @@ QP.push({id:'12·comp.work',step:'12·comp',mode:'work',label:'the remainder mac
 /* ----- annex 12·eng Will the shelf hold: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'12·eng.work',step:'12·eng',mode:'work',label:'support pushes and the worst bend',open:()=>measured('12·eng'),make(){
     const L=[1.2,1.8,2,2.4,3,3.6][rnd(6)], P=[300,400,500,600,800,900,1200][rnd(7)], ask=rnd(3);
-    if(ask===0){ const d=Math.round(L*(1+rnd(5))/6*100)/100, RB=P*d/L, RA=P-RB; if(Math.abs(RB*10-Math.round(RB*10))>1e-9) return null;
-      const right='R_A = '+DECAX(RA,1)+' N, R_B = '+DECAX(RB,1)+' N', wrong=UQAX(right,['R_A = '+DECAX(RB,1)+' N, R_B = '+DECAX(RA,1)+' N','R_A = '+DECAX(P/2,1)+' N, R_B = '+DECAX(P/2,1)+' N','R_A = '+DECAX(P*d,1)+' N, R_B = '+DECAX(P*(L-d),1)+' N'],3); if(wrong.length<3||Math.abs(RA-RB)<1e-9) return null;
+    if(ask===0){ /* a load off the middle whose pushes end within one place */
+      const W12=(L,P,d)=>{ const RB=P*d/L, RA=P-RB, right='R_A = '+DECAX(RA,1)+' N, R_B = '+DECAX(RB,1)+' N'; return [RB,RA,right,UQAX(right,['R_A = '+DECAX(RB,1)+' N, R_B = '+DECAX(RA,1)+' N','R_A = '+DECAX(P/2,1)+' N, R_B = '+DECAX(P/2,1)+' N','R_A = '+DECAX(P*d,1)+' N, R_B = '+DECAX(P*(L-d),1)+' N'],3)]; };
+      const [L,P,d]=pick(LVC('12eng.r',()=>LX([1.2,1.8,2,2.4,3,3.6],[300,400,500,600,800,900,1200],[1,2,3,4,5]).map(([L,P,j])=>[L,P,Math.round(L*j/6*100)/100]).filter(([L,P,d])=>{ const [RB,RA,,w]=W12(L,P,d); return Math.abs(RB*10-Math.round(RB*10))<=1e-9&&Math.abs(RA-RB)>=1e-9&&w.length>=3; }))), [RB,RA,right,wrong]=W12(L,P,d);
       return {index:'q:12·eng.work[r;'+L+';'+P+';'+d+']', lines:[['P = '+P+'\\ \\text{N at } d = '+d+'\\ \\text{m}','a load'],['\\text{supports at } 0 \\text{ and } L = '+L+'\\ \\text{m}','A and B']], ask:'How hard does each support push?', right:'$'+right.replace(/ N/g,'\\ \\text{N}')+'$', opts:shuffle([right,...wrong]).map(o=>'$'+o.replace(/ N/g,'\\ \\text{N}')+'$'), lead:'', why:'Support-pushes: R_B = Pd/L = ('+P+' \u00b7 '+d+')/'+L+' = '+DECAX(RB,1)+' N, and R_A = P \u2212 R_B = '+DECAX(RA,1)+' N. The nearer support takes more.'}; }
     if(ask===1){ const M=P*L/4, right=DECAX(M,1)+' N\u00b7m', wrong=UQAX(right,[DECAX(P*L/2,1)+' N\u00b7m',DECAX(P*L/8,1)+' N\u00b7m',DECAX(P*L,1)+' N\u00b7m',DECAX(P*L*L/8,1)+' N\u00b7m'],3); if(wrong.length<3) return null;
       return {index:'q:12·eng.work[m;'+L+';'+P+']', lines:[['P = '+P+'\\ \\text{N},\\ \\ L = '+L+'\\ \\text{m}','one load that can move along the span']], ask:'What is the worst turning effect it can bend the beam with?', right, opts:shuffle([right,...wrong]), lead:'', why:'Worst-place: at the middle, PL/4 = '+P+' \u00b7 '+L+'/4 = '+right+'.'}; }
@@ -17465,17 +17475,21 @@ QP.push({id:'12·eng.work',step:'12·eng',mode:'work',label:'support pushes and 
 /* ----- annex 12·phys How does a small push lift a heavy weight: Work, Word Problems, Check Proofs ----- */
 const DECAX=(v,k)=>{ k=(k==null?3:k); return String(Math.round(v*Math.pow(10,k))/Math.pow(10,k)); };
 QP.push({id:'12·phys.work',step:'12·phys',mode:'work',label:'the balance point',open:()=>measured('12·phys'),make(){
-    const n=3, w=[], x=[]; for(let i=0;i<n;i++){ w.push(1+rnd(8)); x.push(rnd(9)/2); } const W=w.reduce((a,b)=>a+b,0), M=w.reduce((a,b,i)=>a+b*x[i],0), p=M/W, avg=x.reduce((a,b)=>a+b,0)/n;
+    const n=3, w=[], x=[]; for(let i=0;i<n;i++){ w.push(1+rnd(8)); x.push(rnd(9)/2); }
+    /* a balance point away from the plain average: places not all the same, and weight leaned onto the place furthest from the average until the two differ */
+    if(x.every(v=>v===x[0])) x[n-1]=x[0]<4?x[0]+1:x[0]-1;
+    { const av=x.reduce((a,b)=>a+b,0)/n, far=x.map(v=>Math.abs(v-av)), i=far.indexOf(Math.max(...far)); while(Math.abs(w.reduce((a,b,j)=>a+b*x[j],0)/w.reduce((a,b)=>a+b,0)-av)<0.05) w[i]++; }
+    const W=w.reduce((a,b)=>a+b,0), M=w.reduce((a,b,i)=>a+b*x[i],0), p=M/W, avg=x.reduce((a,b)=>a+b,0)/n;
     if(Math.abs(p-avg)<0.05) return null;
     const right=DECAX(p)+' m', wrong=UQAX(right,[DECAX(avg)+' m',DECAX(M)+' m',DECAX(M/n)+' m',DECAX(W/ (x.reduce((a,b)=>a+b,0)||1))+' m'],3); if(wrong.length<3) return null;
     return {index:'q:12·phys.work['+w.join(',')+';'+x.join(',')+']', lines:w.map((v,i)=>[v+'\\ \\text{kg at }'+x[i]+'\\ \\text{m}','on the bar']), ask:'Where does the bar balance?', right, opts:shuffle([right,...wrong]), lead:'', why:'Balance-formula: the weighted average, ('+w.map((v,i)=>v+' \u00b7 '+x[i]).join(' + ')+')/'+W+' = '+DECAX(M)+'/'+W+(Math.abs(p*1000-Math.round(p*1000))>1e-9?' \u2248 ':' = ')+right+'. Not the plain average of the positions, '+DECAX(avg)+'.'}; }},
   {id:'12·phys.word',step:'12·phys',mode:'word',label:'levers and gears',open:()=>measured('12·phys'),make(){
-    if(rnd(2)){ const g=[[12,36],[10,30],[15,45],[16,48],[20,40],[12,48],[18,36],[14,42]], a=g[rnd(8)], b=g[rnd(8)], m1=a[0]/a[1], m2=b[0]/b[1], m=m1*m2, rpm=[60,90,120,180,240][rnd(5)]*(1/m)/ (1/m);
+    if(rnd(2)){ const g=[[12,36],[10,30],[15,45],[16,48],[20,40],[12,48],[18,36],[14,42]], [a,b,rpm]=pick(LVC('12phys.g',()=>LX(LRG(0,7),LRG(0,7),[60,90,120,180,240]).filter(([i,j,r])=>{ const o=r*((g[i][0]/g[i][1])*(g[j][0]/g[j][1])); return Math.abs(o*100-Math.round(o*100))<=1e-9; }).map(([i,j,r])=>[g[i],g[j],r]))), m1=a[0]/a[1], m2=b[0]/b[1], m=m1*m2; /* a last gear turning a whole number of hundredths a minute */
       const F=v=>{ const d=Math.round(1/v); return Math.abs(1/v-d)<1e-9?'1/'+d:DECAX(v); }, out=rpm*m;
       if(Math.abs(out*100-Math.round(out*100))>1e-9) return null;
       const right=DECAX(out,2)+' turns a minute', wrong=UQAX(right,[DECAX(rpm*(m1+m2),2)+' turns a minute',DECAX(rpm/m,2)+' turns a minute',DECAX(rpm*m1,2)+' turns a minute',DECAX(rpm*m2,2)+' turns a minute'],3); if(wrong.length<3) return null;
       return {index:'q:12·phys.word[g;'+a+';'+b+';'+rpm+']', a3:['12·phys.word',DASH,DASH], story:'A winch has two meshes. A '+a[0]+'-tooth gear drives a '+a[1]+'-tooth gear, and a '+b[0]+'-tooth gear on that shaft drives a '+b[1]+'-tooth gear. The crank turns the first gear '+rpm+' times a minute.', lines:[], ask:'How fast does the last gear turn?', right, opts:shuffle([right,...wrong]), lead:'', why:'Gear-train: the ratios multiply, '+a[0]+'/'+a[1]+' \u00b7 '+b[0]+'/'+b[1]+' = '+F(m)+'. So '+rpm+' \u00b7 '+F(m)+' = '+DECAX(out,2)+'. They do not add.'}; }
-    const L=[600,800,900,1000,1200,1500][rnd(6)], a=[0.1,0.2,0.25,0.3,0.5][rnd(5)], b=[1,1.2,1.5,2,2.5][rnd(5)], E=L*a/b;
+    const [L,a,b]=pick(LVC('12phys.l',()=>LX([600,800,900,1000,1200,1500],[0.1,0.2,0.25,0.3,0.5],[1,1.2,1.5,2,2.5]).filter(([L,a,b])=>{ const E=L*a/b; return Math.abs(E*100-Math.round(E*100))<=1e-9&&UQAX(String(E),[L*b/a,L-E,L*a,L/2].map(String),3).length>=3; }))), E=L*a/b;
     if(Math.abs(E*100-Math.round(E*100))>1e-9) return null;
     const right=DECAX(E,2)+' N', wrong=UQAX(right,[DECAX(L*b/a,2)+' N',DECAX(L-E,2)+' N',DECAX(L*a,2)+' N',DECAX(L/2,2)+' N'],3); if(wrong.length<3) return null;
     return {index:'q:12·phys.word[l;'+L+';'+a+';'+b+']', a3:['12·phys.word',DASH,DASH], story:'A crowbar rests on a stone. A rock pushing down with '+L+' N sits '+a+' m from the stone on one side; a hand pushes '+b+' m from the stone on the other.', lines:[], ask:'What push of the hand just balances the rock?', right, opts:shuffle([right,...wrong]), lead:'', why:'Law of the lever: the turning effects match, '+L+' \u00b7 '+a+' = E \u00b7 '+b+', so E = '+right+'. The hand moves '+DECAX(b/a,2)+' times as far as the rock: no energy is free.'}; }},
@@ -17501,7 +17515,7 @@ QP.push({id:'13·comp.work',step:'13·comp',mode:'work',label:'halving and tange
     const right=F(N), wrong=UQAX(right,[F(x-k/x),F(x+k/x),F((x*x-k)/(2*x)),F(k/x)],3); if(wrong.length<3) return null;
     return {index:'q:13·comp.work[t;'+k+';'+x+']', lines:[['f(x) = x^2 - '+k,'f\'(x) = 2x'],['x = '+x,'a guess']], ask:'Where does one tangent step land?', right, opts:shuffle([right,...wrong]), lead:'', why:'N(x) = x \u2212 f(x)/f\'(x) = '+x+' \u2212 ('+(x*x-k)+')/'+(2*x)+' = '+right+'. That is (x + '+k+'/x)/2.'}; }},
   {id:'13·comp.word',step:'13·comp',mode:'word',label:'dividing with no divide key',open:()=>measured('13·comp'),make(){
-    const k=[3,4,6,7,8,9][rnd(6)], x=[0.1,0.2,0.3][rnd(3)], e=x-1/k, N=x*(2-k*x);
+    const [k,x]=pick(LVC('13comp',()=>LX([3,4,6,7,8,9],[0.1,0.2,0.3]).filter(([k,x])=>x*(2-k*x)>0))), e=x-1/k, N=x*(2-k*x);
     if(N<=0) return null; const right=MNAX(DECAX(N,4)), wrong=UQAX(right,[DECAX(x*(2+k*x),4),DECAX(2*x-k,4),DECAX(x+ k*e*e,4),DECAX(1/k,4)].map(MNAX),3); if(wrong.length<3) return null;
     return {index:'q:13·comp.word['+k+';'+x+']', a3:['13·comp.word',DASH,DASH], story:'An old machine could multiply and subtract but not divide. To find 1/'+k+', it ran the tangent step for f(x) = 1/x \u2212 '+k+', starting from '+x+'.', lines:[], ask:'What is its next guess?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Reciprocal-step: N(x) = x(2 \u2212 kx) = '+x+' \u00b7 (2 \u2212 '+DECAX(k*x,4)+') = '+right+'. The new error is \u2212k times the old error squared: \u2212'+k+' \u00b7 ('+DECAX(e,4)+')\u00b2 \u2248 '+DECAX(-k*e*e,4)+'.')}; }},
   {id:'13·comp.line',step:'13·comp',mode:'proof',label:'what a root program licenses',open:()=>measured('13·comp'),make(){
@@ -17545,7 +17559,7 @@ QP.push({id:'13·nav.work',step:'13·nav',mode:'work',label:'the centred chord',
   {id:'13·nav.word',step:'13·nav',mode:'word',label:'the twelfths law',open:()=>measured('13·nav'),make(){
     const R=[2.4,3.6,4.8,6,7.2,9.6][rnd(6)], lo=[0.5,1,1.5,2][rnd(4)], n=1+rnd(5), tw=[1,2,3,3,2,1], cum=tw.slice(0,n).reduce((a,b)=>a+b,0), ask=rnd(2);
     const P=['Moss Landing','Monterey','Half Moon Bay','Bodega Bay'][rnd(4)];
-    const right=ask?DECAX(tw[n-1]*R/12,2)+' ft':DECAX(lo+cum*R/12,2)+' ft', wrong=UQAX(right,ask?[DECAX(R/6,2)+' ft',DECAX(cum*R/12,2)+' ft',DECAX(tw[n%6]*R/12+0.1,2)+' ft',DECAX(R/12,2)+' ft',DECAX(R/4,2)+' ft']:[DECAX(lo+n*R/6,2)+' ft',DECAX(cum*R/12,2)+' ft',DECAX(lo+(cum+1)*R/12,2)+' ft',DECAX(lo+tw[n-1]*R/12,2)+' ft'],3); if(wrong.length<3) return null;
+    const right=ask?DECAX(tw[n-1]*R/12,2)+' ft':DECAX(lo+cum*R/12,2)+' ft', wrong=UQAX(right,ask?[DECAX(R/6,2)+' ft',DECAX(cum*R/12,2)+' ft',DECAX(tw[n%6]*R/12+0.1,2)+' ft',DECAX(R/12,2)+' ft',DECAX(R/4,2)+' ft',DECAX(tw[n-1]*R/6,2)+' ft',DECAX(lo+tw[n-1]*R/12,2)+' ft']:[DECAX(lo+n*R/6,2)+' ft',DECAX(cum*R/12,2)+' ft',DECAX(lo+(cum+1)*R/12,2)+' ft',DECAX(lo+tw[n-1]*R/12,2)+' ft',DECAX(lo+n*R/12,2)+' ft',DECAX(lo+cum*R/6,2)+' ft',DECAX(lo+(cum+tw[n%6])*R/12,2)+' ft'],3); if(wrong.length<3) return null;
     return {index:'q:13·nav.word['+R+';'+lo+';'+n+';'+ask+']', a3:['13·nav.word',DASH,DASH], story:'At '+P+', low water is '+lo+' ft at noon, and high water '+DECAX(lo+R,2)+' ft at 6 p.m.', lines:[], ask:ask?'By the twelfths law, how much does the water rise in hour '+n+'?':'By the twelfths law, how high is the water at '+n+' p.m.?', right, opts:shuffle([right,...wrong]), lead:'', why:'The range is '+R+' ft. The law climbs 1, 2, 3, 3, 2, 1 twelfths. '+(ask?'Hour '+n+' takes '+tw[n-1]+'/12 of '+R+' = '+right+'.':'After '+n+' hour'+(n>1?'s':'')+', '+cum+' twelfths: '+lo+' + '+cum+'/12 \u00b7 '+R+' = '+right+'.')}; }},
   {id:'13·nav.line',step:'13·nav',mode:'proof',label:'what a tide table licenses',open:()=>measured('13·nav'),make(){
     return line28('13·nav.line',[
@@ -17568,8 +17582,8 @@ QP.push({id:'13·phys.work',step:'13·phys',mode:'work',label:'velocity at an in
     const v0=[9.8,14.7,19.6,24.5,29.4][rnd(5)], T=v0/9.8, H=v0*v0/19.6, ask=rnd(3), t=Math.round((0.5+rnd(Math.round(2*T*2-1)))*0.5*100)/100;
     let right,wrong,q,why;
     if(ask===0){ right=DECAX(T,2)+' s'; wrong=[DECAX(2*T,2)+' s',DECAX(T/2,2)+' s',DECAX(v0,2)+' s',DECAX(T+1,2)+' s']; q='When does it reach the top?'; why='v(t) = '+v0+' \u2212 9.8t is 0 at t = '+v0+'/9.8 = '+right+'. There the velocity is 0; the acceleration is still \u22129.8 m/s\u00b2.'; }
-    else if(ask===1){ right=DECAX(H,3)+' m'; wrong=[DECAX(2*H,3)+' m',DECAX(v0*T,3)+' m',DECAX(H/2,3)+' m',DECAX(v0,3)+' m']; q='How high does it go?'; why='At the top, t = '+DECAX(T,2)+' s, and y = '+v0+'t \u2212 4.9t\u00b2 = '+DECAX(v0*T,2)+' \u2212 '+DECAX(4.9*T*T,3)+' = '+right+'.'; }
-    else { if(t<=0||t>=2*T) return null; const v=v0-9.8*t; right=DECAX(v,2)+' m/s'; wrong=[DECAX(-v===v?v+1:-v,2)+' m/s',DECAX(v0+9.8*t,2)+' m/s',DECAX(v0-4.9*t,2)+' m/s',DECAX(Math.abs(v)+9.8,2)+' m/s']; q='What is its velocity, measured upward, at t = '+t+' s?'; why='v(t) = '+v0+' \u2212 9.8t, so v('+t+') = '+right+(v<0?': negative, so it is coming down, at a speed of '+DECAX(-v,2)+' m/s.':'.'); }
+    else if(ask===1){ right=DECAX(H,3)+' m'; wrong=[DECAX(2*H,3)+' m',DECAX(v0*T,3)+' m',DECAX(H/2,3)+' m',DECAX(v0,3)+' m',DECAX(v0*v0/2,3)+' m',DECAX(4.9*T,3)+' m']; q='How high does it go?'; why='At the top, t = '+DECAX(T,2)+' s, and y = '+v0+'t \u2212 4.9t\u00b2 = '+DECAX(v0*T,2)+' \u2212 '+DECAX(4.9*T*T,3)+' = '+right+'.'; }
+    else { if(t<=0||t>=2*T) return null; const v=v0-9.8*t; right=DECAX(v,2)+' m/s'; wrong=[DECAX(-v===v?v+1:-v,2)+' m/s',DECAX(v0+9.8*t,2)+' m/s',DECAX(v0-4.9*t,2)+' m/s',DECAX(Math.abs(v)+9.8,2)+' m/s',DECAX(9.8*t,2)+' m/s',DECAX(v0-9.8*t*t,2)+' m/s']; q='What is its velocity, measured upward, at t = '+t+' s?'; why='v(t) = '+v0+' \u2212 9.8t, so v('+t+') = '+right+(v<0?': negative, so it is coming down, at a speed of '+DECAX(-v,2)+' m/s.':'.'); }
     wrong=UQAX(right,wrong.map(w=>w.replace(/^-/,'\u2212')),3).map(x=>x); right=right.replace(/^-/,'\u2212'); wrong=UQAX(right,wrong,3); if(wrong.length<3) return null;
     return {index:'q:13·phys.word['+v0+';'+ask+';'+t+']', a3:['13·phys.word',DASH,DASH], story:'A ball is thrown straight up at '+v0+' m/s. Its height in metres is y(t) = '+v0+'t \u2212 4.9t\u00b2, t seconds later.', lines:[], ask:q, right, opts:shuffle([right,...wrong]), lead:'', why:why.replace(/= -/g,'= \u2212')}; }},
   {id:'13·phys.line',step:'13·phys',mode:'proof',label:'what the slopes license',open:()=>measured('13·phys'),make(){
@@ -17739,8 +17753,8 @@ QP.push({id:'15·eng.work',step:'15·eng',mode:'work',label:'the push, in thin s
 /* ----- annex 16·eng Where will a loaded beam crack: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'16·eng.work',step:'16·eng',mode:'work',label:'shear and bending',open:()=>measured('16·eng'),make(){
     const L=[2,3,4,5,6][rnd(5)], w=[1,2,3,4,5][rnd(5)], ask=rnd(3), R=w*L/2;
-    if(ask===0){ const x=Math.round((rnd(L*2)+1)/2*10)/10; if(x>=L) return null; const V=R-w*x;
-      const right=MNAX(DECAX(V,2))+' kN', wrong=UQAX(right,[DECAX(w*x,2)+' kN',MNAX(DECAX(-V,2))+' kN',DECAX(R,2)+' kN',DECAX(R*x-w*x*x/2,3)+' kN'],3); if(wrong.length<3) return null;
+    if(ask===0){ const x=Math.round((rnd(L*2-1)+1)/2*10)/10; /* a cut inside the span */ const V=R-w*x;
+      const right=MNAX(DECAX(V,2))+' kN', wrong=UQAX(right,[DECAX(w*x,2)+' kN',MNAX(DECAX(-V,2))+' kN',DECAX(R,2)+' kN',DECAX(R*x-w*x*x/2,3)+' kN',DECAX(w*(L-x),2)+' kN',DECAX(R+w*x,2)+' kN'],3); if(wrong.length<3) return null;
       return {index:'q:16·eng.work[V;'+L+';'+w+';'+x+']', lines:[['w = '+w+'\\ \\text{kN/m on } [0, '+L+']','spread evenly'],['R_0 = R_L = '+R+'\\ \\text{kN}','the supports']], ask:'What is the shear at x = '+x+' m?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Shear-from-load: V\u2032 = \u2212w, so V(x) = R\u2080 \u2212 wx = '+R+' \u2212 '+w+' \u00b7 '+x+' = '+DECAX(V,2)+' kN.')}; }
     if(ask===1){ const M=w*L*L/8, right=DECAX(M,3)+' kN\u00b7m at x = '+DECAX(L/2,2)+' m', wrong=UQAX(right,[DECAX(w*L*L/4,3)+' kN\u00b7m at x = '+DECAX(L/2,2)+' m',DECAX(M,3)+' kN\u00b7m at x = 0',DECAX(w*L/2,3)+' kN\u00b7m at x = '+DECAX(L/2,2)+' m',DECAX(w*L*L/2,3)+' kN\u00b7m at x = '+L+' m'],3); if(wrong.length<3) return null;
       return {index:'q:16·eng.work[M;'+L+';'+w+']', lines:[['w = '+w+'\\ \\text{kN/m on } [0, '+L+']','spread evenly, supports at both ends']], ask:'Where does the beam bend most, and how hard?', right, opts:shuffle([right,...wrong]), lead:'', why:'Most-bending: V(x) = '+R+' \u2212 '+w+'x crosses zero at x = '+DECAX(L/2,2)+'. M there is the area under V: \u00bd \u00b7 '+R+' \u00b7 '+DECAX(L/2,2)+' = '+DECAX(M,3)+' kN\u00b7m.'}; }
@@ -17934,9 +17948,9 @@ QP.push({id:'18·econ.work',step:'18·econ',mode:'work',label:'a flinch with no 
 /* ----- annex 18·eng Why are bridges built from triangles: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'18·eng.work',step:'18·eng',mode:'work',label:'the force in a bar',open:()=>measured('18·eng'),make(){
     const S=[[3,4,5],[6,8,10],[5,12,13],[8,15,17],[1,1,Math.SQRT2]][rnd(5)], [run,rise,len]=S, W=[6,10,12,20,24,30][rnd(6)], ask=rnd(2);
-    if(ask){ const j=rnd(5)===0?1:0; const T=W*len/rise; const right=DECAX(T,2)+' kN', wrong=UQAX(right,[DECAX(W,2)+' kN',DECAX(W*rise/len,2)+' kN',DECAX(W*run/rise,2)+' kN',DECAX(W*len/run,2)+' kN'],3); if(wrong.length<3) return null;
+    if(ask){ const j=rnd(5)===0?1:0; const T=W*len/rise; const right=DECAX(T,2)+' kN', wrong=UQAX(right,[DECAX(W,2)+' kN',DECAX(W*rise/len,2)+' kN',DECAX(W*run/rise,2)+' kN',DECAX(W*len/run,2)+' kN',DECAX(W*rise/run,2)+' kN',DECAX(W*run/len,2)+' kN',DECAX(W/2,2)+' kN',DECAX(2*W,2)+' kN'],3); if(wrong.length<3) return null;
       return {index:'q:18·eng.work[t;'+S.join(',')+';'+W+']', lines:[['\\text{a slant bar: run } '+run+',\\ \\text{rise } '+rise+(len%1?'':',\\ \\text{length } '+len),'pinned at both ends'],['\\text{its part up must hold } '+W+'\\ \\text{kN}','the load at the top joint']], ask:'What force runs along the slant?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bar-force: the force and its parts make a triangle similar to the bar. The part up is T \u00b7 rise/\u2113, so T = '+W+' \u00b7 '+DECAX(len,3)+'/'+rise+' = '+right+'. The load is only its part up.'}; }
-    const j=[4,5,6,7,8,10][rnd(6)], b=2*j-3, right=String(b), wrong=UQAX(right,[String(2*j),String(j+1),String(3*j-6),String(2*j-2)],3); if(wrong.length<3) return null;
+    const j=[4,5,6,7,8,10][rnd(6)], b=2*j-3, right=String(b), wrong=UQAX(right,[String(2*j),String(j+1),String(3*j-6),String(2*j-2),String(2*j-1),String(2*j+3)],3); if(wrong.length<3) return null;
     return {index:'q:18·eng.work[b;'+j+']', lines:[['j = '+j,'joints, grown from a triangle']], ask:'How many bars does the frame have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Add-a-joint: a triangle has 3 joints and 3 bars; each new joint brings 2 bars. b = 2j \u2212 3 = '+right+'.'}; }},
   {id:'18·eng.word',step:'18·eng',mode:'word',label:'a roof frame',open:()=>measured('18·eng'),make(){
     const S=[[3,4,5],[4,3,5],[12,5,13],[5,12,13],[8,6,10]][rnd(5)], [run,rise,len]=S, W=[2,4,6,8,10][rnd(5)]*(len/5===Math.round(len/5)?5:13)/ (len/5===Math.round(len/5)?5:13), P=W*[1,2,3][rnd(3)];
@@ -17974,9 +17988,9 @@ QP.push({id:'18·nav.work',step:'18·nav',mode:'work',label:'map scale',open:()=
 /* ----- annex 18·phys Why do planets travel on ellipses: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'18·phys.work',step:'18·phys',mode:'work',label:'nearest and farthest',open:()=>measured('18·phys'),make(){
     const ask=rnd(2), l=[1,1.2,1.5,2][rnd(4)], e=[0.1,0.2,0.25,0.5,0.6][rnd(5)];
-    if(ask){ const q=l/(1+e), Q=l/(1-e), right='q = '+DECAX(q,3)+',\\ Q = '+DECAX(Q,3), wrong=UQAX(right,['q = '+DECAX(l*(1-e),3)+',\\ Q = '+DECAX(l*(1+e),3),'q = '+DECAX(l-e,3)+',\\ Q = '+DECAX(l+e,3),'q = '+DECAX(Q,3)+',\\ Q = '+DECAX(q,3)],3); if(wrong.length<3) return null;
+    if(ask){ const q=l/(1+e), Q=l/(1-e), right='q = '+DECAX(q,3)+',\\ Q = '+DECAX(Q,3), wrong=UQAX(right,['q = '+DECAX(l*(1-e),3)+',\\ Q = '+DECAX(l*(1+e),3),'q = '+DECAX(l-e,3)+',\\ Q = '+DECAX(l+e,3),'q = '+DECAX(Q,3)+',\\ Q = '+DECAX(q,3),'q = '+DECAX(l*(1-e*e),3)+',\\ Q = '+DECAX(l/(1-e*e),3),'q = '+DECAX(q,3)+',\\ Q = '+DECAX(l*(1+e),3)],3); if(wrong.length<3) return null;
       return {index:'q:18·phys.work[qQ;'+l+';'+e+']', lines:[['r = '+l+' - '+e+'x','the line of an orbit, AU']], ask:'What are the nearest and farthest distances from the sun?', right:'$'+right+'$', opts:shuffle([right,...wrong]).map(o=>'$'+o+'$'), lead:'', why:'Orbit-ends: q = \u2113/(1 + e) = '+l+' \u00f7 '+(1+e)+' \u2248 '+DECAX(q,3)+', and Q = \u2113/(1 \u2212 e) = '+l+' \u00f7 '+DECAX(1-e,2)+' \u2248 '+DECAX(Q,3)+' AU.'}; }
-    const q=[0.3,0.5,0.586,1,1.381][rnd(5)], Q=q*[1.5,2,3,4,10][rnd(5)], E=(Q-q)/(Q+q), right=DECAX(E,3), wrong=UQAX(right,[DECAX((Q-q)/Q,3),DECAX(q/Q,3),DECAX((Q-q)/2,3),DECAX(1-E,3)],3); if(wrong.length<3) return null;
+    const q=[0.3,0.5,0.586,1,1.381][rnd(5)], Q=q*[1.5,2,3,4,10][rnd(5)], E=(Q-q)/(Q+q), right=DECAX(E,3), wrong=UQAX(right,[DECAX((Q-q)/Q,3),DECAX(q/Q,3),DECAX((Q-q)/2,3),DECAX(1-E,3),DECAX((Q+q)/2,3),DECAX(q/(Q+q),3)],3); if(wrong.length<3) return null;
     return {index:'q:18·phys.work[e;'+q+';'+Q+']', lines:[['q = '+q+',\\ \\ Q = '+DECAX(Q,3),'nearest and farthest, AU']], ask:'What is the orbit\u2019s e?', right, opts:shuffle([right,...wrong]), lead:'', why:'Run backwards: e = (Q \u2212 q)/(Q + q) = '+DECAX(Q-q,3)+' \u00f7 '+DECAX(Q+q,3)+' \u2248 '+right+'.'}; }},
   {id:'18·phys.word',step:'18·phys',mode:'word',label:'which cut of the cone',open:()=>measured('18·phys'),make(){
     const B=[['a planet',0.093],['a comet',0.967],['a body from outside the solar system',1.2],['a probe on its way out',1],['a moon',0.05],['a returning comet',0.6]][rnd(6)], e=B[1];
@@ -17993,8 +18007,8 @@ QP.push({id:'18·phys.work',step:'18·phys',mode:'work',label:'nearest and farth
 /* ----- annex 19·bio Why not just burn the sugar: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'19·bio.work',step:'19·bio',mode:'work',label:'the drop, and the coins',open:()=>measured('19·bio'),make(){
     const ask=rnd(2);
-    if(ask){ const D=[150,180,200,220,250,300][rnd(6)], c=[19,20,25,50][rnd(4)], m=[1,2,3,4][rnd(4)], k=Math.ceil(D/(m*c)); if(k<2) return null;
-      const right=String(k), wrong=UQAX(right,[String(Math.floor(D/c)),String(k+1),String(k-1),String(Math.ceil(D/c))],3); if(wrong.length<3) return null;
+    if(ask){ const W19=(D,c,m,k)=>[String(Math.floor(D/c)),String(k+1),String(k-1),String(Math.ceil(D/c)),String(Math.ceil(D/(c*(m+1))))], [D,c,m]=pick(LVC('19bio.w',()=>LX([150,180,200,220,250,300],[19,20,25,50],[1,2,3,4]).filter(([D,c,m])=>{ const k=Math.ceil(D/(m*c)); return k>=2&&UQAX(String(k),W19(D,c,m,k),3).length>=3; }))), k=Math.ceil(D/(m*c));
+      const right=String(k), wrong=UQAX(right,W19(D,c,m,k),3); if(wrong.length<3) return null;
       return {index:'q:19·bio.work[w;'+D+';'+c+';'+m+']', lines:[['\\text{drop } D = '+D+' \\text{ kJ}','route-free'],['\\text{coins of } '+c+' \\text{ kJ, at most } '+m+' \\text{ a step}','given']], ask:'What is the fewest steps that could bank the whole drop?', right, opts:shuffle([right,...wrong]), lead:'', why:'Whole-coins: at least D ÷ (mc) = '+D+' ÷ '+(m*c)+' ≈ '+DECAX(D/(m*c),2)+' steps, so '+k+'.'}; }
     const C=[['NADH',-0.32],['a flavin carrier',-0.03],['ubiquinone',0.05],['cytochrome c',0.25]], a=C[rnd(C.length)], E2=[0.82,0.82,0.55,0.39][rnd(4)]; if(E2<=a[1]+0.1) return null;
     const v=2*96.5*(E2-a[1]), right=Math.round(v)+' kJ', wrong=UQAX(right,[Math.round(96.5*(E2-a[1]))+' kJ',Math.round(2*96.5*Math.abs(E2+a[1]))+' kJ',Math.round(v*2)+' kJ',Math.round(2*(E2-a[1])*100)/100+' kJ'],3); if(wrong.length<3) return null;
@@ -18071,7 +18085,7 @@ QP.push({id:'19·crypt.work',step:'19·crypt',mode:'work',label:'counting the se
     if(ask===1){ const k=2+rnd(3), v=Math.pow(26,k), right=SPAX(v), wrong=UQAX(right,[SPAX(26*k),SPAX(Math.pow(k,26)>1e9?Math.pow(26,k-1):Math.pow(k,26)),SPAX(Math.pow(26,k+1)),SPAX(Math.pow(26,k-1))],3); if(wrong.length<3) return null;
       return {index:'q:19·crypt.work[t;'+k+']', lines:[[k+' \\text{ wheels, each set to one of } 26 \\text{ turns}','the starting turns']], ask:'How many starting turns are there in all?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stages multiply: 26 for each of '+k+' wheels, 26^'+k+' = '+right+'.'}; }
     const p=1+rnd(3); let num=1; for(let i=0;i<2*p;i++) num*=26-i; let den=Math.pow(2,p); for(let i=2;i<=p;i++) den*=i; const v=num/den;
-    const right=SPAX(v), wrong=UQAX(right,[SPAX(num/Math.pow(2,p)),SPAX(num),SPAX(num/den*Math.pow(2,p)/ (p>1?1:2)),SPAX(v*2),SPAX(Math.round(v/2))],3); if(wrong.length<3) return null;
+    const right=SPAX(v), wrong=UQAX(right,[SPAX(num/Math.pow(2,p)),SPAX(num),SPAX(num/den*Math.pow(2,p)/ (p>1?1:2)),SPAX(v*2),SPAX(Math.round(v/2)),SPAX(Math.pow(26,2*p)/den)],3); if(wrong.length<3) return null;
     return {index:'q:19·crypt.work[b;'+p+']', lines:[[p+' \\text{ pair'+(p>1?'s':'')+' of letters swapped on the board}','the board']], ask:'How many ways are there to choose the pairs?', right, opts:shuffle([right,...wrong]), lead:'', why:'Choose the '+(2*p)+' letters in order: '+SPAX(num)+'. Forget the order within each pair (2^'+p+')'+(p>1?' and the order of the pairs ('+p+'!)':'')+': '+right+'.'}; }},
   {id:'19·crypt.word',step:'19·crypt',mode:'word',label:'a letter never itself',open:()=>measured('19·crypt'),make(){
     const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ', crib=['WEATHER','REPORT','GENERAL','NOTHING','ATTACK'][rnd(5)], L=crib.length;
@@ -18265,9 +18279,9 @@ QP.push({id:'21·nav.work',step:'21·nav',mode:'work',label:'noon sun and two mi
 const DGAX=x=>x*Math.PI/180, DEGAX=x=>x*180/Math.PI;
 QP.push({id:'21·phys.work',step:'21·phys',mode:'work',label:'slopes, curves and throws',open:()=>measured('21·phys'),make(){
     const ask=rnd(3);
-    if(ask===0){ const mu=[0.3,0.4,0.5,0.6,0.7,0.8,0.9][rnd(7)], a=DEGAX(Math.atan(mu)), right=Math.round(a)+'°', wrong=UQAX(right,[Math.round(DEGAX(Math.asin(mu)))+'°',Math.round(DEGAX(Math.acos(mu)))+'°',Math.round(mu*90)+'°',Math.round(90-a)+'°'],3); if(wrong.length<3) return null;
+    if(ask===0){ const mu=[0.3,0.4,0.5,0.6,0.7,0.8,0.9][rnd(7)], a=DEGAX(Math.atan(mu)), right=Math.round(a)+'°', wrong=UQAX(right,[Math.round(DEGAX(Math.asin(mu)))+'°',Math.round(DEGAX(Math.acos(mu)))+'°',Math.round(mu*90)+'°',Math.round(90-a)+'°',Math.round(45*mu)+'°',Math.round(DEGAX(Math.atan(mu/2)))+'°'],3); if(wrong.length<3) return null;
       return {index:'q:21·phys.work[s;'+mu+']', lines:[['\\mu = '+mu,'the slope and the block']], ask:'What is the steepest slope the block holds on, to the nearest degree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slope: the block holds exactly when tan α ≤ μ, whatever it weighs. tan α = '+mu+' at α ≈ '+right+'.'}; }
-    if(ask===1){ const v=[10,15,20,25,30][rnd(5)], r=[40,50,80,100,150,200][rnd(6)], m=v*v/(r*9.8); if(m>1.2) return null; const right=DECAX(m,2), wrong=UQAX(right,[DECAX(v/(r*9.8),2),DECAX(v*v/r,2),DECAX(r*9.8/(v*v),2),DECAX(m*2,2)],3); if(wrong.length<3) return null;
+    if(ask===1){ const [v,r]=pick(LVC('21phys.vr',()=>LX([10,15,20,25,30],[40,50,80,100,150,200]).filter(([v,r])=>v*v/(r*9.8)<=1.2))), m=v*v/(r*9.8); const right=DECAX(m,2), wrong=UQAX(right,[DECAX(v/(r*9.8),2),DECAX(v*v/r,2),DECAX(r*9.8/(v*v),2),DECAX(m*2,2)],3); if(wrong.length<3) return null;
       return {index:'q:21·phys.work[c;'+v+';'+r+']', lines:[['v = '+v+' \\text{ m/s},\\ \\ r = '+r+' \\text{ m}','a flat curve'],['g \\approx 9.8 \\text{ m/s}^2','']], ask:'What is the least μ that holds the car on the curve?', right, opts:shuffle([right,...wrong]), lead:'', why:'Round: the car needs v² ÷ r = '+(v*v)+' ÷ '+r+' = '+DECAX(v*v/r,2)+' m/s² toward the centre; friction gives at most μ · 9.8. So μ ≥ '+right+'.'}; }
     const v=[10,12,15,20,25][rnd(5)], th=[15,30,45,60,75][rnd(5)], R=v*v*Math.sin(DGAX(2*th))/9.8, right=Math.round(R)+' m', wrong=UQAX(right,[Math.round(v*v*Math.sin(DGAX(th))/9.8)+' m',Math.round(v*v/9.8)+' m',Math.round(2*R)+' m',Math.round(v*Math.sin(DGAX(2*th))/9.8)+' m'],3); if(wrong.length<3) return null;
     return {index:'q:21·phys.work[t;'+v+';'+th+']', lines:[['v = '+v+' \\text{ m/s},\\ \\ \\theta = '+th+'^\\circ','thrown over level ground'],['g \\approx 9.8 \\text{ m/s}^2','']], ask:'How far away does the stone land, to the nearest metre?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slant-throw: v² sin 2θ ÷ g = '+(v*v)+' · sin '+(2*th)+'° ÷ 9.8 ≈ '+right+'.'+(th!==45?' The angle '+(90-th)+'° lands it at the same place.':' 45° goes farthest.')}; }},
@@ -18668,7 +18682,7 @@ QP.push({id:'25·eng.work',step:'25·eng',mode:'work',label:'cables and chains',
 /* ----- annex 25·now Which numbers stay home: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'25·now.work',step:'25·now',mode:'work',label:'run the step',open:()=>measured('25·now'),make(){
     const c=[-2,-1.5,-1,-0.75,-0.5,0.25,0.3,0.5,1,-2.5,0.1][rnd(11)], z1=c, z2=c*c+c, z3=z2*z2+c, ask=rnd(2);
-    if(ask){ const right=MNAX(DECAX(z3,4)), wrong=UQAX(right,[MNAX(DECAX(z2,4)),MNAX(DECAX(z2*z2,4)),MNAX(DECAX(z2+c,4)),MNAX(DECAX(z3*z3+c,4))],3); if(wrong.length<3) return null;
+    if(ask){ const right=MNAX(DECAX(z3,4)), wrong=UQAX(right,[MNAX(DECAX(z2,4)),MNAX(DECAX(z2*z2,4)),MNAX(DECAX(z2+c,4)),MNAX(DECAX(z3*z3+c,4)),MNAX(DECAX(z3+c,4)),MNAX(DECAX(c*c,4))],3); if(wrong.length<3) return null;
       return {index:'q:25·now.work[z;'+c+']', lines:[[MNAX('z_{n+1} = z_n^2 + c,\\ \\ z_0 = 0,\\ \\ c = '+c),'the run of c']], ask:'What is z₃?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('z₁ = c = '+c+', z₂ = z₁² + c = '+DECAX(z2,4)+', z₃ = z₂² + c = '+DECAX(z3,4)+'.')}; }
     const home=c>=-2&&c<=0.25, right=home?'it stays home':'it escapes', wrong=[home?'it escapes':'it stays home',home?'it escapes, since |c| > 0':'it stays home, since |c| ≤ 2',home?'no one can tell without running it for ever':'no one can tell without running it for ever'];
     const W=UQAX(right,wrong,3); if(W.length<3) W.push('it stays home only for the first 1000 steps');
@@ -18709,7 +18723,7 @@ QP.push({id:'26·phys.work',step:'26·phys',mode:'work',label:'swings and impeda
 /* ----- annex 27·chem Can every reaction be balanced: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'27·chem.work',step:'27·chem',mode:'work',label:'one balance, up to stretching',open:()=>measured('27·chem'),make(){
     const ask=rnd(2);
-    if(ask){ const k=[2,3,4][rnd(3)], a=DEGAX(Math.acos(-1/(k-1))), right=DECAX(a,2)+'°', wrong=UQAX(right,[DECAX(360/k,2)+'°',DECAX(180/k,2)+'°',DECAX(DEGAX(Math.acos(-1/k)),2)+'°','90°'],3); if(wrong.length<3) return null;
+    if(ask){ const k=[2,3,4][rnd(3)], a=DEGAX(Math.acos(-1/(k-1))), right=DECAX(a,2)+'°', wrong=UQAX(right,[DECAX(360/k,2)+'°',DECAX(180/k,2)+'°',DECAX(DEGAX(Math.acos(-1/k)),2)+'°','90°',DECAX(DEGAX(Math.acos(-1/(k+1))),2)+'°'],3); if(wrong.length<3) return null;
       return {index:'q:27·chem.work[a;'+k+']', lines:[[k+' \\text{ vectors of length 1 adding to } 0','every two at one angle']], ask:'At what angle does each pair meet?', right, opts:shuffle([right,...wrong]), lead:'', why:'Equal-spread: cos θ = −1∕(k − 1) = −1∕'+(k-1)+', so θ ≈ '+right+'.'}; }
     const R=[['CH_4 + O_2 \\to CO_2 + H_2O',[1,2,1,2]],['C_2H_6 + O_2 \\to CO_2 + H_2O',[2,7,4,6]],['C_3H_8 + O_2 \\to CO_2 + H_2O',[1,5,3,4]],['C_4H_{10} + O_2 \\to CO_2 + H_2O',[2,13,8,10]],['H_2 + O_2 \\to H_2O',[2,1,2]],['N_2 + H_2 \\to NH_3',[1,3,2]],['Fe + O_2 \\to Fe_2O_3',[4,3,2]],['Al + O_2 \\to Al_2O_3',[4,3,2]],['C_2H_4 + O_2 \\to CO_2 + H_2O',[1,3,2,2]]][rnd(9)];
     const s=a=>a.join(' : '), c=R[1], right=s(c), wrong=UQAX(right,[s(c.map((x,i)=>i===1?x+1:x)),s(c.map(x=>x*2)),s(c.map((x,i)=>i===c.length-1?x+1:x)),s(c.map(()=>1)),s(c.map((x,i)=>i===0?x+1:x))],3); if(wrong.length<3) return null;
@@ -18758,7 +18772,7 @@ QP.push({id:'27·econ.work',step:'27·econ',mode:'work',label:'one new order',op
     if(ask){ const c=[0.3,0.4,0.5,0.6][rnd(4)], k=[1,2,3,4][rnd(4)], v=Math.pow(c,k+1)/(1-c), right=DECAX(v,4), wrong=UQAX(right,[DECAX(Math.pow(c,k)/(1-c),4),DECAX(Math.pow(c,k+1),4),DECAX(1/(1-c),4),DECAX(Math.pow(c,k+1)*(1-c),4)],3); if(wrong.length<3) return null;
       return {index:'q:27·econ.work[r;'+c+';'+k+']', lines:[['\\text{every column of } A \\text{ adds to at most } '+c,'an input–output table'],['\\text{rounds } 0 \\text{ to } '+k+' \\text{ counted}','I + A + \\dots + A^{'+k+'}']], ask:'At most what share of the total demand do the rounds left out add?', right, opts:shuffle([right,...wrong]), lead:'', why:'Every-round: the rounds after the kth add up to at most c^(k+1)∕(1 − c) = '+c+'^'+(k+1)+' ÷ '+DECAX(1-c,2)+' ≈ '+right+' of it.'}; }
     const a=[0.1,0.2,0.3][rnd(3)], b=[0.1,0.2,0.3][rnd(3)], c=[0.1,0.2][rnd(2)], d=[0.2,0.3,0.4][rnd(4)%3], L=LEOAX(a,b,c,d), j=rnd(2), m=L.i[0][j]+L.i[1][j];
-    const right=DECAX(m,2), wrong=UQAX(right,[DECAX(1/(1-(j?b+d:a+c)),2),DECAX(L.i[j][j],2),DECAX(1+(j?b+d:a+c),2),DECAX(L.i[0][1-j]+L.i[1][1-j],2)],3); if(wrong.length<3) return null;
+    const right=DECAX(m,2), wrong=UQAX(right,[DECAX(1/(1-(j?b+d:a+c)),2),DECAX(L.i[j][j],2),DECAX(1+(j?b+d:a+c),2),DECAX(L.i[0][1-j]+L.i[1][1-j],2),DECAX(m-1,2),DECAX(L.i[1-j][j],2)],3); if(wrong.length<3) return null;
     return {index:'q:27·econ.work[m;'+[a,b,c,d,j].join(';')+']', lines:[['A = \\begin{pmatrix} '+a+' & '+b+' \\\\ '+c+' & '+d+' \\end{pmatrix}','farms, factories'],['\\text{one more dollar of final demand for '+(j?'factories':'farms')+'}','']], ask:'How much total output does it bring, to two places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Order-column: column '+(j+1)+' of (I − A)⁻¹ is ('+DECAX(L.i[0][j],3)+', '+DECAX(L.i[1][j],3)+'), and its sum is '+right+'.'}; }},
   {id:'27·econ.word',step:'27·econ',mode:'word',label:'every industry buys from every other',open:()=>measured('27·econ'),make(){
     const a=[0.1,0.2,0.3][rnd(3)], b=[0.2,0.3][rnd(2)], c=[0.1,0.2][rnd(2)], d=[0.2,0.3,0.4][rnd(3)], d1=[10,20,30][rnd(3)], d2=[20,40,50][rnd(3)], L=LEOAX(a,b,c,d), x1=L.i[0][0]*d1+L.i[0][1]*d2, x2=L.i[1][0]*d1+L.i[1][1]*d2;
@@ -18856,7 +18870,7 @@ QP.push({id:'28·bio.work',step:'28·bio',mode:'work',label:'averaged over a loo
 /* ----- annex 28·econ What does a shopper buy: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'28·econ.work',step:'28·econ',mode:'work',label:'the spending share',open:()=>measured('28·econ'),make(){
     const al=[0.25,0.3,0.4,0.5,0.6,0.75][rnd(6)], m=[60,100,120,200,600][rnd(5)], px=[1,2,3,4,5][rnd(5)], F=rnd(2), q=F?al*m/px:(1-al)*m/px;
-    const right=DECAX(q,2), wrong=UQAX(right,[DECAX(F?(1-al)*m/px:al*m/px,2),DECAX(F?al*m:(1-al)*m,2),DECAX(m/px/2,2),DECAX(F?al*px:(1-al)*px,2)],3); if(wrong.length<3) return null;
+    const right=DECAX(q,2), wrong=UQAX(right,[DECAX(F?(1-al)*m/px:al*m/px,2),DECAX(F?al*m:(1-al)*m,2),DECAX(m/px/2,2),DECAX(F?al*px:(1-al)*px,2),DECAX(m/px,2),DECAX(F?m/(al*px):m/((1-al)*px),2)],3); if(wrong.length<3) return null;
     return {index:'q:28·econ.work['+[al,m,px,F].join(';')+']', lines:[['U = '+al+'\\ln x + '+DECAX(1-al,2)+'\\ln y','satisfaction'],['m = '+m+',\\ \\ \\text{the price of '+(F?'x':'y')+' is } '+px,'the budget']], ask:'How much '+(F?'x':'y')+' is in the best basket?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spending-share: the shopper spends the share '+(F?al:DECAX(1-al,2))+' of the budget on '+(F?'x':'y')+', whatever the prices: '+(F?al:DECAX(1-al,2))+' \u00b7 '+m+' \u00f7 '+px+' = '+right+'.'}; }},
   {id:'28·econ.word',step:'28·econ',mode:'word',label:'the worth of one more dollar',open:()=>measured('28·econ'),make(){
     const m=[40,60,80,120,600][rnd(5)], F=rnd(2);
@@ -19050,9 +19064,9 @@ QP.push({id:'30·comp.work',step:'30·comp',mode:'work',label:'surprise and capa
 /* ----- annex 30·econ Can a chart beat the market: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'30·econ.work',step:'30·econ',mode:'work',label:'the drift and the wobble',open:()=>measured('30·econ'),make(){
     const ask=rnd(2);
-    if(ask){ const m=[5,10,20,50,100,500][rnd(6)], a=[0.05,0.01][rnd(2)], v=1-Math.pow(1-a,m), right=Math.round(100*v)+'%', wrong=UQAX(right,[Math.round(100*Math.min(1,m*a))+'%',Math.round(100*a)+'%',Math.round(100*Math.pow(a,1/m))+'%',Math.round(100*Math.pow(1-a,m))+'%'],3); if(wrong.length<3) return null;
+    if(ask){ const m=[5,10,20,50,100,500][rnd(6)], a=[0.05,0.01][rnd(2)], v=1-Math.pow(1-a,m), right=Math.round(100*v)+'%', wrong=UQAX(right,[Math.round(100*Math.min(1,m*a))+'%',Math.round(100*a)+'%',Math.round(100*Math.pow(a,1/m))+'%',Math.round(100*Math.pow(1-a,m))+'%',Math.round(100*(1-Math.pow(a,m)))+'%'],3); if(wrong.length<3) return null;
       return {index:'q:30·econ.work[m;'+m+';'+a+']', lines:[[m+' \\text{ trading rules, each tested apart}','none with any real edge'],['\\text{each passes by luck with chance } '+a,'']], ask:'What is the chance that at least one passes?', right, opts:shuffle([right,...wrong]), lead:'', why:'At-least-one: 1 \u2212 (1 \u2212 '+a+')^'+m+' \u2248 '+right+'; on average '+DECAX(m*a,2)+' pass. A winner among many tries is no evidence by itself.'}; }
-    const mu=[0.02,0.04,0.05][rnd(3)], sg=[1,1.2,1.5,2][rnd(4)], t=[1,25,100,250,1000][rnd(5)], v=mu/sg*Math.sqrt(t), right=DECAX(v,3), wrong=UQAX(right,[DECAX(mu/sg*t,3),DECAX(mu/sg,3),DECAX(mu*t/(sg*t),4),DECAX(sg/mu/Math.sqrt(t),3)],3); if(wrong.length<3) return null;
+    const mu=[0.02,0.04,0.05][rnd(3)], sg=[1,1.2,1.5,2][rnd(4)], t=[25,100,250,1000][rnd(4)], v=mu/sg*Math.sqrt(t), /* more than one period, or the scaling has nothing to show */ right=DECAX(v,3), wrong=UQAX(right,[DECAX(mu/sg*t,3),DECAX(mu/sg,3),DECAX(mu*t/(sg*t),4),DECAX(sg/mu/Math.sqrt(t),3)],3); if(wrong.length<3) return null;
     return {index:'q:30·econ.work[d;'+mu+';'+sg+';'+t+']', lines:[['\\mu = '+mu+'\\%,\\ \\ \\sigma = '+sg+'\\%','a day\u2019s drift and wobble'],['t = '+t+' \\text{ days}','']], ask:'By how many widths does the drift stand out against the wobble?', right, opts:shuffle([right,...wrong]), lead:'', why:'Drift-and-width: the drift grows like t and the wobble like \u221at, so (\u03bc\u2215\u03c3)\u221at = ('+mu+' \u00f7 '+sg+') \u00b7 \u221a'+t+' \u2248 '+right+'.'}; }},
   {id:'30·econ.word',step:'30·econ',mode:'word',label:'many tries make winners',open:()=>measured('30·econ'),make(){
     const F=rnd(2);
@@ -19160,8 +19174,8 @@ QP.push({id:'30·phys.work',step:'30·phys',mode:'work',label:'shares fall as e 
 /* ----- annex 30·stat Did the treatment work: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'30·stat.work',step:'30·stat',mode:'work',label:'between and within',open:()=>measured('30·stat'),make(){
     const ask=rnd(2);
-    if(ask){ const s2=[1,2.5,4,10.5][rnd(4)], d=[1,2,3][rnd(3)], n=Math.ceil(15.68*s2/(d*d)); if(n<3) return null;
-      const right=String(n), wrong=UQAX(right,[String(Math.ceil(7.84*s2/(d*d))),String(Math.ceil(15.68*s2/d)),String(Math.ceil(15.68*Math.sqrt(s2)/d)),String(Math.ceil(3.92*s2/(d*d)))].filter(x=>x!=='0'&&x!=='1'),3); if(wrong.length<3) return null;
+    if(ask){ const [s2,d]=pick(LVC('30stat.sd',()=>LX([1,2.5,4,10.5],[1,2,3]).filter(([s2,d])=>Math.ceil(15.68*s2/(d*d))>=3))), n=Math.ceil(15.68*s2/(d*d));
+      const right=String(n), wrong=UQAX(right,[String(Math.ceil(7.84*s2/(d*d))),String(Math.ceil(15.68*s2/d)),String(Math.ceil(15.68*Math.sqrt(s2)/d)),String(Math.ceil(3.92*s2/(d*d))),String(Math.ceil(31.36*s2/(d*d))),String(Math.ceil(3.92*Math.sqrt(s2)/d))].filter(x=>x!=='0'&&x!=='1'),3); if(wrong.length<3) return null;
       return {index:'q:30·stat.work[n;'+s2+';'+d+']', lines:[['\\sigma^2 = '+s2+',\\ \\ d = '+d,'spread, and the difference to find'],['\\text{power } 0.8 \\text{ at the one-in-twenty line}','']], ask:'How many plots does each group need?', right, opts:shuffle([right,...wrong]), lead:'', why:'Plots-needed: n = 2(2.80)²σ²/d² ≈ 15.68 · '+s2+' ÷ '+(d*d)+' ≈ '+DECAX(15.68*s2/(d*d),1)+', so '+n+'.'}; }
     const k=[3,4][rnd(2)], m=[4,5,6][rnd(3)], N=k*m, b=[6,10,12,20][rnd(4)], w=[2,2.5,3,4][rnd(4)], B=(k-1)*b, W=(N-k)*w, right=DECAX(b/w,2), wrong=UQAX(right,[DECAX(B/W,2),DECAX((B/k)/(W/N),2),DECAX((B/(k-1))/(W/(N-1)),2),DECAX(w/b,2)],3); if(wrong.length<3) return null;
     return {index:'q:30·stat.work[f;'+k+';'+m+';'+b+';'+w+']', lines:[[k+' \\text{ mixes, '+m+' plots each}','N = '+N],['B = '+DECAX(B,1)+',\\ \\ W = '+DECAX(W,1),'squares-split']], ask:'What is F?', right, opts:shuffle([right,...wrong]), lead:'', why:'F = (B/(k − 1)) ÷ (W/(N − k)) = ('+DECAX(B,1)+'/'+(k-1)+') ÷ ('+DECAX(W,1)+'/'+(N-k)+') = '+b+' ÷ '+w+' = '+right+'.'}; }},
@@ -19185,7 +19199,7 @@ QP.push({id:'31·eng.work',step:'31·eng',mode:'work',label:'ways of shaking',op
     const ask=rnd(2);
     if(ask){ const a=1+rnd(9), b=1+rnd(9), v=(3*a+4*b)/5, right=DECAX(v,2), wrong=UQAX(right,[DECAX((4*a+3*b)/5,2),String(a+b),DECAX((3*a+4*b)/25,2),DECAX(Math.sqrt(a*a+b*b),2)],3); if(wrong.length<3) return null;
       return {index:'q:31·eng.work[f;'+a+';'+b+']', lines:[['F = ('+a+', '+b+')','a push on two floors'],['e_1 = (\\tfrac35, \\tfrac45)','the first way of shaking']], ask:'What part of the push drives the first way?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shared-push: only the reading F · e₁ = (3 · '+a+' + 4 · '+b+') ÷ 5 = '+right+' drives it.'}; }
-    const m=[2,4,5,10][rnd(4)], w=[1,1.5,2,3][rnd(4)], L=m*w*w, right=DECAX(w,2), wrong=UQAX(right,[DECAX(L/m,2),DECAX(Math.sqrt(L),2),DECAX(Math.sqrt(m/L),2),DECAX(Math.sqrt(L*m),2)],3); if(wrong.length<3) return null;
+    const m=[2,4,5,10][rnd(4)], w=[1,1.5,2,3][rnd(4)], L=m*w*w, right=DECAX(w,2), wrong=UQAX(right,[DECAX(L/m,2),DECAX(Math.sqrt(L),2),DECAX(Math.sqrt(m/L),2),DECAX(Math.sqrt(L*m),2),DECAX(L/(2*m),2),DECAX(m/L,2)],3); if(wrong.length<3) return null;
     return {index:'q:31·eng.work[w;'+m+';'+w+']', lines:[['m\\,x\'\' = -Kx,\\ \\ m = '+m,'the pulls between floors'],['\\lambda_1 = '+DECAX(L,2),'a stretch of K']], ask:'At what pace ω does that way swing?', right, opts:shuffle([right,...wrong]), lead:'', why:'Symmetric-sway: ω = √(λ ÷ m) = √('+DECAX(L,2)+' ÷ '+m+') = '+right+'.'}; }},
   {id:'31·eng.word',step:'31·eng',mode:'word',label:'the tower in the wind',open:()=>measured('31·eng'),make(){
     const k=[2,4,9,16][rnd(4)], right=DECAX(4/Math.sqrt(k),2)+' s', wrong=UQAX(right,[DECAX(4/k,2)+' s',DECAX(4*Math.sqrt(k),2)+' s',DECAX(4*k,2)+' s','4 s'],3); if(wrong.length<3) return null;
@@ -19236,7 +19250,7 @@ QP.push({id:'31·phys.work',step:'31·phys',mode:'work',label:'the filter as a s
     const ask=rnd(2);
     if(ask){ const N=[['water',1.33],['glass',1.5],['a diamond',2.42]][rnd(3)], n=N[1], d=180/Math.PI, right=DECAX(Math.atan(n)*d,1)+'°', wrong=UQAX(right,[DECAX(Math.asin(1/n)*d,1)+'°',DECAX(Math.atan(1/n)*d,1)+'°',DECAX(Math.acos(1/n)*d,1)+'°','45°'],3); if(wrong.length<3) return null;
       return {index:'q:31·phys.work[b;'+n+']', lines:[['n = '+n,N[0]]], ask:'At what angle from straight down does light off '+N[0]+' shake only level?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level-glare: tan θ = n, so θ = arctan '+n+' ≈ '+right+'.'}; }
-    const t=[20,30,45,60,70][rnd(5)], c=Math.cos(t*Math.PI/180), right=DECAX(100*c*c,1)+'%', wrong=UQAX(right,[DECAX(100*c,1)+'%','50%',DECAX(50*c*c,1)+'%',DECAX(100*(1-c*c),1)+'%'],3); if(wrong.length<3) return null;
+    const t=[20,30,45,60,70][rnd(5)], c=Math.cos(t*Math.PI/180), right=DECAX(100*c*c,1)+'%', wrong=UQAX(right,[DECAX(100*c,1)+'%','50%',DECAX(50*c*c,1)+'%',DECAX(100*(1-c*c),1)+'%',DECAX(100*(1-c),1)+'%'],3); if(wrong.length<3) return null;
     return {index:'q:31·phys.work[m;'+t+']', lines:[['\\text{light shaking along one line}','glare'],['\\theta = '+t+'^\\circ \\text{ to the filter’s line}','']], ask:'What share of its brightness passes?', right, opts:shuffle([right,...wrong]), lead:'', why:'Filter-shadow: |PE|² = |E|² cos²θ = cos² '+t+'° ≈ '+right+'.'}; }},
   {id:'31·phys.word',step:'31·phys',mode:'word',label:'three filters at the lake',open:()=>measured('31·phys'),make(){
     const t=[15,30,45,60][rnd(4)], a=t*Math.PI/180, v=0.5*Math.pow(Math.cos(a)*Math.sin(a),2), right=DECAX(100*v,2)+'%', wrong=UQAX(right,['0%',DECAX(50*Math.pow(Math.cos(a),2),2)+'%',DECAX(100*Math.pow(Math.cos(a)*Math.sin(a),2),2)+'%','50%'],3); if(wrong.length<3) return null;
@@ -19486,7 +19500,7 @@ QP.push({id:'35·chem.work',step:'35·chem',mode:'work',label:'turning lines and
     const ask=rnd(3);
     if(ask===2){ const D=[300,400,498,945,243][rnd(5)], v=119627/D, right=DECAX(v,0)+' nm', wrong=UQAX(right,[DECAX(v*2,0)+' nm',DECAX(1240/D*100,0)+' nm',DECAX(D*1.2,0)+' nm',DECAX(v/2,0)+' nm'],3); if(wrong.length<3) return null;
       return {index:'q:35·chem.work[d;'+D+']', lines:[['D = '+D+' \\text{ kJ per mole}','a bond'],['N_A hc = 0.1196 \\text{ J m per mole}','']], ask:'Below what wavelength can one lump of light break it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Break-threshold: λ below N_A hc ÷ D = 0.1196 ÷ '+(D*1000)+' m ≈ '+right+'.'}; }
-    if(ask===1){ const B=[10,20,57.636][rnd(3)], J=rnd(4), right=DECAX(2*B*(J+1),3)+' GHz', wrong=UQAX(right,[DECAX(B*(J+1),3)+' GHz',DECAX(2*B*J,3)+' GHz',DECAX(B*(J+1)*(J+2),3)+' GHz',DECAX(2*B*(J+2),3)+' GHz'].filter(x=>x!=='0 GHz'),3); if(wrong.length<3) return null;
+    if(ask===1){ const B=[10,20,57.636][rnd(3)], J=rnd(4), right=DECAX(2*B*(J+1),3)+' GHz', wrong=UQAX(right,[DECAX(B*(J+1),3)+' GHz',DECAX(2*B*J,3)+' GHz',DECAX(B*(J+1)*(J+2),3)+' GHz',DECAX(2*B*(J+2),3)+' GHz',DECAX(B*(J+1)/2,3)+' GHz',DECAX(3*B*(J+1),3)+' GHz'].filter(x=>x!=='0 GHz'),3); if(wrong.length<3) return null;
       return {index:'q:35·chem.work[t;'+B+';'+J+']', lines:[['B = '+B+' \\text{ GHz}','a molecule of two atoms'],['J = '+J+' \\to '+(J+1),'']], ask:'At what frequency is the line?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turning-lines: 2B(J + 1) = 2 · '+B+' · '+(J+1)+' = '+right+'. The lines are 2B apart.'}; }
     const P=[['H³⁵Cl','D³⁵Cl',35/36,70/37,2886],['¹²C¹⁶O','¹³C¹⁶O',192/28,208/29,2143]][rnd(2)], v=P[4]*Math.sqrt(P[2]/P[3]), right=DECAX(v,0)+' cm⁻¹', wrong=UQAX(right,[DECAX(P[4]*P[2]/P[3],0)+' cm⁻¹',DECAX(P[4]*Math.sqrt(P[3]/P[2]),0)+' cm⁻¹',P[4]+' cm⁻¹',DECAX(P[4]*P[3]/P[2],0)+' cm⁻¹'],3); if(wrong.length<3) return null;
     return {index:'q:35·chem.work[i;'+P[0]+']', lines:[['\\tilde\\nu = '+P[4]+' \\text{ cm}^{-1}','the shake of '+P[0]],['\\mu = '+DECAX(P[2],4)+' \\to '+DECAX(P[3],4),P[1]+', the same bond']], ask:'Where is the shake of '+P[1]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shaking-line: f = (1/2π)√(κ/μ), and κ is the same bond, so '+P[4]+' · √('+DECAX(P[2],4)+' ÷ '+DECAX(P[3],4)+') ≈ '+right+'.'}; }},
@@ -19674,7 +19688,7 @@ QP.push({id:'37·crypt.work',step:'37·crypt',mode:'work',label:'flip, key and l
 /* ----- annex 37·eng Why does a room change a song: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'37·eng.work',step:'37·eng',mode:'work',label:'ringing, levels and howls',open:()=>measured('37·eng'),make(){
     const ask=rnd(3);
-    if(ask===2){ const S=[85,88,90,92][rnd(4)], P=[1,2,10,100][rnd(4)], r=[1,2,4,10][rnd(4)], v=S+10*Math.log10(P)-20*Math.log10(r), right=DECAX(v,1)+' dB', wrong=UQAX(right,[DECAX(S+20*Math.log10(P)-20*Math.log10(r),1)+' dB',DECAX(S+10*Math.log10(P)-10*Math.log10(r),1)+' dB',DECAX(S+P-r,1)+' dB',DECAX(S+10*Math.log10(P),1)+' dB'],3); if(wrong.length<3) return null;
+    if(ask===2){ const S=[85,88,90,92][rnd(4)], [P,r]=pick(LX([1,2,10,100],[1,2,4,10]).filter(([P,r])=>P>1||r>1)), v=S+10*Math.log10(P)-20*Math.log10(r), /* not 1 W at 1 m, where every slip reads the same */ right=DECAX(v,1)+' dB', wrong=UQAX(right,[DECAX(S+20*Math.log10(P)-20*Math.log10(r),1)+' dB',DECAX(S+10*Math.log10(P)-10*Math.log10(r),1)+' dB',DECAX(S+P-r,1)+' dB',DECAX(S+10*Math.log10(P),1)+' dB',DECAX(S+10*Math.log10(P)+20*Math.log10(r),1)+' dB',DECAX(S-20*Math.log10(r),1)+' dB'],3); if(wrong.length<3) return null;
       return {index:'q:37·eng.work[l;'+S+';'+P+';'+r+']', lines:[['S = '+S+' \\text{ dB (1 W, 1 m)}','a loudspeaker'],['P = '+P+' \\text{ W},\\ \\ r = '+r+' \\text{ m}','open air']], ask:'What level does it make there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Loudspeaker: S + 10 log₁₀ P − 20 log₁₀ r = '+S+' + '+DECAX(10*Math.log10(P),1)+' − '+DECAX(20*Math.log10(r),1)+' ≈ '+right+'.'}; }
     if(ask===1){ const g=[[20,-6,10],[30,-10,6],[12,12,-20]][rnd(3)], v=g.reduce((s,x)=>s+x,0), f=x=>String(x).replace('-','−'), right=f(v)+' dB', wrong=UQAX(right,[f(2*v)+' dB',f(Math.abs(g[0])+Math.abs(g[1])+Math.abs(g[2]))+' dB',f(Math.max(...g))+' dB',f(Math.round(v/3))+' dB'],3); if(wrong.length<3) return null;
       return {index:'q:37·eng.work[c;'+g.join(';')+']', lines:[['\\text{gains } '+g.map(f).join(',\\ ')+' \\text{ dB}','three stages in a chain']], ask:'What is the gain of the chain?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level-chain: gains multiply as numbers and add in decibels: '+g.map(f).join(' + ').replace(/\+ −/g,'− ')+' = '+right+'.'}; }
@@ -19697,12 +19711,12 @@ const ORDAX=(()=>{ const o=[]; for(let s=1;s<=8;s++) for(let n=1;n<=s;n++){ cons
 const LETAX='spdf', MISSAX=[24,29,41,42,44,45,46,47,57,58,64,78,79]; /* fillings the rule misses, as measured: left out */
 const FILLAX=Z=>{ const out=[]; let left=Z; for(const [n,l] of ORDAX){ if(left<=0) break; const k=Math.min(left,2*(2*l+1)); out.push([n,l,k]); left-=k; } return out; };
 QP.push({id:'38·chem.work',step:'38·chem',mode:'work',label:'filling by n + ℓ',open:()=>measured('38·chem'),make(){
-    const Z=3+rnd(54); if(MISSAX.includes(Z)) return null; const F=FILLAX(Z), sh=F.filter(x=>x[0]>1||x[1]>0), [n,l,k]=pick(sh.slice(-3)); const name=n+LETAX[l];
+    const Z=pick(LRG(3,56).filter(z=>!MISSAX.includes(z))); const F=FILLAX(Z), sh=F.filter(x=>x[0]>1||x[1]>0), [n,l,k]=pick(sh.slice(-3)); const name=n+LETAX[l];
     const right=String(k), wrong=UQAX(right,[2*(2*l+1),k-1,k+1,k+2,Math.max(0,k-2),Z%10],3); if(wrong.length<3) return null;
     return {index:'q:38·chem.work['+Z+';'+name+']', lines:[['an atom with '+Z+' electrons','given'],['it fills by the n-plus-ℓ order','the n-plus-ℓ technique']], ask:'How many electrons sit in '+name+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'In n + ℓ order: '+F.map(([a,b,c])=>a+LETAX[b]+'('+c+')').join(' ')+'.'}; }},
   {id:'38·chem.word',step:'38·chem',mode:'word',label:'where a cloud is thickest',open:()=>measured('38·chem'),make(){
     const n=1+rnd(4), l=n-1, r=(n*n*0.0529), E=13.6/(n*n), two=rnd(2), name=n+LETAX[l];
-    const MN=x=>String(x).replace(/^-/,'−'), right=two?MN((-E).toFixed(2))+' eV':r.toFixed(3)+' nm', wrong=two?UQAX(right,[MN((-13.6/n).toFixed(2))+' eV',MN((-13.6/((n+1)*(n+1))).toFixed(2))+' eV',MN((-13.6*n*n).toFixed(1))+' eV',MN((-13.6/(l*l||4)).toFixed(2))+' eV'],3):UQAX(right,[(n*0.0529).toFixed(3)+' nm',((n+1)*(n+1)*0.0529).toFixed(3)+' nm',(2*n*n*0.0529).toFixed(3)+' nm',(0).toFixed(3)+' nm'],3); if(wrong.length<3) return null;
+    const MN=x=>String(x).replace(/^-/,'−'), right=two?MN((-E).toFixed(2))+' eV':r.toFixed(3)+' nm', wrong=two?UQAX(right,[MN((-13.6/n).toFixed(2))+' eV',MN((-13.6/((n+1)*(n+1))).toFixed(2))+' eV',MN((-13.6*n*n).toFixed(1))+' eV',MN((-13.6/(l*l||4)).toFixed(2))+' eV',MN((13.6/(n*n)).toFixed(2))+' eV'],3):UQAX(right,[(n*0.0529).toFixed(3)+' nm',((n+1)*(n+1)*0.0529).toFixed(3)+' nm',(2*n*n*0.0529).toFixed(3)+' nm',(0).toFixed(3)+' nm'],3); if(wrong.length<3) return null;
     return {index:'q:38·chem.word['+n+';'+two+']', a3:['38·chem.word',DASH,DASH], story:'A hydrogen atom’s electron is in the '+name+' shape, p · e^(−r/'+n+'r₀) with p a still polynomial of degree '+l+'. Take r₀ = 0.0529 nm.', lines:[], ask:two?'What is its energy?':'At what distance from the nucleus is the chance per unit distance largest?', right, opts:shuffle([right,...wrong]), lead:'', why:two?'Times-a-fade technique: a = (ℓ + 1) r₀ and E = −13.6 eV/(ℓ + 1)² = −13.6/'+(n*n)+' = '+MN((-E).toFixed(2))+' eV.':'Thickest-distance technique: r = n² r₀ = '+(n*n)+' · 0.0529 = '+r.toFixed(3)+' nm, not 0, since the shell 4πr² is tiny near the centre.'}; }},
   {id:'38·chem.line',step:'38·chem',mode:'proof',label:'what a cloud licenses',open:()=>measured('38·chem'),make(){
     const n=2+rnd(4), l=rnd(n);
@@ -20013,7 +20027,7 @@ QP.push({id:'42·eng.work',step:'42·eng',mode:'work',label:'faces, crimp and gr
       ['k6',[['\\text{a braid after a braid}','given'],['\\text{the shuffle after the shuffle}','strand-shuffle']],2,0,'Follow each strand through both.']],[]); }});
 /* ----- annex 42·logi What is the cheapest way to ship: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'42·logi.work',step:'42·logi',mode:'work',label:'chains and cuts',open:()=>measured('42·logi'),make(){
-    const ask=rnd(2), a=1+rnd(5), b=2+rnd(7), c=2+rnd(7), d=1+rnd(5); if(b===c) return null;
+    const ask=rnd(2), a=1+rnd(5), b=2+rnd(7), c=2+(b-1+rnd(6))%7, d=1+rnd(5); /* c differs from b */
     if(ask){ const right=String(Math.abs(b-c))+' days, on '+(b<c?'B':'C'), wrong=UQAX(right,['0 days, on '+(b<c?'B':'C'),String(Math.abs(b-c))+' days, on '+(b<c?'C':'B'),String(b+c)+' days, on '+(b<c?'B':'C')],3); if(wrong.length<3) return null;
       return {index:'q:42·logi.work[s;'+a+';'+b+';'+c+';'+d+']', lines:[['A\\ '+a+',\\ B\\ '+b+',\\ C\\ '+c+',\\ D\\ '+d+' \\text{ days}','tasks'],['A \\text{ before } B, C;\\ \\ B, C \\text{ before } D','']], ask:'Which task has slack, and how much?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slack-time: the longest chain is A, '+(b>c?'B':'C')+', D; the other middle task can start up to '+Math.abs(b-c)+' days late without moving the end.'}; }
     const v=a+Math.max(b,c)+d, right=v+' days', wrong=UQAX(right,[(a+b+c+d)+' days',(a+Math.min(b,c)+d)+' days',Math.max(a,b,c,d)+' days',(a+(b+c)/2+d)+' days'],3); if(wrong.length<3) return null;
@@ -20033,7 +20047,7 @@ QP.push({id:'42·logi.work',step:'42·logi',mode:'work',label:'chains and cuts',
 /* ----- annex 42·now Can we trust a proof no one can read: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'42·now.work',step:'42·now',mode:'work',label:'charges on the map',open:()=>measured('42·now'),make(){
     const ask=rnd(2);
-    if(ask){ const n5=12, n7=rnd(6), n5b=n5+n7, right=String(n5b), wrong=UQAX(right,[String(12),String(12-n7),String(n7),String(6*n7)],3); if(wrong.length<3) return null;
+    if(ask){ const n5=12, n7=1+rnd(5), n5b=n5+n7, /* at least one seven: with none every slip reads 12 or 0 */ right=String(n5b), wrong=UQAX(right,[String(12),String(12-n7),String(n7),String(6*n7)],3); if(wrong.length<3) return null;
       return {index:'q:42·now.work[c;'+n7+']', lines:[['\\text{a flat graph of triangles, every dot of 5, 6 or 7 links}','charges 6 − d add to 12'],[n7+' \\text{ dots of 7 links}','']], ask:'How many dots of 5 links does it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Charge-count: each 5 carries +1, each 6 carries 0, each 7 carries −1; they add to 12, so fives − '+n7+' = 12, fives = '+right+'.'}; }
     const V=4+rnd(20), E=3*V-6, F=2*V-4, ask2=rnd(2), right=String(ask2?E:F), wrong=UQAX(right,[String(ask2?F:E),String(3*V),String(V+2),String(2*V)],3); if(wrong.length<3) return null;
     return {index:'q:42·now.work[v;'+V+';'+ask2+']', lines:[['V = '+V,'a flat graph whose faces are all triangles']], ask:'How many '+(ask2?'links':'faces')+' does it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each face has 3 links and each link 2 faces, so 3F = 2E; with V − E + F = 2, E = 3V − 6 = '+E+' and F = 2V − 4 = '+F+'.'}; }},
@@ -20115,7 +20129,7 @@ QP.push({id:'43·crypt.work',step:'43·crypt',mode:'work',label:'three points fi
     const md=(a,p)=>((a%p)+p)%p, inv=(a,p)=>{ a=md(a,p); for(let x=1;x<p;x++) if(md(a*x,p)===1) return x; return 0; };
     const p=[11,13,17][rnd(3)], s=rnd(p), a1=rnd(p), a2=1+rnd(p-1), f=x=>md(s+a1*x+a2*x*x,p), X=shuffle([1,2,3,4,5]).slice(0,3).sort((a,b)=>a-b), Y=X.map(f);
     const w=X.map((xi,i)=>{ const o=X.filter((_,j)=>j!==i); return md(o[0]*o[1]*inv((xi-o[0])*(xi-o[1]),p),p); }), S=md(Y[0]*w[0]+Y[1]*w[1]+Y[2]*w[2],p); if(S!==s) return null;
-    const right=String(s), wrong=UQAX(right,[String(md(Y[0]+Y[1]+Y[2],p)),String(Y[0]),String(md(s+1,p)),String(md(Y[0]*w[0],p))],3); if(wrong.length<3) return null;
+    const right=String(s), wrong=UQAX(right,[String(md(Y[0]+Y[1]+Y[2],p)),String(Y[0]),String(md(s+1,p)),String(md(Y[0]*w[0],p)),String(md(s-1,p)),String(md(2*s,p))],3); if(wrong.length<3) return null;
     return {index:'q:43·crypt.work['+p+';'+s+';'+a1+';'+a2+';'+X.join('')+']', lines:[['\\text{shares } '+X.map((x,i)=>'('+x+', '+Y[i]+')').join(',\\ '),'on the clock of '+p],['f(x) = s + a_1x + a_2x^2','']], ask:'What is the secret s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rebuild-at-zero: weights '+w.join(', ')+'; s ≡ '+Y.map((y,i)=>y+' · '+w[i]).join(' + ')+' ≡ '+right+' on the clock of '+p+'.'}; }},
   {id:'43·crypt.word',step:'43·crypt',mode:'word',label:'two holders meet',open:()=>measured('43·crypt'),make(){
     const p=[11,13,17,101][rnd(4)], F=rnd(2);
@@ -20685,6 +20699,7 @@ CH.pref={}; const sizeOf=v=>{ const K=v&&KIND[v.k]; return K&&K.size?K.size(v):n
    chain there. Each seed keeps a few of its own values that are known to work under the current switches and settings; when a fresh value
    cannot carry the chain (or is the wrong size for the Terms setting) one of those is dealt instead. The design's mix of rungs is kept by
    preferring, for the last link of a chain still on one rung, links from another rung, and by weighting links from new rungs three to one. */
+const SZV={}; function sizedVals(S,z){ const k=S.id+'|'+z; if(!SZV[k]){ const o=[], seen=new Set(); for(let i=0;i<300&&o.length<40;i++){ let r=null; try{ r=S.make(); }catch(e){ if(e&&e.over) throw e; } if(r&&r.val&&sizeOf(r.val)===z){ const id=r.ix!=null?String(r.ix):JSON.stringify(r.val); if(!seen.has(id)){ seen.add(id); o.push(r); } } } SZV[k]=o; } return SZV[k]; }
 const SZC={}; function sizesOf(S){ if(!SZC[S.id]){ const s=new Set(); for(let i=0;i<12;i++){ let r=null; try{ r=S.make(); }catch(e){} if(r&&r.val){ const z=sizeOf(r.val); if(z!==null) s.add(z); } } SZC[S.id]=s; } return SZC[S.id]; }
 const FZ={};
 function deal(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.terms||0;
@@ -20716,12 +20731,18 @@ function deal(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.t
   const build=(S0,sd,budget)=>{ const ns=want?[want]:shuffle(lens(sd.val.k).filter(m=>m<=4)); for(const n of ns){ const ch=grow(sd,n,budget,rungOfS(S0.step)); if(ch) return ch; } return null; };
   const key=open.map(l=>l.id).join(',')+'|'+want+'|'+terms, Z=FZ[key]||(FZ[key]={});
   /* the values of a seed known to carry a chain here: found once, from up to 24 of its own values */
-  const known=S0=>{ if(Z[S0.id]) return Z[S0.id]; const vals=[]; for(let i=0;i<24&&vals.length<4;i++){ let sd=null; try{ sd=S0.make(); }catch(e){ if(e&&e.over) throw e; } if(sd&&sd.val&&sizeOk(sd)&&build(S0,sd,40)) vals.push(sd); } return Z[S0.id]=vals; };
+  /* a value of the seed: under Terms, one of its listed values of that size; otherwise a fresh make */
+  const fresh=S0=>{ if(terms&&KIND[kindOf(S0)]&&KIND[kindOf(S0)].size){ const SV=sizedVals(S0,terms); return SV.length?pick(SV):null; } let sd=null; try{ sd=S0.make(); }catch(e){ if(e&&e.over) throw e; } return sd; };
+  /* the values of a seed known to carry a chain under these switches and settings (as round 2: up to 4 found from up to 24 of its values). Fresh values are
+     dealt while they carry; the first time more than one in ten of a seed's fresh values cannot, it is dealt from its list of values that carry instead,
+     and the list grows (to 40) by trying two more of its own values each time it is dealt. */
+  const known=S0=>{ if(Z[S0.id]) return Z[S0.id]; const vals=[]; for(let i=0;i<24&&vals.length<4;i++){ const sd=fresh(S0); if(sd&&sd.val&&sizeOk(sd)&&build(S0,sd,40)) vals.push(sd); } vals.n=0; vals.bad=0; vals.tries=0; return Z[S0.id]=vals; };
   const pool=seeds.slice();
   while(pool.length){ const S0=pick(pool), vals=known(S0); if(!vals.length){ pool.splice(pool.indexOf(S0),1); continue; }
-    let sd=null; try{ sd=S0.make(); }catch(e){ if(e&&e.over) throw e; } let chain=sd&&sd.val&&sizeOk(sd)?build(S0,sd,40):null;
-    if(chain){ if(vals.length<12) vals.push(sd); else vals[rnd(vals.length)]=sd; }
-    else { sd=pick(vals); chain=build(S0,sd,400); }
+    if(vals.cat){ for(let k=0;k<2&&vals.length<40&&vals.tries<300;k++){ vals.tries++; const s2=fresh(S0); if(s2&&s2.val&&sizeOk(s2)&&build(S0,s2,40)) vals.push(s2); } }
+    let sd=vals.cat?pick(vals):fresh(S0); let chain=sd&&sd.val&&sizeOk(sd)?build(S0,sd,vals.cat?400:40):null; if(!vals.cat) vals.n++;
+    if(chain&&!vals.cat){ if(vals.length<12) vals.push(sd); else vals[rnd(vals.length)]=sd; }
+    else if(!chain&&!vals.cat){ vals.bad++; if(vals.bad>0.05*vals.n) vals.cat=true; sd=pick(vals); chain=build(S0,sd,400); }
     if(!chain){ pool.splice(pool.indexOf(S0),1); continue; }
     const steps=new Set([S0.step]); chain.forEach(c=>{ (c.L.steps(c.o.U||new Set())).forEach(s=>steps.add(s)); });
     return {S0,sd,chain,out:chain[chain.length-1].o,steps:[...steps]}; }
@@ -20795,7 +20816,7 @@ SEEDS.push(
   {id:'5b.ints',step:'5b',label:'integers',kind:'num',make(){ const n=nz(-15,15); return {val:num(n),ix:String(n)}; }},
   {id:'43a.hours',step:'43a',label:'whole numbers for a clock',kind:'num',make(){ const n=ri(-40,99); return {val:num(n),ix:String(n)}; }},
   {id:'27d.grids',step:'27d',label:'2 × 2 grids',kind:'mat',make(){ const m=[[ri(-3,3),ri(-3,3)],[ri(-3,3),ri(-3,3)]]; if(m[0][0]*m[1][1]-m[0][1]*m[1][0]===0&&Math.random()<0.7) return null; return {val:mat(qi2(m)),ix:m.flat().join(',')}; }},
-  {id:'27f.stretchers',step:'27f',label:'grids with whole stretches',kind:'mat',make(){ const a=nz(-3,3), b=nz(-3,3); if(a===b) return null; const s=pick([[1,1,0,1],[1,2,1,1],[2,1,1,1],[1,0,1,1],[1,1,1,2]]);
+  {id:'27f.stretchers',step:'27f',label:'grids with whole stretches',kind:'mat',make(){ const a=nz(-3,3), b=pick([-3,-2,-1,1,2,3].filter(v=>v!==a)); const s=pick([[1,1,0,1],[1,2,1,1],[2,1,1,1],[1,0,1,1],[1,1,1,2]]);
     /* S diag(a,b) S⁻¹ with det S = ±1 keeps whole entries */ const [p,q,r,t]=s, dt=p*t-q*r; if(Math.abs(dt)!==1) return null;
     const m=[[ (p*a*t-q*b*r)/dt, (-p*a*q+q*b*p)/dt ],[ (r*a*t-t*b*r)/dt, (-r*a*q+t*b*p)/dt ]]; return {val:mat(qi2(m)),ix:[a,b,s.join('')].join(',')}; }},
   {id:'18a.points',step:'18a',label:'points of the plane',kind:'vec',make(){ const u=[nz(-6,6),ri(-6,6)]; return {val:vec(u.map(x=>Q(x))),ix:u.join(',')}; }},
@@ -21384,24 +21405,28 @@ function grref(m0,mode){ const m=m0.map(r=>r.slice()), R=m.length, C=m[0].length
 const grank=m=>grref(m).rank;
 const ginv=m=>{ const n=m.length; if(m[0].length!==n) return null; const r=grref(m.map((row,i)=>row.concat(gI(n)[i]))); if(r.rank<n||r.leads.some((c,i)=>c!==i)) return null; return r.m.map(row=>row.slice(n)); };
 const sq3=(n)=>Array.from({length:n},()=>Array.from({length:n},()=>ri(-3,3)));
+/* blankdraws r10: a 3 by 3 grid of entries -3..3 whose size is not 0 and at most cap: the first row not all 0, the second off its line, the third with 0 < |row · (first × second)| <= cap; rows then shuffled */
+const V3BD=()=>LVC('bd.v3',()=>LX(LRG(-3,3),LRG(-3,3),LRG(-3,3))), crBD=(u,v)=>[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]];
+const sq3free=cap=>{ const V=V3BD(), r0=pick1(V.filter(v=>v.some(z=>z))), r1=pick1(V.filter(v=>crBD(r0,v).some(z=>z))), c=crBD(r0,r1), r2=pick1(V.filter(v=>{ const d=Math.abs(v[0]*c[0]+v[1]*c[1]+v[2]*c[2]); return d>0&&d<=cap; })); return shuffle([r0,r1,r2]); };
 const unimod=n=>{ let m=gI(n).map(r=>r.map(x=>x.p)); for(let t=0;t<n+2;t++){ const i=rnd(n), j=(i+1+rnd(n-1))%n, k=pick1([-2,-1,1,2]); m[i]=m[i].map((a,c)=>a+k*m[j][c]); } if(Math.random()<0.5) m=[m[1],m[0]].concat(m.slice(2)); return m; };
 const mix=(u,v,a,b)=>u.map((x,i)=>a*x+b*v[i]);
 SEEDS.push(
-  {id:'27k.bkgrids3',step:'27k',kind:'grid',label:'3 by 3 grids',make(){ const m=sq3(3), d=gdet(gq(m)); return qz(d)||Math.abs(d.p)>40?null:{val:grid(m),ix:m.flat().join(',')}; }},
+  {id:'27k.bkgrids3',step:'27k',kind:'grid',label:'3 by 3 grids',make(){ const m=sq3free(40), d=gdet(gq(m)); return qz(d)||Math.abs(d.p)>40?null:{val:grid(m),ix:m.flat().join(',')}; }},
   {id:'27k.bkpowers',step:'27k',kind:'grid',label:'the rows 1, t, t² for three numbers t',make(){ const z=shuffle([-3,-2,-1,0,1,2,3,4]).slice(0,3); return {val:grid(z.map(t=>[1,t,t*t])),ix:z.join(',')}; }},
   {id:'27k.bkopposite',step:'27k',kind:'grid',label:'3 by 3 grids that are the negative of their side-turn',make(){ const [a,b,c]=[nz(-3,3),nz(-3,3),nz(-3,3)]; return {val:grid([[0,a,b],[-a,0,c],[-b,-c,0]]),ix:[a,b,c].join(',')}; }},
-  {id:'27b.bklists3',step:'27b',kind:'grid',label:'three lists of three numbers, as rows: free, or one a mix of the others',make(){ const u=[nz(-3,3),ri(-3,3),ri(-3,3)], v=[ri(-3,3),nz(-3,3),ri(-3,3)], free=Math.random()<0.5;
-    const w=free?[ri(-3,3),ri(-3,3),nz(-3,3)]:mix(u,v,pick1([-2,-1,1,2]),pick1([-2,-1,1,2,3])); const m=[u,v,w]; if(w.some(x=>Math.abs(x)>9)||grank(gq([u,v]))<2||(free&&qz(gdet(gq(m))))) return null; return {val:grid(m),ix:m.flat().join(',')}; }},
+  {id:'27b.bklists3',step:'27b',kind:'grid',label:'three lists of three numbers, as rows: free, or one a mix of the others',make(){ const u=[nz(-3,3),ri(-3,3),ri(-3,3)], v=pick1(V3BD().filter(v=>v[1]&&crBD(u,v).some(z=>z))), free=Math.random()<0.5, n=crBD(u,v); /* v off u's line; a free w off their plane; a mix that stays within 9 */
+    const w=free?pick1(V3BD().filter(w=>w[2]&&w[0]*n[0]+w[1]*n[1]+w[2]*n[2]!==0)):(([a,b])=>mix(u,v,a,b))(pick1(LX([-2,-1,1,2],[-2,-1,1,2,3]).filter(([a,b])=>mix(u,v,a,b).every(x=>Math.abs(x)<=9)))); const m=[u,v,w]; if(w.some(x=>Math.abs(x)>9)||grank(gq([u,v]))<2||(free&&qz(gdet(gq(m))))) return null; return {val:grid(m),ix:m.flat().join(',')}; }},
   {id:'27b.bkneighbours',step:'27b',kind:'grid',label:'the coefficients of u ± v, v ± w, w ± u in a free list u, v, w',make(){ const s=[pick1([-1,1]),pick1([-1,1]),pick1([-1,1])]; return {val:grid([[1,s[0],0],[0,1,s[1]],[s[2],0,1]]),ix:s.join(',')}; }},
   {id:'27b.bkplanes',step:'27b',kind:'grid',label:'two free pairs of lists of three, as four rows: two planes through 0',make(){ const u1=[nz(-3,3),ri(-3,3),ri(-3,3)], u2=[ri(-3,3),nz(-3,3),ri(-3,3)]; if(grank(gq([u1,u2]))<2) return null;
     const same=Math.random()<0.5, v1=same?mix(u1,u2,1,1):[ri(-3,3),ri(-3,3),nz(-3,3)], v2=same?mix(u1,u2,1,-2):[nz(-3,3),ri(-3,3),ri(-3,3)]; const m=[u1,u2,v1,v2]; if(grank(gq([v1,v2]))<2||m.flat().some(x=>Math.abs(x)>9)) return null; return {val:grid(m),ix:m.flat().join(',')}; }},
   {id:'27c.bkgrids3',step:'27c',kind:'grid',label:'3 by 3 grids with one, two or three free rows',make(){ const k=rnd(3), r1=[nz(-3,3),ri(-3,3),ri(-3,3)], r2=[ri(-3,3),nz(-3,3),ri(-3,3)];
     const m=k===0?[r1,r1.map(x=>2*x),r1.map(x=>-x)]:k===1?[r1,r2,mix(r1,r2,1,1)]:[r1,r2,[ri(-3,3),ri(-3,3),nz(-3,3)]]; if(grank(gq(m))!==k+1||m.flat().some(x=>Math.abs(x)>6)) return null; return {val:grid(m),ix:m.flat().join(',')}; }},
   {id:'27d.bkgrids',step:'27d',kind:'grid',label:'grids of 2 by 3, 3 by 2 and 1 by 3',make(){ const [r,c]=pick1([[2,3],[3,2],[1,3],[3,3]]); const m=Array.from({length:r},()=>Array.from({length:c},()=>ri(-3,3))); return m.flat().every(x=>x===0)?null:{val:grid(m),ix:r+'x'+c+':'+m.flat().join(',')}; }},
-  {id:'27j.bksystems3',step:'27j',kind:'grid',label:'three samenesses in three unknowns, as a grid with the right sides last',make(){ const kind=rnd(3), x=[ri(-3,3),ri(-3,3),ri(-3,3)]; let A;
-    if(kind===0){ A=sq3(3); if(qz(gdet(gq(A)))) return null; } else { const r1=[nz(-3,3),ri(-3,3),ri(-3,3)], r2=[ri(-3,3),nz(-3,3),ri(-3,3)]; A=[r1,r2,mix(r1,r2,pick1([-1,1,2]),pick1([-1,1]))]; if(grank(gq(A))!==2) return null; }
+  {id:'27j.bksystems3',step:'27j',kind:'grid',label:'three samenesses in three unknowns, as a grid with the right sides last',make(){ const kind=rnd(3); let A, x;
+    if(kind===0){ A=sq3free(1e9); if(qz(gdet(gq(A)))) return null; } else { const r1=[nz(-3,3),ri(-3,3),ri(-3,3)], r2=pick1(V3BD().filter(v=>v[1]&&crBD(r1,v).some(z=>z))); A=[r1,r2,mix(r1,r2,pick1([-1,1,2]),pick1([-1,1]))]; if(grank(gq(A))!==2) return null; }
+    x=pick1(V3BD().filter(x=>A.every(r=>Math.abs(r.reduce((s,a,i)=>s+a*x[i],0))<=(kind===2?13:15)))); /* an answer whose right sides stay within 15 */
     const b=A.map(r=>r.reduce((s,a,i)=>s+a*x[i],0)); if(kind===2) b[2]+=pick1([-2,-1,1,2]); const m=A.map((r,i)=>r.concat([b[i]])); return m.flat().some(v=>Math.abs(v)>15)?null:{val:grid(m),ix:kind+':'+m.flat().join(',')}; }},
-  {id:'27j.bkreach',step:'27j',kind:'grid',label:'three rows in two unknowns, the third a mix of the first two',make(){ const r1=[nz(-3,3),ri(-3,3)], r2=[ri(-3,3),nz(-3,3)]; if(r1[0]*r2[1]-r1[1]*r2[0]===0) return null; const m=[r1,r2,mix(r1,r2,pick1([-2,-1,1,2,3]),pick1([-2,-1,1,2,3]))]; return m.flat().some(x=>Math.abs(x)>12)?null:{val:grid(m),ix:m.flat().join(',')}; }},
+  {id:'27j.bkreach',step:'27j',kind:'grid',label:'three rows in two unknowns, the third a mix of the first two',make(){ const r1=[nz(-3,3),ri(-3,3)], r2=pick1(LX(LRG(-3,3),[-3,-2,-1,1,2,3]).filter(r=>r1[0]*r[1]-r1[1]*r[0]!==0)), m=[r1,r2,(([a,b])=>mix(r1,r2,a,b))(pick1(LX([-2,-1,1,2,3],[-2,-1,1,2,3]).filter(([a,b])=>mix(r1,r2,a,b).every(x=>Math.abs(x)<=12))))]; return m.flat().some(x=>Math.abs(x)>12)?null:{val:grid(m),ix:m.flat().join(',')}; }},
   {id:'27j.bkrows',step:'27j',kind:'grid',label:'2 by 3 grids in lowest terms, or one move short',make(){ const a=ri(-3,3), b=ri(-3,3), c=ri(1,3), k=rnd(5); const m=[[[1,0,a],[0,1,b]],[[1,a,0],[0,0,1]],[[c+1,0,a],[0,1,b]],[[0,1,b],[1,0,a]],[[1,c,a],[0,1,b]]][k]; return {val:grid(m),ix:k+':'+[a,b,c].join(',')}; }},
   {id:'27j.bkunimod',step:'27j',kind:'grid',label:'3 by 3 grids reached from I by row moves',make(){ const m=unimod(3); return m.flat().some(x=>Math.abs(x)>9)||geq(gq(m),gI(3))?null:{val:grid(m),ix:m.flat().join(',')}; }},
   {id:'27f.bkstairs',step:'27f',kind:'grid',label:'3 by 3 staircases',make(){ const d=shuffle([-3,-2,-1,1,2,3,4,5]).slice(0,3), u=[nz(-3,3),nz(-3,3),nz(-3,3)]; return {val:grid([[d[0],u[0],u[1]],[0,d[1],u[2]],[0,0,d[2]]]),ix:d.concat(u).join(',')}; }},
@@ -21529,7 +21554,7 @@ const MAPS=[['the flip (x, y) ↦ (x, −y)',[[1,0],[0,-1]]],['the quarter turn 
 const KEEP=[[[Q(3,5),Q(-4,5)],[Q(4,5),Q(3,5)]],[[Q(3,5),Q(4,5)],[Q(4,5),Q(-3,5)]],[[Q(5,13),Q(-12,13)],[Q(12,13),Q(5,13)]],[[Q(0),Q(1)],[Q(1),Q(0)]],[[Q(3,5),Q(4,5)],[Q(4,5),Q(3,5)]],[[Q(1),Q(1)],[Q(0),Q(1)]],[[Q(2),Q(0)],[Q(0),Q(1,2)]],[[Q(4,5),Q(3,5)],[Q(-3,5),Q(4,5)]]];
 SEEDS.push(
   {id:'27d.bkmaps',step:'27d',kind:'mat',label:'the grids of the flip, the quarter turn, the shear, the flattening and the swap',make(){ const k=rnd(MAPS.length); return {val:mat(mm(MAPS[k][1])),ix:String(k)}; }},
-  {id:'27d.bknil',step:'27d',kind:'mat',label:'a column times a row that meets it at 0',make(){ const u=[nz(-3,3),nz(-3,3)], s=pick1([1,-1,2]), v=[u[1]*s,-u[0]*s], m=[[u[0]*v[0],u[0]*v[1]],[u[1]*v[0],u[1]*v[1]]]; return m.flat().some(x=>Math.abs(x)>9)?null:{val:mat(mm(m)),ix:u.concat(v).join(',')}; }},
+  {id:'27d.bknil',step:'27d',kind:'mat',label:'a column times a row that meets it at 0',make(){ const [u0,u1,s]=pick1(LVC('27d.nil',()=>LX([-3,-2,-1,1,2,3],[-3,-2,-1,1,2,3],[1,-1,2]).filter(([a,b,s])=>[a*b*s,a*a*s,b*b*s].every(x=>Math.abs(x)<=9)))), u=[u0,u1], v=[u[1]*s,-u[0]*s], /* entries within 9 */ m=[[u[0]*v[0],u[0]*v[1]],[u[1]*v[0],u[1]*v[1]]]; return m.flat().some(x=>Math.abs(x)>9)?null:{val:mat(mm(m)),ix:u.concat(v).join(',')}; }},
   {id:'27b.bkbases',step:'27b',kind:'mat',label:'grids whose columns are a basis of whole lists',make(){ /* row moves that keep every entry within 6; never the plain identity */ let m=[[1,0],[0,1]]; for(let t=0;t<4;t++){ const i=rnd(2), j=1-i, ks=[-2,-1,1,2].filter(k=>m[i].every((a,c)=>Math.abs(a+k*m[j][c])<=6)); if(ks.length){ const k=pick1(ks); m[i]=m[i].map((a,c)=>a+k*m[j][c]); } }
     if(m[0][0]===1&&m[1][1]===1&&m[0][1]===0&&m[1][0]===0) m[0]=[1,pick1([-2,-1,1,2])]; if(Math.random()<0.5) m=[m[1],m[0]]; return {val:mat(mm(m)),ix:m.flat().join(',')}; }},
   {id:'31d.bkkeepers',step:'31d',kind:'mat',label:'grids of fractions, some of which keep the dot',make(){ const k=rnd(KEEP.length); return {val:mat(KEEP[k]),ix:String(k)}; }},
@@ -21745,7 +21770,7 @@ const sl=(t,x)=>{ const r=slope(t); return ev(r.t,x); };
 
 /* ================= seeds: functions ================= */
 const fseed=(id,label,mk)=>SEEDS.push({id,step:id.split('.')[0],label,kind:'fn',make(){ const r=mk(); if(!r) return null; r.val={k:'fn',t:r.t}; return r; }});
-fseed('10c.gaps','a gap of powers over a gap',()=>{ const n=ri(2,5), p=pick([-3,-2,-1,1,2,3]); if(Math.abs(p)===3&&n>3) return null;
+fseed('10c.gaps','a gap of powers over a gap',()=>{ const p=pick([-3,-2,-1,1,2,3]), n=ri(2,Math.abs(p)===3?3:5); /* 3⁴ and up are too big to show */
   const t=M(A(P(X,n),N(-Math.pow(p,n))),P(A(X,N(-p)),-1)); const pts=[p,0,1,-1,2,-2].filter((x,i,a)=>a.indexOf(x)===i); return {t,ix:n+','+p,pts}; });
 fseed('10c.rootgaps','a gap of roots over a gap',()=>{ const k=ri(1,4);
   if(Math.random()<0.5){ const pts=[0]; for(let x=-k*k;x<=20;x++) if(x!==0&&isq(x+k*k)!==null) pts.push(x); return {t:M(A(P(A(X,N(k*k)),Q(1,2)),N(-k)),P(X,-1)),ix:'a'+k,pts:pts.slice(0,6)}; }
@@ -22553,14 +22578,14 @@ SEEDS.push(
   {id:'9d.odds',step:'9d',label:'shifted odd powers',kind:'fn',make(){ const a=pick([1,2,-1,3]), h=ri(-2,2), k=ri(-5,5); let t=M(N(a),P(lin(1,-h),3)); if(k) t=A(t,N(k)); if(a===1) t=k?A(P(lin(1,-h),3),N(k)):P(lin(1,-h),3);
     return {val:{k:'fn',t},ix:[a,h,k].join(','),pts:[h,h+1,h-1,h+2,h-2]}; }},
   {id:'10f.ratfns',step:'10f',label:'a polynomial over a polynomial',kind:'fn',make(){
-    if(Math.random()<0.5){ const a=nz(-3,3), b=ri(-4,4), c=pick([1,1,2,-1]), d=ri(-4,4); if(a*d-b*c===0) return null; const t=simp(M(lin(a,b),P(lin(c,d),-1)));
+    if(Math.random()<0.5){ const a=nz(-3,3), b=ri(-4,4), c=pick([1,1,2,-1]), d=pick(LRG(-4,4).filter(d=>a*d-b*c!==0)); const t=simp(M(lin(a,b),P(lin(c,d),-1)));
       const pts=[0,1,-1,2,-2,3,4].filter(x=>c*x+d!==0); return {val:{k:'fn',t},ix:['ll',a,b,c,d].join(','),pts}; }
-    const r=ri(-3,3), s=ri(-3,3), p=nz(-2,2), q=ri(-3,3); if(s===r||p*s+q===0) return null; /* (x − r)(px + q) over (x − r)(x − s): a hole at r */
+    const r=ri(-3,3), s=pick(LRG(-3,3).filter(v=>v!==r)), p=nz(-2,2), q=pick(LRG(-3,3).filter(v=>p*s+v!==0)); /* (x − r)(px + q) over (x − r)(x − s): a hole at r */
     const nu=pmul([Q(-r),Q(1)],[Q(q),Q(p)]), de=pmul([Q(-r),Q(1)],[Q(-s),Q(1)]); const t=M(fromPoly(nu),P(fromPoly(de),-1));
     return {val:{k:'fn',t},ix:['hole',r,s,p,q].join(','),pts:[-3,-2,-1,0,1,2,3,4].filter(x=>x!==r&&x!==s)}; }},
   {id:'13h.fracpows',step:'13h',label:'fraction powers of x',kind:'fn',make(){ const e=pick([Q(3,2),Q(1,2),Q(5,2),Q(-1,2)]), k=pick([1,2,4,-2]); const t=k===1?P(X,e):M(N(k),P(X,e));
     return {val:{k:'fn',t},ix:[qs(e),k].join(','),pts:[1,4,9,16]}; }},
-  {id:'17k.splits',step:'17k',label:'a line over two straight factors',kind:'fn',make(){ const r=ri(-3,3), s=ri(-3,3), a=ri(-3,3), b=ri(-4,4); if(r===s||(a===0&&b===0)) return null;
+  {id:'17k.splits',step:'17k',label:'a line over two straight factors',kind:'fn',make(){ const r=ri(-3,3), s=pick(LRG(-3,3).filter(v=>v!==r)), a=ri(-3,3), b=pick(LRG(-4,4).filter(v=>a||v));
     const t=M(fromPoly([Q(b),Q(a)]),P(fromPoly(pmul([Q(-r),Q(1)],[Q(-s),Q(1)])),-1)); return {val:{k:'fn',t:simp(t)},ix:[r,s,a,b].join(','),pts:[-3,-2,-1,0,1,2,3,4].filter(x=>x!==r&&x!==s)}; }},
   {id:'9·cb8.pairs',step:'9·cb8',label:'pairs a + bi',kind:'cx',make(){ const a=ri(-4,4), b=nz(-4,4); return {val:cx(Q(a),Q(b)),ix:a+','+b}; }},
   {id:'8·phys.sizes',step:'8·phys',label:'sizes by powers of ten',kind:'num',make(){ const m=pick([2,3,4,5,6,7,8,9,12,15,25,45]), e=pick([-3,-2,-1,2,3]); const v=e<0?Q(m,Math.pow(10,-e)):Q(m*Math.pow(10,e)); return {val:num(v),ix:qs(v)}; }}
@@ -23620,7 +23645,7 @@ nl('27·now.shrink',{mk:()=>({k:rint(1,2)}),say:(p,x,nm)=>'a difference of '+nm+
 
 /* ================= rung 28: many variables ================= */
 SEEDS.push(
-  {id:'28a.polys2',step:'28a',label:'polynomials in x and y',kind:'f2',make(){ const n=rint(2,4), ts=[]; for(let i=0;i<n;i++){ const a=rint(0,2), b=rint(0,2-(a===2?1:0)); ts.push([a,b,Q(nz(-3,3))]); } const F=F2(ts); if(F.ts.length<2||!F.ts.some(t=>t[0]+t[1]>=2)) return null; return {val:F,ix:f2s(F.ts)}; }},
+  {id:'28a.polys2',step:'28a',label:'polynomials in x and y',kind:'f2',make(){ const n=rint(2,4), MON=[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1]], ms=shuffle(MON.slice()).slice(0,n); /* different terms, one of them of degree 2 or more */ if(!ms.some(m=>m[0]+m[1]>=2)) ms[0]=(H=>H[Math.floor(Math.random()*H.length)])(MON.filter(m=>m[0]+m[1]>=2&&!ms.some(x=>x[0]===m[0]&&x[1]===m[1]))); const ts=ms.map(([a,b])=>[a,b,Q(nz(-3,3))]); const F=F2(ts); if(F.ts.length<2||!F.ts.some(t=>t[0]+t[1]>=2)) return null; return {val:F,ix:f2s(F.ts)}; }},
   {id:'28l.forms',step:'28l',label:'squares and cross terms',kind:'f2',make(){ const a=ri(-3,3), b=ri(-4,4), c=ri(-3,3), d=ri(-3,3); const F=F2([[2,0,Q(a)],[1,1,Q(b)],[0,2,Q(c)],[0,0,Q(d)]]); if(F.ts.filter(t=>t[0]+t[1]===2).length<2) return null; return {val:F,ix:[a,b,c,d].join(',')}; }});
 const PT=()=>[ri(-2,2),ri(-2,2)];
 const nextF=l=>'FGHKMF'['FGHKMF'.indexOf(l)+1]||'G';
@@ -27156,9 +27181,10 @@ function wdeal2(P){ const op=W=>W.steps.every(s=>openStep(s,P));
   const pool=laws.slice();
   while(pool.length){ const L0=pick(pool), vals=known(L0); if(!vals.length){ pool.splice(pool.indexOf(L0),1); continue; }
     let want=LWc||drawLines(); if(!LWc&&want>=4&&REC.includes(L0.id)) want=3; /* ungeared: a law that just gave a long chain gives a shorter one, so long chains come from many laws */
-    let S=tryf(()=>L0.make()), full=fits(L0,S)?tryGrow(L0,S,want,LWc?160:120):null;
-    if(full){ if(vals.length<8) vals.push(S); else vals[rnd(vals.length)]=S; }
-    else { S=pick(vals); full=tryGrow(L0,S,want,400); }
+    if(vals.cat){ for(let k=0;k<2&&vals.length<30&&(vals.tries||0)<200;k++){ vals.tries=(vals.tries||0)+1; const S2=tryf(()=>L0.make()); if(fits(L0,S2)&&tryGrow(L0,S2,LWc||3,160)) vals.push(S2); } }
+    let S=vals.cat?pick(vals):tryf(()=>L0.make()), full=fits(L0,S)?tryGrow(L0,S,want,vals.cat?400:LWc?160:120):null; if(!vals.cat) vals.n=(vals.n||0)+1;
+    if(full&&!vals.cat){ if(vals.length<8) vals.push(S); else vals[rnd(vals.length)]=S; }
+    else if(!full&&!vals.cat){ vals.bad=(vals.bad||0)+1; if(vals.bad>0.05*vals.n) vals.cat=true; S=pick(vals); full=tryGrow(L0,S,want,400); }
     if(!full){ pool.splice(pool.indexOf(L0),1); continue; }
     if(!LWc&&full.length>=4){ REC.push(L0.id); if(REC.length>120) REC.shift(); }
     return {L0,S,chain:full,out:full[full.length-1].o}; }
