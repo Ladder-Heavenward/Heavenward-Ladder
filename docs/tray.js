@@ -62,6 +62,7 @@ const css=`
 @media (prefers-reduced-motion:reduce){#mk-tray .mk-pane{animation:none}}
 #mk-tray .mk-sec{display:grid;gap:6px}
 #mk-tray .mk-sh{margin:0;display:grid;grid-template-columns:1.2rem 1fr auto;align-items:center;gap:6px;width:100%;box-sizing:border-box;text-align:left;background:var(--mk-sand);color:var(--mk-ink);border:1px solid var(--mk-grid);border-radius:7px;padding:7px 10px;cursor:pointer;font-family:var(--mk-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase}
+#mk-tray .mk-sh.on{border-color:var(--mk-teal);color:var(--mk-teal)}
 #mk-tray .mk-sh i{font-style:normal;color:var(--mk-muted)}
 #mk-tray .mk-sh em{font-style:normal;color:var(--mk-muted);font-size:.66rem;letter-spacing:0}
 #mk-tray .mk-sh.here span::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mk-teal);margin-left:7px;vertical-align:middle}
@@ -182,7 +183,7 @@ function drawKeys(){
   lastS=S; lastHere=limitTo?new Set():here; paint();
 }
 /* quickkeys 08:25Z (Andrew): a group button opens and closes its pane in place, under its row of buttons; each subset has
-   its own button to open and close it. Subsets holding this page's keys start open; what you open or close is remembered. */
+   its own button. One group and one subset open at a time (08:26Z "switch, not toggle"); the subset holding this page's keys starts open. */
 let secOpen={}; try{ secOpen=JSON.parse(LS.getItem('mathkeys-open')||'{}')||{}; }catch(e){}
 const saveSec=()=>{ try{ LS.setItem('mathkeys-open',JSON.stringify(secOpen)); }catch(e){} };
 function paint(){
@@ -197,16 +198,19 @@ function paint(){
   n.textContent=limitTo?'keys for '+limitLabel:'keys open so far · a dot marks the keys this page writes';
   keys.appendChild(n);
 }
-function makePane(g,here){
+function makePane(g,here){ /* 08:26Z (Andrew): the subsets switch: opening one closes the others in its pane */
   const pane=document.createElement('div'); pane.className='mk-pane'; pane.id='mk-pane-'+g.n; pane.setAttribute('role','group'); pane.setAttribute('aria-label',g.n);
-  g.s.forEach(x=>{ const id=g.n+'/'+x.h, sec=document.createElement('div'); sec.className='mk-sec';
-    const isOpen=(id in secOpen)?secOpen[id]:(g.s.length===1||x.c.some(k=>here.has(k)));
-    const row=document.createElement('div'); row.className='mk-row'; row.hidden=!isOpen; x.c.forEach(k=>row.appendChild(makeKey(k,here)));
-    const h=document.createElement('button'); h.type='button'; h.className='mk-sh'+(x.c.some(k=>here.has(k))?' here':''); h.setAttribute('aria-expanded',String(isOpen));
-    h.innerHTML=`<i>${isOpen?'▾':'▸'}</i><span></span><em>${x.c.length}</em>`; h.querySelector('span').textContent=x.h;
-    h.addEventListener('click',()=>{ const v=row.hidden; row.hidden=!v; h.setAttribute('aria-expanded',String(v)); h.querySelector('i').textContent=v?'▾':'▸'; secOpen[id]=v; saveSec(); });
-    sec.appendChild(h); sec.appendChild(row); pane.appendChild(sec); });
-  return pane;
+  const def=(g.s.find(x=>x.c.some(k=>here.has(k)))||{}).h;
+  const cur=(g.n in secOpen)?secOpen[g.n]:(g.s.length===1?g.s[0].h:def);
+  const secs=[];
+  const show=h=>secs.forEach(o=>{ const v=o.h===h; o.row.hidden=!v; o.b.setAttribute('aria-expanded',String(v)); o.b.classList.toggle('on',v); o.b.querySelector('i').textContent=v?'▾':'▸'; });
+  g.s.forEach(x=>{ const sec=document.createElement('div'); sec.className='mk-sec';
+    const row=document.createElement('div'); row.className='mk-row'; x.c.forEach(k=>row.appendChild(makeKey(k,here)));
+    const b=document.createElement('button'); b.type='button'; b.className='mk-sh'+(x.c.some(k=>here.has(k))?' here':'');
+    b.innerHTML=`<i>▸</i><span></span><em>${x.c.length}</em>`; b.querySelector('span').textContent=x.h;
+    b.addEventListener('click',()=>{ const now=b.classList.contains('on')?null:x.h; show(now); secOpen[g.n]=now; saveSec(); });
+    sec.appendChild(b); sec.appendChild(row); pane.appendChild(sec); secs.push({h:x.h,row,b}); });
+  show(cur); return pane;
 }
 window.MathKeys={ limit(set,label){ limitTo=set&&[...set].length?new Set(set):null; limitLabel=label||''; drawKeys(); }, marksIn, open:v=>open(v), tree:TREE };
 drawKeys();
