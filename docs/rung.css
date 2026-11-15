@@ -1435,3 +1435,22 @@ body.fv.sw .sayback.sw-on .givens .katex-display,body.fv.sw .sayback.sw-on .give
 .mgraph .mg-details{margin:0 10px 10px 18px;padding:6px 10px;border-left:3px solid var(--teal);background:var(--paper);border-radius:0 6px 6px 0;font-size:.86rem}
 .mgraph .mg-details p{margin:4px 0}
 /* graphview end */
+
+/* awardglow (Andrew 2026-11-15 06:18Z): in light mode the award glows subtract from the paper (mix-blend-mode:multiply)
+   instead of adding light, so they show on cream and white. Each glow colour is the filter whose product with the paper
+   gives the award's own hue: cyan for the teal star and x, a clear blue for the blue star, amber for gold stars and crowns.
+   Dark mode is untouched: these rules only match light mode (chosen, or the system default). */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]) .crown .star{mix-blend-mode:multiply;text-shadow:0 0 2px rgb(0 170 210/.55),0 0 9px rgb(0 170 210/.5),0 0 16px rgb(0 170 210/.3)}
+  :root:not([data-theme="dark"]) section.rfin-blue .rfin-s{mix-blend-mode:multiply;text-shadow:0 0 2px rgb(40 120 255/.55),0 0 8px rgb(40 120 255/.5),0 0 14px rgb(40 120 255/.3)}
+  :root:not([data-theme="dark"]) section.rfin-gold .rfin-s,:root:not([data-theme="dark"]) section.rfin-wings .rfin-s{mix-blend-mode:multiply;text-shadow:0 0 2px rgb(255 176 0/.7),0 0 8px rgb(255 176 0/.6),0 0 14px rgb(255 176 0/.35)}
+  :root:not([data-theme="dark"]) .rfin-x svg{mix-blend-mode:multiply;filter:drop-shadow(0 0 2px rgb(0 170 210/.6)) drop-shadow(0 0 6px rgb(0 170 210/.5))}
+  :root:not([data-theme="dark"]) .royalcrown,:root:not([data-theme="dark"]) .topcrown,:root:not([data-theme="dark"]) .ax-crown{mix-blend-mode:multiply;
+    filter:drop-shadow(0 0 2px rgb(255 176 0/.75)) drop-shadow(0 0 7px rgb(255 176 0/.55))!important}
+}
+:root[data-theme="light"] .crown .star{mix-blend-mode:multiply;text-shadow:0 0 2px rgb(0 170 210/.55),0 0 9px rgb(0 170 210/.5),0 0 16px rgb(0 170 210/.3)}
+:root[data-theme="light"] section.rfin-blue .rfin-s{mix-blend-mode:multiply;text-shadow:0 0 2px rgb(40 120 255/.55),0 0 8px rgb(40 120 255/.5),0 0 14px rgb(40 120 255/.3)}
+:root[data-theme="light"] section.rfin-gold .rfin-s,:root[data-theme="light"] section.rfin-wings .rfin-s{mix-blend-mode:multiply;text-shadow:0 0 2px rgb(255 176 0/.7),0 0 8px rgb(255 176 0/.6),0 0 14px rgb(255 176 0/.35)}
+:root[data-theme="light"] .rfin-x svg{mix-blend-mode:multiply;filter:drop-shadow(0 0 2px rgb(0 170 210/.6)) drop-shadow(0 0 6px rgb(0 170 210/.5))}
+:root[data-theme="light"] .royalcrown,:root[data-theme="light"] .topcrown,:root[data-theme="light"] .ax-crown{mix-blend-mode:multiply;
+  filter:drop-shadow(0 0 2px rgb(255 176 0/.75)) drop-shadow(0 0 7px rgb(255 176 0/.55))!important}
