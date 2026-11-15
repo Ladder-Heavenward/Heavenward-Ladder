@@ -18184,6 +18184,50 @@ QP.push({id:'22·comp.work',step:'22·comp',mode:'work',label:'ways in bits, ste
       ['w4',[['\\text{a gas fills its box}','seen'],['\\text{a force spreads it}','it spreads']],2,1,'The even splits outnumber the rest.'],
       ['w5',[['\\text{a gas halved at fixed } T','a slow squeeze'],['\\text{heat out} = NkT\\ln 2','halved-room']],2,0,'The work is the area under NkT/v from V/2 to V.'],
       ['w6',[['n = 10^6','a sorted list'],['\\text{at most } 20 \\text{ comparisons}','halve-to-nothing']],2,0,'2¹⁹ ≤ 10⁶ < 2²⁰: 19 + 1.']],[]); }});
+/* ----- annex 22·crypt How soon do two fingerprints match: Work, Word Problems, Check Proofs ----- */
+const QNAX=(n,N)=>{ let q=1; for(let k=1;k<n;k++) q*=1-k/N; return q; };
+QP.push({id:'22·crypt.work',step:'22·crypt',mode:'work',label:'no match, counted',open:()=>measured('22·crypt'),make(){
+    const ask=rnd(2);
+    if(ask){ const b=[32,40,48,56,64,128,160,256][rnd(8)], right=String(b/2), wrong=UQAX(right,[String(b),String(b-1),String(Math.round(Math.log2(b))),String(b/4)],3); if(wrong.length<3) return null;
+      return {index:'q:22·crypt.work[b;'+b+']', lines:[['\\text{a fingerprint of } '+b+' \\text{ bits}','given']], ask:'About how many bits does it hold out against a search for any colliding pair?', right, opts:shuffle([right,...wrong]), lead:'', why:'Matching-pair: a match is as likely as not after about 1.18 \u221aN codes, and \u221a(2^'+b+') = 2^'+(b/2)+'. So about '+right+' bits.'}; }
+    const N=[365,365,100,1000][rnd(4)], n=[5,10,15,20,23,30,40][rnd(7)]; if(n>=N) return null; const q=QNAX(n,N), l=n*(n-1)/(2*N);
+    const right=DECAX(1-q,3), wrong=UQAX(right,[DECAX(q,3),DECAX(n/N,3),l<1?DECAX(l,3):DECAX(n/(2*N),3),DECAX(1-Math.pow(1-1/N,n),3)],3); if(wrong.length<3) return null;
+    return {index:'q:22·crypt.work[m;'+N+';'+n+']', lines:[[n+' \\text{ codes drawn at random from } '+N,'given']], ask:'What is the chance that two of them match, to three places?', right, opts:shuffle([right,...wrong]), lead:'', why:'No-match: q = (1 \u2212 1\u2215'+N+')(1 \u2212 2\u2215'+N+')\u22ef(1 \u2212 '+(n-1)+'\u2215'+N+') \u2248 '+DECAX(q,4)+', so a match has chance 1 \u2212 q \u2248 '+right+'.'}; }},
+  {id:'22·crypt.word',step:'22·crypt',mode:'word',label:'fenced by e',open:()=>measured('22·crypt'),make(){
+    const n=[10,15,20,23,25,30][rnd(6)], l=n*(n-1)/2/365, lo=1-Math.exp(-l), f=x=>DECAX(x,3);
+    const right='between '+f(lo)+' and '+f(l), wrong=UQAX(right,['between '+f(n/365)+' and '+f(l),'exactly '+f(l),'between '+f(lo)+' and '+f(2*l),'between '+f(Math.exp(-l))+' and 1'],3); if(wrong.length<3) return null;
+    return {index:'q:22·crypt.word['+n+']', a3:['22·crypt.word',DASH,DASH], story:'A class in Bellingham has '+n+' students. Take birthdays as random among 365 days.', lines:[], ask:'Without working the whole product, between which two numbers does the chance of a shared birthday lie?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pairs-per-code: '+n+' students make '+(n*(n-1)/2)+' pairs, so \u03bb = '+(n*(n-1)/2)+' \u00f7 365 \u2248 '+DECAX(l,3)+'. The chance lies between 1 \u2212 e^(\u2212\u03bb) \u2248 '+f(lo)+' and \u03bb; the count gives '+f(1-QNAX(n,365))+'.'}; }},
+  {id:'22·crypt.line',step:'22·crypt',mode:'proof',label:'what the pairs license',open:()=>measured('22·crypt'),make(){
+    return line28('22·crypt.line',[
+      ['y1',[['365 \\text{ days}','given'],['\\text{a shared birthday takes about } 183 \\text{ people}','half the days']],2,1,'The pairs grow as n\u00b2: 23 people make it as likely as not.'],
+      ['y2',[['\\text{a } b\\text{-bit fingerprint}','given'],['\\text{breaking it takes } 2^b \\text{ tries}','every code']],2,1,'That is for a match to one given file; any colliding pair takes about \u221a(2\u1d47).'],
+      ['y3',[['40 \\text{ birthdays},\\ \\lambda \\approx 2.14','pairs per code'],['\\text{the chance of a match is } \\lambda','pairs-per-code']],2,1,'\u03bb is an upper fence; a chance is never above 1.'],
+      ['y4',[['\\text{no collision has been found}','given'],['\\text{none exists}','a search']],2,1,'By pigeonhole they exist; only finding one is hard.'],
+      ['y5',[['\\text{fingerprints of } b \\text{ bits on longer files}','given'],['\\text{two files share a fingerprint}','collision']],2,0,'More files than fingerprints: pigeonhole.'],
+      ['y6',[['23 \\text{ birthdays},\\ \\lambda \\approx 0.693','given'],['0.500 \\le \\text{chance} \\le 0.693','pairs-per-code']],2,0,'1 \u2212 e^(\u22120.693) = 0.5.']],[]); }});
+/* ----- annex 22·econ How far does a dollar go: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·econ.work',step:'22·econ',mode:'work',label:'round after round',open:()=>measured('22·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const b=[0.2,0.3,0.4,0.5,0.6][rnd(5)], c=b+[0.1,0.2,0.3][rnd(3)]; if(c>=0.95) return null; const f=x=>DECAX(1/(1-x),2), right='between '+f(b)+' and '+f(c);
+      const wrong=UQAX(right,['between '+DECAX(1/b,2)+' and '+DECAX(1/c,2),'between '+DECAX(1+b,2)+' and '+DECAX(1+c,2),'exactly '+DECAX(1/(1-(b+c)/2),2),'between '+DECAX(1/c,2)+' and '+DECAX(1/b,2)],3); if(wrong.length<3) return null;
+      return {index:'q:22·econ.work[b;'+b+';'+c+']', lines:[['\\text{every round spends between } '+b+' \\text{ and } '+DECAX(c,2)+' \\text{ of the round before}','given']], ask:'What can be said of the total from one first dollar?', right, opts:shuffle([right,...wrong]), lead:'', why:'Between-shares: the total lies between 1\u2215(1 \u2212 '+b+') = '+f(b)+' and 1\u2215(1 \u2212 '+DECAX(c,2)+') = '+f(c)+'. The bracket is as wide as the guesses.'}; }
+    const c=[0.2,0.25,0.4,0.5,0.6,0.75,0.8,0.9][rnd(8)], right=DECAX(1/(1-c),2), wrong=UQAX(right,[DECAX(1/c,2),DECAX(1+c,2),DECAX(1-c,2),DECAX(c/(1-c),2)],3); if(wrong.length<3) return null;
+    return {index:'q:22·econ.work[c;'+c+']', lines:[['c = '+c,'the share each round spends of the last'],['\\text{one first dollar}','']], ask:'How many dollars of spending does it make in all?', right, opts:shuffle([right,...wrong]), lead:'', why:'Respending: 1 + c + c\u00b2 + \u22ef = 1\u2215(1 \u2212 c) = 1\u2215'+DECAX(1-c,2)+' = '+right+'. The total is one over the leak.'}; }},
+  {id:'22·econ.word',step:'22·econ',mode:'word',label:'where the dollar leaks',open:()=>measured('22·econ'),make(){
+    const T=['Forks, on the Olympic Peninsula','Port Angeles','Aberdeen','Sequim'][rnd(4)], s=[0.05,0.1][rnd(2)], t=[0.15,0.2][rnd(2)], o=[0.3,0.4,0.5][rnd(3)], L=s+t+o, F=rnd(3);
+    if(F===2){ const right='one dollar', wrong=['1\u2215(1 \u2212 c) dollars','nothing: the tax cancels it','one dollar less than without the plan'];
+      return {index:'q:22·econ.word[b;'+T.length+']', a3:['22·econ.word',DASH,DASH], story:'The town council in '+T+' spends a new dollar on a road crew and pays for it with a new dollar of local tax.', lines:[], ask:'How much spending does the plan add in all?', right, opts:shuffle([right,...wrong]), lead:'', why:'Balanced: only round 0 survives. Every later round of the spending is cancelled by a round the tax took away, whatever share is spent.'}; }
+    const v=F?t/L:1/L, right=F?DECAX(v,2)+' dollars':DECAX(v,2)+' dollars', wrong=F?UQAX(right,[DECAX(t,2)+' dollars',DECAX(t/(1-t),2)+' dollars',DECAX(t*(1-L),2)+' dollars',DECAX(t*2,2)+' dollars'],3):UQAX(right,[DECAX(1/(1-L),2)+' dollars',DECAX(1/(1-o),2)+' dollars',DECAX(1/s,2)+' dollars',DECAX(1-L,2)+' dollars'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:22·econ.word['+s+';'+t+';'+o+';'+F+']', a3:['22·econ.word',DASH,DASH], story:'A household in '+T+' saves '+s+' of each new dollar, pays '+t+' in taxes, and spends '+o+' on goods made outside the town. The rest it spends in town, and each shop that takes it does the same.', lines:[], ask:F?'Of one first dollar, how much ends in taxes, over all the rounds?':'How many dollars of spending in town does one first dollar make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Leaked-share: each round leaks '+s+' + '+t+' + '+o+' = '+DECAX(L,2)+', so the total is 1 \u00f7 '+DECAX(L,2)+' \u2248 '+DECAX(1/L,2)+'.'+(F?' Taxes take '+t+' of every round: '+t+' \u00b7 '+DECAX(1/L,2)+' \u2248 '+right+'.':'')}; }},
+  {id:'22·econ.line',step:'22·econ',mode:'proof',label:'what the rounds license',open:()=>measured('22·econ'),make(){
+    return line28('22·econ.line',[
+      ['d1',[['c = 0.8','the share spent'],['\\text{total} = \\tfrac{1}{0.8}','one over c']],2,1,'One over the leak: 1\u2215(1 \u2212 0.8) = 5.'],
+      ['d2',[['\\text{the rounds never end}','given'],['\\text{the total passes every bound}','endless rounds']],2,1,'Rounds that shrink by a fixed share below 1 settle.'],
+      ['d3',[['\\text{the rounds shrink}','given'],['\\text{the total settles}','shrinking']],2,1,'Shrinking is not enough; shrinking by a share below a fixed c is.'],
+      ['d4',[['5 \\text{ dollars of spending from } 1','respending'],['5 \\text{ dollars of new money}','the total']],2,1,'It is one dollar, changing hands.'],
+      ['d5',[['\\text{leak } 0.7 \\text{ each round}','leaked-share'],['\\text{total} \\approx 1.43','one over the leak']],2,0,'1 \u00f7 0.7 \u2248 1.43.'],
+      ['d6',[['\\text{a dollar spent, paid by a dollar of tax}','balanced'],['\\text{one dollar of spending}','only round 0']],2,0,'Each later round is cancelled by one the tax took away.']],[]); }});
 /* ----- annex 22·logi Why is the best route so hard to find: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'22·logi.work',step:'22·logi',mode:'work',label:'tours and floors',open:()=>measured('22·logi'),make(){
     const ask=rnd(2);
@@ -18223,6 +18267,47 @@ QP.push({id:'22·nav.work',step:'22·nav',mode:'work',label:'stretches and strip
       ['m4',[['\\text{the strips get thin}','given'],['\\text{their total stays small}','thin strips']],2,1,'Thin strips can add past every bound, as 1 + ½ + ⅓ + ⋯ does.'],
       ['m5',[['\\text{the same drawn area}','on the heading map'],['\\text{the same ground}','area']],2,1,'Only at the same latitude.'],
       ['m6',[['\\varphi = 60^\\circ','given'],['\\text{east stretch } 2','east-stretch']],2,0,'sec 60° = 1 ÷ cos 60° = 2.']],[]); }});
+/* ----- annex 22·now Can a far digit of pi be found alone: Work, Word Problems, Check Proofs ----- */
+const HXAX='0123456789ABCDEF';
+QP.push({id:'22·now.work',step:'22·now',mode:'work',label:'a digit far out',open:()=>measured('22·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const K=[5,8,10,12,20,25][rnd(6)], d=K*Math.log10(16), right='about '+Math.floor(d), wrong=UQAX(right,['about '+K,'about '+(K*16),'about '+Math.floor(K*Math.log10(2)),'about '+(2*K)],3); if(wrong.length<3) return null;
+      return {index:'q:22·now.work[k;'+K+']', lines:[['\\text{terms that shrink by a factor of } 16','the digit sum'],[K+' \\text{ terms}','summed']], ask:'About how many decimal places do the summed terms fix, before the tail can reach them?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each term is sixteen times smaller than the last, and log₁₀ 16 ≈ 1.204: '+K+' terms fix about '+K+' · 1.204 ≈ '+DECAX(d,1)+' decimal places.'}; }
+    const x=(1+rnd(9998))/9999, i=Math.floor(16*x), right=HXAX[i], wrong=UQAX(right,[HXAX[Math.floor(10*x)],HXAX[(i+1)%16],HXAX[Math.floor(x*100)%16],HXAX[(i+15)%16]],3); if(wrong.length<3) return null;
+    return {index:'q:22·now.work[s;'+DECAX(x,4)+']', lines:[['\\operatorname{frac}(16^d\\pi) \\approx '+DECAX(x,4),'computed']], ask:'What is the base-sixteen digit in place d + 1?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shift: the digit is the whole part of 16 · '+DECAX(x,4)+' = '+DECAX(16*x,4)+', which is '+i+(i>9?', written '+right:'')+'.'}; }},
+  {id:'22·now.word',step:'22·now',mode:'word',label:'a digit is read from a fence',open:()=>measured('22·now'),make(){
+    const x=Math.random(), wE=[6,8,10][rnd(3)], w=Math.pow(10,-wE); let a=x-w, b=x+w; if(a<0||b>=1) return null; let n=0, s='';
+    while(n<12){ const da=Math.floor(16*a), db=Math.floor(16*b); if(da!==db) break; s+=HXAX[da]; n++; a=16*a-da; b=16*b-db; }
+    const right=String(n), wrong=UQAX(right,[String(wE),String(n+1),String(Math.max(0,n-1)),String(2*wE),String(n+2)],3); if(wrong.length<3) return null;
+    return {index:'q:22·now.word['+DECAX(x,10)+';'+wE+']', a3:['22·now.word',DASH,DASH], story:'A run in ordinary arithmetic finds frac(16ᵈπ) as '+DECAX(x,10)+', with a width of 10⁻'+String(wE).replace(/./g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[c])+' on each side.', lines:[], ask:'How many base-sixteen digits can be published from this fence?', right, opts:shuffle([right,...wrong]), lead:'', why:'Report only the digits on which the whole fence agrees. Peeling both ends of the fence by sixteen'+(n?' gives '+s+' from each, and then they part.':' parts at once: the fence straddles a boundary.')}; }},
+  {id:'22·now.line',step:'22·now',mode:'proof',label:'what the digit sum licenses',open:()=>measured('22·now'),make(){
+    return line28('22·now.line',[
+      ['v1',[['\\text{the digit sum}','BBP'],['\\text{the millionth decimal digit, peeled off}','peeling']],2,1,'It peels base-sixteen digits; base ten is open.'],
+      ['v2',[['\\text{the computer matched } \\pi \\text{ to many places}','a hunt'],['\\text{the sum is proved}','a match']],2,1,'A match is a guess; the column proves it.'],
+      ['v3',[['\\textstyle\\int\\sum','an area of a sum'],['\\textstyle\\sum\\int','swap them']],2,1,'Only once the leftover’s area heads to 0.'],
+      ['v4',[['\\text{a value with width } 10^{-12}','computed'],['\\text{all its digits}','narrow enough']],2,1,'Only those on which the whole fence agrees.'],
+      ['v5',[['\\text{trillions of digits look even}','counted'],['\\pi \\text{ is normal}','the cases']],2,1,'Cases prove no statement; it is open.'],
+      ['v6',[['\\operatorname{frac}(16^d\\pi) = 0.3125','given'],['\\delta_{d+1} = 5','shift']],2,0,'16 · 0.3125 = 5.']],[]); }});
+/* ----- annex 22·phys When does a bouncing ball stop: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·phys.work',step:'22·phys',mode:'work',label:'how far, and how long',open:()=>measured('22·phys'),make(){
+    const h=[0.2,0.3,0.5,1,1.5,2][rnd(6)], r=[0.25,0.36,0.49,0.64,0.81][rnd(5)], s=Math.sqrt(r), ask=rnd(2);
+    if(ask){ const t0=Math.sqrt(2*h/9.8), T=t0*(1+s)/(1-s), right=DECAX(T,2)+' s', wrong=UQAX(right,[DECAX(t0*(1+r)/(1-r),2)+' s',DECAX(t0/(1-s),2)+' s',DECAX(t0*(1+s),2)+' s',DECAX(2*T,2)+' s'],3); if(wrong.length<3) return null;
+      return {index:'q:22·phys.work[t;'+h+';'+r+']', lines:[['h = '+h+' \\text{ m},\\ \\ r = '+r,'dropped; each bounce reaches r of the last height'],['g \\approx 9.8 \\text{ m/s}^2','']], ask:'Within how many seconds do all the bounces end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Time: t₀ = √(2h∕g) ≈ '+DECAX(t0,3)+' s and √r = '+DECAX(s,1)+'. The hops shrink by √r, so T = t₀(1 + √r)∕(1 − √r) ≈ '+right+'.'}; }
+    const D=h*(1+r)/(1-r), right=DECAX(D,2)+' m', wrong=UQAX(right,[DECAX(h/(1-r),2)+' m',DECAX(h*(1+s)/(1-s),2)+' m',DECAX(2*h/(1-r),2)+' m',DECAX(h*(1+r),2)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:22·phys.work[d;'+h+';'+r+']', lines:[['h = '+h+' \\text{ m},\\ \\ r = '+r,'dropped; each bounce reaches r of the last height']], ask:'How far does the ball travel, up and down, in all its bounces?', right, opts:shuffle([right,...wrong]), lead:'', why:'Distance: down h, then up and down 2hr + 2hr² + ⋯, which is h(1 + r)∕(1 − r) = '+h+' · '+DECAX(1+r,2)+' ÷ '+DECAX(1-r,2)+' ≈ '+right+'.'}; }},
+  {id:'22·phys.word',step:'22·phys',mode:'word',label:'hearing the share',open:()=>measured('22·phys'),make(){
+    const g1=[0.4,0.5,0.6][rnd(3)], s=[0.8,0.85,0.875,0.9][rnd(4)], g2=Math.round(g1*s*1000)/1000, sr=g2/g1, F=rnd(2);
+    const right=F?DECAX(g2*sr,3)+' s':DECAX(sr*sr,3), wrong=F?UQAX(right,[DECAX(g2*sr*sr,3)+' s',DECAX(g2-(g1-g2),3)+' s',DECAX(g2,3)+' s',DECAX(g2*Math.sqrt(sr),3)+' s'],3):UQAX(right,[DECAX(sr,3),DECAX(Math.sqrt(sr),3),DECAX(1-sr,3),DECAX(2*sr-1,3)],3);
+    if(wrong.length<3) return null;
+    return {index:'q:22·phys.word['+g1+';'+g2+';'+F+']', a3:['22·phys.word',DASH,DASH], story:'A referee at a table-tennis hall in Bellevue drops a ball on a table and listens. Two neighbouring gaps between clicks last '+g1+' s and then '+g2+' s.', lines:[], ask:F?'How long should the next gap last?':'What share of the last height does each bounce reach?', right, opts:shuffle([right,...wrong]), lead:'', why:'Click: neighbouring gaps stand in the ratio √r = '+g2+' ÷ '+g1+' = '+DECAX(sr,4)+'. '+(F?'So the next gap is '+g2+' · '+DECAX(sr,4)+' ≈ '+right+'.':'So r = '+DECAX(sr,4)+'² ≈ '+right+'.')}; }},
+  {id:'22·phys.line',step:'22·phys',mode:'proof',label:'what the bounces license',open:()=>measured('22·phys'),make(){
+    return line28('22·phys.line',[
+      ['o1',[['\\text{endlessly many bounces}','the share law'],['\\text{endless time}','endless hops']],2,1,'Hop times shrink by √r < 1: their sum settles.'],
+      ['o2',[['\\text{each bounce reaches } r \\text{ of the last height}','given'],['\\text{the hop times shrink by } r','the same share']],2,1,'By √r: the fall time goes as the root of the height.'],
+      ['o3',[['\\text{the hops shrink}','given'],['\\text{they end in a finite time}','shrinking']],2,1,'Shrinking is not enough: hops of 1, ½, ⅓, … seconds pass every bound.'],
+      ['o4',[['\\text{the time is finite}','time technique'],['\\text{a real ball bounces endlessly often}','the law']],2,1,'The law is read past its range; each contact takes τ.'],
+      ['o5',[['\\text{gaps of } 0.400 \\text{ s and } 0.350 \\text{ s}','heard'],['r \\approx 0.766','click']],2,0,'√r = 0.875, and 0.875² ≈ 0.766.'],
+      ['o6',[['\\text{every bounce takes at least } \\tau','contact'],['\\text{only finitely many in a few seconds}','contact']],2,0,'n bounces take at least nτ.']],[]); }});
 /* ----- annex 22·stat Why do rare events share one pattern: Work, Word Problems, Check Proofs ----- */
 const FACAX=n=>n<2?1:n*FACAX(n-1), POIAX=(l,k)=>Math.exp(-l)*Math.pow(l,k)/FACAX(k);
 QP.push({id:'22·stat.work',step:'22·stat',mode:'work',label:'many small chances, counted',open:()=>measured('22·stat'),make(){
