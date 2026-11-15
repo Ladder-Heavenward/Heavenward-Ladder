@@ -17596,6 +17596,89 @@ QP.push({id:'15·eng.work',step:'15·eng',mode:'work',label:'the push, in thin s
       ['s4',[['\\textstyle\\int_0^H \\rho g y\\,dy','given'],['\\text{the push on the dam}','the area']],2,1,'That is the push on a strip one metre wide; multiply by W.'],
       ['s5',[['F = \\textstyle\\int_0^H \\rho g y W\\,dy','thin strips'],['= \\tfrac12 \\rho g W H^2','the area under y']],2,0,'The area under y from 0 to H is H\u00b2/2.'],
       ['s6',[['p \\text{ grows with depth}','given'],['\\text{a dam is thicker at the bottom}','the deep strips push hardest']],2,0,'The wall must hold most where the pressure is greatest.']],[]); }});
+/* ----- annex 16·eng Where will a loaded beam crack: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'16·eng.work',step:'16·eng',mode:'work',label:'shear and bending',open:()=>measured('16·eng'),make(){
+    const L=[2,3,4,5,6][rnd(5)], w=[1,2,3,4,5][rnd(5)], ask=rnd(3), R=w*L/2;
+    if(ask===0){ const x=Math.round((rnd(L*2)+1)/2*10)/10; if(x>=L) return null; const V=R-w*x;
+      const right=MNAX(DECAX(V,2))+' kN', wrong=UQAX(right,[DECAX(w*x,2)+' kN',MNAX(DECAX(-V,2))+' kN',DECAX(R,2)+' kN',DECAX(R*x-w*x*x/2,3)+' kN'],3); if(wrong.length<3) return null;
+      return {index:'q:16·eng.work[V;'+L+';'+w+';'+x+']', lines:[['w = '+w+'\\ \\text{kN/m on } [0, '+L+']','spread evenly'],['R_0 = R_L = '+R+'\\ \\text{kN}','the supports']], ask:'What is the shear at x = '+x+' m?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Shear-from-load: V\u2032 = \u2212w, so V(x) = R\u2080 \u2212 wx = '+R+' \u2212 '+w+' \u00b7 '+x+' = '+DECAX(V,2)+' kN.')}; }
+    if(ask===1){ const M=w*L*L/8, right=DECAX(M,3)+' kN\u00b7m at x = '+DECAX(L/2,2)+' m', wrong=UQAX(right,[DECAX(w*L*L/4,3)+' kN\u00b7m at x = '+DECAX(L/2,2)+' m',DECAX(M,3)+' kN\u00b7m at x = 0',DECAX(w*L/2,3)+' kN\u00b7m at x = '+DECAX(L/2,2)+' m',DECAX(w*L*L/2,3)+' kN\u00b7m at x = '+L+' m'],3); if(wrong.length<3) return null;
+      return {index:'q:16·eng.work[M;'+L+';'+w+']', lines:[['w = '+w+'\\ \\text{kN/m on } [0, '+L+']','spread evenly, supports at both ends']], ask:'Where does the beam bend most, and how hard?', right, opts:shuffle([right,...wrong]), lead:'', why:'Most-bending: V(x) = '+R+' \u2212 '+w+'x crosses zero at x = '+DECAX(L/2,2)+'. M there is the area under V: \u00bd \u00b7 '+R+' \u00b7 '+DECAX(L/2,2)+' = '+DECAX(M,3)+' kN\u00b7m.'}; }
+    const b=[0.05,0.1][rnd(2)], h=[0.1,0.15,0.2,0.3][rnd(4)], M=[1,2,3,6][rnd(4)]*1000, s=6*M/(b*h*h);
+    const right=DECAX(s/1e6,2)+' MPa', wrong=UQAX(right,[DECAX(6*M/(b*b*h)/1e6,2)+' MPa',DECAX(M/(b*h*h)/1e6,2)+' MPa',DECAX(6*M/(b*h)/1e6,2)+' MPa',DECAX(3*M/(b*h*h)/1e6,2)+' MPa'],3); if(wrong.length<3) return null;
+    return {index:'q:16·eng.work[s;'+b+';'+h+';'+M+']', lines:[['b = '+b+'\\ \\text{m},\\ \\ h = '+h+'\\ \\text{m}','width; depth'],['M = '+M+'\\ \\text{N\u00b7m}','at the cut']], ask:'What is the greatest stress at the cut?', right, opts:shuffle([right,...wrong]), lead:'', why:'Deep-beam: \u03c3_m = 6M/(bh\u00b2) = 6 \u00b7 '+M+' \u00f7 ('+b+' \u00b7 '+h+'\u00b2) = '+DECAX(s,0)+' Pa \u2248 '+right+', at the top and bottom faces.'}; }},
+  {id:'16·eng.word',step:'16·eng',mode:'word',label:'deep or wide',open:()=>measured('16·eng'),make(){
+    const ask=rnd(2), k=[2,3,1.5][rnd(3)];
+    const right='it is divided by '+DECAX(ask?k*k:k,3), wrong=UQAX(right,['it is divided by '+DECAX(ask?k:k*k,3),'it does not change','it is divided by '+DECAX(k*k*k,3),'it is multiplied by '+DECAX(ask?k*k:k,3)],3); if(wrong.length<3) return null;
+    return {index:'q:16·eng.word['+ask+';'+k+']', a3:['16·eng.word',DASH,DASH], story:'A deck joist carries the same load as before, but the builder uses a board '+(k===1.5?'one and a half':k)+' times as '+(ask?'deep':'wide')+', the other size the same.', lines:[], ask:'What happens to the greatest stress in it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Deep-beam: \u03c3_m = 6M/(bh\u00b2). '+(ask?'Depth helps by its square: h \u00d7 '+k+' divides \u03c3 by '+DECAX(k*k,3)+'.':'Width helps only by itself: b \u00d7 '+k+' divides \u03c3 by '+k+'.')}; }},
+  {id:'16·eng.line',step:'16·eng',mode:'proof',label:'what shear and bending license',open:()=>measured('16·eng'),make(){
+    return line28('16·eng.line',[
+      ['b1',[['\\text{a heavy load at } p','given'],['\\text{the beam cracks at } p','the heaviest load']],2,1,'It bends most where the shear crosses zero.'],
+      ['b2',[['V\' = -w','shear-from-load'],['M(x) = \\textstyle\\int_0^x w(s)\\,ds','the area']],2,1,'That is R\u2080 \u2212 V(x); M is the area under V, two steps from w.'],
+      ['b3',[['\\text{twice as deep}','given'],['\\text{twice as strong}','depth']],2,1,'Deep-beam: four times, since h is squared.'],
+      ['b4',[['\\text{a person standing at } p','a load at a point'],['V\'(p) = -w(p)','area-slope']],2,1,'A load at one point makes V jump there; area-slope needs w continuous.'],
+      ['b5',[['M\' = V','moment-from-shear'],['M \\text{ rises while } V \\gt 0','rise-and-fall']],2,0,'A positive slope means M climbs.'],
+      ['b6',[['\\sigma_m = 6M/(bh^2)','deep-beam'],['\\text{the breaking load}','the stress']],2,1,'Only while the stretch law is true.']],[]); }});
+/* ----- annex 16·logi How much is in the tank right now: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'16·logi.work',step:'16·logi',mode:'work',label:'the level from the rates',open:()=>measured('16·logi'),make(){
+    const V0=[200,300,400,500][rnd(4)], P=[[6,60,50],[6,80,120],[6,80,100],[6,90,60]].map(r=>[r[0],r[1]+rnd(3)*10,r[2]+rnd(3)*10]).slice(0,2+rnd(2));
+    let V=V0, lo=V0; P.forEach(r=>{ V+=r[0]*(r[1]-r[2]); lo=Math.min(lo,V); }); if(lo<0) return null;
+    const right=String(V)+' m\u00b3', wrong=UQAX(right,[String(V-V0)+' m\u00b3',String(V0+P.reduce((a,r)=>a+r[0]*r[1],0))+' m\u00b3',String(V0-P.reduce((a,r)=>a+r[0]*(r[1]-r[2]),0))+' m\u00b3',String(lo)+' m\u00b3'],3); if(wrong.length<3) return null;
+    return {index:'q:16·logi.work['+V0+';'+JSON.stringify(P)+']', lines:[['V(0) = '+V0+'\\ \\text{m}^3','at midnight']].concat(P.map((r,i)=>['\\text{in } '+r[1]+',\\ \\text{out } '+r[2]+'\\ \\text{m}^3\\text{/h}','for '+r[0]+' h'])), ask:'How much water is in the tank at the end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tank-level: V(T) = V(0) + the area under in \u2212 out = '+V0+P.map(r=>' + '+r[0]+' \u00b7 ('+r[1]+' \u2212 '+r[2]+')').join('')+' = '+right+'.'}; }},
+  {id:'16·logi.word',step:'16·logi',mode:'word',label:'never dry',open:()=>measured('16·logi'),make(){
+    const P=[]; for(let i=0;i<4;i++) P.push([3+rnd(4), 40+10*rnd(5), 30+10*rnd(7)]); let c=0, D=0; P.forEach(r=>{ c+=r[0]*(r[2]-r[1]); D=Math.max(D,c); }); if(D<=0) return null;
+    const draw=P.reduce((a,r)=>a+r[0]*r[2],0);
+    const right=String(D)+' m\u00b3', wrong=UQAX(right,[String(draw)+' m\u00b3',String(c>0?c:D+40)+' m\u00b3','0 m\u00b3',String(D+P[0][0]*P[0][2])+' m\u00b3'],3); if(wrong.length<3) return null;
+    return {index:'q:16·logi.word['+JSON.stringify(P)+']', a3:['16·logi.word',DASH,DASH], story:'A town\u2019s water tank has a steady pump and a changing draw. In order through the day: '+P.map(r=>r[0]+' h at '+r[1]+' in, '+r[2]+' out').join('; ')+' (m\u00b3 an hour).', lines:[], ask:'What is the least the tank can hold at the start and never run dry that day?', right, opts:shuffle([right,...wrong]), lead:'', why:'Never-dry: the start must be at least the deepest dip of \u222b(out \u2212 in). Running: '+(()=>{ let s=0; return P.map(r=>{ s+=r[0]*(r[2]-r[1]); return MNAX(String(s)); }).join(', '); })()+'. The greatest is '+D+' m\u00b3, not the day\u2019s whole draw.'}; }},
+  {id:'16·logi.line',step:'16·logi',mode:'proof',label:'what the tank licenses',open:()=>measured('16·logi'),make(){
+    return line28('16·logi.line',[
+      ['w1',[['\\text{the town draws hardest at noon}','given'],['\\text{the tank is lowest at noon}','the draw']],2,1,'It is lowest when out falls back to in.'],
+      ['w2',[['\\textstyle\\int_0^t (\\text{in} - \\text{out})','given'],['\\text{the water in the tank}','the area']],2,1,'It is the change: add V(0).'],
+      ['w3',[['\\text{start with the day\u2019s whole draw}','given'],['\\text{the least safe start}','to be safe']],2,1,'The deepest dip is enough.'],
+      ['w4',[['\\text{in} = \\text{out at } t','given'],['\\text{the lowest is at } t','slope 0']],2,1,'The crest has in = out too; and the lowest may sit at an end.'],
+      ['w5',[['r \\lt 88\\ \\text{m}^3\\text{/h, the average outflow}','a pump'],['\\text{the tank runs dry in the end}','pump-rate']],2,0,'Each day it loses 24(88 \u2212 r) m\u00b3, and no start saves it.'],
+      ['w6',[['V(t) = V(0) - \\textstyle\\int_0^t (\\text{out} - \\text{in})','tank-level'],['V(t) \\ge 0 \\text{ for all } t \\iff V(0) \\ge D','never-dry']],2,0,'D is the greatest of those integrals.']],[]); }});
+/* ----- annex 16·nav Where am I now: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'16·nav.work',step:'16·nav',mode:'work',label:'dead reckoning',open:()=>measured('16·nav'),make(){
+    const legs=[[2+rnd(3),[6,8,10,12][rnd(4)]],[1+rnd(3),[4,5,6,9][rnd(4)]],[1+rnd(2),[7,8,11][rnd(3)]]], s0=[0,5,10,20][rnd(4)], d=legs.reduce((a,l)=>a+l[0]*l[1],0);
+    const right=String(s0+d)+' nmi', wrong=UQAX(right,[String(d)+' nmi',String(s0+legs.reduce((a,l)=>a+l[1],0)*legs.reduce((a,l)=>a+l[0],0)/3|0)+' nmi',String(s0+d+legs[2][1])+' nmi',String(s0+legs.reduce((a,l)=>a+l[0]+l[1],0))+' nmi'],3); if(wrong.length<3) return null;
+    return {index:'q:16·nav.work['+JSON.stringify(legs)+';'+s0+']', lines:[['s(0) = '+s0+'\\ \\text{nmi}','along the track'],[legs.map(l=>l[1]+'\\ \\text{kn for } '+l[0]+'\\ \\text{h}').join(',\\ \\ \\text{then }'),'speed through the run']], ask:'Where is the boat at the end, along the track?', right, opts:shuffle([right,...wrong]), lead:'', why:'Dead-reckoning: s(T) = s(0) + the area under the speed = '+s0+' + '+legs.map(l=>l[1]+' \u00b7 '+l[0]).join(' + ')+' = '+right+'.'}; }},
+  {id:'16·nav.word',step:'16·nav',mode:'word',label:'errors that grow',open:()=>measured('16·nav'),make(){
+    const ask=rnd(2);
+    if(ask){ const M=[0.1,0.2,0.25,0.5][rnd(4)], T=[6,10,12,24,30][rnd(4)], e=M*T;
+      const right='at most '+DECAX(e,2)+' nmi', wrong=UQAX(right,['exactly '+DECAX(e,2)+' nmi','at most '+DECAX(M,2)+' nmi','at most '+DECAX(M*T*T/2,2)+' nmi','none: the doubt is too small to matter'],3); if(wrong.length<3) return null;
+      return {index:'q:16·nav.word[s;'+M+';'+T+']', a3:['16·nav.word',DASH,DASH], story:'A navigator trusts the log to within '+M+' kn at every moment of a '+T+'-hour run, from a known start.', lines:[], ask:'How far off can the reckoned place be at the end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speed-error: |e(T)| \u2264 MT = '+M+' \u00b7 '+T+' = '+DECAX(e,2)+' nmi. At most: errors of both signs may cancel.'}; }
+    const M=[0.01,0.02,0.05][rnd(3)], T=[60,100,300,600][rnd(4)], e=M*T*T/2;
+    const right='at most '+DECAX(e,1)+' m', wrong=UQAX(right,['at most '+DECAX(M*T,1)+' m','at most '+DECAX(M*T*T,1)+' m','exactly '+DECAX(e,1)+' m','at most '+DECAX(M*T/2,1)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:16·nav.word[a;'+M+';'+T+']', a3:['16·nav.word',DASH,DASH], story:'A drone reckons its place from an accelerometer that reads within '+M+' m/s\u00b2 of the truth, its speed and place right at the start.', lines:[], ask:'How far off can its place be after '+T+' s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Doubled-error: run backwards twice, |e| \u2264 MT\u00b2/2 = '+M+' \u00b7 '+T+'\u00b2/2 = '+DECAX(e,1)+' m. It grows with the square of the time.'}; }},
+  {id:'16·nav.line',step:'16·nav',mode:'proof',label:'what the log licenses',open:()=>measured('16·nav'),make(){
+    return line28('16·nav.line',[
+      ['n1',[['\\text{the log reads } 8\\ \\text{kn}','given'],['\\text{the speed over the ground is } 8\\ \\text{kn}','the log']],2,1,'Through the water; a current adds its own, unseen.'],
+      ['n2',[['|e(T)| \\le MT','speed-error'],['e(T) = MT','the bound']],2,1,'At most; errors of both signs may cancel.'],
+      ['n3',[['\\text{a doubt of } 0.1\\ \\text{kn}','given'],['\\text{too small to matter}','small']],2,1,'After 30 h it may be 3 nmi.'],
+      ['n4',[['\\text{a doubt in the push}','an accelerometer'],['\\text{the place error grows with the time}','speed-error']],2,1,'With the square of the time: doubled-error.'],
+      ['n5',[['|u(t) - v(t)| \\le M','on [0, T]'],['|e(T)| \\le MT','the area under M']],2,0,'The error is the area under u \u2212 v, at most M over a stretch T.'],
+      ['n6',[['\\text{the left sum of the speeds}','readings each hour'],['\\text{where the boat is}','dead reckoning']],2,1,'An estimate: the speed may rise and fall between readings.']],[]); }});
+/* ----- annex 16·phys How far did it go, if you only know how fast: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'16·phys.work',step:'16·phys',mode:'work',label:'work is an area',open:()=>measured('16·phys'),make(){
+    const k=[100,200,400,500,800][rnd(5)], x1=[0.1,0.2,0.3,0.4][rnd(4)], ask=rnd(2);
+    if(ask){ const m=[0.5,1,2][rnd(3)], E=0.5*k*x1*x1, v=Math.sqrt(2*E/m); if(Math.abs(v*100-Math.round(v*100))>1e-6) return null;
+      const right=DECAX(v,2)+' m/s', wrong=UQAX(right,[DECAX(2*E/m,2)+' m/s',DECAX(k*x1/m,2)+' m/s',DECAX(Math.sqrt(E/m),3)+' m/s',DECAX(E,2)+' m/s'],3); if(wrong.length<3) return null;
+      return {index:'q:16·phys.work[v;'+k+';'+x1+';'+m+']', lines:[['k = '+k+'\\ \\text{N/m},\\ \\ x_1 = '+x1+'\\ \\text{m}','a spring, squeezed'],['m = '+m+'\\ \\text{kg}','a block, let go from rest']], ask:'How fast is the block going when the spring is back at its natural length?', right, opts:shuffle([right,...wrong]), lead:'', why:'Work-energy: the area under kx from 0 to '+x1+' is \u00bdk x\u2081\u00b2 = '+DECAX(E,3)+' J = \u00bdmv\u00b2, so v = \u221a(2 \u00b7 '+DECAX(E,3)+' \u00f7 '+m+') = '+right+'.'}; }
+    const x2=0, W=0.5*k*(x1*x1-x2*x2), right=DECAX(W,3)+' J', wrong=UQAX(right,[DECAX(k*x1*x1,3)+' J',DECAX(k*x1,3)+' J',DECAX(0.5*k*x1,3)+' J',DECAX(k*x1*x1/4,3)+' J'],3); if(wrong.length<3) return null;
+    return {index:'q:16·phys.work[W;'+k+';'+x1+']', lines:[['F(x) = -'+k+'x','a spring, x in m']], ask:'How much work does the spring do as it goes from x = '+x1+' m back to 0?', right, opts:shuffle([right,...wrong]), lead:'', why:'F changes along the way, so the work is an area: \u00bdk(x\u2081\u00b2 \u2212 x\u2082\u00b2) = \u00bd \u00b7 '+k+' \u00b7 '+x1+'\u00b2 = '+right+'. Not F \u00b7 d.'}; }},
+  {id:'16·phys.word',step:'16·phys',mode:'word',label:'impulse is an area',open:()=>measured('16·phys'),make(){
+    const F=[200,400,600,1000,1500][rnd(5)], T=[0.01,0.02,0.05,0.1][rnd(4)], m=[0.1,0.15,0.45,0.5][rnd(4)], nm={0.1:'hockey puck',0.15:'baseball',0.45:'soccer ball',0.5:'rubber ball'}[m], J=0.5*F*T, v=J/m;
+    const right=DECAX(v,2)+' m/s', wrong=UQAX(right,[DECAX(F*T/m,2)+' m/s',DECAX(J,3)+' m/s',DECAX(F/m*T/4,2)+' m/s',DECAX(F*m*T,3)+' m/s'],3); if(wrong.length<3) return null;
+    return {index:'q:16·phys.word['+F+';'+T+';'+m+']', a3:['16·phys.word',DASH,DASH], story:'A '+m+' kg '+nm+' at rest is struck. The force rises steadily from 0 to '+F+' N and falls steadily back to 0, over '+T+' s in all.', lines:[], ask:'How fast does it leave?', right, opts:shuffle([right,...wrong]), lead:'', why:'Impulse: the change in momentum is the area under F, a triangle, \u00bd \u00b7 '+F+' \u00b7 '+T+' = '+DECAX(J,3)+' kg\u00b7m/s. So v = '+DECAX(J,3)+' \u00f7 '+m+' = '+right+'.'}; }},
+  {id:'16·phys.line',step:'16·phys',mode:'proof',label:'what the areas license',open:()=>measured('16·phys'),make(){
+    return line28('16·phys.line',[
+      ['q1',[['\\text{a speed record } v(t)','given'],['\\text{distance} = \\textstyle\\int v\\,dt','area-is-a-change']],2,1,'That is displacement; distance is \u222b|v| dt.'],
+      ['q2',[['F(x) = -kx','a spring'],['W = F \\cdot d','work']],2,1,'F changes along the way; the work is an area: \u00bdk(x\u2081\u00b2 \u2212 x\u2082\u00b2).'],
+      ['q3',[['\\textstyle\\int F\\,dt','over time'],['= \\Delta(\\tfrac12 mv^2)','work-energy']],2,1,'Over time it is \u0394(mv); over distance, \u0394(\u00bdmv\u00b2).'],
+      ['q4',[['\\textstyle\\int_R^\\infty GMm/r^2\\,dr','escape'],['= \\infty','the region is endless']],2,1,'Out-to-forever with p = 2: it converges, to GMm/R.'],
+      ['q5',[['F = p\', \\text{ continuous}','given'],['p(t_2) - p(t_1) = \\textstyle\\int_{t_1}^{t_2} F\\,dt','impulse']],2,0,'Area-is-a-change, with p as the antiderivative of F.'],
+      ['q6',[['F(x(t)) = m v\'(t)','given'],['\\textstyle\\int F\\,dx = \\Delta(\\tfrac12 m v^2)','substitution']],2,0,'The slope of \u00bdmv\u00b2 along the motion is m v v\u2032 = F v.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
