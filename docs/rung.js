@@ -479,7 +479,7 @@ function crown(sec,th,built,royal,annex){ /* rfinish (Andrew 2026-11-13): the ma
   /* annex crown jewels (Andrew 2026-11-15 05:19Z): passed annexes earn the crown; an annex with its gold star, wings and crosswalk x too sets a purple jewel in it */
   let jw=wrap&&wrap.querySelector('.rc-jw'); const jn=royal?jewels(annex||[]):0;
   if(jn&&wrap){ if(!jw){ jw=document.createElement('span'); jw.className='rc-jw'; wrap.appendChild(jw); }
-    if(+jw.dataset.n!==jn){ jw.dataset.n=jn; const sz=Math.min(.3,1.05/jn).toFixed(3); jw.innerHTML=('<i style="width:'+sz+'rem;height:'+sz+'rem"></i>').repeat(jn);
+    if(+jw.dataset.n!==jn){ jw.dataset.n=jn; const sz=Math.min(.13,.8/jn).toFixed(3); jw.innerHTML=('<i style="width:'+sz+'rem;height:'+sz+'rem"></i>').repeat(jn);
       const all=jn===(annex||[]).length; jw.title=jn+' of '+(annex||[]).length+' annexes with every mark'+(all?': all of them':''); jw.setAttribute('aria-label',jw.title); if(rc) rc.title='every annex passed; '+jw.title; } }
   else if(jw) jw.remove();
 }
