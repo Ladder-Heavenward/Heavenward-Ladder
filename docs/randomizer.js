@@ -3262,6 +3262,627 @@ K({id:'margin',step:'30q',steps:['30q'],title:'a poll’s margin against its siz
   return card(this,{ix:what+','+mark[0],links:['30q.sample-size'].concat(what==='read'?['30q.estimate']:[]),fig,ask,right,opts:o,why}); }});
 })();
 
+/* ===== Read Graph, part F: the figure kinds (Andrew 2026-11-15 03:07Z: "check the graph view laundry tab's seed.link system and make sure
+   that it has the ability to produce/include all the kind of graphs you've just added"; 03:21Z "Build them now"). Six shared drawers
+   (a plot with arrows, four curve colours, a key and two panels; a wide table; a free graph; a general tree; gates; a message diagram
+   for 2 to 4 machines) and the card kinds that grow their seeds on them. Every answer is computed from the seed. Loaded before rgraphZ. ===== */
+(function(){
+const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph, K=G.K, {sg,dec,uniq,tp,tv}=G;
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const ri=(a,b)=>a+rn(b-a+1), M='−', f1=v=>Math.round(v*10)/10;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const card=(k,o)=>Object.assign({index:'g:'+k.id+'['+o.ix+']'+(o.links&&o.links.length?'.'+o.links.join('+'):''), a3:['g.'+k.id+'['+o.ix+']',(o.links&&o.links.length?o.links.join('+'):k.step),'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+const four=(right,c)=>{ const ws=uniq(right,c).slice(0,3); return ws.length<3?null:sh([right,...ws]); };
+const box=(W,H,body,alt)=>'<svg class="rgfig" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(alt)+'" xmlns="http://www.w3.org/2000/svg">'+body+'</svg>';
+const T=(x,y,s,cls,a)=>'<text class="'+(cls||'rg-lab')+'" x="'+f1(x)+'" y="'+f1(y)+'"'+(a?' text-anchor="'+a+'"':'')+'>'+esc(s)+'</text>';
+const Ln=(x1,y1,x2,y2,cls,ex)=>'<line class="'+(cls||'rg-axis')+'" x1="'+f1(x1)+'" y1="'+f1(y1)+'" x2="'+f1(x2)+'" y2="'+f1(y2)+'"'+(ex||'')+'/>';
+const Ci=(x,y,r,cls)=>'<circle class="'+(cls||'rg-dot')+'" cx="'+f1(x)+'" cy="'+f1(y)+'" r="'+r+'"/>';
+const Re=(x,y,w,h,cls)=>'<rect class="'+(cls||'rg-bar')+'" x="'+f1(x)+'" y="'+f1(y)+'" width="'+f1(w)+'" height="'+f1(h)+'"/>';
+let UID=0; const uid=()=>'rf'+(++UID)+'x'+rn(1e6);
+const marker=id=>'<defs><marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="rg-head" d="M0 0L10 5L0 10z"/></marker></defs>';
+const Ar=(x1,y1,x2,y2,id,cls)=>Ln(x1,y1,x2,y2,cls||'rg-cv',' marker-end="url(#'+id+')"');
+const sumA=a=>a.reduce((s,v)=>s+v,0);
+const KC={a:'rg-cv',b:'rg-cv rg-b',c:'rg-cv rg-c',d:'rg-cv rg-d'}, KD={a:'rg-dot',b:'rg-dot rg-db',c:'rg-dot rg-dc',d:'rg-dot rg-dd'};
+const LETK=['a','b','c','d'];
+
+/* the colours, the marked cells and the gate shapes this part needs; the rest of the look is the Read Graph's own */
+if(typeof document!=='undefined'&&document.head&&!document.getElementById('rgF')){ const s=document.createElement('style'); s.id='rgF';
+  s.textContent='.rg-c{stroke:var(--plum,#7b4b94)}.rg-d{stroke:var(--gold,#b08a2e)}.rg-db{fill:var(--ember,#c8501e)}.rg-dc{fill:var(--plum,#7b4b94)}.rg-dd{fill:var(--gold,#b08a2e)}'
+   +'.rg-fill2{fill:rgba(200,80,30,.22)}.rg-gate{fill:var(--card,#fff);stroke:currentColor;stroke-width:1.5}.rg-wire{fill:none;stroke:currentColor;stroke-width:1.3}.rg-hi{stroke:var(--ember,#c8501e)!important;stroke-width:3!important}'
+   +'.rg-col1{fill:rgba(31,111,139,.55)}.rg-col2{fill:rgba(200,80,30,.55)}.rg-col3{fill:rgba(176,138,46,.6)}.rg-col4{fill:rgba(123,75,148,.55)}.rg-strike{stroke:var(--ember,#c8501e);stroke-width:2}';
+  document.head.appendChild(s); }
+
+/* ---------- drawer 1: a plot with arrows, up to four curve colours, a key, and one or two panels ----------
+   S: {x:[x0,x1], y:[y0,y1], sx, sy, lx, ly, xl, yl, parts:[...], key:[[k,label],..]}
+   parts: {t:'fn',f,from,to,k,dash} {t:'line',pts,k,dash} {t:'dots',pts,k,open} {t:'arrow',from,to,k} {t:'text',at,s,dx,dy,cls}
+          {t:'level',F,levels} (level curves by marching squares) {t:'ring',at,r,k} */
+function panel(S,ox,id,oy){ oy=oy||0; const W=320, ml=34, mr=12, mt=12+oy, mb=30, pw=W-ml-mr, ph=230-12-mb;
+  const [x0,x1]=S.x, [y0,y1]=S.y, X=x=>ox+ml+(x-x0)/(x1-x0)*pw, Y=y=>mt+(y1-y)/(y1-y0)*ph, o=[], cid=uid();
+  o.push('<defs><clipPath id="'+cid+'"><rect x="'+(ox+ml)+'" y="'+mt+'" width="'+pw+'" height="'+ph+'"/></clipPath></defs>');
+  const sx=S.sx||1, sy=S.sy||1, lx=S.lx||sx, ly=S.ly||sy, lab=v=>sg(Math.round(v*1000)/1000);
+  for(let x=Math.ceil(x0/sx-1e-9)*sx;x<=x1+1e-9;x+=sx) o.push(Ln(X(x),mt,X(x),mt+ph,'rg-grid'));
+  for(let y=Math.ceil(y0/sy-1e-9)*sy;y<=y1+1e-9;y+=sy) o.push(Ln(ox+ml,Y(y),ox+ml+pw,Y(y),'rg-grid'));
+  const ax=(x0<=0&&x1>=0)?X(0):ox+ml, ay=(y0<=0&&y1>=0)?Y(0):mt+ph;
+  o.push(Ln(ox+ml,ay,ox+ml+pw,ay)+Ln(ax,mt,ax,mt+ph));
+  for(let x=Math.ceil(x0/lx-1e-9)*lx;x<=x1+1e-9;x+=lx){ const v=Math.round(x*1000)/1000; if(Math.abs(v)<1e-9&&ax!==ox+ml) continue; o.push(T(X(v),Math.min(ay+13,mt+ph+13),lab(v),'rg-lab','middle')); }
+  for(let y=Math.ceil(y0/ly-1e-9)*ly;y<=y1+1e-9;y+=ly){ const v=Math.round(y*1000)/1000; if(Math.abs(v)<1e-9&&ay!==mt+ph) continue; o.push(T(Math.max(ax-4,ox+ml-4),Y(v)+3.5,lab(v),'rg-lab','end')); }
+  if(S.xl) o.push(T(ox+ml+pw,mt+ph+26,S.xl,'rg-name','end')); if(S.yl) o.push(T(ox+ml+4,mt+10,S.yl,'rg-name','start'));
+  const cl=' clip-path="url(#'+cid+')"', pl=(pts,k,dash)=>'<polyline'+cl+' class="'+KC[k||'a']+(dash?' rg-dash':'')+'" points="'+pts.filter(p=>isFinite(p[1])).map(([x,y])=>f1(X(x))+','+f1(Y(Math.max(y0-(y1-y0),Math.min(y1+(y1-y0),y))))).join(' ')+'"/>';
+  (S.parts||[]).forEach(p=>{
+    if(p.t==='fn'){ const n=p.n||160, a=p.from===undefined?x0:p.from, b=p.to===undefined?x1:p.to, pts=[]; for(let i=0;i<=n;i++){ const x=a+(b-a)*i/n; pts.push([x,p.f(x)]); } o.push(pl(pts,p.k,p.dash)); }
+    if(p.t==='line') o.push(pl(p.pts,p.k,p.dash));
+    if(p.t==='dots') p.pts.forEach(([x,y])=>o.push(Ci(X(x),Y(y),p.r||3.4,p.open?'rg-open':KD[p.k||'a'])));
+    if(p.t==='ring') o.push('<circle'+cl+' class="'+KC[p.k||'a']+'" cx="'+f1(X(p.at[0]))+'" cy="'+f1(Y(p.at[1]))+'" r="'+f1(p.r*pw/(x1-x0))+'"/>');
+    if(p.t==='arrow') o.push(Ar(X(p.from[0]),Y(p.from[1]),X(p.to[0]),Y(p.to[1]),id,KC[p.k||'b']));
+    if(p.t==='text') o.push(T(X(p.at[0])+(p.dx||0),Y(p.at[1])+(p.dy||0),p.s,p.cls||'rg-lab',p.a||'start'));
+    if(p.t==='level'){ const N=48, gx=i=>x0+(x1-x0)*i/N, gy=j=>y0+(y1-y0)*j/N; p.levels.forEach(L=>{ for(let i=0;i<N;i++) for(let j=0;j<N;j++){
+        const P=[[gx(i),gy(j)],[gx(i+1),gy(j)],[gx(i+1),gy(j+1)],[gx(i),gy(j+1)]], v=P.map(([x,y])=>p.F(x,y)-L), q=[];
+        for(let e=0;e<4;e++){ const a=v[e], b=v[(e+1)%4]; if(a*b<0){ const t=a/(a-b), A=P[e], B=P[(e+1)%4]; q.push([A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t]); } }
+        if(q.length===2) o.push('<line'+cl+' class="rg-grid" style="stroke:var(--muted,#888);stroke-width:1" x1="'+f1(X(q[0][0]))+'" y1="'+f1(Y(q[0][1]))+'" x2="'+f1(X(q[1][0]))+'" y2="'+f1(Y(q[1][1]))+'"/>'); } }); }
+  });
+  if(S.key){ const kx=ox+ml+8, ky=mt+8; o.push(Re(kx-4,ky-4,96,S.key.length*15+4,'rg-uni')); S.key.forEach(([k,s],i)=>{ o.push(Ln(kx,ky+6+i*15,kx+16,ky+6+i*15,KC[k])+T(kx+21,ky+10+i*15,s,'rg-lab','start')); }); }
+  return o.join(''); }
+const plot=(S,alt)=>{ const id=uid(); return box(320,230,marker(id)+panel(S,0,id),alt); };
+const plot2=(A,B,alt)=>{ const id=uid(); return box(320,460,marker(id)+panel(A,0,id)+panel(B,0,id,230),alt); };
+
+/* ---------- drawer 2: a wide table: any number of columns, several shaded rows, any marks in the cells, or the grid form ---------- */
+function wtable(heads,rows,opt){ opt=opt||{}; const mark=opt.mark||[], cw=heads.map((h,j)=>Math.max(opt.cw||34,String(h).length*8+14)), W=sumA(cw)+2, rh=22, H=rh*(rows.length+1)+2;
+  const xs=[]; let x=1; cw.forEach(w=>{ xs.push(x); x+=w; });
+  const o=['<rect class="rg-tthead" x="1" y="1" width="'+(W-2)+'" height="'+rh+'"/>'];
+  heads.forEach((h,j)=>o.push(T(xs[j]+cw[j]/2,rh-6,h,'rg-ttt','middle')));
+  rows.forEach((r,i)=>{ const y=1+rh*(i+1); if(mark.includes(i)) o.push(Re(1,y,W-2,rh,'rg-ttmark'));
+    r.forEach((c,j)=>{ if(opt.cellmark&&opt.cellmark.some(([a,b])=>a===i&&b===j)) o.push(Re(xs[j]+1,y+1,cw[j]-2,rh-2,'rg-fill2')); o.push(T(xs[j]+cw[j]/2,y+rh-6,c,'rg-ttt'+(opt.out&&opt.out.includes(j)?' rg-ttout':''),'middle')); }); });
+  if(opt.split) opt.split.forEach(j=>o.push(Ln(xs[j],1,xs[j],H-1,'rg-ttbox')));
+  o.push('<rect class="rg-ttbox" x="1" y="1" width="'+(W-2)+'" height="'+(H-2)+'"/>');
+  return '<svg class="rgfig rgtt" style="max-width:'+Math.round(W*1.25)+'px" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(opt.alt||'a table')+'" xmlns="http://www.w3.org/2000/svg">'+o.join('')+'</svg>'; }
+/* the grid form of a table on three letters: P down the side, Q R across in the order TT, TF, FF, FT, so neighbours differ in one letter */
+function kgrid(f,L){ const cols=[[1,1],[1,0],[0,0],[0,1]], W=60+4*44, H=40+2*36, o=[];
+  cols.forEach(([q,r],j)=>o.push(T(80+j*44,24,(q?'T':'F')+(r?'T':'F'),'rg-ttt','middle')));
+  [1,0].forEach((p,i)=>{ o.push(T(30,40+i*36+22,p?'T':'F','rg-ttt','middle'));
+    cols.forEach(([q,r],j)=>{ const v=f({[L[0]]:!!p,[L[1]]:!!q,[L[2]]:!!r}); o.push((v?'<rect class="rg-ttmark" x="'+(58+j*44)+'" y="'+(40+i*36)+'" width="44" height="36"/>':'')+'<rect class="rg-ttbox" x="'+(58+j*44)+'" y="'+(40+i*36)+'" width="44" height="36"/>'+T(80+j*44,40+i*36+23,v?'1':'0','rg-ttt','middle')); }); });
+  o.push(T(30,24,L[0]+' \\ '+L[1]+L[2],'rg-lab','middle'));
+  return box(W,H,o.join(''),'a table drawn as a grid, the rows that give 1 shaded'); }
+
+/* ---------- drawer 3: a free graph: dots placed by the seed, one-way or two-way links, labels on links, loops, more than one link
+   between two dots (by bend), coloured dots, boxes and diamonds, a double ring and a start arrow ----------
+   N: [{x,y,s,r,ring,start,col,shape:'dot'|'box'|'diamond',w,h,cls}]   E: [{a,b,s,dir,bend,loop,hi,dash,ang}] */
+function fgraph(N,E,W,H,alt){ const id=uid(), o=[marker(id)];
+  const edgePt=(n,tx,ty)=>{ const dx=tx-n.x, dy=ty-n.y, L=Math.hypot(dx,dy)||1; if(n.shape==='box'||n.shape==='diamond'){ const w=(n.w||60)/2, h=(n.h||28)/2, t=n.shape==='box'?Math.min(w/Math.abs(dx||1e-9),h/Math.abs(dy||1e-9)):1/(Math.abs(dx)/w+Math.abs(dy)/h); return [n.x+dx*t,n.y+dy*t]; } const r=(n.r||13)+(n.ring?4:0)+1; return [n.x+dx/L*r,n.y+dy/L*r]; };
+  E.forEach(e=>{ const A=N[e.a], B=N[e.b], cls='rg-cv'+(e.hi?' rg-b':'')+(e.dash?' rg-dash':''), mk=e.dir===false?'':' marker-end="url(#'+id+')"';
+    if(e.loop||e.a===e.b){ const g=(e.ang===undefined?-90:e.ang)*Math.PI/180, r=(A.r||13), ux=Math.cos(g), uy=Math.sin(g), px=-uy, py=ux;
+      const s1=[A.x+(ux*0.8+px*0.6)*r,A.y+(uy*0.8+py*0.6)*r], s2=[A.x+(ux*0.8-px*0.6)*r,A.y+(uy*0.8-py*0.6)*r], c1=[A.x+(ux*2.9+px*1.6)*r,A.y+(uy*2.9+py*1.6)*r], c2=[A.x+(ux*2.9-px*1.6)*r,A.y+(uy*2.9-py*1.6)*r];
+      o.push('<path class="'+cls+'"'+mk+' d="M'+f1(s1[0])+' '+f1(s1[1])+' C'+f1(c1[0])+' '+f1(c1[1])+' '+f1(c2[0])+' '+f1(c2[1])+' '+f1(s2[0])+' '+f1(s2[1])+'"/>');
+      if(e.s) o.push(T(A.x+ux*r*3.1,A.y+uy*r*3.1+4,e.s,'rg-wt','middle')); return; }
+    const mx=(A.x+B.x)/2, my=(A.y+B.y)/2, dx=B.x-A.x, dy=B.y-A.y, L=Math.hypot(dx,dy)||1, nx=-dy/L, ny=dx/L, bd=e.bend||0, cx=mx+nx*bd*2, cy=my+ny*bd*2;
+    const p0=edgePt(A,cx,cy), p1=edgePt(B,cx,cy);
+    o.push('<path class="'+cls+'"'+mk+' d="M'+f1(p0[0])+' '+f1(p0[1])+' Q'+f1(cx)+' '+f1(cy)+' '+f1(p1[0])+' '+f1(p1[1])+'"/>');
+    if(e.s!==undefined&&e.s!==''){ const t=e.pos===undefined?0.5:e.pos, qx=(1-t)*(1-t)*p0[0]+2*(1-t)*t*cx+t*t*p1[0], qy=(1-t)*(1-t)*p0[1]+2*(1-t)*t*cy+t*t*p1[1], side=(e.side||1)*(bd<0?-1:1); o.push(Re(qx+nx*11*side-9,qy+ny*11*side-9,18,15,'rg-node" style="stroke:none')+T(qx+nx*11*side,qy+ny*11*side+3,e.s,'rg-wt','middle')); } });
+  N.forEach(n=>{ if(n.start){ const [sx,sy]=[n.x-(n.r||13)-26,n.y]; o.push(Ar(sx,sy,n.x-(n.r||13)-(n.ring?5:2),n.y,id,'rg-axis')); }
+    if(n.shape==='box') o.push(Re(n.x-(n.w||60)/2,n.y-(n.h||28)/2,n.w||60,n.h||28,'rg-node'));
+    else if(n.shape==='diamond'){ const w=(n.w||70)/2, h=(n.h||36)/2; o.push('<polygon class="rg-node" points="'+[[n.x,n.y-h],[n.x+w,n.y],[n.x,n.y+h],[n.x-w,n.y]].map(p=>p.map(f1).join(',')).join(' ')+'"/>'); }
+    else if(n.shape==='dot') o.push(Ci(n.x,n.y,n.r||5,n.cls||'rg-dot'));
+    else { o.push('<circle class="'+(n.col?'rg-col'+n.col:(n.cls||'rg-node'))+'" cx="'+f1(n.x)+'" cy="'+f1(n.y)+'" r="'+(n.r||13)+'"'+(n.col?' style="stroke:var(--ink,#222);stroke-width:1.2"':'')+'/>'); if(n.ring) o.push('<circle class="rg-set" cx="'+f1(n.x)+'" cy="'+f1(n.y)+'" r="'+((n.r||13)+4)+'"/>'); }
+    if(n.s!==undefined) o.push(T(n.x+(n.dx||0),n.y+(n.dy===undefined?4.5:n.dy),n.s,n.shape==='box'||n.shape==='diamond'?'rg-lab" style="fill:currentColor;font-size:11.5px':'rg-tag','middle')); });
+  return box(W,H,o.join(''),alt||'dots joined by links'); }
+const ringPos=(n,cx,cy,r,start)=>[...Array(n)].map((_,i)=>{ const a=(start===undefined?-90:start)*Math.PI/180+2*Math.PI*i/n; return [cx+r*Math.cos(a),cy+r*Math.sin(a)]; });
+
+/* ---------- drawer 4: a general tree: any branching, labels at the dots and on the branches ----------
+   node {s, kids:[...], e (branch label)}; leaves spread evenly, levels evenly down */
+function gtree(root,W,H,alt){ const leaves=[], depth=n=>n.kids&&n.kids.length?1+Math.max(...n.kids.map(depth)):0, D=depth(root);
+  const walk=n=>{ if(!n.kids||!n.kids.length){ leaves.push(n); return; } n.kids.forEach(walk); }; walk(root);
+  leaves.forEach((l,i)=>{ l._x=24+(W-48)*(leaves.length===1?0.5:i/(leaves.length-1)); });
+  const place=(n,d)=>{ n._y=22+(H-50)*d/Math.max(D,1); if(n.kids&&n.kids.length){ n.kids.forEach(k=>place(k,d+1)); n._x=sumA(n.kids.map(k=>k._x))/n.kids.length; } }; place(root,0);
+  const o=[]; const draw=n=>{ (n.kids||[]).forEach(k=>{ o.push(Ln(n._x,n._y,k._x,k._y,k.hi?'rg-cv rg-b':'rg-cv')); if(k.e!==undefined) o.push(T((n._x+k._x)/2+(k._x<n._x?-6:6),(n._y+k._y)/2,k.e,'rg-wt',k._x<n._x?'end':'start')); draw(k); }); }; draw(root);
+  const dots=n=>{ const leaf=!n.kids||!n.kids.length; if(leaf){ o.push(Ci(n._x,n._y,4,'rg-dot')+T(n._x,n._y+18,n.s,'rg-tag','middle')); } else { const w=Math.max(26,String(n.s).length*8+10); o.push(Re(n._x-w/2,n._y-11,w,22,'rg-node')+T(n._x,n._y+4,n.s,'rg-tag','middle')); } (n.kids||[]).forEach(dots); }; dots(root);
+  return box(W,H,o.join(''),alt||'a tree'); }
+
+/* ---------- drawer 5: gates: not, both (and), either (or), not-and, not-either, one-but-not-both, wired by the seed ----------
+   ins: letter names; gates: [{op:'AND'|'OR'|'NOT'|'NAND'|'NOR'|'XOR', a:src, b:src}], src = 'i0'.. or 'g0'..; the last gate is the output */
+function gcirc(ins,gates,W,H,vals){ const lev={}, Y={}; ins.forEach((s,i)=>{ lev['i'+i]=0; });
+  gates.forEach((g,j)=>{ lev['g'+j]=1+Math.max(lev[g.a],g.b!==undefined?lev[g.b]:0); });
+  const maxL=Math.max(...gates.map((g,j)=>lev['g'+j])), colX=l=>60+(l-1)*((W-150)/Math.max(maxL-1,1));
+  ins.forEach((s,i)=>{ Y['i'+i]=30+i*((H-60)/Math.max(ins.length-1,1)); });
+  const byL={}; gates.forEach((g,j)=>{ (byL[lev['g'+j]]=byL[lev['g'+j]]||[]).push(j); });
+  Object.keys(byL).forEach(l=>{ byL[l].forEach((j,k)=>{ const g=gates[j], want=(Y[g.a]+(g.b!==undefined?Y[g.b]:Y[g.a]))/2; Y['g'+j]=want; }); const js=byL[l].slice().sort((a,b)=>Y['g'+a]-Y['g'+b]); for(let k=1;k<js.length;k++) if(Y['g'+js[k]]-Y['g'+js[k-1]]<52) Y['g'+js[k]]=Y['g'+js[k-1]]+52; });
+  const o=[], outX={}; ins.forEach((s,i)=>{ o.push(T(12,Y['i'+i]+4,s+(vals?' = '+vals[i]:''),'rg-tag','start')); outX['i'+i]=vals?52:26; });
+  const shape=(op,x,y)=>{ const w=40, h=30, bub=/^N|^NOT/.test(op)&&op!=='NOT'||op==='NOT', base=op.replace(/^N(?!OT)/,''); let s='';
+    if(op==='NOT') s='<path class="rg-gate" d="M'+x+' '+(y-12)+' L'+(x+26)+' '+y+' L'+x+' '+(y+12)+'Z"/>';
+    else if(base==='AND') s='<path class="rg-gate" d="M'+x+' '+(y-h/2)+' H'+(x+w/2)+' A'+(h/2)+' '+(h/2)+' 0 0 1 '+(x+w/2)+' '+(y+h/2)+' H'+x+'Z"/>';
+    else { s='<path class="rg-gate" d="M'+x+' '+(y-h/2)+' Q'+(x+w*0.6)+' '+(y-h/2)+' '+(x+w)+' '+y+' Q'+(x+w*0.6)+' '+(y+h/2)+' '+x+' '+(y+h/2)+' Q'+(x+10)+' '+y+' '+x+' '+(y-h/2)+'Z"/>'; if(base==='XOR') s+='<path class="rg-wire" d="M'+(x-6)+' '+(y-h/2)+' Q'+(x+4)+' '+y+' '+(x-6)+' '+(y+h/2)+'"/>'; }
+    const right=op==='NOT'?x+26:base==='AND'?x+w/2+h/2:x+w; if(bub) s+='<circle class="rg-gate" cx="'+(right+4)+'" cy="'+y+'" r="4"/>';
+    return [s,bub?right+8:right]; };
+  gates.forEach((g,j)=>{ const x=colX(lev['g'+j])+10, y=Y['g'+j], [s,ox]=shape(g.op,x,y); o.push(s); outX['g'+j]=ox;
+    const pins=g.op==='NOT'?[[g.a,y]]:[[g.a,y-8],[g.b,y+8]];
+    pins.forEach(([src,py])=>{ const sx=outX[src], sy=Y[src], mx=x-12-(pins.length>1&&py>y?6:0); o.push('<polyline class="rg-wire" points="'+sx+','+f1(sy)+' '+f1(mx)+','+f1(sy)+' '+f1(mx)+','+f1(py)+' '+(x+(g.op==='NOT'||/AND/.test(g.op)?0:6))+','+f1(py)+'"/>'); }); });
+  const last='g'+(gates.length-1); o.push(Ln(outX[last],Y[last],W-34,Y[last],'rg-wire')+T(W-30,Y[last]+4,'out','rg-lab','start'));
+  return box(W,H,o.join(''),'a circuit of gates'); }
+const GOP={AND:(a,b)=>a&&b,OR:(a,b)=>a||b,NOT:a=>!a,NAND:(a,b)=>!(a&&b),NOR:(a,b)=>!(a||b),XOR:(a,b)=>a!==b};
+const gEval=(gates,v)=>{ const val={}; v.forEach((x,i)=>{ val['i'+i]=!!x; }); gates.forEach((g,j)=>{ val['g'+j]=GOP[g.op](val[g.a],val[g.b]); }); return val['g'+(gates.length-1)]; };
+const GNAME={AND:'both',OR:'either',NOT:'not',NAND:'not-and',NOR:'neither',XOR:'one but not both'};
+
+/* ---------- drawer 6: a message diagram for 2 to 4 machines: time lines, messages as slanted arrows (labelled, or struck out), events ---------- */
+function mdia(names,msgs,evs,W,H){ const id=uid(), m=names.length, Yp=i=>30+i*((H-50)/Math.max(m-1,1)), o=[marker(id)];
+  names.forEach((s,i)=>o.push(Ln(36,Yp(i),W-10,Yp(i))+T(8,Yp(i)+4,s,'rg-tag','start')));
+  msgs.forEach(g=>{ const y1=Yp(g.from), y2=Yp(g.to), d=y2>y1?-6:6; o.push(Ar(g.x1,y1,g.x2,y2+d,id,'rg-cv'+(g.k==='b'?' rg-b':'')+(g.dash?' rg-dash':'')));
+    if(g.s){ const t=g.lpos===undefined?0.5:g.lpos; o.push(T(g.x1+(g.x2-g.x1)*t+5,y1+(y2-y1)*t-3,g.s,'rg-lab','start')); }
+    if(g.struck){ const cx=(g.x1+g.x2)/2, cy=(y1+y2)/2; o.push(Ln(cx-7,cy-7,cx+7,cy+7,'rg-strike')+Ln(cx-7,cy+7,cx+7,cy-7,'rg-strike')); } });
+  evs.forEach(e=>{ o.push(Ci(e.x,Yp(e.p),e.big?6:4,e.big?'rg-dot rg-db':'rg-dot')); if(e.s) o.push(T(e.x,Yp(e.p)-9,e.s,'rg-tag','middle')); });
+  return box(W,H,o.join(''),'machines in time, with messages'); }
+
+G.F={plot,plot2,panel,wtable,kgrid,fgraph,gtree,gcirc,gEval,mdia,ringPos};
+
+/* ================= kinds on the plot ================= */
+/* 28o: downhill steps on a bowl; which step size drew them */
+K({id:'downhill',step:'28o',steps:['28g','28o'],title:'which step size drew the downhill steps',make(){
+  const c=pk([2,3,4]), F=(x,y)=>x*x+c*y*y, x0=pk([-3,-2,2,3]), y0=pk([-2,-1,1,2]), hs=sh([0.1,0.15,0.2,0.25,0.3,0.35]).slice(0,4), h=hs[0];
+  const path=hh=>{ const p=[[x0,y0]]; for(let i=0;i<4;i++){ const [x,y]=p[p.length-1]; p.push([x-hh*2*x,y-hh*2*c*y]); } return p; };
+  const P=path(h); if(P.some(([x,y])=>Math.abs(x)>4.4||Math.abs(y)>4.4)) return null;
+  const parts=[{t:'level',F,levels:[1,4,9,16].map(v=>v*1)}]; for(let i=0;i<4;i++) parts.push({t:'arrow',from:P[i],to:P[i+1],k:'b'}); parts.push({t:'dots',pts:[P[0]]});
+  const right='h = '+dec(h), o=four(right,hs.slice(1).map(v=>'h = '+dec(v))); if(!o) return null;
+  return card(this,{ix:c+';'+x0+','+y0+';'+h,links:['28g.uphill','28o.downhill-step'],fig:plot({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts,alt:''},'level curves of a bowl with four downhill steps'),
+    ask:'The level curves are f = x² + '+c+'y². Four downhill steps p ← p − h∇f start at the dot. Which step size h drew them?',right,opts:o,
+    why:'∇f = (2x, '+(2*c)+'y), so each step multiplies x by 1 − 2h and y by 1 − '+(2*c)+'h. The first step goes from ('+sg(x0)+', '+sg(y0)+') to ('+dec(P[1][0])+', '+dec(P[1][1])+'): x is multiplied by '+dec(1-2*h)+', so 1 − 2h = '+dec(1-2*h)+' and h = '+dec(h)+'.'}); }});
+
+/* 28g: the uphill vector at a point of a level map */
+K({id:'uphill',step:'28g',title:'the uphill vector off a level map',make(){
+  const fs=[['x² + 2y²',(x,y)=>x*x+2*y*y,(x,y)=>[2*x,4*y]],['xy',(x,y)=>x*y,(x,y)=>[y,x]],['x² − y²',(x,y)=>x*x-y*y,(x,y)=>[2*x,-2*y]],['2x² + y²',(x,y)=>2*x*x+y*y,(x,y)=>[4*x,2*y]],['x² + y²',(x,y)=>x*x+y*y,(x,y)=>[2*x,2*y]]];
+  const [nm,F,g]=pk(fs), p=[ri(-2,2),ri(-2,2)], v=g(p[0],p[1]); if(!v[0]||!v[1]||Math.abs(v[0])===Math.abs(v[1])) return null;
+  const P=a=>'('+a.map(sg).join(', ')+')', right=P(v), o=four(right,[P([v[1],v[0]]),P([-v[0],-v[1]]),P([-v[1],v[0]]),P([v[0]/2,v[1]/2].map(z=>Math.round(z*2)/2))]); if(!o) return null;
+  const L=Math.hypot(v[0],v[1]), s=1.4/L;
+  return card(this,{ix:nm+';'+p.join(','),links:['28g.uphill'],fig:plot({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'level',F,levels:[-8,-4,-2,-1,1,2,4,8,12]},{t:'arrow',from:p,to:[p[0]+v[0]*s,p[1]+v[1]*s],k:'b'},{t:'dots',pts:[p]}]},'level curves with one point and its uphill arrow'),
+    ask:'The level curves of f = '+nm+' are drawn, with an arrow uphill at the dot ('+sg(p[0])+', '+sg(p[1])+'). What is ∇f there?',right,opts:o,
+    why:'∇f lists the two partial slopes: for f = '+nm+' they are '+(nm==='xy'?'(y, x)':P(['∂f/∂x','∂f/∂y']))+'; at ('+sg(p[0])+', '+sg(p[1])+') that is '+right+'. It crosses the level curve at a right angle and points uphill; '+P([-v[0],-v[1]])+' points down and '+P([-v[1],v[0]])+' runs along the curve.'}); }});
+
+/* 24k: resting places that hold, off the graph of F and its phase arrows */
+K({id:'resting',step:'24k',title:'which resting places hold',make(){
+  const rs=sh([-3,-2,-1,0,1,2,3]).slice(0,3).sort((a,b)=>a-b), k=pk([1,-1]), F=y=>k*(y-rs[0])*(y-rs[1])*(y-rs[2])/4, sl=r=>k*rs.filter(s=>s!==r).reduce((p,s)=>p*(r-s),1);
+  const hold=rs.filter(r=>sl(r)<0), nm=a=>a.length===3?'all three':a.length===0?'none':a.map(r=>'y = '+sg(r)).join(' and ');
+  const parts=[{t:'fn',f:F,from:-4.5,to:4.5}], pts=rs.map(r=>[r,0]);
+  [-4.2,...rs.slice(0,2).map((r,i)=>(r+rs[i+1])/2),4.2].forEach(m=>{ const up=F(m)>0; parts.push({t:'arrow',from:[m-(up?0.35:-0.35),0],to:[m+(up?0.35:-0.35),0],k:'b'}); });
+  parts.push({t:'dots',pts});
+  const right=nm(hold), cand=[nm([rs[0]]),nm([rs[1]]),nm([rs[2]]),nm([rs[0],rs[2]]),nm(rs),nm([rs[0],rs[1]])], o=four(right,cand); if(!o) return null;
+  return card(this,{ix:rs.join(',')+';'+k,links:['24k.rest-holds'],fig:plot({x:[-4.5,4.5],y:[-4.5,4.5],xl:'y',yl:'F(y)',parts},'the graph of F with arrows on the axis'),
+    ask:'For y′ = F(y), the graph of F is drawn, with arrows on the axis showing which way y moves. Which resting places hold?',right,opts:o,
+    why:'A rest holds when y moves toward it from both sides: F is above 0 just left of it and below 0 just right, so F falls through 0 there. That happens at '+right+'; at '+rs.filter(r=>!hold.includes(r)).map(r=>'y = '+sg(r)).join(' and ')+' the arrows point away.'}); }});
+
+/* 30j: four bells told apart by colour and key */
+K({id:'spreads',step:'30j',title:'which bell has this spread',make(){
+  const ss=sh([0.5,0.75,1,1.5,2]).slice(0,4), b=s=>x=>Math.exp(-x*x/(2*s*s))/(s*Math.sqrt(2*Math.PI)), w=rn(4), LAB=['A','B','C','D'];
+  const parts=ss.map((s,i)=>({t:'fn',f:b(s),k:LETK[i],n:200}));
+  const right='curve '+LAB[w], o=sh(LAB.map(l=>'curve '+l));
+  return card(this,{ix:ss.join(',')+';'+w,links:['30j.bell'],fig:plot({x:[-4,4],y:[0,0.85],sx:1,sy:0.1,lx:1,ly:0.2,xl:'x',parts,key:ss.map((s,i)=>[LETK[i],'curve '+LAB[i]])},'four bell curves in four colours'),
+    ask:'Four bells with centre 0 are drawn. Which one has spread σ = '+dec(ss[w])+'?',right,opts:o,
+    why:'A bell’s top is 1/(σ√(2π)), so the wider the spread, the lower and flatter the bell. σ = '+dec(ss[w])+' gives a top of '+dec(b(ss[w])(0))+', which is '+right+'.'}); }});
+
+/* 24·econ: the loop and the swing in time, two panels */
+K({id:'swing',step:'24·econ',steps:['24h','24·econ'],title:'one swing off a two-panel loop',make(){
+  const [p,q]=pk([[1,1],[0.5,2],[1,4],[2,2],[0.5,0.5],[1,0.25],[2,0.5],[4,1]]), n=Math.sqrt(p*q), A=1, per=2*Math.PI/n; if(per>16) return null;
+  const X=t=>A*Math.cos(n*t), Y=t=>A*n/p*Math.sin(n*t), top=Math.max(1,n/p)*1.3;
+  const ts=[...Array(121)].map((_,i)=>i*per/120), loop=ts.map(t=>[X(t),Y(t)]);
+  const L={x:[-top,top],y:[-top,top],sx:top/4,sy:top/4,lx:top/2,ly:top/2,xl:'x',yl:'y',parts:[{t:'line',pts:loop,k:'c'},{t:'arrow',from:[X(per/8),Y(per/8)],to:[X(per/8+0.05),Y(per/8+0.05)],k:'c'},{t:'dots',pts:[[A,0]]}]};
+  const Tm=Math.ceil(per*1.6), Rt={x:[0,Tm],y:[-top,top],sx:1,sy:top/4,lx:Tm>12?4:2,ly:top/2,xl:'years',parts:[{t:'fn',f:X,k:'a'},{t:'fn',f:Y,k:'b'}],key:[['a','x'],['b','y']]};
+  const right=dec(Math.round(per*10)/10), o=four(right,[dec(Math.round(per*5)/10),dec(Math.round(per*20)/10),dec(Math.round(2*Math.PI*n*10)/10),dec(Math.round(2*Math.PI/(p*q)*10)/10)]); if(!o) return null;
+  return card(this,{ix:p+','+q,links:['24·econ.each-steers'],fig:plot2(L,Rt,'the loop of x and y, and x and y against time'),
+    ask:'x′ = −'+(p===1?'':dec(p))+'y and y′ = '+(q===1?'':dec(q))+'x. The loop is on top; x and y against time are below. How many years does one full swing take?',right,opts:o,
+    why:'x″ = −pq·x, so x swings as cos(√(pq)·t) with √(pq) = '+dec(n)+'. One swing takes 2π/√(pq) = '+right+' years; below, x comes back to its top after that long.'}); }});
+
+/* 21·phys: a block on a slope, the weight split into along and into */
+K({id:'slopeblock',step:'21·phys',steps:['21b','21·phys'],title:'a weight split along a slope',make(){
+  const W=pk([10,20,40,60]), deg=pk([30,60]), along=R()<0.5, s=deg===30?0.5:Math.sqrt(3)/2, c=deg===30?Math.sqrt(3)/2:0.5;
+  const a=deg*Math.PI/180, x0=deg===60?90:30, y0=215, L=deg===60?205:270, x1=x0+L*Math.cos(a), y1=y0-L*Math.sin(a), ux=Math.cos(a), uy=-Math.sin(a), nx=Math.sin(a), ny=Math.cos(a);
+  const bx=x0+0.55*L*ux-nx*16, by=y0+0.55*L*uy-ny*16, id=uid(), sc=70/W*W/70*1.1;
+  let bd=marker(id)+'<polygon class="rg-shade" points="'+x0+','+y0+' '+f1(x1)+','+y0+' '+f1(x1)+','+f1(y1)+'"/>'+Ln(x0,y0,x1,y1,'rg-axis')+Ln(x0,y0,x1,y0,'rg-axis');
+  bd+='<polygon class="rg-node" points="'+[[-1,-1],[1,-1],[1,1],[-1,1]].map(([p,q])=>f1(bx+p*22*ux-q*15*nx)+','+f1(by+p*22*uy-q*15*ny)).join(' ')+'"/>';
+  bd+=Ar(bx,by,bx,by+70,id,'rg-cv')+T(bx+6,by+70,'W = '+W+' N','rg-wt','start');
+  bd+=Ar(bx,by,bx-ux*70*s,by-uy*70*s,id,'rg-cv rg-b')+Ar(bx,by,bx+nx*70*c,by+ny*70*c,id,'rg-cv rg-c');
+  bd+=T(x0+40,y0-6,deg+'°','rg-tag','start')+T(16,22,'red: along the slope; purple: into it','rg-lab','start');
+  const v=along?W*s:W*c, right=dec(Math.round(v*100)/100)+' N', o=four(right,[dec(Math.round(W*(along?c:s)*100)/100)+' N',dec(Math.round(W*Math.tan(a)*100)/100)+' N',W+' N',dec(Math.round(W/2*100)/100*(along?2:1)/2)+' N']); if(!o) return null;
+  return card(this,{ix:W+';'+deg+';'+(along?'a':'i'),links:['21b.next-and-facing','21·phys.slope'],fig:box(320,230,bd,'a block on a slope with its weight split'),
+    ask:'A block of weight '+W+' N rests on a slope at '+deg+'°. How large is the part of its weight '+(along?'pulling down the slope':'pressing into the slope')+'?',right,opts:o,
+    why:'Along the slope the weight gives W sin α, into it W cos α. With α = '+deg+'°, '+(along?'sin':'cos')+' α = '+(((along?s:c)===0.5)?'½':'√3/2')+', so the part is '+right+'.'}); }});
+
+/* ================= kinds on the wide table ================= */
+const TT2=['P ⇒ Q','Q ⇒ P','P ∧ ¬Q','¬P ∨ Q','P ⇔ Q','¬(P ∧ Q)','¬(P ∨ Q)','¬P ∧ Q','P ∨ ¬Q','¬P ⇒ Q','¬(P ⇒ Q)','¬P ⇔ Q','P ∧ Q','P ∨ Q','¬P ∧ ¬Q','¬P ∨ ¬Q','¬Q ⇒ ¬P','¬P ⇒ ¬Q'];
+const TT3=['(P ∧ Q) ⇒ R','P ⇒ (Q ∨ R)','(P ∨ Q) ∧ ¬R','P ∧ (Q ⇒ R)','(P ⇒ R) ∧ (Q ⇒ R)','¬P ∨ (Q ∧ R)','(P ⇔ Q) ∧ R','(P ∨ R) ⇒ Q','P ⇒ (Q ⇒ R)','¬(P ∧ Q) ∨ R','(P ∧ Q) ∨ R','P ∧ (Q ∨ R)','(P ∨ Q) ⇒ R','¬P ∧ (Q ∨ R)'];
+const ROWS=L=>{ const r=[]; for(let m=0;m<(1<<L.length);m++){ const e={}; L.forEach((v,i)=>e[v]=!(m&(1<<(L.length-1-i)))); r.push(e); } return r; };
+const colOf=(s,L)=>ROWS(L).map(e=>tv(tp(s),e)?1:0).join('');
+
+/* 1f: several columns side by side; which two agree on every row */
+K({id:'agree',step:'1f',steps:['1e','1f'],title:'which two columns agree',make(){
+  for(let t=0;t<60;t++){ const fs=sh(TT2).slice(0,4), cs=fs.map(f=>colOf(f,['P','Q'])); const pairs=[]; for(let i=0;i<4;i++) for(let j=i+1;j<4;j++) if(cs[i]===cs[j]) pairs.push([i,j]); if(pairs.length!==1) continue;
+    const [a,b]=pairs[0], nm=(i,j)=>fs[i]+'  /  '+fs[j], right=nm(a,b), others=[]; for(let i=0;i<4;i++) for(let j=i+1;j<4;j++) if(!(i===a&&j===b)) others.push(nm(i,j));
+    const o=four(right,sh(others)); if(!o) continue;
+    const rows=ROWS(['P','Q']).map((e,r)=>[e.P?'T':'F',e.Q?'T':'F',...cs.map(c=>c[r])]);
+    return card(this,{ix:fs.join('|'),links:['1e.row-test','1f.rephrase'],fig:wtable(['P','Q',...fs],rows,{out:[2,3,4,5],split:[2],alt:'a truth table with four statements side by side'}),
+      ask:'Four statements are worked on every row. Which two agree on every row, so that either may stand for the other?',right,opts:o,
+      why:'Read down each column: '+fs.map((f,i)=>f+' gives '+cs[i]).join('; ')+'. Only '+fs[a]+' and '+fs[b]+' give the same marks on all four rows.'}); }
+  return null; }});
+
+/* 39p: several shaded rows; which statement gives 1 on exactly those rows */
+K({id:'shaded',step:'39p',steps:['1e','39p'],title:'the statement of the shaded rows',make(){
+  const f=pk(TT3), L=['P','Q','R'], c=colOf(f,L); if(!/1/.test(c)||!/0/.test(c)) return null;
+  const ws=sh(TT3.filter(g=>colOf(g,L)!==c)); const seen=new Set([c]), pick=[]; ws.forEach(g=>{ const cg=colOf(g,L); if(pick.length<3&&!seen.has(cg)){ seen.add(cg); pick.push(g); } });
+  const o=four(f,pick); if(!o) return null;
+  const rows=ROWS(L).map(e=>L.map(v=>e[v]?'T':'F')), mark=[...c].map((b,i)=>b==='1'?i:-1).filter(i=>i>=0);
+  return card(this,{ix:f,links:['39p.sum-of-boths'],fig:wtable(L,rows,{mark,alt:'the eight rows of three letters with some rows shaded'}),
+    ask:'The shaded rows are exactly the rows on which a statement gives 1. Which statement?',right:f,opts:o,
+    why:f+' gives '+c+' down the eight rows (TTT first), 1 on the shaded rows and 0 elsewhere. '+pick.map(g=>g+' gives '+colOf(g,L)).join('; ')+'.'}); }});
+
+/* 39p: the grid form of a table */
+K({id:'kgrid',step:'39p',title:'a statement read off the grid form of its table',make(){
+  const f=pk(TT3), L=['P','Q','R'], c=colOf(f,L); if(!/1/.test(c)||!/0/.test(c)) return null;
+  const seen=new Set([c]), pick=[]; sh(TT3).forEach(g=>{ const cg=colOf(g,L); if(pick.length<3&&!seen.has(cg)){ seen.add(cg); pick.push(g); } });
+  const o=four(f,pick); if(!o) return null; const F=e=>tv(tp(f),e);
+  return card(this,{ix:f,links:['39p.grid'],fig:kgrid(F,L),
+    ask:'The table of a statement is drawn as a grid: P down the side, Q and R across, so that next-door cells differ in one letter. Cells with 1 are shaded. Which statement is it?',right:f,opts:o,
+    why:'Read the cells as rows: '+f+' gives 1 exactly where the grid is shaded. The others give '+pick.map(g=>colOf(g,L)).join(', ')+' down the rows TTT to FFF, against '+c+'.'}); }});
+
+/* inf18: data over two stages: the joining words on 0, m and 1 */
+K({id:'stages',step:'inf18',title:'which joining word the three-valued table gives',make(){
+  const V=[0,0.5,1], nm=v=>v===0.5?'m':String(v), ops=[['a ∧ b',(a,b)=>Math.min(a,b)],['a ∨ b',(a,b)=>Math.max(a,b)],['a ⇒ b',(a,b)=>a<=b?1:b],['b ⇒ a',(a,b)=>b<=a?1:a]];
+  const w=rn(4), [name,op]=ops[w], rows=V.map(a=>[nm(a),...V.map(b=>nm(op(a,b)))]);
+  const o=sh(ops.map(x=>x[0]));
+  return card(this,{ix:name,links:['inf18.stages'],fig:wtable(['a \\ b','0','m','1'],rows,{out:[1,2,3],split:[1],cw:40,alt:'a table on the three values 0, m and 1'}),
+    ask:'Over two stages, now and later, a claim is 0 (never), m (only later) or 1 (from now). The table gives a joining word, a down the side and b across. Which?',right:name,opts:o,
+    why:name==='a ∧ b'?'Both are so exactly from the later of the two times: the smaller value, the minimum.':name==='a ∨ b'?'Either is so from the earlier of the two times: the larger value, the maximum.':'An if is 1 where the first never outlasts the second, and otherwise takes the second’s value: read the cell (m, 0): it is 0, and (1, m) is m.'}); }});
+
+/* 19b: a table of a group with one cell left blank */
+K({id:'cayley',step:'19b',steps:['19a','19b'],title:'the blank cell of a group table',make(){
+  const n=pk([4,5,6]), lets=['e',...sh(['a','b','c','d','f','g']).slice(0,n-1)], perm=lets, i=ri(1,n-1), j=ri(1,n-1), right=perm[(i+j)%n];
+  const order=[0,...sh([...Array(n-1).keys()].map(k=>k+1))], rows=order.map(r=>[perm[r],...order.map(cc=>(r===i&&cc===j)?'?':perm[(r+cc)%n])]);
+  const o=four(right,sh(lets.filter(x=>x!==right)));
+  if(!o) return null; const rowHas=order.map(cc=>perm[(i+cc)%n]).filter((x,k)=>order[k]!==j);
+  return card(this,{ix:n+';'+lets.join('')+';'+i+','+j,links:['19a.combine','19b.cancel'],fig:wtable(['·',...order.map(k=>perm[k])],rows,{out:[0],split:[1],cw:32,alt:'a group table with one cell blank'}),
+    ask:'The table combines the members of a group: row first, then column. What goes in the blank cell?',right,opts:o,
+    why:'Each member appears exactly once in every row (cancelling: if xy = xz then y = z). Row '+perm[i]+' already holds '+rowHas.join(', ')+', so the blank is '+right+'.'}); }});
+
+/* 41j: the flipped diagonal differs from every row */
+K({id:'diagonal',step:'41j',steps:['41i','41j'],title:'the row that differs from every machine',make(){
+  const n=pk([4,5]), rows=[...Array(n)].map(()=>[...Array(n+1)].map(()=>rn(2))), diag=rows.map((r,i)=>r[i]), flip=diag.map(b=>1-b).join('');
+  const right=flip, cand=[diag.join(''),rows[0].slice(0,n).map(b=>1-b).join(''),rows.map((r,i)=>1-r[n-1-i]).join(''),flip.split('').reverse().join(''),rows[n-1].slice(0,n).join('')];
+  if(rows.some(r=>r.slice(0,n).join('')===flip)) return null; const o=four(right,cand); if(!o) return null;
+  return card(this,{ix:rows.map(r=>r.join('')).join('.'),links:['41j.diagonal'],fig:wtable(['machine',...[...Array(n+1)].map((_,j)=>String(j+1))],rows.map((r,i)=>['M'+(i+1),...r.map(String)]),{cellmark:rows.map((_,i)=>[i,i+1]),split:[1],alt:'a table of machines and their outputs with the diagonal marked'}),
+    ask:'Row i lists what machine Mi outputs on inputs 1, 2, 3, …. Flip the marked cells down the diagonal. Which list, read from input 1, differs from every machine’s row?',right,opts:o,
+    why:'The diagonal reads '+diag.join('')+'; flipping each mark gives '+flip+'. Its i-th mark differs from Mi’s i-th mark, so it differs from every row in at least one place.'}); }});
+})();
+
+/* ===== part F, second half: kinds on the free graph, the tree, the gates and the message diagram ===== */
+(function(){
+const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph, K=G.K, {sg,dec,uniq}=G, {fgraph,gtree,gcirc,gEval,mdia,ringPos}=G.F;
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const ri=(a,b)=>a+rn(b-a+1);
+const card=(k,o)=>Object.assign({index:'g:'+k.id+'['+o.ix+']'+(o.links&&o.links.length?'.'+o.links.join('+'):''), a3:['g.'+k.id+'['+o.ix+']',(o.links&&o.links.length?o.links.join('+'):k.step),'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+const four=(right,c)=>{ const ws=uniq(right,c).slice(0,3); return ws.length<3?null:sh([right,...ws]); };
+const nums=(right,c)=>four(String(right),c.filter(v=>v>=0&&v!==right).map(String));
+const DOT='ABCDEFGH';
+/* a few fixed spreads of dots, chosen so links between them rarely pass through a third dot */
+const SPOTS={4:[[60,50],[260,50],[260,170],[60,170]],5:[[160,30],[280,95],[235,190],[85,190],[40,95]],6:[[50,60],[160,30],[270,60],[270,160],[160,190],[50,160]],7:[[50,50],[160,25],[270,50],[290,130],[205,195],[115,195],[30,130]]};
+const conn=(n,E)=>{ const par=[...Array(n).keys()], f=x=>par[x]===x?x:(par[x]=f(par[x])); E.forEach(([a,b])=>{ par[f(a)]=f(b); }); return new Set([...Array(n).keys()].map(f)).size===1; };
+const randE=(n,m)=>{ const all=[]; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) all.push([i,j]); for(let t=0;t<80;t++){ const E=sh(all).slice(0,m); if(conn(n,E)) return E; } return null; };
+const nodes=(n,extra)=>SPOTS[n].map(([x,y],i)=>Object.assign({x,y,s:DOT[i]},extra?extra(i):{}));
+
+/* ---------- machines with states (41g) ---------- */
+const run=(D,w)=>{ let s=0; for(const ch of w) s=D[s][ch]; return s; };
+function machine(nS){ const D=[...Array(nS)].map(()=>({a:rn(nS),b:rn(nS)})), acc=[...Array(nS)].map(()=>R()<0.45); if(!acc.some(x=>x)||acc.every(x=>x)) return null; return {D,acc}; }
+function mdraw(M){ const n=M.D.length, P=n===2?[[90,110],[230,110]]:[[70,150],[160,50],[250,150]], N=P.map(([x,y],i)=>({x,y,s:'q'+i,ring:M.acc[i],start:i===0,r:16})), E=[];
+  M.D.forEach((tr,i)=>{ const to={}; ['a','b'].forEach(ch=>{ (to[tr[ch]]=to[tr[ch]]||[]).push(ch); });
+    Object.keys(to).forEach(j=>{ j=+j; const s=to[j].join(', '); if(j===i) E.push({a:i,b:i,loop:1,s,ang:P[i][1]>100?90:-90}); else E.push({a:i,b:j,s,bend:M.D[j]&&(M.D[j].a===i||M.D[j].b===i)?14:0}); }); });
+  return fgraph(N,E,320,220,'a machine of states with lettered arrows'); }
+K({id:'accepts',step:'41g',steps:['12·comp','41g'],title:'which string the machine accepts',make(){
+  const M=machine(pk([2,3,3])); if(!M) return null; const words=new Set(); for(let t=0;t<40&&words.size<12;t++) words.add([...Array(ri(2,5))].map(()=>pk(['a','b'])).join(''));
+  const W=[...words], yes=W.filter(w=>M.acc[run(M.D,w)]), no=W.filter(w=>!M.acc[run(M.D,w)]); if(!yes.length||no.length<3) return null;
+  const right=pk(yes), o=four(right,sh(no)); if(!o) return null;
+  const trace=w=>{ let s=0, t='q0'; for(const ch of w){ s=M.D[s][ch]; t+=' →'+ch+' q'+s; } return t; };
+  return card(this,{ix:M.D.map(t=>t.a+''+t.b).join('.')+';'+M.acc.map(Number).join(''),links:['41g.run'],fig:mdraw(M),
+    ask:'The machine starts at q0 (the arrow in) and accepts when it ends on a double ring. Which string does it accept?',right,opts:o,
+    why:'Run '+right+': '+trace(right)+', a double ring. '+o.filter(w=>w!==right).map(w=>w+' ends at q'+run(M.D,w)).join('; ')+', single rings.'}); }});
+
+/* ---------- worlds that see one another (3b) ---------- */
+function world(n){ const S=[]; for(let i=0;i<n;i++) for(let j=0;j<n;j++) if(R()<(i===j?0.5:0.35)) S.push([i,j]); return S; }
+function wdraw(n,S,P){ const pos=n===3?[[70,150],[160,50],[250,150]]:[[70,60],[250,60],[250,170],[70,170]], N=pos.map(([x,y],i)=>({x,y,s:'uvwz'[i],r:15,cls:P&&P[i]?'rg-dot':'rg-node'})), E=[];
+  S.forEach(([a,b])=>{ if(a===b) E.push({a,b,loop:1,ang:pos[a][1]>100?90:-90}); else E.push({a,b,bend:S.some(([c,d])=>c===b&&d===a)?10:0}); });
+  return fgraph(N,E,320,230,'worlds with arrows for which sees which'); }
+K({id:'seesprops',step:'3b',steps:['2h','3b'],title:'which properties the seeing has',make(){
+  const n=pk([3,3,4]), S=world(n), has=(a,b)=>S.some(e=>e[0]===a&&e[1]===b), I=[...Array(n).keys()];
+  const refl=I.every(i=>has(i,i)), sym=S.every(([a,b])=>has(b,a)), tr=S.every(([a,b])=>S.every(([c,d])=>b!==c||has(a,d)));
+  const say=(r,s,t)=>{ const L=[r?'reflexive':'',s?'symmetric':'',t?'transitive':''].filter(Boolean); return L.length?L.join(', '):'none of the three'; };
+  const right=say(refl,sym,tr), cand=[]; for(let m=0;m<8;m++) cand.push(say(m&1,m&2,m&4)); const o=four(right,sh(cand)); if(!o) return null;
+  const nm=i=>'uvwz'[i], fail=[!refl?'reflexive fails: '+nm(I.find(i=>!has(i,i)))+' does not see itself':'',!sym?'symmetric fails: '+(([a,b])=>nm(a)+' sees '+nm(b)+' but not back')(S.find(([a,b])=>!has(b,a))):'',!tr?'transitive fails: '+(()=>{ for(const [a,b] of S) for(const [c,d] of S) if(b===c&&!has(a,d)) return nm(a)+' sees '+nm(b)+', '+nm(b)+' sees '+nm(d)+', but '+nm(a)+' does not see '+nm(d); })():''].filter(Boolean);
+  return card(this,{ix:n+';'+S.map(e=>e.join('')).join('.'),links:['2h.properties','3b.worlds'],fig:wdraw(n,S),
+    ask:'Each arrow says one world sees another (a loop: a world sees itself). Which of the three properties does seeing have here?',right,opts:o,
+    why:(fail.length?fail.join('; ')+'. ':'')+'So: '+right+'.'}); }});
+K({id:'boxat',step:'3b',title:'where □P is so',make(){
+  const n=4, S=world(n), P=[...Array(n)].map(()=>R()<0.5), sees=i=>S.filter(e=>e[0]===i).map(e=>e[1]);
+  const box=[...Array(n).keys()].map(i=>sees(i).every(j=>P[j])), yes=box.map((b,i)=>b?i:-1).filter(i=>i>=0); if(yes.length!==1) return null;
+  const nm=i=>'uvwz'[i], right=nm(yes[0]), o=sh(['u','v','w','z']);
+  return card(this,{ix:S.map(e=>e.join('')).join('.')+';'+P.map(Number).join(''),links:['3b.box'],fig:wdraw(n,S,P),
+    ask:'P is so in the filled worlds and not in the open ones; arrows say which world sees which. In which world is □P so?',right,opts:o,
+    why:'□P is so in a world when P is so in every world it sees. '+[0,1,2,3].map(i=>nm(i)+' sees '+(sees(i).length?sees(i).map(nm).join(', '):'nothing')+(box[i]?': all filled':': '+nm(sees(i).find(j=>!P[j]))+' is open')).join('; ')+'.'}); }});
+
+/* ---------- one-way graphs (42l) ---------- */
+const LAY=[[30,110],[110,40],[110,180],[200,40],[200,180],[290,110]];
+function dag(){ const E=[]; for(let i=0;i<6;i++) for(let j=i+1;j<6;j++) if((j-i<=2||R()<0.15)&&R()<0.7) E.push([i,j,ri(1,9)]); return E; }
+K({id:'bestroute',step:'42l',steps:['42k','42l'],title:'the shortest route through a one-way graph',make(){
+  const E=dag(), best=Array(6).fill(Infinity); best[0]=0; E.forEach(()=>0); for(let j=1;j<6;j++) E.filter(e=>e[1]===j).forEach(([a,b,w])=>{ best[j]=Math.min(best[j],best[a]+w); });
+  if(!isFinite(best[5])) return null; const long=Array(6).fill(-Infinity); long[0]=0; for(let j=1;j<6;j++) E.filter(e=>e[1]===j).forEach(([a,b,w])=>{ long[j]=Math.max(long[j],long[a]+w); });
+  let g=0, at=0, gl=0; while(at!==5){ const out=E.filter(e=>e[0]===at); if(!out.length){ gl=null; break; } const m=out.reduce((p,c)=>c[2]<p[2]?c:p); g+=m[2]; at=m[1]; }
+  const right=best[5], o=nums(right,[long[5],gl===null?right+2:g,right+1,right-1,E.filter(e=>e[0]===0).reduce((s,e)=>s+e[2],0)]); if(!o) return null;
+  const N=LAY.map(([x,y],i)=>({x,y,s:i===0?'s':i===5?'t':DOT[i-1]})), F=E.map(([a,b,w])=>({a,b,s:String(w)}));
+  return card(this,{ix:E.map(e=>e.join('')).join('.'),links:['42l.best-pieces'],fig:fgraph(N,F,320,220,'a one-way graph with lengths'),
+    ask:'Links are one-way, with their lengths written on them. How long is the shortest route from s to t?',right:String(right),opts:o,
+    why:'Settle the dots in forward order, each at its shortest distance: '+N.map((n,i)=>n.s+' '+(isFinite(best[i])?best[i]:'unreached')).join(', ')+'. A best route is made of best pieces, so t is '+right+'.'+(gl!==null&&g!==right?' Taking the cheapest link at each dot gives '+g+', which is not the best.':'')}); }});
+K({id:'forward',step:'42l',title:'an order that puts every link forward',make(){
+  const n=5, E=[]; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) if(R()<0.45) E.push([i,j]); if(E.length<4) return null;
+  const lab=sh(DOT.slice(0,n).split('')), ok=ord=>E.every(([a,b])=>ord.indexOf(lab[a])<ord.indexOf(lab[b]));
+  const right=[0,1,2,3,4].map(i=>lab[i]).join(' '), bad=[]; for(let t=0;t<60&&bad.length<6;t++){ const p=sh(lab).join(' '); if(!ok(p.split(' '))&&!bad.includes(p)) bad.push(p); }
+  const okOthers=[]; for(let t=0;t<60;t++){ const p=sh(lab).join(' '); if(ok(p.split(' '))&&p!==right) okOthers.push(p); }
+  const o=four(right,bad); if(!o||o.filter(x=>ok(x.split(' '))).length!==1) return null;
+  const pos=SPOTS[5], N=pos.map(([x,y],i)=>({x,y,s:lab[i]})), F=E.map(([a,b])=>({a,b}));
+  const brk=w=>{ const p=w.split(' '); const e=E.find(([a,b])=>p.indexOf(lab[a])>p.indexOf(lab[b])); return lab[e[0]]+' → '+lab[e[1]]+' runs back'; };
+  return card(this,{ix:E.map(e=>e.join('')).join('.')+';'+lab.join(''),links:['42l.forward-order'],fig:fgraph(sh([0]).length?N:N,F,320,220,'a one-way graph with no cycle'),
+    ask:'The one-way graph has no cycle. Which list of its dots puts every link forward, from earlier to later?',right,opts:o,
+    why:'In '+right+' every arrow runs left to right. '+o.filter(x=>x!==right).map(x=>'In '+x+', '+brk(x)).join('; ')+'.'}); }});
+
+/* ---------- flows and cuts (42f) ---------- */
+K({id:'maxflow',step:'42f',title:'the largest flow, read off the network',make(){
+  const P=[[30,110],[120,40],[120,180],[210,40],[210,180],[295,110]], cross=pk([[[1,4]],[[2,3]],[]]), E=[[0,1],[0,2],[1,3],[2,4],...cross,[3,5],[4,5]].map(([a,b])=>[a,b,ri(1,9)]);
+  const n=6, cap=[...Array(n)].map(()=>Array(n).fill(0)); E.forEach(([a,b,c])=>{ cap[a][b]+=c; });
+  let flow=0; const f=cap.map(r=>r.map(()=>0));
+  for(;;){ const prev=Array(n).fill(-1); prev[0]=0; const q=[0]; while(q.length&&prev[5]<0){ const u=q.shift(); for(let v=0;v<n;v++) if(prev[v]<0&&cap[u][v]-f[u][v]+f[v][u]>0){ prev[v]=u; q.push(v); } } if(prev[5]<0) break;
+    let b=Infinity; for(let v=5;v!==0;v=prev[v]){ const u=prev[v]; b=Math.min(b,cap[u][v]-f[u][v]+f[v][u]); } for(let v=5;v!==0;v=prev[v]){ const u=prev[v], back=Math.min(b,f[v][u]); f[v][u]-=back; f[u][v]+=b-back; } flow+=b; }
+  const outS=E.filter(e=>e[0]===0).reduce((s,e)=>s+e[2],0), inT=E.filter(e=>e[1]===5).reduce((s,e)=>s+e[2],0), minE=Math.min(...E.map(e=>e[2]));
+  const o=nums(flow,[outS,inT,minE,flow+1,flow-1,outS+inT]); if(!o) return null;
+  const N=P.map(([x,y],i)=>({x,y,s:i===0?'s':i===5?'t':DOT[i-1]})), F=E.map(([a,b,c])=>({a,b,s:String(c),pos:0.4}));
+  return card(this,{ix:E.map(e=>e.join('')).join('.'),links:['42f.flow','42f.cut'],fig:fgraph(N,F,320,220,'a network with the most each link can carry'),
+    ask:'Each link carries at most the number written on it, one way. What is the largest flow from s to t?',right:String(flow),opts:o,
+    why:'Push along routes with room left until none remains: the total is '+flow+'. A cut round s that the flow fills shows no flow can be larger (smallest cut = largest flow). Out of s alone is '+outS+' and into t alone is '+inT+'; the narrow places in between decide.'}); }});
+
+/* ---------- a tour of the links, with more than one link between two dots (42c) ---------- */
+K({id:'linktour',step:'42c',title:'a tour of the links on a graph with doubled links',make(){
+  const n=pk([4,5]), base=randE(n,n), E=[]; if(!base) return null; base.forEach(e=>{ E.push(e); if(R()<0.4) E.push(e); }); if(R()<0.5){ const e=pk(base); E.push(e); }
+  const deg=Array(n).fill(0); E.forEach(([a,b])=>{ deg[a]++; deg[b]++; }); const odd=deg.map((d,i)=>d%2?i:-1).filter(i=>i>=0);
+  const nm=i=>DOT[i], right=odd.length===0?'a closed tour':odd.length===2?'a tour from '+nm(odd[0])+' to '+nm(odd[1])+', not closed':'no tour of the links';
+  const cand=['a closed tour','no tour of the links','a tour from '+nm(0)+' to '+nm(1)+', not closed','a tour from '+nm(1)+' to '+nm(2)+', not closed','a tour from '+nm(0)+' to '+nm(n-1)+', not closed'];
+  const o=four(right,sh(cand)); if(!o) return null;
+  const cnt={}, F=E.map(([a,b])=>{ const k=a+'-'+b; cnt[k]=(cnt[k]||0)+1; const total=E.filter(e=>e[0]===a&&e[1]===b).length; return {a,b,dir:false,bend:total===1?0:(cnt[k]===1?-12:12)}; });
+  return card(this,{ix:E.map(e=>e.join('')).join('.'),links:['42a.ends-count','42c.tour'],fig:fgraph(nodes(n),F,320,220,'dots joined by links, some doubled'),
+    ask:'Two links between the same two dots are two links. Is there a walk that uses every link exactly once, and if so, of which kind?',right,opts:o,
+    why:'Count the links at each dot: '+deg.map((d,i)=>nm(i)+' '+d).join(', ')+'. '+(odd.length===0?'All even, and the graph is in one piece: a closed tour.':odd.length===2?'Exactly two odd dots, '+nm(odd[0])+' and '+nm(odd[1])+': a tour must start at one and end at the other.':odd.length+' odd dots: every tour has at most two, so there is none.')}); }});
+
+/* ---------- colours, matchings, layers, the cheapest tree (42d, 42e, 42k) ---------- */
+const chrom=(n,E)=>{ for(let k=1;k<=n;k++){ const c=Array(n).fill(-1); const go=i=>{ if(i===n) return true; for(let x=0;x<k;x++){ if(E.some(([a,b])=>(a===i&&c[b]===x)||(b===i&&c[a]===x))) continue; c[i]=x; if(go(i+1)) return true; } c[i]=-1; return false; }; if(go(0)) return [k,c]; } };
+K({id:'fewcolours',step:'42d',steps:['42d'],title:'the fewest colours for the dots',make(){
+  const n=pk([5,6]), E=randE(n,ri(n,n+4)); if(!E) return null; const [k,c]=chrom(n,E), m=E.length;
+  const deg=Array(n).fill(0); E.forEach(([a,b])=>{ deg[a]++; deg[b]++; }); const o=nums(k,[k-1,k+1,Math.max(...deg)+1,Math.max(...deg),2,3,4].filter(v=>v>0)); if(!o) return null;
+  const cyc=[]; for(let a=0;a<n;a++) for(let b=a+1;b<n;b++) for(let d=b+1;d<n;d++){ const h=(x,y)=>E.some(e=>(e[0]===x&&e[1]===y)||(e[0]===y&&e[1]===x)); if(h(a,b)&&h(b,d)&&h(a,d)) cyc.push([a,b,d]); }
+  return card(this,{ix:n+';'+E.map(e=>e.join('')).join('.'),links:['42d.colouring'],fig:fgraph(nodes(n),E.map(([a,b])=>({a,b,dir:false})),320,220,'dots joined by links'),
+    ask:'Colour the dots so that no link joins two dots of one colour. What is the fewest colours that will do?',right:String(k),opts:o,
+    why:'It can be done with '+k+': '+c.map((x,i)=>DOT[i]+' '+(x+1)).join(', ')+'. '+(k===2?'Fewer is impossible: a link needs two colours.':cyc.length?'Fewer is impossible: '+cyc[0].map(i=>DOT[i]).join(', ')+' form a triangle'+(k>3?' and every try with 3 colours runs into a clash':'')+'.':'Trying every way with '+(k-1)+' colours, some link always joins two of one colour.')}); }});
+K({id:'matching',step:'42e',title:'the largest matching in a two-sided graph',make(){
+  const a=pk([3,4]), b=pk([3,4]), E=[]; for(let i=0;i<a;i++) for(let j=0;j<b;j++) if(R()<0.38) E.push([i,a+j]); if(E.length<3) return null;
+  const mt=Array(a+b).fill(-1), aug=(u,seen)=>{ for(const [x,y] of E) if(x===u&&!seen.has(y)){ seen.add(y); if(mt[y]<0||aug(mt[y],seen)){ mt[y]=u; mt[u]=y; return true; } } return false; };
+  let size=0; for(let i=0;i<a;i++) if(aug(i,new Set())) size++;
+  const deg=[...Array(a)].map((_,i)=>E.filter(e=>e[0]===i).length), o=nums(size,[Math.min(a,b),size+1,size-1,E.length,deg.filter(d=>d>0).length]); if(!o) return null;
+  const N=[...Array(a)].map((_,i)=>({x:80,y:30+i*(160/(a-1||1)),s:String(i+1)})).concat([...Array(b)].map((_,j)=>({x:240,y:30+j*(160/(b-1||1)),s:'pqrs'[j]})));
+  return card(this,{ix:a+'x'+b+';'+E.map(e=>e.join('')).join('.'),links:['42e.matching'],fig:fgraph(N,E.map(([x,y])=>({a:x,b:y,dir:false})),320,220,'a two-sided graph'),
+    ask:'A matching is a set of links, no two sharing a dot. How many links has the largest matching here?',right:String(size),opts:o,
+    why:'One largest matching: '+[...Array(a)].map((_,i)=>mt[i]>=0?(i+1)+'–'+'pqrs'[mt[i]-a]:'').filter(Boolean).join(', ')+'. No path grows it further (each path from a free dot on the left ends without reaching a free dot on the right), so '+size+' is the most.'}); }});
+K({id:'layers',step:'42k',title:'how many links from the start',make(){
+  const n=7, E=randE(n,ri(7,9)); if(!E) return null; const d=Array(n).fill(-1); d[0]=0; const q=[0]; while(q.length){ const u=q.shift(); E.forEach(([a,b])=>{ const v=a===u?b:b===u?a:-1; if(v>=0&&d[v]<0){ d[v]=d[u]+1; q.push(v); } }); }
+  const far=d.map((x,i)=>[x,i]).filter(([x])=>x>=2); if(!far.length) return null; const [k,t]=pk(far);
+  const o=nums(k,[k+1,k-1,d.filter(x=>x>=0).length-1,Math.max(...d)+1]); if(!o) return null; const N=nodes(n,i=>i===0?{s:'r'}:{});
+  return card(this,{ix:E.map(e=>e.join('')).join('.')+';'+t,links:['42k.layers'],fig:fgraph(N,E.map(([a,b])=>({a,b,dir:false})),320,220,'dots joined by links, one marked r'),
+    ask:'Walk out from r layer by layer, each layer one link farther. In which layer is dot '+N[t].s+'?',right:String(k),opts:o,
+    why:'Layer 0 is r; '+[...Array(Math.max(...d))].map((_,L)=>'layer '+(L+1)+': '+d.map((x,i)=>x===L+1?N[i].s:'').filter(Boolean).join(', ')).join('; ')+'. So '+N[t].s+' is in layer '+k+'.'}); }});
+K({id:'cheaptree',step:'42k',steps:['42b','42k'],title:'the cost of the cheapest tree',make(){
+  const n=5, E=randE(n,ri(6,8)); if(!E) return null; const ws=sh([1,2,3,4,5,6,7,8,9]).slice(0,E.length), W=E.map((e,i)=>[e[0],e[1],ws[i]]);
+  const par=[...Array(n).keys()], f=x=>par[x]===x?x:(par[x]=f(par[x])); let cost=0; const pick=[]; W.slice().sort((a,b)=>a[2]-b[2]).forEach(([a,b,w])=>{ if(f(a)!==f(b)){ par[f(a)]=f(b); cost+=w; pick.push(w); } });
+  const cheap4=W.map(e=>e[2]).sort((a,b)=>a-b).slice(0,n-1).reduce((s,v)=>s+v,0), all=W.reduce((s,e)=>s+e[2],0);
+  const o=nums(cost,[cheap4===cost?cost+1:cheap4,all,cost+2,cost-1,Math.max(...pick)*(n-1)]); if(!o) return null;
+  return card(this,{ix:W.map(e=>e.join('')).join('.'),links:['42k.greedy-tree'],fig:fgraph(nodes(n),W.map(([a,b,w])=>({a,b,dir:false,s:String(w),pos:0.3})),320,220,'dots joined by links with costs'),
+    ask:'Each link has a cost. A spanning tree joins all the dots with no cycle. What does the cheapest spanning tree cost?',right:String(cost),opts:o,
+    why:'Take links cheapest first, skipping any that would close a cycle: '+pick.join(' + ')+' = '+cost+'.'+(cheap4!==cost?' The four cheapest links alone ('+cheap4+') would close a cycle.':'')}); }});
+
+/* ---------- keys on a ring (45k) ---------- */
+K({id:'keyring',step:'45k',title:'which machine holds a key on the ring',make(){
+  const S=32, gaps=[3,3,3,3,3]; for(let i=0;i<17;i++) gaps[rn(5)]++; const ms=[]; let at=rn(S); gaps.forEach(g=>{ ms.push(at%S); at+=g; }); ms.sort((a,b)=>a-b);
+  const key=rn(S); if(ms.includes(key)) return null; const after=ms.find(m=>m>key), holder=after!==undefined?after:ms[0], before=ms.filter(m=>m<key), prevM=before.length?before[before.length-1]:ms[4];
+  const lab=m=>'M'+m, right=lab(holder), o=four(right,[lab(prevM),...sh(ms.filter(m=>m!==holder)).map(lab)]); if(!o) return null;
+  const cx=160, cy=115, r=86, ang=v=>-Math.PI/2+2*Math.PI*v/S, P=v=>[cx+r*Math.cos(ang(v)),cy+r*Math.sin(ang(v))], [kx,ky]=P(key);
+  let bd='<circle class="rg-set" cx="'+cx+'" cy="'+cy+'" r="'+r+'"/><text class="rg-lab" x="'+cx+'" y="'+(cy-4)+'" text-anchor="middle">0 at the top,</text><text class="rg-lab" x="'+cx+'" y="'+(cy+10)+'" text-anchor="middle">clockwise</text>';
+  ms.forEach(m=>{ const [x,y]=P(m); bd+='<circle class="rg-node" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="14"/><text class="rg-tag" x="'+x.toFixed(1)+'" y="'+(y+4.5).toFixed(1)+'" text-anchor="middle">'+m+'</text>'; });
+  bd+='<circle class="rg-dot rg-db" cx="'+kx.toFixed(1)+'" cy="'+ky.toFixed(1)+'" r="5"/><text class="rg-wt" x="'+(cx+(r+22)*Math.cos(ang(key))).toFixed(1)+'" y="'+(cy+(r+22)*Math.sin(ang(key))+4).toFixed(1)+'" text-anchor="middle">key '+key+'</text>';
+  const fig='<svg class="rgfig" viewBox="0 0 320 235" role="img" aria-label="machines on a ring of 32 places and one key" xmlns="http://www.w3.org/2000/svg">'+bd+'</svg>';
+  return card(this,{ix:ms.join(',')+';'+key,links:['45k.successor'],fig,
+    ask:'Places 0 to 31 run clockwise round the ring; the numbered circles are machines at their places (machine Mn at place n). Each key is held by the first machine after it, clockwise. Who holds key '+key+'?',right,opts:o,
+    why:'Going clockwise from place '+key+', the first machine met is '+right+'. '+lab(prevM)+' is the machine just before the key, a common slip.'}); }});
+
+/* ---------- squares of named arrows (47c) and loops of exchange rates (infecon) ---------- */
+K({id:'square',step:'47c',steps:['47a','47c'],title:'what a commuting square says',make(){
+  const L=sh(['f','g','h','k','u','v']).slice(0,4), [top,right_,left,bot]=L, Ob=sh(['A','B','C','D','X','Y']).slice(0,4);
+  const N=[{x:80,y:50,s:Ob[0]},{x:240,y:50,s:Ob[1]},{x:80,y:180,s:Ob[2]},{x:240,y:180,s:Ob[3]}], E=[{a:0,b:1,s:top},{a:1,b:3,s:right_,side:-1},{a:0,b:2,s:left,side:-1},{a:2,b:3,s:bot}];
+  const ask=R()<0.5, right=ask?bot+' ∘ '+left:right_+' ∘ '+top, given=ask?right_+' ∘ '+top:bot+' ∘ '+left;
+  const o=four(right,[left+' ∘ '+bot,top+' ∘ '+right_,top+' ∘ '+left,right_+' ∘ '+bot,bot+' ∘ '+top]); if(!o) return null;
+  return card(this,{ix:L.join('')+Ob.join(''),links:['47a.compose','47c.square'],fig:fgraph(N,E,320,230,'a square of four named arrows'),
+    ask:'The square commutes: both ways round from '+Ob[0]+' to '+Ob[3]+' give the same arrow. Which arrow equals '+given+'?',right,opts:o,
+    why:'Read “after” right to left. One way round is '+top+' then '+right_+', written '+right_+' ∘ '+top+'; the other is '+left+' then '+bot+', written '+bot+' ∘ '+left+'. Commuting says they are equal.'}); }});
+K({id:'rateloop',step:'infecon',title:'what one unit becomes round a loop of rates',make(){
+  const nm=sh(['crowns','marks','pesos','rand','yen']).slice(0,3), r=[pk([2,4,5,8]),pk([0.5,0.25,2,0.2]),pk([0.5,1.25,0.25,1.5])], prod=r[0]*r[1]*r[2]; if(prod===1&&R()<0.5) return null;
+  const P=[[160,35],[275,185],[45,185]], N=P.map(([x,y],i)=>({x,y,s:nm[i],shape:'box',w:66,h:26})), E=[{a:0,b:1,s:'×'+dec(r[0])},{a:1,b:2,s:'×'+dec(r[1])},{a:2,b:0,s:'×'+dec(r[2])}];
+  const right=dec(prod), o=four(right,[dec(r[0]+r[1]+r[2]),dec(1/prod),dec(r[0]*r[1]),dec(Math.round(prod*200)/100),dec(prod+1)]); if(!o) return null;
+  return card(this,{ix:nm.join(',')+';'+r.join(','),links:['infecon.loop'],fig:fgraph(N,E,320,220,'three moneys with exchange rates on arrows'),
+    ask:'Start with 1 of '+nm[0]+' and exchange round the loop, multiplying by the rate on each arrow. How many '+nm[0]+' come home?',right,opts:o,
+    why:'Rates multiply along a path: 1 × '+r.map(dec).join(' × ')+' = '+right+'. '+(prod===1?'The loop comes home to 1: no gain.':prod>1?'More than 1: a loop that pays, which a stuck pair of prices would not allow.':'Less than 1: the loop loses.')}); }});
+
+/* ---------- a flow chart (40b) ---------- */
+K({id:'chart',step:'40b',steps:['40b'],title:'what a flow chart leaves in x',make(){
+  const a=ri(0,3), b=ri(6,14), c=pk([2,3,4]), mul=R()<0.3, N0=[{x:90,y:30,s:'1  x ← '+a,shape:'box',w:100,h:26},{x:90,y:100,s:'2  x < '+b+' ?',shape:'diamond',w:110,h:42},{x:90,y:175,s:'3  x ← x '+(mul?'× ':'+ ')+c,shape:'box',w:110,h:26},{x:250,y:100,s:'0  stop',shape:'box',w:76,h:26}];
+  if(mul&&a===0) return null; let x=a, turns=0; while(x<b){ x=mul?x*c:x+c; turns++; if(turns>30) return null; }
+  const E=[{a:0,b:1},{a:1,b:2,s:'yes',side:-1},{a:1,b:3,s:'no'},{a:2,b:1,bend:-40}];
+  const askTurns=R()<0.35, right=askTurns?turns:x, o=nums(right,askTurns?[turns+1,turns-1,Math.ceil((b-a)/c)+1,x]:[x-c,mul?x/c*c+1:x+c,b,b+1,x+1]); if(!o) return null;
+  return card(this,{ix:a+','+b+','+c+(mul?'m':'a')+(askTurns?'t':'x'),links:['40b.chart'],fig:fgraph(N0,E,320,215,'a flow chart with numbered boxes'),
+    ask:askTurns?'Run the chart from box 1. How many times is box 3 visited before it stops?':'Run the chart from box 1. What is x when it stops?',right:String(right),opts:o,
+    why:'x runs '+(()=>{ let y=a, L=[a]; while(y<b){ y=mul?y*c:y+c; L.push(y); } return L.join(', '); })()+'; the test fails first at '+x+', after '+turns+' visits to box 3.'}); }});
+
+/* ---------- trees: the statement tree (1e), a tree with lengths (42·bio), combining (45m) ---------- */
+const OPS=['∧','∨','⇒'], opv={'∧':(a,b)=>a&&b,'∨':(a,b)=>a||b,'⇒':(a,b)=>!a||b};
+const leaf=s=>({s}), nd=(op,l,r)=>({s:op,kids:[l,r]}), str=t=>t.kids?'('+str(t.kids[0])+' '+t.s+' '+str(t.kids[1])+')':t.s, top=t=>str(t).replace(/^\((.*)\)$/,'$1');
+K({id:'stree',step:'1e',steps:['1e'],title:'which statement the tree draws',make(){
+  const L=sh(['P','Q','R']), o1=pk(OPS), o2=pk(OPS), leftDeep=R()<0.5;
+  const t=leftDeep?nd(o1,nd(o2,leaf(L[0]),leaf(L[1])),leaf(L[2])):nd(o1,leaf(L[0]),nd(o2,leaf(L[1]),leaf(L[2])));
+  const alt=leftDeep?nd(o2,leaf(L[0]),nd(o1,leaf(L[1]),leaf(L[2]))):nd(o2,nd(o1,leaf(L[0]),leaf(L[1])),leaf(L[2]));
+  const re=leftDeep?nd(o1,leaf(L[0]),nd(o2,leaf(L[1]),leaf(L[2]))):nd(o1,nd(o2,leaf(L[0]),leaf(L[1])),leaf(L[2]));
+  const sw=JSON.parse(JSON.stringify(t)); sw.kids.reverse();
+  const right=top(t), o=four(right,[top(re),top(alt),top(sw)]); if(!o) return null;
+  return card(this,{ix:str(t),links:['1e.tree'],fig:gtree(t,280,180,'a statement drawn as a tree'),
+    ask:'A statement is drawn as a tree: each joining word sits above the two parts it joins. Which statement is it?',right,opts:o,
+    why:'Work from the top: the top word is '+o1+', joining '+top(t.kids[0])+' (left) and '+top(t.kids[1])+' (right). So it is '+right+'.'}); }});
+K({id:'treelen',step:'42·bio',title:'a distance read off a tree with lengths',make(){
+  const ends=sh(['frog','newt','carp','shark','hawk','crow']).slice(0,4), ln=()=>ri(1,9), a=[ln(),ln(),ln(),ln()], mid=ri(1,5);
+  const t={s:'',kids:[{s:'',e:'',kids:[{s:ends[0],e:a[0]},{s:ends[1],e:a[1]}]},{s:'',e:'',kids:[{s:ends[2],e:a[2]},{s:ends[3],e:a[3]}]}]};
+  t.kids[0].e=mid; t.kids[1].e=0; const i=rn(2), j=2+rn(2), right=a[i]+mid+a[j], same=a[0]+a[1];
+  const o=nums(right,[a[i]+a[j],right+mid,same,a[i]+mid,right-1]); if(!o) return null;
+  t.kids[1].e=''; const fig=gtree(t,300,190,'a tree of descent with branch lengths');
+  return card(this,{ix:ends.join(',')+';'+a.join(',')+';'+mid,links:['42·bio.tree-distance'],fig,
+    ask:'The numbers are branch lengths; the two forks are joined by an inner link of '+mid+'. How far apart are '+ends[i]+' and '+ends[j]+' along the tree?',right:String(right),opts:o,
+    why:'There is one path in a tree: up from '+ends[i]+' ('+a[i]+'), across the inner link ('+mid+'), down to '+ends[j]+' ('+a[j]+'): '+right+'.'}); }});
+K({id:'combine',step:'45m',title:'the missing piece in a combining tree',make(){
+  const xs=[ri(1,9),ri(1,9),ri(1,9),ri(1,9)], h=rn(4), tot=xs.reduce((s,v)=>s+v,0), leafs=xs.map((v,i)=>({s:i===h?'?':String(v)}));
+  const t={s:String(tot),kids:[{s:String(xs[0]+xs[1]),kids:[leafs[0],leafs[1]]},{s:String(xs[2]+xs[3]),kids:[leafs[2],leafs[3]]}]};
+  const sib=h^1, right=xs[h], o=nums(right,[tot-xs[sib],xs[sib],right+1,right-1,tot-right]); if(!o) return null;
+  return card(this,{ix:xs.join(',')+';'+h,links:['45m.split-combine'],fig:gtree(t,280,170,'a tree that adds results'),
+    ask:'Four machines each hold a number; each fork adds the two below it. One number is hidden. What is it?',right:String(right),opts:o,
+    why:'The fork above it shows '+(h<2?xs[0]+xs[1]:xs[2]+xs[3])+' and the other piece under that fork is '+xs[sib]+', so the hidden number is '+right+'. Any tree of + gives the same total, since + groups either way.'}); }});
+
+/* ---------- gates (39f, 39g) ---------- */
+const bits=gates=>{ const r=[]; for(const A of [1,0]) for(const B of [1,0]) for(const C of [1,0]) r.push(gEval(gates,[A,B,C])?1:0); return r.join(''); };
+K({id:'gatecol',step:'39f',steps:['39f','39p'],title:'the column a circuit of gates gives',make(){
+  const ops=['AND','OR','NAND','NOR','XOR'], g=[{op:pk(ops),a:'i0',b:'i1'},{op:pk(ops),a:'i1',b:'i2'}];
+  if(R()<0.4) g.push({op:'NOT',a:'g0'}); g.push({op:pk(ops),a:g.length===3?'g2':'g0',b:'g1'});
+  const right=bits(g), flip=right.split('').map(b=>1-b).join(''), o=four(right,[flip,right.split('').reverse().join(''),bits(g.slice(0,-1).concat([{op:'OR',a:g[g.length-1].a,b:'g1'}])),bits(g.slice(0,-1).concat([{op:'AND',a:g[g.length-1].a,b:'g1'}]))]);
+  if(!o||/^(0+|1+)$/.test(right)) return null;
+  return card(this,{ix:g.map(x=>x.op+x.a+(x.b||'')).join('.'),links:['39f.gates'],fig:gcirc(['A','B','C'],g,320,200),
+    ask:'Work the circuit on all eight rows, ABC = 111, 110, 101, 100, 011, 010, 001, 000. Which column comes out?',right,opts:o,
+    why:'Row by row through the gates ('+g.map(x=>x.op==='NOT'?'not':'both/either'.length&&({AND:'both',OR:'either',NAND:'not-and',NOR:'neither',XOR:'one but not both'})[x.op]).join(', ')+') the output is '+right+'.'}); }});
+const NANDB={not:[{op:'NAND',a:'i0',b:'i0'}],both:[{op:'NAND',a:'i0',b:'i1'},{op:'NAND',a:'g0',b:'g0'}],either:[{op:'NAND',a:'i0',b:'i0'},{op:'NAND',a:'i1',b:'i1'},{op:'NAND',a:'g0',b:'g1'}],
+  neither:[{op:'NAND',a:'i0',b:'i0'},{op:'NAND',a:'i1',b:'i1'},{op:'NAND',a:'g0',b:'g1'},{op:'NAND',a:'g2',b:'g2'}],'one but not both':[{op:'NAND',a:'i0',b:'i1'},{op:'NAND',a:'i0',b:'g0'},{op:'NAND',a:'i1',b:'g0'},{op:'NAND',a:'g1',b:'g2'}],
+  'not-and':[{op:'NAND',a:'i0',b:'i1'}]};
+K({id:'nandbuild',step:'39f',title:'which gate the not-ands build',make(){
+  const names=Object.keys(NANDB).filter(n=>n!=='not-and'&&n!=='not'), nm=pk(names), g=NANDB[nm];
+  const o=four(nm,sh(names.concat(['not-and']).filter(n=>n!==nm))); if(!o) return null;
+  const col=[]; for(const A of [1,0]) for(const B of [1,0]) col.push(gEval(g,[A,B])?1:0);
+  return card(this,{ix:nm,links:['39f.nand-alone'],fig:gcirc(['x','y'],g,320,170),
+    ask:'Every gate here is a not-and. Which gate does the whole circuit act as?',right:nm,opts:o,
+    why:'Work the four rows xy = 11, 10, 01, 00: the output is '+col.join('')+', the column of '+nm+'. A not-and with both inputs joined is a not.'}); }});
+K({id:'ringclock',step:'39g',title:'the beat of a ring of not gates',make(){
+  const n=pk([3,5,7]), tau=pk([1,2,5,10]), right=String(2*n*tau)+' ns', o=four(right,[n*tau+' ns',(n+1)*tau+' ns',4*n*tau+' ns',2*tau+' ns']); if(!o) return null;
+  const P=G.F.ringPos(n,160,105,72), N=P.map(([x,y])=>({x,y,s:'¬',r:13})), E=P.map((_,i)=>({a:i,b:(i+1)%n}));
+  return card(this,{ix:n+';'+tau,links:['39g.ring'],fig:fgraph(N,E,320,215,'a ring of not gates'),
+    ask:'A ring of '+n+' not gates, each taking '+tau+' ns to answer. How long is one full beat of the ring (high, then low, then high again)?',right,opts:o,
+    why:'A change runs round the ring in '+n+' × '+tau+' = '+n*tau+' ns and, the count being odd, comes back flipped. Two trips bring it back as it was: 2 × '+n+' × '+tau+' = '+right+'.'}); }});
+
+/* ---------- message diagrams (45e, 45f) ---------- */
+K({id:'before',step:'45e',title:'which event happened before f',make(){
+  const m=pk([3,4]), names=['P','Q','R','S'].slice(0,m), evs=[], msgs=[], X=Array(m).fill(50);
+  for(let s=0;s<9;s++){ const p=rn(m), id=evs.length; evs.push({p,x:X[p],id}); X[p]+=32;
+    if(R()<0.45){ const q=pk([...Array(m).keys()].filter(i=>i!==p)), rx=Math.max(X[q],evs[id].x+40); X[q]=rx; const r={p:q,x:rx,id:evs.length,from:id}; evs.push(r); X[q]+=32; msgs.push({from:p,x1:evs[id].x,to:q,x2:rx}); } }
+  if(Math.max(...evs.map(e=>e.x))>300) return null;
+  const n=evs.length, hb=[...Array(n)].map(()=>Array(n).fill(false));
+  evs.forEach(a=>evs.forEach(b=>{ if(a.p===b.p&&a.x<b.x) hb[a.id][b.id]=true; })); evs.forEach(e=>{ if(e.from!==undefined) hb[e.from][e.id]=true; });
+  for(let k=0;k<n;k++) for(let i=0;i<n;i++) for(let j=0;j<n;j++) if(hb[i][k]&&hb[k][j]) hb[i][j]=true;
+  const f=evs.filter(e=>evs.filter(a=>hb[a.id][e.id]).length>=2&&evs.filter(a=>a.id!==e.id&&!hb[a.id][e.id]&&!hb[e.id][a.id]).length>=3); if(!f.length) return null; const F=pk(f);
+  const L='abcdeghjkmnpqrstuvw', lab=evs.map((e,i)=>L[i]); lab[F.id]='f';
+  const yes=evs.filter(a=>hb[a.id][F.id]&&a.p!==F.p), no=evs.filter(a=>a.id!==F.id&&!hb[a.id][F.id]&&!hb[F.id][a.id]); if(!yes.length||no.length<3) return null;
+  const pickY=pk(yes), right=lab[pickY.id], o=four(right,sh(no).map(a=>lab[a.id])); if(!o) return null;
+  return card(this,{ix:evs.map(e=>e.p+':'+e.x).join(',')+';'+F.id,links:['45e.happened-before'],fig:mdia(names,msgs,evs.map(e=>({p:e.p,x:e.x,s:lab[e.id],big:e.id===F.id})),320,40+m*45),
+    ask:'Events sit on the machines’ time lines; arrows are messages. e → f when e comes first on one machine, or e sends what f receives, or a chain of these. Which of these events happened before f?',right,opts:o,
+    why:'From '+right+' a chain of earlier-on-one-machine steps and messages runs to f. The others neither reach f nor are reached from it: they are concurrent with f.'}); }});
+K({id:'commit',step:'45f',title:'what the coordinator sends after the votes',make(){
+  const w=3, votes=[...Array(w)].map(()=>R()<0.75?'yes':'no'), lost=R()<0.25?rn(w):-1, allYes=votes.every(v=>v==='yes')&&lost<0;
+  const right=allYes?'commit, to all':'abort, to all', o=sh(['commit, to all','abort, to all','commit, to those who voted yes','wait until every vote arrives']);
+  const names=['C','W1','W2','W3'], msgs=[], evs=[];
+  for(let i=0;i<w;i++){ msgs.push({from:0,x1:50,to:i+1,x2:80+i*18,s:i===0?'prepare':'',lpos:0.25}); msgs.push({from:i+1,x1:130+i*18,to:0,x2:200+i*24,s:votes[i],k:votes[i]==='no'?'b':'a',struck:i===lost,lpos:0.15}); }
+  evs.push({p:0,x:240,s:'?',big:1});
+  return card(this,{ix:votes.join(',')+';'+lost,links:['45f.two-phase'],fig:mdia(names,msgs,evs,320,215),
+    ask:'Two-phase commit: C asks each worker to prepare, and each votes. A crossed-out arrow is a vote that never arrives, so C’s wait for it runs out. What does C send next?',right,opts:o,
+    why:allYes?'Every vote is yes and every vote arrived, so C sends commit to all.':'C commits only when every worker has voted yes; '+(votes.includes('no')?'a no vote':'a vote that never arrived')+' means abort, sent to all so that none of them commits alone.'}); }});
+})();
+
+/* ===== part F, third part (Andrew 03:44Z "i'm positive about knots"; 03:47Z the upright figure has no picture card):
+   knot drawings closed from a row of twists (34m), and the upright figure of 29a ===== */
+(function(){
+const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph, K=G.K, {uniq}=G;
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const ri=(a,b)=>a+rn(b-a+1), f1=v=>Math.round(v*10)/10, M='−', sgn=v=>v<0?M+(-v):String(v);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const card=(k,o)=>Object.assign({index:'g:'+k.id+'['+o.ix+']'+(o.links&&o.links.length?'.'+o.links.join('+'):''), a3:['g.'+k.id+'['+o.ix+']',(o.links&&o.links.length?o.links.join('+'):k.step),'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+const four=(right,c)=>{ const ws=uniq(right,c).slice(0,3); return ws.length<3?null:sh([right,...ws]); };
+const box=(W,H,body,alt)=>'<svg class="rgfig" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(alt)+'" xmlns="http://www.w3.org/2000/svg">'+body+'</svg>';
+const T=(x,y,s,a)=>'<text class="rg-lab" x="'+f1(x)+'" y="'+f1(y)+'"'+(a?' text-anchor="'+a+'"':'')+'>'+esc(s)+'</text>';
+const HALO='style="fill:none;stroke:var(--card,#fff);stroke-width:9;stroke-linecap:butt"', ROPE='style="fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round"';
+/* a row of n twists, each crossing over one way or the other (over[i] = 'f': the falling strand on top, sign +1; 'r': the rising one, sign −1), closed above and below */
+function twists(over,alt){ const n=over.length, w=Math.min(40,220/n), xs=160-n*w/2, xe=160+n*w/2, y1=78, y2=124, o=[];
+  const piece=(xa,xb,from,to)=>'M'+f1(xa)+' '+from+' C'+f1((xa+xb)/2)+' '+from+' '+f1((xa+xb)/2)+' '+to+' '+f1(xb)+' '+to;
+  o.push('<path '+ROPE+' d="M'+f1(xe)+' '+y1+' C'+f1(xe+34)+' '+y1+' '+f1(xe+34)+' '+(y1-46)+' '+f1(xe)+' '+(y1-46)+' L'+f1(xs)+' '+(y1-46)+' C'+f1(xs-34)+' '+(y1-46)+' '+f1(xs-34)+' '+y1+' '+f1(xs)+' '+y1+'"/>');
+  o.push('<path '+ROPE+' d="M'+f1(xe)+' '+y2+' C'+f1(xe+34)+' '+y2+' '+f1(xe+34)+' '+(y2+46)+' '+f1(xe)+' '+(y2+46)+' L'+f1(xs)+' '+(y2+46)+' C'+f1(xs-34)+' '+(y2+46)+' '+f1(xs-34)+' '+y2+' '+f1(xs)+' '+y2+'"/>');
+  for(let i=0;i<n;i++){ const xa=xs+i*w, xb=xa+w, fall=piece(xa,xb,y1,y2), rise=piece(xa,xb,y2,y1), top=over[i]==='f'?fall:rise, under=over[i]==='f'?rise:fall;
+    o.push('<path '+ROPE+' d="'+under+'"/>','<path '+HALO+' d="'+top+'"/>','<path '+ROPE+' d="'+top+'"/>'); }
+  const head=(x,y)=>'<path style="fill:currentColor" d="M'+f1(x-6)+' '+y+' L'+f1(x+5)+' '+(y-5)+' L'+f1(x+5)+' '+(y+5)+'Z"/>';
+  o.push(head(160,y1-46),head(160,y2+46));
+  return box(320,182,o.join(''),alt); }
+function knotSeed(){ const n=ri(3,7), over=[...Array(n)].map(()=>R()<0.5?'f':'r'); const w=over.reduce((s,c)=>s+(c==='f'?1:-1),0); return {n,over,w,rings:n%2===0?2:1}; }
+const SIGNRULE='A crossing counts +1 when, walking along the over strand with the arrows, the under strand passes from your right to your left, and '+M+'1 the other way.';
+
+K({id:'knotsign',step:'34m',steps:['34m'],title:'the signed crossing count of a knot drawing',make(){
+  const {n,over,w,rings}=knotSeed(), right=sgn(w), plus=over.filter(c=>c==='f').length;
+  const o=four(right,sh([sgn(-w),String(n),sgn(w+2),sgn(w-2),String(plus),sgn(n-2*plus+ (w===0?2:0))]).filter(x=>x!==right)); if(!o) return null;
+  return card(this,{ix:over.join(''),links:['34m3.signed-crossings'],fig:twists(over,'a drawing of '+(rings===1?'a knot':'two rings')+' with '+n+' crossings, its strands given a direction'),
+    ask:'Both strands run left to right through the twists and back along the outside. '+SIGNRULE+' What is the signed crossing count w of the drawing?',right,opts:o,
+    why:'Inside the row both strands run to the right. Where the strand falling to the right lies on top, the crossing counts +1; where the rising strand lies on top, '+M+'1. There are '+plus+' of the first and '+(n-plus)+' of the second, so w = '+plus+' '+M+' '+(n-plus)+' = '+right+'.'}); }});
+
+K({id:'knotcolours',step:'34m',steps:['34m'],title:'how many three-colourings a knot drawing has',make(){
+  const {n,over,w,rings}=knotSeed(), m=Math.abs(w), c=m%3===0?9:3, right=String(c);
+  const o=four(right,['3','9','27','6','1'].filter(x=>x!==right)); if(!o) return null;
+  return card(this,{ix:over.join(''),links:['34m2.three-colour'],fig:twists(over,'a drawing with '+n+' crossings in a row'),
+    ask:'Colour each strand red, green or blue so that at every crossing the three strands meeting there are all alike or all different. How many such colourings does this drawing have?',right,opts:o,
+    why:'Pokes take away neighbouring crossings that lean opposite ways, and they never change the count. That leaves a row of '+m+' crossing'+(m===1?'':'s')+' all leaning one way'+(m?'':', which is '+(rings===2?'two rings lying apart':'the plain ring'))+'. '+(m===0?'Each ring takes any one colour by itself: 3 × 3 = 9.':c===9?'With '+m+' a multiple of 3, the colours can go all different round the row as well as all alike: 3 + 6 = 9.':'With '+m+' crossing'+(m===1?'':'s')+', not a multiple of 3, the colours cannot change round the row and come back, so only the 3 one-colour colourings work.')}); }});
+
+K({id:'knotpokes',step:'34m',steps:['34m'],title:'how many crossings are left after the pokes',make(){
+  const s=knotSeed(); if(s.n<4||s.over.every(c=>c===s.over[0])) return null; const {n,over,w}=s, m=Math.abs(w), right=String(m);
+  const o=four(right,[String(n),String(m+2),String(n-m),String(m+1),String(Math.max(0,m-1))].filter(x=>x!==right)); if(!o) return null;
+  return card(this,{ix:over.join(''),links:['34m1.three-moves'],fig:twists(over,'a row of '+n+' crossings, some leaning each way'),
+    ask:'A poke takes away two neighbouring crossings where one strand passes over the other and then back. Making pokes until none is left, how many crossings remain in the row?',right,opts:o,
+    why:'Two neighbouring crossings that lean opposite ways are one strand passing over and back, so a poke removes them. Each leaning cancels one of the other leaning: '+over.filter(c=>c==='f').length+' against '+over.filter(c=>c==='r').length+' leaves '+m+'.'}); }});
+
+/* 29a: the upright figure: legs equal and square to the base, the top bent by the case */
+const ANG=[['π/3',60],['2π/5',72],['3π/8',67.5],['4π/9',80],['π/2',90],['5π/9',100],['3π/5',108],['5π/8',112.5],['2π/3',120]];
+const COMP={'π/3':'2π/3','2π/5':'3π/5','3π/8':'5π/8','4π/9':'5π/9','π/2':'π/2','5π/9':'4π/9','3π/5':'2π/5','5π/8':'3π/8','2π/3':'π/3'};
+function upright(deg,lab,labC){ const A=[80,196], B=[240,196], D=[80,76], C=[240,76], k=80/Math.tan(deg*Math.PI/180), cy=76+Math.max(-60,Math.min(60,k)), o=[];
+  const L=(p,q)=>'<line class="rg-axis" x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" style="stroke-width:2.2"/>';
+  o.push(L(A,B),L(A,D),L(B,C),'<path class="rg-cv" style="fill:none;stroke-width:2.6" d="M80 76 Q160 '+f1(cy)+' 240 76"/>');
+  o.push('<path class="rg-axis" style="fill:none" d="M80 182 h14 v14"/><path class="rg-axis" style="fill:none" d="M240 182 h-14 v14"/>');
+  o.push('<line class="rg-axis" x1="74" y1="136" x2="86" y2="136"/><line class="rg-axis" x1="234" y1="136" x2="246" y2="136"/>');
+  o.push(T(68,206,'A','end'),T(252,206,'B','start'),T(68,72,'D','end'),T(252,72,'C','start'));
+  o.push(T(94,104,lab,'start'),T(226,104,labC||'?','end'));
+  return box(320,224,o.join(''),'an upright figure: base AB, equal legs square to it, and a top DC'); }
+
+K({id:'uprighttop',step:'29a',steps:['29a'],title:'the other top angle of the upright figure',make(){
+  const [lab,deg]=pk(ANG), right=lab;
+  const o=four(right,sh([COMP[lab],'π/2','it cannot be told','π/4'].filter(x=>x!==right))); if(!o) return null;
+  return card(this,{ix:lab,links:['29a.top-angles'],fig:upright(deg,lab),
+    ask:'In the upright figure ABCD the legs AD and BC are equal and square to the base AB; the parallel axiom is not used. The top angle at D is '+lab+'. What is the top angle at C?',right,opts:o,
+    why:'Top-angles technique: the two top angles of an upright figure are equal (the figure is its own mirror image across the line joining the midpoints of AB and DC). So the angle at C is '+lab+' as well.'}); }});
+
+K({id:'uprightcase',step:'29a',steps:['29a'],title:'which case the upright figure shows',make(){
+  const [lab,deg]=pk(ANG), kind=deg<90?'sharp':deg>90?'blunt':'right';
+  const ALL={sharp:'sharp: the other axioms allow it',right:'right: the other axioms allow it',blunt:'blunt: the other axioms rule it out'};
+  const right=ALL[kind], wrong=[kind==='sharp'?'sharp: the other axioms rule it out':kind==='blunt'?'blunt: the other axioms allow it':'right: the other axioms rule it out',...Object.values(ALL).filter(x=>x!==right)];
+  const o=four(right,sh(wrong)); if(!o) return null;
+  return card(this,{ix:lab,links:['29a.no-blunt-top'],fig:upright(deg,lab,lab),
+    ask:'The upright figure has both top angles '+lab+'. Which case is it, and what do the other axioms, without the parallel axiom, say of that case?',right,opts:o,
+    why:lab+(deg<90?' is smaller than right: the sharp case. No-blunt-top technique: the top angles are right or sharp, never blunt; the other axioms cannot rule out the sharp case, which is the plane of 29c where parallels are many.':deg>90?' is larger than right: the blunt case. No-blunt-top technique: the top angles are right or sharp, never blunt, so the other axioms rule it out.':' is right: the case the parallel axiom gives. The other axioms allow it; the no-blunt-top technique rules out only the blunt case.')}); }});
+})();
+
 /* ===== Read Graph, the turn-around link (Andrew 2026-11-14 14:08Z: "For each graph we make we can turn it around: which graph/table/map
    represents the statement provided"). Loaded last. For every kind already registered, a twin kind deals the same question backwards:
    the question and its answer are given, and four pictures of that kind are offered; exactly one has that answer. The twins draw their
@@ -3285,7 +3906,8 @@ function turnMake(k){ return function(){ let c=null; try{ c=k.make.call(k); }cat
     fig:'', html, right, opts:LET.slice(), ask:'Turned around: '+c.ask+' The answer is '+c.right+'. In which picture?',
     why:'In '+right+' the answer is '+c.right+'. '+c.why+' In the other pictures the same question gives '+sib.map(s=>s.right).join(', ')+'.'}; }; }
 /* kinds whose question changes with every picture so that no three siblings share it (t4 sweep, 2026-11-14): no twin */
-const NOTWIN=['pie','stemplot','margin','residplot','area3','impltan','keepdrop','slopeat·recip','mvt','column','landing','slopepic','wave4','specsum','composed','ivt','taylor','sphere','isfn','overfit','heat','waveeq','huecircle','colourfade'];
+const NOTWIN=['pie','stemplot','margin','residplot','area3','impltan','keepdrop','slopeat·recip','mvt','column','landing','slopepic','wave4','specsum','composed','ivt','taylor','sphere','isfn','overfit','heat','waveeq','huecircle','colourfade',
+  /* part F (2026-11-15): kinds whose siblings rarely share a question */ 'swing','fewcolours','layers','square','commit','uphill','boxat','matching','treelen','knotcolours','uprightcase'];
 base.forEach(k=>{ if(k.id.indexOf('turn·')===0||NOTWIN.includes(k.id)) return; G.KINDS.push({id:'turn·'+k.id,step:k.step,steps:k.steps,title:k.title+', turned around',turned:true,make:turnMake(k)}); });
 })();
 

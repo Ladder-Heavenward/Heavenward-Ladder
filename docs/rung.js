@@ -602,7 +602,7 @@ function deskHTML(){
   d.innerHTML='<div class="dtop"><button type="button" class="dback">← back</button><b class="dttl"></b><span class="dacct">'+(window.LadderAccount?LadderAccount.name:'')+'</span></div><div class="dname"><span class="dname-n" title="your name on this device">'+(window.LadderAccount?LadderAccount.name:'')+'</span><a class="dname-s" href="standing.html">Standing</a></div><div class="dtabs"><button data-p="keys">Quick Keys</button>'+(qs?'<button data-p="qs">Questions</button>':'')+'<button data-p="graph">Graph View</button><button data-p="moves">Techs Read</button><button data-p="rand">Laundry</button>'+(document.querySelector('.qid')?'<button type="button" class="dcross">Crosswalk</button>':'')+'<button type="button" class="dstick">Measuring Stick</button><button type="button" class="dstand">Answering Questions</button>'+(hb?'<button data-p="base">Cellar</button>':'')+'<button data-p="rec" class="dgear" aria-label="settings and record" title="settings and record">⚙</button>'+(document.querySelector('.wrap>section.class.step')&&false?'<button type="button" class="dfv">Page View</button>':'')+'<button type="button" class="dheights">Index</button><a class="dshare" href="install.html">Share the Ladder</a><button class="x" aria-label="close">✕</button></div>'
     +'<div class="dpane" id="dp-keys"><div id="dkeyshost"></div></div>'
     +(qs?'<div class="dpane" id="dp-qs"><p class="dnote">The page’s questions, here so you can read them beside the class.</p><div class="dq" id="dq"></div></div>':'')
-    +'<div class="dpane" id="dp-graph"><p class="dtrio" role="group" aria-label="tech screens"><button type="button" data-go="moves">Techs Read</button><button type="button" data-go="graph">Graph View</button><button type="button" data-go="deck">Tech Deck</button></p><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper: x^2, 2sin(x), e^x, ln x, √x, |x|, x!. a, b, c and k get sliders.</p></div>'
+    +'<div class="dpane" id="dp-graph"><p class="dtrio" role="group" aria-label="tech screens"><button type="button" data-go="moves">Techs Read</button><button type="button" data-go="graph">Graph View</button><button type="button" data-go="deck">Tech Deck</button></p><div id="dgfig"></div><div id="dmg"></div><p class="dnote" style="margin-top:10px">Type it as on paper. A line can be a curve (x^2, tan x), a relation (x^2 + y^2 = 4), a region (y &lt; x), points, a path (cos t, sin t), polar (r = 1 + cos θ), a slope field, a statement (P ∧ Q ⇒ R) or a network (A-B, B-C); “what can a line be?” lists them all. Graphs opens the catalogue.</p></div>'
     +'<div class="dpane" id="dp-moves">'+/* techhead */'<p class="dtrio" role="group" aria-label="tech screens"><button type="button" data-go="moves">Techs Read</button><button type="button" data-go="graph">Graph View</button><button type="button" data-go="deck">Tech Deck</button></p><p class="dnote" id="dmnote">The techs this step builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div></div>'
     +'<div class="dpane" id="dp-deck"><p class="dtrio" role="group" aria-label="tech screens"><button type="button" data-go="moves">Techs Read</button><button type="button" data-go="graph">Graph View</button><button type="button" data-go="deck">Tech Deck</button></p><p class="dnote">Each card is one tech you have earned. A tech lands here when you finish its step’s questions.</p><div class="dk-tools"><input type="search" id="dkq" placeholder="find a tech by name or word" aria-label="find a tech"><span class="dk-count" id="dkcount"></span></div><div id="dklist"></div><p class="dnote" id="dkahead"></p></div>'
     +'<div class="dpane" id="dp-rand">'+/* hangdry */'<p class="jogtxt" role="status" aria-label="the laundry is loading">'+'Hang Drying'.split('').map((c,i)=>c===' '?'<s>&nbsp;</s>':'<s aria-hidden="true" style="animation-delay:'+(i*70)+'ms">'+c+'</s>').join('')+'</p></div>'
@@ -832,34 +832,42 @@ ready(()=>{ renderAll(document);
 })();
 
 /* ---- MathGraph (shared grapher) ---- */
-/* MathGraph: a small function grapher for the lesson pages. Type a function of x the way you'd
-   write it (x^2, 2sin(x), e^x, ln x, (1+1/x)^x, √x, |x|, x!), up to three at once; drag to pan,
-   pinch or scroll to zoom; touch or hover to trace; sliders appear for a, b, c, k. */
+/* MathGraph (graph view, 0.67.22 on): one line draws whichever kind of graph it names.
+   y = f(x) or f(x) alone; x = g(y); relations such as x^2 + y^2 = 4; regions such as y < x^2 or
+   -1 < x < 2; pieces such as x^2 if x < 1; 3 - x if x >= 1; points (1, 2), (3, 4); a path
+   (cos t, sin t); polar r = 1 + cos θ; slope fields y' = x - y; arrows (0,0) -> (2,1); terms
+   a_n = 1/n; data 3, 5, 2; statements P ∧ Q ⇒ R (a truth table); links A-B, B-C or A->B, B->C
+   (a network); sets A ∩ B' (set circles). Removable breaks, jumps and endless breaks are found and marked.
+   Any number of lines, a colour for each, drag to pan, pinch, scroll or slide to zoom. */
 (function(){
 'use strict';
 const SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','⁺':'+','ⁿ':'n','ˣ':'x','½':'(1/2)'};
 function normalize(s){
-  s=s.replace(/[×·∙⋅]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-').replace(/π/g,'pi').replace(/θ/g,'x').replace(/∛/g,'cbrt').replace(/√/g,'sqrt').replace(/eˣ/g,'e^x');
-  s=s.replace(/^\s*(?:y|f\s*\(\s*x\s*\))\s*=\s*/,'');
-  // superscript runs -> ^(…)
+  s=s.replace(/[×·∙⋅]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-').replace(/π/g,'pi').replace(/[θϑ]/g,'theta').replace(/∛/g,'cbrt').replace(/√/g,'sqrt').replace(/eˣ/g,'e^x');
   s=s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺ⁿˣ]+/g,m=>'^('+[...m].map(c=>SUP[c]).join('')+')');
-  s=s.replace(/½/g,'(1/2)').replace(/⅓/g,'(1/3)').replace(/¼/g,'(1/4)').replace(/¾/g,'(3/4)').replace(/⅔/g,'(2/3)');
+  s=s.replace(/½/g,'(1/2)').replace(/⅓/g,'(1/3)').replace(/¼/g,'(1/4)').replace(/¾/g,'(3/4)').replace(/⅔/g,'(2/3)').replace(/∞/g,'Infinity');
   return s;
 }
-const FN={sin:Math.sin,cos:Math.cos,tan:Math.tan,asin:Math.asin,acos:Math.acos,atan:Math.atan,arcsin:Math.asin,arccos:Math.acos,arctan:Math.atan,
-  sec:x=>1/Math.cos(x),csc:x=>1/Math.sin(x),cot:x=>1/Math.tan(x),sinh:Math.sinh,cosh:Math.cosh,tanh:Math.tanh,
-  sqrt:Math.sqrt,cbrt:Math.cbrt,ln:Math.log,log:Math.log10,exp:Math.exp,abs:Math.abs,floor:Math.floor,ceil:Math.ceil,round:Math.round,sign:Math.sign};
+function erf(x){ const t=1/(1+0.3275911*Math.abs(x)); const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x); return x>=0?y:-y; }
 function gamma(z){ if(z<0.5) return Math.PI/(Math.sin(Math.PI*z)*gamma(1-z)); z-=1; const g=7,c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7]; let x=c[0]; for(let i=1;i<g+2;i++) x+=c[i]/(z+i); const t=z+g+0.5; return Math.sqrt(2*Math.PI)*Math.pow(t,z+0.5)*Math.exp(-t)*x; }
 const fact=v=>gamma(v+1);
+const FN={sin:Math.sin,cos:Math.cos,tan:Math.tan,asin:Math.asin,acos:Math.acos,atan:Math.atan,arcsin:Math.asin,arccos:Math.acos,arctan:Math.atan,
+  sec:x=>1/Math.cos(x),csc:x=>1/Math.sin(x),cot:x=>1/Math.tan(x),sinh:Math.sinh,cosh:Math.cosh,tanh:Math.tanh,
+  sqrt:Math.sqrt,cbrt:Math.cbrt,ln:Math.log,log:Math.log10,exp:Math.exp,abs:Math.abs,floor:Math.floor,ceil:Math.ceil,round:Math.round,sign:Math.sign,
+  erf:erf,gamma:gamma,frac:x=>x-Math.floor(x),bell:x=>Math.exp(-x*x/2)/Math.sqrt(2*Math.PI)};
+/* where each function can break: its "watch" points (zeros of these give a hole, wall, jump or end) */
+const WATCH={tan:a=>Math.cos(a),sec:a=>Math.cos(a),csc:a=>Math.sin(a),cot:a=>Math.sin(a),ln:a=>a,log:a=>a,sqrt:a=>a,
+  asin:a=>(a-1)*(a+1),acos:a=>(a-1)*(a+1),arcsin:a=>(a-1)*(a+1),arccos:a=>(a-1)*(a+1),floor:a=>Math.sin(Math.PI*a),ceil:a=>Math.sin(Math.PI*a),
+  round:a=>Math.cos(Math.PI*a),sign:a=>a,frac:a=>Math.sin(Math.PI*a),gamma:a=>a<=0.5?Math.sin(Math.PI*a):1};
 const PARAMS=['a','b','c','k'];
+const NAMES=[...Object.keys(FN),'pi','e','x','y','n','t','theta','Infinity'].concat(PARAMS).sort((p,q)=>q.length-p.length);
 function tokenize(s){
   const t=[]; let i=0;
   while(i<s.length){ const ch=s[i];
     if(/\s/.test(ch)){i++;continue;}
-    if(/[0-9.]/.test(ch)){ let j=i; while(j<s.length&&/[0-9.]/.test(s[j])) j++; t.push({k:'num',v:parseFloat(s.slice(i,j))}); i=j; continue; }
+    if(/[0-9.]/.test(ch)){ let j=i; while(j<s.length&&/[0-9.]/.test(s[j])) j++; if(s[j]==='e'&&/[0-9]/.test(s[j+1]||'')&&false) j++; t.push({k:'num',v:parseFloat(s.slice(i,j))}); i=j; continue; }
     if(/[a-zA-Z]/.test(ch)){ let j=i; while(j<s.length&&/[a-zA-Z]/.test(s[j])) j++; let w=s.slice(i,j); i=j;
-      // split runs like "xsin" or "2pix": greedy longest known word, else single letters
-      while(w.length){ let m=null; for(const name of [...Object.keys(FN),'pi','e','x','n','t'].concat(PARAMS).sort((p,q)=>q.length-p.length)){ if(w.startsWith(name)){ m=name; break; } }
+      while(w.length){ let m=null; for(const name of NAMES){ if(w.startsWith(name)){ m=name; break; } }
         if(!m) throw new Error('unknown name “'+w+'”'); t.push({k:FN[m]?'fn':'id',v:m}); w=w.slice(m.length); }
       continue; }
     if('+-*/^()!|,'.includes(ch)){ t.push({k:'op',v:ch}); i++; continue; }
@@ -867,17 +875,18 @@ function tokenize(s){
   }
   return t;
 }
-function parse(src){
-  const toks=tokenize(normalize(src)); let p=0; const used=new Set();
+/* parse an expression; returns {f, params, vars, watch}. x, t, n and θ are all the free variable; y is y. */
+function parseExpr(src){
+  const toks=tokenize(normalize(src)); let p=0; const used=new Set(), vars=new Set(), watch=[];
   const peek=()=>toks[p], next=()=>toks[p++];
   const isOp=(v)=>peek()&&peek().k==='op'&&peek().v===v;
   const startsPrimary=()=>{ const q=peek(); return q && (q.k==='num'||q.k==='id'||q.k==='fn'||(q.k==='op'&&(q.v==='('||q.v==='|'))); };
   function expr(){ let a=term(); while(isOp('+')||isOp('-')){ const o=next().v, b=term(), A=a; a= o==='+'? (e=>A(e)+b(e)) : (e=>A(e)-b(e)); } return a; }
-  function term(){ let a=unary(); for(;;){ if(isOp('*')||isOp('/')){ const o=next().v, b=unary(), A=a; a= o==='*'?(e=>A(e)*b(e)):(e=>A(e)/b(e)); }
+  function term(){ let a=unary(); for(;;){ if(isOp('*')||isOp('/')){ const o=next().v, b=unary(), A=a; if(o==='/') watch.push(b); a= o==='*'?(e=>A(e)*b(e)):(e=>{ const d=b(e); return d===0?NaN:A(e)/d; }); }
       else if(startsPrimary() && !(peek().k==='op'&&peek().v==='|'&&absDepth>0)){ const b=unary(), A=a; a=e=>A(e)*b(e); } else break; } return a; }
   function unary(){ if(isOp('-')){ next(); const a=unary(); return e=>-a(e); } if(isOp('+')){ next(); return unary(); } return power(); }
-  function power(){ const b=postfix(); if(isOp('^')){ next(); const ex=unary(); return e=>Math.pow(b(e),ex(e)); } return b; }
-  function postfix(){ let a=primary(); while(isOp('!')){ next(); const A=a; a=e=>fact(A(e)); } return a; }
+  function power(){ const b=postfix(); if(isOp('^')){ next(); const ex=unary(); watch.push(b); return e=>{ const B=b(e); return B!==B?NaN:Math.pow(B,ex(e)); }; } return b; }
+  function postfix(){ let a=primary(); while(isOp('!')){ next(); const A=a; watch.push(e=>{ const v=A(e)+1; return v<=0.5?Math.sin(Math.PI*v):1; }); a=e=>fact(A(e)); } return a; }
   let absDepth=0;
   function primary(){ const q=next(); if(!q) throw new Error('the expression ends too soon');
     if(q.k==='num'){ const v=q.v; return ()=>v; }
@@ -885,94 +894,366 @@ function parse(src){
     if(q.k==='op'&&q.v==='|'){ absDepth++; const a=expr(); absDepth--; if(!isOp('|')) throw new Error('a “|” is never closed'); next(); return e=>Math.abs(a(e)); }
     if(q.k==='fn'){ const f=FN[q.v]; let arg;
       if(isOp('(')){ next(); arg=expr(); if(!isOp(')')) throw new Error('a “(” is never closed'); next(); }
-      else arg=power();  // ln x, sin 2x reads as sin(2)·x? no: sin takes the next power term
+      else arg=power();
+      if(WATCH[q.v]){ const w=WATCH[q.v], A=arg; watch.push(e=>w(A(e))); }
       let fn=e=>f(arg(e));
-      if(isOp('^')){ next(); const ex=unary(), F=fn; fn=e=>Math.pow(F(e),ex(e)); }   // sin^2(x) written sin(x)^2
+      if(isOp('^')){ next(); const ex=unary(), F=fn; fn=e=>Math.pow(F(e),ex(e)); }
       return fn; }
     if(q.k==='id'){ const n=q.v;
-      if(n==='x'||n==='n'||n==='t') return e=>e.x;
+      if(n==='x'||n==='n'||n==='t'||n==='theta'){ vars.add(n); return e=>e.x; }
+      if(n==='y'){ vars.add('y'); return e=>e.y; }
       if(n==='pi') return ()=>Math.PI;
       if(n==='e') return ()=>Math.E;
+      if(n==='Infinity') return ()=>Infinity;
       used.add(n); return e=>e[n]; }
     throw new Error('unexpected “'+q.v+'”');
   }
   const f=expr(); if(p<toks.length) throw new Error('unexpected “'+(toks[p].v)+'”');
-  return {f,params:[...used]};
+  return {f,params:[...used],vars,watch};
+}
+/* the old entry point: a function of x, with any "y =" in front dropped */
+function parse(src){ const r=parseExpr(String(src).replace(/^\s*(?:y|f\s*\(\s*x\s*\))\s*=\s*/,'')); return {f:r.f,params:r.params}; }
+
+/* ---------- splitting a line ---------- */
+function topSplit(s,seps){ const out=[]; let d=0,last=0;
+  for(let i=0;i<s.length;i++){ const ch=s[i]; if(ch==='('||ch==='['||ch==='{') d++; else if(ch===')'||ch===']'||ch==='}') d--; else if(d===0&&seps.includes(ch)){ out.push(s.slice(last,i)); last=i+1; } }
+  out.push(s.slice(last)); return out; }
+const CMP=/(<=|>=|≤|≥|<|>|=)/;
+function cmpSplit(s){ const parts=[], ops=[]; let d=0,last=0;
+  for(let i=0;i<s.length;i++){ const ch=s[i]; if(ch==='('||ch==='[') d++; else if(ch===')'||ch===']') d--;
+    else if(d===0&&'<>=≤≥'.includes(ch)){ let op=ch; if((ch==='<'||ch==='>')&&s[i+1]==='='){ op=ch+'='; } parts.push(s.slice(last,i)); ops.push(op); i+=op.length-1; last=i+1; } }
+  parts.push(s.slice(last)); return {parts,ops}; }
+const opTest={'<':(a,b)=>a<b,'>':(a,b)=>a>b,'<=':(a,b)=>a<=b+1e-12,'>=':(a,b)=>a>=b-1e-12,'≤':(a,b)=>a<=b+1e-12,'≥':(a,b)=>a>=b-1e-12,'=':(a,b)=>Math.abs(a-b)<1e-9};
+/* a condition such as -1 < x <= 2 (several joined by "and") -> {test, diffs:[{f,strict}], params, vars} */
+function parseCond(s){ const ands=s.split(/\band\b|∧|&/); const tests=[], diffs=[], params=new Set(), vars=new Set();
+  ands.forEach(a=>{ const {parts,ops}=cmpSplit(a); if(!ops.length) throw new Error('“'+a.trim()+'” has no <, > or ='); const fs=parts.map(q=>{ const r=parseExpr(q); r.params.forEach(x=>params.add(x)); r.vars.forEach(x=>vars.add(x)); return r.f; });
+    ops.forEach((o,i)=>{ const A=fs[i],B=fs[i+1],T=opTest[o]; tests.push(e=>T(A(e),B(e))); diffs.push({f:e=>A(e)-B(e),strict:o==='<'||o==='>'}); }); });
+  return {test:e=>tests.every(t=>t(e)),diffs,params:[...params],vars}; }
+function rangeOf(s,v){ // "0 < t < 6", "t from 0 to 4pi", "t in [0, 2pi]"
+  let m=s.match(/(?:from)\s*(.+?)\s*to\s*(.+)$/); if(m) return [parseExpr(m[1]).f({}),parseExpr(m[2]).f({})];
+  m=s.match(/\[\s*(.+?)\s*,\s*(.+?)\s*\]/); if(m) return [parseExpr(m[1]).f({}),parseExpr(m[2]).f({})];
+  const {parts,ops}=cmpSplit(s); if(ops.length===2) return [parseExpr(parts[0]).f({}),parseExpr(parts[2]).f({})];
+  return null; }
+
+/* ---------- logic: P ∧ Q ⇒ R ---------- */
+function parseLogic(src){
+  let s=src.replace(/\b(and)\b/gi,'∧').replace(/\b(or)\b/gi,'∨').replace(/\b(not)\b/gi,'¬').replace(/\b(xor)\b/gi,'⊕').replace(/\b(iff)\b/gi,'⇔').replace(/\b(implies|then)\b/gi,'⇒').replace(/\bif\b/gi,'')
+    .replace(/<->|<=>|↔|≡/g,'⇔').replace(/->|=>|→|⊃/g,'⇒').replace(/&&?|\^|·/g,'∧').replace(/\|\|?|\bv\b|\+/g,'∨').replace(/[~!¬]/g,'¬').replace(/⊤/g,'1').replace(/⊥/g,'0');
+  const toks=[]; for(const ch of s){ if(/\s/.test(ch)) continue; if(/[A-Z01]/.test(ch)||'¬∧∨⊕⇒⇔()\''.includes(ch)) toks.push(ch); else throw new Error('unexpected “'+ch+'” in a statement'); }
+  let p=0; const peek=()=>toks[p], vars=new Set();
+  const node=(op,a,b)=>({op,a,b});
+  function iff(){ let a=imp(); while(peek()==='⇔'){ p++; a=node('⇔',a,imp()); } return a; }
+  function imp(){ const a=xor(); if(peek()==='⇒'){ p++; return node('⇒',a,imp()); } return a; }
+  function xor(){ let a=or(); while(peek()==='⊕'){ p++; a=node('⊕',a,or()); } return a; }
+  function or(){ let a=and(); while(peek()==='∨'){ p++; a=node('∨',a,and()); } return a; }
+  function and(){ let a=not(); while(peek()==='∧'||(peek()&&/[A-Z(¬01]/.test(peek()))){ if(peek()==='∧') p++; a=node('∧',a,not()); } return a; }
+  function not(){ if(peek()==='¬'){ p++; return node('¬',not()); } let a=atom(); while(peek()==='\''){ p++; a=node('¬',a); } return a; }
+  function atom(){ const q=toks[p++]; if(!q) throw new Error('the statement ends too soon');
+    if(q==='('){ const a=iff(); if(toks[p++]!==')') throw new Error('a “(” is never closed'); return a; }
+    if(q==='0'||q==='1') return {op:'c',v:q==='1'}; if(/[A-Z]/.test(q)){ vars.add(q); return {op:'v',v:q}; } throw new Error('unexpected “'+q+'”'); }
+  const t=iff(); if(p<toks.length) throw new Error('unexpected “'+toks[p]+'”');
+  const show=n=>n.op==='v'?n.v:n.op==='c'?(n.v?'⊤':'⊥'):n.op==='¬'?'¬'+(n.a.op==='v'||n.a.op==='c'||n.a.op==='¬'?show(n.a):'('+show(n.a)+')'):(wrap(n.a,n.op)+' '+n.op+' '+wrap(n.b,n.op));
+  const RANK={'⇔':0,'⇒':1,'⊕':2,'∨':3,'∧':4};
+  const wrap=(c,op)=>(c.op in RANK&&RANK[c.op]<=RANK[op])?'('+show(c)+')':show(c);
+  const ev=(n,m)=>n.op==='v'?m[n.v]:n.op==='c'?n.v:n.op==='¬'?!ev(n.a,m):n.op==='∧'?ev(n.a,m)&&ev(n.b,m):n.op==='∨'?ev(n.a,m)||ev(n.b,m):n.op==='⊕'?ev(n.a,m)!==ev(n.b,m):n.op==='⇒'?(!ev(n.a,m)||ev(n.b,m)):ev(n.a,m)===ev(n.b,m);
+  const cols=[], seen=new Set(); (function walk(n){ if(n.op==='v'||n.op==='c') return; if(n.a) walk(n.a); if(n.b) walk(n.b); const k=show(n); if(!seen.has(k)){ seen.add(k); cols.push(n); } })(t);
+  return {vars:[...vars].sort(),tree:t,cols,show,ev}; }
+
+/* ---------- networks: A-B, B-C:3, A->C, A->A ---------- */
+const NODE="[A-Za-z][A-Za-z0-9']*|\\d+";
+const EDGE=new RegExp('^\\s*('+NODE+')((?:\\s*(?:<->|↔|->|→|—|–|-)\\s*(?:'+NODE+'))+)\\s*(?:[:=]\\s*(-?[\\d.]+))?\\s*$');
+function parseNet(src){ const s=src.replace(/^\s*(?:graph|net|network)\s*:?/i,''); const N=[], E=[]; const add=n=>{ if(!N.includes(n)) N.push(n); };
+  topSplit(s,',;').forEach(it=>{ if(!it.trim()) return; if(/^\s*([A-Za-z][A-Za-z0-9']*|\d+)\s*$/.test(it)){ add(it.trim()); return; }
+    const m=it.match(EDGE); if(!m) throw new Error('“'+it.trim()+'” is not a link like A-B or A->B');
+    const parts=it.replace(/[:=]\s*-?[\d.]+\s*$/,'').split(/\s*(<->|↔|->|→|—|–|-)\s*/).map(x=>x.trim()).filter(x=>x!=='');
+    for(let i=0;i+2<parts.length;i+=2){ const a=parts[i], op=parts[i+1], b=parts[i+2]; add(a); add(b); E.push({a,b,dir:op==='->'||op==='→'?1:op==='<->'||op==='↔'?2:0,w:m[3]!==undefined?m[3]:null}); } });
+  return {N,E}; }
+function looksNet(s){ if(/^\s*(?:graph|net|network)\s*:?/i.test(s)) return true; const it=topSplit(s,',;').filter(x=>x.trim()); if(it.length<2) return false;
+  let edges=0; for(const x of it){ if(/^\s*[A-Z][A-Za-z0-9']*\s*$/.test(x)) continue; const m=x.match(EDGE); if(!m) return false; if(!/^[A-Z0-9]/.test(m[1].trim())) return false; edges++; } return edges>0; }
+
+/* ---------- sets: A ∩ B', A ∪ (B \ C) ---------- */
+function parseSets(src){ let s=src.replace(/^\s*sets?\s*:?/i,'').replace(/\bcap\b|\band\b|∧|&/g,'∩').replace(/\bcup\b|\bor\b|∨|\|/g,'∪').replace(/[\\−]|\bminus\b|(?<=[A-Z')\s])-(?=[\sA-Z(])/g,'∖').replace(/ᶜ|\^c/g,"'").replace(/Δ|△|⊕/g,'Δ');
+  const toks=[]; for(const ch of s){ if(/\s/.test(ch)) continue; if(/[A-CU∅]/.test(ch)||'∩∪∖Δ()\''.includes(ch)) toks.push(ch); else throw new Error('unexpected “'+ch+'” in sets: use A, B, C, U, ∩, ∪, \\, Δ and \''); }
+  let p=0; const peek=()=>toks[p], used=new Set();
+  function un(){ let a=it(); while(peek()==='∪'||peek()==='∖'||peek()==='Δ'){ const o=toks[p++], b=it(), A=a; a=o==='∪'?(m=>A(m)||b(m)):o==='∖'?(m=>A(m)&&!b(m)):(m=>A(m)!==b(m)); } return a; }
+  function it(){ let a=co(); while(peek()==='∩'){ p++; const b=co(), A=a; a=m=>A(m)&&b(m); } return a; }
+  function co(){ let a=at(); while(peek()==='\''){ p++; const A=a; a=m=>!A(m); } return a; }
+  function at(){ const q=toks[p++]; if(!q) throw new Error('the set ends too soon'); if(q==='('){ const a=un(); if(toks[p++]!==')') throw new Error('a “(” is never closed'); return a; }
+    if(q==='U') return ()=>true; if(q==='∅') return ()=>false; used.add(q); return m=>!!m[q]; }
+  const f=un(); if(p<toks.length) throw new Error('unexpected “'+toks[p]+'”'); return {f,used}; }
+
+/* ---------- one line -> a drawable item ---------- */
+function stripY(s){ return s.replace(/^\s*(?:y|f\s*\(\s*x\s*\))\s*=\s*/,''); }
+function compileLine(raw){
+  const src=String(raw||'').trim(); if(!src) return null;
+  const s=normalize(src);
+  const P=new Set(), add=r=>{ (r.params||[]).forEach(x=>P.add(x)); return r; };
+  const out=(o)=>Object.assign(o,{src,params:[...P]});
+  // data 3, 5, 2
+  let m=s.match(/^\s*data\s*:?\s*(.*)$/i);
+  if(m){ const v=m[1].split(/[\s,;]+/).filter(Boolean).map(Number); if(!v.length||v.some(x=>!isFinite(x))) throw new Error('data takes numbers, like data 3, 5, 2'); return out({kind:'data',v}); }
+  // sets
+  if(/^\s*sets?\b/i.test(s)||(/[∩∪∖Δ']/.test(s)&&/^[\sA-CU∅∩∪∖Δ()'\\]+$/.test(s))){ const r=parseSets(s); return out({kind:'sets',f:r.f,used:r.used}); }
+  // networks
+  if(looksNet(src)){ const r=parseNet(src); return out({kind:'net',N:r.N,E:r.E}); }
+  // statements
+  if(/^\s*(?:table|statement)\s*:?/i.test(src)||(/[∧∨¬⇒⇔↔⊕]|\b(?:and|or|not|iff|implies|xor)\b|->|→/.test(src)&&/^[\sA-Z01()∧∨¬⇒⇔↔⊕⊤⊥~!&|^'<>=\-→·+]+$|^[\sA-Z01()'∧∨¬⇒⇔↔⊕~!&|^<>=\-→·+]*(?:\b(?:and|or|not|iff|implies|xor|if|then)\b[\sA-Z01()'∧∨¬⇒⇔↔⊕~!&|^<>=\-→·+]*)+$/i.test(src)&&/[A-Z]/.test(src)&&!/[a-z]/.test(src.replace(/\b(?:and|or|not|iff|implies|xor|if|then|table|statement)\b/gi,'')))){
+    const r=parseLogic(src.replace(/^\s*(?:table|statement)\s*:?/i,'')); if(r.vars.length>5) throw new Error('at most five letters in a statement'); return out({kind:'logic',L:r}); }
+  // slope field y' = f(x, y)
+  m=s.match(/^\s*(?:y'|y′|dy\s*\/\s*dx)\s*=\s*(.+)$/); if(m){ const r=add(parseExpr(m[1])); return out({kind:'field',f:r.f}); }
+  // polar r = f(θ)
+  m=s.match(/^\s*r\s*=\s*(.+)$/);
+  if(m){ const [body,rng]=topSplit(m[1],';').concat(['']); const b2=body.split(/\bfor\b/); const r=add(parseExpr(b2[0])); let R=rng||b2[1]?rangeOf(rng||b2[1]):null;
+    if(!R){ const g=t=>r.f(Object.assign({x:t},DEFP)); let k=1; for(;k<=6;k++){ if([0.3,1.1,2.3].every(t=>{ const a=g(t),b=g(t+2*Math.PI*k); return Math.abs(a-b)<1e-6*(1+Math.abs(a)); })) break; } R=[0,2*Math.PI*(k>6?1:k)]; }
+    return out({kind:'polar',f:r.f,R}); }
+  // terms a_n = …
+  m=s.match(/^\s*([a-z])\s*(?:_\s*n|\(\s*n\s*\)|ₙ)\s*=\s*(.+)$/); if(m){ const r=add(parseExpr(m[2])); return out({kind:'seq',f:r.f}); }
+  // arrows (0,0) -> (2,1); vec(2,1); <2,1>
+  if(/->|→/.test(s)&&/\(/.test(s)){ const segs=topSplit(s,',;').join('|'); const A=[]; s.split(/\s*;\s*|\)\s*,\s*(?=\()/).forEach(()=>{});
+    const re=/\(([^()]*(?:\([^()]*\)[^()]*)*)\)\s*(?:->|→)\s*\(([^()]*(?:\([^()]*\)[^()]*)*)\)/g; let q;
+    while((q=re.exec(s))){ const p1=topSplit(q[1],',').map(t=>add(parseExpr(t)).f), p2=topSplit(q[2],',').map(t=>add(parseExpr(t)).f); if(p1.length!==2||p2.length!==2) throw new Error('an arrow joins two points, like (0,0) -> (2,1)'); A.push([p1,p2]); }
+    if(!A.length) throw new Error('an arrow joins two points, like (0,0) -> (2,1)'); void segs; return out({kind:'arrows',A}); }
+  m=s.match(/^\s*(?:vec\s*\(|<)(.+?)(?:\)|>)\s*$/); if(m&&!/[<>=]/.test(m[1])){ const p2=topSplit(m[1],',').map(t=>add(parseExpr(t)).f); if(p2.length===2) return out({kind:'arrows',A:[[[()=>0,()=>0],p2]]}); }
+  // tuples: points or a path in t
+  if(/^\s*\(/.test(s)){ const [body,...rest]=s.split(/;|\bfor\b/); const groups=[]; let d=0,start=-1;
+    for(let i=0;i<body.length;i++){ const ch=body[i]; if(ch==='('){ if(d===0) start=i; d++; } else if(ch===')'){ d--; if(d===0) groups.push(body.slice(start+1,i)); } }
+    const tuples=groups.map(g=>topSplit(g,',')); if(tuples.length&&tuples.every(t=>t.length===2)){
+      const parsed=tuples.map(t=>t.map(x=>add(parseExpr(x)))); const usesT=parsed.some(t=>t.some(r=>r.vars.has('t')||r.vars.has('theta')||r.vars.has('x')));
+      if(usesT){ if(parsed.length!==1) throw new Error('one path at a time: (cos t, sin t)'); const R=rest.length?rangeOf(rest.join(' ')):(/(sin|cos|tan)/.test(body)?[0,2*Math.PI]:[-5,5]); return out({kind:'param',fx:parsed[0][0].f,fy:parsed[0][1].f,R:R||[0,2*Math.PI]}); }
+      return out({kind:'points',P:parsed.map(t=>[t[0].f,t[1].f])}); } }
+  // pieces: x^2 if x < 1; 3 - x if x >= 1   (or  expr, cond)
+  const body=stripY(s); const pcs=topSplit(body,';').filter(x=>x.trim());
+  const pieceOf=t=>{ let mm=t.match(/^(.*?)\s*\bif\b\s*(.+)$/); if(!mm){ const cs=topSplit(t,','); if(cs.length===2&&CMP.test(cs[1])&&!CMP.test(cs[0])) mm=[0,cs[0],cs[1]]; }
+    return mm?{e:mm[1],c:mm[2]}:null; };
+  const asPieces=pcs.map(pieceOf);
+  if(asPieces.length&&asPieces.every(x=>x)&&(pcs.length>1||asPieces[0])){
+    const list=asPieces.map(q=>{ const r=add(parseExpr(q.e)); const c=parseCond(q.c); c.params.forEach(x=>P.add(x)); return {f:r.f,c,watch:r.watch}; });
+    const f=e=>{ for(const q of list) if(q.c.test(e)) return q.f(e); return NaN; };
+    const watch=[].concat(...list.map(q=>q.watch.concat(q.c.diffs.map(d=>d.f))));
+    return out({kind:'fn',f,watch}); }
+  // comparisons
+  const {parts,ops}=cmpSplit(s);
+  if(ops.some(o=>o!=='=')||topSplit(s,',').length>1&&/[<>≤≥]/.test(s)){ const c=parseCond(s.replace(/,/g,' and ')); c.params.forEach(x=>P.add(x)); return out({kind:'region',c}); }
+  if(ops.length===1){ const L=parts[0].trim(), Rt=parts[1];
+    if(/^(?:y|f\s*\(\s*x\s*\))$/.test(L)){ const r=add(parseExpr(Rt)); if(!r.vars.has('y')) return out({kind:'fn',f:r.f,watch:r.watch}); }
+    if(L==='x'){ const r=add(parseExpr(Rt)); if(!r.vars.has('x')) return out({kind:'xfn',f:e=>r.f({...e,x:e.y}),g:r.f,watch:r.watch,yvar:true}); }
+    const a=add(parseExpr(L)), b=add(parseExpr(Rt)); return out({kind:'rel',F:e=>a.f(e)-b.f(e)}); }
+  if(ops.length>1) throw new Error('use < or ≤ to chain, like -1 < x < 2');
+  const r=add(parseExpr(s)); if(r.vars.has('y')) throw new Error('add = or < to say what to do with y');
+  return out({kind:'fn',f:r.f,watch:r.watch});
+}
+const DEFP={a:1,b:1,c:0,k:1};
+const SIDE={logic:1,net:1,sets:1};
+
+/* ---------- breaks: holes, walls, jumps and ends ---------- */
+function snap(x){ const r=Math.round(x*1e6)/1e6; if(Math.abs(x-r)<1e-9) return r; const q=Math.round(x/(Math.PI/12)); if(Math.abs(x-q*Math.PI/12)<1e-9) return q*Math.PI/12; return x; }
+function rootsOf(c,x0,x1,N){ const out=[]; const xs=[], vs=[];
+  for(let i=0;i<=N;i++){ const x=x0+(x1-x0)*i/N; let v; try{ v=c(x); }catch(e){ v=NaN; } xs.push(x); vs.push(v); }
+  const push=x=>{ x=snap(x); if(!out.length||Math.abs(out[out.length-1]-x)>(x1-x0)*1e-9) out.push(x); };
+  for(let i=0;i<=N;i++){ const v=vs[i]; if(!isFinite(v)) continue;
+    if(v===0){ push(xs[i]); continue; }
+    if(i<N&&isFinite(vs[i+1])&&v*vs[i+1]<0){ let a=xs[i],b=xs[i+1],fa=v; for(let k=0;k<60;k++){ const mid=(a+b)/2, fm=c(mid); if(!isFinite(fm)) break; if(fm===0){ a=b=mid; break; } if(fa*fm<0) b=mid; else { a=mid; fa=fm; } }
+      const r=(a+b)/2, fr=Math.abs(c(r)); if(fr<1e-6*(1+Math.abs(v)+Math.abs(vs[i+1]))) push(r); }
+    else if(i>0&&i<N&&isFinite(vs[i-1])&&isFinite(vs[i+1])&&Math.abs(v)<=Math.abs(vs[i-1])&&Math.abs(v)<=Math.abs(vs[i+1])&&v*vs[i-1]>0&&v*vs[i+1]>0){ // even zero
+      let a=xs[i-1],b=xs[i+1]; const g=0.381966; for(let k=0;k<80;k++){ const p1=a+g*(b-a),p2=b-g*(b-a); if(Math.abs(c(p1))<Math.abs(c(p2))) b=p2; else a=p1; }
+      const r=(a+b)/2; if(Math.abs(c(r))<1e-9) push(r); } }
+  return out; }
+function findBreaks(item,env,x0,x1,s,N){
+  const f=x=>{ try{ return item.f(env(x)); }catch(e){ return NaN; } };
+  let cand=[]; (item.watch||[]).forEach(w=>{ cand=cand.concat(rootsOf(x=>w(env(x)),x0,x1,N)); if(cand.length>600) cand.length=600; });
+  cand.sort((a,b)=>a-b); const xs=cand.filter((x,i)=>i===0||x-cand[i-1]>1e-9*(x1-x0));
+  const h1=0.5/s, hs=[h1,h1*1e-3,h1*1e-6], tol=1.2/s; const out=[];
+  const side=(x,d)=>{ const v=hs.map(h=>f(x+d*h)); if(!isFinite(v[2])){ return isFinite(v[0])&&Math.abs(v[0])>1e3/s?{t:'wall'}:{t:'none'}; }
+    if(!isFinite(v[0])||!isFinite(v[1])) return {t:'conv',v:v[2]};
+    const d1=Math.abs(v[1]-v[0]), d2=Math.abs(v[2]-v[1]); if(d2<=Math.max(d1*0.35,1e-12*(1+Math.abs(v[2])))){ const r=d1>0?d2/d1:0; return {t:'conv',v:r>0&&r<1?v[2]+(v[2]-v[1])*r/(1-r):v[2]}; } return {t:'wall',sign:Math.sign(v[2])}; };
+  for(const x of xs){ const L=side(x,-1), R=side(x,1), v=f(x), fin=isFinite(v);
+    if(L.t==='wall'||R.t==='wall'){ out.push({x,t:'wall',L,R}); continue; }
+    if(L.t==='conv'&&R.t==='conv'){ if(Math.abs(L.v-R.v)<tol){ const m=(L.v+R.v)/2; if(fin&&Math.abs(v-m)<tol) continue; out.push({x,t:'hole',m,v:fin?v:null}); }
+      else out.push({x,t:'jump',L:L.v,R:R.v,v:fin?v:null}); continue; }
+    if(L.t==='conv'||R.t==='conv'){ const e=L.t==='conv'?L.v:R.v; out.push({x,t:'end',m:e,closed:fin&&Math.abs(v-e)<tol,side:L.t==='conv'?-1:1}); } }
+  return out; }
+
+/* ---------- colours ---------- */
+const DEFCOL=['--ember','--teal','--gold','#7b5cc4','#3c8d4a','#c4487e','#2f6fb3','#9a6a2f','#4a9a9a','#b04a3a'];
+let _cx=null; function hexOf(cssColor){ if(!_cx) _cx=document.createElement('canvas').getContext('2d'); _cx.fillStyle='#000'; _cx.fillStyle=cssColor; const v=_cx.fillStyle; if(v[0]==='#') return v; const m=v.match(/[\d.]+/g)||[0,0,0]; return '#'+m.slice(0,3).map(n=>(+n|0).toString(16).padStart(2,'0')).join(''); }
+function rgba(hex,a){ const h=hexOf(hex).slice(1); return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')'; }
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function colourOf(i,chosen){ if(chosen) return chosen; const d=DEFCOL[i%DEFCOL.length]; return d[0]==='-'?(cssv(d)||'#888'):d; }
+
+/* ---------- painting the plane ---------- */
+function paint(c,W,H,view,items,o){
+  o=o||{}; const col=n=>cssv(n)||'#888';
+  const X=x=>W/2+(x-view.cx)*view.s, Y=y=>H/2-(y-view.cy)*view.s, IX=px=>view.cx+(px-W/2)/view.s, IY=py=>view.cy-(py-H/2)/view.s;
+  const CL=v=>Math.max(-8*H,Math.min(9*H,v));
+  c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
+  const raw=(o.thumb?45:70)/view.s, pw=Math.pow(10,Math.floor(Math.log10(raw))), mm=raw/pw, step=(mm<=1?1:mm<=2?2:mm<=5?5:10)*pw;
+  c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
+  for(let gx=Math.ceil(IX(0)/step)*step; gx<=IX(W); gx+=step){ c.moveTo(X(gx),0); c.lineTo(X(gx),H); }
+  for(let gy=Math.ceil(IY(H)/step)*step; gy<=IY(0); gy+=step){ c.moveTo(0,Y(gy)); c.lineTo(W,Y(gy)); }
+  c.stroke();
+  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); c.moveTo(0,Y(0)); c.lineTo(W,Y(0)); c.moveTo(X(0),0); c.lineTo(X(0),H); c.stroke();
+  if(!o.thumb){ c.font='11px Nunito, system-ui, sans-serif'; c.fillStyle=col('--muted');
+    const fmt=v=>{ const r=Math.round(v/step)*step; return Math.abs(r)<step*1e-6?'0':(+r.toPrecision(6)).toString(); };
+    c.textAlign='center'; const ly=Math.min(H-4,Math.max(12,Y(0)+13));
+    for(let gx=Math.ceil(IX(0)/step)*step; gx<=IX(W); gx+=step){ if(Math.abs(gx)<step/2) continue; c.fillText(fmt(gx),X(gx),ly); }
+    c.textAlign='left'; const lx=Math.min(W-40,Math.max(4,X(0)+5));
+    for(let gy=Math.ceil(IY(H)/step)*step; gy<=IY(0); gy+=step){ if(Math.abs(gy)<step/2) continue; c.fillText(fmt(gy),lx,Y(gy)-3); } }
+  const card=col('--card'); const lw=o.thumb?2:2.6, dotR=o.thumb?3.2:4.5;
+  const dot=(x,y,clr,open)=>{ c.beginPath(); c.arc(X(x),Y(y),dotR,0,7); if(open){ c.fillStyle=card; c.fill(); c.lineWidth=2; c.strokeStyle=clr; c.stroke(); } else { c.fillStyle=clr; c.fill(); } };
+  const arrowHead=(x1,y1,x2,y2,clr)=>{ const a=Math.atan2(y2-y1,x2-x1), L=o.thumb?7:10; c.fillStyle=clr; c.beginPath(); c.moveTo(x2,y2); c.lineTo(x2-L*Math.cos(a-0.4),y2-L*Math.sin(a-0.4)); c.lineTo(x2-L*Math.cos(a+0.4),y2-L*Math.sin(a+0.4)); c.closePath(); c.fill(); };
+  const grid=(cell,F)=>{ const nx=Math.ceil(W/cell)+1, ny=Math.ceil(H/cell)+1, v=new Float64Array(nx*ny); for(let j=0;j<ny;j++) for(let i=0;i<nx;i++){ let z; try{ z=F(IX(i*cell),IY(j*cell)); }catch(e){ z=NaN; } v[j*nx+i]=z; } return {nx,ny,v,cell}; };
+  const contour=(F,clr,dash,width)=>{ const cell=o.thumb?4:3, g=grid(cell,F); c.strokeStyle=clr; c.lineWidth=width||lw; c.setLineDash(dash?[6,4]:[]); c.beginPath();
+    const {nx,ny,v}=g; const ok=(px,py,a,b)=>{ let z; try{ z=F(IX(px),IY(py)); }catch(e){ return false; } return isFinite(z)&&Math.abs(z)<=0.25*Math.max(Math.abs(a),Math.abs(b))+1e-9; };
+    for(let j=0;j<ny-1;j++) for(let i=0;i<nx-1;i++){ const a=v[j*nx+i],b=v[j*nx+i+1],d=v[(j+1)*nx+i],e=v[(j+1)*nx+i+1]; if(!(isFinite(a)&&isFinite(b)&&isFinite(d)&&isFinite(e))) continue;
+      const P=[]; const x0=i*cell,y0=j*cell;
+      const edge=(p,q,ax,ay,bx,by)=>{ if((p<0)!==(q<0)){ const t=p/(p-q); const px=ax+(bx-ax)*t, py=ay+(by-ay)*t; if(ok(px,py,p,q)) P.push([px,py]); } };
+      edge(a,b,x0,y0,x0+cell,y0); edge(b,e,x0+cell,y0,x0+cell,y0+cell); edge(d,e,x0,y0+cell,x0+cell,y0+cell); edge(a,d,x0,y0,x0,y0+cell);
+      if(P.length>=2){ c.moveTo(P[0][0],P[0][1]); c.lineTo(P[1][0],P[1][1]); } if(P.length===4){ c.moveTo(P[2][0],P[2][1]); c.lineTo(P[3][0],P[3][1]); } }
+    c.stroke(); c.setLineDash([]); };
+  const res={traces:[]};
+  items.forEach(it=>{ if(!it||SIDE[it.kind]) return; const clr=it.color, env=it.env;
+    c.setLineDash([]); c.lineWidth=lw; c.strokeStyle=clr; c.fillStyle=clr;
+    if(it.kind==='fn'||it.kind==='xfn'){ const sideways=it.kind==='xfn';
+      const f=sideways?(y=>{ try{ return it.g(env(y)); }catch(e){ return NaN; } }):(x=>{ try{ return it.f(env(x)); }catch(e){ return NaN; } });
+      const A0=sideways?IY(H):IX(0), A1=sideways?IY(0):IX(W), span=sideways?H:W;
+      const P=(a,b)=>sideways?[X(b),Y(a)]:[X(a),Y(b)];
+      const br=findBreaks({f:sideways?(e=>it.g(e)):it.f,watch:it.watch},env,A0,A1,view.s,Math.min(1200,Math.ceil(span*1.5)));
+      const cuts=br.filter(b=>b.t!=='hole').map(b=>b.x); const tiny=1e-7/view.s;
+      const draw=(fx,dash,width)=>{ c.strokeStyle=clr; c.lineWidth=width; c.setLineDash(dash?[5,4]:[]); c.beginPath(); let pen=false, prev=null; let ci=0;
+        const stepA=(A1-A0)/(span*2);
+        const put=(a,b)=>{ const [px,py]=P(a,b); if(!isFinite(b)){ pen=false; prev=null; return; } const cpx=CL(px),cpy=CL(py);
+          if(pen&&prev&&Math.abs((sideways?cpx-prev[0]:cpy-prev[1]))>span*0.75){ // a big leap that no watch caught: look closer
+            const mid=fx((a+prev[2])/2); const mv=sideways?X(mid):Y(mid); const lo=Math.min(sideways?prev[0]:prev[1],sideways?cpx:cpy), hi=Math.max(sideways?prev[0]:prev[1],sideways?cpx:cpy);
+            if(!(isFinite(mid)&&mv>=lo-2&&mv<=hi+2)) pen=false; }
+          if(!pen){ c.moveTo(cpx,cpy); pen=true; } else c.lineTo(cpx,cpy); prev=[cpx,cpy,a]; };
+        for(let a=A0; a<=A1+stepA; a+=stepA){
+          while(ci<cuts.length&&cuts[ci]<=a){ const xc=cuts[ci]; const l=fx(xc-tiny); if(pen&&isFinite(l)) put(xc-tiny,l); pen=false; prev=null; const r=fx(xc+tiny); if(isFinite(r)) put(xc+tiny,r); ci++; }
+          put(a,fx(a)); }
+        c.stroke(); c.setLineDash([]); };
+      draw(f,false,lw);
+      if(o.slope&&!sideways){ const h=1e-5*Math.max(1,1/view.s); draw(x=>(f(x+h)-f(x-h))/(2*h),true,1.6); }
+      if(br.length<=150) br.forEach(b=>{ const at=(a,bv,open)=>{ const [px,py]=P(a,bv); c.beginPath(); c.arc(px,py,dotR,0,7); if(open){ c.fillStyle=card; c.fill(); c.lineWidth=2; c.strokeStyle=clr; c.stroke(); } else { c.fillStyle=clr; c.fill(); } };
+        if(b.t==='wall'){ c.strokeStyle=clr; c.globalAlpha=.6; c.lineWidth=1.3; c.setLineDash([6,5]); c.beginPath(); const [px,py]=P(b.x,0); if(sideways){ c.moveTo(0,py); c.lineTo(W,py); } else { c.moveTo(px,0); c.lineTo(px,H); } c.stroke(); c.setLineDash([]); c.globalAlpha=1; }
+        else if(b.t==='hole'){ at(b.x,b.m,true); if(b.v!==null) at(b.x,b.v,false); }
+        else if(b.t==='jump'){ const lc=b.v!==null&&Math.abs(b.v-b.L)<1.2/view.s, rc=b.v!==null&&Math.abs(b.v-b.R)<1.2/view.s; at(b.x,b.L,!lc); at(b.x,b.R,!rc); if(b.v!==null&&!lc&&!rc) at(b.x,b.v,false); }
+        else if(b.t==='end'){ at(b.x,b.m,!b.closed); } });
+      if(!sideways) res.traces.push({it,f,br}); }
+    else if(it.kind==='rel'){ contour((x,y)=>it.F(env(x,y)),clr,false); }
+    else if(it.kind==='region'){ const cell=o.thumb?3:2, F=(x,y)=>it.c.test(env(x,y))?1:0; c.fillStyle=rgba(clr,.22);
+      for(let py=0;py<H;py+=cell) for(let px=0;px<W;px+=cell){ let t=false; try{ t=it.c.test(env(IX(px+cell/2),IY(py+cell/2))); }catch(e){} if(t) c.fillRect(px,py,cell,cell); }
+      void F; it.c.diffs.forEach(d=>contour((x,y)=>d.f(env(x,y)),clr,d.strict,o.thumb?1.6:2)); }
+    else if(it.kind==='param'||it.kind==='polar'){ const [t0,t1]=it.R, N=o.thumb?600:2400; c.beginPath(); let pen=false, prev=null;
+      for(let i=0;i<=N;i++){ const t=t0+(t1-t0)*i/N; let x,y; try{ if(it.kind==='param'){ x=it.fx(env(t)); y=it.fy(env(t)); } else { const r=it.f(env(t)); x=r*Math.cos(t); y=r*Math.sin(t); } }catch(e){ x=NaN; }
+        if(!isFinite(x)||!isFinite(y)){ pen=false; continue; } const px=CL(X(x)),py=CL(Y(y)); if(pen&&prev&&Math.hypot(px-prev[0],py-prev[1])>Math.max(W,H)*0.6) pen=false;
+        if(!pen){ c.moveTo(px,py); pen=true; } else c.lineTo(px,py); prev=[px,py]; }
+      c.stroke(); }
+    else if(it.kind==='points'){ it.P.forEach(p=>{ const x=p[0](env(0)), y=p[1](env(0)); if(isFinite(x)&&isFinite(y)){ dot(x,y,clr,false); if(!o.thumb){ c.fillStyle=col('--ink'); c.font='11px Nunito, system-ui, sans-serif'; c.textAlign='left'; c.fillText('('+(+x.toFixed(3))+', '+(+y.toFixed(3))+')',X(x)+7,Y(y)-7); } } }); }
+    else if(it.kind==='arrows'){ it.A.forEach(([p,q])=>{ const x1=X(p[0](env(0))),y1=Y(p[1](env(0))),x2=X(q[0](env(0))),y2=Y(q[1](env(0))); if(![x1,y1,x2,y2].every(isFinite)) return; c.strokeStyle=clr; c.lineWidth=lw; c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke(); arrowHead(x1,y1,x2,y2,clr); }); }
+    else if(it.kind==='field'){ const sp=o.thumb?18:26, L=sp*0.32; c.lineWidth=o.thumb?1.2:1.6; c.strokeStyle=clr;
+      c.beginPath(); for(let py=sp/2;py<H;py+=sp) for(let px=sp/2;px<W;px+=sp){ let m; try{ m=it.f(env(IX(px),IY(py))); }catch(e){ m=NaN; } if(!isFinite(m)) continue; const a=Math.atan(m); c.moveTo(px-L*Math.cos(a),py+L*Math.sin(a)); c.lineTo(px+L*Math.cos(a),py-L*Math.sin(a)); } c.stroke(); }
+    else if(it.kind==='seq'){ let n0=0; try{ if(!isFinite(it.f(env(0)))) n0=1; }catch(e){ n0=1; } const lo=Math.max(n0,Math.ceil(IX(0))), hi=Math.floor(IX(W)); const every=Math.max(1,Math.ceil((hi-lo)/400));
+      for(let n=lo;n<=hi;n+=every){ let v; try{ v=it.f(env(n)); }catch(e){ v=NaN; } if(isFinite(v)) dot(n,v,clr,false); } }
+    else if(it.kind==='data'){ c.fillStyle=rgba(clr,.55); c.strokeStyle=clr; c.lineWidth=1.4; it.v.forEach((v,i)=>{ const x0=X(i+0.6),x1=X(i+1.4),y0=Y(0),y1=Y(v); c.fillRect(Math.min(x0,x1),Math.min(y0,y1),Math.abs(x1-x0),Math.abs(y1-y0)); c.strokeRect(Math.min(x0,x1),Math.min(y0,y1),Math.abs(x1-x0),Math.abs(y1-y0)); }); }
+  });
+  res.X=X; res.Y=Y; res.IX=IX; res.IY=IY; return res;
 }
 
+/* ---------- the pictures beside the plane: tables, networks, set circles ---------- */
+const esc=t=>String(t).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+function sideEl(it,small){
+  const box=document.createElement('div'); box.className='mg-sidecard'; box.style.borderLeftColor=it.color;
+  if(it.kind==='logic'){ const L=it.L, n=L.vars.length, cols=L.cols.length>6?[L.tree]:L.cols; let h='<table class="tt mg-tt"><tr>'+L.vars.map(v=>'<th>'+v+'</th>').join('')+cols.map((cn,i)=>'<th'+(i===cols.length-1?' class="mg-main"':'')+'>'+esc(L.show(cn))+'</th>').join('')+'</tr>';
+    const rows=Math.pow(2,n); let trues=0;
+    for(let r=0;r<rows;r++){ const m={}; L.vars.forEach((v,i)=>m[v]=!((r>>(n-1-i))&1)); h+='<tr>'+L.vars.map(v=>'<td class="'+(m[v]?'T':'F')+'">'+(m[v]?'T':'F')+'</td>').join('')+cols.map((cn,i)=>{ const v=L.ev(cn,m); if(i===cols.length-1&&v) trues++; return '<td class="'+(v?'T':'F')+(i===cols.length-1?' mg-main':'')+'">'+(v?'T':'F')+'</td>'; }).join('')+'</tr>'; }
+    h+='</table>'; const say=trues===rows?'true on every row: it always holds':trues===0?'false on every row: it never holds':'true on '+trues+' of '+rows+' rows';
+    box.innerHTML=(small?'':'<p class="mg-sidehead">'+esc(it.src)+'</p>')+'<div class="mg-ttwrap">'+h+'</div>'+(small?'':'<p class="mg-sidenote">'+say+'</p>');
+    box.querySelectorAll('.mg-main').forEach(e=>e.style.boxShadow='inset 0 -2px 0 '+it.color); }
+  else if(it.kind==='net'){ const {N,E}=it, w=small?200:300, h=small?150:220, cx=w/2, cy=h/2, R=Math.min(w,h)/2-(small?20:28);
+    const pos={}; N.forEach((n,i)=>{ const a=-Math.PI/2+2*Math.PI*i/N.length; pos[n]=[cx+R*Math.cos(a),cy+R*Math.sin(a)]; });
+    const ink=cssv('--ink')||'#333', card=cssv('--card')||'#fff'; const id='mga'+Math.random().toString(36).slice(2,8);
+    let s='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" role="img" aria-label="'+esc(it.src)+'"><defs><marker id="'+id+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="'+it.color+'"/></marker></defs>';
+    const pairCount={}; const r0=small?9:13;
+    E.forEach(e=>{ const key=[e.a,e.b].sort().join('|'); const k=pairCount[key]=(pairCount[key]||0)+1; const [x1,y1]=pos[e.a],[x2,y2]=pos[e.b];
+      const mk=(e.dir?' marker-end="url(#'+id+')"':'')+(e.dir===2?' marker-start="url(#'+id+')"':'');
+      if(e.a===e.b){ const ox=x1-cx, oy=y1-cy, L=Math.hypot(ox,oy)||1, ux=ox/L, uy=oy/L; const lx=x1+ux*(r0+9), ly=y1+uy*(r0+9);
+        s+='<circle cx="'+lx+'" cy="'+ly+'" r="9" fill="none" stroke="'+it.color+'" stroke-width="2"/>'; if(e.w!==null) s+='<text x="'+(lx+ux*16)+'" y="'+(ly+uy*16+4)+'" text-anchor="middle" font-size="11" fill="'+ink+'">'+esc(e.w)+'</text>'; return; }
+      const dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy), ux=dx/L, uy=dy/L; const sx=x1+ux*r0, sy=y1+uy*r0, ex=x2-ux*r0, ey=y2-uy*r0;
+      const bend=(k-1)===0?0:((k%2?1:-1)*Math.ceil((k-1)/2)*22); const flip=e.a<e.b?1:-1; const mx=(sx+ex)/2-uy*bend*flip, my=(sy+ey)/2+ux*bend*flip;
+      s+='<path d="M'+sx+','+sy+' Q'+mx+','+my+' '+ex+','+ey+'" fill="none" stroke="'+it.color+'" stroke-width="2"'+mk+'/>';
+      if(e.w!==null){ const lx=(sx+2*mx+ex)/4, ly=(sy+2*my+ey)/4; s+='<rect x="'+(lx-11)+'" y="'+(ly-8)+'" width="22" height="15" rx="3" fill="'+card+'"/><text x="'+lx+'" y="'+(ly+4)+'" text-anchor="middle" font-size="11" fill="'+ink+'">'+esc(e.w)+'</text>'; } });
+    N.forEach(n=>{ const [x,y]=pos[n]; s+='<circle cx="'+x+'" cy="'+y+'" r="'+r0+'" fill="'+card+'" stroke="'+ink+'" stroke-width="1.5"/><text x="'+x+'" y="'+(y+4)+'" text-anchor="middle" font-size="'+(small?10:12)+'" fill="'+ink+'">'+esc(n)+'</text>'; });
+    s+='</svg>'; const deg={}; N.forEach(n=>deg[n]=0); E.forEach(e=>{ deg[e.a]++; deg[e.b]++; });
+    const dirs=E.some(e=>e.dir); box.innerHTML=(small?'':'<p class="mg-sidehead">'+esc(it.src)+'</p>')+s+(small?'':'<p class="mg-sidenote">'+N.length+' dots, '+E.length+' link'+(E.length===1?'':'s')+(dirs?'':'; meetings at each dot: '+N.map(n=>n+' '+deg[n]).join(', '))+'</p>'); }
+  else if(it.kind==='sets'){ const three=it.used.has('C'), w=small?200:280, h=small?140:190; const cv=document.createElement('canvas'); const dpr=window.devicePixelRatio||1; cv.width=w*dpr; cv.height=h*dpr; cv.style.width=w+'px'; cv.style.height=h+'px';
+    const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); const r=three?h*0.27:h*0.32;
+    const C=three?{A:[w/2-r*0.55,h/2-r*0.32],B:[w/2+r*0.55,h/2-r*0.32],C:[w/2,h/2+r*0.5]}:{A:[w/2-r*0.55,h/2],B:[w/2+r*0.55,h/2]};
+    c.fillStyle=cssv('--card')||'#fff'; c.fillRect(0,0,w,h); c.fillStyle=rgba(it.color,.5);
+    for(let y=0;y<h;y+=2) for(let x=0;x<w;x+=2){ const m={}; for(const k in C) m[k]=Math.hypot(x+1-C[k][0],y+1-C[k][1])<r; if(it.f(m)) c.fillRect(x,y,2,2); }
+    c.strokeStyle=cssv('--ink')||'#333'; c.lineWidth=1.5; c.strokeRect(1,1,w-2,h-2); c.fillStyle=c.strokeStyle; c.font=(small?11:13)+'px Nunito, system-ui, sans-serif'; c.textAlign='center';
+    for(const k in C){ c.beginPath(); c.arc(C[k][0],C[k][1],r,0,7); c.stroke(); const off=k==='A'?[-r*0.75,-r*0.75]:k==='B'?[r*0.75,-r*0.75]:[r*0.95,r*0.7]; c.fillText(k,C[k][0]+off[0],C[k][1]+off[1]); }
+    c.textAlign='left'; c.fillText('U',6,small?14:16);
+    box.innerHTML=small?'':'<p class="mg-sidehead">'+esc(it.src)+'</p>'; box.appendChild(cv); }
+  return box; }
+
+/* ---------- the grapher ---------- */
+const ZMIN=0.05, ZMAX=1e6, ZL=s=>Math.round(1000*Math.log(s/ZMIN)/Math.log(ZMAX/ZMIN)), ZS=v=>ZMIN*Math.pow(ZMAX/ZMIN,v/1000);
 function MathGraph(host,opts){
-  opts=Object.assign({lines:3,height:320,seed:['x^2','',''],key:'graph'},opts||{});
-  const col=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888';
-  const COLORS=['--ember','--teal','--gold'];
+  opts=Object.assign({height:320,seed:['x^2'],key:'graph'},opts||{});
   host.classList.add('mgraph');
-  host.innerHTML=`<div class="mg-rows"></div><div class="mg-params"></div>
+  host.innerHTML=`<div class="mg-rows"></div><p class="mg-addrow"><button type="button" class="mg-add">＋ add line</button><button type="button" class="mg-gr" aria-expanded="false">Graphs</button><button type="button" class="mg-help" aria-expanded="false">what can a line be?</button></p>
+   <div class="mg-helpbox" hidden></div><div class="mg-params"></div>
    <div class="mg-wrap"><canvas class="mg-c"></canvas></div>
    <div class="mg-bar"><span class="mg-read">touch or hover the graph to trace</span>
-   <span class="mg-btns"><label class="mg-ck"><input type="checkbox" class="mg-slope"> slope curve</label><button class="mg-in" aria-label="zoom in">＋</button><button class="mg-out" aria-label="zoom out">－</button><button class="mg-home">reset view</button></span></div>`;
-  const rows=host.querySelector('.mg-rows'), pbox=host.querySelector('.mg-params'), cv=host.querySelector('.mg-c'), read=host.querySelector('.mg-read');
+   <span class="mg-btns"><label class="mg-ck"><input type="checkbox" class="mg-slope"> slope curve</label><button class="mg-home">reset view</button></span></div>
+   <div class="mg-zoom"><button class="mg-out" aria-label="zoom out">－</button><input type="range" class="mg-zr" min="0" max="1000" step="1" aria-label="zoom"><button class="mg-in" aria-label="zoom in">＋</button><span class="mg-zs"></span></div>
+   <div class="mg-side"></div>
+   <div class="mg-cat" hidden></div>`;
+  const rows=host.querySelector('.mg-rows'), pbox=host.querySelector('.mg-params'), cv=host.querySelector('.mg-c'), read=host.querySelector('.mg-read'), side=host.querySelector('.mg-side'), wrap=host.querySelector('.mg-wrap'), zr=host.querySelector('.mg-zr'), zs=host.querySelector('.mg-zs');
   let st={}; try{ st=JSON.parse(LS.getItem('mg:'+opts.key)||'{}'); }catch(e){}
   const save=()=>{ try{ LS.setItem('mg:'+opts.key,JSON.stringify(st)); }catch(e){} };
-  st.src=st.src||opts.seed.slice(); st.p=st.p||{a:1,b:1,c:0,k:1}; st.view=st.view||{cx:0,cy:0,s:40};
-  const fns=[null,null,null], inputs=[];
-  for(let i=0;i<opts.lines;i++){
-    const r=document.createElement('div'); r.className='mg-row';
-    r.innerHTML=`<span class="mg-sw" style="background:var(${COLORS[i]})"></span><span class="mg-y">y =</span><input class="mg-in-${i}" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="${i===0?'x^2':i===1?'2sin(x)':'(1+1/x)^x'}"><span class="mg-err"></span>`;
-    rows.appendChild(r); const inp=r.querySelector('input'); inp.value=st.src[i]||''; inputs.push(inp);
-    inp.addEventListener('input',()=>{ st.src[i]=inp.value; save(); compile(); draw(); });
-  }
-  function compile(){
-    const need=new Set();
-    inputs.forEach((inp,i)=>{ const err=inp.parentElement.querySelector('.mg-err'); err.textContent=''; fns[i]=null;
-      if(!inp.value.trim()) return;
-      try{ const r=parse(inp.value); fns[i]=r.f; r.params.forEach(p=>need.add(p)); }catch(e){ err.textContent=e.message; } });
+  st.src=(st.src||opts.seed.slice()).slice(); while(st.src.length>1&&!String(st.src[st.src.length-1]||'').trim()) st.src.pop(); if(!st.src.length) st.src=[''];
+  st.col=st.col||[]; st.p=st.p||{a:1,b:1,c:0,k:1}; st.view=st.view||{cx:0,cy:0,s:40}; st.view.s=Math.min(ZMAX,Math.max(ZMIN,st.view.s));
+  let items=[];
+  const PH=['x^2','2sin(x)','x^2 + y^2 = 4','y < x','(cos t, sin t)','r = 1 + cos θ','A-B, B-C, C-A','P ∧ Q ⇒ R'];
+  function buildRows(){ rows.innerHTML='';
+    st.src.forEach((v,i)=>{ const r=document.createElement('div'); r.className='mg-row';
+      const clr=colourOf(i,st.col[i]);
+      r.innerHTML=`<label class="mg-sw" title="colour of this line"><input type="color" value="${hexOf(clr)}" aria-label="colour of line ${i+1}"></label><input class="mg-src" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="${PH[i%PH.length]}" aria-label="line ${i+1}"><button type="button" class="mg-x" aria-label="remove line ${i+1}" title="remove this line">×</button><span class="mg-kind"></span><span class="mg-err"></span>`;
+      rows.appendChild(r); const inp=r.querySelector('.mg-src'); inp.value=v||'';
+      r.querySelector('.mg-sw').style.background=clr;
+      inp.addEventListener('input',()=>{ st.src[i]=inp.value; save(); compile(); draw(); });
+      const ci=r.querySelector('input[type=color]'); ci.addEventListener('input',()=>{ st.col[i]=ci.value; r.querySelector('.mg-sw').style.background=ci.value; save(); compile(); draw(); });
+      r.querySelector('.mg-x').onclick=()=>{ if(st.src.length===1){ st.src=['']; st.col=[]; } else { st.src.splice(i,1); st.col.splice(i,1); } save(); buildRows(); compile(); draw(); };
+    }); }
+  const KINDNAME={fn:'curve',xfn:'curve on its side',rel:'relation',region:'region',param:'path in t',polar:'polar curve',points:'points',arrows:'arrows',field:'slope field',seq:'terms',data:'bars',logic:'truth table',net:'network',sets:'set circles'};
+  function compile(){ const need=new Set(); items=[];
+    [...rows.children].forEach((r,i)=>{ const err=r.querySelector('.mg-err'), kd=r.querySelector('.mg-kind'); err.textContent=''; kd.textContent='';
+      const v=st.src[i]; if(!v||!v.trim()){ items.push(null); return; }
+      try{ const it=compileLine(v); it.color=colourOf(i,st.col[i]); it.env=(x,y)=>Object.assign({x,y},st.p); it.params.forEach(p=>need.add(p)); items.push(it); kd.textContent=KINDNAME[it.kind]||''; }
+      catch(e){ err.textContent=e.message; items.push(null); } });
     pbox.innerHTML='';
     [...need].sort().forEach(p=>{ const l=document.createElement('label'); l.className='mg-p';
       l.innerHTML=`<span>${p}</span><input type="range" min="-5" max="5" step="0.1" value="${st.p[p]??1}"><output>${(+(st.p[p]??1)).toFixed(1)}</output>`;
       const r=l.querySelector('input'), o=l.querySelector('output'); r.oninput=()=>{ st.p[p]=+r.value; o.textContent=(+r.value).toFixed(1); save(); draw(); }; pbox.appendChild(l); });
-  }
-  let W=0,H=0,dpr=1;
+    drawSide(); }
+  function drawSide(){ side.innerHTML=''; items.forEach(it=>{ if(it&&SIDE[it.kind]) side.appendChild(sideEl(it,false)); });
+    const plane=items.some(it=>it&&!SIDE[it.kind]), any=items.some(it=>it); wrap.hidden=!plane&&any; host.querySelector('.mg-bar').hidden=wrap.hidden; host.querySelector('.mg-zoom').hidden=wrap.hidden; }
+  let W=0,H=0,dpr=1, trace=null, last=null;
   function size(){ dpr=window.devicePixelRatio||1; W=cv.clientWidth; H=opts.height; cv.style.height=H+'px'; cv.width=W*dpr; cv.height=H*dpr; }
-  const X=x=>W/2+(x-st.view.cx)*st.view.s, Y=y=>H/2-(y-st.view.cy)*st.view.s, IX=px=>st.view.cx+(px-W/2)/st.view.s, IY=py=>st.view.cy-(py-H/2)/st.view.s;
-  function niceStep(){ const raw=70/st.view.s, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<=1?1:m<=2?2:m<=5?5:10)*p; }
-  function env(x){ return Object.assign({x},st.p); }
-  let trace=null;
+  function zoomShow(){ zr.value=ZL(st.view.s); const raw=70/st.view.s, pw=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/pw, step=(m<=1?1:m<=2?2:m<=5?5:10)*pw; zs.textContent='one square = '+(+step.toPrecision(3)); }
   function draw(){
-    if(!W) size(); const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,W,H);
-    c.fillStyle=col('--card'); c.fillRect(0,0,W,H);
-    const step=niceStep(); c.lineWidth=1; c.font='11px Nunito, system-ui, sans-serif'; c.fillStyle=col('--muted');
-    c.strokeStyle=col('--grid'); c.beginPath();
-    for(let gx=Math.ceil(IX(0)/step)*step; gx<=IX(W); gx+=step){ c.moveTo(X(gx),0); c.lineTo(X(gx),H); }
-    for(let gy=Math.ceil(IY(H)/step)*step; gy<=IY(0); gy+=step){ c.moveTo(0,Y(gy)); c.lineTo(W,Y(gy)); }
-    c.stroke();
-    c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); c.moveTo(0,Y(0)); c.lineTo(W,Y(0)); c.moveTo(X(0),0); c.lineTo(X(0),H); c.stroke();
-    const fmt=v=>{ const r=Math.round(v/step)*step; return Math.abs(r)<1e-9?'0':(+r.toPrecision(6)).toString(); };
-    c.textAlign='center'; const ly=Math.min(H-4,Math.max(12,Y(0)+13));
-    for(let gx=Math.ceil(IX(0)/step)*step; gx<=IX(W); gx+=step){ if(Math.abs(gx)<step/2) continue; c.fillText(fmt(gx),X(gx),ly); }
-    c.textAlign='left'; const lx=Math.min(W-40,Math.max(4,X(0)+5));
-    for(let gy=Math.ceil(IY(H)/step)*step; gy<=IY(0); gy+=step){ if(Math.abs(gy)<step/2) continue; c.fillText(fmt(gy),lx,Y(gy)-3); }
+    if(!W) size(); if(!W||wrap.hidden) { zoomShow(); return; } const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
     const slope=host.querySelector('.mg-slope').checked;
-    fns.forEach((f,i)=>{ if(!f) return;
-      const plot=(g,dash)=>{ c.strokeStyle=col(COLORS[i]); c.lineWidth=dash?1.6:2.6; c.setLineDash(dash?[5,4]:[]); c.beginPath(); let pen=false, py=null;
-        for(let px=0; px<=W; px+=1){ const x=IX(px); let y; try{ y=g(x); }catch(e){ y=NaN; }
-          const sy=Y(y); if(!isFinite(y)||Math.abs(sy)>H*20){ pen=false; py=null; continue; }
-          if(pen && py!==null && Math.abs(sy-py)>H*1.5){ pen=false; }
-          if(!pen){ c.moveTo(px,sy); pen=true; } else c.lineTo(px,sy); py=sy; }
-        c.stroke(); c.setLineDash([]); };
-      plot(x=>f(env(x)),false);
-      if(slope){ const h=1e-4; plot(x=>(f(env(x+h))-f(env(x-h)))/(2*h),true); }
-    });
-    if(trace!==null){ const x=IX(trace); c.strokeStyle=col('--muted'); c.setLineDash([3,3]); c.beginPath(); c.moveTo(trace,0); c.lineTo(trace,H); c.stroke(); c.setLineDash([]);
-      const parts=['x = '+(+x.toFixed(3))];
-      fns.forEach((f,i)=>{ if(!f) return; const y=f(env(x)); if(!isFinite(y)) { parts.push('—'); return; }
-        c.fillStyle=col(COLORS[i]); c.beginPath(); c.arc(trace,Y(y),5,0,7); c.fill();
-        const h=1e-4, d=(f(env(x+h))-f(env(x-h)))/(2*h);
-        // tangent
-        c.strokeStyle=col(COLORS[i]); c.globalAlpha=.55; c.lineWidth=1.4; c.beginPath(); const dx=60/st.view.s; c.moveTo(X(x-dx),Y(y-d*dx)); c.lineTo(X(x+dx),Y(y+d*dx)); c.stroke(); c.globalAlpha=1;
-        parts.push(['ember','teal','gold'][i]+': y = '+(+y.toFixed(4))+', slope '+(isFinite(d)?(+d.toFixed(4)):'—')); });
-      read.textContent=parts.join(';  ');
-    }
+    last=paint(c,W,H,st.view,items,{slope}); zoomShow();
+    if(trace!==null){ const x=last.IX(trace); c.strokeStyle=cssv('--muted')||'#888'; c.lineWidth=1; c.setLineDash([3,3]); c.beginPath(); c.moveTo(trace,0); c.lineTo(trace,H); c.stroke(); c.setLineDash([]);
+      const parts=['x = '+(+x.toPrecision(6))];
+      last.traces.forEach(({it,f})=>{ const y=f(x); if(!isFinite(y)){ parts.push('—'); return; }
+        c.fillStyle=it.color; c.beginPath(); c.arc(trace,last.Y(y),5,0,7); c.fill();
+        const h=1e-5*Math.max(1,1/st.view.s), d=(f(x+h)-f(x-h))/(2*h);
+        c.strokeStyle=it.color; c.globalAlpha=.55; c.lineWidth=1.4; c.beginPath(); const dx=60/st.view.s; c.moveTo(last.X(x-dx),last.Y(y-d*dx)); c.lineTo(last.X(x+dx),last.Y(y+d*dx)); c.stroke(); c.globalAlpha=1;
+        parts.push(it.src+': y = '+(+y.toPrecision(6))+', slope '+(isFinite(d)?(+d.toPrecision(5)):'—')); });
+      read.textContent=parts.join(';  '); }
   }
-  // interaction
   let drag=null, pinch=null;
   const pos=e=>{ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; };
   cv.addEventListener('pointerdown',e=>{ cv.setPointerCapture(e.pointerId); drag={p:pos(e),cx:st.view.cx,cy:st.view.cy,moved:false,id:e.pointerId}; });
@@ -982,20 +1263,70 @@ function MathGraph(host,opts){
     draw(); });
   cv.addEventListener('pointerup',()=>{ drag=null; save(); });
   cv.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse'){ trace=null; draw(); } });
-  cv.addEventListener('wheel',e=>{ e.preventDefault(); const p=pos(e), x0=IX(p.x), y0=IY(p.y); const f=Math.exp(-e.deltaY*0.0015); zoomAt(x0,y0,p,f); },{passive:false});
-  function zoomAt(x0,y0,p,f){ st.view.s=Math.min(5000,Math.max(0.5,st.view.s*f)); st.view.cx=x0-(p.x-W/2)/st.view.s; st.view.cy=y0+(p.y-H/2)/st.view.s; save(); draw(); }
+  cv.addEventListener('wheel',e=>{ e.preventDefault(); const p=pos(e); zoomAt(last.IX(p.x),last.IY(p.y),p,Math.exp(-e.deltaY*0.0015)); },{passive:false});
+  function zoomAt(x0,y0,p,f){ st.view.s=Math.min(ZMAX,Math.max(ZMIN,st.view.s*f)); st.view.cx=x0-(p.x-W/2)/st.view.s; st.view.cy=y0+(p.y-H/2)/st.view.s; save(); draw(); }
   cv.addEventListener('touchstart',e=>{ if(e.touches.length===2){ const [a,b]=e.touches; pinch={d:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),s:st.view.s}; } },{passive:true});
-  cv.addEventListener('touchmove',e=>{ if(pinch&&e.touches.length===2){ e.preventDefault(); const [a,b]=e.touches, d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY); const r=cv.getBoundingClientRect(); const p={x:(a.clientX+b.clientX)/2-r.left,y:(a.clientY+b.clientY)/2-r.top}; const x0=IX(p.x),y0=IY(p.y); st.view.s=pinch.s; zoomAt(x0,y0,p,d/pinch.d); } },{passive:false});
+  cv.addEventListener('touchmove',e=>{ if(pinch&&e.touches.length===2){ e.preventDefault(); const [a,b]=e.touches, d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY); const r=cv.getBoundingClientRect(); const p={x:(a.clientX+b.clientX)/2-r.left,y:(a.clientY+b.clientY)/2-r.top}; const x0=last.IX(p.x),y0=last.IY(p.y); st.view.s=pinch.s; zoomAt(x0,y0,p,d/pinch.d); } },{passive:false});
   cv.addEventListener('touchend',()=>{ pinch=null; });
-  host.querySelector('.mg-in').onclick=()=>zoomAt(st.view.cx,st.view.cy,{x:W/2,y:H/2},1.5);
-  host.querySelector('.mg-out').onclick=()=>zoomAt(st.view.cx,st.view.cy,{x:W/2,y:H/2},1/1.5);
+  host.querySelector('.mg-in').onclick=()=>zoomAt(st.view.cx,st.view.cy,{x:W/2,y:H/2},2);
+  host.querySelector('.mg-out').onclick=()=>zoomAt(st.view.cx,st.view.cy,{x:W/2,y:H/2},1/2);
+  zr.oninput=()=>{ const ns=ZS(+zr.value); zoomAt(st.view.cx,st.view.cy,{x:W/2,y:H/2},ns/st.view.s); };
   host.querySelector('.mg-home').onclick=()=>{ st.view={cx:0,cy:0,s:40}; save(); draw(); };
   host.querySelector('.mg-slope').onchange=draw;
+  host.querySelector('.mg-add').onclick=()=>{ st.src.push(''); save(); buildRows(); compile(); draw(); const ins=rows.querySelectorAll('.mg-src'); ins[ins.length-1].focus(); };
+  const helpBtn=host.querySelector('.mg-help'), helpBox=host.querySelector('.mg-helpbox');
+  helpBtn.onclick=()=>{ const open=helpBox.hidden; helpBox.hidden=!open; helpBtn.setAttribute('aria-expanded',open); if(open&&!helpBox.innerHTML) helpBox.innerHTML=HELP; };
+  const grBtn=host.querySelector('.mg-gr'), cat=host.querySelector('.mg-cat');
+  grBtn.onclick=()=>{ const open=cat.hidden; cat.hidden=!open; grBtn.setAttribute('aria-expanded',open); grBtn.classList.toggle('on',open); if(open) openCatalogue(cat,api); };
   new ResizeObserver(()=>{ size(); draw(); }).observe(cv);
-  compile(); size(); draw();
-  return { set(i,src){ inputs[i].value=src; st.src[i]=src; save(); compile(); draw(); }, redraw(){ size(); draw(); } };
+  buildRows(); compile(); size(); draw();
+  const api={ set(i,src){ while(st.src.length<=i) st.src.push(''); st.src[i]=src; save(); buildRows(); compile(); draw(); },
+    add(src,view){ const e=st.src.findIndex(v=>!String(v||'').trim()); if(e>=0) st.src[e]=src; else st.src.push(src); if(view) st.view=Object.assign({},view); save(); buildRows(); compile(); draw(); wrap.scrollIntoView({block:'nearest',behavior:'smooth'}); },
+    redraw(){ size(); compile(); draw(); } };
+  return api;
 }
-window.MathGraph=MathGraph; window.MathGraph.parse=parse;
+const HELP='<ul>'
+ +'<li><b>a curve</b>: <code>x^2</code>, <code>y = 2sin(x)</code>, <code>tan x</code>, <code>(x^2-1)/(x-1)</code></li>'
+ +'<li><b>a curve on its side</b>: <code>x = y^2</code>, or an upright line <code>x = 3</code></li>'
+ +'<li><b>pieces</b>: <code>x^2 if x &lt; 1; 3 - x if x &gt;= 1</code>, or one piece kept to a stretch: <code>√x, x ≤ 4</code></li>'
+ +'<li><b>a relation</b>: <code>x^2 + y^2 = 4</code>, <code>x^2/9 - y^2/4 = 1</code></li>'
+ +'<li><b>a region</b>: <code>y &lt; x^2</code>, <code>-1 &lt; x ≤ 2</code>, <code>x^2 + y^2 &lt; 4 and y &gt; 0</code> (a dashed edge is left out, a full edge is kept)</li>'
+ +'<li><b>points</b>: <code>(1, 2), (3, 4)</code>; <b>arrows</b>: <code>(0,0) -&gt; (2,1)</code>, <code>vec(2, 1)</code></li>'
+ +'<li><b>a path in t</b>: <code>(cos t, sin t)</code>, <code>(t, t^2) for -2 &lt; t &lt; 2</code></li>'
+ +'<li><b>polar</b>: <code>r = 1 + cos θ</code>, <code>r = θ for 0 &lt; θ &lt; 6pi</code></li>'
+ +'<li><b>a slope field</b>: <code>y\' = x - y</code>; <b>terms</b>: <code>a_n = 1/n</code>; <b>bars</b>: <code>data 3, 5, 2, 8</code></li>'
+ +'<li><b>a truth table</b>: <code>P ∧ Q ⇒ R</code>, <code>not (P and Q)</code>, <code>P -&gt; Q</code></li>'
+ +'<li><b>a network</b>: <code>A-B, B-C:3, C-A</code>; one way: <code>A-&gt;B, B-&gt;C, C-&gt;A, B-&gt;B</code></li>'
+ +'<li><b>set circles</b>: <code>A ∩ B\'</code>, <code>(A ∪ B) \\ C</code></li>'
+ +'<li>a, b, c and k get sliders. Breaks are marked by the names of 11f: an open dot for a removable break, a full and an open dot for a jump, a dashed upright for an endless break. A full dot keeps an end, an open dot leaves it out.</li></ul>';
+
+/* ---------- the Graphs catalogue (graph-catalogue.js, loaded when first opened) ---------- */
+function scriptBase(){ const s=[...document.scripts].map(x=>x.getAttribute('src')||'').find(x=>/(^|\/)rung\.js(\?|$)/.test(x)); return s?s.replace(/rung\.js.*$/,''):''; }
+function loadCatalogue(){ if(window.LADDER_GRAPHS) return Promise.resolve(window.LADDER_GRAPHS); if(loadCatalogue.p) return loadCatalogue.p;
+  loadCatalogue.p=new Promise((ok,no)=>{ const s=document.createElement('script'); s.src=scriptBase()+'graph-catalogue.js'; s.onload=()=>ok(window.LADDER_GRAPHS||[]); s.onerror=()=>{ loadCatalogue.p=null; no(new Error('the catalogue could not be loaded')); }; document.head.appendChild(s); });
+  return loadCatalogue.p; }
+function thumb(entry,w,h){ const lines=[].concat(entry.line); const its=lines.map((l,i)=>{ try{ const it=compileLine(l); it.color=colourOf(i); it.env=(x,y)=>Object.assign({x,y},DEFP,entry.p||{}); return it; }catch(e){ return null; } }).filter(Boolean);
+  const box=document.createElement('div'); box.className='mg-thumb';
+  if(its.length&&its.every(it=>SIDE[it.kind])){ its.forEach(it=>box.appendChild(sideEl(it,true))); return box; }
+  const cv=document.createElement('canvas'), dpr=window.devicePixelRatio||1; cv.width=w*dpr; cv.height=h*dpr; cv.style.width=w+'px'; cv.style.height=h+'px';
+  const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); const v=entry.view||{cx:0,cy:0,s:20}; paint(c,w,h,{cx:v.cx,cy:v.cy,s:v.s*w/300},its,{thumb:true}); box.appendChild(cv); return box; }
+function openCatalogue(host,api){ if(host.dataset.built) return; host.innerHTML='<p class="dnote">Loading the graphs…</p>';
+  loadCatalogue().then(C=>{ host.dataset.built='1'; host.innerHTML='<p class="mg-cathead">Graphs on the Ladder, by kind. Open one by its name to see it; <b>draw it</b> puts it on the graph above.</p>';
+    C.forEach(sec=>{ const d=document.createElement('details'); d.className='mg-sec'; d.innerHTML='<summary>'+esc(sec.cat)+' <span class="mg-n">'+sec.items.length+'</span></summary>'+(sec.note?'<p class="mg-secnote">'+esc(sec.note)+'</p>':'');
+      sec.items.forEach(en=>{ const g=document.createElement('details'); g.className='mg-entry'; g.innerHTML='<summary><span class="mg-ename">'+esc(en.name)+'</span>'+(en.at?' <span class="mg-at">'+esc(en.at)+'</span>':'')+'</summary>';
+        g.addEventListener('toggle',()=>{ if(!g.open||g.dataset.built) return; g.dataset.built='1';
+          const body=document.createElement('div'); body.className='mg-ebody'; body.appendChild(thumb(en,220,140));
+          const right=document.createElement('div'); right.className='mg-eside';
+          right.innerHTML='<p class="mg-eline">'+[].concat(en.line).map(l=>'<code>'+esc(l)+'</code>').join('<br>')+'</p><p class="mg-ebtns"><button type="button" class="mg-draw">draw it</button><button type="button" class="mg-det" aria-expanded="false">details</button></p>';
+          body.appendChild(right); g.appendChild(body);
+          const det=document.createElement('div'); det.className='mg-details'; det.hidden=true;
+          det.innerHTML='<p><b>What it shows.</b> '+esc(en.what)+'</p><p><b>The statements that draw it.</b> '+esc(en.from)+'</p><p><b>What changes its shape.</b> '+esc(en.shape)+'</p>'; g.appendChild(det);
+          right.querySelector('.mg-draw').onclick=()=>{ [].concat(en.line).forEach((l,i)=>api.add(l,i===0?en.view:null)); };
+          const db=right.querySelector('.mg-det'); db.onclick=()=>{ det.hidden=!det.hidden; db.setAttribute('aria-expanded',!det.hidden); db.classList.toggle('on',!det.hidden); }; });
+        d.appendChild(g); });
+      host.appendChild(d); }); }).catch(e=>{ host.innerHTML='<p class="dnote">'+esc(e.message)+'.</p>'; }); }
+
+window.MathGraph=MathGraph; window.MathGraph.parse=parse; window.MathGraph.compileLine=compileLine; window.MathGraph.findBreaks=findBreaks; window.MathGraph.paint=paint; window.MathGraph.thumb=thumb;
 })();
 
 /* ---- desk controller ---- */
@@ -1161,8 +1492,8 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
     if(pics.length){ const n=document.createElement('p'); n.className='dnote'; n.textContent='The figure'+(pics.length>1?'s':'')+' on '+h.say+':'; fig.appendChild(n); pics.slice(0,4).forEach(x=>{ let c; if(x.tagName==='CANVAS'){ try{ if(!x.width||!x.height) return; c=new Image(); c.src=x.toDataURL(); c.alt='the picture on '+h.say; }catch(e){ return; } } else c=x.cloneNode(true); c.removeAttribute('id'); c.classList.add('dgpic'); fig.appendChild(c); }); }
     if(G&&GK===k){ G.redraw(); return; }
     const seed=footCurves(h.els); document.getElementById('dmg').innerHTML='';
-    G=MathGraph(document.getElementById('dmg'),{key:k,height:280,seed:seed.length?seed.concat(['','']).slice(0,3):['x^2','','']}); GK=k;
-    const n=document.createElement('p'); n.className='dnote'; n.textContent=seed.length?'Seeded with the curve'+(seed.length>1?'s':'')+' '+h.say+' names. Change them, or add your own; this footing keeps what you build.':'Build up to three curves here; this footing keeps what you build.'; document.getElementById('dmg').prepend(n); }
+    G=MathGraph(document.getElementById('dmg'),{key:k,height:280,seed:seed.length?seed:['x^2']}); GK=k;
+    const n=document.createElement('p'); n.className='dnote'; n.textContent=seed.length?'Seeded with the curve'+(seed.length>1?'s':'')+' '+h.say+' names. Change them, or add your own; this footing keeps what you build.':'Build as many lines as you like here, of any kind; this footing keeps what you build.'; document.getElementById('dmg').prepend(n); }
   /* curves a footing names (y = …, f(x) = …) in its TeX or its words, turned into the grapher's typing and kept only if the grapher can draw them */
   function footCurves(els){ if(!els||!window.MathGraph) return []; const src=[];
     els.forEach(el=>{ [el,...el.querySelectorAll('[data-tex],[data-tex-inline],[data-t]')].forEach(n=>{ const v=n.getAttribute&&(n.getAttribute('data-tex')||n.getAttribute('data-tex-inline')||n.getAttribute('data-t')); if(v) src.push(v); });
