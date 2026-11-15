@@ -17138,6 +17138,146 @@ QP.push({id:'8·phys.work',step:'8·phys',mode:'work',label:'scientific form',op
       ['f7',[['\\tfrac{70\\ \\mu\\text{m}}{0.11\\ \\text{nm}}','given'],['= \\tfrac{70}{0.11}','divide the numbers']],2,1,'\u03bcm and nm differ by 10\u00b3: convert both to metres first.'],
       ['f8',[['a light-year','given'],['a time','a year']],2,1,'A length: how far light goes in a year.'],
       ['f9',[['0.00520','a measurement'],['three significant figures','from the first digit not 0']],2,0,'5, 2 and the final 0.']],[]); }});
+/* ----- annex 9·bio Is a cow just a big mouse: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'9·bio.work',step:'9·bio',mode:'work',label:'power-law habit',open:()=>measured('9·bio'),make(){
+    const r=2+rnd(4), k=Math.pow(r,4), per=rnd(2);
+    if(per){ const right='1/'+r, wrong=UQAX(right,['1/'+k,'1/'+(r*r*r),String(r),'1/'+(r*r)],3); if(wrong.length<3) return null;
+      return {index:'q:9·bio.work[per;'+k+']', lines:[['B = 70\\,M^{3/4}','the three-quarters law'],['M_2 = '+k+'\\,M_1','a heavier animal']], ask:'By what factor is the heavier animal’s rate per kilogram, B/M, multiplied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Per kilogram: B/M = 70 M^(−1/4). Power-law habit with b = −1/4: '+k+'^(−1/4) = 1/'+r+', since '+k+' = '+r+'⁴.'}; }
+    const right=String(r*r*r), wrong=UQAX(right,[String(k),String(r*r),String(Math.round(k*3/4)),String(r*r*r*r/2)],3); if(wrong.length<3) return null;
+    return {index:'q:9·bio.work[B;'+k+']', lines:[['B = 70\\,M^{3/4}','the three-quarters law'],['M_2 = '+k+'\\,M_1','a heavier animal']], ask:'By what factor is the heavier animal’s B multiplied?', right, opts:shuffle([right,...wrong]), lead:'', why:'Power-law habit: f(kM) = k^b f(M), so the factor is '+k+'^(3/4). '+k+' = '+r+'⁴, so '+k+'^(3/4) = '+r+'³ = '+right+'.'}; }},
+  {id:'9·bio.word',step:'9·bio',mode:'word',label:'the three-quarters law',open:()=>measured('9·bio'),make(){
+    const A=[['a dog',16,2],['a goat',81,3],['a pig',256,4],['a steer',625,5],['a rabbit',1,1],['a sheep',81,3],['a hog',256,4]][rnd(7)], [nm,M,r]=A, B=70*r*r*r, per=rnd(2);
+    const right=per?String(Math.round(B/M*100)/100)+' kcal/kg/day':B+' kcal/day', wrong=per?UQAX(right,[String(70)+' kcal/kg/day',String(Math.round(70*r*100)/100)+' kcal/kg/day',String(Math.round(B/M*r*100)/100)+' kcal/kg/day',String(Math.round(70/(r*r)*100)/100)+' kcal/kg/day'],3):UQAX(right,[70*M+' kcal/day',Math.round(70*M*3/4)+' kcal/day',70*r*r+' kcal/day',70*r*r*r*r/2+' kcal/day'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:9·bio.word['+nm+';'+per+']', a3:['9·bio.word',DASH,DASH], story:'Basal metabolism follows B = 70 M^(3/4), with M in kilograms and B in kcal/day. '+nm[0].toUpperCase()+nm.slice(1)+' has a mass of '+M+' kg.', lines:[], ask:per?'What does the law give for its rate per kilogram?':'What does the law give for its basal rate?', right, opts:shuffle([right,...wrong]), lead:'', why:M+' = '+r+'⁴, so '+M+'^(3/4) = '+r+'³ = '+(r*r*r)+', and B = 70 · '+(r*r*r)+' = '+B+' kcal/day.'+(per?' Per kilogram: '+B+'/'+M+' = 70 · '+M+'^(−1/4) = '+right+'.':'')}; }},
+  {id:'9·bio.line',step:'9·bio',mode:'proof',label:'what a power law licenses',open:()=>measured('9·bio'),make(){
+    return line28('9·bio.line',[
+      ['w1',[['f(M) = a M^b','a power law'],['f(kM) = k \\cdot a M^b','the factor comes out']],2,1,'It comes out as k^b: double the mass gives ×1.68 under ¾, not ×2.'],
+      ['w2',[['f(M) = a M^b','a power law'],['f(kM) = k^b f(M)','fraction-exponent techniques']],2,0,'A power of a product is the product of the powers, for positive k and M.'],
+      ['w3',[['16 = 2^4','given'],['16^{3/4} = 8','2^3']],2,0,'Sixteen times the mass, eight times the rate.'],
+      ['w4',[['B = 70 M^{3/4}','the law'],['B/M \\text{ goes as } M^{3/4}','per kilogram']],2,1,'Divide by M: M^(−1/4). Per kilogram falls as mass grows.'],
+      ['w5',[['B = 70 M^{3/4}','the law'],['M = B^{4/3}/70','run it backwards']],2,1,'Undo the 70 first, then the power: M = (B/70)^(4/3).'],
+      ['w6',[['\\text{mouse and cow give } b \\text{ a little under } \\tfrac34','one pair'],['\\text{every pair gives that } b','the law']],2,1,'Data scatter around the law: mouse and sheep give a little over.'],
+      ['w7',[['K^p \\lt L^q','whole-number powers'],['K^{p/q} \\lt L','bracket-an-exponent']],2,0,'Raising to the q-th power keeps order both ways.']],[]); }});
+/* ----- annex 9·crypt Can a code be truly unbreakable: Work, Word Problems, Check Proofs ----- */
+const BITSAX=n=>{ let s=''; for(let i=0;i<n;i++) s+=rnd(2); return s; };
+const XORAX=(a,b)=>a.split('').map((x,i)=>x===b[i]?'0':'1').join('');
+const ANDAX=(a,b)=>a.split('').map((x,i)=>x==='1'&&b[i]==='1'?'1':'0').join('');
+const ORAX=(a,b)=>a.split('').map((x,i)=>x==='1'||b[i]==='1'?'1':'0').join('');
+const FLIPAX=(a,i)=>a.slice(0,i)+(a[i]==='1'?'0':'1')+a.slice(i+1);
+QP.push({id:'9·crypt.work',step:'9·crypt',mode:'work',label:'exclusive or, place by place',open:()=>measured('9·crypt'),make(){
+    const n=8, m=BITSAX(n), k=BITSAX(n), c=XORAX(m,k), ask=rnd(2);
+    const right=c, wrong=UQAX(right,[ANDAX(m,k),ORAX(m,k),FLIPAX(c,rnd(n)),XORAX(c,'11111111')],3); if(wrong.length<3) return null;
+    return {index:'q:9·crypt.work['+m+';'+k+';'+ask+']', lines:ask?[['c = '+m,'a cipher text'],['k = '+k,'the key']]:[['m = '+m,'a message'],['k = '+k,'the key']], ask:ask?'What message does the pad give back, c ⊕ k?':'What is the cipher text, m ⊕ k?', right, opts:shuffle([right,...wrong]), lead:'', why:'At each place, 1 exactly when one of the two bits is 1: '+m+' ⊕ '+k+' = '+c+'.'+(ask?' Own-way-back: the same key undoes itself.':'')}; }},
+  {id:'9·crypt.word',step:'9·crypt',mode:'word',label:'one key each',open:()=>measured('9·crypt'),make(){
+    const n=8, m=BITSAX(n), c=BITSAX(n), k=XORAX(m,c), two=rnd(2);
+    if(two){ const m2=BITSAX(n), k2=BITSAX(n), c1=XORAX(m,k2), c2=XORAX(m2,k2), right=XORAX(m,m2), wrong=UQAX(right,[k2,XORAX(right,'11111111'),FLIPAX(right,rnd(n)),ANDAX(c1,c2)],3); if(wrong.length<3) return null;
+      return {index:'q:9·crypt.word[2;'+m+';'+m2+';'+k2+']', a3:['9·crypt.word',DASH,DASH], story:'A clerk used one pad key twice. An eavesdropper took both cipher texts off the wire: c₁ = '+c1+' and c₂ = '+c2+'.', lines:[], ask:'What does c₁ ⊕ c₂ hand the eavesdropper?', right:'m₁ ⊕ m₂ = '+right, opts:shuffle(['m₁ ⊕ m₂ = '+right,...wrong.map(w=>(w===k2?'the key, ':'m₁ ⊕ m₂ = ')+w)]), lead:'', why:'Key-cancels: (m₁ ⊕ k) ⊕ (m₂ ⊕ k) = m₁ ⊕ m₂ ⊕ (k ⊕ k) = m₁ ⊕ m₂, here '+right+'. The key is gone, and the two messages are tied together.'}; }
+    const right=k, wrong=UQAX(right,[ANDAX(m,c),ORAX(m,c),FLIPAX(k,rnd(n)),c],3); if(wrong.length<3) return null;
+    return {index:'q:9·crypt.word[1;'+m+';'+c+']', a3:['9·crypt.word',DASH,DASH], story:'An eavesdropper holds the cipher text '+c+' and guesses that the message was '+m+'.', lines:[], ask:'Which key would send that message to that cipher text?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-key-each: exactly one key does it, k = m ⊕ c = '+k+'. Every guess has its own key, so the cipher text alone rules out no message.'}; }},
+  {id:'9·crypt.line',step:'9·crypt',mode:'proof',label:'what the pad licenses',open:()=>measured('9·crypt'),make(){
+    return line28('9·crypt.line',[
+      ['o1',[['E_k(m) = m \\oplus k','the pad'],['E_k(E_k(m)) = m','A \\oplus A = 0,\\ A \\oplus 0 = A']],2,0,'Own-way-back: (m ⊕ k) ⊕ k = m ⊕ (k ⊕ k) = m ⊕ 0 = m.'],
+      ['o2',[['c \\text{ looks like noise}','given'],['\\text{any key is safe}','the output']],2,1,'A key from a guessable source fails: the attacker tries the guessable keys first.'],
+      ['o3',[['\\text{a key of } 8 \\text{ bits, repeated}','given'],['\\text{a pad}','one key per message']],2,1,'2⁸ keys cannot fit 2ⁿ messages: most messages are ruled out.'],
+      ['o4',[['E_k(E_j(m))','two pads'],['\\text{safer than } E_k(m)','twice']],2,1,'E_k ∘ E_j = E_{j ⊕ k}: one pad with key j ⊕ k.'],
+      ['o5',[['c_1 = m_1 \\oplus k,\\ \\ c_2 = m_2 \\oplus k','one key twice'],['c_1 \\oplus c_2 = m_1 \\oplus m_2','key-cancels']],2,0,'k ⊕ k = 0, and the key is gone.'],
+      ['o6',[['m \\text{ AND } k','a cipher'],['\\text{the key runs it back}','own-way-back']],2,1,'AND is not one-to-one in m: where k(i) = 0 every message gives 0.'],
+      ['o7',[['\\text{a message } m,\\ \\text{a cipher text } c','same length'],['\\text{exactly one key sends } m \\text{ to } c','k = m \\oplus c']],2,0,'One-key-each.']],[]); }});
+/* ----- annex 10·crypt Is a huge number of keys enough: Work, Word Problems, Check Proofs ----- */
+const ABCAX='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const KEYAX=()=>shuffle(ABCAX.split(''));
+QP.push({id:'10·crypt.work',step:'10·crypt',mode:'work',label:'a key is a bijection',open:()=>measured('10·crypt'),make(){
+    const W=['SALINAS','RIVER','LETTUCE','HARBOR','ORCHARD','FERRY','TRACTOR','MONTEREY','CANNERY','ARTICHOKE'][rnd(10)], g=KEYAX(), map=x=>g[ABCAX.indexOf(x)], back=rnd(2);
+    const L=[...new Set(W.split(''))], c=W.split('').map(map).join(''), inv=x=>ABCAX[g.indexOf(x)];
+    const right=back?W:c, scr=s=>{ const a=s.split(''); const i=rnd(a.length-1); [a[i],a[i+1]]=[a[i+1],a[i]]; return a.join(''); };
+    const wrong=UQAX(right,back?[W.split('').map(x=>map(map(x))).join(''),scr(W),W.split('').reverse().join(''),c]:[W.split('').map(inv).join(''),scr(c),W,c.split('').reverse().join('')],3); if(wrong.length<3) return null;
+    const rows=L.map(x=>back?[map(x)+' \\leftarrow '+x,'']:[x+' \\mapsto '+map(x),'']); rows[0][1]=back?'g, read leftward':'the key g';
+    return {index:'q:10·crypt.work['+W+';'+g.join('')+';'+back+']', lines:[[rows.map(r=>r[0]).join(',\\ \\ '),back?'g, as pairs':'the key g, as pairs']], ask:back?'The cipher text is '+c+'. What is the plain text?':'What is the cipher text of '+W+'?', right, opts:shuffle([right,...wrong]), lead:'', why:back?'Run the key backwards, letter by letter: g⁻¹ sends '+c+' to '+W+'. g is a bijection, so g⁻¹ exists.':'Apply g to each letter in turn: '+W+' becomes '+c+'.'}; }},
+  {id:'10·crypt.word',step:'10·crypt',mode:'word',label:'the tallies travel',open:()=>measured('10·crypt'),make(){
+    const ask=rnd(2);
+    if(ask){ const j=1+rnd(6), F=n=>{ let r=1; for(let i=2;i<=n;i++) r*=i; return r; }, left=26-j;
+      const right=left+'!', wrong=UQAX(right,['26! − '+j,(26-j)+'','26!/'+j,'26 · '+left+'!'],3); if(wrong.length<3) return null;
+      return {index:'q:10·crypt.word[k;'+j+']', a3:['10·crypt.word',DASH,DASH], story:'A codebreaker has worked out what the key does to '+j+' letter'+(j>1?'s':'')+' of a substitution cipher on 26 letters.', lines:[], ask:'How many keys are still possible?', right, opts:shuffle([right,...wrong]), lead:'', why:'The key is a bijection. With '+j+' letter'+(j>1?'s':'')+' and '+(j>1?'their':'its')+' images fixed, what is left is a bijection between the other '+left+' letters and the other '+left+' images: '+left+'! of them (4k’s arrangements).'}; }
+    const x='ETAOINSRH'[rnd(9)], g=KEYAX(), y=g[ABCAX.indexOf(x)], n=8+rnd(60), z=ABCAX[ABCAX.indexOf(y)===25?0:ABCAX.indexOf(y)+1];
+    const right=y+', '+n+' times', wrong=UQAX(right,[x+', '+n+' times',y+', '+(n+1)+' times',z+', '+n+' times',y+', a different count: the key changes tallies'],3); if(wrong.length<3) return null;
+    return {index:'q:10·crypt.word[t;'+x+';'+y+';'+n+']', a3:['10·crypt.word',DASH,DASH], story:'A letter written in English holds the letter '+x+' exactly '+n+' times. It is sent through a substitution cipher whose key sends '+x+' to '+y+'.', lines:[], ask:'Which cipher letter appears, and how often?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tallies-travel: f_c(g(x)) = f_m(x). The cipher text holds '+y+' exactly as often as the plain text holds '+x+': '+n+' times.'}; }},
+  {id:'10·crypt.line',step:'10·crypt',mode:'proof',label:'what the tallies license',open:()=>measured('10·crypt'),make(){
+    return line28('10·crypt.line',[
+      ['q1',[['26! \\text{ keys}','keys technique'],['\\text{it takes } 10^{10} \\text{ years to break}','try every key']],2,1,'That is the time to try every key; the tally attack tries none.'],
+      ['q2',[['g \\text{ sends A to B and B to B}','given'],['g \\text{ is a key}','a substitution']],2,1,'Not one-to-one: no g⁻¹, and the reader cannot tell A from B.'],
+      ['q3',[['g, h \\text{ two keys}','given'],['\\text{encrypting with } g \\text{ then } h \\text{ is stronger}','twice']],2,1,'h ∘ g is one bijection: one key of the same kind.'],
+      ['q4',[['c_i = g(m_i)','the cipher'],['f_c(g(x)) = f_m(x)','tallies-travel']],2,0,'The same places: cᵢ = g(x) exactly when mᵢ = x, since g is one-to-one.'],
+      ['q5',[['f_c(g(x)) = f_m(x)','tallies-travel'],['f_c = f_m','the tallies']],2,1,'f_c = f_m ∘ g⁻¹: the same numbers on different letters.'],
+      ['q6',[['\\text{a key is fixed by } g(\\text{A}), \\dots, g(\\text{Z})','an arrangement'],['26! \\text{ keys}','arrangements technique']],2,0,'Each arrangement is the list of exactly one bijection.'],
+      ['q7',[['\\text{the top cipher letter in a short text}','given'],['\\text{it is } g(\\text{E})','the chart']],2,1,'Only probably: the chart is a law, not a technique. It may be g(T) or g(A).']],[]); }});
+/* ----- annex 10·logi How many trucks does a route need: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'10·logi.work',step:'10·logi',mode:'work',label:'items and hours',open:()=>measured('10·logi'),make(){
+    const ask=rnd(3), lam=[4,6,8,10,12,15,20,24][rnd(8)], W=[0.5,1.5,2,2.5,3,4][rnd(6)], L=lam*W;
+    if(ask===0){ const right=String(L), wrong=UQAX(right,[String(lam/W),String(lam+W),String(W/lam),String(L*2)],3); if(wrong.length<3) return null;
+      return {index:'q:10·logi.work[L;'+lam+';'+W+']', lines:[['\\lambda = '+lam+'\\ \\text{an hour},\\ \\ W = '+W+'\\ \\text{hours}','in the long run']], ask:'How many items are in the queue, on average?', right, opts:shuffle([right,...wrong]), lead:'', why:'Long-run: L = λW = '+lam+' · '+W+' = '+L+'.'}; }
+    if(ask===1){ const right=W+' hours', wrong=UQAX(right,[L*lam+' hours',(lam/L)+' hours',(L+lam)+' hours',(L-lam>0?L-lam:lam/2)+' hours'],3); if(wrong.length<3) return null;
+      return {index:'q:10·logi.work[W;'+lam+';'+W+']', lines:[['L = '+L+',\\ \\ \\lambda = '+lam+'\\ \\text{an hour}','in the long run']], ask:'How long does an item stay, on average?', right, opts:shuffle([right,...wrong]), lead:'', why:'Long-run, run backwards: W = L/λ = '+L+'/'+lam+' = '+W+' hours.'}; }
+    const mu=[3,4,5,6,8][rnd(5)], steps=[mu,mu+2+rnd(4),mu+1+rnd(6)], n=[6,8,10,12][rnd(4)];
+    const right=String(mu*n), wrong=UQAX(right,[String(steps[1]*n),String(Math.round((steps[0]+steps[1]+steps[2])/3)*n),String(steps[2]*n),String((steps[0]+steps[1]+steps[2])*n)],3); if(wrong.length<3) return null;
+    return {index:'q:10·logi.work[D;'+steps.join(',')+';'+n+']', lines:[['\\text{steps pass on } '+shuffle(steps.slice()).join(', ')+'\\ \\text{an hour}','a line of three'],['n = '+n+'\\ \\text{hours}','']], ask:'At most how many items leave the line in that time?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slowest-step: D(n) ≤ μ_min · n = '+mu+' · '+n+' = '+(mu*n)+'.'}; }},
+  {id:'10·logi.word',step:'10·logi',mode:'word',label:'the trucks',open:()=>measured('10·logi'),make(){
+    const trips=[6,8,9,10,12,14,15,16,18,20][rnd(10)], hpt=[1.5,2,2.5,3,4,5][rnd(6)], wh=[8,10,12][rnd(3)], need=trips*hpt/wh, n=Math.ceil(need-1e-9);
+    const right=String(n), wrong=UQAX(right,[String(trips),String(Math.floor(need)===n?n+1:Math.floor(need)),String(Math.ceil(trips*hpt/24)),String(n+2)],3); if(wrong.length<3) return null;
+    return {index:'q:10·logi.word['+trips+';'+hpt+';'+wh+']', a3:['10·logi.word',DASH,DASH], story:'A cooler in Salinas sends '+trips+' loads a day to a port. Each round trip, loading included, takes '+hpt+' hours, and each truck works '+wh+' hours a day.', lines:[], ask:'What is the fewest trucks the route can run on?', right, opts:shuffle([right,...wrong]), lead:'', why:'Truck-count: trips × hours per trip ÷ working hours = '+trips+' · '+hpt+'/'+wh+' = '+(Math.round(need*100)/100)+(Math.abs(need-n)>1e-9?', so at least '+n+' whole trucks.':' trucks.')}; }},
+  {id:'10·logi.line',step:'10·logi',mode:'proof',label:'what the queue licenses',open:()=>measured('10·logi'),make(){
+    return line28('10·logi.line',[
+      ['l1',[['\\text{trips per day}','given'],['\\text{trucks needed}','the same number']],2,1,'Units: trips per day times hours per trip, over working hours per truck.'],
+      ['l2',[['\\text{the cooler passes on } 5 \\text{ an hour}','the slowest step'],['\\text{a faster truck clears the queue}','speed']],2,1,'Slowest-step: the cooler sets the pace; faster trucks only arrive sooner to wait.'],
+      ['l3',[['\\textstyle\\sum_{t<T} N(t) = \\sum_j W_j','item-hours'],['L_T = \\lambda_T W_T','divide by T']],2,0,'Both sides are counted in item-hours, by hours and by items.'],
+      ['l4',[['\\lambda \\gt \\mu_{\\min}','given'],['\\text{the queue settles}','the long run']],2,1,'At least (λ − μ_min)n wait at hour n: it passes every bound.'],
+      ['l5',[['\\text{one hour’s look: 30 items, 10 arrivals}','given'],['W = 3 \\text{ hours}','W = L/\\lambda']],2,1,'L and λ are averages over the window, not one hour’s look.'],
+      ['l6',[['D(n) \\le \\mu_{\\min} \\cdot n','slowest-step'],['\\text{speeding up another step raises the bound}','a faster step']],2,1,'Every item passes the slowest step; the bound does not change.'],
+      ['l7',[['12 \\text{ trips} \\cdot 2.5\\ \\text{h} \\div 10\\ \\text{h}','truck-count'],['\\text{at least } 3 \\text{ trucks}','30 truck-hours']],2,0,'30/10 = 3.']],[]); }});
+/* ----- annex 11·crypt Is a keyword safer than one shift: Work, Word Problems, Check Proofs ----- */
+const VIGAX=(m,k,s)=>m.split('').map((x,i)=>ABCAX[(ABCAX.indexOf(x)+(s||1)*ABCAX.indexOf(k[i%k.length])+26)%26]).join('');
+QP.push({id:'11·crypt.work',step:'11·crypt',mode:'work',label:'several shifts in turn',open:()=>measured('11·crypt'),make(){
+    const W=['MONTE','CANYON','KELP','OTTERS','HARBOR','UPWELL','SALMON','FOGBANK'][rnd(8)], K=['OTTER','BAY','SEA','KEY','FOG','TIDE'][rnd(6)], back=rnd(2), c=VIGAX(W,K);
+    const right=back?W:c, wrong=UQAX(right,back?[VIGAX(c,K),VIGAX(c,K.split('').reverse().join(''),-1),VIGAX(W,K.slice(1)+K[0]),VIGAX(c,'B',-1)]:[VIGAX(W,K,-1),VIGAX(W,K[0]),VIGAX(W,K.slice(1)+K[0]),VIGAX(W,K.split('').reverse().join(''))],3); if(wrong.length<3) return null;
+    return {index:'q:11·crypt.work['+W+';'+K+';'+back+']', lines:[['\\text{keyword } '+K+' = '+K.split('').map(x=>ABCAX.indexOf(x)).join(',\\ '),'L = '+K.length]], ask:back?'The cipher text is '+c+'. What is the plain text?':'What does '+W+' become?', right, opts:shuffle([right,...wrong]), lead:'', why:(back?'Take away the key letter at each place, by remainders on 26: ':'Add the key letter at each place, by remainders on 26: ')+W.split('').map((x,i)=>ABCAX.indexOf(x)+(back?'':'')+' + '+ABCAX.indexOf(K[i%K.length])).join(', ').replace(/^/,back?c+' gives ':'')+(back?', so '+W+'.':' → '+c+'.')}; }},
+  {id:'11·crypt.word',step:'11·crypt',mode:'word',label:'repeats give away the length',open:()=>measured('11·crypt'),make(){
+    const L=[3,4,5,6,7][rnd(5)], ks=[2,3,4,5].map(j=>L*j+[0,L,2*L][rnd(3)]), dist=shuffle([...new Set(ks)]).slice(0,3+rnd(2)).sort((a,b)=>a-b), g=dist.reduce((a,b)=>GCDAX(a,b));
+    if(g!==L||dist.length<3) return null;
+    const right=String(L)+', or a divisor of it', wrong=UQAX(right,[String(dist[0]),String(dist.reduce((a,b)=>a+b,0)/dist.length|0),String(L*2),String(L+1)],3); if(wrong.length<3) return null;
+    return {index:'q:11·crypt.word['+dist.join(',')+']', a3:['11·crypt.word',DASH,DASH], story:'A codebreaker finds the same stretch of three letters repeated in a keyword cipher text, at distances of '+dist.join(', ')+' letters.', lines:[], ask:'What does the keyword’s length look like?', right, opts:shuffle([right,...wrong]), lead:'', why:'Repeats technique: a repeat whose distance the length divides shows up as a repeat. gcd('+dist.join(', ')+') = '+L+', so the length is likely '+L+', but every divisor of the length divides the distances too: the column test decides.'}; }},
+  {id:'11·crypt.line',step:'11·crypt',mode:'proof',label:'what the repeats license',open:()=>measured('11·crypt'),make(){
+    return line28('11·crypt.line',[
+      ['v1',[['\\text{the repeats’ distances have gcd } 1','given'],['L = 1','the gcd']],2,1,'Stray repeats spoil a single divisor: tally which L divides the most distances.'],
+      ['v2',[['L \\text{ divides every distance}','given'],['L \\text{ is the length}','repeats']],2,1,'Every divisor of the length does too, and every multiple passes the column test.'],
+      ['v3',[['\\text{MONTE},\\ \\text{key OTTER}','L = 5'],['\\text{AHGXV}','remainders by 26']],2,0,'12 + 14, 14 + 19, 13 + 19, 19 + 4, 4 + 17, by 26: 0, 7, 6, 23, 21.'],
+      ['v4',[['\\text{a shift}','one column'],['\\text{changes } \\kappa','the letters move']],2,1,'Tallies-travel: the same tallies on other letters, the same sum.'],
+      ['v5',[['L \\mid j - i','a plain stretch at places i and j'],['\\text{the cipher text repeats it}','repeats technique']],2,0,'Places i + t and j + t have one remainder, so one shift.'],
+      ['v6',[['\\text{the top letter of a column of 114}','given'],['\\text{it is } g(\\text{E})','the chart']],2,1,'In 114 letters, often not: match the whole chart.'],
+      ['v7',[['g(0.0390) \\approx 55','the estimate'],['L = 55','the formula']],2,1,'Near κ_flat the estimate passes every bound; trust the column test.']],[]); }});
+/* ----- annex 11·econ Why would oranges be left to rot: Work, Word Problems, Check Proofs ----- */
+const MKTAX=()=>{ for(let t=0;t<40;t++){ const a=[4000,5000,6000,8000][rnd(4)], b=[50,80,100,120,200][rnd(5)], c=[0,500,1000,1500][rnd(4)], d=[50,100,150,200,250][rnd(5)], p=(a-c)/(b+d); if(Number.isInteger(p)&&p>2&&a-b*p>0) return {a,b,c,d,p,q:a-b*p}; } return null; };
+QP.push({id:'11·econ.work',step:'11·econ',mode:'work',label:'where they meet',open:()=>measured('11·econ'),make(){
+    const M=MKTAX(); if(!M) return null; const {a,b,c,d,p,q}=M, ask=rnd(2);
+    const lines=[['D(p) = '+a+' - '+b+'\\,p','demand'],['S(p) = '+(c?c+' + ':'')+d+'\\,p','supply']];
+    if(ask){ const right='$'+p+', '+q+' boxes', wrong=UQAX(right,['$'+((a+c)/(b+d)).toFixed(0)+', '+(a-b*Math.round((a+c)/(b+d)))+' boxes','$'+p+', '+(a+c+(d-b)*p)/2+' boxes','$'+(p+1)+', '+(a-b*(p+1))+' boxes','$'+p+', '+(a-c)+' boxes'],3); if(wrong.length<3) return null;
+      return {index:'q:11·econ.work[m;'+a+';'+b+';'+c+';'+d+']', lines, ask:'Where do they meet: the price, and the boxes?', right, opts:shuffle([right,...wrong]), lead:'', why:a+' − '+b+'p = '+(c?c+' + ':'')+d+'p gives '+(b+d)+'p = '+(a-c)+', so p* = '+p+', and q* = D('+p+') = '+q+'.'}; }
+    const f=p+2+rnd(8), Df=a-b*f, Sf=c+d*f; if(Df<=0) return null;
+    const right=String(Sf-Df), wrong=UQAX(right,[String(Df),String(Sf),String((b+d)*(f-p)+b),String(Sf+Df)],3); if(wrong.length<3) return null;
+    return {index:'q:11·econ.work[r;'+a+';'+b+';'+c+';'+d+';'+f+']', lines:lines.concat([['f = '+f,'a price floor']]), ask:'How many boxes are left over at the floor?', right, opts:shuffle([right,...wrong]), lead:'', why:'The floor is above p* = '+p+', so the rot technique gives S(f) − D(f) = '+Sf+' − '+Df+' = '+right+'.'}; }},
+  {id:'11·econ.word',step:'11·econ',mode:'word',label:'a least price',open:()=>measured('11·econ'),make(){
+    const M=MKTAX(); if(!M) return null; const {a,b,c,d,p}=M, below=rnd(3)===0, f=below?p-1-rnd(Math.min(4,p-1)):p+1+rnd(6), Df=a-b*f, Sf=c+d*f; if(Df<=0||f<1) return null;
+    const right=below?'nothing changes: the floor is below the meeting price':Df+' boxes', wrong=below?['$'+f+' a box, with boxes left over',(Sf)+' boxes',(Df)+' boxes']:UQAX(right,[Sf+' boxes',(Sf-Df)+' boxes',(a-b*p)+' boxes','nothing changes: the floor is below the meeting price'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:11·econ.word['+a+';'+b+';'+c+';'+d+';'+f+']', a3:['11·econ.word',DASH,DASH], story:'At a wholesale market for navel oranges, buyers take D(p) = '+a+' − '+b+'p boxes a week and growers send S(p) = '+(c?c+' + ':'')+d+'p, at p dollars a box. The growers agree that no box sells below $'+f+'.', lines:[], ask:below?'What does the floor do?':'How many boxes are sold each week?', right, opts:shuffle([right,...wrong]), lead:'', why:'They meet at p* = '+p+'. '+(below?'A floor of $'+f+' is below it, so the price stays at $'+p+': R('+f+') = 0.':'Above p*, what is sold is the lesser of the two: D('+f+') = '+Df+'. The other '+(Sf-Df)+' sent are left over.')}; }},
+  {id:'11·econ.line',step:'11·econ',mode:'proof',label:'what the market licenses',open:()=>measured('11·econ'),make(){
+    return line28('11·econ.line',[
+      ['m1',[['D(26) = 3400,\\ \\ S(26) = 4900','a floor of $26'],['4900 \\text{ boxes are sold}','supply']],2,1,'Sold is the lesser: 3400. The other 1500 are left over.'],
+      ['m2',[['\\text{a floor of } \\$15,\\ p^* = 20','given'],['\\text{boxes are left over}','a floor']],2,1,'Below p* a floor does nothing: R(15) = 0.'],
+      ['m3',[['6000 - 100p = 1000 + 150p','where they meet'],['p^* = 20','250p = 5000']],2,0,'5g’s techs: q* = 4000.'],
+      ['m4',[['T(f) = 90\\,000 - 100(f - 30)^2','takings'],['\\text{a higher floor always means more takings}','a higher price']],2,1,'T is greatest at 30, and falls after.'],
+      ['m5',[['\\text{a supply with a jump}','the bumper crop'],['\\text{there is a meeting price}','every market has one']],2,1,'A jump can skip over demand.'],
+      ['m6',[['Q(p) = S(p) \\text{ below } 20,\\ D(p) \\text{ above}','the lesser'],['Q \\text{ is continuous at } 20','glued-functions']],2,0,'Both pieces arrive at 4000.'],
+      ['m7',[['Q(p)','what is sold'],['= \\tfrac12\\,(S(p) + D(p))','the average']],2,1,'The lesser of the two: a box is sold only when sent and bought.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
