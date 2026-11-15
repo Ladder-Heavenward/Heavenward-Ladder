@@ -6,19 +6,20 @@
 'use strict';
 if(document.getElementById('mk-tray')) return;
 const L=s=>s.split(' ');
-const TREE=[ /* 0.3.23 (Andrew 2026-11-05 10:54): no stray keys; each mark sits in its group */
-  {t:'︿ ﹀',n:'pack and unpack',c:L('︿ ﹀'),always:1},
-  {t:'∂ ∇ ∫',n:'rates and integrals',c:L('∂ ∇ ∫ ∬ ∭ ∮ ∯')},
-  {t:'√ ∛',n:'roots',c:L('√ ∛ ∜')},
-  {t:'xⁿ',n:'superscript',c:[...L('⁻ ⁺ ⁽ ⁾'),{t:'ⁿ',n:'n',c:L('⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ⁿ ˣ')}]},
-  {t:'xₙ',n:'subscript',c:[...L('₋ ₊ ₍ ₎'),{t:'ₙ',n:'n',c:L('₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₙ ₓ ₐ ᵢ')}]},
-  {t:'½ ⅓',n:'fractions',c:L('½ ⅓ ¼ ⅔ ¾ ⁄')},
-  {t:'→ ≈ ∝',n:'between two expressions',c:L('→ ← ↔ ↦ ⇒ ⇔ ≈ ≠ ≡ ≅ ≤ ≥ ≪ ≫ ∝ ± ∓ · × ÷ ∘ ⋯ ∴ ∵ lim ∈ ∉ ∅ ∀ ∃ ¬ ∧ ∨ ⊥ ⊂ ⊃ ⊆ ⊇ ∪ ∩ ∖')},
-  {t:'ℕ ℤ ∞',n:'number sets',c:L('ℕ ℤ ℚ ℝ ℂ ∞ ℵ')},
-  {t:'α β γ',n:'greek',c:L('α β γ δ ε ζ η θ ι κ λ μ ν ξ π ρ σ τ υ φ χ ψ ω')},
-  {t:'Γ Δ Σ',n:'GREEK',c:L('Γ Δ Θ Λ Ξ Π Σ Φ Ψ Ω')},
-  {t:'′ ″ °',n:'primes, degree, angle brackets',c:L('′ ″ ° ⟨ ⟩')}
-];
+const TREE=[ /* 0.3.23 (Andrew 2026-11-05 10:54): no stray keys; each mark sits in its group.
+   quickkeys (Andrew 2026-11-15 08:00Z): the keys reach the end of the infinity series. 08:14Z: four groups by what the
+   learner is writing: Names, Statements, Sets and Proofs, each opening into a pane in subsets. */
+  {t:'π xₙ ½',n:'names',s:[['constants','π e ∞ ℏ'],['greek','α β γ δ ε ζ η θ ι κ λ μ ν ξ π ρ σ τ υ φ χ ψ ω'],['script','ℓ 𝒜 ℬ 𝒞 𝒟 ℱ 𝒦 𝒮 𝒯 𝒱 𝒲'],
+    ['superscript','⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ⁻ ⁺ ⁽ ⁾ ⁿ ˣ ⁱ ʲ ᵏ ᵐ ᵖ ʳ ˢ ᵗ ᵃ ᵇ ᶜ ᵈ ᵉ ᵍ ʰ ᵘ ᵛ ʷ ʸ ᶻ ᵀ ᴺ ᴸ ᵠ'],['subscript','₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₋ ₊ ₍ ₎ ₌ ₙ ₓ ₐ ᵢ ⱼ ₖ ₗ ₘ ₚ ᵣ ₛ ₜ ᵤ ᵥ ₑ ₕ ₒ ᵧ ᵦ'],
+    ['fractions','½ ⅓ ⅔ ¼ ¾ ⅕ ⅗ ⅘ ⅙ ⅚ ⅐ ⅛ ⅜ ⅞ ⅑ ⁄'],['primes and degree','′ ″ °']]},
+  {t:'→ ≤ Σ',n:'statements',s:[['operators: arrows','→ ← ↔ ↦ ↑ ↓ ↪ ⇌'],['operators: comparing','≈ ≠ ≡ ≢ ≅ ≃ ∼ ≤ ≥ ≲ ≪ ≫ ∝ ≺ ≼ ∣ ∤ ∥ ∠'],
+    ['operators: arithmetic','± ∓ · × ÷ ∘ ⊕ ⊗ √ ∛ ∜ lim'],['operators: rates and integrals','∂ ∇ ∫ ∬ ∭ ∮ ∯'],['operators: sums and products','∑ ∏'],
+    ['GREEK','Γ Δ Θ Λ Ξ Π Σ Φ Ψ Ω'],['brackets','⟨ ⟩ ⌊ ⌋ ⌈ ⌉ ⟦ ⟧']]},
+  {t:'∅ ∈ ⋯',n:'sets',s:[['marks','∅ ⋯ ⋮'],['belonging','∈ ∉ ∋'],['parts','⊂ ⊃ ⊆ ⊇ ⊊ ⊈ ⊲'],['joining and cutting','∪ ∩ ∖ ⊔ ⋃ ⋂'],['number sets','ℕ ℤ ℚ ℝ ℂ ℵ 𝒫']]},
+  {t:'︿ ⊥ ∎',n:'proofs',always:1,s:[['pack and unpack','︿ ﹀'],['totally true and totally false','⊤ ⊥'],['connectives','¬ ∧ ∨ ⋁ ⇒ ⇐ ⇔'],['quantifiers','∀ ∃'],
+    ['proving','⊢ ⊬ ⊨ ⊭ ∴ ∵ ∎'],['box and diamond','□ ◇'],['quotes','⌜ ⌝']]}
+].map(g=>(g.s=g.s.map(([h,c])=>({h,c:L(c)})),g));
+const LEAVES=new Set(TREE.flatMap(g=>g.s.flatMap(x=>x.c)));
 const css=`
 #mk-tray{--mk-paper:var(--paper,#fbf9f4);--mk-ink:var(--ink,#26262b);--mk-muted:var(--muted,#8a8a93);--mk-grid:var(--grid,#e3dfd5);--mk-sand:var(--sand,#ece7dd);--mk-card:var(--card,#fff);--mk-teal:var(--teal,#1f6f8b);--mk-ember:var(--ember,#c8501e);
   --mk-mono:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;--mk-serif:"Source Serif 4",Georgia,serif;font-family:var(--mk-serif);color:var(--mk-ink)}
@@ -38,18 +39,31 @@ const css=`
 @media (max-width:480px){#mk-tray .mk-line{grid-template-columns:1fr 1fr} #mk-tray .mk-line textarea{grid-column:1/-1}} /* 2026-11-10 (Andrew 15:59): the own line fits a phone */
 #mk-tray.ownline .mk-line{display:grid}
 #mk-tray textarea{font-family:var(--mk-mono);font-size:1.05rem;padding:7px 10px;border:1px solid var(--mk-grid);border-radius:6px;background:var(--mk-card);color:var(--mk-ink);resize:vertical;min-height:2.4rem;min-width:0;width:100%;box-sizing:border-box}
-#mk-tray .mk-keys{display:flex;flex-wrap:wrap;gap:6px}
-#mk-tray .mk-k{font-family:var(--mk-serif);font-size:1.25rem;min-width:2.7rem;min-height:2.7rem;padding:3px 9px;border-radius:7px;line-height:1.15;cursor:pointer;display:grid;align-content:center;justify-items:center;gap:1px}
+#mk-tray .mk-keys{display:block}
+/* quickkeys: the four group buttons sit two by two, all one size */
+#mk-tray .mk-grid,#mk-tray .mk-row{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+#mk-tray .mk-g{margin:0;flex:0 0 calc((100% - 6px)/2);box-sizing:border-box;height:5rem;position:relative;background:var(--mk-card);color:var(--mk-ink);border:1px solid var(--mk-grid);border-radius:10px;cursor:pointer;display:grid;align-content:center;justify-items:center;gap:3px;padding:4px 4px 6px;font-family:var(--mk-serif)}
+#mk-tray .mk-g span{font-size:1.45rem;letter-spacing:.08em;line-height:1.1;white-space:nowrap}
+#mk-tray .mk-g small{font-family:var(--mk-mono);font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;color:var(--mk-muted);line-height:1.15;text-align:center;max-width:100%}
+#mk-tray .mk-g.here::after{content:"";position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--mk-teal)}
+#mk-tray .mk-g:hover{border-color:var(--mk-ink)}
+#mk-tray .mk-k{margin:0;font-family:var(--mk-serif);font-size:1.25rem;box-sizing:border-box;flex:0 0 calc((100% - 30px)/6);height:2.9rem;padding:0;border-radius:8px;line-height:1;cursor:pointer;display:grid;place-items:center;position:relative}
+@media (min-width:560px){#mk-tray .mk-k{flex-basis:calc((100% - 42px)/8)}}
+#mk-tray.mk-docked .mk-k{flex-basis:calc((100% - 30px)/6)}
 #mk-tray .mk-k.leaf{background:var(--mk-teal);color:#fff;border:1px solid var(--mk-teal)}
 #mk-tray .mk-k.leaf.w{font-size:.95rem;font-family:var(--mk-mono)}
-#mk-tray .mk-k.node{background:var(--mk-card);color:var(--mk-ink);border:1px solid var(--mk-grid);padding:3px 10px}
-#mk-tray .mk-k.node small{font-family:var(--mk-mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mk-muted);white-space:nowrap}
-#mk-tray .mk-k.node::after{content:"▾";font-size:.7rem;color:var(--mk-muted);line-height:.6}
-#mk-tray .mk-k:hover{filter:brightness(1.08)} #mk-tray .mk-k.node:hover{border-color:var(--mk-ink)}
-#mk-tray .mk-pop{position:fixed;z-index:9002;background:var(--mk-paper);border:1px solid var(--mk-grid);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.28);padding:8px;display:flex;flex-wrap:wrap;gap:6px;max-width:min(92vw,520px)}
-#mk-tray .mk-pop .mk-pt{flex:1 0 100%;font-family:var(--mk-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mk-muted);display:flex;justify-content:space-between;align-items:center}
-#mk-tray .mk-pop .mk-pt button{font-family:var(--mk-mono);font-size:.7rem;background:none;border:0;color:var(--mk-muted);cursor:pointer;padding:2px 4px}
-#mk-tray .mk-scope{flex:1 0 100%;margin:4px 0 0;font-family:var(--mk-mono);font-size:.68rem;color:var(--mk-muted)}
+#mk-tray .mk-k.here::after{content:"";position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:#fff;opacity:.9}
+#mk-tray .mk-k:hover{filter:brightness(1.08)}
+/* the pane a group opens into: a head with the way back, then the group's sections */
+#mk-tray .mk-pane{animation:mkin .2s ease}
+@keyframes mkin{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#mk-tray .mk-pane{animation:none}}
+#mk-tray .mk-ph{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;margin:0 0 8px}
+#mk-tray .mk-ph .mk-back{justify-self:start;font-family:var(--mk-mono);font-size:.8rem;background:var(--mk-sand);color:var(--mk-ink);border:1px solid var(--mk-grid);border-radius:6px;padding:5px 9px;cursor:pointer}
+#mk-tray .mk-ph b{font-family:var(--mk-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mk-ink);font-weight:700}
+#mk-tray .mk-sec{margin:0 0 10px}
+#mk-tray .mk-sh{font-family:var(--mk-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mk-muted);text-align:center;margin:0 0 5px}
+#mk-tray .mk-scope{margin:8px 0 0;font-family:var(--mk-mono);font-size:.68rem;color:var(--mk-muted);text-align:center}
 #mk-tray .mk-toast{font-family:var(--mk-mono);font-size:.72rem;color:var(--mk-teal);min-height:1em}
 #mk-tray button:focus-visible{outline:2px solid var(--mk-ember);outline-offset:2px}
 `;
@@ -89,49 +103,48 @@ function insert(k){
 }
 root.addEventListener('mousedown',e=>{ if(e.target.closest('button')) e.preventDefault(); });  // keep the page box focused
 
-// --- keys and clusters ------------------------------------------------------------------
-const pops=[];
-function closePops(from=0){ while(pops.length>from) pops.pop().remove(); }
-function makeKey(item,depth){
-  const b=document.createElement('button'); b.type='button'; b.className='mk-k';
-  if(typeof item==='string') item={k:item};
-  if(item.k){ b.classList.add('leaf'); if(item.k.length>2) b.classList.add('w'); b.textContent=item.k; b.setAttribute('aria-label','type '+item.k);
-    b.addEventListener('click',()=>{ insert(item.k); say(item.k+' written'); }); }
-  else { b.classList.add('node'); b.innerHTML=`<span>${item.t}</span><small>${item.n}</small>`; b.setAttribute('aria-haspopup','true'); b.setAttribute('aria-label',item.n+': '+item.c.map(x=>typeof x==='string'?x:x.n).join(' '));
-    b.addEventListener('click',e=>openPop(item,e,depth)); }
-  return b;
+// --- keys and panes (quickkeys 2026-11-15: a group opens into a pane in place of the popups) ---------------------
+let openG=null, lastS=null, lastHere=null;
+function makeKey(k,here){
+  const b=document.createElement('button'); b.type='button'; b.className='mk-k leaf'+(k.length>2?' w':'')+(here&&here.has(k)?' here':''); b.textContent=k; b.setAttribute('aria-label','type '+k);
+  b.addEventListener('click',()=>{ insert(k); say(k+' written'); }); return b;
 }
-function openPop(item,e,depth){
-  closePops(depth);
-  const pop=document.createElement('div'); pop.className='mk-pop'; pop.setAttribute('role','group'); pop.setAttribute('aria-label',item.n);
-  const head=document.createElement('div'); head.className='mk-pt'; head.innerHTML=`<span>${item.n}</span><button type="button" aria-label="close ${item.n}">✕</button>`;
-  head.querySelector('button').addEventListener('click',()=>closePops(depth)); pop.appendChild(head);
-  item.c.forEach(ch=>pop.appendChild(makeKey(ch,depth+1)));
-  root.appendChild(pop); pops.push(pop);
-  // place it over the keyboard at the point of the tap, kept on screen
-  const x=e.clientX||e.target.getBoundingClientRect().left, y=e.clientY||e.target.getBoundingClientRect().top;
-  const w=pop.offsetWidth, h=pop.offsetHeight, vw=innerWidth, vh=innerHeight;
-  pop.style.left=Math.max(6,Math.min(vw-w-6,x-w/2))+'px';
-  pop.style.top=Math.max(6,(y-h-10>6? y-h-10 : Math.min(vh-h-6,y+14)))+'px';
+function makeGroup(g,here){
+  const b=document.createElement('button'); b.type='button'; b.className='mk-g'+(g.s.some(x=>x.c.some(k=>here.has(k)))?' here':'');
+  b.innerHTML=`<span>${g.t}</span><small>${g.n}</small>`; b.setAttribute('aria-label',g.n+': '+g.s.flatMap(x=>x.c).join(' '));
+  b.addEventListener('click',()=>{ openG=g.n; paint(); }); return b;
 }
 /* The keys limit themselves to the marks the learner is expected to use: by default the marks this page
    writes in its lesson and questions (not its basement); in the randomizer, the marks its chosen pools write. */
 const TEX={forall:'∀',exists:'∃',neg:'¬',lnot:'¬',land:'∧',wedge:'∧',lor:'∨',vee:'∨',Rightarrow:'⇒',implies:'⇒',Leftrightarrow:'⇔',iff:'⇔',to:'→',rightarrow:'→',leftarrow:'←',leftrightarrow:'↔',mapsto:'↦',
   le:'≤',leq:'≤',ge:'≥',geq:'≥',ne:'≠',neq:'≠',approx:'≈',equiv:'≡',cong:'≅',in:'∈',notin:'∉',emptyset:'∅',varnothing:'∅',subset:'⊂',subseteq:'⊆',supset:'⊃',supseteq:'⊇',cup:'∪',cap:'∩',setminus:'∖',
-  cdot:'·',times:'×',div:'÷',circ:'∘',pm:'±',mp:'∓',infty:'∞',aleph:'ℵ',int:'∫',iint:'∬',iiint:'∭',oint:'∮',sum:'Σ',prod:'Π',sqrt:'√',partial:'∂',nabla:'∇',lim:'lim',langle:'⟨',rangle:'⟩',
+  cdot:'·',times:'×',div:'÷',circ:'∘',pm:'±',mp:'∓',infty:'∞',aleph:'ℵ',int:'∫',iint:'∬',iiint:'∭',oint:'∮',sum:'∑',prod:'∏',sqrt:'√',partial:'∂',nabla:'∇',lim:'lim',langle:'⟨',rangle:'⟩',
   cdots:'⋯',ldots:'⋯',dots:'⋯',therefore:'∴',because:'∵',propto:'∝',bot:'⊥',perp:'⊥',ll:'≪',gg:'≫',prime:'′',degree:'°',
   alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',iota:'ι',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',sigma:'σ',tau:'τ',upsilon:'υ',phi:'φ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',
+  mid:'∣',nmid:'∤',parallel:'∥',sim:'∼',simeq:'≃',lesssim:'≲',prec:'≺',preceq:'≼',subsetneq:'⊊',nsubseteq:'⊈',ni:'∋',oplus:'⊕',otimes:'⊗',vdash:'⊢',nvdash:'⊬',models:'⊨',top:'⊤',
+  uparrow:'↑',downarrow:'↓',Leftarrow:'⇐',hookrightarrow:'↪',rightleftharpoons:'⇌',lhd:'⊲',triangleleft:'⊲',sqcup:'⊔',Box:'□',Diamond:'◇',angle:'∠',vdots:'⋮',bigcup:'⋃',bigcap:'⋂',bigvee:'⋁',
+  ell:'ℓ',hbar:'ℏ',lfloor:'⌊',rfloor:'⌋',lceil:'⌈',rceil:'⌉',llbracket:'⟦',rrbracket:'⟧',ulcorner:'⌜',urcorner:'⌝',Longleftrightarrow:'⇔',Longrightarrow:'⇒',longrightarrow:'→',longleftarrow:'←',
   Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Phi:'Φ',Psi:'Ψ',Omega:'Ω'};
 const SUP='⁰¹²³⁴⁵⁶⁷⁸⁹ⁿˣ⁻⁺⁽⁾', SUB='₀₁₂₃₄₅₆₇₈₉ₙₓₐᵢ₋₊₍₎';
+const SUPL={i:'ⁱ',j:'ʲ',k:'ᵏ',m:'ᵐ',p:'ᵖ',r:'ʳ',s:'ˢ',t:'ᵗ',a:'ᵃ',b:'ᵇ',c:'ᶜ',d:'ᵈ',e:'ᵉ',g:'ᵍ',h:'ʰ',u:'ᵘ',v:'ᵛ',w:'ʷ',y:'ʸ',z:'ᶻ',T:'ᵀ',N:'ᴺ',L:'ᴸ'};
+const SUBL={j:'ⱼ',k:'ₖ',l:'ₗ',m:'ₘ',p:'ₚ',r:'ᵣ',s:'ₛ',t:'ₜ',u:'ᵤ',v:'ᵥ',e:'ₑ',h:'ₕ',o:'ₒ'};
+const SAME={'⋅':'·','⟺':'⇔','⟹':'⇒','⟸':'⇐','⟶':'→','⟵':'←','ϕ':'φ','ϵ':'ε','◊':'◇','∑':'∑'};
+const CAL={P:'𝒫',A:'𝒜',B:'ℬ',C:'𝒞',D:'𝒟',F:'ℱ',K:'𝒦',S:'𝒮',T:'𝒯',V:'𝒱',W:'𝒲'};
+/* an infinity step's label (∞Φ, ∞ל‎ ...) names the step and is not a mark: Φ no longer shows on ∞Φ's page */
+const unlabel=t=>String(t).replace(/∞(?!·)[^\s·.,;:)]‎?/g,' ');
 function marksIn(text){
-  const S=new Set(); text=String(text);
+  const S=new Set(); text=unlabel(text);
   text.replace(/\\mathbb\s*\{?\s*([NZQRC])/g,(m,c)=>{ S.add({N:'ℕ',Z:'ℤ',Q:'ℚ',R:'ℝ',C:'ℂ'}[c]); return m; });
+  text.replace(/\\mathcal\s*\{?\s*([A-Z])/g,(m,c)=>{ if(CAL[c]) S.add(CAL[c]); return m; });
   text.replace(/\\([A-Za-z]+)/g,(m,w)=>{ if(TEX[w]) S.add(TEX[w]); return m; });
   if(/\^/.test(text)) [...SUP].forEach(c=>S.add(c));
   if(/_[{\w]/.test(text)) [...SUB].forEach(c=>S.add(c));
+  text.replace(/\^\{?([A-Za-z])/g,(m,c)=>{ if(SUPL[c]) S.add(SUPL[c]); return m; });
+  text.replace(/_\{?([a-z])/g,(m,c)=>{ if(SUBL[c]) S.add(SUBL[c]); return m; });
   if(/\\frac|\\tfrac/.test(text)) S.add('⁄');
   if(/\blim\b/.test(text)) S.add('lim');
-  for(const ch of text) S.add(ch);
+  for(const ch of text) if(ch!=='e') S.add(SAME[ch]||ch);
+  if(/(^|[^A-Za-z\\])e(\^|[⁰¹²³⁴⁵⁶⁷⁸⁹ˣⁱᵗ⁻⁽ⁿᵏ])/.test(text)) S.add('e'); /* Euler's number: e raised to a power */
   return S;
 }
 function pageMarks(){
@@ -142,43 +155,54 @@ function pageMarks(){
   body.querySelectorAll('[data-tex],[data-tex-inline],[data-t]').forEach(n=>parts.push(n.getAttribute('data-tex')||n.getAttribute('data-tex-inline')||n.getAttribute('data-t')||''));
   return marksIn(parts.join('\n'));
 }
-function filt(item,S,depth){
-  if(typeof item==='string') return S.has(item)?item:null;
-  if(item.k) return S.has(item.k)?item:null;
-  if(item.always&&depth===0) return item;
-  if(item.n==='n'){ return item.c.some(x=>S.has(x))?item:null; }
-  const c=item.c.map(x=>filt(x,S,depth+1)).filter(Boolean);
-  if(!c.length) return null;
-  if(c.length===1&&typeof c[0]==='string'&&depth>0) return {k:c[0]};
-  const t=c.length<item.c.length?c.slice(0,3).map(x=>typeof x==='string'?x:(x.k||x.t)).join(' '):item.t;
-  return Object.assign({},item,{c,t});
+/* quickkeys (Andrew 2026-11-15 08:03Z, "unlocked at the right time"): a key opens at the first step that writes it and
+   stays open after; the keys of the page you are on carry a dot. The map of which step writes which key is keymap.js. */
+function stepReached(st){ const U=window.LadderUnlock; try{ if(LS.getItem('steps:'+st)!=null||LS.getItem('cert:'+st)) return true; }catch(e){}
+  if(U&&U.reachedStep&&U.ready&&U.ready()&&!/^(inf|hist|dbt)/.test(st)) return U.reachedStep(st);
+  try{ const P=JSON.parse(LS.getItem('pages:done')||'{}'); if(P[st]&&P[st].v) return true; }catch(e){} return false; }
+function unlockedKeys(){
+  if(window.LADDER_DESK) return new Set(LEAVES);
+  const M=window.LADDER_KEYMAP; if(!M) return null;
+  const S=new Set(); for(const st in M) if(stepReached(st)) for(const k of M[st].split(' ')) S.add(k);
+  return S;
 }
+let mapAsked=false;
+function askMap(){ if(window.LADDER_KEYMAP||mapAsked) return; mapAsked=true; const sc=document.createElement('script'); sc.src='keymap.js'; sc.onload=()=>{ drawKeys(); const U=window.LadderUnlock; if(U&&U.ready&&!U.ready()){ U.load(); setTimeout(drawKeys,1200); } }; document.head.appendChild(sc); }
+function groupsFor(S){ /* the group buttons always show the same three marks, so the four look alike */
+  return TREE.map(g=>{ const s=g.s.map((x,i)=>({h:x.h,c:(g.always&&i===0)?x.c:x.c.filter(k=>S.has(k))})).filter(x=>x.c.length); return s.length?Object.assign({},g,{s}):null; }).filter(Boolean); }
 let limitTo=null, limitLabel='';
 function drawKeys(){
-  closePops(0); keys.innerHTML='';
-  const S=limitTo||pageMarks();
-  const shown=new Set();
-  const items=TREE.map(x=>filt(x,S,0)).filter(Boolean).map(x=>{
-    if(x.k){ if(shown.has(x.k)) return null; shown.add(x.k); return x; }
-    const c=x.c.filter(y=>typeof y!=='string'||!shown.has(y)); c.forEach(y=>{ if(typeof y==='string') shown.add(y); });
-    if(!c.length) return null; return Object.assign({},x,{c}); }).filter(Boolean);
-  items.forEach(item=>keys.appendChild(makeKey(item,0)));
+  const here=limitTo||pageMarks(); let S;
+  if(limitTo) S=limitTo; else { askMap(); const U=unlockedKeys(); S=new Set(here); if(U) U.forEach(k=>S.add(k)); }
+  lastS=S; lastHere=limitTo?new Set():here; paint();
+}
+function paint(){
+  keys.innerHTML=''; const G=groupsFor(lastS), here=lastHere;
+  const g=openG&&G.find(x=>x.n===openG);
+  if(g){
+    const pane=document.createElement('div'); pane.className='mk-pane'; pane.setAttribute('role','group'); pane.setAttribute('aria-label',g.n);
+    const ph=document.createElement('div'); ph.className='mk-ph'; ph.innerHTML=`<button type="button" class="mk-back">‹ keys</button><b>${g.n}</b><span></span>`;
+    ph.querySelector('.mk-back').addEventListener('click',()=>{ openG=null; paint(); }); pane.appendChild(ph);
+    g.s.forEach(x=>{ const sec=document.createElement('div'); sec.className='mk-sec'; if(x.h){ const h=document.createElement('p'); h.className='mk-sh'; h.textContent=x.h; sec.appendChild(h); }
+      const row=document.createElement('div'); row.className='mk-row'; x.c.forEach(k=>row.appendChild(makeKey(k,here))); sec.appendChild(row); pane.appendChild(sec); });
+    keys.appendChild(pane); return;
+  }
+  openG=null;
+  const grid=document.createElement('div'); grid.className='mk-grid'; G.forEach(x=>grid.appendChild(makeGroup(x,here))); keys.appendChild(grid);
   const n=document.createElement('p'); n.className='mk-scope';
-  n.textContent=items.length?('keys for '+(limitTo?limitLabel:'this page')):(limitTo?limitLabel.replace(/^./,c=>c.toUpperCase())+' ask':'This page asks')+' for no marks beyond your own keyboard.';
+  n.textContent=limitTo?'keys for '+limitLabel:'keys open so far · a dot marks the keys this page writes';
   keys.appendChild(n);
 }
-window.MathKeys={ limit(set,label){ limitTo=set?new Set(set):null; limitLabel=label||''; drawKeys(); }, marksIn, open:v=>open(v) };
+window.MathKeys={ limit(set,label){ limitTo=set&&[...set].length?new Set(set):null; limitLabel=label||''; drawKeys(); }, marksIn, open:v=>open(v), tree:TREE };
 drawKeys();
-document.addEventListener('pointerdown',e=>{ if(pops.length && !e.target.closest('.mk-pop') && !e.target.closest('.mk-k.node')) closePops(0); },true);
 
 // --- open / close ------------------------------------------------------------------------
-function open(v){ root.classList.toggle('open',v); btn.setAttribute('aria-expanded',String(v)); if(v){ panel.hidden=false; btn.textContent='⌨ hide'; setTarget(editable(document.activeElement)?document.activeElement:target); } else { closePops(0); btn.textContent='⌨ keys'; setTimeout(()=>{ if(!root.classList.contains('open')) panel.hidden=true; },240); } }
+function open(v){ root.classList.toggle('open',v); btn.setAttribute('aria-expanded',String(v)); if(v){ panel.hidden=false; btn.textContent='⌨ hide'; setTarget(editable(document.activeElement)?document.activeElement:target); } else { btn.textContent='⌨ keys'; setTimeout(()=>{ if(!root.classList.contains('open')) panel.hidden=true; },240); } }
 btn.addEventListener('click',()=>open(!root.classList.contains('open')));
 $('.mk-close').addEventListener('click',()=>open(false));
 $('.mk-own').addEventListener('click',()=>{ setTarget(null); line.focus(); });
 $('.mk-copy').addEventListener('click',()=>{ const done=()=>say('line copied'); const fb=()=>{ line.select(); try{ document.execCommand('copy'); done(); }catch(e){ say('select and copy by hand'); } }; if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(line.value).then(done).catch(fb); else fb(); });
 $('.mk-clear').addEventListener('click',()=>{ line.value=''; saveLine(); say('cleared'); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(pops.length) closePops(pops.length-1); else if(root.classList.contains('open')) open(false); } });
-panel.addEventListener('scroll',()=>closePops(0));
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(openG&&root.classList.contains('open')){ openG=null; paint(); } else if(root.classList.contains('open')) open(false); } });
 setTarget(null);
 })();
