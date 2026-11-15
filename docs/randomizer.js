@@ -17444,7 +17444,7 @@ QP.push({id:'12·eng.work',step:'12·eng',mode:'work',label:'support pushes and 
       ['k6',[['R_A \\lt 0','the push'],['\\text{a small push}','R_A']],2,1,'A pull the support must supply; a trestle cannot, and the plank tips.'],
       ['k7',[['P \\text{ at } d,\\ \\text{supports at } 0, L','given'],['R_B = Pd/L','turning effects about A']],2,0,'Support-pushes: R_B \u00b7 L = P \u00b7 d.']],[]); }});
 /* ----- annex 12·phys How does a small push lift a heavy weight: Work, Word Problems, Check Proofs ----- */
-const DECAX=(v,k)=>String(Math.round(v*Math.pow(10,k||3))/Math.pow(10,k||3));
+const DECAX=(v,k)=>{ k=(k==null?3:k); return String(Math.round(v*Math.pow(10,k))/Math.pow(10,k)); };
 QP.push({id:'12·phys.work',step:'12·phys',mode:'work',label:'the balance point',open:()=>measured('12·phys'),make(){
     const n=3, w=[], x=[]; for(let i=0;i<n;i++){ w.push(1+rnd(8)); x.push(rnd(9)/2); } const W=w.reduce((a,b)=>a+b,0), M=w.reduce((a,b,i)=>a+b*x[i],0), p=M/W, avg=x.reduce((a,b)=>a+b,0)/n;
     if(Math.abs(p-avg)<0.05) return null;
@@ -18663,6 +18663,92 @@ QP.push({id:'25·now.work',step:'25·now',mode:'work',label:'run the step',open:
       ['m4',[['|z_1| = |c| \\le 2','c = 1 + i'],['c \\text{ stays home}','under 2']],2,1,'c = 1 + i has |c| ≈ 1.41 and escapes.'],
       ['m5',[['|z_N| > 2','a run'],['c \\text{ escapes}','escape']],2,0,'One step past 2 proves escape.'],
       ['m6',[['c = -1','a real number'],['0,\\ -1,\\ 0,\\ -1,\\ \\dots','the run']],2,0,'(−1)² − 1 = 0 and 0² − 1 = −1: a cycle of two.']],[]); }});
+/* ----- annex 26·phys How does a radio pick one station: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'26·phys.work',step:'26·phys',mode:'work',label:'swings and impedances',open:()=>measured('26·phys'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const V=[100,110,120,220,230,240][rnd(6)], right=DECAX(V*Math.SQRT2,0)+' V', wrong=UQAX(right,[V+' V',DECAX(V/Math.SQRT2,0)+' V',DECAX(2*V,0)+' V',DECAX(V*1.5,0)+' V'],3); if(wrong.length<3) return null;
+      return {index:'q:26·phys.work[v;'+V+']', lines:[['\\text{an outlet rated } '+V+' \\text{ V}','the steady stand-in']], ask:'How far does the voltage swing each way?', right, opts:shuffle([right,...wrong]), lead:'', why:'Steady-stand-in: a swing to ±V₀ warms as a steady V₀∕√2 would, so V₀ = '+V+' · √2 ≈ '+right+'.'}; }
+    if(ask===1){ const R=[10,20,30][rnd(3)], XL=[20,30,37.7,40,50][rnd(5)], XC=[10,15,26.5,30][rnd(4)], Z=Math.hypot(R,XL-XC), right=DECAX(Z,1)+' Ω', wrong=UQAX(right,[DECAX(R+XL+XC,1)+' Ω',DECAX(Math.hypot(R,XL+XC),1)+' Ω',DECAX(R+Math.abs(XL-XC),1)+' Ω',DECAX(Math.hypot(XL,XC),1)+' Ω'],3); if(wrong.length<3) return null;
+      return {index:'q:26·phys.work[z;'+R+';'+XL+';'+XC+']', lines:[['R = '+R+' \\ \\Omega,\\ \\ \\omega L = '+XL+' \\ \\Omega,\\ \\ \\tfrac{1}{\\omega C} = '+XC+' \\ \\Omega','in a row']], ask:'What is the size of the total impedance?', right, opts:shuffle([right,...wrong]), lead:'', why:'Row: Z = '+R+' + '+XL+'i − '+XC+'i = '+R+(XL>=XC?' + ':' − ')+DECAX(Math.abs(XL-XC),1)+'i, as complex numbers. Its size is √('+R+'² + '+DECAX(Math.abs(XL-XC),1)+'²) ≈ '+right+'. The coil and store point opposite ways.'}; }
+    const L=[100,200,240,250][rnd(4)], C=[50,100,150,200,365][rnd(5)], f=1/(2*Math.PI*Math.sqrt(L*1e-6*C*1e-12))/1000, right=DECAX(f,0)+' kHz', wrong=UQAX(right,[DECAX(1/Math.sqrt(L*1e-6*C*1e-12)/1000,0)+' kHz',DECAX(f/2,0)+' kHz',DECAX(f*Math.PI,0)+' kHz',DECAX(f*2,0)+' kHz'],3); if(wrong.length<3) return null;
+    return {index:'q:26·phys.work[f;'+L+';'+C+']', lines:[['L = '+L+' \\ \\mu\\text{H},\\ \\ C = '+C+' \\text{ pF}','a coil and a store in a row']], ask:'What pace, in kHz, does the circuit pass best?', right, opts:shuffle([right,...wrong]), lead:'', why:'Resonance: ω₀ = 1∕√(LC), so f₀ = 1∕(2π√(LC)) ≈ '+right+'.'}; }},
+  {id:'26·phys.word',step:'26·phys',mode:'word',label:'a swing pushed at its own pace',open:()=>measured('26·phys'),make(){
+    const l=[1.6,2,2.4,3,4][rnd(5)], b=[0.02,0.05,0.1,0.2][rnd(4)], w=Math.sqrt(9.8/l), v=w/(2*b), right=DECAX(v,0)+' times', wrong=UQAX(right,[DECAX(w/b,0)+' times',DECAX(w,1)+' times',DECAX(1/(2*b),0)+' times',DECAX(v*v,0)+' times'],3); if(wrong.length<3) return null;
+    return {index:'q:26·phys.word['+l+';'+b+']', a3:['26·phys.word',DASH,DASH], story:'A playground swing in a park in Spokane hangs on chains '+l+' m long, so ω₀ = √(9.8 ÷ '+l+') a second. Its brake is light, b = '+b+' a second. A parent gives small pushes in step with it.', lines:[], ask:'How many times as far does it swing as the same push held steady would hold it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pushed-swing: ω₀∕(2b) = '+DECAX(w,3)+' ÷ '+DECAX(2*b,2)+' ≈ '+right+'.'}; }},
+  {id:'26·phys.line',step:'26·phys',mode:'proof',label:'what the circuit licenses',open:()=>measured('26·phys'),make(){
+    return line28('26·phys.line',[
+      ['a1',[['\\text{a 120 V outlet}','given'],['\\text{never past 120 V}','its rating']],2,1,'120 V is the steady stand-in; the peaks are near 170 V.'],
+      ['a2',[['R,\\ \\omega L,\\ \\tfrac{1}{\\omega C} \\text{ in a row}','given'],['|Z| = R + \\omega L + \\tfrac{1}{\\omega C}','they add']],2,1,'The parts point different ways: add as complex numbers, then take the size.'],
+      ['a3',[['\\text{a coil}','Z = iωL'],['\\text{its current in step with its voltage}','impedance']],2,1,'iωL: a quarter turn behind.'],
+      ['a4',[['\\text{a sharper tuning}','larger Q'],['\\text{better sound}','sharp']],2,1,'Too narrow a band cuts the station’s own high notes.'],
+      ['a5',[['\\omega = 1/\\sqrt{LC}','the pace'],['\\omega L = \\tfrac{1}{\\omega C}','resonance']],2,0,'The coil and store cancel, leaving only R.'],
+      ['a6',[['Q = 50 \\text{ at } 680 \\text{ kHz}','sharpness'],['\\text{a band } 13.6 \\text{ kHz wide}','sharpness']],2,0,'ω₀∕Q wide: 680 ÷ 50 = 13.6.']],[]); }});
+/* ----- annex 27·chem Can every reaction be balanced: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'27·chem.work',step:'27·chem',mode:'work',label:'one balance, up to stretching',open:()=>measured('27·chem'),make(){
+    const ask=rnd(2);
+    if(ask){ const k=[2,3,4][rnd(3)], a=DEGAX(Math.acos(-1/(k-1))), right=DECAX(a,2)+'°', wrong=UQAX(right,[DECAX(360/k,2)+'°',DECAX(180/k,2)+'°',DECAX(DEGAX(Math.acos(-1/k)),2)+'°','90°'],3); if(wrong.length<3) return null;
+      return {index:'q:27·chem.work[a;'+k+']', lines:[[k+' \\text{ vectors of length 1 adding to } 0','every two at one angle']], ask:'At what angle does each pair meet?', right, opts:shuffle([right,...wrong]), lead:'', why:'Equal-spread: cos θ = −1∕(k − 1) = −1∕'+(k-1)+', so θ ≈ '+right+'.'}; }
+    const R=[['CH_4 + O_2 \\to CO_2 + H_2O',[1,2,1,2]],['C_2H_6 + O_2 \\to CO_2 + H_2O',[2,7,4,6]],['C_3H_8 + O_2 \\to CO_2 + H_2O',[1,5,3,4]],['C_4H_{10} + O_2 \\to CO_2 + H_2O',[2,13,8,10]],['H_2 + O_2 \\to H_2O',[2,1,2]],['N_2 + H_2 \\to NH_3',[1,3,2]],['Fe + O_2 \\to Fe_2O_3',[4,3,2]],['Al + O_2 \\to Al_2O_3',[4,3,2]],['C_2H_4 + O_2 \\to CO_2 + H_2O',[1,3,2,2]]][rnd(9)];
+    const s=a=>a.join(' : '), c=R[1], right=s(c), wrong=UQAX(right,[s(c.map((x,i)=>i===1?x+1:x)),s(c.map(x=>x*2)),s(c.map((x,i)=>i===c.length-1?x+1:x)),s(c.map(()=>1)),s(c.map((x,i)=>i===0?x+1:x))],3); if(wrong.length<3) return null;
+    return {index:'q:27·chem.work[b;'+right+']', lines:[['\\mathrm{'+R[0]+'}','a reaction']], ask:'What is its one balance in whole amounts, all positive, with no common divisor above 1?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-up-to-scale: every balance is a stretch of one. Count each element on both sides; '+right+' balances them all, and its amounts share no divisor above 1.'}; }},
+  {id:'27·chem.word',step:'27·chem',mode:'word',label:'when the pulls do not cancel',open:()=>measured('27·chem'),make(){
+    const F=rnd(3);
+    if(F===0){ const p=[1,1.5,2][rnd(3)], t=[90,104.5,120,150,180][rnd(5)], v=2*p*Math.cos(DGAX(t/2)), right=DECAX(v,2)+' units', wrong=UQAX(right,[DECAX(2*p,2)+' units',DECAX(p*Math.cos(DGAX(t/2)),2)+' units',DECAX(2*p*Math.sin(DGAX(t/2)),2)+' units',DECAX(2*p*Math.cos(DGAX(t)),2)+' units'].map(x=>x.replace(/^-/,'−')),3); if(wrong.length<3) return null;
+      return {index:'q:27·chem.word[p;'+p+';'+t+']', a3:['27·chem.word',DASH,DASH], story:'A molecule has two like bonds, each pulling charge with size '+p+', meeting at '+t+'°.', lines:[], ask:'How big is the molecule’s charge-vector?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cancelling-pulls: two like bonds of size p meeting at θ leave 2p cos(θ⁄2) = 2 · '+p+' · cos '+DECAX(t/2,2)+'° ≈ '+right+'.'+(t===180?' Opposite pulls cancel.':'')}; }
+    const M=[['CCl₄','four like bonds spread evenly',0],['CO₂','two like bonds in a straight line',0],['H₂O','two like bonds meeting at 104.5°',1],['BF₃','three like bonds spread evenly in a plane',0],['NH₃','three like bonds bent below the nitrogen like a tripod',1]][rnd(5)];
+    const right=M[2]?'yes: the bond vectors do not add to 0':'no: the bond vectors add to 0, however hard each pulls', wrong=[M[2]?'no: the bond vectors add to 0, however hard each pulls':'yes: the bond vectors do not add to 0','yes: every molecule with pulling bonds has one','no: like bonds never pull'];
+    return {index:'q:27·chem.word[m;'+M[0]+']', a3:['27·chem.word',DASH,DASH], story:'In '+M[0]+' the central atom has '+M[1]+'.', lines:[], ask:'Does the molecule have a charge-vector?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cancelling-pulls: a molecule whose like bonds point along vectors that add to 0 has no charge-vector. '+(M[2]?'These do not add to 0.':'These do, by the equal-spread technique.')}; }},
+  {id:'27·chem.line',step:'27·chem',mode:'proof',label:'what the atom grid licenses',open:()=>measured('27·chem'),make(){
+    return line28('27·chem.line',[
+      ['n1',[['\\mathrm{N_2 + 4\\,H_2 \\to 2\\,NH_4}','balanced'],['\\text{it happens}','a balance']],2,1,'A balance is needed for a reaction, not enough: NH₄ alone is no stable molecule.'],
+      ['n2',[['\\mathrm{H_2O \\to H_2O_2}','unbalanced'],['\\text{balanced by changing the small numbers}','fix it']],2,1,'That changes the species; only the amounts in front are unknowns.'],
+      ['n3',[['\\text{a reaction}','given'],['\\text{exactly one balance}','balance']],2,1,'Only when the space of balances has dimension 1.'],
+      ['n4',[['\\tfrac{13}{2}\\,\\mathrm{O_2} \\text{ for one butane}','amounts'],['\\text{not a balance}','fractions']],2,1,'It is; whole numbers are only its stretch by 2.'],
+      ['n5',[['\\text{two balances}','given'],['\\text{their sum is a balance}','atom-grid']],2,0,'The balances are what the atom grid loses: a space.'],
+      ['n6',[['4 \\text{ equal vectors adding to } 0','equal-spread'],['\\cos\\theta = -\\tfrac13,\\ \\theta \\approx 109.47^\\circ','equal-spread']],2,0,'cos θ = −1∕(k − 1) with k = 4.']],[]); }});
+/* ----- annex 27·crypt A grid that locks letters: Work, Word Problems, Check Proofs ----- */
+const M26AX=x=>((x%26)+26)%26, INV26AX=d=>{ for(let e=1;e<26;e++) if(M26AX(d*e)===1) return e; return 0; };
+QP.push({id:'27·crypt.work',step:'27·crypt',mode:'work',label:'remainders by 26',open:()=>measured('27·crypt'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const m=-(1+rnd(80)), right=String(M26AX(m)), wrong=UQAX(right,[String(-m%26),String(26-M26AX(m)+1),String(M26AX(m)+1),String(Math.abs(m))],3); if(wrong.length<3) return null;
+      return {index:'q:27·crypt.work[n;'+m+']', lines:[[MNAX(String(m)),'an entry']], ask:'What remainder by 26 does it leave?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX(m+' + 26 · '+Math.ceil(-m/26)+' = '+right+', from 0 to 25.')}; }
+    if(ask===1){ const d=[3,5,7,9,11,15,17,19,21,23,25][rnd(11)], e=INV26AX(d), right=String(e), wrong=UQAX(right,[String(26-d),String(M26AX(e+2)),String(27-e),String(d)],3); if(wrong.length<3) return null;
+      return {index:'q:27·crypt.work[e;'+d+']', lines:[['\\det K \\text{ leaves } '+d,'by 26']], ask:'What e makes e · '+d+' leave 1 by 26?', right, opts:shuffle([right,...wrong]), lead:'', why:e+' · '+d+' = '+(e*d)+' = 26 · '+Math.floor(e*d/26)+' + 1.'}; }
+    const d=[2,3,4,5,6,7,8,9,10,11,12,13,15,17,24,25][rnd(16)], g=(a,b)=>b?g(b,a%b):a, ok=g(d,26)===1, right=ok?'yes: '+d+' shares no divisor above 1 with 26':'no: '+d+' shares '+g(d,26)+' with 26', wrong=[ok?'no: '+d+' shares '+(d%2?13:2)+' with 26':'yes: '+d+' shares no divisor above 1 with 26','yes: any det other than 0 will do','no: only det 1 can be undone'];
+    return {index:'q:27·crypt.work[d;'+d+']', lines:[['\\det K = '+d,'a key grid']], ask:'Can K be undone among letters?', right, opts:shuffle([right,...wrong]), lead:'', why:'The way back needs e with e · det K leaving 1 by 26, and that e exists exactly when det K shares no divisor above 1 with 26. '+(ok?'Here e = '+INV26AX(d)+'.':'Here no e does.')}; }},
+  {id:'27·crypt.word',step:'27·crypt',mode:'word',label:'a pair of letters is a vector',open:()=>measured('27·crypt'),make(){
+    const A='abcdefghijklmnopqrstuvwxyz', K=[[7,8],[11,11]], x=rnd(26), y=rnd(26), u=M26AX(K[0][0]*x+K[0][1]*y), v=M26AX(K[1][0]*x+K[1][1]*y);
+    const right=(A[u]+A[v]).toUpperCase(), wrong=UQAX(right,[(A[M26AX(K[0][0]*x+K[1][0]*y)]+A[M26AX(K[0][1]*x+K[1][1]*y)]).toUpperCase(),(A[v]+A[u]).toUpperCase(),(A[M26AX(u+1)]+A[v]).toUpperCase(),(A[x]+A[y]).toUpperCase()],3); if(wrong.length<3) return null;
+    return {index:'q:27·crypt.word['+A[x]+A[y]+']', a3:['27·crypt.word',DASH,DASH], story:'A clerk locks a report two letters at a time, a = 0 to z = 25, with the key grid K whose rows are (7, 8) and (11, 11). The next pair of the message is “'+A[x]+A[y]+'”.', lines:[], ask:'What pair does the clerk send?', right, opts:shuffle([right,...wrong]), lead:'', why:'Remainders-pass-through: K('+x+', '+y+') = ('+(7*x+8*y)+', '+(11*x+11*y)+'), which leave ('+u+', '+v+') by 26: '+right+'.'}; }},
+  {id:'27·crypt.line',step:'27·crypt',mode:'proof',label:'what the grid licenses',open:()=>measured('27·crypt'),make(){
+    return line28('27·crypt.line',[
+      ['g1',[['\\det K = 2 \\ne 0','given'],['K \\text{ can be undone among letters}','det not 0']],2,1,'2 shares a divisor with 26; no e has 2e leaving 1.'],
+      ['g2',[['S\\,K = (\\det K)\\,I','stand-in'],['K\' = \\tfrac{1}{\\det K}\\,S','undo']],2,1,'Fractions are not letters; use e with e det K leaving 1.'],
+      ['g3',[['-11','an entry'],['\\text{it leaves } 11 \\text{ by } 26','drop the sign']],2,1,'−11 + 26 = 15: it leaves 15.'],
+      ['g4',[['\\text{two known pairs}','a guessed word'],['\\text{the key}','known-pairs']],2,1,'Only when their grid P can be undone among letters; ga and le cannot.'],
+      ['g5',[['\\det K = -11 \\text{ leaves } 15','given'],['K\' = 7\\,S','15 · 7 = 105 = 26 · 4 + 1']],2,0,'7 undoes 15 among letters.'],
+      ['g6',[['m \\text{ leaves } r,\\ n \\text{ leaves } r\'','by 26'],['mn \\text{ leaves what } rr\' \\text{ leaves}','remainders-pass-through']],2,0,'mn = 26(…) + rr′.']],[]); }});
+/* ----- annex 27·econ How much must every industry make: Work, Word Problems, Check Proofs ----- */
+const LEOAX=(a,b,c,d)=>{ const D=(1-a)*(1-d)-b*c; return {D, i:[[(1-d)/D,b/D],[c/D,(1-a)/D]]}; };
+QP.push({id:'27·econ.work',step:'27·econ',mode:'work',label:'one new order',open:()=>measured('27·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const c=[0.3,0.4,0.5,0.6][rnd(4)], k=[1,2,3,4][rnd(4)], v=Math.pow(c,k+1)/(1-c), right=DECAX(v,4), wrong=UQAX(right,[DECAX(Math.pow(c,k)/(1-c),4),DECAX(Math.pow(c,k+1),4),DECAX(1/(1-c),4),DECAX(Math.pow(c,k+1)*(1-c),4)],3); if(wrong.length<3) return null;
+      return {index:'q:27·econ.work[r;'+c+';'+k+']', lines:[['\\text{every column of } A \\text{ adds to at most } '+c,'an input–output table'],['\\text{rounds } 0 \\text{ to } '+k+' \\text{ counted}','I + A + \\dots + A^{'+k+'}']], ask:'At most what share of the total demand do the rounds left out add?', right, opts:shuffle([right,...wrong]), lead:'', why:'Every-round: the rounds after the kth add up to at most c^(k+1)∕(1 − c) = '+c+'^'+(k+1)+' ÷ '+DECAX(1-c,2)+' ≈ '+right+' of it.'}; }
+    const a=[0.1,0.2,0.3][rnd(3)], b=[0.1,0.2,0.3][rnd(3)], c=[0.1,0.2][rnd(2)], d=[0.2,0.3,0.4][rnd(4)%3], L=LEOAX(a,b,c,d), j=rnd(2), m=L.i[0][j]+L.i[1][j];
+    const right=DECAX(m,2), wrong=UQAX(right,[DECAX(1/(1-(j?b+d:a+c)),2),DECAX(L.i[j][j],2),DECAX(1+(j?b+d:a+c),2),DECAX(L.i[0][1-j]+L.i[1][1-j],2)],3); if(wrong.length<3) return null;
+    return {index:'q:27·econ.work[m;'+[a,b,c,d,j].join(';')+']', lines:[['A = \\begin{pmatrix} '+a+' & '+b+' \\\\ '+c+' & '+d+' \\end{pmatrix}','farms, factories'],['\\text{one more dollar of final demand for '+(j?'factories':'farms')+'}','']], ask:'How much total output does it bring, to two places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Order-column: column '+(j+1)+' of (I − A)⁻¹ is ('+DECAX(L.i[0][j],3)+', '+DECAX(L.i[1][j],3)+'), and its sum is '+right+'.'}; }},
+  {id:'27·econ.word',step:'27·econ',mode:'word',label:'every industry buys from every other',open:()=>measured('27·econ'),make(){
+    const a=[0.1,0.2,0.3][rnd(3)], b=[0.2,0.3][rnd(2)], c=[0.1,0.2][rnd(2)], d=[0.2,0.3,0.4][rnd(3)], d1=[10,20,30][rnd(3)], d2=[20,40,50][rnd(3)], L=LEOAX(a,b,c,d), x1=L.i[0][0]*d1+L.i[0][1]*d2, x2=L.i[1][0]*d1+L.i[1][1]*d2;
+    const right=DECAX(x1,1)+' farm, '+DECAX(x2,1)+' factory', wrong=UQAX(right,[d1+' farm, '+d2+' factory',DECAX(d1+a*d1+b*d2,1)+' farm, '+DECAX(d2+c*d1+d*d2,1)+' factory',DECAX(x2,1)+' farm, '+DECAX(x1,1)+' factory'],3); if(wrong.length<3) return null;
+    return {index:'q:27·econ.word['+[a,b,c,d,d1,d2].join(';')+']', a3:['27·econ.word',DASH,DASH], story:'In a small valley economy, each dollar of farm output uses '+a+' of farm goods and '+c+' of factory goods; each dollar of factory output uses '+b+' of farm goods and '+d+' of factory goods. Final buyers want '+d1+' of farm goods and '+d2+' of factory goods, in millions.', lines:[], ask:'What must each industry make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Gross-output: x = Ax + d, so (I − A)x = d and x = (I − A)⁻¹d ≈ ('+DECAX(x1,1)+', '+DECAX(x2,1)+'). The industries also make for each other.'}; }},
+  {id:'27·econ.line',step:'27·econ',mode:'proof',label:'what the table licenses',open:()=>measured('27·econ'),make(){
+    return line28('27·econ.line',[
+      ['t1',[['\\text{final demand } d','given'],['\\text{output} = d','what buyers want']],2,1,'Industries also make for each other: x = Ax + d.'],
+      ['t2',[['\\text{a column adds to more than 1}','given'],['\\text{it cannot feed itself}','the column test']],2,1,'The column test is enough, not needed: look for a surplus plan.'],
+      ['t3',[['\\det(I - A) \\ne 0','given'],['\\text{it feeds itself}','undone']],2,1,'The outputs must not be negative: Δ < 0 gives negative ones.'],
+      ['t4',[['x = (I - A)^{-1}d','gross-output'],['x = d + Ad','the rounds']],2,1,'Two rounds of endlessly many.'],
+      ['t5',[['\\text{every column of } A \\text{ adds to at most } c < 1','given'],['(I - A)^{-1} = I + A + A^2 + \\cdots','every-round']],2,0,'The rounds shrink by c at least, and settle.'],
+      ['t6',[['\\text{a plan leaving a surplus of everything}','given'],['\\text{every demand can be met}','feeds-itself']],2,0,'The surplus plan scales to cover any demand that is not negative.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
