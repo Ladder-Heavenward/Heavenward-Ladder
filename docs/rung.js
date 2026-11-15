@@ -1051,22 +1051,50 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
   function trio(p){ const gb=desk.querySelector('.dtabs [data-p="graph"]'); desk.querySelectorAll('.dtrio [data-go]').forEach(b=>{ const on=b.dataset.go===p; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); if(b.dataset.go==='graph') b.hidden=!!(gb&&gb.classList.contains('lk-hide')); }); }
   desk.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.dtrio [data-go]'); if(b&&!b.classList.contains('on')) show(b.dataset.go); });
   let deckDone=false;
-  function fillDeck(){ if(deckDone) return; deckDone=true; const list=document.getElementById('dklist'), qi=document.getElementById('dkq'); let q='';
+  function fillDeck(){ if(deckDone) return; deckDone=true; const list=document.getElementById('dklist'), qi=document.getElementById('dkq'); let q=''; /* deckgroups: by use, with a proof pane under each tech */
     const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     let pages={}; try{ pages=JSON.parse(LS.getItem('pages:done')||'{}')||{}; }catch(e){}
-    const draw=()=>{ const M=window.LADDER_MOVES; if(!M){ list.textContent=''; return; } const U=window.LadderUnlock, have=M.moves.filter(m=>!!(pages[m.file]&&pages[m.file].v)||!!(U&&U.passedStep&&U.passedStep(m.file))); /* allunlock */
-      const shown=have.filter(m=>!q||(m.name+' '+m.words+' '+(m.accepted||'')).toLowerCase().includes(q));
+    const need=(src,ok)=>new Promise(res=>{ if(ok()) return res(); const s=document.createElement('script'); s.src=src; s.onload=()=>res(); s.onerror=()=>res(); document.head.appendChild(s); });
+    const keyOf=f=>{ const G=window.LADDER_DECKGROUPS; if(G.step[f]) return G.step[f]; const m=String(f).match(/^r(\d\d)([a-z]*)\d*$/); if(!m) return G.other; return (m[2]&&G.annex[m[2]])||G.rung[String(+m[1])]||G.other; };
+    const PROOF={technique:1,rewrite:1};
+    const card=(m,i)=>'<div class="dmv"><b>'+esc(m.name)+(m.accepted?' <span class="acc">('+esc(m.accepted)+')</span>':'')+'</b> <span class="kd">'+esc(m.kind)+'</span>'+(m.tex?'<div class="mt" data-t="'+esc(m.tex)+'"></div>':'')+'<div class="mw">'+esc(m.words)+'</div>'
+      +'<div class="dk-foot"><a class="mwhere" href="'+esc(m.file)+'.html'+(m.pid?'#'+esc(m.pid):'')+'">built at '+esc(m.tag)+' →</a>'+(PROOF[m.kind]&&m.pid?'<button type="button" class="dk-pf" data-i="'+i+'" aria-expanded="false">proof</button>':'')+'</div>'
+      +(PROOF[m.kind]&&m.pid?'<div class="dk-pfpane" hidden></div>':'')+'</div>';
+    const tex=sc=>{ if(window.katex) sc.querySelectorAll('.mt:not(.done)').forEach(el=>{ el.classList.add('done'); try{ katex.render(el.dataset.t,el,{throwOnError:false,strict:false,trust:true}); }catch(e){ el.textContent=el.dataset.t; } }); };
+    const draw=()=>{ const M=window.LADDER_MOVES, G=window.LADDER_DECKGROUPS; if(!M||!G){ list.textContent=''; return; } const U=window.LadderUnlock;
+      const have=[]; M.moves.forEach((m,i)=>{ if(!!(pages[m.file]&&pages[m.file].v)||!!(U&&U.passedStep&&U.passedStep(m.file))) have.push(i); }); /* allunlock */
+      const shown=have.filter(i=>{ const m=M.moves[i]; return !q||(m.name+' '+m.words+' '+(m.accepted||'')).toLowerCase().includes(q); });
       if(!have.length) list.innerHTML='<p class="dnote">Nothing here yet. Finish the questions on a step and the techs it builds land here.</p>';
       else if(!shown.length) list.innerHTML='<p class="dnote">No earned tech matches.</p>';
-      else { let h='', cur=''; shown.forEach(m=>{ if(m.file!==cur){ if(cur) h+='</details>'; cur=m.file; h+='<details class="dfold dk-step"'+(q?' open':'')+'><summary><span>'+esc(m.tag)+'</span><b>'+shown.filter(x=>x.file===m.file).length+'</b></summary>'; }
-          h+='<div class="dmv"><b>'+esc(m.name)+(m.accepted?' <span class="acc">('+esc(m.accepted)+')</span>':'')+'</b> <span class="kd">'+esc(m.kind)+'</span>'+(m.tex?'<div class="mt" data-t="'+esc(m.tex)+'"></div>':'')+'<div class="mw">'+esc(m.words)+'</div><a class="mwhere" href="'+esc(m.file)+'.html'+(m.pid?'#'+esc(m.pid):'')+'">built at '+esc(m.tag)+' →</a></div>'; });
-        list.innerHTML=h+'</details>'; const dd=list.querySelectorAll('details'); if(!q&&dd.length) dd[dd.length-1].open=true;
-        const tex=sc=>{ if(window.katex) sc.querySelectorAll('.mt:not(.done)').forEach(el=>{ el.classList.add('done'); try{ katex.render(el.dataset.t,el,{throwOnError:false,strict:false,trust:true}); }catch(e){ el.textContent=el.dataset.t; } }); };
-        dd.forEach(d=>{ if(d.open) tex(d); d.addEventListener('toggle',()=>{ if(d.open) tex(d); }); }); }
+      else { const by={}; shown.forEach(i=>{ const k=keyOf(M.moves[i].file); (by[k]=by[k]||[]).push(i); }); let h='';
+        G.groups.forEach(g=>{ const n=g.subs.reduce((a,s)=>a+(by[s[0]]||[]).length,0); if(!n) return;
+          h+='<details class="dfold dk-grp"'+(q?' open':'')+'><summary><span>'+esc(g.name)+'</span><b>'+n+'</b></summary><div class="dk-in"><p class="dk-use">'+esc(g.use)+'</p>';
+          g.subs.forEach(s=>{ const it=by[s[0]]; if(!it) return; h+='<details class="dfold dk-sub"'+(q?' open':'')+'><summary><span>'+esc(s[1])+'</span><b>'+it.length+'</b></summary><div class="dk-cards">'+it.map(i=>card(M.moves[i],i)).join('')+'</div></details>'; });
+          h+='</div></details>'; });
+        list.innerHTML=h; list.querySelectorAll('details.dk-sub').forEach(d=>{ if(d.open) tex(d); d.addEventListener('toggle',()=>{ if(d.open) tex(d); }); }); }
       document.getElementById('dkcount').textContent=shown.length+' of '+have.length+' earned';
       const left=M.moves.length-have.length; document.getElementById('dkahead').textContent=left>0?left+' more techs wait further up the ladder, and past them the ones nobody has found yet.':''; };
+    /* the proof: the tech's own paragraph on its step page and what follows it there, up to the slides or the questions */
+    const docs={};
+    const pageDoc=f=>docs[f]||(docs[f]=fetch(f+'.html').then(r=>{ if(!r.ok) throw new Error(r.status); return r.text(); }).then(t=>new DOMParser().parseFromString(t,'text/html')));
+    const proofOf=m=>pageDoc(m.file).then(doc=>{ const p=doc.querySelector('[data-pid="'+m.pid+'"]'); if(!p) return null;
+      const others=new Set(window.LADDER_MOVES.moves.filter(x=>x.file===m.file&&x.pid&&x.pid!==m.pid).map(x=>x.pid));
+      const box=document.createElement('div'); box.appendChild(p.cloneNode(true)); let body=false;
+      for(let e=p.nextElementSibling;e;e=e.nextElementSibling){
+        if(e.matches('section.slides,section.sayback,section.extra,section.challenge,aside,nav,h2,h3,.chq')) break;
+        if(e.matches('script,style,canvas,figure,svg,section.pic,.brkkey,.pic,.panel,.panels')) continue;
+        const pid=e.getAttribute('data-pid'); if(pid&&others.has(pid)&&body) break;
+        if(e.matches('pre.lines')&&(e.hasAttribute('data-wrong')||/not allowed|illegal/i.test(e.getAttribute('data-label')||''))) continue;
+        box.appendChild(e.cloneNode(true)); if(!(pid&&others.has(pid))) body=true; }
+      box.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id')); box.querySelectorAll('script,canvas').forEach(x=>x.remove());
+      try{ window.Rung.renderAll(box); }catch(e){} return box; });
+    list.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.dk-pf'); if(!b) return; const pane=b.closest('.dmv').querySelector('.dk-pfpane'); if(!pane) return;
+      const open=pane.hidden; pane.hidden=!open; b.setAttribute('aria-expanded',open?'true':'false'); b.classList.toggle('on',open); if(!open||pane.dataset.done) return;
+      pane.dataset.done='1'; pane.innerHTML='<p class="dnote">Opening the proof…</p>'; const m=window.LADDER_MOVES.moves[+b.dataset.i];
+      proofOf(m).then(box=>{ pane.innerHTML=''; if(box) pane.appendChild(box); else pane.innerHTML='<p class="dnote">The proof is on its step’s page.</p>'; })
+        .catch(()=>{ delete pane.dataset.done; pane.innerHTML='<p class="dnote">The proof could not load. Try again when you are online.</p>'; }); });
     qi.addEventListener('input',()=>{ q=qi.value.trim().toLowerCase(); draw(); });
-    if(window.LADDER_MOVES) draw(); else { const s=document.createElement('script'); s.src='moves-data.js'; s.onload=draw; s.onerror=()=>{ list.textContent='The techs could not load.'; }; document.head.appendChild(s); } }
+    Promise.all([need('deck-groups.js',()=>!!window.LADDER_DECKGROUPS),need('moves-data.js',()=>!!window.LADDER_MOVES)]).then(()=>{ if(window.LADDER_MOVES&&window.LADDER_DECKGROUPS) draw(); else list.textContent='The techs could not load.'; }); }
   let movesDone=false;
   function fillMoves(){ if(movesDone) return; movesDone=true; const box=document.getElementById('dmoves'), note=document.getElementById('dmnote');
     const page=ladderPage();
