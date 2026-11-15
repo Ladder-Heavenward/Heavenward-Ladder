@@ -18142,6 +18142,107 @@ QP.push({id:'21·phys.work',step:'21·phys',mode:'work',label:'slopes, curves an
       ['f4',[['\\text{a stone whirled on a string}','given'],['\\text{the pull on it is outward}','it feels so']],2,1,'The string pulls it in; outward is only how it feels.'],
       ['f5',[['\\text{thrown at } 30^\\circ \\text{ and at } 60^\\circ','same speed'],['\\text{the same landing place}','slant-throw']],2,0,'sin 60° = sin 120°: angles adding to 90° land together.'],
       ['f6',[['20 \\text{ m/s on a curve of } 50 \\text{ m}','given'],['\\mu \\ge 0.82','round']],2,0,'400 ÷ 50 = 8, and 8 ÷ 9.8 ≈ 0.82.']],[]); }});
+/* ----- annex 22·chem How much energy holds a salt crystal: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·chem.work',step:'22·chem',mode:'work',label:'the same terms, another total',open:()=>measured('22·chem'),make(){
+    const ask=rnd(2);
+    if(ask){ const a=[0.25,0.282,0.3,0.32,0.35][rnd(5)], u=1.44/a, E=-2*Math.LN2*u, right=MNAX(DECAX(E,2))+' eV', wrong=UQAX(right,[MNAX(DECAX(-Math.LN2*u,2))+' eV',MNAX(DECAX(-2*u,2))+' eV',MNAX(DECAX(-u,2))+' eV',DECAX(-E,2)+' eV'],3); if(wrong.length<3) return null;
+      return {index:'q:22·chem.work[e;'+a+']', lines:[['Ke^2 = 1.44 \\text{ eV nm},\\ \\ a = '+a+' \\text{ nm}','a charged row']], ask:'What is the energy of one atom in the row?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Total: −2 ln 2 · Ke²/a. Ke²/a = 1.44 ÷ '+a+' ≈ '+DECAX(u,2)+' eV, and −1.386 · '+DECAX(u,2)+' ≈ '+DECAX(E,2)+' eV.')}; }
+    const P=[[1,1],[1,2],[2,1],[1,4],[3,1],[1,3],[4,1],[2,3]][rnd(8)], t=Math.LN2+0.5*Math.log(P[0]/P[1]), right=DECAX(t,3), wrong=UQAX(right,[DECAX(Math.LN2,3),DECAX(Math.LN2*P[0]/P[1],3),DECAX(Math.LN2+0.5*Math.log(P[1]/P[0]),3),DECAX(Math.LN2+Math.log(P[0]/P[1]),3)],3); if(wrong.length<3) return null;
+    return {index:'q:22·chem.work[b;'+P.join(';')+']', lines:[['1 - \\tfrac12 + \\tfrac13 - \\tfrac14 + \\cdots','the bracket'],['\\text{gathered } '+P[0]+' \\text{ pull'+(P[0]>1?'s':'')+' for every } '+P[1]+' \\text{ push'+(P[1]>1?'es':'')+'}','an order']], ask:'What total does that order give, to three places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Block-order: ln 2 + ½ ln('+P[0]+'∕'+P[1]+') ≈ 0.693 '+(P[0]>=P[1]?'+ '+DECAX(0.5*Math.log(P[0]/P[1]),3):'− '+DECAX(-0.5*Math.log(P[0]/P[1]),3))+' = '+right+'.'+(P[0]===P[1]?' Equal blocks keep ln 2.':'')}; }},
+  {id:'22·chem.word',step:'22·chem',mode:'word',label:'a row of alternating charges',open:()=>measured('22·chem'),make(){
+    const n=3+rnd(6); let s=0; const S=[]; for(let k=1;k<=n+2;k++){ s+=(k%2?1:-1)/k; S.push(s); }
+    const a=S[n-1], b=S[n], lo=Math.min(a,b), hi=Math.max(a,b), f=x=>DECAX(x,3), right='between '+f(lo)+' and '+f(hi);
+    const wrong=UQAX(right,['between '+f(Math.min(S[n-2],S[n-1]))+' and '+f(Math.max(S[n-2],S[n-1]))+', and nowhere else','exactly '+f(b),'between 0.5 and '+f(lo),'above '+f(hi)],3); if(wrong.length<3) return null;
+    return {index:'q:22·chem.word['+n+']', a3:['22·chem.word',DASH,DASH], story:'A student adds the bracket 1 − ½ + ⅓ − ¼ + ⋯ shell by shell. After '+n+' terms the sum is '+f(a)+'; after '+(n+1)+', it is '+f(b)+'.', lines:[], ask:'What can be said of the whole total from these two sums alone?', right, opts:shuffle([right,...wrong]), lead:'', why:'Charged-row: the sum settles between any two partial sums in a row, since each new term overshoots back by less than the last. So the total, ln 2 ≈ 0.693, lies between '+f(lo)+' and '+f(hi)+'.'}; }},
+  {id:'22·chem.line',step:'22·chem',mode:'proof',label:'what the bracket licenses',open:()=>measured('22·chem'),make(){
+    return line28('22·chem.line',[
+      ['i1',[['\\text{the terms head to } 0','given'],['\\text{every order gives one total}','terms shrink']],2,1,'Only when the sizes’ sum settles; here it is 1 + ½ + ⅓ + ⋯.'],
+      ['i2',[['\\text{one atom in a charged row}','given'],['U = -\\tfrac{Ke^2}{a}\\ln 2','total']],2,1,'Each shell holds two atoms: the 2 stays.'],
+      ['i3',[['\\tfrac1{n+1} + \\cdots + \\tfrac1{2n} \\ge \\tfrac12','a fence'],['\\text{the total is } \\tfrac12','the fence']],2,1,'A fence is not a total; the areas close in on ln 2.'],
+      ['i4',[['\\text{a lopsided order of shells}','given'],['\\text{just as good a crystal}','same atoms']],2,1,'Its pieces’ charge passes every bound.'],
+      ['i5',[['1 \\text{ pull for } 4 \\text{ pushes}','an order'],['\\text{total } 0','block-order']],2,0,'ln 2 + ½ ln ¼ = ln 2 − ln 2 = 0.'],
+      ['i6',[['\\text{pieces of bounded charge}','neutral-piece'],['\\text{total } \\ln 2','every such order']],2,0,'The shell by shell total is the crystal’s energy.']],[]); }});
+/* ----- annex 22·comp What does forgetting cost: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·comp.work',step:'22·comp',mode:'work',label:'ways in bits, steps in a search',open:()=>measured('22·comp'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const n=[10,50,100,1000,1500,10000,65536,1000000][rnd(8)], c=Math.floor(Math.log2(n))+1, right=String(c), wrong=UQAX(right,[String(c-1),String(Math.ceil(n/2)),String(c+1),String(Math.round(Math.log10(n)))],3); if(wrong.length<3) return null;
+      return {index:'q:22·comp.work[h;'+n+']', lines:[['\\text{a sorted list of } '+SPAX(n).replace(/ /g,'\\,')+' \\text{ items}','given']], ask:'How many comparisons, at most, does a halving search make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Halve-to-nothing: at most ⌊log₂ n⌋ + 1. 2^'+(c-1)+' = '+SPAX(Math.pow(2,c-1))+' ≤ '+SPAX(n)+' < 2^'+c+', so '+(c-1)+' + 1 = '+c+'.'}; }
+    if(ask===1){ const a=1+rnd(8), b=1+rnd(8), right=(a+b)+' bits', wrong=UQAX(right,[Math.log2(Math.pow(2,a)+Math.pow(2,b)).toFixed(2).replace(/\.00$/,'')+' bits',(a*b)+' bits',SPAX(Math.pow(2,a)*Math.pow(2,b))+' bits',(Math.max(a,b))+' bits'],3); if(wrong.length<3) return null;
+      return {index:'q:22·comp.work[b;'+a+';'+b+']', lines:[['W_1 = '+Math.pow(2,a)+',\\ \\ W_2 = '+Math.pow(2,b),'two bodies, each its equally likely ways']], ask:'How many bits of ways do the two have, side by side?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ways-to-bits: side by side the ways multiply, '+Math.pow(2,a)+' · '+Math.pow(2,b)+' = '+SPAX(Math.pow(2,a+b))+', and their logs add: '+a+' + '+b+' = '+right+'.'}; }
+    const T=[77,150,273,300,310,373,600][rnd(7)], q=1.380649e-23*T*Math.LN2, right=DECAX(q*1e21,2)+' × 10⁻²¹ J', wrong=UQAX(right,[DECAX(1.380649e-23*T*1e21,2)+' × 10⁻²¹ J',DECAX(q*1e21/Math.LN2*Math.LN10,2)+' × 10⁻²¹ J',DECAX(q*2e21,2)+' × 10⁻²¹ J',DECAX(q*1e22,2)+' × 10⁻²¹ J'],3); if(wrong.length<3) return null;
+    return {index:'q:22·comp.work[e;'+T+']', lines:[['T = '+T+' \\text{ K}','the room'],['k = 1.380649 \\times 10^{-23} \\text{ J/K}','fixed']], ask:'What is the least heat sent into the room by wiping one bit?', right, opts:shuffle([right,...wrong]), lead:'', why:'Erasure: at least kT ln 2 = 1.380649 × 10⁻²³ · '+T+' · 0.6931 ≈ '+right+'.'}; }},
+  {id:'22·comp.word',step:'22·comp',mode:'word',label:'gates that forget',open:()=>measured('22·comp'),make(){
+    const G=[['NOT, which sends A to not A',0],['AND, which sends A and B to A · B',1],['OR, which sends A and B to A + B',1],['the gate that sends (A, B) to (A, A ⊕ B)',0],['the gate that sends (A, B, C) to (A, B, C ⊕ A · B)',0],['the gate that sends A and B to A ⊕ B',1],['the gate that sends (A, B) to (B, A)',0]][rnd(7)];
+    const Y='yes: it sends two input rows to one output, so it forgets', Nn='no: its rows go to different outputs and can be run backwards';
+    const right=G[1]?Y:Nn, wrong=[G[1]?Nn:Y,'yes: every gate pays kT ln 2 each time it is used','no: a gate that has an output never forgets'];
+    return {index:'q:22·comp.word['+G[0].length+']', a3:['22·comp.word',DASH,DASH], story:'A chip designer in Hillsboro wants a circuit whose heat could, in principle, be pushed below kT ln 2 a step. One gate in it is '+G[0]+'.', lines:[], ask:'Must that gate pay at least kT ln 2 of heat each time it runs?', right, opts:shuffle([right,...wrong]), lead:'', why:'Gate-loss: a gate pays only for the bits it forgets, and it forgets exactly when two input rows share an output. '+(G[1]?'Here they do.':'Here no two rows share one, so it forgets nothing.')}; }},
+  {id:'22·comp.line',step:'22·comp',mode:'proof',label:'what the ways license',open:()=>measured('22·comp'),make(){
+    return line28('22·comp.line',[
+      ['w1',[['\\text{two bodies side by side}','given'],['W = W_1 + W_2','ways add']],2,1,'Ways multiply; their logs add.'],
+      ['w2',[['N = 1000,\\ k = 100','a share'],['\\log_2\\tbinom{N}{k} = N h(0.1) \\text{ exactly}','share-count']],2,1,'Off by a few times ln N: 464.4 against 469.0.'],
+      ['w3',[['\\text{a NOT gate}','given'],['\\text{it pays } kT\\ln 2 \\text{ a use}','every gate pays']],2,1,'Only for the bits it forgets; NOT pays nothing.'],
+      ['w4',[['\\text{a gas fills its box}','seen'],['\\text{a force spreads it}','it spreads']],2,1,'The even splits outnumber the rest.'],
+      ['w5',[['\\text{a gas halved at fixed } T','a slow squeeze'],['\\text{heat out} = NkT\\ln 2','halved-room']],2,0,'The work is the area under NkT/v from V/2 to V.'],
+      ['w6',[['n = 10^6','a sorted list'],['\\text{at most } 20 \\text{ comparisons}','halve-to-nothing']],2,0,'2¹⁹ ≤ 10⁶ < 2²⁰: 19 + 1.']],[]); }});
+/* ----- annex 22·logi Why is the best route so hard to find: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·logi.work',step:'22·logi',mode:'work',label:'tours and floors',open:()=>measured('22·logi'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=3+rnd(8), v=FACAX(n)/2, right=SPAX(v), wrong=UQAX(right,[SPAX(FACAX(n)),SPAX(FACAX(n-1)/2),SPAX(FACAX(n-1)),SPAX(n*n)],3); if(wrong.length<3) return null;
+      return {index:'q:22·logi.work[t;'+n+']', lines:[['\\text{a depot and } '+n+' \\text{ stops}','a courier’s day']], ask:'How many different tours are there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tour-count: '+n+'! orders of the stops, each loop counted once each way round: '+SPAX(FACAX(n))+' ÷ 2 = '+right+'.'}; }
+    const k=5+rnd(3), L=[]; let s=0; for(let i=0;i<k;i++){ const a=1+rnd(5), b=a+rnd(4); L.push([a,b]); s+=a+b; }
+    const right=DECAX(s/2,1), wrong=UQAX(right,[String(s),DECAX(L.reduce((x,y)=>x+y[0],0),1),DECAX(L.reduce((x,y)=>x+y[1],0),1),DECAX(s/2+k,1)],3); if(wrong.length<3) return null;
+    return {index:'q:22·logi.work[f;'+L.map(x=>x.join('+')).join(',')+']', lines:[['\\text{each place’s two shortest links: } '+L.map(x=>x[0]+' + '+x[1]).join(',\\ '),'in blocks, the depot first']], ask:'What floor does the two-links technique put under every tour?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-links floor: every tour is at least half the sum of each place’s two shortest links: '+s+' ÷ 2 = '+right+' blocks.'}; }},
+  {id:'22·logi.word',step:'22·logi',mode:'word',label:'one more stop',open:()=>measured('22·logi'),make(){
+    const n=[10,12,14,16][rnd(4)], f=[10,100,1000,10000,1000000][rnd(5)]; let m=n, w=1; while(w*(m+1)<=f){ m++; w*=m; }
+    const right=String(m), wrong=UQAX(right,[String(m+2),String(m+1),String(n+Math.round(Math.log10(f))*2),String(2*n),String(m-1)],3); if(wrong.length<3) return null;
+    return {index:'q:22·logi.word['+n+';'+f+']', a3:['22·logi.word',DASH,DASH], story:'A delivery firm in Tacoma has a machine that tries every tour of '+n+' stops in one night. It buys a machine '+SPAX(f)+' times as fast.', lines:[], ask:'How many stops can the new machine try every tour of, in one night?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-more-stop: each extra stop multiplies the tours by the new number of stops. '+(m>n?Array.from({length:m-n},(_,i)=>n+1+i).join(' · ')+' = '+SPAX(w)+' fits in '+SPAX(f)+', and one more stop would not.':'Even '+(n+1)+' more times the work does not fit.')}; }},
+  {id:'22·logi.line',step:'22·logi',mode:'proof',label:'what the tours license',open:()=>measured('22·logi'),make(){
+    return line28('22·logi.line',[
+      ['t1',[['n \\text{ stops and a depot}','given'],['n! \\text{ tours}','orders']],2,1,'Each loop is counted once each way round: n!/2.'],
+      ['t2',[['\\text{a computer twice as fast}','given'],['\\text{twice the stops}','speed']],2,1,'One more stop multiplies the work by n + 1.'],
+      ['t3',[['\\text{the nearest stop each time}','nearest-stop'],['\\text{the shortest tour in all}','greedy']],2,1,'The far stops are left for last.'],
+      ['t4',[['\\text{the floor is } 28.5','two-links floor'],['\\text{a tour of } 28.5 \\text{ exists}','the floor']],2,1,'The floor is under the best; it need not be met.'],
+      ['t5',[['\\text{a nearest-stop tour of } 44,\\ \\text{floor } 28.5','given'],['\\text{at most } 1.54 \\text{ times the best}','two-links floor']],2,0,'44 ÷ 28.5 ≈ 1.54, without trying another tour.'],
+      ['t6',[['4 \\text{ stops}','given'],['12 \\text{ tours}','tour-count']],2,0,'4! ÷ 2 = 12.']],[]); }});
+/* ----- annex 22·nav Why the far north looks so big: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'22·nav.work',step:'22·nav',mode:'work',label:'stretches and strips',open:()=>measured('22·nav'),make(){
+    const P=[['Eureka',40.8],['Vancouver',49.3],['Juneau',58.3],['Anchorage',61.2],['San Diego',32.7],['Honolulu',21.3],['Fairbanks',64.8]][rnd(7)], c=Math.cos(DGAX(P[1])), ask=rnd(3);
+    if(ask===2){ const h=Math.log(1/c+Math.tan(DGAX(P[1]))), right=DECAX(h,3)+'R', wrong=UQAX(right,[DECAX(DGAX(P[1]),3)+'R',DECAX(Math.tan(DGAX(P[1])),3)+'R',DECAX(1/c,3)+'R',DECAX(Math.sin(DGAX(P[1])),3)+'R'],3); if(wrong.length<3) return null;
+      return {index:'q:22·nav.work[h;'+P[0]+']', lines:[['\\varphi = '+P[1]+'^\\circ','the latitude of '+P[0]]], ask:'At what height does the heading map draw it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Strip: the height is R ln(sec φ + tan φ) = R ln('+DECAX(1/c,3)+' + '+DECAX(Math.tan(DGAX(P[1])),3)+') ≈ '+right+'.'}; }
+    const A=ask===1, v=A?1/(c*c):1/c, right=DECAX(v,2), wrong=UQAX(right,[DECAX(A?1/c:1/(c*c),2),DECAX(c,2),DECAX(Math.tan(DGAX(P[1])),2),DECAX(1+P[1]/90,2)],3); if(wrong.length<3) return null;
+    return {index:'q:22·nav.work['+(A?'a':'s')+';'+P[0]+']', lines:[['\\varphi = '+P[1]+'^\\circ','the latitude of '+P[0]]], ask:A?'By how much does the heading map stretch areas there?':'By how much does every straight-grid map stretch east–west lengths there?', right, opts:shuffle([right,...wrong]), lead:'', why:A?'Shape-or-size: the heading map stretches east by sec φ and north by sec φ too, so areas by sec² φ = 1 ÷ '+DECAX(c*c,4)+' ≈ '+right+'.':'East-stretch: a circle of latitude has length 2πR cos φ but is drawn as wide as the equator: sec φ = 1 ÷ '+DECAX(c,4)+' ≈ '+right+'.'}; }},
+  {id:'22·nav.word',step:'22·nav',mode:'word',label:'sizes or headings, not both',open:()=>measured('22·nav'),make(){
+    const p=[30,45,60,70][rnd(4)], c=Math.cos(DGAX(p)), r=c*c, nm={30:'three quarters',45:'half',60:'a quarter',70:'about an eighth'}[p];
+    const right=nm+' of it', wrong=UQAX(right,['the same ground','four times it','twice it','three quarters of it','half of it','a quarter of it'],3);
+    return {index:'q:22·nav.word['+p+']', a3:['22·nav.word',DASH,DASH], story:'On a wall chart that keeps every heading, a ship’s officer draws two squares of the same size: one on the equator, one at '+p+'° N.', lines:[], ask:'How much ground does the square at '+p+'° N cover, beside the one on the equator?', right, opts:shuffle([right,...wrong]), lead:'', why:'Shape-or-size: the heading map stretches areas by sec² φ, so the same drawn area covers cos² '+p+'° ≈ '+DECAX(r,3)+' of the ground at the equator.'}; }},
+  {id:'22·nav.line',step:'22·nav',mode:'proof',label:'what the map licenses',open:()=>measured('22·nav'),make(){
+    return line28('22·nav.line',[
+      ['m1',[['\\text{a straight-grid map}','given'],['\\text{it stretches north by } \\sec\\varphi','east-stretch']],2,1,'Only the east stretch is forced; the north stretch is chosen.'],
+      ['m2',[['\\text{a straight line on the heading map}','drawn'],['\\text{the shortest route}','straight']],2,1,'It is a steady heading; the great circle bends toward the pole.'],
+      ['m3',[['\\text{the pole}','latitude 90°'],['\\text{drawn at } R\\ln(\\sec 90^\\circ + \\tan 90^\\circ)','strip']],2,1,'sec 90° is not defined; the height passes every bound.'],
+      ['m4',[['\\text{the strips get thin}','given'],['\\text{their total stays small}','thin strips']],2,1,'Thin strips can add past every bound, as 1 + ½ + ⅓ + ⋯ does.'],
+      ['m5',[['\\text{the same drawn area}','on the heading map'],['\\text{the same ground}','area']],2,1,'Only at the same latitude.'],
+      ['m6',[['\\varphi = 60^\\circ','given'],['\\text{east stretch } 2','east-stretch']],2,0,'sec 60° = 1 ÷ cos 60° = 2.']],[]); }});
+/* ----- annex 22·stat Why do rare events share one pattern: Work, Word Problems, Check Proofs ----- */
+const FACAX=n=>n<2?1:n*FACAX(n-1), POIAX=(l,k)=>Math.exp(-l)*Math.pow(l,k)/FACAX(k);
+QP.push({id:'22·stat.work',step:'22·stat',mode:'work',label:'many small chances, counted',open:()=>measured('22·stat'),make(){
+    const ask=rnd(2);
+    if(ask){ const l=[0.3,0.4,0.5,0.6,0.765,0.8][rnd(6)], N=[5,8,10,12,20][rnd(5)], L=l*N, right=DECAX(L,2), wrong=UQAX(right,[DECAX(l,3),DECAX(l+N,2),DECAX(L*L,2),DECAX(Math.exp(-L),4)],3); if(wrong.length<3) return null;
+      return {index:'q:22·stat.work[a;'+l+';'+N+']', lines:[['\\lambda = '+l+' \\text{ slips a page}','a tally'],[N+' \\text{ pages}','a chapter']], ask:'What count of slips does the chapter expect?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pages-add: rare counts that run apart add, and so do their expected counts: '+N+' · '+l+' = '+right+'. The chapter is clean with chance e^(−'+right+') ≈ '+DECAX(Math.exp(-L),4)+'.'}; }
+    const l=[0.5,0.8,1,1.5,2,2.4,3][rnd(7)], k=rnd(4), p=POIAX(l,k), right=DECAX(p,3), wrong=UQAX(right,[DECAX(Math.pow(l,k)/FACAX(k),3),DECAX(Math.exp(-l)*Math.pow(l,k),3),DECAX(POIAX(l,k+1),3),DECAX(1-p,3)],3); if(wrong.length<3) return null;
+    return {index:'q:22·stat.work[p;'+l+';'+k+']', lines:[['\\lambda = '+l,'the expected count'],['k = '+k,'hits']], ask:'What is the chance of exactly '+k+' hit'+(k===1?'':'s')+', to three places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rare-count: e^(−'+l+') · '+l+(k>1?'^'+k:'')+' ÷ '+k+'! = '+DECAX(Math.exp(-l),4)+' · '+DECAX(Math.pow(l,k),4)+' ÷ '+FACAX(k)+' ≈ '+right+'.'}; }},
+  {id:'22·stat.word',step:'22·stat',mode:'word',label:'a help line in Olympia',open:()=>measured('22·stat'),make(){
+    const r=[1.2,1.8,2.4,3,3.6][rnd(5)], s=[10,15,20,30][rnd(4)], l=r*s/60, F=rnd(2), p=F?Math.exp(-l):1-Math.exp(-l);
+    const right=DECAX(p,3), wrong=UQAX(right,[DECAX(1-p,3),DECAX(l,3),DECAX(Math.exp(-r),3),DECAX(POIAX(l,1),3)],3); if(wrong.length<3) return null;
+    return {index:'q:22·stat.word['+r+';'+s+';'+F+']', a3:['22·stat.word',DASH,DASH], story:'A help line in Olympia takes '+r+' calls a minute on average, from many callers who each call rarely and on their own.', lines:[], ask:F?'What is the chance that '+s+' seconds pass with no call, to three places?':'What is the chance of at least one call in '+s+' seconds, to three places?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pages-add, run the other way: '+s+' seconds expect '+r+' · '+s+' ÷ 60 = '+DECAX(l,3)+' calls. No call has chance e^(−'+DECAX(l,3)+') ≈ '+DECAX(Math.exp(-l),3)+(F?'.':', so at least one has chance '+right+'.')}; }},
+  {id:'22·stat.line',step:'22·stat',mode:'proof',label:'what the rare count licenses',open:()=>measured('22·stat'),make(){
+    return line28('22·stat.line',[
+      ['s1',[['\\lambda = 0.8','slips a page'],['\\text{most pages hold } 1 \\text{ slip}','the expected count']],2,1,'The most likely count is 0 whenever λ < 1.'],
+      ['s2',[['4 \\text{ letters, each at chance } \\tfrac12','given'],['e^{-2}\\tfrac{2^k}{k!}','rare-count']],2,1,'The law needs many chances, each small.'],
+      ['s3',[['\\text{mean} = \\text{variance}','a tally'],['\\text{a count of rare events}','mean-and-spread']],2,1,'That runs the technique backwards.'],
+      ['s4',[['\\text{slips that come in runs}','given'],['e^{-\\lambda}\\tfrac{\\lambda^k}{k!}','rare-count']],2,1,'The chances multiply only when the slips come apart.'],
+      ['s5',[['\\text{a rare count with } \\lambda = 0.765','a tally'],['\\text{its variance is } 0.765','mean-and-spread']],2,0,'A count of rare events has its variance equal to its mean.'],
+      ['s6',[['\\textstyle\\sum_k e^{-\\lambda}\\tfrac{\\lambda^k}{k!}','every count'],['1','count-total']],2,0,'e^(−λ) times e^λ.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
