@@ -19922,6 +19922,91 @@ QP.push({id:'41·phys.work',step:'41·phys',mode:'work',label:'pairs, cold and p
       ['q4',[['a = 14,\\ N = 15','given'],['\\text{the period gives factors}','period']],2,1,'r = 2 and 14 is N − 1: this a fails; pick another.'],
       ['q5',[['\\Phi = (|00\\rangle + |11\\rangle)/\\sqrt2','shared'],['\\text{no pair of states}','no-split']],2,0,'A pair would give |01⟩ or |10⟩ a share, or lose one of the two terms.'],
       ['q6',[['kT \\ll hf','a cold qubit'],['\\text{upper state with chance about } e^{-hf/kT}','cold-qubit']],2,0,'The energy-share technique on two states.']],[]); }});
+/* ----- annex 42·chem How many ways can atoms join: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·chem.work',step:'42·chem',mode:'work',label:'trees of carbon',open:()=>measured('42·chem'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const R=[[6,[2,1,1,-1,-1,-2],6,'benzene: a ring of six'],[4,[2,0,0,-2],4,'a ring of four']][rnd(2)], L=R[1].slice().sort((a,b)=>b-a); let s=0; for(let i=0;i<R[2]/2;i++) s+=2*L[i]; const pairs=R[2]/2*2, g=s-pairs, right=g+' units of β', wrong=UQAX(right,[s+' units of β',pairs+' units of β',(g+2)+' units of β',(-g-1)+' units of β'],3).map(x=>x.replace('-','−')); if(wrong.length<3) return null;
+      return {index:'q:42·chem.work[r;'+R[0]+']', lines:[['\\text{stretches of the grid: } '+R[1].join(', ').replace(/-/g,'−'),R[3]],[R[2]+' \\text{ spread electrons}','two to a state, lowest first']], ask:'How much does the ring gain over '+(R[2]/2)+' separate pairs, each pair at stretch 1?', right, opts:shuffle([right,...wrong]), lead:'', why:'Graph-energy: filled stretches total '+s+'; separate pairs give '+pairs+'; the gain is '+g+' units of β.'}; }
+    if(ask===1){ const W=[['pentane, a chain of five',20,36.1],['isopentane, a chain of four with a branch',18,27.7],['neopentane, one carbon with four',16,9.5]], i=rnd(3), j=(i+1+rnd(2))%3, hi=W[i][1]>W[j][1]?i:j;
+      const right=W[hi][0], wrong=[W[hi===i?j:i][0],'they boil at the same point','it cannot be told from the trees'];
+      return {index:'q:42·chem.work[w;'+i+';'+j+']', lines:[['\\text{distance totals } '+W[i][1]+' \\text{ and } '+W[j][1],'two kinds of C₅H₁₂']], ask:'Which boils higher: '+W[i][0]+', or '+W[j][0]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'The distance total sorts the pentanes: 20, 18, 16 against 36.1, 27.7, 9.5 °C. The larger total, less branched, boils higher.'}; }
+    const C=[1,1,1,2,3,5,9,18,35,75], n=4+rnd(7), right=String(C[n-1]), wrong=UQAX(right,[Math.pow(n,n-2).toLocaleString('en').replace(/,/g,' '),String(C[n-2]),String(C[n]||C[n-1]*2+5),String(n-2)],3); if(wrong.length<3) return null;
+    return {index:'q:42·chem.work[n;'+n+']', lines:[['C_{'+n+'}H_{'+(2*n+2)+'}','all bonds single']], ask:'How many kinds of molecule have that formula?', right, opts:shuffle([right,...wrong]), lead:'', why:'Alkane-tree: the kinds are the carbon trees on '+n+' dots with at most four links each: '+right+'. '+n+'^'+(n-2)+' counts trees on named dots, not shapes.'}; }},
+  {id:'42·chem.word',step:'42·chem',mode:'word',label:'the camp stove',open:()=>measured('42·chem'),make(){
+    const F=rnd(2);
+    const right=F?'they have different graphs: a chain of four, and three carbons round a fourth':'it is a tree, with '+'n − 1 carbon links', wrong=F?['the same graph drawn differently','the same graph with different hydrogens','different numbers of atoms']:['it has one ring','it has a double bond','it has n links'];
+    return {index:'q:42·chem.word['+F+']', a3:['42·chem.word',DASH,DASH], story:F?'Two gases in camp stove canisters are both C₄H₁₀, and one boils at a lower point than the other.':'A molecule in one piece has n carbons and 2n + 2 hydrogens, all bonds single.', lines:[], ask:F?'How do they differ?':'What is its graph of atoms?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Isomers have different graphs; one graph drawn two ways is one molecule.':'Alkane-tree: count the links, 4n + 2n + 2 ends, halved: 3n + 1 links on 3n + 2 dots, one fewer than the dots, so a tree.'}; }},
+  {id:'42·chem.line',step:'42·chem',mode:'proof',label:'what the graph licenses',open:()=>measured('42·chem'),make(){
+    return line28('42·chem.line',[
+      ['a1',[['\\text{two isomers}','given'],['\\text{the same graph drawn differently}','drawings']],2,1,'They have different graphs.'],
+      ['a2',[['\\text{six carbons}','hexanes'],['6^4 \\text{ kinds}','leaf-code']],2,1,'That counts trees on six named dots with any links.'],
+      ['a3',[['\\text{the distance total}','given'],['\\text{the boiling point exactly}','fit']],2,1,'It sorts the pentanes; the fit has a spread of about a degree.'],
+      ['a4',[['\\text{a stretch } \\lambda \\text{ of the grid}','graph'],['\\text{the energy is } \\lambda','energies']],2,1,'It is α + λβ, and β is negative.'],
+      ['a5',[['C_nH_{2n+2},\\ \\text{one piece}','given'],['\\text{a tree}','alkane-tree']],2,0,'3n + 1 links on 3n + 2 dots.'],
+      ['a6',[['\\text{benzene}','ring of six'],['\\text{gains 2 units over three pairs}','graph-energy']],2,0,'2 · 2 + 4 · 1 = 8 against 6.']],[]); }});
+/* ----- annex 42·econ Can everyone be paired so no two would rather swap: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·econ.work',step:'42·econ',mode:'work',label:'proposals and holding',open:()=>measured('42·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=3+rnd(8), right=String(n*n-n+1), wrong=UQAX(right,[String(n*n),String(n),String(n*(n+1)/2),String(n*n-1)],3); if(wrong.length<3) return null;
+      return {index:'q:42·econ.work[n;'+n+']', lines:[[n+' \\text{ doctors},\\ '+n+' \\text{ hospitals}','doctors propose']], ask:'At most how many proposals does the run take?', right, opts:shuffle([right,...wrong]), lead:'', why:'Proposal-count: each doctor is refused at most n − 1 times, and the run stops when the last hospital gets its first offer: n² − n + 1 = '+right+'.'}; }
+    const D=['Ana','Ben','Cai'], H=['North','Lake','Park'], dp=D.map(()=>shuffle([0,1,2])), hp=H.map(()=>shuffle([0,1,2]));
+    const held=[-1,-1,-1], nxt=[0,0,0]; let free=[0,1,2], guard=0;
+    while(free.length&&guard++<20){ const d=free.shift(), h=dp[d][nxt[d]++]; if(held[h]<0) held[h]=d; else if(hp[h].indexOf(d)<hp[h].indexOf(held[h])){ free.push(held[h]); held[h]=d; } else free.push(d); }
+    const who=rnd(3), mine=held.indexOf(who), right=H[mine], wrong=H.filter(x=>x!==right).concat(['no hospital']);
+    const pr=(L,names)=>L.map(x=>names[x]).join(' > ');
+    return {index:'q:42·econ.work[g;'+dp.map(x=>x.join('')).join('')+';'+hp.map(x=>x.join('')).join('')+';'+who+']', lines:[[D.map((d,i)=>'\\text{'+d+': '+pr(dp[i],H)+'}').join(',\\ '),'doctors’ lists'],[H.map((h,i)=>'\\text{'+h+': '+pr(hp[i],D)+'}').join(',\\ '),'hospitals’ lists']], ask:'Doctors propose, and each hospital holds its best offer so far. Where does '+D[who]+' end?', right, opts:shuffle([right,...wrong]), lead:'', why:'Run the proposals: the end pairs '+held.map((d,h)=>D[d]+' with '+H[h]).join(', ')+'. It holds, and it is the best that holds for each doctor.'}; }},
+  {id:'42·econ.word',step:'42·econ',mode:'word',label:'the match day',open:()=>measured('42·econ'),make(){
+    const F=rnd(3), Q=[['A medical school pairs doctors with hospitals by a run in which doctors propose.','Is the run fair to both sides?','no: best for the doctors, worst for the hospitals, of all pairings that hold'],['Four students must split into two pairs of roommates, each ranking the other three.','Must a pairing that holds exist?','no: with one side, there may be none'],['A pairing holds: no doctor and hospital both prefer each other to their partners.','Does everyone get a first choice?','no: holding is about pairs, not about joy']];
+    const wrong=[['yes: it is fair to both','yes, if the lists are honest','no: it is worst for the doctors'],['yes: one always exists','yes, by the proposal run','no: four is too few'],['yes: holding means first choices','yes, for the proposers','no: no one does']][F];
+    return {index:'q:42·econ.word['+F+']', a3:['42·econ.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Best-for-proposers: no doctor is ever refused by a hospital possible for them.','Two sides are needed; the four roommates can have none.','In the example one gets a second choice, and the pairing still holds.'][F]}; }},
+  {id:'42·econ.line',step:'42·econ',mode:'proof',label:'what the pairing licenses',open:()=>measured('42·econ'),make(){
+    return line28('42·econ.line',[
+      ['m1',[['\\text{a pairing that holds}','given'],['\\text{everyone has a first choice}','joy']],2,1,'Holding is about pairs, not about joy.'],
+      ['m2',[['\\text{the proposal run}','given'],['\\text{fair to both sides}','fair']],2,1,'Best for proposers, worst for choosers.'],
+      ['m3',[['\\text{a group of doctors and hospitals}','given'],['\\text{only one pairing holds}','one']],2,1,'The example has two.'],
+      ['m4',[['\\text{any group that pairs off}','one side'],['\\text{a pairing that holds exists}','exists']],2,1,'Two sides are needed.'],
+      ['m5',[['\\text{the run ends}','given'],['\\text{the pairing holds}','no-swap']],2,0,'A doctor who prefers a hospital proposed there first and was refused for someone it prefers.'],
+      ['m6',[['n \\text{ doctors, } n \\text{ hospitals}','given'],['\\text{at most } n^2 - n + 1 \\text{ proposals}','proposal-count']],2,0,'Each doctor is refused at most n − 1 times.']],[]); }});
+/* ----- annex 42·eng What holds cloth and rope together: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·eng.work',step:'42·eng',mode:'work',label:'faces, crimp and grip',open:()=>measured('42·eng'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const c=3+rnd(10), right=String(c+2), wrong=UQAX(right,[String(c),String(2*c),String(c+1),String(4*c)],3); if(wrong.length<3) return null;
+      return {index:'q:42·eng.work[f;'+c+']', lines:[['\\text{a knot drawing in one piece}',c+' \\text{ crossings}']], ask:'How many faces does it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Crossing-faces: c dots, 2c links (four ends at each), and dots − links + faces = 2: '+c+' − '+(2*c)+' + F = 2, F = '+right+'.'}; }
+    if(ask===1){ const d=[0.1,0.2,0.3,0.5][rnd(4)], v=Math.sqrt(1+d*d)-1, right=DECAX(100*v,2)+'%', wrong=UQAX(right,[DECAX(100*d,1)+'%',DECAX(100*d*d,2)+'%',DECAX(100*Math.sqrt(d),1)+'%',DECAX(50*d,1)+'%'],3); if(wrong.length<3) return null;
+      return {index:'q:42·eng.work[c;'+d+']', lines:[['d/p = '+d,'a thread’s rise over its run, in a weave']], ask:'By how much can the cloth stretch along it before the yarn is pulled?', right, opts:shuffle([right,...wrong]), lead:'', why:'Crimp: √(1 + (d/p)²) − 1 = √'+DECAX(1+d*d,4)+' − 1 ≈ '+right+'.'}; }
+    const m=[0.2,0.3,0.5][rnd(3)], t=[0.5,1,2,3][rnd(4)], v=Math.exp(2*Math.PI*m*t), right=DECAX(v,1)+' times', wrong=UQAX(right,[DECAX(t*Math.exp(2*Math.PI*m),1)+' times',DECAX(1+2*Math.PI*m*t,1)+' times',DECAX(Math.exp(m*t),2)+' times',DECAX(2*Math.PI*m*t,2)+' times'],3); if(wrong.length<3) return null;
+    return {index:'q:42·eng.work[g;'+m+';'+t+']', lines:[['\\mu = '+m,'rope on a post'],[t+' \\text{ turn'+(t===1?'':'s')+'}','θ = 2π × turns']], ask:'How many times the pull can it hold?', right, opts:shuffle([right,...wrong]), lead:'', why:'Turn-grip: e^(μθ) = e^('+m+' · 2π · '+t+') ≈ '+right+'. Each turn multiplies; turns do not add.'}; }},
+  {id:'42·eng.word',step:'42·eng',mode:'word',label:'the dock line',open:()=>measured('42·eng'),make(){
+    const F=rnd(3), Q=[['A deckhand takes a second turn of line round a bollard, μ = 0.3.','Does two turns hold twice what one turn holds?','no: each turn multiplies the grip, by e^(2π · 0.3) ≈ 6.6'],['A weaver lays one warp over every weft.','Does the cloth hang together, since that thread crosses every other?','no: the warp lifts off; no arrow comes back up to it'],['A plait ends with every strand back where it started.','Has the plait come undone?','no: the shuffle forgets over and under']];
+    const wrong=[['yes: twice the rope, twice the grip','yes, if it is tight','no: a second turn adds nothing'],['yes: it crosses every thread','yes, if pulled tight','no: no weave hangs together'],['yes: back in place means undone','yes, if pulled straight','no: it is a knot']][F];
+    return {index:'q:42·eng.word['+F+']', a3:['42·eng.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Turn-grip: T′ = μT gives T₀e^(μθ).','Hangs-together: every thread must be reached from every other along arrows.','Strand-shuffle: σᵢ gives the same swap over or under; the braid is not the do-nothing braid.'][F]}; }},
+  {id:'42·eng.line',step:'42·eng',mode:'proof',label:'what the weave licenses',open:()=>measured('42·eng'),make(){
+    return line28('42·eng.line',[
+      ['k1',[['\\text{the strands are back in their places}','shuffle'],['\\text{the plait has come undone}','undone']],2,1,'The shuffle forgets over and under.'],
+      ['k2',[['\\text{every thread crosses some other}','weave'],['\\text{the cloth hangs together}','crossing']],2,1,'A warp over every weft crosses all of them and lifts off.'],
+      ['k3',[['\\text{two turns}','given'],['\\text{twice what one turn holds}','grip']],2,1,'The grip multiplies by e^(2πμ) each turn.'],
+      ['k4',[['\\text{a cloth}','given'],['\\text{it stretches as far as its yarn}','stretch']],2,1,'It stretches by its crimp, or its loops’ change of shape, first.'],
+      ['k5',[['\\text{a knot drawing, } c \\text{ crossings}','one piece'],['c + 2 \\text{ faces}','crossing-faces']],2,0,'c − 2c + F = 2.'],
+      ['k6',[['\\text{a braid after a braid}','given'],['\\text{the shuffle after the shuffle}','strand-shuffle']],2,0,'Follow each strand through both.']],[]); }});
+/* ----- annex 42·logi What is the cheapest way to ship: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·logi.work',step:'42·logi',mode:'work',label:'chains and cuts',open:()=>measured('42·logi'),make(){
+    const ask=rnd(2), a=1+rnd(5), b=2+rnd(7), c=2+rnd(7), d=1+rnd(5); if(b===c) return null;
+    if(ask){ const right=String(Math.abs(b-c))+' days, on '+(b<c?'B':'C'), wrong=UQAX(right,['0 days, on '+(b<c?'B':'C'),String(Math.abs(b-c))+' days, on '+(b<c?'C':'B'),String(b+c)+' days, on '+(b<c?'B':'C')],3); if(wrong.length<3) return null;
+      return {index:'q:42·logi.work[s;'+a+';'+b+';'+c+';'+d+']', lines:[['A\\ '+a+',\\ B\\ '+b+',\\ C\\ '+c+',\\ D\\ '+d+' \\text{ days}','tasks'],['A \\text{ before } B, C;\\ \\ B, C \\text{ before } D','']], ask:'Which task has slack, and how much?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slack-time: the longest chain is A, '+(b>c?'B':'C')+', D; the other middle task can start up to '+Math.abs(b-c)+' days late without moving the end.'}; }
+    const v=a+Math.max(b,c)+d, right=v+' days', wrong=UQAX(right,[(a+b+c+d)+' days',(a+Math.min(b,c)+d)+' days',Math.max(a,b,c,d)+' days',(a+(b+c)/2+d)+' days'],3); if(wrong.length<3) return null;
+    return {index:'q:42·logi.work[l;'+a+';'+b+';'+c+';'+d+']', lines:[['A\\ '+a+',\\ B\\ '+b+',\\ C\\ '+c+',\\ D\\ '+d+' \\text{ days}','tasks'],['A \\text{ before } B, C;\\ \\ B, C \\text{ before } D','']], ask:'How long does the project take?', right, opts:shuffle([right,...wrong]), lead:'', why:'A project takes as long as its longest chain: '+a+' + '+Math.max(b,c)+' + '+d+' = '+right+'.'}; }},
+  {id:'42·logi.word',step:'42·logi',mode:'word',label:'roads, ports and prices',open:()=>measured('42·logi'),make(){
+    const F=rnd(3), Q=[['A shipper widens a road that some smallest cut of the network leaves untouched.','Does the network carry more?','no: widening links outside a smallest cut cannot raise the largest flow'],['A planner sends every city its cheapest port’s containers.','Is that the cheapest plan?','not always: a port’s supply can bind, and others must cover'],['A company has three warehouses and wants every town’s distance to the nearest one.','How many nearest-first runs does it need?','one: from a new start linked at length 0 to every warehouse']];
+    const wrong=[['yes: any wider road helps','yes, if it is busy','no: widening never helps'],['yes: always','yes, if costs are whole numbers','no: never'],['three, one from each warehouse','one from each town','none: it cannot be done']][F];
+    return {index:'q:42·logi.word['+F+']', a3:['42·logi.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Untouched-cut: the most a network carries is its smallest cut.','Bend’s cheapest port is Seattle, which has only 300: supplies bind.','Shared-start: one run from the new dot gives every distance at once.'][F]}; }},
+  {id:'42·logi.line',step:'42·logi',mode:'proof',label:'what the network licenses',open:()=>measured('42·logi'),make(){
+    return line28('42·logi.line',[
+      ['s1',[['\\text{the shortest road from Seattle to Bend}','given'],['\\text{it starts on the shortest link out of Seattle}','first link']],2,1,'The technique settles whole paths, not first links.'],
+      ['s2',[['\\text{any road widened}','given'],['\\text{the network carries more}','widen']],2,1,'Only links of every smallest cut.'],
+      ['s3',[['\\text{each city takes its cheapest port}','given'],['\\text{the cheapest plan}','greedy']],2,1,'Supplies bind.'],
+      ['s4',[['\\text{the tasks total 21 days}','given'],['\\text{the project takes 21 days}','sum']],2,1,'It is the longest chain: 15.'],
+      ['s5',[['p_j - q_i \\le \\text{cost on every route, equal where used}','prices'],['\\text{the plan is cheapest}','route-price']],2,0,'Prices at the ports prove it.'],
+      ['s6',[['\\text{a corner of the shipping plans}','given'],['\\text{the routes in use hold no cycle}','tree-corner']],2,0,'So whole supplies give whole shipments.']],[]); }});
 /* ===== Annex pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
