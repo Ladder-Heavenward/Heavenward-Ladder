@@ -177,6 +177,15 @@ addEventListener('storage',e=>{ if(e.key===RK||e.key===null){ raw=null; stale=tr
   const mv=[]; ks.forEach(k=>{ if(!/^(marks:|rand:|sq:)/.test(k)&&k!=='ladder:lastFooting'&&k!=='ladder:furthest') return; const v=LS.getItem(k); if(v==null) return; const nk=/^sq:/.test(k)?tg(k):k, nv=tg(v); if(nk!==k||nv!==v) mv.push([k,nk,nv]); });
   mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
   LS.setItem(F,String(Date.now())); }catch(e){} })();
+/* 0.67.38 knot footing tick move (Andrew passed 2026-11-15 17:06Z): new 34m4 A Table of Prime Knots came in before Moves, so
+   34m4 -> 34m5 (question 34m4.1 -> 34m5.1, standing 34m.5.k -> 34m.6.k), once, under ladder:mvFeet3. */
+(function(){ const F='ladder:mvFeet3'; try{ if(LS.getItem(F)!=null) return; const M={"34m4":"34m5","34m4.1":"34m5.1","34m.5.1":"34m.6.1","34m.5.2":"34m.6.2","34m.5.3":"34m.6.3","34m.5.4":"34m.6.4","34m.5.5":"34m.6.5"};
+  const K=Object.keys(M).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.]/g,'\\.'));
+  const RE=new RegExp('(?<![A-Za-z0-9_·.])('+K.join('|')+')(?![A-Za-z0-9_·])','g'), tg=v=>String(v).replace(RE,(x,k)=>M[k]);
+  const ks=[]; for(let i=0;i<LS.length;i++){ const k=LS.key(i); if(k) ks.push(k); }
+  const mv=[]; ks.forEach(k=>{ if(!/^(marks:|rand:|sq:)/.test(k)&&k!=='ladder:lastFooting'&&k!=='ladder:furthest') return; const v=LS.getItem(k); if(v==null) return; const nk=/^sq:/.test(k)?tg(k):k, nv=tg(v); if(nk!==k||nv!==v) mv.push([k,nk,nv]); });
+  mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
+  LS.setItem(F,String(Date.now())); }catch(e){} })();
 
 (function(){
 'use strict';
@@ -3092,16 +3101,16 @@ function pos(stem){ const O=order(); if(!O||!stem) return -1; stem=String(stem).
 let fpC=null;
 function furthestPos(){ const hereK=(window.ladderPage&&ladderPage())||''; if(fpC&&fpC.v===window.__lsVer&&fpC.h===hereK) return fpC.b; const b=furthestPos0(); fpC={v:window.__lsVer,h:hereK,b}; return b; }
 function furthestPos0(){ let best=-1; const f=J('ladder:furthest',null); if(f&&f.page) best=Math.max(best,pos(f.page));
-  /* allunlock (Andrew 2026-11-14 17:08Z): every unlock reads this one reach, so testing in, a stick pass, a passed page,
-     footings read (steps:) and a rung opened (open:rNN) all count, as well as the furthest footing */
-  const P=J('pages:done',{}); for(const s in P) if(P[s]&&P[s].v){ const o=s.match(/^open:(r\d\d)$/); best=Math.max(best,pos(o?o[1]:s)); }
-  /* a step you measured into counts as reached */
-  try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i); let m=k&&k.match(/^cert:(.+)$/); if(m){ const t=m[1].match(/^in:(r\d\d)$/); best=Math.max(best,pos(t?t[1]:m[1])); continue; }
-    m=k&&k.match(/^steps:(.+)$/); if(m) best=Math.max(best,pos(m[1])); } }catch(e){} /* annexunlock: tested in to rung NN reaches rung NN */
-  const here=(window.ladderPage&&ladderPage())||''; best=Math.max(best,pos(here)); return best; }
+  /* allunlock (Andrew 2026-11-14 17:08Z): testing in, a stick pass, a passed page, footings read and a rung opened each count.
+     reachfix (Andrew 2026-11-15 14:10Z): only the furthest footing and a test-in move the reach along the ladder; a passed page, footings read,
+     a stick pass, a rung opened or the page you are on reach that step alone (sameStep), so reading rung 8 no longer opens rungs 3-7 */
+  try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i); const m=k&&k.match(/^cert:in:(r\d\d)$/); if(m) best=Math.max(best,pos(m[1])); } }catch(e){} /* annexunlock: tested in to rung NN reaches rung NN */
+  return best; }
+function sameStep(stem){ const P=J('pages:done',{}); if((P[stem]&&P[stem].v)||certOf(stem)) return true; const m=String(stem).match(/^r(\d\d)/); if(m&&P['open:r'+m[1]]&&P['open:r'+m[1]].v&&stem==='r'+m[1]) return true;
+  try{ if(LS.getItem('steps:'+stem)!=null) return true; }catch(e){} const here=(window.ladderPage&&ladderPage())||''; return !!here&&here.replace(/\.html$/,'')===stem; }
 /* allunlock: a step is reached once the reach is at it, and passed once the reach is beyond it (or it is passed or measured itself) */
 const certOf=s=>{ try{ return !!JSON.parse(LS.getItem('cert:'+s)||'null'); }catch(e){ return false; } };
-function reachedStep(stem){ if(!stem) return false; const P=J('pages:done',{}); if(P[stem]&&P[stem].v) return true; if(certOf(stem)) return true; const p=pos(stem); return p>=0&&furthestPos()>=p; }
+function reachedStep(stem){ if(!stem) return false; if(sameStep(stem)) return true; const p=pos(stem); return p>=0&&furthestPos()>=p; }
 function passedStep(stem){ if(!stem) return false; const P=J('pages:done',{}); if(P[stem]&&P[stem].v) return true; if(certOf(stem)) return true; const p=pos(stem); return p>=0&&furthestPos()>p; }
 function firstAnnex(){ const O=order(); if(!O) return null; let b=null; for(const s in O) if(SUBJ.test(s)&&(b==null||O[s]<O[b])) b=s; return b; }
 function reached(stem){ if(!stem) return true; const p=pos(stem); if(p<0) return true; return furthestPos()>=p; }
@@ -3969,3 +3978,5 @@ function cwSync(){ const X=get('cards:x',{}), s=stem(), c=CM()[s];
 new MutationObserver(ms=>{ for(const m of ms) for(const n of m.addedNodes){ if(n.nodeType===1&&(n.classList.contains('aq-cwdone')||(n.querySelector&&n.querySelector('.aq-cwdone')))){ setTimeout(cwSync,1700); return; } } }).observe(document.documentElement,{childList:true,subtree:true});
 window.LadderStepUnlocks={mark,fill,cwSync};
 })();
+
+/* blankdraws r3 applied */
