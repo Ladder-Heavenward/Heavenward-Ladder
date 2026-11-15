@@ -1464,3 +1464,65 @@ body.fv.sw .sayback.sw-on .givens .katex-display,body.fv.sw .sayback.sw-on .give
 :root{--paper:#ebeff5;--card:#f6f8fb;--sand:#dce2ea;--grid:#cdd5df;--muted:#6c747f;--ink:#1f262d}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#141b24;--card:#1c2530;--sand:#242d38;--grid:#323c48;--muted:#97a0aa;--ink:#e3e7ee}}
 :root[data-theme="dark"]{--paper:#141b24;--card:#1c2530;--sand:#242d38;--grid:#323c48;--muted:#97a0aa;--ink:#e3e7ee}
+
+/* btnunify (Andrew 2026-11-15 07:09Z): one button design in both modes. Every text button uses the same font, size and weight,
+   the same height, a pill shape and the same border width. Filled buttons keep their tool colours; the text on each fill is
+   white or deep navy, whichever reads better (at least 4.5:1). Choice buttons are outlined pills. The toolbox buttons sit two
+   to a row at equal widths, with Share, Settings and Close on a row of their own. */
+:root{--btn-fs:.9rem;--btn-fw:600;--btn-h:40px;--btn-bw:1.5px;--btn-dark:#141b24}
+
+/* the shared shape */
+#desk .dtabs button,#desk .dtabs .dshare,#annexfab,#cellarfab,.openbtn,.certbtn,#agreebox .agyes,
+#stick .sk-tools.aq-bar .aq-b,#stick .sk-tools button,#desk .dtrio button,#desk .dtheme button,#desk .dinner button,
+#desk .dlink.recx,#desk .dlink.recopen,#desk .dlink.recdel,
+.fvnav,.rungs>.foldall button,#mk-tray .mk-copy,#mk-tray .mk-clear{
+  font-family:var(--mono)!important;font-size:var(--btn-fs)!important;font-weight:var(--btn-fw)!important;letter-spacing:.01em!important;
+  line-height:1.2!important;min-height:var(--btn-h)!important;padding:0 18px!important;border-radius:999px!important;
+  border-width:var(--btn-bw)!important;border-style:solid!important;box-sizing:border-box!important;text-align:center;
+  justify-content:center;align-items:center;text-decoration:none!important}
+#desk .dtabs .dshare{display:inline-flex}
+.fvnav{min-height:36px!important}
+
+/* toolbox row: two tools to a row at equal widths, then Share, Settings and Close */
+#desk .dtabs{gap:8px!important;justify-content:center!important;padding:12px!important}
+#desk .dtabs button:not(.dgear):not(.x):not([data-p="rec"]){flex:1 1 calc(50% - 4px)!important}
+#desk .dtabs .dshare{flex:1 1 auto!important;order:7!important;margin:0!important}
+#desk .dtabs button[data-p="rec"],#desk .dtabs .dgear,#desk .dtabs .x{flex:0 0 var(--btn-h)!important;width:var(--btn-h)!important;padding:0!important;margin:0!important;font-size:1.1rem!important;line-height:1!important}
+#desk .dtabs button.on{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink)!important}
+
+/* fills, light mode (white text where it reads at 4.5:1 or better, else deep navy) */
+#desk .dtabs button.dheights{background:#7b1e2b!important;border-color:#7b1e2b!important;color:#fff!important}
+#desk .dtabs button.dstand{background:#7a4a8c!important;border-color:#7a4a8c!important;color:#fff!important}
+#desk .dtabs button[data-p="moves"]{background:#2f6fd6!important;border-color:#2f6fd6!important;color:#fff!important}
+#desk .dtabs button[data-p="rand"]{background:#1d3461!important;border-color:#1d3461!important;color:#fff!important}
+#desk .dtabs button[data-p="base"],#cellarfab,#desk .dtabs button[data-p="rec"]{background:#f2c935!important;border-color:#d9ae1f!important;color:var(--btn-dark)!important}
+#desk .dtabs .dshare,#annexfab{background:#4f7a3a!important;border-color:#4f7a3a!important;color:#fff!important}
+#desk .dtabs .x{background:#b3261e!important;border-color:#b3261e!important;color:#fff!important}
+.certbtn{color:var(--btn-dark)!important}
+#stick .sk-tools.aq-bar .aq-b-un{--c:#2a62bf}
+#stick .sk-tools.aq-bar .aq-b-ms{--c:#866419}
+
+/* outlined choice buttons */
+#desk .dtrio button,#desk .dtheme button,#desk .dinner button,#stick .sk-tools button:not(.aq-b):not(.sk-cellar),.rungs>.foldall button,#mk-tray .mk-copy,#mk-tray .mk-clear{background:transparent!important;border-color:var(--grid)!important;color:var(--ink)!important}
+#desk .dtrio button.on{background:#2f6fd6!important;border-color:#2f6fd6!important;color:#fff!important}
+#desk .dtheme button.on{background:var(--ink)!important;border-color:var(--ink)!important;color:var(--paper)!important}
+#desk .dlink.recx,#desk .dlink.recopen{background:transparent!important;border-color:var(--ember)!important;color:var(--ember)!important;width:100%;max-width:320px;margin:0 0 8px!important}
+#desk .dlink.recdel{background:transparent!important;border-color:var(--wrong,#b3261e)!important;color:var(--wrong,#b3261e)!important;width:100%;max-width:320px;margin:0 0 8px!important}
+
+/* dark mode: light fills take deep navy text */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) #desk .dtabs button.dstand{background:#b98bcc!important;border-color:#b98bcc!important;color:var(--btn-dark)!important}
+  :root:not([data-theme="light"]) #desk .dtabs button[data-p="moves"],:root:not([data-theme="light"]) #desk .dtrio button.on{background:#6fa8ff!important;border-color:#6fa8ff!important;color:var(--btn-dark)!important}
+  :root:not([data-theme="light"]) #desk .dtabs button[data-p="rand"]{background:#2b4a8c!important;border-color:#2b4a8c!important;color:#fff!important}
+  :root:not([data-theme="light"]) #desk .dtabs .dshare,:root:not([data-theme="light"]) #annexfab{background:#8fbf72!important;border-color:#8fbf72!important;color:var(--btn-dark)!important}
+  :root:not([data-theme="light"]) .openbtn,:root:not([data-theme="light"]) #agreebox .agyes{color:var(--btn-dark)!important}
+  :root:not([data-theme="light"]) #stick .sk-tools.aq-bar .aq-b.on{color:var(--btn-dark)!important}
+  :root:not([data-theme="light"]) #stick .sk-tools.aq-bar .aq-b-un{--c:#6fa8ff}:root:not([data-theme="light"]) #stick .sk-tools.aq-bar .aq-b-ms{--c:var(--gold)}}
+:root[data-theme="dark"] #desk .dtabs button.dstand{background:#b98bcc!important;border-color:#b98bcc!important;color:var(--btn-dark)!important}
+:root[data-theme="dark"] #desk .dtabs button[data-p="moves"],:root[data-theme="dark"] #desk .dtrio button.on{background:#6fa8ff!important;border-color:#6fa8ff!important;color:var(--btn-dark)!important}
+:root[data-theme="dark"] #desk .dtabs button[data-p="rand"]{background:#2b4a8c!important;border-color:#2b4a8c!important;color:#fff!important}
+:root[data-theme="dark"] #desk .dtabs .dshare,:root[data-theme="dark"] #annexfab{background:#8fbf72!important;border-color:#8fbf72!important;color:var(--btn-dark)!important}
+:root[data-theme="dark"] .openbtn,:root[data-theme="dark"] #agreebox .agyes{color:var(--btn-dark)!important}
+:root[data-theme="dark"] #stick .sk-tools.aq-bar .aq-b.on{color:var(--btn-dark)!important}
+:root[data-theme="dark"] #stick .sk-tools.aq-bar .aq-b-un{--c:#6fa8ff}:root[data-theme="dark"] #stick .sk-tools.aq-bar .aq-b-ms{--c:var(--gold)}
+#mk-tray .mk-copy,#mk-tray .mk-clear{height:var(--btn-h)!important;align-self:center!important}
