@@ -2569,15 +2569,18 @@ function stickSection(scope,key){
   if(scope==='rung'){ const R=rungOf(key); return R?{steps:R.core.concat(R.annex).map(stickTag),norm:'r'+key}:null; }
   if(scope==='floor'){ const F=floorOf(key); if(!F) return null; const st=[]; F.rungs.forEach(r=>{ const R=rungOf(r); if(R) R.core.concat(R.annex).forEach(s=>st.push(stickTag(s))); }); return {steps:st,norm:'f'+key}; }
   return null; }
-/* annexstick (Andrew 2026-11-15 05:12Z): where a section has none of the four Laundry kinds (most annexes), its stick deals
-   eight from its own crosswalk cards and technique questions, the other Laundry pools the step opens, turn about */
-async function annexQs(tags){ const M=window.LADDER_CARDMAP||{}, stems=Object.keys(M).filter(s=>tags.includes(M[s][0]));
-  const ok=x=>x&&x.a&&(x.w||[]).filter(w=>w&&w!==x.a).length>=3; let tq=[], cq=[];
-  for(const s of stems){ try{ tq=tq.concat(await stepTech(s)); }catch(e){} try{ cq=cq.concat(await cardsOf(s)); }catch(e){} }
-  const seenT=new Set(); tq=shuffle(tq.filter(ok)).filter(x=>{ const k=x.id.replace(/[nw]$/,''); if(seenT.has(k)) return false; seenT.add(k); return true; }); cq=shuffle(cq.filter(ok));
-  const out=[]; while(out.length<8&&(tq.length||cq.length)){ const want=out.length%2?tq:cq, src=want.length?want:(tq.length?tq:cq), x=src.pop(), L=String(x.q).split('\n'), w=shuffle(x.w.filter(v=>v&&v!==x.a)).slice(0,3);
-    out.push({mode:src===tq?'tech':'cards', index:x.id, ask:L[0], lines:L.length>1?[[L.slice(1).join(' '),null]]:[], right:x.a, opts:shuffle([x.a].concat(w)), why:x.why||'', lead:src===tq?'':'It is '+x.a+'. '}); }
-  return out; }
+/* annexstick (Andrew 2026-11-15 05:12Z, 05:33Z): a step that cannot feed all four Laundry kinds (most annexes) is measured on the pools
+   it does feed, two of each: its Laundry kinds (drawn as usual), its crosswalk cards, its technique questions and its standing questions' forks */
+async function annexQs(tags,kinds){ const M=window.LADDER_CARDMAP||{}, stems=Object.keys(M).filter(s=>tags.includes(M[s][0]));
+  const ok=x=>x&&x.a&&(x.w||[]).filter(w=>w&&w!==x.a).length>=2; let tq=[], cq=[], sq=[];
+  for(const s of stems){ try{ tq=tq.concat(await stepTech(s)); }catch(e){} try{ cq=cq.concat(await cardsOf(s)); }catch(e){}
+    try{ await script('sq/'+s+'.js',()=>window.LADDER_SQ&&Object.keys(window.LADDER_SQ).some(id=>id.split('.')[0]===M[s][0])); const S=window.LADDER_SQ||{};
+      Object.keys(S).filter(id=>id.split('.')[0]===M[s][0]&&S[id].kind!=='debate').forEach(id=>Object.keys(S[id].n).forEach(k=>{ const N=S[id].n[k], r=(N.c||[]).find(c=>c.go||c.win);
+        if(r&&N.c.length>1) sq.push({id:'s:'+id+'#'+k,q:N.t,a:r.t,w:N.c.filter(c=>c!==r).map(c=>c.t),why:r.why||''}); })); }catch(e){} }
+  const seenT=new Set(); tq=tq.filter(ok).filter(x=>{ const k=x.id.replace(/[nw]$/,''); if(seenT.has(k)) return false; seenT.add(k); return true; });
+  const two=(arr,mode)=>shuffle(arr.filter(ok)).slice(0,2).map(x=>{ const L=String(x.q).split('\n'), w=shuffle(x.w.filter(v=>v&&v!==x.a)).slice(0,3);
+    return {mode, index:x.id, ask:L[0], lines:L.length>1?[[L.slice(1).join(' '),null]]:[], right:x.a, opts:shuffle([x.a].concat(w)), why:x.why||'', lead:mode==='tech'?'':mode==='sq'?'The path goes by: '+x.a+'. ':'It is '+x.a+'. '}; });
+  const out=[]; kinds.forEach(m=>out.push(m,m)); return shuffle(out.concat(two(cq,'cards'),two(tq,'tech'),two(sq,'sq'))); }
 /* the sitting */
 let box=null;
 function close(){ if(box){ box.remove(); box=null; document.body.classList.remove('stickopen'); } }
@@ -2589,13 +2592,14 @@ async function sit(scope,key,opts){ opts=opts||{}; close();
   /* stickdraw (Andrew 2026-11-14 16:52Z): eight Laundry questions from the section's own steps, two of each kind, at full links and terms,
      each 2 sd of complexity above the norm; the first is dealt the moment it is drawn, the rest are drawn while the climber works */
   await maps(); await rand().catch(()=>null); const Rz=window.LadderRandomizer, me=box, sec=stickSection(scope,key);
-  const plan=(Rz&&Rz.stickPlan&&sec)?Rz.stickPlan(sec.steps):[];
-  const fb=(!plan.length&&sec)?await annexQs(sec.steps):null; /* annexstick */
-  if(!plan.length&&!(fb&&fb.length)){ box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">This section has no Laundry pools yet, so its measuring stick cannot be sat.</p></div>'; wire(); return; }
+  let plan=(Rz&&Rz.stickPlan&&sec)?Rz.stickPlan(sec.steps):[];
+  /* annexstick (Andrew 05:33Z): a step that cannot feed all four kinds is measured on the pools it does feed, two of each */
+  const fb=(scope==='step'&&sec&&new Set(plan).size<4)?await annexQs(sec.steps,[...new Set(plan)]):null; if(fb) plan=fb;
+  if(!plan.length){ box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-q">This section has no Laundry pools yet, so its measuring stick cannot be sat.</p></div>'; wire(); return; }
   try{ Rz.style&&Rz.style(); }catch(e){}
-  const N=fb?fb.length:plan.length, got=fb?fb.slice():new Array(N), seenIdx=new Set(), KL={cards:'Crosswalk',tech:'Techniques'}; (Rz.MODES||[]).forEach(M=>{ KL[M.id]=M.label; });
+  const N=plan.length, got=plan.map(x=>typeof x==='string'?undefined:x), seenIdx=new Set(), KL={cards:'Crosswalk',tech:'Techniques',sq:'Standing Questions'}; (Rz.MODES||[]).forEach(M=>{ KL[M.id]=M.label; });
   let i=0, right=0, asked=0, waiting=false;
-  if(!fb) plan.reduce((ch,m,k)=>ch.then(()=>box===me?Rz.stickDraw(m,sec.steps,sec.norm,seenIdx):null).then(q=>{ got[k]=q||{none:1}; if(box===me&&waiting&&k===i){ waiting=false; show(); } }),Promise.resolve());
+  plan.reduce((ch,m,k)=>typeof m!=='string'?ch:ch.then(()=>box===me?Rz.stickDraw(m,sec.steps,sec.norm,seenIdx):null).then(q=>{ got[k]=q||{none:1}; if(box===me&&waiting&&k===i){ waiting=false; show(); } }),Promise.resolve());
   const total=()=>N-got.filter(g=>g&&g.none).length, need=()=>Math.ceil(total()*0.8);
   const show=()=>{ if(box!==me) return; while(i<N&&got[i]&&got[i].none) i++; if(i>=N) return end();
     const c=got[i];
