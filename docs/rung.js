@@ -3917,7 +3917,9 @@ function fill(pane){ const s=stem(); pane.innerHTML='<p class="aqu-n">Gathering 
           w.appendChild(r); }));
         const paint=()=>w.querySelectorAll('.aqu-qid').forEach(b=>{ const o=origin(b.dataset.q); b.classList.toggle('done',!!(o&&o.classList.contains('done'))); });
         w.querySelectorAll('.aqu-qid').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const o=origin(b.dataset.q); if(o&&o.__tick){ o.__tick(); paint(); } });
-        paint(); d.__paint=paint; d.appendChild(w); },
+        paint(); d.__paint=paint; d.appendChild(w);
+        /* a tick made on the page or in the toolbox repaints this pane too */
+        const mo=new MutationObserver(paint); w.querySelectorAll('.aqu-qid').forEach(b=>{ const o=origin(b.dataset.q); if(o) mo.observe(o,{attributes:true,attributeFilter:['class']}); }); },
       cw:d=>{ if(window.LadderCrosswalk&&LadderCrosswalk.deal) LadderCrosswalk.deal(d,s,()=>{ const b=bar.querySelector('.aqu-k-cw span'); if(b) b.innerHTML=CHI+' '+(c?c[2]:0)+' cards'; }); else d.innerHTML='<p class="aqu-n">The crosswalk is still loading.</p>'; },
       ms:d=>{ d.innerHTML='<p class="aqu-n">Fresh Laundry questions from this section’s own pools; 80% passes and gives the gold star.</p><ul class="aqu-list">'+ms.map(([sc,k,l])=>'<li><button type="button" class="aqu-go" data-s="'+sc+'" data-k="'+esc(k)+'">'+esc(l)+'</button> <span class="aqu-st">'+msState(sc,k)+'</span></li>').join('')+'</ul>';
         d.querySelectorAll('.aqu-go').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const sc=b.dataset.s; if(window.LadderStick) LadderStick.sit(sc,sc==='step'?b.dataset.k:+b.dataset.k,{via:'stick'}); }); },
@@ -3935,5 +3937,10 @@ function mark(){ document.querySelectorAll('.sayback').forEach(sb=>{ if(sb.close
   sb.appendChild(w); const b=w.firstChild, pane=w.lastChild;
   b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const v=pane.hidden; pane.hidden=!v; b.setAttribute('aria-expanded',String(v)); b.classList.toggle('on',v); if(v&&!pane.dataset.made){ pane.dataset.made='1'; fill(pane); } }; }); }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mark); else mark();
-window.LadderStepUnlocks={mark,fill};
+/* a crosswalk x earned anywhere (this slide's pane or the toolbox's Crosswalk pane) shows in both */
+function cwSync(){ const X=get('cards:x',{}), s=stem(), c=CM()[s];
+  document.querySelectorAll('.aqu-k-cw span').forEach(e=>{ e.innerHTML=(X[s]?CHI+' ':'')+(c?c[2]:0)+' cards'; });
+  const pane=document.querySelector('#stick .aq-p-cw'); if(pane&&!pane.hidden&&pane.childNodes.length&&!pane.querySelector('#cards')&&window.LadderCrosswalk){ const sc=pane.closest('#stick'), y=sc?sc.scrollTop:0; LadderCrosswalk.fill(pane); if(sc) sc.scrollTop=y; } }
+new MutationObserver(ms=>{ for(const m of ms) for(const n of m.addedNodes){ if(n.nodeType===1&&(n.classList.contains('aq-cwdone')||(n.querySelector&&n.querySelector('.aq-cwdone')))){ setTimeout(cwSync,1700); return; } } }).observe(document.documentElement,{childList:true,subtree:true});
+window.LadderStepUnlocks={mark,fill,cwSync};
 })();
