@@ -607,6 +607,7 @@ function deskHTML(){
     +'<div class="dpane" id="dp-deck"><p class="dtrio" role="group" aria-label="tech screens"><button type="button" data-go="moves">Techs Read</button><button type="button" data-go="graph">Graph View</button><button type="button" data-go="deck">Tech Deck</button></p><p class="dnote">Each card is one tech you have earned. A tech lands here when you finish its step’s questions.</p><div class="dk-tools"><input type="search" id="dkq" placeholder="find a tech by name or word" aria-label="find a tech"><span class="dk-count" id="dkcount"></span></div><div id="dklist"></div><p class="dnote" id="dkahead"></p></div>'
     +'<div class="dpane" id="dp-rand">'+/* hangdry */'<p class="jogtxt" role="status" aria-label="the laundry is loading">'+'Hang Drying'.split('').map((c,i)=>c===' '?'<s>&nbsp;</s>':'<s aria-hidden="true" style="animation-delay:'+(i*70)+'ms">'+c+'</s>').join('')+'</p></div>'
     +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="dtheme"><span class="dnote">Display:</span> <button type="button" data-th="light">Light</button> <button type="button" data-th="dark">Dark</button></p><p class="dcomp"><label><input type="checkbox" class="reccomp"> Opt into competition</label><span class="dnote dcomp-n">Gives you a climber name and opens the Standing.</span></p><h4 class="drech">Record</h4><p class="recname"><span class="dnote">Your climber name:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> </p><p class="recrolls"><button type="button" class="dlink recroll">New Name</button> <button type="button" class="dlink recroll-a">New Animal</button> <button type="button" class="dlink recroll-p">New Place</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><button type="button" class="dlink recopen">open my record as a file</button><input type="file" accept=".json,application/json" class="reci" hidden></p><p><label class="dnote recai-l"><input type="checkbox" class="recai"> An AI assistant is connected</label></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
+  { const w=document.createElement('div'); w.className='dtool'; w.appendChild(d.querySelector('.dtop')); d.querySelectorAll(':scope>.dpane:not(#dp-keys)').forEach(x=>w.appendChild(x)); d.appendChild(w); } /* sidepanels: the tool's half of the toolbox */
   document.body.append(b,d);
 }
 
@@ -1359,7 +1360,7 @@ window.__deskInit=function(){
     if(on){ const h=hereOf(); desk.querySelector('.dttl').textContent=TOOLS[p]; desk.dataset.tool=p; desk.querySelector('.dback').textContent='← back to '+h.say;
       if(!(history.state&&history.state.tool)) try{ history.pushState({tool:p},''); }catch(e){} else try{ history.replaceState({tool:p},''); }catch(e){}
       desk.querySelector('.dpane.on')&&(desk.querySelector('.dpane.on').scrollTop=0); } }
-  function show(p){ desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); desk.querySelectorAll('.dpane').forEach(d=>d.classList.toggle('on',d.id==='dp-'+p)); dock(p==='keys'); toolPage(p); if(p==='book') renderBook(); if(p==='qs') fillQs(); if(p==='base') fillBase(); if(p==='moves') fillMoves(); if(p==='deck') fillDeck(); trio(p); if(p==='graph') initGraph(); if(p==='rand') loadRand(); else if(window.MathKeys) MathKeys.limit(null); st.tab=p; save(); }
+  function show(p){ desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); desk.querySelectorAll('.dpane').forEach(d=>d.classList.toggle('on',d.id==='dp-'+p)); dock(p==='keys'||!!(window.LadderSide&&LadderSide.on&&LadderSide.on())); /* sidepanels: the keys stay in the toolbox column */ toolPage(p); if(p==='book') renderBook(); if(p==='qs') fillQs(); if(p==='base') fillBase(); if(p==='moves') fillMoves(); if(p==='deck') fillDeck(); trio(p); if(p==='graph') initGraph(); if(p==='rand') loadRand(); else if(window.MathKeys) MathKeys.limit(null); st.tab=p; save(); }
   window.addEventListener('popstate',()=>{ if(desk.classList.contains('toolpage')) open(false); });
 /* spindry (Andrew 2026-11-14 00:20Z): a tumble dryer's drum over the Laundry while it loads; at least 1.6 s, then until questions are drawn */
 window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'just that one is fine' */
@@ -1437,7 +1438,10 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
       const ax=at<0?[]:M.moves.map((m,i)=>[m,i]).filter(([m,i])=>m.kind==='axiom'&&/axiom|principle|line$/.test(m.name)&&MAIN.test(m.file)&&ord.indexOf(m.file)<=at&&!own.has(i));
       if((!ids||!ids.length)&&!ax.length){ note.textContent='This page builds and uses no named tech. The whole catalogue of what you have earned is a tap away.'; return; }
       if(!ids||!ids.length) note.textContent='This step builds and uses no named tech of its own. Below are the axioms you have earned so far, which every step stands on.';
-      const card=m=>'<div class="dmv'+(m.file===page?' here':'')+'"><b>'+m.name+(m.accepted?' <span class="acc">('+m.accepted+')</span>':'')+'</b> <span class="kd">'+m.kind+(m.file===page?' · built here':' · '+m.tag)+'</span>'+(m.tex?'<div class="mt" data-t="'+m.tex.replace(/"/g,'&quot;')+'"></div>':'')+'<div class="mw">'+m.words+'</div>'+(m.pid?'<a class="mwhere" href="'+(m.file===page?'':m.file+'.html')+'#'+m.pid+'">'+(m.file===page?'where it is built, on this page':'where it is built')+' →</a>':'')+'</div>';
+      /* techsread: the tech's text is escaped, so a "<" in its words (Σ_{t<T}) no longer opens a stray tag that nests the next cards */
+      const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+      /* techsread: a card built on this page is marked "mine", not "here": placeHere() removes every .here on the page whenever a mark changes, and took the Built here cards with it */
+      const card=m=>'<div class="dmv'+(m.file===page?' mine':'')+'"><b>'+esc(m.name)+(m.accepted?' <span class="acc">('+esc(m.accepted)+')</span>':'')+'</b> <span class="kd">'+esc(m.kind)+(m.file===page?' · built here':' · '+esc(m.tag))+'</span>'+(m.tex?'<div class="mt" data-t="'+esc(m.tex)+'"></div>':'')+'<div class="mw">'+esc(m.words)+'</div>'+(m.pid?'<a class="mwhere" href="'+(m.file===page?'':m.file+'.html')+'#'+m.pid+'">'+(m.file===page?'where it is built, on this page':'where it is built')+' →</a>':'')+'</div>';
       const mine=(ids||[]).map(i=>M.moves[i]), built=mine.filter(m=>m.file===page), used=mine.filter(m=>m.file!==page);
       const fold=(cls,name,list,open)=>list.length?'<details class="dfold '+cls+'"'+(open?' open':'')+'><summary><span>'+name+'</span><b>'+list.length+'</b></summary>'+list.map(card).join('')+'</details>':'';
       if(!built.length&&(used.length||ax.length)) note.textContent='This step builds no named tech of its own. What it uses is folded below; tap a pill to open it.';
@@ -1456,7 +1460,10 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
     setTimeout(go,50); });
   document.addEventListener('click',e=>{ const a=e.target.closest&&e.target.closest('#dmoves a.mwhere'); if(a&&a.getAttribute('href').startsWith('#')) open(false); });
   desk.querySelector('.x').onclick=()=>open(false);
-  desk.querySelector('.dback').onclick=()=>open(false);
+  /* sidepanels: on a desktop closing a tool leaves the toolbox open */
+  window.LadderSide=window.LadderSide||{}; LadderSide.toolOff=()=>{ if(!desk.classList.contains('toolpage')) return; show('keys'); if(history.state&&history.state.tool) try{ history.back(); }catch(e){} };
+  const side0=()=>{ if(window.LadderSide&&LadderSide.on&&LadderSide.on()) LadderSide.toolOff(); else open(false); };
+  desk.querySelector('.dback').onclick=side0;
   desk.querySelectorAll('.dtabs [data-p]').forEach(b=>b.onclick=()=>show(b.dataset.p));
   /* toolbox gear */ (function(){ const R=document.documentElement, eff=()=>R.getAttribute('data-theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
     const mark=()=>desk.querySelectorAll('.dtheme [data-th]').forEach(b=>{ const on=b.dataset.th===eff(); b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); });
@@ -1468,9 +1475,9 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
       const an=desk.querySelector('.dannex'), ba=desk.querySelector('.dtabs [data-p="base"]'); if(ba) ba.classList.toggle('tb-in',!!(an&&!an.classList.contains('lk-hide'))); };
     document.addEventListener('click',()=>setTimeout(sync,0)); [300,1200,3000,7000].forEach(ms=>setTimeout(sync,ms)); })();
   const dfv=desk.querySelector('.dfv'); if(dfv) dfv.onclick=()=>{ open(false); if(window.LadderFV&&LadderFV.toggle) LadderFV.toggle(); };
-  const dx=desk.querySelector('.dcross'); if(dx) dx.onclick=()=>{ open(false); if(window.LadderCards) LadderCards.open(); else if(typeof toast==='function') toast('the crosswalk is loading'); };
-  const dsk=desk.querySelector('.dstick'); if(dsk) dsk.onclick=()=>{ open(false); if(window.LadderMeasure) LadderMeasure.list(); };
-  const dsq=desk.querySelector('.dstand'); if(dsq) dsq.onclick=()=>{ open(false); if(window.LadderStanding) LadderStanding.list(); else if(typeof toast==='function') toast('the standing questions are loading'); };
+  const dx=desk.querySelector('.dcross'); if(dx) dx.onclick=()=>{ side0(); if(window.LadderCards) LadderCards.open(); else if(typeof toast==='function') toast('the crosswalk is loading'); };
+  const dsk=desk.querySelector('.dstick'); if(dsk) dsk.onclick=()=>{ side0(); if(window.LadderMeasure) LadderMeasure.list(); };
+  const dsq=desk.querySelector('.dstand'); if(dsq) dsq.onclick=()=>{ side0(); if(window.LadderStanding) LadderStanding.list(); else if(typeof toast==='function') toast('the standing questions are loading'); };
   const dh=desk.querySelector('.dheights'); if(dh) dh.onclick=()=>{ open(false); if(window.LadderFV) LadderFV.heights(); else location.href='index.html'; };
   const rx=desk.querySelector('.recx'), ri=desk.querySelector('.reci'), rn=desk.querySelector('#recnote');
   if(rx) rx.onclick=()=>LadderRecord.export();
@@ -2952,7 +2959,7 @@ function catalogue(want){ data().then(D=>{ if(!D) return;
 /* the toolbox button, beside "Dizzying heights" */
 function button(){ const dh=document.querySelector('#desk .dheights'); if(!dh) return false; if(document.querySelector('#desk .dannex')) return true;
   const b=document.createElement('button'); b.type='button'; b.className='dannex'; b.textContent='Annexes';
-  b.onclick=()=>{ const x=document.querySelector('#desk .x'); if(x) x.click(); catalogue(); };
+  b.onclick=()=>{ if(window.LadderSide&&LadderSide.on&&LadderSide.on()){ if(LadderSide.toolOff) LadderSide.toolOff(); } else { const x=document.querySelector('#desk .x'); if(x) x.click(); } catalogue(); /* sidepanels */ };
   dh.parentNode.insertBefore(b,dh); return true; }
 /* annexlayout: every annex unlocked so far is finished (at least one unlocked) */
 function crowned(D){ const h=high(), P=get('pages:done',{}); let any=false;
@@ -3563,7 +3570,7 @@ try{ if(document.fonts&&document.fonts.load){ window.addEventListener('load',fun
 /* toolscreens */
 (function(){ 'use strict'; if(window.LADDER_DESK) return;
   const closeStick=()=>{ const s=document.getElementById('stick'); if(s){ s.remove(); document.body.classList.remove('stickopen'); } };
-  document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#lbar')&&document.getElementById('stick')) closeStick(); },true);
+  document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('#lbar')&&document.getElementById('stick')&&!(window.LadderSide&&LadderSide.on&&LadderSide.on())) closeStick(); /* sidepanels: the tool column stays */ },true);
   const boot=()=>{ if(!document.querySelector('.rungs')) return;
     const f=document.createElement('button'); f.type='button'; f.id='annexfab'; f.textContent='Annexes'; f.hidden=true;
     f.onclick=()=>{ if(window.LadderAnnexes) LadderAnnexes.catalogue(); }; document.body.appendChild(f);
@@ -3847,4 +3854,86 @@ function dress(ol){ load().then(F=>{ ol.querySelectorAll(':scope>li.k-sky').forE
     li.appendChild(d); });
   if(window.__footCount){ if(window.LADDER_UND) __footCount(); else setTimeout(()=>{ if(window.__footCount) __footCount(); },1500); } }); }
 window.LadderSkyFeet={dress,load};
+})();
+/* sidepanels */ /* 2026-11-15 (Andrew 04:33Z): on a desktop the footing view, the toolbox and the open tool sit side by side; none takes the screen.
+   Toolbox screens (Laundry, Techs Read, Graph View, Tech Deck, Cellar, Settings) open in a column right of the toolbox; the screens
+   built on #stick (Answering Questions, the Measuring Stick, Standing Questions, Annexes, the cellar) and the crosswalk take that column too. */
+(function(){ 'use strict';
+const MQ=window.matchMedia?matchMedia('(min-width:1200px)'):null;
+const on=()=>!!(MQ&&MQ.matches);
+window.LadderSide=Object.assign(window.LadderSide||{},{on});
+function stickGone(){ const s=document.getElementById('stick'); if(s){ s.remove(); document.body.classList.remove('stickopen'); } }
+function cardsGone(){ const c=document.querySelector('body>#cards:not(.cd-in)'); if(!c) return; if(window.LadderCards&&LadderCards.close) LadderCards.close(); if(c.isConnected) c.remove(); document.body.classList.remove('cardsopen'); }
+function start(){ const desk=document.getElementById('desk'); if(!desk){ if(document.readyState!=='complete') setTimeout(start,200); return; }
+  /* one tool at a time: a toolbox screen closes a #stick screen or the crosswalk, and the other way round; the toolbox stays */
+  new MutationObserver(()=>{ if(on()&&desk.classList.contains('toolpage')){ stickGone(); cardsGone(); } }).observe(desk,{attributes:true,attributeFilter:['class']});
+  new MutationObserver(ms=>{ if(!on()) return; ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType!==1) return;
+    if(n.id==='stick'){ if(desk.classList.contains('toolpage')&&LadderSide.toolOff) LadderSide.toolOff(); cardsGone(); }
+    else if(n.id==='cards'&&!n.classList.contains('cd-in')){ if(desk.classList.contains('toolpage')&&LadderSide.toolOff) LadderSide.toolOff(); stickGone(); } })); }).observe(document.body,{childList:true}); }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();
+
+/* stepunlocks */ /* 2026-11-15 (Andrew 04:33Z): each footing's understanding-question slide is titled "Answering Questions", slug "here or in the
+   toolbox", with a button opening a pane of what the step unlocks: its understanding questions, crosswalk, measuring stick and standing
+   questions, and a way into the Laundry when the step opens new pools (laundry-new.js, made by mklnew.js). */
+(function(){ 'use strict';
+const CHI='<svg class="aq-chi" viewBox="20 20 280 300" width="15" height="16" aria-hidden="true"><path d="M262,64 C220,118 130,226 66,292" fill="none" stroke="#5fd13a" stroke-width="22" stroke-linecap="round"/><path fill="currentColor" d="M38,92 C52,52 98,44 124,86 L216,262 C228,284 246,290 270,276 L276,286 C246,318 196,316 176,280 L88,112 C76,90 58,88 46,100 Z"/></svg>', STAR='<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2l2.9 6.6 7.1.7-5.4 4.8 1.6 7L12 17.4 5.8 21.1l1.6-7L2 9.3l7.1-.7z"/></svg>', WING='<svg viewBox="0 0 28 14" width="24" height="12" aria-hidden="true"><path fill="currentColor" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/><path fill="currentColor" transform="matrix(-1 0 0 1 28 0)" d="M13.4 9.2C11 3.6 6.4.9.8.8c1 3 2.4 5 4.4 6.2-1 .5-1.7 1.1-2.2 1.9 1.9.9 3.8 1 5.2.7-.6 1-.8 2-.5 3.2 1.4.4 3.4-.2 5.7-3.6z"/></svg>';
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const get=(k,d)=>{ try{ const v=JSON.parse(LS.getItem(k)||'null'); return v==null?d:v; }catch(e){ return d; } };
+const stem=()=>window.ladderPage?ladderPage():(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
+const CM=()=>window.LADDER_CARDMAP||{};
+const once={};
+function script(src,test){ if(test&&test()) return Promise.resolve(true); if(once[src]) return once[src];
+  return once[src]=new Promise(res=>{ const s=document.createElement('script'); s.src=src; s.onload=()=>res(true); s.onerror=()=>res(false); document.head.appendChild(s); }); }
+function rich(el,t){ el.innerHTML=''; String(t).split(/(\$[^$]+\$)/).forEach(p=>{ if(/^\$[^$]+\$$/.test(p)){ const sp=document.createElement('span'), x=p.slice(1,-1);
+    if(window.katex){ try{ katex.render(x,sp,{throwOnError:false,strict:false}); }catch(e){ sp.textContent=x; } } else sp.textContent=x; el.appendChild(sp); } else el.appendChild(document.createTextNode(p)); }); }
+const mine=el=>!el.closest('#desk,#stick,.aqu');
+const srcQs=()=>{ const a=[...document.querySelectorAll('section.step .sayback ol')].filter(mine); return a.length?a:[...document.querySelectorAll('.wrap .sayback ol, .wrap #qs ol')].filter(mine); };
+const origin=t=>[...document.querySelectorAll('.qid,.id')].find(o=>mine(o)&&o.textContent.trim()===t);
+function measures(s){ const S=window.LadderStick; if(!S||!S.where) return []; const w=S.where(s); if(!w) return [];
+  if(w.core&&w.core[w.core.length-1]===s) return w.lastRung?[['floor',w.fl,'measure floor '+w.fl]]:[['rung',w.r,'measure rung '+w.r]]; return [['step',s,'measure this step']]; }
+function msState(sc,k){ const S=window.LadderStick; const c=S&&S.certKey?get('cert:'+S.certKey(sc,k),null):null; return c?(c.via==='measure'?'measured ahead':'measured '+(c.score||'')):'not yet measured'; }
+function sqState(id){ const r=get('sq:'+id,{}); return r.done?'answered':(r.until&&r.until>Date.now()?'resting':''); }
+function laundry(){ const d=document.getElementById('desk'), b=document.getElementById('deskbtn'); if(d&&!d.classList.contains('open')&&b) b.click(); const t=d&&d.querySelector('.dtabs [data-p="rand"]'); if(t) t.click(); }
+const LBL={un:'Understanding',cw:'Crosswalk',ms:'Measuring Stick',sq:'Standing Questions'};
+function fill(pane){ const s=stem(); pane.innerHTML='<p class="aqu-n">Gathering what this step unlocks…</p>';
+  Promise.all([window.LadderStick&&LadderStick.maps?LadderStick.maps().catch(()=>null):null,script('sq/index.js',()=>window.LADDER_SQINDEX),script('sq/titles.js',()=>window.LADDER_SQTITLES),script('laundry-new.js',()=>window.LADDER_LNEW)]).then(()=>{
+    const qs=srcQs(), c=CM()[s], ms=measures(s), sq=((window.LADDER_SQINDEX||{})[s]||[]), ln=+((window.LADDER_LNEW||{})[s]||0), rb=document.querySelector('#desk .dtabs [data-p="rand"]');
+    const nq=qs.reduce((a,o)=>a+o.querySelectorAll(':scope>li').length,0), X=get('cards:x',{}), P=get('pages:done',{});
+    const K=[]; if(nq) K.push('un'); if(c&&c[2]>0) K.push('cw'); if(ms.length) K.push('ms'); if(sq.length) K.push('sq');
+    const sub={un:(P[s]&&P[s].v?STAR+' ':'')+nq+' question'+(nq===1?'':'s'),cw:(X[s]?CHI+' ':'')+(c?c[2]:0)+' cards',ms:ms.map(m=>m[0]==='step'?'this step':m[0]+' '+m[1]).join(''),sq:sq.length+' question'+(sq.length===1?'':'s')};
+    pane.innerHTML='';
+    if(!K.length&&!(ln>0)){ pane.innerHTML='<p class="aqu-n">This step unlocks no questions of its own.</p>'; return; }
+    const bar=document.createElement('div'); bar.className='aqu-bar'; bar.innerHTML=K.map(k=>'<button type="button" class="aqu-k aqu-k-'+k+'" data-k="'+k+'" aria-pressed="false"><b>'+LBL[k]+'</b><span>'+sub[k]+'</span></button>').join('');
+    pane.appendChild(bar); const box={};
+    K.forEach(k=>{ const d=document.createElement('div'); d.className='aqu-sub aqu-s-'+k; d.hidden=true; box[k]=d; pane.appendChild(d); });
+    if(ln>0&&rb&&!rb.classList.contains('lk-hide')){ const p=document.createElement('p'); p.className='aqu-lp'; p.innerHTML='<button type="button" class="aqu-l">Laundry · '+ln+' new pool'+(ln===1?'':'s')+' <span aria-hidden="true">→</span></button>'; p.firstChild.onclick=e=>{ e.preventDefault(); e.stopPropagation(); laundry(); }; pane.appendChild(p); }
+    const made={};
+    const make={
+      un:d=>{ const w=document.createElement('div'); w.className='aqu-ql';
+        qs.forEach(o=>o.querySelectorAll(':scope>li').forEach(li=>{ const id=li.querySelector('.qid,.id'); const t=id?id.textContent.trim():''; const r=document.createElement('div'); r.className='aqu-q';
+          const c2=li.cloneNode(true); c2.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id')); c2.querySelectorAll('.qid,.id,.ph,.qbr').forEach(e=>e.remove());
+          r.innerHTML='<button type="button" class="aqu-qid" data-q="'+esc(t)+'">'+esc(t)+'</button><div class="aqu-qt"></div>'; while(c2.firstChild) r.lastChild.appendChild(c2.firstChild);
+          w.appendChild(r); }));
+        const paint=()=>w.querySelectorAll('.aqu-qid').forEach(b=>{ const o=origin(b.dataset.q); b.classList.toggle('done',!!(o&&o.classList.contains('done'))); });
+        w.querySelectorAll('.aqu-qid').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const o=origin(b.dataset.q); if(o&&o.__tick){ o.__tick(); paint(); } });
+        paint(); d.__paint=paint; d.appendChild(w); },
+      cw:d=>{ if(window.LadderCrosswalk&&LadderCrosswalk.deal) LadderCrosswalk.deal(d,s,()=>{ const b=bar.querySelector('.aqu-k-cw span'); if(b) b.innerHTML=CHI+' '+(c?c[2]:0)+' cards'; }); else d.innerHTML='<p class="aqu-n">The crosswalk is still loading.</p>'; },
+      ms:d=>{ d.innerHTML='<p class="aqu-n">Fresh Laundry questions from this section’s own pools; 80% passes and gives the gold star.</p><ul class="aqu-list">'+ms.map(([sc,k,l])=>'<li><button type="button" class="aqu-go" data-s="'+sc+'" data-k="'+esc(k)+'">'+esc(l)+'</button> <span class="aqu-st">'+msState(sc,k)+'</span></li>').join('')+'</ul>';
+        d.querySelectorAll('.aqu-go').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const sc=b.dataset.s; if(window.LadderStick) LadderStick.sit(sc,sc==='step'?b.dataset.k:+b.dataset.k,{via:'stick'}); }); },
+      sq:d=>{ const TT=window.LADDER_SQTITLES||{};
+        d.innerHTML='<p class="aqu-n">Each walks a branching path: a path to its answer, or a debate to the bottom of one line of inquiry.</p><ul class="aqu-list">'+sq.map(([id,kind,txt,has])=>'<li'+(get('sq:'+id,{}).done?' class="aqu-done"':'')+'><button type="button" class="aqu-go" data-id="'+esc(id)+'"'+(has?'':' disabled')+'>'+esc(id)+'</button> <span class="aqu-tt"></span> <span class="aqu-st">'+(kind==='debate'?'debate':'')+(sqState(id)?(kind==='debate'?' · ':'')+sqState(id):'')+'</span></li>').join('')+'</ul>';
+        d.querySelectorAll('.aqu-tt').forEach((e,i)=>rich(e,TT[sq[i][0]]||sq[i][2]||''));
+        d.querySelectorAll('.aqu-go').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); if(window.LadderStanding) LadderStanding.walk(b.dataset.id,{stem:s}); }); } };
+    bar.querySelectorAll('.aqu-k').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const k=b.dataset.k, v=box[k].hidden; box[k].hidden=!v; b.classList.toggle('on',v); b.setAttribute('aria-pressed',String(v));
+      if(v&&!made[k]){ made[k]=true; make[k](box[k]); } else if(v&&box[k].__paint) box[k].__paint(); });
+  }); }
+function mark(){ document.querySelectorAll('.sayback').forEach(sb=>{ if(sb.closest('#desk,#stick')||sb.querySelector(':scope>.aqh')||!sb.querySelector('ol')) return;
+  const h=document.createElement('div'); h.className='aqh'; h.innerHTML='<span class="aqh-s">here or in the toolbox</span><span class="aqh-t">Answering Questions</span>';
+  const h3=sb.querySelector(':scope>h3'); if(h3) h3.after(h); else sb.prepend(h);
+  const w=document.createElement('div'); w.className='aqu'; w.innerHTML='<button type="button" class="aqu-b" aria-expanded="false"><span>Unlocked by this step</span><span class="aqu-v" aria-hidden="true">▾</span></button><div class="aqu-pane" hidden></div>';
+  sb.appendChild(w); const b=w.firstChild, pane=w.lastChild;
+  b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); const v=pane.hidden; pane.hidden=!v; b.setAttribute('aria-expanded',String(v)); b.classList.toggle('on',v); if(v&&!pane.dataset.made){ pane.dataset.made='1'; fill(pane); } }; }); }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mark); else mark();
+window.LadderStepUnlocks={mark,fill};
 })();

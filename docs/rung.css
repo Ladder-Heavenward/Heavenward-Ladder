@@ -409,7 +409,7 @@ body.cardsopen{overflow:hidden}
 /* quick moves in the desk */
 #dmoves{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin:8px 0;max-width:100%}
 #dmoves .dmv{min-width:0;box-sizing:border-box;overflow-wrap:anywhere;border:1px solid var(--grid,#e3dfd5);border-radius:6px;padding:8px 10px;background:var(--card,#fff)}
-#dmoves .dmv.here{border-color:var(--teal,#1f6f8b)}
+#dmoves .dmv.mine{border-color:var(--teal,#1f6f8b)}
 #dmoves .kd{font-family:var(--mono,monospace);font-size:.72rem;color:var(--muted,#8a8a93)}
 #dmoves .acc{font-weight:400;color:var(--muted,#8a8a93)}
 #dmoves .mt{margin:4px 0;overflow-x:auto}
@@ -1192,8 +1192,8 @@ html[data-compete] #desk .dtabs button[data-p="rand"]{display:none!important}
 #desk details.dfold[open]>summary{border-color:var(--teal)}
 #desk details.dfold.df-ax>summary{border-color:var(--gold)}
 #desk details.dfold>.dmv{margin:0 0 8px}
-/* a card built on this page carried the page-wide .here tag style (white, small, one line): put the card's own style back */
-#dmoves .dmv.here{font-family:inherit;font-size:inherit;color:var(--ink);white-space:normal;margin-left:0;vertical-align:baseline;padding:8px 10px;border-radius:6px;background:var(--card,#fff)}
+/* techsread: cards built on this page are .dmv.mine (they were .here, which placeHere() removes) */
+
 body.toolpage .swbar{display:none!important}
 #dklist{display:grid;grid-template-columns:minmax(0,1fr);margin:8px 0}
 #dklist .dmv{min-width:0;box-sizing:border-box;overflow-wrap:anywhere;border:1px solid var(--grid,#e3dfd5);border-radius:6px;padding:8px 10px;background:var(--card,#fff)}
@@ -1435,3 +1435,85 @@ body.fv.sw .sayback.sw-on .givens .katex-display,body.fv.sw .sayback.sw-on .give
 .mgraph .mg-details{margin:0 10px 10px 18px;padding:6px 10px;border-left:3px solid var(--teal);background:var(--paper);border-radius:0 6px 6px 0;font-size:.86rem}
 .mgraph .mg-details p{margin:4px 0}
 /* graphview end */
+/* sidepanels */ /* 2026-11-15 (Andrew 04:33Z): on a desktop the footing view, the toolbox and the open tool sit side by side */
+#desk .dtool{display:contents}
+@media (min-width:1200px){
+  :root{--tbw:clamp(340px,26vw,420px);--tlw:clamp(430px,36vw,640px)}
+  body{--sideR:0px}
+  body.deskopen{--sideR:var(--tbw)}
+  body.stickopen,body:has(>#cards:not(.cd-in)){--sideR:var(--tlw)}
+  body.deskopen.stickopen,body.deskopen.toolpage,body.deskopen:has(>#cards:not(.cd-in)){--sideR:calc(var(--tbw) + var(--tlw))}
+  body.deskopen,body.stickopen,body.toolpage,body:has(>#cards:not(.cd-in)){padding-right:calc(var(--sideR) + 28px)}
+  body.stickopen,body.toolpage,body.cardsopen{overflow:visible}
+  /* the toolbox: its own column, left of the open tool */
+  #desk{width:var(--tbw);right:0;transition:right .18s ease}
+  body.stickopen #desk,body:has(>#cards:not(.cd-in)) #desk{right:var(--tlw)}
+  #desk.toolpage{position:fixed;inset:0 0 0 auto;width:calc(var(--tbw) + var(--tlw));height:auto;display:grid;grid-template-columns:var(--tbw) var(--tlw);grid-template-rows:auto auto minmax(0,1fr);border:0;border-left:1px solid var(--grid);border-radius:0;box-shadow:-4px 0 20px rgba(0,0,0,.12);background:var(--card);z-index:49}
+  body.hasbar #desk.toolpage{bottom:var(--lbh)}
+  #desk.toolpage .dname{display:flex;grid-column:1;grid-row:1}
+  #desk.toolpage .dtabs{display:flex;grid-column:1;grid-row:2}
+  #desk.toolpage #dp-keys{display:block;grid-column:1;grid-row:3;min-height:0}
+  #desk.toolpage .dtool{display:flex;flex-direction:column;grid-column:2;grid-row:1/-1;min-height:0;min-width:0;background:var(--paper);border-left:1px solid var(--grid)}
+  #desk.toolpage .dtool>.dpane.on{flex:1 1 auto;min-height:0;max-width:none;margin:0}
+  #desk .drumload{left:auto;right:0;width:var(--tlw);bottom:var(--lbh,0px)}
+  /* the open tool: a column at the right edge */
+  #stick{inset:0 0 var(--lbh,52px) auto;width:var(--tlw);border-left:1px solid var(--grid);box-shadow:-4px 0 20px rgba(0,0,0,.12)}
+  #stick .sk-card{max-width:none}
+  body>#cards:not(.cd-in){inset:0 0 var(--lbh,52px) auto;width:var(--tlw);background:var(--paper);align-items:flex-start;border-left:1px solid var(--grid);box-shadow:-4px 0 20px rgba(0,0,0,.12);overflow:auto}
+  body>#cards:not(.cd-in) .cd-card{box-shadow:none;max-height:none}
+  /* the footing view keeps its own controls, centred on what is left of the screen */
+  .fvnav{left:calc((100% - var(--sideR))/2)}
+  .swbar{right:var(--sideR)}
+  body:is(.deskopen,.stickopen,.toolpage):not(.sw) .fvnav:not([hidden]),body:is(.deskopen,.stickopen,.toolpage).sw .fvnav.fvup:not([hidden]){display:inline-block!important}
+  body:is(.stickopen,.toolpage) .swbar:not([hidden]){display:flex!important}
+}
+/* stepunlocks */ /* 2026-11-15 (Andrew 04:33Z): the understanding question's slide: "Answering Questions", and what the step unlocks */
+.aqh,.aqu{display:none}
+body.fv.sw .sayback.sw-on{display:flex;flex-direction:column;align-items:center}
+body.fv.sw .sayback.sw-on>ol{margin-top:auto}
+body.fv.sw .sayback.sw-on .aqh{display:flex;flex-direction:column;align-items:center;gap:4px;margin:0 0 18px;text-align:center}
+.aqh-s{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.aqh-t{font-family:var(--serif);font-size:1.6rem;font-weight:600;line-height:1.15;color:var(--ink)}
+body.fv.sw .sayback.sw-on .aqu{display:block;width:100%;max-width:34rem;margin:22px auto auto;text-align:left}
+.aqu-b{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 auto;font-family:var(--mono);font-size:.9rem;padding:10px 18px;border-radius:999px;border:1.5px solid var(--ember);background:transparent;color:var(--ember);cursor:pointer}
+.aqu-b.on{background:var(--ember);color:#fff}
+.aqu-v{transition:transform .2s;font-size:.8rem}
+.aqu-b[aria-expanded="false"] .aqu-v{transform:rotate(-90deg)}
+.aqu-pane{margin:14px 0 0;animation:aquIn .18s ease-out}
+.aqu-pane[hidden]{display:none}
+@keyframes aquIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.aqu-pane{animation:none}}
+.aqu-n{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:.3em 0 .6em;text-align:center}
+.aqu-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.aqu-k{--c:var(--teal);display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--mono);padding:9px 8px;border-radius:12px;border:1.5px solid var(--c);background:transparent;color:var(--c);cursor:pointer}
+.aqu-k b{font-size:.88rem;font-weight:600}
+.aqu-k span{font-size:.74rem;opacity:.9;display:inline-flex;align-items:center;gap:4px}
+.aqu-k svg{vertical-align:-2px}
+.aqu-k:last-child:nth-child(odd){grid-column:1/-1}
+.aqu-k-un{--c:#2f6fd6}
+.aqu-k-ms{--c:var(--gold)}
+.aqu-k-sq{--c:var(--plum)}
+.aqu-k.on{background:var(--c);color:#fff}
+.aqu-k.on .aq-chi path:not([stroke]){fill:#fff}
+.aqu-sub{--c:var(--teal);margin:12px 0 4px;padding:.2em 0 .2em 12px;border-left:3px solid var(--c)}
+.aqu-sub[hidden]{display:none}
+.aqu-s-un{--c:#2f6fd6}
+.aqu-s-ms{--c:var(--gold)}
+.aqu-s-sq{--c:var(--plum)}
+.aqu-sub .aqu-n{text-align:left}
+.aqu-q{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:baseline;margin:.5em 0;font-size:.95rem;line-height:1.45}
+.aqu-qid{font-family:var(--mono);font-size:.82rem;color:#2f6fd6;background:none;border:1px solid #2f6fd6;border-radius:999px;padding:2px 9px;cursor:pointer}
+.aqu-qid.done{background:#2f6fd6;color:#fff}
+.aqu-qid.done::after{content:" \2713"}
+.aqu-list{list-style:none;padding:0;margin:.3em 0}
+.aqu-list li{margin:.45em 0;line-height:1.4}
+.aqu-go{font-family:var(--mono);font-size:.84rem;padding:5px 12px;border-radius:999px;border:1px solid var(--c);background:transparent;color:var(--c);cursor:pointer}
+.aqu-go:disabled{opacity:.5;cursor:default}
+.aqu-tt{font-family:var(--serif);font-size:.95rem}
+.aqu-st{font-family:var(--mono);font-size:.76rem;color:var(--muted)}
+.aqu-list li.aqu-done .aqu-go{background:var(--c);color:#fff}
+.aqu-sub #cards.cd-in .cd-q{text-align:left}
+.aqu-lp{text-align:center;margin:14px 0 0}
+.aqu-l{font-family:var(--mono);font-size:.88rem;padding:9px 16px;border-radius:999px;border:1.5px solid #1d3461;background:#1d3461;color:#fff;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .aqu-l{background:#2b4a8c;border-color:#2b4a8c}}
+:root[data-theme="dark"] .aqu-l{background:#2b4a8c;border-color:#2b4a8c}
