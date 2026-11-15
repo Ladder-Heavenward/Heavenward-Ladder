@@ -16716,6 +16716,7 @@ QP.push({id:'46l.unbuild',step:'46l',label:'what can’t be built, by hand',open
 /* ===== Rung pools end ===== */
 /* ===== Annex pools (Andrew 2026-11-15) ===== */
 /* ----- annex pools: shared helpers ----- */
+const QPAX0=QP.length; /* the annex pools start here; poolsA99plain.js turns their TeX into plain maths */
 const UQAX=(right,c,n)=>{ const o=[]; c.forEach(x=>{ x=String(x); if(x!==String(right)&&!o.includes(x)&&o.length<(n||3)) o.push(x); }); return o; };
 const PTAILAX=(m,s)=>{ let t=Math.exp(-m), c=t; for(let k=1;k<=s;k++){ t*=m/k; c+=t; } return 1-c; }; /* the chance of more than s, for a rare count with average m */
 const SHELFAX=(m,a)=>{ let s=0; while(PTAILAX(m,s)>a&&s<2000) s++; return s; };
@@ -19061,7 +19062,7 @@ QP.push({id:'30·logi.work',step:'30·logi',mode:'work',label:'who shows',open:(
     return {index:'q:30·logi.word[a;'+s+']', a3:['30·logi.word',DASH,DASH], story:'A jet has '+s+' seats, and 8% of ticket holders don\u2019t show. A planner proposes selling '+s+' \u00f7 0.92 \u2248 '+t+' tickets.', lines:[], ask:'Is that the right number to sell?', right, opts:shuffle([right,...wrong]), lead:'', why:'The average count would equal the seats, and the count spreads round its average, about as often above as below. The right number comes from f\u2215(f + b), the one-more-ticket line.'}; }},
   {id:'30·logi.line',step:'30·logi',mode:'proof',label:'what the count licenses',open:()=>measured('30·logi'),make(){
     return line28('30·logi.line',[
-      ['b1',[['8\\% \\text{ don\u2019t show}','given'],['\\text{sell } 76/0.92 \\approx 83 \\text{ tickets}','fill the plane']],2,1,'The average fills the plane; half the flights would bump.'],
+      ['b1',[['8\\% \\text{ don\u2019t show}','given'],['\\text{sell } 76 \\div 0.92 \\approx 83 \\text{ tickets}','fill the plane']],2,1,'The average fills the plane; half the flights would bump.'],
       ['b2',[['n \\text{ tickets}','given'],['\\text{the width of the count grows like } n','width']],2,1,'Like \u221an, so big planes overbook by a bigger share.'],
       ['b3',[['\\text{a couple}','given'],['\\text{two independent travellers}','two people']],2,1,'They show together: the width grows by \u221a2.'],
       ['b4',[['80 \\text{ tickets is best}','one cost of a bump'],['\\text{best whatever a bump costs}','best']],2,1,'The line f\u2215(f + b) moves with b.'],
@@ -20270,6 +20271,180 @@ QP.push({id:'44·now2.work',step:'44·now2',mode:'work',label:'wrap, noise and s
       ['w3',[['\\text{row moves on a noisy } b','given'],['\\text{a nearly right } s','rows']],2,1,'The errors spread over all of s.'],
       ['w4',[['\\text{a quantum computer}','given'],['\\text{it breaks every code}','quantum']],2,1,'It finds orders fast; others are not known to fall.'],
       ['w5',[['g^r \\equiv 1,\\ r \\text{ even},\\ g^{r/2} \\not\\equiv -1','clock of N'],['\\gcd(g^{r/2} \\pm 1, N) \\text{ split } N','order-splits']],2,0,'N divides the product but neither factor.']],[]); }});
+/* ----- annex 46·now What are the building blocks of symmetry: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'46·now.work',step:'46·now',mode:'work',label:'sizes of simple groups',open:()=>measured('46·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=[5,6,7,8][rnd(4)], f=[1,2,3,4,5,6,7,8].slice(0,n).reduce((a,b)=>a*b,1), right=(f/2).toLocaleString('en').replace(/,/g,' '), wrong=UQAX(right,[f.toLocaleString('en').replace(/,/g,' '),(n*n).toLocaleString('en'),((f/n)/2).toLocaleString('en').replace(/,/g,' '),(f/4).toLocaleString('en').replace(/,/g,' ')],3); if(wrong.length<3) return null;
+      return {index:'q:46·now.work[a;'+n+']', lines:[['A_{'+n+'}','the even shuffles of '+n+' things']], ask:'How many members has it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Half of the '+n+'! = '+f+' shuffles are even: '+right+'. For five or more things it is simple.'}; }
+    const p=[5,7,11,13][rnd(4)], v=p*(p*p-1)/2, right=String(v), wrong=UQAX(right,[String(p*(p*p-1)),String(p*p-1),String(p*(p-1)/2),String(p*p*(p*p-1))],3); if(wrong.length<3) return null;
+    return {index:'q:46·now.work[p;'+p+']', lines:[['PSL(2, '+p+')','grids over the clock of '+p]], ask:'How many members has it?', right, opts:shuffle([right,...wrong]), lead:'', why:'SL(2, p) has p(p² − 1) members; dividing by ±1 halves it: '+p+' · '+(p*p-1)+' ÷ 2 = '+right+'.'}; }},
+  {id:'46·now.word',step:'46·now',mode:'word',label:'the list of pieces',open:()=>measured('46·now'),make(){
+    const F=rnd(3), Q=[['A student says every finite group is a product of simple groups.','Is it?','no: it has simple pieces, but S₃ is not the product of its pieces of 2 and 3'],['A reader says the list of simple groups makes every finite group known.','Does it?','no: it lists the pieces; how they fit is a separate question'],['A student says PSL(2, p) is simple for every prime p.','Is it?','no: PSL(2, 2) has 6 members and PSL(2, 3) has 12; neither is simple']];
+    const wrong=[['yes: every group is','yes, for groups of even size','no: no group has simple pieces'],['yes: every group is now known','yes, up to a million members','no: the list is wrong'],['yes: for every prime','yes, from 2 on','no: for no prime']][F];
+    return {index:'q:46·now.word['+F+']', a3:['46·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['A group is built from its simple pieces, but not always as their product.','The pieces of a group do not fix the group.','From p = 5 on, PSL(2, p) is simple.'][F]}; }},
+  {id:'46·now.line',step:'46·now',mode:'proof',label:'what the list licenses',open:()=>measured('46·now'),make(){
+    return line28('46·now.line',[
+      ['s1',[['\\text{a finite group}','given'],['\\text{a product of simple groups}','product']],2,1,'S₃ is not the product of its pieces of 2 and 3.'],
+      ['s2',[['\\text{the list of simple groups}','given'],['\\text{every finite group is known}','list']],2,1,'It lists pieces; how they fit is a separate question.'],
+      ['s3',[['PSL(2, p)','given'],['\\text{simple for every prime}','PSL']],2,1,'PSL(2, 2) and PSL(2, 3) are not.'],
+      ['s4',[['\\text{moonshine}','given'],['\\text{proved by computing all of } j','moonshine']],2,1,'By building one structure with the group as its symmetries.'],
+      ['s5',[['A_5','given'],['60 \\text{ members}','even shuffles']],2,0,'Half of 120.']],[]); }});
+/* ----- annex 46·now2 Can every symmetry group come from an equation: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'46·now2.work',step:'46·now2',mode:'work',label:'groups of cubics',open:()=>measured('46·now2'),make(){
+    const C=[[-3,1],[-7,7],[-2,1],[-1,1],[-4,2],[-6,2]][rnd(6)], p=C[0], q=C[1], D=-4*p*p*p-27*q*q, sq=D>0&&Number.isInteger(Math.sqrt(D)), f=x=>String(x).replace('-','−');
+    const right=sq?'A₃, the clock of 3: the discriminant '+D+' is a square':'S₃: the discriminant '+f(D)+' is not a square', wrong=[sq?'S₃: the discriminant '+D+' is not a square':'A₃, the clock of 3: the discriminant '+f(D)+' is a square','S₅','the group of 20'];
+    return {index:'q:46·now2.work['+p+';'+q+']', lines:[['y^3 '+(p<0?'- '+(p===-1?'':-p):'+ '+(p===1?'':p))+'y '+(q<0?'- '+(-q):'+ '+q)+' = 0','irreducible over ℚ'],['\\Delta = -4p^3 - 27q^2','']], ask:'What is its group over ℚ?', right, opts:shuffle([right,...wrong]), lead:'', why:'Δ = −4('+f(p)+')³ − 27 · '+(q*q)+' = '+f(D)+'; an irreducible cubic has group A₃ exactly when Δ is a square in ℚ, else S₃.'}; }},
+  {id:'46·now2.word',step:'46·now2',mode:'word',label:'the open question',open:()=>measured('46·now2'),make(){
+    const F=rnd(3), Q=[['A student says an irreducible quintic always has group S₅.','Does it?','no: x⁵ − 2 has a group of 20'],['A group has not yet been found as the group of an equation over ℚ.','Does that show it cannot come from ℚ?','no: open is not no; no group is known not to come from ℚ'],['Every finite group is Aut(K/E) for some fields.','Does every group then come from an equation over ℚ?','no: E there is a field of letters, not ℚ']];
+    const wrong=[['yes: always','yes, if it has real roots','no: it has group A₅'],['yes: not found means impossible','yes, after 1984','no: it comes from ℚ already'],['yes: E can be ℚ','yes, by cutting the circle','no: no group is Aut(K/E)']][F];
+    return {index:'q:46·now2.word['+F+']', a3:['46·now2.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['46g6: the roots of x⁵ − 2 are a fifth root of 2 times the fifth roots of 1, and its group has 20 members.','Whether every finite group comes from ℚ is open.','Any-group: over a field of letters, by fixing part of the shuffles.'][F]}; }},
+  {id:'46·now2.line',step:'46·now2',mode:'proof',label:'what the fields license',open:()=>measured('46·now2'),make(){
+    return line28('46·now2.line',[
+      ['g1',[['\\text{every group is Aut}(K/E)','any-group'],['\\text{every group comes from } \\mathbb Q','fields']],2,1,'E is a field of letters, not ℚ.'],
+      ['g2',[['\\text{an irreducible quintic}','given'],['\\text{group } S_5','quintic']],2,1,'x⁵ − 2 has a group of 20.'],
+      ['g3',[['\\text{a group not yet found over } \\mathbb Q','given'],['\\text{it cannot come from } \\mathbb Q','open']],2,1,'Open is not no.'],
+      ['g4',[['\\text{the clock of 3}','group'],['\\text{needs a cubic with three non-real roots}','cubic']],2,1,'y³ + y² − 2y − 1 has three real roots and group A₃.'],
+      ['g5',[['\\text{any finite group } G','given'],['\\text{the group of some splitting field over some field}','any-group']],2,0,'Fix part of the shuffles of a field of letters.']],[]); }});
+/* ----- annex 46·phys What are particles built from: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'46·phys.work',step:'46·phys',mode:'work',label:'quarks and binding',open:()=>measured('46·phys'),make(){
+    const ask=rnd(2);
+    if(ask){ const Q=[['uud',1],['udd',0],['uus',1],['dds',-1],['uds',0],['sss',-1],['uuu',2],['ddd',-1]][rnd(8)], ch={u:2,d:-1,s:-1}, v=Q[0].split('').reduce((a,c)=>a+ch[c],0)/3, f=x=>String(x).replace('-','−'), right=f(v), wrong=UQAX(right,[f(v+1),f(v-1),'1/3','2'],3); if(wrong.length<3) return null;
+      return {index:'q:46·phys.work[q;'+Q[0]+']', lines:[['\\text{quarks } '+Q[0],'u = +⅔, d = −⅓, s = −⅓']], ask:'What is the charge of the particle?', right, opts:shuffle([right,...wrong]), lead:'', why:'Add the thirds: '+Q[0].split('').map(c=>c==='u'?'⅔':'−⅓').join(' + ').replace(/\+ −/g,'− ')+' = '+right+'.'}; }
+    const N=[['the deuteron',1,1,1875.613],['helium-4',2,2,3727.379],['tritium',1,2,2808.921]][rnd(3)], B=N[1]*938.272+N[2]*939.565-N[3], right=DECAX(B,3)+' MeV', wrong=UQAX(right,[DECAX(N[3]-N[1]*938.272,3)+' MeV',DECAX(B/(N[1]+N[2]),3)+' MeV',DECAX(N[1]*938.272+N[2]*939.565,3)+' MeV',DECAX(2*B,3)+' MeV'],3); if(wrong.length<3) return null;
+    return {index:'q:46·phys.work[b;'+N[0]+']', lines:[[N[0]+': '+N[1]+'\\text{ p}, '+N[2]+'\\text{ n}','M c^2 = '+N[3]+' \\text{ MeV}'],['m_p c^2 = 938.272,\\ \\ m_n c^2 = 939.565 \\text{ MeV}','']], ask:'What is its binding energy?', right, opts:shuffle([right,...wrong]), lead:'', why:'A nucleus weighs less than its parts by B/c²: '+N[1]+' · 938.272 + '+N[2]+' · 939.565 − '+N[3]+' ≈ '+right+'.'}; }},
+  {id:'46·phys.word',step:'46·phys',mode:'word',label:'the gap in the ten',open:()=>measured('46·phys'),make(){
+    const F=rnd(3), Q=[['A student says isospin is exact, so the proton and neutron weigh the same.','Do they?','no: it is broken by the electric push and the quark masses: 1.293 MeV apart'],['A reader says the Ω⁻ was found first, then fitted into the ten.','Was it?','no: the gap in the ten predicted it'],['A student says quark colour is the colour of rung 36.','Is it?','no: it is a third label with three values; only the name is borrowed']];
+    const wrong=[['yes: exactly the same','yes, within a millionth','no: the neutron is lighter'],['yes: found, then fitted','yes, in 1932','no: it was never found'],['yes: red, green and blue light','yes, seen in a prism','no: quarks have no labels']][F];
+    return {index:'q:46·phys.word['+F+']', a3:['46·phys.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['938.272 against 939.565 MeV.','The ten had one place left, and its strangeness and mass were read off before the find.','The name is borrowed for a label with three values.'][F]}; }},
+  {id:'46·phys.line',step:'46·phys',mode:'proof',label:'what the symmetry licenses',open:()=>measured('46·phys'),make(){
+    return line28('46·phys.line',[
+      ['p1',[['\\text{isospin}','given'],['m_p = m_n','exact']],2,1,'1.293 MeV apart.'],
+      ['p2',[['\\text{a nucleus}','given'],['\\text{weighs the sum of its parts}','sum']],2,1,'Less by B/c²: 2.224 MeV for the deuteron.'],
+      ['p3',[['\\text{the } \\Omega^-','given'],['\\text{found, then fitted into the ten}','order']],2,1,'The gap in the ten predicted it.'],
+      ['p4',[['\\text{quark colour}','given'],['\\text{the colour of rung 36}','colour']],2,1,'Only the name is borrowed.'],
+      ['p5',[['\\psi \\text{ obeys the wave law, dies away at both ends}','given'],['\\text{the total of } |\\psi|^2 \\text{ is kept}','phase-keeps']],2,0,'Its rate is a flow out of the ends.'],
+      ['p6',[['uud','quarks'],['\\text{charge } 1','proton']],2,0,'⅔ + ⅔ − ⅓ = 1.']],[]); }});
+/* ----- annex 47·comp Can a program’s type say what it does: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'47·comp.work',step:'47·comp',mode:'work',label:'counting the members of types',open:()=>measured('47·comp'),make(){
+    const T=[['Bool',2],['One',1],['Dir',4],['Bit3',8],['Day',7]], a=T[rnd(5)], b=T[rnd(5)], k=rnd(3), name=['('+a[0]+' × '+b[0]+')','('+a[0]+' + '+b[0]+')','('+a[0]+' → '+b[0]+')'][k], v=[a[1]*b[1],a[1]+b[1],Math.pow(b[1],a[1])][k];
+    const right=v.toLocaleString('en').replace(/,/g,' '), wrong=UQAX(right,[String(a[1]*b[1]),String(a[1]+b[1]),String(Math.pow(b[1],a[1])),String(Math.pow(a[1],b[1])),String(a[1]*b[1]+1)].map(x=>Number(x).toLocaleString('en').replace(/,/g,' ')),3); if(wrong.length<3) return null;
+    return {index:'q:47·comp.work['+a[0]+';'+b[0]+';'+k+']', lines:[['|\\text{'+a[0]+'}| = '+a[1]+',\\ \\ |\\text{'+b[0]+'}| = '+b[1],'two types']], ask:'How many members has '+name+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Type-counts: products multiply, sums add, and Y → Z has |Z|^|Y|: '+right+'.'}; }},
+  {id:'47·comp.word',step:'47·comp',mode:'word',label:'a program for every type',open:()=>measured('47·comp'),make(){
+    const F=rnd(3), Q=[['A program p_X : X → X is written for every type X without looking at the type.','What can it do?','nothing: it is the do-nothing program at every type'],['A program p_X : X × X → X is written for every type X without looking at the type.','What can it do?','hand back the first part at every type, or the second at every type'],['A program takes a choice of Worker or Task to a Report.','What is it the same as?','a program from Worker to Report, paired with one from Task to Report']];
+    const wrong=[['anything it likes','swap members of X','hand back a fixed member'],['add the two parts','hand back the larger part','choose a part by the type'],['a program from Worker × Task to Report','one program from Report','a Report for every pair']][F];
+    return {index:'q:47·comp.word['+F+']', a3:['47·comp.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Only-identity: test it on One → X picking any x; it must hand back x.','Two-picks: test it on Bool → X sending false to x and true to y.','The cases-map technique: (X + Y) → Z matches (X → Z) × (Y → Z).'][F]}; }},
+  {id:'47·comp.line',step:'47·comp',mode:'proof',label:'what the types license',open:()=>measured('47·comp'),make(){
+    return line28('47·comp.line',[
+      ['t1',[['(X + Y) \\to Z','a program'],['(X \\to Z) \\times (Y \\to Z)','cases-map']],2,0,'A program out of a choice is a program for each tag.'],
+      ['t2',[['|Y \\to Z|','given'],['|Y| \\cdot |Z|','count']],2,1,'It is |Z| to the power |Y|.'],
+      ['t3',[['\\text{map over a list}','given'],['\\text{map of do-nothing is do-nothing}','map-over']],2,0,'Entry by entry, each entry is left as it is.'],
+      ['t4',[['p_X : X \\to X \\text{ for every type}','carried along'],['\\text{it may swap members}','swap']],2,1,'Only-identity: it is the do-nothing program.'],
+      ['t5',[['\\text{the join of Worker and Task over Team}','given'],['\\text{the limit of Worker → Team ← Task}','join-is-limit']],2,0,'The pairs whose two teams agree.']],[]); }});
+/* ----- annex 47·now When are two things truly the same: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'47·now.work',step:'47·now',mode:'work',label:'ways of being the same',open:()=>measured('47·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const a=rnd(9)-4, b=rnd(9)-4, f=x=>String(x).replace('-','−'), w=x=>x===0?'refl':(x>0?'loop':'loop⁻¹')+(Math.abs(x)>1?' run '+Math.abs(x)+' times':''), right=f(a+b), wrong=UQAX(right,[f(a*b),f(a-b),f(Math.abs(a)+Math.abs(b)),'0'],3); if(wrong.length<3) return null;
+      return {index:'q:47·now.work[c;'+a+';'+b+']', lines:[['\\text{a way } '+w(a)+',\\ \\text{then a way } '+w(b),'base = base on the circle']], ask:'What whole number matches the two run in a row?', right, opts:shuffle([right,...wrong]), lead:'', why:'Circle-ways: loop goes to 1 and running ways in a row goes to adding: '+(a<0?'('+f(a)+')':f(a))+' + '+(b<0?'('+f(b)+')':f(b))+' = '+right+'.'}; }
+    const n=2+rnd(5), F=[1,1,2,6,24,120,720][n], right=String(F), wrong=UQAX(right,[String(n),String(n*n),String(Math.pow(2,n)),String(F/2)],3); if(wrong.length<3) return null;
+    return {index:'q:47·now.work[n;'+n+']', lines:[['\\text{a type with } '+n+' \\text{ members}','with univalence']], ask:'In how many ways is it the same as itself?', right, opts:shuffle([right,...wrong]), lead:'', why:'Way-count: the ways are its matchings with itself, its shuffles: '+n+'! = '+right+'.'}; }},
+  {id:'47·now.word',step:'47·now',mode:'word',label:'paths and the circle',open:()=>measured('47·now'),make(){
+    const F=rnd(3), Q=[['Two ways p and q show x = y.','Must p = q?','no: Bool = Bool has refl and the swap'],['A student says the circle type has a point for each angle.','Does it?','no: it has one point, base, and one way, loop'],['A student calls univalence a technique of the calculus.','Is it?','no: it is laid down; the calculus without it cannot prove it']];
+    const wrong=[['yes: all ways are one','yes, for sets','no: there are no ways'],['yes: every angle','yes, for whole angles','no: it has no points'],['yes: it is proved','yes, from the carry-along technique','no: it is false']][F];
+    return {index:'q:47·now.word['+F+']', a3:['47·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Ways need not be the same way.','The angles are not members; ways base = base match the whole numbers.','The calculus has a world where it fails.'][F]}; }},
+  {id:'47·now.line',step:'47·now',mode:'proof',label:'what the ways license',open:()=>measured('47·now'),make(){
+    return line28('47·now.line',[
+      ['u1',[['p : x = y,\\ q : x = y','given'],['p = q','same']],2,1,'Bool = Bool has refl and the swap.'],
+      ['u2',[['\\text{univalence}','given'],['\\{1, 2\\} = \\{3, 4\\} \\text{ as sets}','sets']],2,1,'It speaks of types in the calculus.'],
+      ['u3',[['\\text{the circle type}','given'],['\\text{a point for each angle}','angles']],2,1,'One point, base, and one way, loop.'],
+      ['u4',[['\\text{univalence}','given'],['\\text{a technique of the calculus}','laid down']],2,1,'It is laid down.'],
+      ['u5',[['p : x = y,\\ \\text{a member of } P(x)','given'],['\\text{a member of } P(y)','carry-along']],2,0,'For every type family P.']],[]); }});
+/* ----- annex 47·now2 Is all of mathematics one theory: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'47·now2.work',step:'47·now2',mode:'work',label:'counting on a clock',open:()=>measured('47·now2'),make(){
+    const p=[3,5,7,13,17][rnd(5)]; let A=0; for(let x=0;x<p;x++) for(let y=0;y<p;y++) if(((y*y+y-(x*x*x-x*x))%p+p)%p===0) A++; const ask=rnd(2), b=p-A, f=x=>String(x).replace('-','−');
+    const right=ask?f(b):String(A), wrong=UQAX(right,ask?[f(A),f(p+1-A),f(-b),'0']:[String(p),String(p+1),String(2*p),String(A+1)],3); if(wrong.length<3) return null;
+    return {index:'q:47·now2.work['+p+';'+ask+']', lines:[['y^2 + y = x^3 - x^2','a curve'],['\\text{the clock of } '+p,'']], ask:ask?'What is b_'+p+' = '+p+' − A_'+p+'?':'How many pairs (x, y) of hours lie on it, A_'+p+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Clock-count: for each hour x, y² + y = f(x) has 1 + χ(4f(x) + 1) answers; summed over the '+p+' hours, A = '+A+', and b = '+p+' − '+A+' = '+f(b)+'.'}; }},
+  {id:'47·now2.word',step:'47·now2',mode:'word',label:'the programme of 1967',open:()=>measured('47·now2'),make(){
+    const F=rnd(3), Q=[['c_p = b_p for every prime anyone has checked.','Is it proved?','not by checking: checking is induction under the large case; the proof is a deduction'],['A student uses the clock-count technique on the clock of 2.','Does it work there?','no: it needs p odd; on the clock of 2, try all four pairs'],['A reader says the programme of 1967 is proved.','Is it?','no: its geometric form over complex curves is; the case over the fractions is open']];
+    const wrong=[['yes: every prime checked','yes, after a million primes','no: it is false'],['yes: for every prime','yes, with χ(1)','no: no clock works'],['yes: proved in 2024','yes, every case','no: no part of it is proved']][F];
+    return {index:'q:47·now2.word['+F+']', a3:['47·now2.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['The proof (1954) is a deduction over the arrangement.','The technique divides by 2 to complete the square.','The 2024 proof matches two categories built from a curve.'][F]}; }},
+  {id:'47·now2.line',step:'47·now2',mode:'proof',label:'what the counts license',open:()=>measured('47·now2'),make(){
+    return line28('47·now2.line',[
+      ['l1',[['c_p = b_p \\text{ for every prime checked}','checked'],['\\text{proved}','check']],2,1,'Checking is induction under the large case.'],
+      ['l2',[['p = 2','clock'],['A_2 = 2 \\text{ by the clock-count technique}','count']],2,1,'The technique needs p odd; A₂ = 4.'],
+      ['l3',[['\\text{the 2024 proof}','given'],['\\text{the two categories have the same things}','things']],2,1,'It matches them as categories, not thing for thing.'],
+      ['l4',[['\\text{the programme}','given'],['\\text{proved}','all']],2,1,'Its geometric form over complex curves is; the case over the fractions is open.'],
+      ['l5',[['p \\text{ odd}','clock'],['A_p = \\sum_x (1 + \\chi(4f(x) + 1))','clock-count']],2,0,'Complete the square: (2y + 1)² = 4f(x) + 1.']],[]); }});
+/* ----- annex pools: plain maths (Andrew 2026-11-15 07:13Z, the exhaustive draw): the Laundry and the Measuring Stick print a line as text,
+   as the rung pools write it, so every annex question is turned from TeX into that plain style before it is shown ----- */
+const PLAINAX=(()=>{
+  const SUP={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','+':'⁺','-':'⁻','−':'⁻','=':'⁼','(':'⁽',')':'⁾','n':'ⁿ','i':'ⁱ','x':'ˣ','y':'ʸ','t':'ᵗ','k':'ᵏ','a':'ᵃ','b':'ᵇ','c':'ᶜ','d':'ᵈ','e':'ᵉ','m':'ᵐ','p':'ᵖ','r':'ʳ','s':'ˢ','u':'ᵘ','v':'ᵛ','z':'ᶻ','T':'ᵀ','*':'*','′':'′','∗':'*',' ':''};
+  const SUB={'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉','+':'₊','-':'₋','−':'₋','=':'₌','(':'₍',')':'₎','a':'ₐ','e':'ₑ','h':'ₕ','i':'ᵢ','j':'ⱼ','k':'ₖ','l':'ₗ','m':'ₘ','n':'ₙ','o':'ₒ','p':'ₚ','r':'ᵣ','s':'ₛ','t':'ₜ','u':'ᵤ','v':'ᵥ','x':'ₓ'};
+  const SYM={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ϵ',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',vartheta:'ϑ',iota:'ι',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',sigma:'σ',tau:'τ',upsilon:'υ',phi:'ϕ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',
+    Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Phi:'Φ',Psi:'Ψ',Omega:'Ω',
+    cdot:'·',times:'×',div:'÷',pm:'±',mp:'∓',approx:'≈',le:'≤',leq:'≤',ge:'≥',geq:'≥',ne:'≠',neq:'≠',lt:'<',gt:'>',to:'→',rightarrow:'→',mapsto:'↦',leftarrow:'←',gets:'←',Rightarrow:'⇒',implies:'⇒',Leftarrow:'⇐',iff:'⇔',Leftrightarrow:'⇔',leftrightarrow:'↔',rightleftharpoons:'⇌',
+    circ:'∘',in:'∈',notin:'∉',ni:'∋',cup:'∪',cap:'∩',subseteq:'⊆',subset:'⊂',supseteq:'⊇',supset:'⊃',setminus:'∖',emptyset:'∅',varnothing:'∅',infty:'∞',aleph:'ℵ',beth:'ℶ',ell:'ℓ',hbar:'ℏ',nabla:'∇',partial:'∂',int:'∫',oint:'∮',iint:'∬',sum:'Σ',prod:'∏',
+    cdots:'⋯',dots:'…',ldots:'…',vdots:'⋮',equiv:'≡',propto:'∝',gg:'≫',ll:'≪',mid:'|',nmid:'∤',vert:'|',lvert:'|',rvert:'|',Vert:'‖',lVert:'‖',rVert:'‖',oplus:'⊕',otimes:'⊗',land:'∧',wedge:'∧',lor:'∨',vee:'∨',neg:'¬',lnot:'¬',forall:'∀',exists:'∃',
+    langle:'⟨',rangle:'⟩',lfloor:'⌊',rfloor:'⌋',lceil:'⌈',rceil:'⌉',star:'⋆',ast:'∗',bullet:'•',sim:'∼',simeq:'≃',cong:'≅',perp:'⊥',bot:'⊥',top:'⊤',parallel:'∥',angle:'∠',triangle:'△',degree:'°',prime:'′',dagger:'†',square:'□',Box:'□',Diamond:'◇',diamond:'◇',models:'⊨',vdash:'⊢',
+    uparrow:'↑',downarrow:'↓',hookrightarrow:'↪',twoheadrightarrow:'↠',longrightarrow:'⟶',longmapsto:'⟼',colon:':',prec:'≺',succ:'≻',preceq:'⪯',succeq:'⪰',sqcup:'⊔',bigcup:'⋃',bigcap:'⋂',coloneqq:'≔',triangleq:'≜',lnot:'¬',S:'§',
+    sin:'sin',cos:'cos',tan:'tan',sec:'sec',csc:'csc',cot:'cot',sinh:'sinh',cosh:'cosh',tanh:'tanh',arcsin:'arcsin',arccos:'arccos',arctan:'arctan',ln:'ln',log:'log',exp:'exp',det:'det',max:'max',min:'min',gcd:'gcd',lcm:'lcm',lim:'lim',arg:'arg',dim:'dim',ker:'ker',sup:'sup',inf:'inf',deg:'deg',Pr:'Pr',
+    ',':' ',';':' ',':':' ','!':'',' ':' ',quad:'  ',qquad:'  ','%':'%','$':'$','&':'&','#':'#','_':'_','|':'‖'};
+  const BB={Q:'ℚ',R:'ℝ',Z:'ℤ',N:'ℕ',C:'ℂ',F:'𝔽',P:'ℙ',E:'𝔼',H:'ℍ'};
+  const ACC={tilde:'̃',hat:'̂',bar:'̄',overline:'̅',vec:'⃗',dot:'̇',ddot:'̈',widetilde:'̃',widehat:'̂'};
+  const FR={'1/2':'½','1/3':'⅓','2/3':'⅔','1/4':'¼','3/4':'¾','1/5':'⅕','1/6':'⅙','1/8':'⅛'};
+  const simple=s=>/^[\p{L}\p{N}.′∞!]+$/u.test(s)||/^[−-]?\d+(\.\d+)?$/.test(s);
+  const wrap=s=>simple(s)||/^\(.*\)$/.test(s)&&!/\).*\(/.test(s)?s:'('+s+')';
+  function conv(s){ let i=0; const n=s.length;
+    const group=()=>{ /* reads one argument: {...} or one token */ while(i<n&&s[i]===' ') i++;
+      if(s[i]==='{'){ let d=1, j=i+1; while(j<n&&d){ if(s[j]==='\\'){ j+=2; continue; } if(s[j]==='{') d++; else if(s[j]==='}') d--; j++; } const inner=s.slice(i+1,j-1); i=j; return conv(inner); }
+      if(s[i]==='\\'){ const m=/^\\([a-zA-Z]+|.)/.exec(s.slice(i)); i+=m[0].length; return conv(m[0]); }
+      return s[i++]||''; };
+    const raw=()=>{ while(i<n&&s[i]===' ') i++; if(s[i]!=='{') return s[i++]||''; let d=1, j=i+1; while(j<n&&d){ if(s[j]==='{') d++; else if(s[j]==='}') d--; j++; } const r=s.slice(i+1,j-1); i=j; return r; };
+    const script=(t,M,mark)=>{ t=t.trim(); if(t&&[...t].every(c=>M[c]!==undefined)) return [...t].map(c=>M[c]).join(''); t=t.replace(/-/g,'−'); if(mark==='_'&&/^[\p{L}\p{N}]+$/u.test(t)) return '_'+t; return mark+([...t].length===1?t:'('+t+')'); };
+    let o='';
+    while(i<n){ const c=s[i];
+      if(c==='\\'){ const m=/^\\([a-zA-Z]+|.)/.exec(s.slice(i)); const w=m[1]; i+=m[0].length;
+        if(w==='\\'){ o+='; '; continue; }
+        if(w==='{'){ o+='{'; continue; } if(w==='}'){ o+='}'; continue; }
+        if(w==='text'||w==='mathrm'||w==='textrm'||w==='operatorname'||w==='mathsf'||w==='textsf'||w==='mathit'||w==='textit'||w==='mathbf'||w==='textbf'||w==='boldsymbol'||w==='bm'||w==='mbox'||w==='mathtt'||w==='texttt'||w==='mathcal'||w==='mathscr'||w==='mathfrak'||w==='emph'||w==='textup'){ o+=w.startsWith('text')||w==='mbox'?raw().replace(/\\([%$&#_{}])/g,'$1').replace(/\\,/g,' '):group(); continue; }
+        if(w==='mathbb'){ const a=group(); o+=[...a].map(ch=>BB[ch]||ch).join(''); continue; }
+        if(w in ACC){ const a=group(); o+=a.length===1?a+ACC[w]:a; continue; }
+        if(w==='frac'||w==='tfrac'||w==='dfrac'||w==='cfrac'){ const a=group().trim(), b=group().trim(); const f=a+'/'+b; let r=FR[f]||(wrap(a)+(/^0[.,]/.test(b)?' ÷ ':'/')+wrap(b)); const nx=s.slice(i).trimStart()[0]||''; if(!FR[f]&&(/[\p{L}\p{N}²³)]$/u.test(o)||/[\p{L}\p{N}\\(]/u.test(nx))) r='('+r+')'; o+=r; continue; }
+        if(w==='binom'||w==='tbinom'||w==='dbinom'){ const a=group().trim(), b=group().trim(); o+=(/[^\s(]$/.test(o)?' ':'')+'C('+a+', '+b+')'; continue; }
+        if(w==='sqrt'){ let k=''; if(s[i]==='['){ const j=s.indexOf(']',i); k=s.slice(i+1,j); i=j+1; } const a=group().trim(); o+=(k?script(k,SUP,''):'')+'√'+(simple(a)?a:'('+a+')'); continue; }
+        if(w==='pmod'){ o+=' (mod '+group().trim()+')'; continue; } if(w==='bmod'||w==='mod'){ o+=' mod '; continue; }
+        if(w==='not'){ const a=group(); o+=a==='='?'≠':a==='∈'?'∉':a==='≡'?'≢':a==='|'?'∤':a+'̸'; continue; }
+        if(w==='left'||w==='right'||w==='big'||w==='Big'||w==='bigg'||w==='Bigg'||w==='bigl'||w==='bigr'||w==='Bigl'||w==='Bigr'||w==='middle'){ if(s[i]==='.') i++; continue; }
+        if(w==='textstyle'||w==='displaystyle'||w==='scriptstyle'||w==='limits'||w==='nolimits'||w==='qquad'&&false){ continue; }
+        if(w==='begin'){ const env=raw(); const end='\\end{'+env+'}'; const j=s.indexOf(end,i); let body=s.slice(i,j<0?n:j); i=j<0?n:j+end.length; if(/array/.test(env)) body=body.replace(/^\s*\{[^}]*\}/,'');
+          const rows=body.split(/\\\\/).map(r=>r.trim()).filter(Boolean).map(r=>r.split('&').map(x=>conv(x).trim()));
+          if(env==='cases') o+='{ '+rows.map(r=>r.join(', ')).join('; ')+' }';
+          else if(/matrix|array/.test(env)){ const t=rows.map(r=>r.join('  ')).join('; '); o+=env[0]==='p'?'('+t+')':env[0]==='v'?'|'+t+'|':'['+t+']'; }
+          else o+=rows.map(r=>r.join(' ')).join('; ');
+          continue; }
+        if(w==='end'){ raw(); continue; }
+        if(w==='overset'||w==='stackrel'){ const a=group(), b=group(); o+=b+'⁽'+a+'⁾'; continue; }
+        if(w==='underbrace'||w==='overbrace'||w==='boxed'||w==='phantom'&&false){ o+=group(); continue; }
+        if(w==='color'){ raw(); continue; } if(w==='hspace'||w==='vspace'||w==='kern'){ raw(); continue; }
+        if(w in SYM){ const v=SYM[w]; if(/^[a-z]{2,}$/i.test(v)&&w===v){ if(/[\p{L}\p{N}²³⁻¹)]$/u.test(o)) o+=' '; o+=v; if(/^[\p{L}\p{N}\\]/u.test(s[i]||'')) o+=' '; } else o+=v; continue; }
+        o+=w; continue; }
+      if(c==='^'||c==='_'){ i++; const t=group(); o+=script(t,c==='^'?SUP:SUB,c); continue; }
+      if(c==='{'){ o+=group(); continue; }
+      if(c==='}'){ i++; continue; }
+      if(c==='~'){ o+=' '; i++; continue; }
+      if(c==='-'&&/[\s(=,]$|^$/.test(o)&&/\d|[a-zA-Z(]/.test(s[i+1]||'')){ o+='−'; i++; continue; }
+      o+=c; i++; }
+    return o; }
+  const tidy=t=>t.replace(/ {2,}/g,' ').replace(/ ([,;.:)])/g,'$1').replace(/\( /g,'(').replace(/(\d) - (\d)/g,'$1 − $2').replace(/ - /g,' − ').trim();
+  const isTex=t=>/\\[a-zA-Z,;:! %${}|]|\^|_\{|_[a-zA-Z0-9]/.test(t);
+  const line=t=>typeof t!=='string'||!isTex(t)?t:tidy(conv(t));
+  const text=t=>typeof t!=='string'?t:t.replace(/\$([^$]+)\$/g,(m,x)=>/[\\^_]/.test(x)?tidy(conv(x)):m).replace(/[A-Za-z]_\{[^{}]*\}|\\[a-zA-Z]+(\{[^{}]*\})*/g,m=>tidy(conv(m))).replace(/([A-Za-zα-ωΑ-Ω])_([aehijklmnoprstuvx0-9])(?![A-Za-z0-9])/g,(m,x,y)=>x+SUB[y]);
+  return q=>{ if(!q) return q;
+    if(q.lines) q.lines=q.lines.map(l=>[line(l[0]),l[1]==null?l[1]:text(line(l[1]))].concat(l.slice(2)));
+    ['story','ask','why','lead'].forEach(k=>{ if(typeof q[k]==='string') q[k]=text(q[k]); });
+    if(q.opts&&!q.html){ const o=q.opts.map(text), r=text(q.right); if(new Set(o).size!==o.length||o.filter(x=>x===r).length!==1) return null; q.opts=o; q.right=r; }
+    q.plain=1;
+    return q; }; })();
+QP.slice(QPAX0).forEach(P=>{ const mk=P.make; P.make=function(){ return PLAINAX(mk.apply(this,arguments)); }; });
 /* ===== Annex pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
@@ -32352,7 +32527,7 @@ function render(box){
     +'<div class="rzbar"><button type="button" class="rzb rzrep" aria-expanded="false"><svg class="rzi" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 1.8 22.6 20.3H1.4Z" fill="#fff" stroke="#000" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 8v6.3" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.5" fill="#000"/></svg><span>Report</span></button><button type="button" class="rzb rzset" aria-label="settings"><span class="rzi rzig" aria-hidden="true">⚙</span><span>Settings</span></button><button type="button" class="rzb rznext"><span class="rzi rzip" aria-hidden="true">+</span><span>Another question</span></button></div>'
     +'<p class="rzaddr" hidden><button type="button" class="rzseed" title="report this question · '+esc(addr).replace(/"/g,'&quot;')+'">'+sayAddr(q.a3)+'</button><br>Tap the address to send the report. <button type="button" class="dlink rzcopy">copy address</button></p>'+gearBox(q);
   wire(); rzUi(box);
-  if(/\$[^$]+\$/.test(q.ask)&&window.katex){ const el=box.querySelector('.rzask'); el.innerHTML=''; String(q.ask).split(/(\$[^$]+\$)/).forEach(t=>{ if(/^\$[^$]+\$$/.test(t)){ const sp=document.createElement('span'); try{ katex.render(t.slice(1,-1),sp,{throwOnError:false}); }catch(e){ sp.textContent=t; } el.appendChild(sp); } else el.appendChild(document.createTextNode(t)); }); }
+  if(/\$[^$]+\$/.test(q.ask)&&window.katex&&!q.plain){ const el=box.querySelector('.rzask'); el.innerHTML=''; String(q.ask).split(/(\$[^$]+\$)/).forEach(t=>{ if(/^\$[^$]+\$$/.test(t)){ const sp=document.createElement('span'); try{ katex.render(t.slice(1,-1),sp,{throwOnError:false}); }catch(e){ sp.textContent=t; } el.appendChild(sp); } else el.appendChild(document.createTextNode(t)); }); }
   let chose='';
   const cp=box.querySelector('.rzcopy'); if(cp) cp.onclick=()=>{ const s='laundry '+addr+' ('+MD.label+') index: '+q.index; const done=()=>{ cp.textContent='copied'; };
     try{ navigator.clipboard.writeText(s).then(done,()=>{ window.prompt('Copy this address',s); }); }catch(e){ window.prompt('Copy this address',s); } };

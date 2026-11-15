@@ -2604,19 +2604,19 @@ async function sit(scope,key,opts){ opts=opts||{}; close();
   const show=()=>{ if(box!==me) return; while(i<N&&got[i]&&got[i].none) i++; if(i>=N) return end();
     const c=got[i];
     if(!c){ waiting=true; box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-n">question '+(i+1)+' of '+total()+'</p><p class="sk-q">'+(i?'Drawing the next question…':'Drawing the first question…')+'</p></div>'; wire(); return; }
-    const L=c.lines||[];
+    const L=c.lines||[], rp=c.plain?(el,x)=>{ el.textContent=String(x); }:rich;
     box.innerHTML='<div class="sk-card">'+head()+'<p class="sk-n">question '+(i+1)+' of '+total()+' · '+esc(KL[c.mode]||c.mode)+' · '+need()+' right to pass</p>'
       +(c.story?'<p class="rzstory"></p>':'')+(c.fig?'<div class="rzfig">'+c.fig+'</div>':'')
       +(L.length?'<div class="rzlines">'+L.map((l,k)=>'<div class="rzl rzs"><span class="rzn">'+(k+1)+'</span><span class="rzt"></span><span class="rzw"></span></div>').join('')+'</div>':'')
       +'<div class="sk-q rzask"></div><div class="sk-opts"></div><p class="sk-why" hidden></p><p><button type="button" class="sk-next" hidden>'+(i+1<N?'next':'finish')+'</button></p></div>'; wire();
-    if(c.story) rich(box.querySelector('.rzstory'),c.story);
-    box.querySelectorAll('.rzl').forEach((row,k)=>{ rich(row.querySelector('.rzt'),L[k][0]); row.querySelector('.rzw').textContent=L[k][1]===null?'?':(L[k][1]||''); });
-    rich(box.querySelector('.rzask'),c.ask||'');
+    if(c.story) rp(box.querySelector('.rzstory'),c.story);
+    box.querySelectorAll('.rzl').forEach((row,k)=>{ rp(row.querySelector('.rzt'),L[k][0]); row.querySelector('.rzw').textContent=L[k][1]===null?'?':(L[k][1]||''); });
+    rp(box.querySelector('.rzask'),c.ask||'');
     const oe=box.querySelector('.sk-opts');
-    shuffle((c.opts||[]).slice()).forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='sk-o'; b.dataset.v=o; if(c.html&&c.html[o]){ b.innerHTML=c.html[o]; b.setAttribute('aria-label',o); b.classList.add('sk-g'); } else rich(b,o);
+    shuffle((c.opts||[]).slice()).forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='sk-o'; b.dataset.v=o; if(c.html&&c.html[o]){ b.innerHTML=c.html[o]; b.setAttribute('aria-label',o); b.classList.add('sk-g'); } else rp(b,o);
       b.onclick=()=>{ if(oe.dataset.done) return; oe.dataset.done='1'; asked++; const ok=o===c.right; if(ok) right++;
         oe.querySelectorAll('.sk-o').forEach(x=>{ x.disabled=true; if(x.dataset.v===c.right) x.classList.add('ok'); }); if(!ok) b.classList.add('no');
-        const w=box.querySelector('.sk-why'); w.hidden=false; rich(w,(ok?'Right. ':(c.lead||'Not this one. '))+(c.why||'')); box.querySelector('.sk-next').hidden=false; };
+        const w=box.querySelector('.sk-why'); w.hidden=false; rp(w,(ok?'Right. ':(c.lead||'Not this one. '))+(c.why||'')); box.querySelector('.sk-next').hidden=false; };
       oe.appendChild(b); });
     box.querySelector('.sk-next').onclick=()=>{ i++; show(); }; };
   const end=()=>{ const n=total(), nd=need(), pass=n>0&&right>=nd, k=certKey(scope,key);
