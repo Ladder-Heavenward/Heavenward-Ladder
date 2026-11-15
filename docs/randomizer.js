@@ -20065,6 +20065,113 @@ QP.push({id:'42·phys.work',step:'42·phys',mode:'work',label:'agreement and the
       ['i4',[['\\text{a memory}','given'],['\\text{it recalls every stored pattern}','memory']],2,1,'Past about 0.14N patterns, stored ones stop being low points.'],
       ['i5',[['s_i \\text{ set to the sign of its field}','update'],['\\text{the energy never rises}','downhill-update']],2,0,'The arrow then agrees with its field.'],
       ['i6',[['\\text{two linked arrows, no field}','given'],['\\text{agreement } \\tanh(J/kT)','pair-agreement']],2,0,'Weights e^(±J/kT) for agree and disagree.']],[]); }});
+/* ----- annex 43·comp How can strangers share a secret: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·comp.work',step:'43·comp',mode:'work',label:'clocks give themselves away',open:()=>measured('43·comp'),make(){
+    const ask=rnd(3), md=(a,p)=>((a%p)+p)%p, inv=(a,p)=>{ for(let x=1;x<p;x++) if(md(a*x,p)===1) return x; return 0; }, G=(a,b)=>b?G(b,a%b):a;
+    if(ask===2){ const P=[[7,11],[11,13],[13,17],[7,19]][rnd(4)], n=P[0]*P[1]; let x=0,y=0; for(let t=0;t<50&&!x;t++){ const r=2+rnd(n-3); if(G(r,n)!==1) continue; for(let s=2;s<n-1;s++){ if(s!==r&&s!==n-r&&md(s*s-r*r,n)===0){ x=r; y=s; break; } } } if(!x) return null;
+      const f=G(Math.abs(x-y),n), right=Math.min(f,n/f)+' × '+Math.max(f,n/f), wrong=UQAX(right,['1 × '+n,G(x+y,n)===f?(f+1)+' × '+(n-f):Math.min(G(x+y,n),n/G(x+y,n))+' × '+Math.max(G(x+y,n),n/G(x+y,n)),x+' × '+y,(Math.abs(x-y))+' × '+(x+y)],3).filter(w=>w!==right); if(wrong.length<3) return null;
+      return {index:'q:43·comp.work[r;'+n+';'+x+';'+y+']', lines:[['n = '+n,'to split'],[x+'^2 \\equiv '+y+'^2 \\pmod{'+n+'}','two roots of one square, not ± each other']], ask:'What split of n do they give?', right, opts:shuffle([right,...wrong]), lead:'', why:'Root-gives-factor: n divides ('+x+' − '+y+')('+x+' + '+y+') but neither factor alone, so gcd('+Math.abs(x-y)+', '+n+') = '+f+' splits it.'}; }
+    if(ask===1){ const p=[11,13,17,101][rnd(4)], right='1 in '+p, wrong=UQAX(right,['1 in 2','1 in '+(p*p),'1 in '+(p-1),'certain'],3); if(wrong.length<3) return null;
+      return {index:'q:43·comp.work[t;'+p+']', lines:[['t \\equiv am + b \\pmod{'+p+'}','a tag, key (a, b) at random'],['\\text{one message and its tag seen}','']], ask:'With what chance does a forger tag another message rightly?', right, opts:shuffle([right,...wrong]), lead:'', why:'One-time-tag: every a fits the one seen pair with some b, so the right tag of a new message is any hour alike: 1 in '+p+'.'}; }
+    const p=[11,13,17,19,23][rnd(5)], a=2+rnd(p-3), c=1+rnd(p-1), x0=rnd(p), x1=md(a*x0+c,p), x2=md(a*x1+c,p); if(x1===x0) return null; const A=md((x2-x1)*inv(x1-x0,p),p), right=String(A), wrong=UQAX(right,[String(md(x2-x1,p)),String(md(x1-x0,p)),String(c),String(md(A+1,p))],3); if(wrong.length<3) return null;
+    return {index:'q:43·comp.work[g;'+p+';'+a+';'+c+';'+x0+']', lines:[['x_{n+1} \\equiv a x_n + c \\pmod{'+p+'}','a straight-map generator'],['x_0, x_1, x_2 = '+x0+', '+x1+', '+x2,'three outputs']], ask:'What is a?', right, opts:shuffle([right,...wrong]), lead:'', why:'Three-outputs: x₂ − x₁ ≡ a(x₁ − x₀), so a ≡ '+md(x2-x1,p)+' · '+md(x1-x0,p)+'⁻¹ ≡ '+right+' on the clock of '+p+'.'}; }},
+  {id:'43·comp.word',step:'43·comp',mode:'word',label:'the listener in the middle',open:()=>measured('43·comp'),make(){
+    const F=rnd(3), Q=[['Two strangers make a shared key with the shared-secret technique, while a listener can change their messages.','Are they safe?','no: she stands in the middle; one side must sign'],['A shop uses a one-time tag, but uses its key twice.','Is it still safe?','no: two messages and tags give the key (a, b)'],['A stream of digits passes every test a student tried.','Is it pseudorandom?','not shown: the straight map passes tallies and falls to three outputs']];
+    const wrong=[['yes: the key is secret','yes, if the clock is large','no: no key can be shared'],['yes: the key is still random','yes, if the messages differ','no: one use already breaks it'],['yes: every test passed','yes, if the tests are many','no: no stream is']][F];
+    return {index:'q:43·comp.word['+F+']', a3:['43·comp.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['She makes one key with each side and passes messages between.','Two equations t ≡ am + b fix a and b.','Passing tests tried is not passing every fast test.'][F]}; }},
+  {id:'43·comp.line',step:'43·comp',mode:'proof',label:'what the clock licenses',open:()=>measured('43·comp'),make(){
+    return line28('43·comp.line',[
+      ['c1',[['\\text{a stream passes every test I tried}','tests'],['\\text{it is pseudorandom}','tried']],2,1,'The straight map passes tallies and falls to three outputs.'],
+      ['c2',[['\\text{multiplying primes}','given'],['\\text{proved one-way}','one-way']],2,1,'No function is proved one-way; this is believed.'],
+      ['c3',[['\\text{a fingerprint}','given'],['\\text{it can be made with no matches}','matches']],2,1,'More files than fingerprints.'],
+      ['c4',[['\\text{a one-time tag, key used twice}','given'],['\\text{still safe}','tag']],2,1,'Two messages and tags give (a, b).'],
+      ['c5',[['x_0, x_1, x_2 \\text{ of a straight map},\\ x_1 \\ne x_0','prime clock'],['a \\text{ and } c \\text{ are found}','three-outputs']],2,0,'a ≡ (x₂ − x₁)/(x₁ − x₀), then c.'],
+      ['c6',[['\\text{a signature on } H(m)','given'],['\\text{it passes for every } m\' \\text{ with } H(m\') = H(m)','sign-the-fingerprint']],2,0,'So it is as safe as the fingerprint’s matches are hard.']],[]); }});
+/* ----- annex 43·crypt Can a secret be split so any three of five can open it: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·crypt.work',step:'43·crypt',mode:'work',label:'three points fix the curve',open:()=>measured('43·crypt'),make(){
+    const md=(a,p)=>((a%p)+p)%p, inv=(a,p)=>{ a=md(a,p); for(let x=1;x<p;x++) if(md(a*x,p)===1) return x; return 0; };
+    const p=[11,13,17][rnd(3)], s=rnd(p), a1=rnd(p), a2=1+rnd(p-1), f=x=>md(s+a1*x+a2*x*x,p), X=shuffle([1,2,3,4,5]).slice(0,3).sort((a,b)=>a-b), Y=X.map(f);
+    const w=X.map((xi,i)=>{ const o=X.filter((_,j)=>j!==i); return md(o[0]*o[1]*inv((xi-o[0])*(xi-o[1]),p),p); }), S=md(Y[0]*w[0]+Y[1]*w[1]+Y[2]*w[2],p); if(S!==s) return null;
+    const right=String(s), wrong=UQAX(right,[String(md(Y[0]+Y[1]+Y[2],p)),String(Y[0]),String(md(s+1,p)),String(md(Y[0]*w[0],p))],3); if(wrong.length<3) return null;
+    return {index:'q:43·crypt.work['+p+';'+s+';'+a1+';'+a2+';'+X.join('')+']', lines:[['\\text{shares } '+X.map((x,i)=>'('+x+', '+Y[i]+')').join(',\\ '),'on the clock of '+p],['f(x) = s + a_1x + a_2x^2','']], ask:'What is the secret s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rebuild-at-zero: weights '+w.join(', ')+'; s ≡ '+Y.map((y,i)=>y+' · '+w[i]).join(' + ')+' ≡ '+right+' on the clock of '+p+'.'}; }},
+  {id:'43·crypt.word',step:'43·crypt',mode:'word',label:'two holders meet',open:()=>measured('43·crypt'),make(){
+    const p=[11,13,17,101][rnd(4)], F=rnd(2);
+    const right=F?'all '+p+' hours, each equally likely':'no: on the clock of 12 the weights need 2⁻¹, which does not exist', wrong=F?[(p-1)+' hours, all but 0','only one: two shares fix it','about half the hours']:['yes: any clock will do','yes, if the shares differ','no: the clock must be 10'];
+    return {index:'q:43·crypt.word['+F+';'+p+']', a3:['43·crypt.word',DASH,DASH], story:F?'A secret is split on the clock of '+p+' so any three of five can open it. Two holders compare their shares.':'A club wants to split its secret on the clock of 12.', lines:[], ask:F?'Which secrets are still possible to them?':'Will that work?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Two-say-nothing: for every hour s′ exactly one curve passes through both shares with value s′ at 0.':'Three-points-fix needs a prime clock, where every difference has an inverse.'}; }},
+  {id:'43·crypt.line',step:'43·crypt',mode:'proof',label:'what the shares license',open:()=>measured('43·crypt'),make(){
+    return line28('43·crypt.line',[
+      ['s1',[['\\text{the curve}','given'],['\\text{worked in the ordinary numbers}','numbers']],2,1,'Sizes leak: on the clock every hour is as likely.'],
+      ['s2',[['\\text{a share}','given'],['\\text{given at } x = 0','hour']],2,1,'That share is the secret.'],
+      ['s3',[['a_2 = 0 \\text{ always}','given'],['\\text{three are still needed}','line']],2,1,'Then f is a straight line and two shares fix it.'],
+      ['s4',[['\\text{two shares}','given'],['\\text{the secret is one of } p - 1','hours']],2,1,'Every one of the p hours is still possible, 0 included.'],
+      ['s5',[['\\text{three shares at different hours}','prime clock'],['\\text{the curve is fixed, and so } s','three-points-fix']],2,0,'Two curves of degree at most 2 agreeing at three hours are the same.'],
+      ['s6',[['\\text{two shares, any } s\'','prime clock'],['\\text{exactly one curve through both with value } s\' \\text{ at } 0','two-say-nothing']],2,0,'Three points fix one curve.']],[]); }});
+/* ----- annex 43·now Do primes keep coming close together: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·now.work',step:'43·now',mode:'work',label:'gaps and patterns',open:()=>measured('43·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const P=[[0,2,4],[0,2,6],[0,4,6],[0,2,8],[0,1],[0,2,6,8],[0,2,4,6],[0,6,12],[0,4,8]][rnd(9)], cov=q=>new Set(P.map(h=>h%q)).size===q, c2=cov(2), c3=cov(3), adm=!c2&&!c3;
+      const right=adm?'admissible: it misses an hour of every small prime':'not admissible: it fills every hour of the clock of '+(c2?2:3), wrong=[adm?'not admissible: it fills every hour of the clock of 3':'admissible: it misses an hour of every small prime','not admissible: it has an even offset','admissible: every pattern is'].filter(x=>x!==right);
+      return {index:'q:43·now.work[a;'+P.join(',')+']', lines:[['\\text{offsets } '+P.join(', '),'n + h, all prime at once?']], ask:'Is the pattern admissible?', right, opts:shuffle([right,...wrong.slice(0,3)]), lead:'', why:'Covered-hours: on the clock of 2 the offsets fill '+[...new Set(P.map(h=>h%2))].join(', ')+'; on the clock of 3, '+[...new Set(P.map(h=>h%3))].join(', ')+'. A pattern that fills every hour of some clock is all prime only finitely often.'}; }
+    const n=[5,6,8,10][rnd(4)], right=String(n-1)+' numbers, from n! + 2 to n! + '+n, wrong=UQAX(right,[n+' numbers, from n! + 1 to n! + '+n,(n-2)+' numbers, from n! + 2 to n! + '+(n-1),'none: n! + 2 is prime'],3); if(wrong.length<3) return null;
+    return {index:'q:43·now.work[g;'+n+']', lines:[['n = '+n,'n! = '+[1,2,3,4,5,6,7,8,9,10].slice(0,n).reduce((a,b)=>a*b,1).toLocaleString('en').replace(/,/g,' ')]], ask:'What run of numbers is surely free of primes?', right, opts:shuffle([right,...wrong]), lead:'', why:'Long-gap: n! + j has the factor j for 2 ≤ j ≤ n, so n − 1 = '+(n-1)+' numbers in a row are none of them prime.'}; }},
+  {id:'43·now.word',step:'43·now',mode:'word',label:'twins and the bound',open:()=>measured('43·now'),make(){
+    const F=rnd(3), Q=[['Since 2013 the bound came down to 246.','Has the gap 246 itself been seen endlessly often?','not shown: some gap of at most 246 recurs; which one is not known'],['A table finds 8169 twin pairs below a million.','Does that show twins never end?','no: counts of a finite table prove nothing about the endless'],['The average gap between primes grows like ln x.','Must short gaps stop?','no: an average says nothing about the smallest']];
+    const wrong=[['yes: 246 recurs','yes, and 2 as well','no: no gap recurs'],['yes: so many cannot end','yes, if the count keeps growing','no: twins end at a million'],['yes: they grow too','yes, after a million','no: gaps shrink']][F];
+    return {index:'q:43·now.word['+F+']', a3:['43·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Width-bound: gaps no wider than the narrowest pattern recur.','A finite table cannot speak for the endless.','Gaps as long as you like and gaps of at most 246 both recur.'][F]}; }},
+  {id:'43·now.line',step:'43·now',mode:'proof',label:'what the patterns license',open:()=>measured('43·now'),make(){
+    return line28('43·now.line',[
+      ['q1',[['\\text{the 2013 bound, now 246}','given'],['\\text{the gap 246 is seen endlessly often}','246']],2,1,'Some gap of at most 246; which one is not known.'],
+      ['q2',[['0, 2, 4','offsets'],['\\text{a pattern like any other}','pattern']],2,1,'It covers the clock of 3.'],
+      ['q3',[['\\text{the average gap grows}','given'],['\\text{short gaps must stop}','average']],2,1,'An average says nothing about the smallest.'],
+      ['q4',[['\\text{a finer weighing}','given'],['246 \\text{ comes down to } 2','methods']],2,1,'The methods cannot see an even or odd count of prime factors; 6 at the very best.'],
+      ['q5',[['n! + j,\\ 2 \\le j \\le n','given'],['\\text{none prime}','long-gap']],2,0,'j divides n! + j.'],
+      ['q6',[['k \\text{ primes, each above } k','offsets'],['\\text{an admissible pattern}','big-primes']],2,0,'They miss hour 0 of every clock of a prime up to k, and k offsets cannot fill a bigger clock.']],[]); }});
+/* ----- annex 43·now2 How regularly are the primes spread: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·now2.work',step:'43·now2',mode:'work',label:'the count and its error',open:()=>measured('43·now2'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const p=[3,5,7,11,13][rnd(5)], a=(p-2)/p, b=(p-1)*(p-1)/(p*p), right=DECAX(a/b,4), wrong=UQAX(right,[DECAX(b/a,4),DECAX(a,4),DECAX(b,4),DECAX((p-2)/(p-1),4)],3); if(wrong.length<3) return null;
+      return {index:'q:43·now2.work[t;'+p+']', lines:[['\\text{the clock of } '+p,'n and n + 2 both miss hour 0']], ask:'By what factor does that beat two independent misses?', right, opts:shuffle([right,...wrong]), lead:'', why:'Twin-correction: '+(p-2)+' of '+p+' hours, against '+(p-1)+'²/'+p+'² for independent misses: ratio '+(p*(p-2))+'/'+((p-1)*(p-1))+' ≈ '+right+'.'}; }
+    const e=[4,6,8,10][rnd(4)], x=Math.pow(10,e), L=Math.log(x);
+    if(ask===1){ const v=x/(L*L), right=DECAX(v,0), wrong=UQAX(right,[DECAX(x/L,0),DECAX(Math.sqrt(x/L),0),DECAX(x/(L*L*L),0),DECAX(Math.sqrt(x),0)],3); if(wrong.length<3) return null;
+      return {index:'q:43·now2.work[l;'+e+']', lines:[['x = 10^{'+e+'}','\\ln x \\approx '+DECAX(L,3)]], ask:'About how much does li(x) exceed x/ln x?', right, opts:shuffle([right,...wrong]), lead:'', why:'Parts-count: by about x/(ln x)² = 10^'+e+' ÷ '+DECAX(L*L,2)+' ≈ '+right+'.'}; }
+    const v=Math.sqrt(x/L), right='about '+DECAX(v,0), wrong=UQAX(right,['about '+DECAX(x/L,0),'about '+DECAX(Math.sqrt(x),0),'about '+DECAX(x/(L*L),0),'about '+DECAX(Math.log(x/L),1)],3); if(wrong.length<3) return null;
+    return {index:'q:43·now2.work[s;'+e+']', lines:[['x = 10^{'+e+'}','\\ln x \\approx '+DECAX(L,3)],['\\text{each } n \\text{ prime by a toss with chance } 1/\\ln n','the pretend count']], ask:'By about how much does the pretend count stray from li(x)?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-of-count: the spread squared is at most the average, about x/ln x, so the count strays by about √(x/ln x) ≈ '+DECAX(v,0)+'.'}; }},
+  {id:'43·now2.word',step:'43·now2',mode:'word',label:'zeros on the line',open:()=>measured('43·now2'),make(){
+    const b=[0.5,0.6,0.75][rnd(3)], e=[6,10][rnd(2)], v=Math.pow(10,e*b), F=rnd(2);
+    if(F){ const right='about 10^'+DECAX(e*b,2), wrong=UQAX(right,['about 10^'+e,'about 10^'+DECAX(e*b*2,2),'about 10^'+DECAX(e*0.25,2),'about 10^'+DECAX(e*0.9,2)],3);
+      return {index:'q:43·now2.word[z;'+b+';'+e+']', a3:['43·now2.word',DASH,DASH], story:'Suppose ζ had a zero ρ = '+b+' + iγ.', lines:[], ask:'How large a wave would it put in the error of the count, at x = 10^'+e+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Zero-size: x^ρ has size x^β = 10^('+e+' · '+b+'), less the |ρ| below it. Only zeros with β = ½ keep the error to square-root size.'}; }
+    const right='no: a finite check; the hypothesis is about endlessly many', wrong=['yes: ten trillion is enough','yes, by the zero-size technique','no: some zero is known off the line'];
+    return {index:'q:43·now2.word[c]', a3:['43·now2.word',DASH,DASH], story:'Ten trillion zeros of ζ have been checked, and every one lies on the line of real part ½.', lines:[], ask:'Are all of them on it?', right, opts:shuffle([right,...wrong]), lead:'', why:'A table checks finitely many; the claim is about every zero.'}; }},
+  {id:'43·now2.line',step:'43·now2',mode:'proof',label:'what the count licenses',open:()=>measured('43·now2'),make(){
+    return line28('43·now2.line',[
+      ['z1',[['\\text{ten trillion zeros on the line}','checked'],['\\text{all are}','all']],2,1,'A finite check; the hypothesis is about endlessly many.'],
+      ['z2',[['\\rho = \\beta + i\\gamma,\\ x \\gt 1','a zero'],['|x^\\rho| = x^\\beta','zero-size']],2,0,'The turn x^(iγ) has size 1.'],
+      ['z3',[['\\text{a count of independent tosses}','given'],['\\text{spread squared at most its average}','spread-of-count']],2,0,'Each qₙ(1 − qₙ) is at most qₙ.'],
+      ['z4',[['li(x)','given'],['\\text{equal to } x/\\ln x','count']],2,1,'It exceeds it by about x/(ln x)².'],
+      ['z5',[['\\text{the clock of 2}','twins'],['\\text{both odd with chance } \\tfrac12 \\text{ against } \\tfrac14','twin-correction']],2,0,'n odd makes n + 2 odd.']],[]); }});
+/* ----- annex 43·phys Why do metals conduct: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'43·phys.work',step:'43·phys',mode:'work',label:'drift, knocks and heat',open:()=>measured('43·phys'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const s=[5.96e7,3.77e7,1e7][rnd(3)], T=[100,200,300][rnd(3)], v=2.44e-8*s*T, right=DECAX(v,0)+' W/(m K)', wrong=UQAX(right,[DECAX(2.44e-8*s,2)+' W/(m K)',DECAX(v/2,0)+' W/(m K)',DECAX(v*10,0)+' W/(m K)',DECAX(2.44e-8*s*T*T/100,0)+' W/(m K)'],3); if(wrong.length<3) return null;
+      return {index:'q:43·phys.work[w;'+s+';'+T+']', lines:[['\\sigma = '+SCAX(s,2)+' \\text{ S/m}','a metal'],['T = '+T+' \\text{ K}','']], ask:'About what is its thermal conductivity?', right, opts:shuffle([right,...wrong]), lead:'', why:'Heat-and-charge: κ = 2.44 × 10⁻⁸ · σ · T = 2.44 × 10⁻⁸ × '+SCAX(s,2)+' × '+T+' ≈ '+right+'.'}; }
+    if(ask===1){ const a=[1.5,1.7,2.0][rnd(3)], b=[0.1,0.3,0.5,1.0][rnd(3)], right=DECAX(a+b,2)+' × 10⁻⁸ Ω m', wrong=UQAX(right,[DECAX(a*b/(a+b),3)+' × 10⁻⁸ Ω m',DECAX(Math.max(a,b),2)+' × 10⁻⁸ Ω m',DECAX(a*b,3)+' × 10⁻⁸ Ω m',DECAX(Math.sqrt(a*a+b*b),2)+' × 10⁻⁸ Ω m'],3); if(wrong.length<3) return null;
+      return {index:'q:43·phys.work[r;'+a+';'+b+']', lines:[['\\rho_{\\text{heat}} = '+a+' \\times 10^{-8}\\ \\Omega\\text{ m}','knocks by shaking atoms'],['\\rho_{\\text{stray}} = '+b+' \\times 10^{-8}\\ \\Omega\\text{ m}','knocks by stray atoms']], ask:'What is the resistivity with both?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rates-add: independent knocks add their rates, and resistivity goes as the rate, so '+a+' + '+b+' = '+DECAX(a+b,2)+'.'}; }
+    const n=[8.5e28,5.9e28,1.8e29][rnd(3)], t=[2.5e-14,1e-14,4e-14][rnd(3)], v=n*1.602e-19*1.602e-19*t/9.109e-31, right=SCAX(v,2)+' S/m', wrong=UQAX(right,[SCAX(n*1.602e-19*t/9.109e-31,2)+' S/m',SCAX(v*1e3,2)+' S/m',SCAX(1/v,2)+' S/m',SCAX(n*1.602e-19*1.602e-19/(t*9.109e-31),2)+' S/m'],3); if(wrong.length<3) return null;
+    return {index:'q:43·phys.work[s;'+n+';'+t+']', lines:[['n = '+SCAX(n,2)+' \\text{ m}^{-3}','free electrons'],['\\tau = '+SCAX(t,2)+' \\text{ s},\\ \\ e = 1.602 \\times 10^{-19},\\ m = 9.109 \\times 10^{-31}','time between knocks']], ask:'What is the conductivity?', right, opts:shuffle([right,...wrong]), lead:'', why:'Drift-current: σ = ne²τ/m ≈ '+right+'.'}; }},
+  {id:'43·phys.word',step:'43·phys',mode:'word',label:'bands of a ring',open:()=>measured('43·phys'),make(){
+    const N=[6,8,10,100][rnd(4)], F=rnd(2);
+    if(F){ const right=String(2*N), wrong=UQAX(right,[String(N),String(N/2),String(4*N)],3);
+      return {index:'q:43·phys.word[n;'+N+']', a3:['43·phys.word',DASH,DASH], story:'A ring of '+N+' atoms wraps a repeating lattice round; one band of its electron levels is considered.', lines:[], ask:'How many electrons does the band hold?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-per-hour: the band has '+N+' levels, one for each hour, and two spins to each: '+right+'.'}; }
+    const right='no: in three directions two bands overlap, and magnesium is a metal', wrong=['yes: two per atom fill a band','yes, at low temperature','no: magnesium has one electron an atom'];
+    return {index:'q:43·phys.word[m]', a3:['43·phys.word',DASH,DASH], story:'Magnesium has two outer electrons an atom, enough to fill a band exactly.', lines:[], ask:'Does magnesium insulate?', right, opts:shuffle([right,...wrong]), lead:'', why:'A full band carries nothing; but the next band dips below the top of the full one, so both are part full.'}; }},
+  {id:'43·phys.line',step:'43·phys',mode:'proof',label:'what the bands license',open:()=>measured('43·phys'),make(){
+    return line28('43·phys.line',[
+      ['b1',[['\\text{a ring of } N \\text{ atoms has } N \\text{ states}','given'],['\\text{its band holds } N \\text{ electrons}','count']],2,1,'Two spins to each hour: 2N.'],
+      ['b2',[['k \\text{ and } k + 2\\pi/a','given'],['\\text{different waves}','waves']],2,1,'At the sites they agree.'],
+      ['b3',[['\\text{an electron in copper}','given'],['\\text{knocked by every atom it passes}','knocks']],2,1,'The perfect lattice never knocks; copper’s run is about 170 atoms.'],
+      ['b4',[['\\text{a full band}','given'],['\\text{its electrons cannot move}','full']],2,1,'Each moves; the speeds cancel in pairs.'],
+      ['b5',[['\\text{the drift speed}','given'],['\\text{the electrons’ speed}','drift']],2,1,'7.4 × 10⁻⁵ m/s is the average; each moves at about 1.6 × 10⁶ m/s.'],
+      ['b6',[['\\text{hopping by } t \\text{ on a ring of } N','given'],['\\text{levels } E_0 - 2t\\cos(2\\pi m/N)','hopping-band']],2,0,'One for each hour m, in a band from E₀ − 2t to E₀ + 2t.']],[]); }});
 /* ===== Annex pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
