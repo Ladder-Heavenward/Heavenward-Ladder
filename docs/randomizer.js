@@ -17531,6 +17531,71 @@ QP.push({id:'14·phys.work',step:'14·phys',mode:'work',label:'sticking together
       ['u5',[['F_{AB} = -F_{BA}','the third law'],['\\text{the accelerations are equal and opposite}','the effects']],2,1,'The forces are equal; the accelerations differ by mass.'],
       ['u6',[['F_{AB} = -F_{BA}','no outside force'],['(p_A + p_B)\' = 0','the second law on each']],2,0,'p\u2032_A + p\u2032_B = F_BA + F_AB = 0: the total does not change.'],
       ['u7',[['\\text{closest approach, a spring between}','given'],['\\text{the two move with one velocity}','the gap stops shrinking']],2,0,'At the least gap its slope is 0, so the two velocities agree.']],[]); }});
+/* ----- annex 15·chem Why does a squeezed gas push back: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'15·chem.work',step:'15·chem',mode:'work',label:'the ideal gas law',open:()=>measured('15·chem'),make(){
+    const n=[0.5,1,2,3][rnd(4)], TC=[0,20,25,27,100][rnd(5)], T=TC+273.15, V=[0.01,0.02,0.025,0.05][rnd(4)], p=n*8.314*T/V;
+    const K=x=>DECAX(x/1000,1)+' kPa', right=K(p), wrong=UQAX(right,[TC>0?K(n*8.314*TC/V):K(p*10),K(p/2),K(p/10),K(p*2)],3); if(wrong.length<3) return null;
+    return {index:'q:15·chem.work['+n+';'+TC+';'+V+']', lines:[['n = '+n+'\\ \\text{mol},\\ \\ T = '+TC+'\\ {}^\\circ\\text{C},\\ \\ V = '+V+'\\ \\text{m}^3','an ideal gas'],['R = 8.314\\ \\text{J/(mol\u00b7K)}','']], ask:'What is its pressure?', right, opts:shuffle([right,...wrong]), lead:'', why:'pV = nRT, with T in kelvin: '+TC+' \u00b0C = '+T+' K. p = '+n+' \u00b7 8.314 \u00b7 '+T+' \u00f7 '+V+' \u2248 '+DECAX(p,0)+' Pa \u2248 '+right+'.'}; }},
+  {id:'15·chem.word',step:'15·chem',mode:'word',label:'work is an area',open:()=>measured('15·chem'),make(){
+    const ask=rnd(2);
+    if(ask){ const u=[1,2,4,5][rnd(4)], v=u*[2,3,4,5][rnd(4)], right=FRAX(v-u,u*v), wrong=UQAX(right,[MNAX('-'+FRAX(v-u,u*v)),FRAX(1,v-u),FRAX(v*v-u*u,u*u*v*v),FRAX(v-u,1)].map(String),3); if(wrong.length<3) return null;
+      return {index:'q:15·chem.word[a;'+u+';'+v+']', a3:['15·chem.word',DASH,DASH], story:'A piston\u2019s work against the pull of molecules on each other needs the area under 1/V\u00b2.', lines:[], ask:'What is the area under 1/x\u00b2 from '+u+' to '+v+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Inverse-square-area: 1/u \u2212 1/v = 1/'+u+' \u2212 1/'+v+' = '+right+'. Positive, since 1/u > 1/v.'}; }
+    const p=[1,1.5,2,3][rnd(4)], V1=[1,2,5][rnd(3)], V2=V1+[1,2,3,5][rnd(4)], W=p*(V2-V1)*100;
+    const right=DECAX(W,1)+' J', wrong=UQAX(right,[DECAX(p*(V2-V1),2)+' J',DECAX(p*V2*100,1)+' J',DECAX(W*10,1)+' J',DECAX(p*(V2+V1)*100,1)+' J'],3); if(wrong.length<3) return null;
+    return {index:'q:15·chem.word[w;'+p+';'+V1+';'+V2+']', a3:['15·chem.word',DASH,DASH], story:'A gas held at a steady '+p+' bar pushes a piston slowly out, from '+V1+' L to '+V2+' L. (1 L\u00b7bar = 100 J.)', lines:[], ask:'How much work does it do?', right, opts:shuffle([right,...wrong]), lead:'', why:'At a fixed pressure the area under p is a box: W = p(V\u2082 \u2212 V\u2081) = '+p+' \u00b7 '+(V2-V1)+' = '+DECAX(p*(V2-V1),2)+' L\u00b7bar = '+right+'.'}; }},
+  {id:'15·chem.line',step:'15·chem',mode:'proof',label:'what the gas law licenses',open:()=>measured('15·chem'),make(){
+    return line28('15·chem.line',[
+      ['a1',[['pV = nRT','given'],['T = 20 \\text{ for } 20\\ {}^\\circ\\text{C}','the temperature']],2,1,'In kelvin: at 0 \u00b0C the law would give V = 0.'],
+      ['a2',[['p \\text{ changes as } V \\text{ grows}','given'],['W = p\\,(V_2 - V_1)','work']],2,1,'That is a box; a changing p needs the area under its curve.'],
+      ['a3',[['\\textstyle\\int_u^v dx/x^2','0 < u < v'],['= 1/v - 1/u','inverse-square-area']],2,1,'Backwards: the area is positive, and 1/u > 1/v.'],
+      ['a4',[['\\Pi = cRT,\\ R = 8.314','osmotic pressure'],['c \\text{ in mol/L}','the unit']],2,1,'In mol/m\u00b3 with R in J/(mol\u00b7K); 1 mol/L = 1000 mol/m\u00b3.'],
+      ['a5',[['\\tfrac{1}{x_{i-1}x_i}\\,\\Delta x_i','one piece'],['= \\tfrac{1}{x_{i-1}} - \\tfrac{1}{x_i}','divide through']],2,0,'\u0394x\u1d62 = x\u1d62 \u2212 x\u1d62\u208b\u2081.'],
+      ['a6',[['\\text{the corrected law for CO}_2','below 304 K'],['\\text{true for every } V','the law']],2,1,'Its curve wiggles there: the gas is turning to liquid.'],
+      ['a7',[['1\\ \\text{L\u00b7bar}','given'],['= 100\\ \\text{J}','10^{-3}\\ \\text{m}^3 \\cdot 10^5\\ \\text{Pa}']],2,0,'A litre is 10\u207b\u00b3 m\u00b3 and a bar 10\u2075 Pa.']],[]); }});
+/* ----- annex 15·econ What is a payment next year worth today: Work, Word Problems, Check Proofs ----- */
+const USDAX=v=>'$'+(Math.round(v*100)/100).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+QP.push({id:'15·econ.work',step:'15·econ',mode:'work',label:'money later, counted now',open:()=>measured('15·econ'),make(){
+    const ask=rnd(3), i=[0.03,0.04,0.05,0.06,0.08][rnd(5)], P=[1000,2000,5000,10000][rnd(4)], n=[1,2,3,5,10][rnd(5)];
+    if(ask===0){ const V=P/Math.pow(1+i,n), right=USDAX(V), wrong=UQAX(right,[USDAX(P*(1-n*i)),USDAX(P*Math.pow(1+i,n)),USDAX(P/(1+n*i)+ (n===1?7:0)),USDAX(P-i*P)],3); if(wrong.length<3) return null;
+      return {index:'q:15·econ.work[pv;'+P+';'+i+';'+n+']', lines:[['\\$'+P+' \\text{ paid in } '+n+' \\text{ year'+(n>1?'s':'')+'}','at '+(i*100)+'% a year']], ask:'What is it worth today?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each year multiplies by '+(1+i)+', so bring it back by dividing: '+P+'/'+(1+i)+'^'+n+' = '+right+'.'}; }
+    if(ask===1){ const A=[1000,2500,5000,6000][rnd(4)], right=USDAX(A/i), wrong=UQAX(right,[USDAX(A*i),USDAX(A/(1+i)),USDAX(A*(1+i)/i),USDAX(A*100)],3); if(wrong.length<3) return null;
+      return {index:'q:15·econ.work[perp;'+A+';'+i+']', lines:[['\\$'+A+' \\text{ a year, forever}','the first in a year'],['i = '+i,'']], ask:'What is the stream worth today?', right, opts:shuffle([right,...wrong]), lead:'', why:'Endless-ratio-sum, ratio 1/(1 + i) < 1: the total is A/i = '+A+'/'+i+' = '+right+'.'}; }
+    const j=i/12, F=Math.pow(1+j,12), right=DECAX((F-1)*100,2)+'%', wrong=UQAX(right,[DECAX(i*100,2)+'%',DECAX(i*100*12,2)+'%',DECAX(i*150,2)+'%',DECAX(i*100+0.5,2)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:15·econ.work[m;'+i+']', lines:[[(i*100)+'\\% \\text{ a year, charged as } '+DECAX(i*100/12,4)+'\\% \\text{ a month}','interest that multiplies']], ask:'What does a year of it multiply by, as a yearly rate?', right, opts:shuffle([right,...wrong]), lead:'', why:'Twelve monthly steps multiply: (1 + '+DECAX(j,5)+')\u00b9\u00b2 \u2248 '+DECAX(F,5)+', so about '+right+' a year, a little more than '+(i*100)+'%.'}; }},
+  {id:'15·econ.word',step:'15·econ',mode:'word',label:'a loan in equal payments',open:()=>measured('15·econ'),make(){
+    const L=[10000,20000,25000,30000,150000][rnd(5)], yr=[3,5,10,15][rnd(4)], r=[0.04,0.06,0.09,0.12][rnd(4)], j=r/12, n=yr*12, M=L*j/(1-Math.pow(1+j,-n));
+    const right=USDAX(M), wrong=UQAX(right,[USDAX(L/n),USDAX(L*(1+r*yr)/n*0.97),USDAX(L*j),USDAX(L*r/(1-Math.pow(1+r,-yr))/12)],3); if(wrong.length<3) return null;
+    return {index:'q:15·econ.word['+L+';'+yr+';'+r+']', a3:['15·econ.word',DASH,DASH], story:'A loan of $'+L.toLocaleString('en')+' is paid back in equal payments at the end of each month for '+yr+' years, at '+(r*100)+'% a year, charged monthly.', lines:[], ask:'What is the monthly payment?', right, opts:shuffle([right,...wrong]), lead:'', why:'M = Lj/(1 \u2212 (1 + j)^(\u2212n)) with j = '+DECAX(j,5)+' and n = '+n+': '+right+'. The payments are worth the loan today; the '+n+' payments add to '+USDAX(M*n)+'.'}; }},
+  {id:'15·econ.line',step:'15·econ',mode:'proof',label:'what present value licenses',open:()=>measured('15·econ'),make(){
+    return line28('15·econ.line',[
+      ['e1',[['\\$1200 \\text{ in payments for } \\$1100 \\text{ cash}','a deal'],['\\text{rate } 100/1100 \\approx 9\\%','the extra']],2,1,'The balance falls each month; the true rate is near 17.7% a year.'],
+      ['e2',[['\\text{payments in different years}','given'],['\\text{add them}','a total']],2,1,'Bring each to today first, then add.'],
+      ['e3',[['6\\% \\text{ a year as } 0.5\\% \\text{ a month}','given'],['6\\% \\text{ a year}','twelve months']],2,1,'1.005\u00b9\u00b2 \u2248 1.0617.'],
+      ['e4',[['1000/1.05^2','given'],['= 1000(1 - 2 \\cdot 0.05)','a short cut']],2,1,'1/1.05\u00b2 \u2248 0.907, not 0.9.'],
+      ['e5',[['\\text{payments growing faster than } i,\\ \\text{forever}','given'],['\\text{a price}','endless-ratio-sum']],2,1,'Ratio at least 1: the sum has no total.'],
+      ['e6',[['V = Mv\\,\\tfrac{1 - v^n}{1 - v}','finite-ratio-sum'],['V = M\\,\\tfrac{1 - (1 + j)^{-n}}{j}','v/(1 - v) = 1/j']],2,0,'v = 1/(1 + j), so 1 \u2212 v = j/(1 + j).'],
+      ['e7',[['\\$5000 \\text{ a year forever, at } 4\\%','given'],['\\$125\\,000','A/i']],2,0,'5000/0.04.']],[]); }});
+/* ----- annex 15·eng How hard does water push on a dam: Work, Word Problems, Check Proofs ----- */
+const MNNAX=v=>v>=1e9?DECAX(v/1e9,2)+' GN':v>=1e6?DECAX(v/1e6,2)+' MN':DECAX(v/1e3,1)+' kN';
+QP.push({id:'15·eng.work',step:'15·eng',mode:'work',label:'the push, in thin strips',open:()=>measured('15·eng'),make(){
+    const H=[2,3,4,5,10,20][rnd(6)], W=[3,5,10,20,50][rnd(5)], F=0.5*1000*9.8*W*H*H, ask=rnd(2);
+    if(ask){ const right=DECAX(H/3,3)+' m above the bed', wrong=UQAX(right,[DECAX(H/2,3)+' m above the bed',DECAX(2*H/3,3)+' m above the bed',DECAX(H/4,3)+' m above the bed','at the bed'],3); if(wrong.length<3) return null;
+      return {index:'q:15·eng.work[c;'+H+']', lines:[['H = '+H+'\\ \\text{m}','water against a flat wall']], ask:'Where does the whole push act?', right, opts:shuffle([right,...wrong]), lead:'', why:'The deep strips push hardest: the push acts at H/3 = '+DECAX(H/3,3)+' m above the bed, two thirds of the way down.'}; }
+    const right=MNNAX(F), wrong=UQAX(right,[MNNAX(2*F),MNNAX(F/H),MNNAX(F*H/3),MNNAX(1000*9.8*W*H)],3); if(wrong.length<3) return null;
+    return {index:'q:15·eng.work[F;'+H+';'+W+']', lines:[['H = '+H+'\\ \\text{m},\\ \\ W = '+W+'\\ \\text{m}','water depth; wall width'],['\\rho = 1000\\ \\text{kg/m}^3,\\ \\ g = 9.8','']], ask:'How hard does the water push on the wall?', right, opts:shuffle([right,...wrong]), lead:'', why:'F = \u222b\u2080\u1d34 \u03c1gyW dy = \u00bd\u03c1gWH\u00b2 = \u00bd \u00b7 1000 \u00b7 9.8 \u00b7 '+W+' \u00b7 '+H+'\u00b2 = '+DECAX(F,0)+' N \u2248 '+right+'. Using the bottom pressure everywhere would double it.'}; }},
+  {id:'15·eng.word',step:'15·eng',mode:'word',label:'deeper water',open:()=>measured('15·eng'),make(){
+    const k=[1.5,2,3,0.5][rnd(4)], ask=rnd(2), K=k===0.5?'half as deep':k+' times as deep';
+    const right=ask?'it does not change: only the depth at the wall counts':'it is multiplied by '+DECAX(k*k,3), wrong=ask?['it doubles: twice the water','it is multiplied by 4','it halves: the water spreads']:UQAX(right,['it is multiplied by '+k,'it is multiplied by '+DECAX(k*k*k,3),'it is multiplied by '+DECAX(Math.sqrt(k),3),'it does not change: only the depth at the wall counts'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:15·eng.word['+k+';'+ask+']', a3:['15·eng.word',DASH,DASH], story:ask?'A reservoir behind a dam is lengthened to twice as far upstream. The depth at the wall stays the same.':'A flood leaves the water behind a straight dam '+K+' as before.', lines:[], ask:'What happens to the push on the dam?', right, opts:shuffle([right,...wrong]), lead:'', why:ask?'F = \u00bd\u03c1gWH\u00b2 has no length of lake in it: only the depth at the wall counts.':'F = \u00bd\u03c1gWH\u00b2 grows like H\u00b2: '+k+'\u00b2 = '+DECAX(k*k,3)+'.'}; }},
+  {id:'15·eng.line',step:'15·eng',mode:'proof',label:'what the strips license',open:()=>measured('15·eng'),make(){
+    return line28('15·eng.line',[
+      ['s1',[['p(H) = \\rho g H','the bottom pressure'],['F = p(H) \\cdot WH','the push']],2,1,'That uses the bottom pressure everywhere: twice the push.'],
+      ['s2',[['p(y) = \\rho g y','the pressure at depth y'],['\\text{the push acts at half the depth}','the middle']],2,1,'The deep strips push hardest: it acts at H/3 above the bed.'],
+      ['s3',[['\\text{twice as deep}','given'],['\\text{twice the push}','F and H']],2,1,'F grows like H\u00b2: four times.'],
+      ['s4',[['\\textstyle\\int_0^H \\rho g y\\,dy','given'],['\\text{the push on the dam}','the area']],2,1,'That is the push on a strip one metre wide; multiply by W.'],
+      ['s5',[['F = \\textstyle\\int_0^H \\rho g y W\\,dy','thin strips'],['= \\tfrac12 \\rho g W H^2','the area under y']],2,0,'The area under y from 0 to H is H\u00b2/2.'],
+      ['s6',[['p \\text{ grows with depth}','given'],['\\text{a dam is thicker at the bottom}','the deep strips push hardest']],2,0,'The wall must hold most where the pressure is greatest.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
