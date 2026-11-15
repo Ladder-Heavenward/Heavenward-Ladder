@@ -17767,6 +17767,86 @@ QP.push({id:'17·phys.work',step:'17·phys',mode:'work',label:'the peak, and the
       ['h4',[['\\text{a greenhouse layer}','given'],['T_s = T_e + \\text{a term for each gas}','adding']],2,1,'The layer enters through T\u2074, under a fourth root: T_s = T_e (2/(2 \u2212 \u03b5))^(1/4).'],
       ['h5',[['E \\in \\{0, hf, 2hf, \\dots\\}','lumps'],['\\text{the average is less than } kT','lumpy-average']],2,0,'hf/(e^(hf/kT) \u2212 1) < kT.'],
       ['h6',[['T \\times 2','given'],['\\text{the total glow} \\times 16','fourth-power']],2,0,'2\u2074 = 16.']],[]); }});
+/* ----- annex 18·econ How much do buyers flinch: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'18·econ.work',step:'18·econ',mode:'work',label:'a flinch with no units',open:()=>measured('18·econ'),make(){
+    const ask=rnd(2);
+    if(ask){ const P1=[2,4,5][rnd(3)], P2=P1*[1.5,2][rnd(2)], Q1=[400,600,800,1000][rnd(4)], Q2=Math.round(Q1*[0.5,0.55,0.6,0.7,0.8,0.9][rnd(6)]), e=Math.log(Q2/Q1)/Math.log(P2/P1);
+      const right=MNAX(DECAX(e,2)), wrong=UQAX(right,[MNAX(DECAX((Q2-Q1)/(P2-P1),2)),MNAX(DECAX(((Q2-Q1)/Q1)/((P2-P1)/P1),2)),DECAX(-e,2),MNAX(DECAX(Math.log(Q2/Q1),2))],3); if(wrong.length<3) return null;
+      return {index:'q:18·econ.work[e;'+P1+';'+P2+';'+Q1+';'+Q2+']', lines:[['P = '+P1+':\\ Q = '+Q1+';\\ \\ P = '+P2+':\\ Q = '+Q2,'two weeks of sales']], ask:'Fit a constant elasticity: what is \u03b5?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Elasticity-is-a-slope: on the log\u2013log plot, \u03b5 = (ln '+Q2+' \u2212 ln '+Q1+')/(ln '+P2+' \u2212 ln '+P1+') = ln '+DECAX(Q2/Q1,4)+' \u00f7 ln '+DECAX(P2/P1,4)+' \u2248 '+DECAX(e,2)+'.')}; }
+    const A=[100,200,300][rnd(3)], b=[2,4,5,10][rnd(4)], P=Math.round(A/b*[0.2,0.25,0.5,0.6,0.75,0.8][rnd(6)]), Q=A-b*P; if(Q<=0||P<=0) return null; const e=-b*P/Q;
+    const right=MNAX(DECAX(e,3)), wrong=UQAX(right,[MNAX(DECAX(-b,3)),MNAX(DECAX(-Q/(b*P),3)),DECAX(-e,3),MNAX(DECAX(-P/Q,3))],3); if(wrong.length<3) return null;
+    return {index:'q:18·econ.work[l;'+A+';'+b+';'+P+']', lines:[['Q(P) = '+A+' - '+b+'P','a straight demand line'],['P = '+P,'']], ask:'What is the elasticity at that price?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('\u03b5 = PQ\u2032/Q = '+P+' \u00b7 (\u2212'+b+')/'+Q+' = '+DECAX(e,3)+'. Not the slope \u2212'+b+': elasticity has no units.')}; }},
+  {id:'18·econ.word',step:'18·econ',mode:'word',label:'when a rise brings in more',open:()=>measured('18·econ'),make(){
+    const G=['artichokes at a farm stand in Castroville','strawberries at a market in Watsonville','tickets to a county fair','loaves at a bakery in Salinas'][rnd(4)], e=[-0.4,-0.6,-0.8,-1,-1.3,-1.5,-2][rnd(7)];
+    const right=e>-1?'more money':e<-1?'less money':'the same money, near this price', wrong=['more money','less money','the same money, near this price','more money, since the price is higher'].filter(x=>x!==right).slice(0,3);
+    return {index:'q:18·econ.word['+e+']', a3:['18·econ.word',DASH,DASH], story:'The demand for '+G+' has elasticity '+MNAX(String(e))+' near the present price.', lines:[], ask:'Does a small price rise bring in more money or less?', right, opts:shuffle([right,...wrong]), lead:'', why:'Revenue-sign: R\u2032(P) = Q(1 + \u03b5) = Q(1 + ('+MNAX(String(e))+')) = Q \u00b7 ('+MNAX(DECAX(1+e,2))+'). '+(e>-1?'Positive: buyers flinch less than one for one.':e<-1?'Negative: buyers flinch more than one for one.':'Zero: the flinch is one for one.')}; }},
+  {id:'18·econ.line',step:'18·econ',mode:'proof',label:'what elasticity licenses',open:()=>measured('18·econ'),make(){
+    return line28('18·econ.line',[
+      ['x1',[['Q(P)','demand'],['\\varepsilon = Q\'(P)','the slope']],2,1,'\u03b5 = PQ\u2032/Q: the slope on the log\u2013log plot, with no units.'],
+      ['x2',[['\\text{a straight demand line}','given'],['\\text{one elasticity}','a line']],2,1,'It has every value from 0 to endless, by pieces-of-the-line.'],
+      ['x3',[['\\text{a price rise}','given'],['\\text{more money}','a higher price']],2,1,'Only where \u03b5 > \u22121.'],
+      ['x4',[['\\varepsilon = -1.47 \\text{ at } \\$2 \\text{ and } \\$3','a fit'],['\\varepsilon = -1.47 \\text{ at } 1\\text{\u00a2}','constant elasticity']],2,1,'A law with a range; far outside it, it fails.'],
+      ['x5',[['PQ(P) = k','constant revenue'],['\\varepsilon = -1 \\text{ at every price}','constant-revenue']],2,0,'Q = k/P, so PQ\u2032/Q = P(\u2212k/P\u00b2)/(k/P) = \u22121.'],
+      ['x6',[['R(P) = PQ(P)','revenue'],['R\'(P) = Q(P)(1 + \\varepsilon(P))','product slope']],2,0,'R\u2032 = Q + PQ\u2032 = Q(1 + PQ\u2032/Q).']],[]); }});
+/* ----- annex 18·eng Why are bridges built from triangles: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'18·eng.work',step:'18·eng',mode:'work',label:'the force in a bar',open:()=>measured('18·eng'),make(){
+    const S=[[3,4,5],[6,8,10],[5,12,13],[8,15,17],[1,1,Math.SQRT2]][rnd(5)], [run,rise,len]=S, W=[6,10,12,20,24,30][rnd(6)], ask=rnd(2);
+    if(ask){ const j=rnd(5)===0?1:0; const T=W*len/rise; const right=DECAX(T,2)+' kN', wrong=UQAX(right,[DECAX(W,2)+' kN',DECAX(W*rise/len,2)+' kN',DECAX(W*run/rise,2)+' kN',DECAX(W*len/run,2)+' kN'],3); if(wrong.length<3) return null;
+      return {index:'q:18·eng.work[t;'+S.join(',')+';'+W+']', lines:[['\\text{a slant bar: run } '+run+',\\ \\text{rise } '+rise+(len%1?'':',\\ \\text{length } '+len),'pinned at both ends'],['\\text{its part up must hold } '+W+'\\ \\text{kN}','the load at the top joint']], ask:'What force runs along the slant?', right, opts:shuffle([right,...wrong]), lead:'', why:'Bar-force: the force and its parts make a triangle similar to the bar. The part up is T \u00b7 rise/\u2113, so T = '+W+' \u00b7 '+DECAX(len,3)+'/'+rise+' = '+right+'. The load is only its part up.'}; }
+    const j=[4,5,6,7,8,10][rnd(6)], b=2*j-3, right=String(b), wrong=UQAX(right,[String(2*j),String(j+1),String(3*j-6),String(2*j-2)],3); if(wrong.length<3) return null;
+    return {index:'q:18·eng.work[b;'+j+']', lines:[['j = '+j,'joints, grown from a triangle']], ask:'How many bars does the frame have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Add-a-joint: a triangle has 3 joints and 3 bars; each new joint brings 2 bars. b = 2j \u2212 3 = '+right+'.'}; }},
+  {id:'18·eng.word',step:'18·eng',mode:'word',label:'a roof frame',open:()=>measured('18·eng'),make(){
+    const S=[[3,4,5],[4,3,5],[12,5,13],[5,12,13],[8,6,10]][rnd(5)], [run,rise,len]=S, W=[2,4,6,8,10][rnd(5)]*(len/5===Math.round(len/5)?5:13)/ (len/5===Math.round(len/5)?5:13), P=W*[1,2,3][rnd(3)];
+    const T=(P/2)*len/rise, H=(P/2)*run/rise;
+    const right='each rafter pushes with '+DECAX(T,2)+' kN; the tie pulls with '+DECAX(H,2)+' kN', wrong=UQAX(right,['each rafter pushes with '+DECAX(P/2,2)+' kN; the tie pulls with '+DECAX(H,2)+' kN','each rafter pushes with '+DECAX(P*len/rise,2)+' kN; the tie pulls with '+DECAX(2*H,2)+' kN','each rafter pushes with '+DECAX(H,2)+' kN; the tie pulls with '+DECAX(T,2)+' kN'],3); if(wrong.length<3) return null;
+    return {index:'q:18·eng.word['+S.join(',')+';'+P+']', a3:['18·eng.word',DASH,DASH], story:'A small roof truss is a triangle: two rafters meet at the peak, and a tie joins their feet. Each rafter runs '+run+' m across and rises '+rise+' m. A load of '+P+' kN hangs at the peak; the walls hold the feet up.', lines:[], ask:'What are the forces in the bars?', right, opts:shuffle([right,...wrong]), lead:'', why:'Joint at the peak: each rafter\u2019s part up is half the load, '+DECAX(P/2,2)+' kN, so the rafter carries '+DECAX(P/2,2)+' \u00b7 '+len+'/'+rise+' = '+DECAX(T,2)+' kN. Joint at a foot: the rafter\u2019s part across, '+DECAX(P/2,2)+' \u00b7 '+run+'/'+rise+' = '+DECAX(H,2)+' kN, is held by the tie.'}; }},
+  {id:'18·eng.line',step:'18·eng',mode:'proof',label:'what a frame licenses',open:()=>measured('18·eng'),make(){
+    return line28('18·eng.line',[
+      ['f1',[['\\text{a four-bar frame of strong bars}','given'],['\\text{it keeps its shape}','strength']],2,1,'It racks with every bar at full length: strength is not the point.'],
+      ['f2',[['b = 2j - 3','a count'],['\\text{the frame keeps its shape}','the count']],2,1,'The count is needed, not enough: badly placed bars still move.'],
+      ['f3',[['\\text{a slant bar holds a load at its top}','given'],['\\text{the force in it is the load}','the load']],2,1,'The load is only its part up: the slant carries load \u00b7 \u2113/rise.'],
+      ['f4',[['\\text{a load across}','given'],['\\text{the pinned bar pushes across}','the load']],2,1,'A pinned bar pushes or pulls only along itself.'],
+      ['f5',[['\\text{three bar lengths, two placements}','a triangle'],['\\text{they are congruent}','rigid-triangle']],2,0,'Three-sides, carried out on bars.'],
+      ['f6',[['\\text{an extra bar}','given'],['\\text{always safer}','more bars']],2,1,'Then the joint equations no longer fix the forces; they depend on how each bar stretches.']],[]); }});
+/* ----- annex 18·nav How can a small map be true to the land: Work, Word Problems, Check Proofs ----- */
+const GRAX=v=>v>=1000?DECAX(v/1000,3)+' km':DECAX(v,1)+' m';
+QP.push({id:'18·nav.work',step:'18·nav',mode:'work',label:'map scale',open:()=>measured('18·nav'),make(){
+    const n=[10000,24000,25000,50000,62500,100000][rnd(6)], cm=[2,3,4.5,6,8,12.5][rnd(6)], ask=rnd(2);
+    if(ask){ const g=cm*n/100, right=GRAX(g), wrong=UQAX(right,[GRAX(cm*n),GRAX(g/10),GRAX(g*10),GRAX(cm*n/1000)],3); if(wrong.length<3) return null;
+      return {index:'q:18·nav.work[d;'+n+';'+cm+']', lines:[['1 : '+n.toLocaleString('en').replace(/,/g,'\\,'),'the map\u2019s scale'],[cm+'\\ \\text{cm}','between two places on the paper']], ask:'How far apart are they on the ground?', right, opts:shuffle([right,...wrong]), lead:'', why:'Map-scale: the same unit both sides, so '+cm+' cm on paper is '+cm+' \u00d7 '+n.toLocaleString('en').replace(/,/g,' ')+' cm = '+GRAX(g)+'.'}; }
+    const a=[2,4,6,9][rnd(4)], f=n/100, A=a*f*f, right=DECAX(A/10000,2)+' ha', wrong=UQAX(right,[DECAX(a*f/10000,4)+' ha',DECAX(A/1e6,4)+' ha',DECAX(A/1000,2)+' ha',DECAX(2*A/10000,2)+' ha'],3); if(wrong.length<3) return null;
+    return {index:'q:18·nav.work[a;'+n+';'+a+']', lines:[['1 : '+n.toLocaleString('en').replace(/,/g,'\\,'),'the map\u2019s scale'],[a+'\\ \\text{cm}^2','a field, on the paper']], ask:'What is its area on the ground? (1 ha = 10 000 m\u00b2)', right, opts:shuffle([right,...wrong]), lead:'', why:'Map-scale: areas scale by n\u00b2. 1 cm on paper is '+f+' m, so 1 cm\u00b2 is '+(f*f).toLocaleString('en').replace(/,/g,' ')+' m\u00b2, and '+a+' cm\u00b2 is '+A.toLocaleString('en').replace(/,/g,' ')+' m\u00b2 = '+right+'.'}; }},
+  {id:'18·nav.word',step:'18·nav',mode:'word',label:'an enlarged copy',open:()=>measured('18·nav'),make(){
+    const n=[24000,25000,50000,100000][rnd(4)], k=[1.25,1.5,2,0.5][rnd(4)], m=n/k;
+    const right='1 : '+m.toLocaleString('en').replace(/,/g,' '), wrong=UQAX(right,['1 : '+n.toLocaleString('en').replace(/,/g,' '),'1 : '+(n*k).toLocaleString('en').replace(/,/g,' '),'1 : '+(n/(k*k)).toLocaleString('en').replace(/,/g,' ')],3); if(wrong.length<3) return null;
+    return {index:'q:18·nav.word['+n+';'+k+']', a3:['18·nav.word',DASH,DASH], story:'A hiker copies a 1 : '+n.toLocaleString('en').replace(/,/g,' ')+' trail map at '+(k*100)+'% on a photocopier.', lines:[], ask:'What is the scale of the copy?', right, opts:shuffle([right,...wrong]), lead:'', why:'Every paper distance is multiplied by '+k+', so 1 unit on the copy is '+n.toLocaleString('en').replace(/,/g,' ')+' \u00f7 '+k+' = '+m.toLocaleString('en').replace(/,/g,' ')+' on the ground. The printed scale bar grew with the copy and stays right.'}; }},
+  {id:'18·nav.line',step:'18·nav',mode:'proof',label:'what a map licenses',open:()=>measured('18·nav'),make(){
+    return line28('18·nav.line',[
+      ['m1',[['1 : 24\\,000','given'],['1\\ \\text{cm for } 24\\,000\\ \\text{m}','the scale']],2,1,'The same unit both sides: 24 000 cm, which is 240 m.'],
+      ['m2',[['\\text{a copy at } 150\\%','given'],['\\text{still } 1 : 24\\,000','the scale']],2,1,'It is 1 : 16 000; the scale bar grew with it.'],
+      ['m3',[['6\\ \\text{cm}^2 \\text{ at } 1 : 24\\,000','given'],['6 \\times 240\\ \\text{m}^2','scale']],2,1,'The area scales by 240\u00b2: 6 \u00d7 57 600 m\u00b2.'],
+      ['m4',[['\\text{eastings in km, northings in miles}','given'],['\\sqrt{\\Delta e^2 + \\Delta n^2}','distance-basics']],2,1,'Distance-basics needs one unit in both directions.'],
+      ['m5',[['\\text{the line on the map}','given'],['\\text{the road is that long}','the map']],2,1,'Never shorter, and on a coast road far longer.'],
+      ['m6',[['\\text{a base line and two sighted directions}','a survey'],['\\text{the far point is fixed}','surveyor\u2019s-triangle']],2,0,'Angle, side, angle fixes a triangle.']],[]); }});
+/* ----- annex 18·phys Why do planets travel on ellipses: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'18·phys.work',step:'18·phys',mode:'work',label:'nearest and farthest',open:()=>measured('18·phys'),make(){
+    const ask=rnd(2), l=[1,1.2,1.5,2][rnd(4)], e=[0.1,0.2,0.25,0.5,0.6][rnd(5)];
+    if(ask){ const q=l/(1+e), Q=l/(1-e), right='q = '+DECAX(q,3)+',\\ Q = '+DECAX(Q,3), wrong=UQAX(right,['q = '+DECAX(l*(1-e),3)+',\\ Q = '+DECAX(l*(1+e),3),'q = '+DECAX(l-e,3)+',\\ Q = '+DECAX(l+e,3),'q = '+DECAX(Q,3)+',\\ Q = '+DECAX(q,3)],3); if(wrong.length<3) return null;
+      return {index:'q:18·phys.work[qQ;'+l+';'+e+']', lines:[['r = '+l+' - '+e+'x','the line of an orbit, AU']], ask:'What are the nearest and farthest distances from the sun?', right:'$'+right+'$', opts:shuffle([right,...wrong]).map(o=>'$'+o+'$'), lead:'', why:'Orbit-ends: q = \u2113/(1 + e) = '+l+' \u00f7 '+(1+e)+' \u2248 '+DECAX(q,3)+', and Q = \u2113/(1 \u2212 e) = '+l+' \u00f7 '+DECAX(1-e,2)+' \u2248 '+DECAX(Q,3)+' AU.'}; }
+    const q=[0.3,0.5,0.586,1,1.381][rnd(5)], Q=q*[1.5,2,3,4,10][rnd(5)], E=(Q-q)/(Q+q), right=DECAX(E,3), wrong=UQAX(right,[DECAX((Q-q)/Q,3),DECAX(q/Q,3),DECAX((Q-q)/2,3),DECAX(1-E,3)],3); if(wrong.length<3) return null;
+    return {index:'q:18·phys.work[e;'+q+';'+Q+']', lines:[['q = '+q+',\\ \\ Q = '+DECAX(Q,3),'nearest and farthest, AU']], ask:'What is the orbit\u2019s e?', right, opts:shuffle([right,...wrong]), lead:'', why:'Run backwards: e = (Q \u2212 q)/(Q + q) = '+DECAX(Q-q,3)+' \u00f7 '+DECAX(Q+q,3)+' \u2248 '+right+'.'}; }},
+  {id:'18·phys.word',step:'18·phys',mode:'word',label:'which cut of the cone',open:()=>measured('18·phys'),make(){
+    const B=[['a planet',0.093],['a comet',0.967],['a body from outside the solar system',1.2],['a probe on its way out',1],['a moon',0.05],['a returning comet',0.6]][rnd(6)], e=B[1];
+    const right=e<1?'an ellipse':e===1?'a parabola':'a hyperbola', wrong=['an ellipse','a parabola','a hyperbola','a circle'].filter(x=>x!==right).slice(0,3);
+    return {index:'q:18·phys.word['+e+']', a3:['18·phys.word',DASH,DASH], story:'The places of '+B[0]+' fit r = \u2113 \u2212 ex with e \u2248 '+e+'.', lines:[], ask:'What kind of path is it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Lift: the places lie on (1 \u2212 e\u00b2)x\u00b2 + 2e\u2113x + y\u00b2 = \u2113\u00b2: an ellipse for 0 \u2264 e < 1, a parabola for e = 1, a hyperbola for e > 1. Here e = '+e+'.'+(e<1&&e>0?' Not a circle, which needs e = 0.':'')}; }},
+  {id:'18·phys.line',step:'18·phys',mode:'proof',label:'what an orbit licenses',open:()=>measured('18·phys'),make(){
+    return line28('18·phys.line',[
+      ['o1',[['\\text{an ellipse with the sun on it}','given'],['\\text{the sun sits at the centre}','the middle']],2,1,'At a focus: r differs at x and \u2212x.'],
+      ['o2',[['r \\text{ changes}','given'],['\\text{the path is an ellipse}','not round']],2,1,'Only if r = \u2113 \u2212 ex: the raised points must lie on one plane.'],
+      ['o3',[['r = \\ell - ex','the line'],['\\text{its slope is } e','reading the line']],2,1,'The slope is \u2212e, with x pointing toward the nearest place.'],
+      ['o4',[['r = \\ell - ex','the line'],['\\alpha = \\ell','the half long axis']],2,1,'\u03b1 = \u2113/(1 \u2212 e\u00b2); \u2113 is r at x = 0, above the sun.'],
+      ['o5',[['q = \\ell/(1 + e),\\ Q = \\ell/(1 - e)','orbit-ends'],['e = (Q - q)/(Q + q)','run backwards']],2,0,'Q \u2212 q = 2\u2113e/(1 \u2212 e\u00b2) and Q + q = 2\u2113/(1 \u2212 e\u00b2).'],
+      ['o6',[['\\text{the fit says how the places lie}','given'],['\\text{it explains why}','the fit']],2,1,'It says how they lie; the cause is held in trust.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
