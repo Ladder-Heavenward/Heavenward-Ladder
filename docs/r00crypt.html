@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>0·crypt · How Can a Word Keep a Secret?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r00b.html">← 0b the same as itself</a><a href="r00c.html">next: 0c guess, work →</a></p>
+  <div class="tags"><span class="tag crypt">0·crypt · cryptography</span></div>
+  <h1>How Can a Word Keep a Secret?</h1>
+  <p data-pid="71f264">Rung 0 gave names to things, and it gave sameness two axioms and two techniques. Three abilities came with that, and the rung used them without stopping to look at them. A name that is the same as another passes wherever the other stood, and nobody asks a second question. A thing can be given any name you like, and as many as you like. And a whole statement can be given a name too, and the name can even be another sentence. Keeping a secret with words uses the same three abilities and nothing more: a <b>password</b> is the first, a <b>codename</b> is the second, and a <b>warning</b> said in cover words is the third.</p>
+</header>
+
+<section class="class step" data-step="0crypt1">
+  <h2 class="sthead"><span class="stno">0crypt1</span>A Password: One Question, and No Others</h2>
+  <p data-pid="11f084">A guard stands at a gate and holds a card. One word is written on the card. A visitor walks up and says a word. If the word the visitor says is the word on the card, the gate opens.</p>
+  <p data-pid="d09eed">Give the two words letters, the way 0a2 gave the cat one. Let v be the word the visitor says. Let g be the word on the guard's card. The guard's whole check is one sameness (0b2):</p>
+  <div class="eqline" data-tex="v = g"></div>
+  <p data-pid="d77d15">Look at what the guard does not ask. Not who the visitor is, not where they came from, not why they want in. Sameness is the only question. 0b10 said it already: carrying a fact is licensed by one thing only, that the things are the same thing.</p>
+  <p data-pid="171e5b">Look also at what v and g name. They name words. If the password is “willow”, nobody at the gate is talking about a tree. The word is mentioned, not used (0a9). A password is a word that does its work as a word.</p>
+  <p data-pid="1ba94a">Now a fact gets carried. The word on the card opens the gate. Call “… opens the gate” O, so that is O(g).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the card carries a fact">
+v = g @@ given: the guard heard the visitor
+O(g) @@ given: the card's word opens the gate
+O(v) @@ swap axiom (0b5): v written where g stood
+  </pre>
+  <p data-pid="cb8918">The visitor's word opens the gate. No one argued for it. The sameness was enough, and that is what “passes without question” means.</p>
+  <p data-pid="3f7550"><b>Passing down a row.</b> The guard's card was copied from a book that stays locked in the office. Let k be the word in the book. The card was copied correctly, so g = k.</p>
+  <pre class="lines" data-k="ember" data-label="this page: passing down a row">
+v = g @@ given
+g = k @@ given: the card was copied from the book
+v = k @@ chain technique (0b7)
+  </pre>
+  <p data-pid="430c18">The visitor said the book's word, and the book never left the office. A second gate has its own card, with the word h on it, copied from the same book: h = k.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the second gate">
+v = k @@ from the column above
+h = k @@ given: the second card was copied from the book
+k = h @@ turn-about technique (0b6)
+v = h @@ chain technique (0b7)
+  </pre>
+  <p data-pid="2e218f">The word passes the second gate too. Each guard knows one sameness, their own. The samenesses run in a row, and the word goes down the row. However long the row is, no new technique is needed: chain, and chain again.</p>
+  <p data-pid="0bef18"><b>What the check earns.</b> It earns v = g, and it earns nothing else. It does not earn “the visitor is a friend”. Anyone who says the word passes, friend or not.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">0·crypt.1.1</span><span class="ph understand">understand</span>What is the one question a password check asks? Name two questions it does not ask. <br>The password is “willow”. Is the word used or mentioned at the gate? How can you tell?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="0crypt2">
+  <h2 class="sthead"><span class="stno">0crypt2</span>A Codename: One Thing, as Many Names as You Like</h2>
+  <p data-pid="d1dbb4">0a2 had a cat asleep on a bed. She was called cat, she was called Serena, and in logic she was c or s. Nothing made the list stop there. She can be “kitty”. She can be “sleepyhead”. A name is chosen, not found, and choosing a new one changes nothing about the cat.</p>
+  <p data-pid="9861b0">Each new name comes in with one sameness. Let k be “kitty” and h be “sleepyhead”: k = s and h = s. The new names agree with each other, and rung 0 can show it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two nicknames agree">
+k = s @@ given: “kitty” names Serena
+h = s @@ given: “sleepyhead” names Serena
+s = h @@ turn-about technique (0b6)
+k = h @@ chain technique (0b7)
+  </pre>
+  <p data-pid="5a45ac">A <b>codename</b> is a name whose sameness is told to some people and not to others. Zoe and Evita are planning a surprise party for Randy. They agree to call the party “Bluebird”. Let b be Bluebird and p be the surprise party for Randy. Their agreement is one sameness, b = p, and only the two of them have it.</p>
+  <p data-pid="d6c08b">At lunch, with Randy sitting right there, Zoe says “Bluebird is on Friday.” Call “… is on Friday” F, so she said F(b). Evita works it out:</p>
+  <pre class="lines" data-k="ember" data-label="this page: Evita reads the codename">
+F(b) @@ given: said out loud at lunch
+b = p @@ given: the agreement, held by Zoe and Evita
+F(p) @@ swap axiom (0b5)
+  </pre>
+  <p data-pid="089ba4">The party is on Friday. Randy heard the same sentence. He has F(b), and he has no sameness with b in it, so he has nothing to swap. To him “Bluebird” does the job of 0a8's “something”: there is a slot, and what fills it is still to be worked out.</p>
+  <p data-pid="9dcead">So the sentence was said in the open, and the secret was kept. The secret was never in the sentence. It was in the sameness, b = p. A sameness kept back like this is called a <b>key</b>.</p>
+  <p data-pid="15ac7b"><b>One thing, many names: fine. One name, two things: not fine.</b> Serena may have ten names, and the column above shows that they all agree. Now suppose “kitty” is also used for Murphy, her look-alike from 0b10. Call Murphy u.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one name handed to two things">
+k = s @@ given: “kitty” names Serena
+k = u @@ given: “kitty” names Murphy
+s = k @@ turn-about technique (0b6)
+s = u @@ chain technique (0b7)
+  </pre>
+  <p data-pid="d2ac6c">The column says Serena is Murphy, and she is not. Every move was licensed, so the fault is in the givens: one name was handed to two things. Anyone who trusts both givens will carry Serena's facts over to Murphy.</p>
+  <p data-pid="32648d"><b>A name that tells.</b> 0a9 showed that some names carry a description inside them. “Sleepyhead” does: it tells a listener that the thing sleeps a lot. “Bluebird” tells nothing about a party. A good nickname tells you everything inside it, a good codename carries nothing, so the only way from the name to the thing is the key.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">0·crypt.2.1</span><span class="ph understand">understand</span>Zoe says “Bluebird needs balloons.” Write it with a bracket. What can Evita write next, and by what? What can Randy write next? <br>Why is it fine for one thing to have many names, and not fine for one name to have two things? Use the column that ends at s = u.</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="0crypt3">
+  <h2 class="sthead"><span class="stno">0crypt3</span>A Warning: A Sentence as the Name of a Statement</h2>
+  <p data-pid="ec3116">A name does not have to be short, and the thing named does not have to be a cat. The possibility axiom (0a1) says any statement can be represented. So a whole statement can be the thing, and it can be given a letter.</p>
+  <p data-pid="b56d4d">Take the statement “We need to leave, because it isn't safe.” Call the whole statement S. Now S is a name, and the statement is the thing it names, just as s is a name and the cat is the thing.</p>
+  <p data-pid="07f7d0">By 0crypt2, a thing can have any name you like. So this statement can have another name, and the other name can be a sentence. 0a9 said that a sentence between quote marks is itself a name. A family agrees ahead of time: among us, “We should start carpooling” names the statement that we need to leave because it isn't safe. Let w be that sentence, taken as a name. The agreement is one sameness, w = S: one statement under two names. It is the family's key.</p>
+  <p data-pid="2f5f7c">At a crowded gathering, Dad says “We should start carpooling.” Two kinds of listener hear the same words.</p>
+  <p data-pid="9e6ad4">A stranger takes the sentence as used. To the stranger it is a claim about sharing cars, and not an interesting one.</p>
+  <p data-pid="da5ed8">The family takes the sentence as a name, and swaps. Call “… is what Dad is telling us” T. It is a claim about the statement, whatever name the statement goes by.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the family reads the warning">
+T(w) @@ given: Dad said the sentence, and the sentence names a statement
+w = S @@ given: the family's agreement
+T(S) @@ swap axiom (0b5)
+  </pre>
+  <p data-pid="6a1dc0">What Dad is telling us is that we need to leave, because it isn't safe. The family gets their coats. Nobody claimed anything about cars.</p>
+  <p data-pid="9db37f">All three abilities are at work here together. A statement was given a name (this footing). The name could be anything, even another sentence (0crypt2). And the family did not stop to ask “why carpooling?”; the sameness let the sentence pass (0crypt1).</p>
+  <p data-pid="8e4603">A name is not correct or incorrect. It only names. So it is no use asking whether “We should start carpooling” was true when Dad said it. The statement that can be so or not so is S.</p>
+  <p data-pid="4a5fb7"><b>The cost.</b> Among the family, the sentence now has a job as a name, so it can no longer be used plainly. If Mom one day really does want to share rides and says so, everyone reaches for a coat. A good cover sentence sounds ordinary to a stranger, and is one the family would almost never need to say and mean.</p>
+  <p data-pid="6f9775"><b>The order.</b> The agreement comes first. Said before the family has the key, “We should start carpooling” is a sentence about cars and nothing else.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">0·crypt.3.1</span><span class="ph understand">understand</span>In 0crypt3, what is the thing named, and what are its two names?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="0crypt4">
+  <h2 class="sthead"><span class="stno">0crypt4</span>Moves to Watch Out For</h2>
+  <p data-pid="fe1cb2">Each move below looks like one of this page's moves. Each has a tag that says what is wrong with it, or what it costs.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{“The}\allowbreak \text{ visitor}\allowbreak \text{ said}\allowbreak \text{ ‘wilow’.}\allowbreak \text{ That}\allowbreak \text{ is}\allowbreak \text{ close}\allowbreak \text{ enough}\allowbreak \text{ to}\allowbreak \text{ ‘willow’,}\allowbreak \text{ so}\allowbreak \text{ the}\allowbreak \text{ gate}\allowbreak \text{ opens.”}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; The gate opens on v = g, and no such sameness is in hand. Looking alike is not sameness (0b10). One letter off is a different word.
+\text{“The}\allowbreak \text{ visitor}\allowbreak \text{ said}\allowbreak \text{ the}\allowbreak \text{ word,}\allowbreak \text{ so}\allowbreak \text{ the}\allowbreak \text{ visitor}\allowbreak \text{ is}\allowbreak \text{ a}\allowbreak \text{ friend.”}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; The check was built to answer one question, whether v = g. “Is a friend” is another question, and nothing in the column earns it. A word can be overheard.
+\text{“‘Bluebird’}\allowbreak \text{ has}\allowbreak \text{ eight}\allowbreak \text{ letters,}\allowbreak \text{ and}\allowbreak \text{ Bluebird}\allowbreak \text{ is}\allowbreak \text{ the}\allowbreak \text{ party,}\allowbreak \text{ so}\allowbreak \text{ ‘the}\allowbreak \text{ surprise}\allowbreak \text{ party}\allowbreak \text{ for}\allowbreak \text{ Randy’}\allowbreak \text{ has}\allowbreak \text{ eight}\allowbreak \text{ letters.”}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; The first statement is about the name, not the thing. The swap axiom carries statements about the thing (0b10). The same goes for the warning: “Dad's sentence has four words” is about the words, and S does not have four words.
+\text{“Randy}\allowbreak \text{ heard}\allowbreak \text{ ‘Bluebird}\allowbreak \text{ is}\allowbreak \text{ on}\allowbreak \text{ Friday’,}\allowbreak \text{ so}\allowbreak \text{ Randy}\allowbreak \text{ knows}\allowbreak \text{ the}\allowbreak \text{ party}\allowbreak \text{ is}\allowbreak \text{ on}\allowbreak \text{ Friday.”}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; A “knows that” sentence is about Randy's knowledge, and the name itself does work in it (0b10, the spelling-bee case). Randy knows something called Bluebird is on Friday. Without the key that is all he knows, and that is the reason a codename works.
+\text{“Zoe}\allowbreak \text{ told}\allowbreak \text{ Evita}\allowbreak \text{ ‘Bluebird}\allowbreak \text{ is}\allowbreak \text{ on}\allowbreak \text{ Friday’}\allowbreak \text{ on}\allowbreak \text{ Monday.}\allowbreak \text{ They}\allowbreak \text{ agreed}\allowbreak \text{ what}\allowbreak \text{ ‘Bluebird’}\allowbreak \text{ names}\allowbreak \text{ on}\allowbreak \text{ Tuesday.”}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; On Monday Evita had F(b) and no key, the same as Randy. The agreement comes before the first use.
+\text{“‘Kitty’}\allowbreak \text{ is}\allowbreak \text{ Serena,}\allowbreak \text{ and}\allowbreak \text{ ‘kitty’}\allowbreak \text{ is}\allowbreak \text{ Murphy}\allowbreak \text{ too.”}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; No rule stops anyone handing out a name twice. The cost is the column in 0crypt2, which ends at s = u.
+\text{“Let's}\allowbreak \text{ call}\allowbreak \text{ the}\allowbreak \text{ party}\allowbreak \text{ ‘Randy's}\allowbreak \text{ Surprise’.”}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; It is a name, and it works as one. But it carries its description inside it (0a9), so Randy needs no key.
+\text{“Dad}\allowbreak \text{ said}\allowbreak \text{ we}\allowbreak \text{ should}\allowbreak \text{ start}\allowbreak \text{ carpooling,}\allowbreak \text{ but}\allowbreak \text{ our}\allowbreak \text{ car}\allowbreak \text{ only}\allowbreak \text{ seats}\allowbreak \text{ four.”}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; Among the family the sentence was a name for S. Answering it as a claim about cars treats a name as if it were used plainly.
+\text{“Mom}\allowbreak \text{ really}\allowbreak \text{ wants}\allowbreak \text{ to}\allowbreak \text{ share}\allowbreak \text{ rides,}\allowbreak \text{ so}\allowbreak \text{ she}\allowbreak \text{ says}\allowbreak \text{ ‘We}\allowbreak \text{ should}\allowbreak \text{ start}\allowbreak \text{ carpooling.’”}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; She may say it. The family will swap, as agreed, and head for the door.
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">0·crypt.4.1</span><span class="ph understand">understand</span>Why is “Randy heard ‘Bluebird is on Friday’, so Randy knows the party is on Friday” a move to watch out for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">0·crypt.5.1</span><span class="tagq">do</span>A third gate has a card with the word j on it, copied from the second gate's card, so j = h. Starting from v = h, write the column that earns v = j, with a reason on every line.</div>
+  <div class="chq"><span class="chid">0·crypt.5.2</span><span class="tagq">do</span>Serena is also called “the grey one”; call that name e, so e = s. From e = s and h = s, write the column that earns e = h.</div>
+  <div class="chq"><span class="chid">0·crypt.5.3</span><span class="tagq">make</span>Choose a codename for something you are planning. Does your codename carry a description inside it? If it does, choose a better one and say why it is better.</div>
+  <div class="chq"><span class="chid">0·crypt.5.4</span><span class="tagq">make</span>Write a cover sentence for the statement “Come home now.” It should sound ordinary to a stranger. Then say what it costs: when could you no longer say your sentence and mean it plainly?</div>
+  <div class="chq"><span class="chid">0·crypt.5.5</span><span class="tagq">converse</span>With a partner, agree on a codename and a cover sentence. Say three sentences to a third person, one of them using your agreement. Can the third person tell which one? What would they need in order to work it out?</div>
+  <div class="chq"><span class="chid">0·crypt.5.6</span><span class="tagq">open</span>A password, a codename and a warning each keep one sameness back. What happens to each of them on the day the sameness gets out?</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r00b.html">← 0b · the same as itself</a><a href="r00c.html">0c · guess, work →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="f14b1d"><b>Cryptography</b> is the accepted name for the study of keeping messages secret. A <b>password</b> is a word checked for sameness and nothing else. A <b>codename</b> is a name whose sameness is held by some people only; “code word” is also said. A sentence used as a name for another statement is a <b>code phrase</b>. The sameness that is kept back is the <b>key</b>.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
