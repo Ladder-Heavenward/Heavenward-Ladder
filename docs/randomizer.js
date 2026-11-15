@@ -16714,6 +16714,133 @@ QP.push({id:'46l.unbuild',step:'46l',label:'what can’t be built, by hand',open
       ['l3',[['x⁴ − x − 1 has degree 4','given'],['its roots can be built','the unbuildable-test technique']],2,1,'Its group has 24 members.'],
       ['l4',[['8x³ − 6x − 1 is irreducible over ℚ','checked'],['cos 20° cannot be built','the unbuildable-test technique']],2,0,'Degree 3 is not a power of 2.']],[]); }});
 /* ===== Rung pools end ===== */
+/* ===== Annex pools (Andrew 2026-11-15) ===== */
+/* ----- annex pools: shared helpers ----- */
+const UQAX=(right,c,n)=>{ const o=[]; c.forEach(x=>{ x=String(x); if(x!==String(right)&&!o.includes(x)&&o.length<(n||3)) o.push(x); }); return o; };
+const PTAILAX=(m,s)=>{ let t=Math.exp(-m), c=t; for(let k=1;k<=s;k++){ t*=m/k; c+=t; } return 1-c; }; /* the chance of more than s, for a rare count with average m */
+const SHELFAX=(m,a)=>{ let s=0; while(PTAILAX(m,s)>a&&s<2000) s++; return s; };
+const MNAX=s=>String(s).replace(/(^|[ (\[,=])-(\d)/g,'$1\u2212$2'); /* unicode minus before digits */
+/* ----- annex 0·crypt How Can a Word Keep a Secret?: Work, Word Problems, Check Proofs (annex01, Andrew 2026-11-15 06:09Z) ----- */
+const NMAX0=['g','h','j','k','m','n','u','v','w','b'];
+QP.push({id:'0·crypt.work',step:'0·crypt',mode:'work',label:'a word passed down a row',open:()=>measured('0·crypt'),make(){
+    const n=2+rnd(3), L=shuffle(NMAX0.slice()).slice(0,n+1), turned=[]; const lines=[];
+    for(let i=0;i<n;i++){ const t=rnd(2)===1; turned.push(t); lines.push([t?L[i+1]+' = '+L[i]:L[i]+' = '+L[i+1],'given']); }
+    const kind=rnd(2); let ask, right, cands, why, ix;
+    if(kind===0){ lines.unshift(['O('+L[0]+')','given: the word '+L[0]+' opens the gate']);
+      right='O('+L[n]+')'; const out=NMAX0.find(x=>!L.includes(x));
+      cands=['O('+out+')',L[n]+' = O','O('+L[0]+' = '+L[n]+')',L[0]+' = '+out]; ask='Which fact do the swap axiom (0b5) and the chain technique (0b7) let you write?';
+      why='Turn about any sameness that runs the wrong way (0b6), chain the row to '+L[0]+' = '+L[n]+', and swap '+L[n]+' in for '+L[0]+': O('+L[n]+').'; ix=[0,L.join(''),turned.map(Number).join('')]; }
+    else { const k=turned.filter(Boolean).length; right=String(k); cands=[n,k+1,n-k,0,1,2,3,4].map(String).filter(x=>x!==right);
+      ask='How many lines must the turn-about technique (0b6) write before the row chains to '+L[0]+' = '+L[n]+'?';
+      why='Each given written the wrong way round needs one turn-about; '+(k===1?'one is':k+' are')+' written the wrong way round.'; ix=[1,L.join(''),turned.map(Number).join('')]; }
+    const wrong=UQAX(right,cands,3); if(wrong.length<3) return null;
+    return {index:'q:0·crypt.work['+ix.join(';')+']', lines, ask, right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'0·crypt.word',step:'0·crypt',mode:'word',label:'gates, cards and codenames',open:()=>measured('0·crypt'),make(){
+    if(rnd(2)===0){ const n=3+rnd(4), bad=2+rnd(n-1), w=pick(['willow','harbor','cedar','lantern','orchard','summit']), mis=w.slice(0,2)+w.slice(3);
+      const right=String(bad-1), wrong=UQAX(right,[n,bad,n-bad,bad-2,1,0].map(String),3); if(wrong.length<3) return null;
+      return {index:'q:0·crypt.word[0;'+n+';'+bad+';'+w+']', a3:['0·crypt.word',DASH,DASH],
+        story:'A road has '+n+' gates in a row. The card at gate 1 was copied from a book that stays in the office, and each later card was copied from the card at the gate before it. At gate '+bad+' the copier wrote “'+mis+'” for “'+w+'”. A visitor says the book’s word, “'+w+'”.',
+        lines:[], ask:'How many gates does the visitor pass?', right, opts:shuffle([right,...wrong]), lead:'',
+        why:'Each card is the same as the one before it only up to gate '+(bad-1)+'; from gate '+bad+' on the cards say “'+mis+'”, and one letter off is a different word (0b10). The visitor passes '+right+' '+(right==='1'?'gate':'gates')+'.'}; }
+    const n=5+rnd(6), k=1+rnd(n-2), nm=pick(['Bluebird','Lantern','Marigold','Kestrel','Pebble']), thing=pick(['the surprise party','the school play','the camping trip','the bake sale']);
+    const right=String(k), wrong=UQAX(right,[n,n-k,k+1,k-1>0?k-1:k+2,n-1].map(String),3); if(wrong.length<3) return null;
+    return {index:'q:0·crypt.word[1;'+n+';'+k+';'+nm+']', a3:['0·crypt.word',DASH,DASH],
+      story:n+' friends sit at lunch. '+k+' of them agreed beforehand that “'+nm+'” names '+thing+'. One of them says “'+nm+' is on Friday.” Everyone hears it.',
+      lines:[], ask:'How many of the '+n+' can write that '+thing+' is on Friday?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Only those who hold the key, the sameness b = p, can swap (0b5). The other '+(n-k)+' have F(b) and nothing to swap it with. So '+k+'.'}; }},
+  {id:'0·crypt.line',step:'0·crypt',mode:'proof',label:'what a sameness kept back licenses',open:()=>measured('0·crypt'),make(){
+    return line28('0·crypt.line',[
+      ['c1',[['v = g, O(g)','given'],['O(v)','the swap axiom (0b5)']],2,0,'v is written where g stood.'],
+      ['c2',[['v = g','given'],['the visitor is a friend','the password check']],2,1,'The check earns v = g and nothing else. A word can be overheard.'],
+      ['c3',[['v = k, h = k','given'],['v = h','the chain technique (0b7)']],2,1,'The row does not run yet: turn h = k about to k = h first (0b6).'],
+      ['c4',[['k = s, h = s, s = h','given, given, turn-about (0b6)'],['k = h','the chain technique (0b7)']],2,0,'k = s and s = h run in a row.'],
+      ['c5',[['F(b), with no sameness for b','given'],['F(p)','the swap axiom (0b5)']],2,1,'Without the key b = p there is nothing to swap. That is Randy’s place.'],
+      ['c6',[['F(b), b = p','given'],['F(p)','the swap axiom (0b5)']],2,0,'Evita holds the key, so she swaps.'],
+      ['c7',[['“Bluebird” has eight letters, b = p','given'],['the surprise party has eight letters','the swap axiom (0b5)']],2,1,'The first statement is about the name, not the thing (0b10).'],
+      ['c8',[['T(w), w = S','given'],['T(S)','the swap axiom (0b5)']],2,0,'“… is what Dad is telling us” is about the statement, whatever its name.'],
+      ['c9',[['Dad said w, w = S','given'],['Dad said S','the swap axiom (0b5)']],2,1,'“said” is about the words, like “knows that” (0b10).'],
+      ['c10',[['k = s, k = u','given'],['s = u','turn-about, then chain']],2,0,'Every move is licensed; the fault is in the givens, one name handed to two things.']],[]); }});
+/* ----- annex 1·comp How Many Machines Can Two Letters Have?: Work, Word Problems, Check Proofs (annex01, Andrew 2026-11-15 06:09Z) ----- */
+const W1CX=['one','two','three','four','five','six','seven','eight','nine','ten'];
+const COL1CX=[['1 1 1 1','⊤'],['1 1 1 0','P ∨ Q'],['1 1 0 1','Q ⇒ P'],['1 1 0 0','P'],['1 0 1 1','P ⇒ Q'],['1 0 1 0','Q'],['1 0 0 1','P ⇔ Q'],['1 0 0 0','P ∧ Q'],
+  ['0 1 1 1','¬(P ∧ Q)'],['0 1 1 0','P ⊕ Q'],['0 1 0 1','¬Q'],['0 1 0 0','P ∧ ¬Q'],['0 0 1 1','¬P'],['0 0 1 0','¬P ∧ Q'],['0 0 0 1','¬P ∧ ¬Q'],['0 0 0 0','⊥']];
+QP.push({id:'1·comp.work',step:'1·comp',mode:'work',label:'switches, settings and columns',open:()=>measured('1·comp'),make(){
+    const kind=rnd(3); let lines, ask, right, cands, why, ix;
+    if(kind===0){ const n=2+rnd(7), s=Math.pow(2,n); right=String(s); cands=[2*n,n*n,s/2,2*s,s-1];
+      lines=[['a machine has '+n+' switches','given'],['each new switch doubles the settings','1g1']]; ask='How many settings does it have?';
+      why='Doubling '+n+' times from 1: '+Array.from({length:n},(_,i)=>Math.pow(2,i+1)).join(', ')+'.'; ix=[0,n]; }
+    else if(kind===1){ const N=3+rnd(60); let n=0; while(Math.pow(2,n)<N) n++; const s=Math.pow(2,n); right=n+' switches, '+(s-N)+' left over';
+      cands=[(n-1)+' switches, '+(Math.pow(2,n-1)-N<0?0:Math.pow(2,n-1)-N)+' left over',(n+1)+' switches, '+(2*s-N)+' left over',n+' switches, 0 left over',N+' switches, 0 left over'];
+      lines=[[N+' things to tell apart','given'],['n switches have 2ⁿ settings','1g1']]; ask='What is the fewest switches, and how many settings are left over?';
+      why=(n-1)+' switches give only '+Math.pow(2,n-1)+' settings; '+n+' give '+s+', which is enough, with '+(s-N)+' left over.'; ix=[1,N]; }
+    else { const c=pick(COL1CX); right=c[1]; cands=shuffle(COL1CX.filter(x=>x[0]!==c[0]).map(x=>x[1]));
+      lines=[['a machine on two letters has the column '+c[0],'down the rows TT, TF, FT, FF']]; ask='Which statement is it?';
+      why='Rung 1 has a statement for every one of the sixteen columns: '+c[0]+' is '+c[1]+'.'; ix=[2,c[0].replace(/ /g,'')]; }
+    const wrong=UQAX(right,cands.map(String),3); if(wrong.length<3) return null;
+    return {index:'q:1·comp.work['+ix.join(';')+']', lines, ask, right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'1·comp.word',step:'1·comp',mode:'word',label:'codes made of switches',open:()=>measured('1·comp'),make(){
+    const t=pick([['a club gives each member a code of on-and-off lights on a badge','members'],['a parking garage marks each level with a row of lamps','levels'],['a ferry office numbers its lockers with rows of switches','lockers'],['a school marks each classroom door with a strip of on-off lamps','classrooms']]);
+    const N=5+rnd(70); let n=0; while(Math.pow(2,n)<N) n++; const s=Math.pow(2,n);
+    const right=n+' lamps or switches', wrong=UQAX(right,[(n-1)+' lamps or switches',(n+1)+' lamps or switches',Math.ceil(N/2)+' lamps or switches',N+' lamps or switches'],3); if(wrong.length<3) return null;
+    return {index:'q:1·comp.word['+t[1]+';'+N+']', a3:['1·comp.word',DASH,DASH],
+      story:t[0].charAt(0).toUpperCase()+t[0].slice(1)+'. There are '+N+' '+t[1]+', and no two may share a code.', lines:[],
+      ask:'What is the fewest lamps or switches each code needs, for '+N+' '+t[1]+'?', right, opts:shuffle([right,...wrong]), lead:'',
+      why:'Each one doubles the settings (1g1): '+(n-1)+' give '+Math.pow(2,n-1)+', too few for '+N+'; '+n+' give '+s+', enough for '+N+' '+t[1]+', with '+(s-N)+' codes spare.'}; }},
+  {id:'1·comp.line',step:'1·comp',mode:'proof',label:'same column, same job',open:()=>measured('1·comp'),make(){
+    return line28('1·comp.line',[
+      ['m1',[['two builds agree in the rows TF, FT and FF','given'],['they are the same machine','same column, same statement (1e14)']],2,1,'A column is every row: P ∨ Q and P ⊕ Q agree in those three and differ in TT.'],
+      ['m2',[['two builds have the same column in all four rows','given'],['either one may be built','same column, same statement (1e14)']],2,0,'The job is the column.'],
+      ['m3',[['the recipe gave a build of fourteen parts','given'],['no smaller build exists','the recipe']],2,1,'The recipe reaches the column; it never counts parts. The alarm went to four.'],
+      ['m4',[['(P ∧ Q) ∨ (P ∧ ¬Q)','given'],['P ∧ (Q ∨ ¬Q)','spread and over or, read backward']],2,0,'Both sides of the or are “P and something”.'],
+      ['m5',[['(P ∨ Q) ∧ (P ∨ ¬Q)','given'],['P ∨ (Q ∧ ¬Q)','spread or over and, read backward']],2,0,'Both sides of the and are “P or something”.'],
+      ['m6',[['P ∨ (Q ∧ ¬Q)','given'],['P ∨ ⊤','Q ∧ ¬Q is the totally true']],2,1,'Q ∧ ¬Q is a clash: it is ⊥, and P ∨ ⊥ is P.'],
+      ['m7',[['four switches','given'],['twenty-six letters each get a setting','sixteen settings']],2,1,'Sixteen settings cannot tell twenty-six letters apart: ten would have none.'],
+      ['m8',[['two letters','given'],['sixteen machines','four rows, each 1 or 0']],2,0,'Two, four, eight, sixteen columns.'],
+      ['m9',[['the column 1 0 1 1','given'],['it is Q ⇒ P','the list of sixteen']],2,1,'1 0 1 1 is P ⇒ Q, with its 0 in the row TF.'],
+      ['m10',[['(P ∧ Q) ∨ (P ∧ R) ∨ (Q ∧ R)','given'],['(P ∧ (Q ∨ R)) ∨ (Q ∧ R)','spread and over or, read backward']],2,0,'The first two pieces are both “P and something”: four parts in place of five.']],[]); }});
+/* ----- annex 1·phys Can a Light Bulb Work Out an And?: Work, Word Problems, Check Proofs (annex01, Andrew 2026-11-15 06:09Z) ----- */
+/* two buttons p, q: each ordinary (closes when held) or breaking (opens when held); wired in a line or side by side */
+const COL1PX=(f)=>[[1,1],[1,0],[0,1],[0,0]].map(([p,q])=>f(p,q)?1:0).join(' ');
+QP.push({id:'1·phys.work',step:'1·phys',mode:'work',label:'the column a wiring shows',open:()=>measured('1·phys'),make(){
+    const kind=rnd(2); let lines, ask, right, cands, why, ix;
+    if(kind===0){ const bp=rnd(2), bq=rnd(2), side=rnd(2); const lp=p=>bp?!p:p, lq=q=>bq?!q:q;
+      const f=side?(p,q)=>lp(p)||lq(q):(p,q)=>lp(p)&&lq(q); right=COL1PX(f);
+      const alts=[COL1PX((p,q)=>!f(p,q)),COL1PX(side?(p,q)=>lp(p)&&lq(q):(p,q)=>lp(p)||lq(q)),COL1PX((p,q)=>f(!p,q)),COL1PX((p,q)=>f(p,!q)),COL1PX((p,q)=>f(!p,!q))];
+      const nm=(b,x)=>(b?'a breaking button ':'an ordinary button ')+x;
+      lines=[[nm(bp,'p')+' and '+nm(bq,'q')+(side?', side by side':', in a line'),'given'],['a held button is T; lit is 1, dark is 0','the two agreements']];
+      ask='What column does the bulb show, down the rows TT, TF, FT, FF?';
+      why=(side?'Side by side is an or':'In a line is an and')+'; a breaking button shows the denial of its letter. So the bulb shows '+(bp?'¬P':'P')+(side?' ∨ ':' ∧ ')+(bq?'¬Q':'Q')+': '+right+'.';
+      cands=alts; ix=[0,bp,bq,side]; }
+    else { const n=3+rnd(3), side=rnd(2), rows=Math.pow(2,n); right=String(side?rows-1:1); cands=[rows,side?1:rows-1,n,rows/2,2*n];
+      lines=[[n+' ordinary buttons '+(side?'side by side, on '+n+' branches':'in a line'),'given'],['each new letter doubles the rows','1g1']];
+      ask='In how many of the '+rows+' rows is the bulb lit?';
+      why=side?'There are '+n+' ways through; only the row with every button up is dark: '+rows+' − 1 = '+(rows-1)+'.':'The path has '+n+' gaps and is unbroken only when all are closed: one row.'; ix=[1,n,side]; }
+    const wrong=UQAX(right,cands.map(String),3); if(wrong.length<3) return null;
+    return {index:'q:1·phys.work['+ix.join(';')+']', lines, ask, right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'1·phys.word',step:'1·phys',mode:'word',label:'buttons, doors and lamps',open:()=>measured('1·phys'),make(){
+    const t=rnd(3);
+    if(t===0){ const n=2+rnd(4), rows=Math.pow(2,n), right='1 of '+rows, wrong=UQAX(right,[(rows-1)+' of '+rows,n+' of '+rows,(rows/2)+' of '+rows,'0 of '+rows],3); if(wrong.length<3) return null;
+      return {index:'q:1·phys.word[0;'+n+']', a3:['1·phys.word',DASH,DASH], story:'A bread slicer at a bakery runs only when its '+n+' guard covers are all shut. Each cover closes one button, and the '+n+' buttons are wired in a line with the motor.', lines:[],
+        ask:'In how many of the ways the '+n+' covers can be set does the slicer run?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each cover doubles the ways (1g1): '+rows+'. In a line, the path is unbroken only when every gap is closed: 1 of '+rows+'.'}; }
+    if(t===1){ const n=2+rnd(4), rows=Math.pow(2,n), right=(rows-1)+' of '+rows, wrong=UQAX(right,['1 of '+rows,n+' of '+rows,(rows/2)+' of '+rows,rows+' of '+rows],3); if(wrong.length<3) return null;
+      return {index:'q:1·phys.word[1;'+n+']', a3:['1·phys.word',DASH,DASH], story:'A farmhouse has '+n+' doors, each with a bell button, and the '+n+' buttons are wired side by side to one bell.', lines:[],
+        ask:'In how many of the ways the '+n+' buttons can be held or let go does the bell ring?', right, opts:shuffle([right,...wrong]), lead:'', why:'Side by side is an or: the bell is silent only when every button is let go. '+rows+' − 1 = '+(rows-1)+' of '+rows+'.'}; }
+    const flips=2+rnd(4), lit=flips%2===0, right=lit?'lit':'dark';
+    return {index:'q:1·phys.word[2;'+flips+']', a3:['1·phys.word',DASH,DASH], story:'The stairway light at a lodge is lit, with both lever switches up. People going up and down flip a lever, one at a time, '+flips+' times in all, top or bottom.', lines:[],
+      ask:'After '+flips+' flips, is the stairway light lit or dark?', right, opts:shuffle(['lit','dark','it depends which levers were flipped','it cannot be told without the wiring']), lead:'',
+      why:'Each flip changes one letter, and a stairway light changes whenever one letter changes. An even number of changes brings it back: '+flips+' flips leave it '+right+'.'}; }},
+  {id:'1·phys.line',step:'1·phys',mode:'proof',label:'what a bulb tells you',open:()=>measured('1·phys'),make(){
+    return line28('1·phys.line',[
+      ['b1',[['two buttons in a line, the bulb lit','given'],['p is held down','keep either part']],2,0,'Lit in a line is P ∧ Q, and an and hands over either part.'],
+      ['b2',[['two buttons side by side, the bulb lit','given'],['p is held down','keep either part']],2,1,'An or does not hand over a part: lit in FT too, where p is up.'],
+      ['b3',[['two buttons side by side, the bulb lit, q is up','given'],['p is held down','the remaining option (1c9)']],2,0,'With ¬Q in hand, the remaining option gives P.'],
+      ['b4',[['two buttons in a line, the bulb dark','given'],['p is not held down','the and gives 0']],2,1,'The and gives 0 in three rows, and p is held in one of them, TF.'],
+      ['b5',[['a breaking button p on the path, the bulb lit','given'],['p is not held down','the not machine (1e2)']],2,0,'That wiring shows ¬P.'],
+      ['b6',[['the stairway, the bottom lever up','given'],['the light is on','the stairway column']],2,1,'One lever alone settles nothing: the column has two letters.'],
+      ['b7',[['the bulb lit in three rows tried','given'],['the buttons are side by side','the column of P ∨ Q']],2,1,'A column is every row; a plain wire lights in all four.'],
+      ['b8',[['wiring one and wiring two, the same eight answers','given'],['they do the same job','same column, same statement (1e14)']],2,0,'A bulb shows a column, and cannot show the wiring.'],
+      ['b9',[['a bare wire beside button p','given'],['the bulb shows ⊤','P ∨ ⊤ has the column of ⊤ (1f2)']],2,0,'There is always a way through.']],[]); }});
+/* ===== Annex pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
 

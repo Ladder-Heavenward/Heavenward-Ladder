@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1·comp · How Many Machines Can Two Letters Have?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+table.tt th{white-space:nowrap}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r01phys.html">← 1·phys can a light bulb work out an and?</a><a href="r01g.html">next: 1g too many rows →</a></p>
+  <div class="tags"><span class="tag comp">1·comp · computing</span></div>
+  <h1>How Many Machines Can Two Letters Have?</h1>
+  <p data-pid="5f8f23">This page grows from one line of 1e2: each joining word is a machine that takes T or F for each part and hands back 1 or 0.</p>
+  <p data-pid="fd658b">A count of every machine there can be, a recipe that builds any of them from three kinds of part, and rung 1's rewrites used to build the same machine with fewer parts.</p>
+  <p data-pid="88d186">The 1 and 0 are marks, as in 1e. Nothing is added or multiplied.</p>
+</header>
+
+<section class="class step" data-step="1comp1">
+  <h2 class="sthead"><span class="stno">1comp1</span>A Switch Holds One Mark</h2>
+  <p data-pid="69de0a">A computer keeps everything it holds in switches. Each switch sits one of two ways, on or off, and stays that way until something changes it.</p>
+  <p data-pid="538abe">Let P be “switch p is on”. P is a statement, and the switch settles it: on is T, off is F. So one switch holds one letter's worth, and no more.</p>
+  <p data-pid="78ac55">What a switch holds is called a <b>bit</b>.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·comp.1.1</span><span class="ph understand">understand</span>What does one switch hold? Why is “switch p is on” always settled?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1comp2">
+  <h2 class="sthead"><span class="stno">1comp2</span>Every Setting Is a Row</h2>
+  <p data-pid="16beac">Put several switches together. One way of setting all of them is one row of a table (1e6). Each new switch doubles the rows, as 1g1 said: every old setting comes back twice, once with the new switch on and once with it off.</p>
+  <div class="tblwrap"><table class="tt"><tr><th>switches</th><th>settings</th></tr><tr><td>one</td><td>two</td></tr><tr><td>two</td><td>four</td></tr><tr><td>three</td><td>eight</td></tr><tr><td>four</td><td>sixteen</td></tr><tr><td>five</td><td>thirty-two</td></tr></table></div>
+  <p data-pid="081af2">So three switches can tell eight things apart, one for each setting. Here are the eight, listed the way 1e6 lists rows, with the last switch changing fastest:</p>
+  <div class="eqline" data-tex="\text{TTT}\quad \text{TTF}\quad \text{TFT}\quad \text{TFF}\quad \text{FTT}\quad \text{FTF}\quad \text{FFT}\quad \text{FFF}"></div>
+  <p data-pid="f9c059">How many switches does it take to tell the twenty-six letters of the alphabet apart? Four give only sixteen settings, which is too few. Five give thirty-two, which is enough, with six settings left over.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·comp.2.1</span><span class="ph understand">understand</span>Why does each new switch double the settings? <br>How many switches does it take to tell the twenty-six letters apart?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1comp3">
+  <h2 class="sthead"><span class="stno">1comp3</span>Sixteen Columns, and No More</h2>
+  <p data-pid="8724ff">1e2 said what makes a joining word a machine: the new statement's row depends only on the rows of its parts. So a machine on two letters is nothing but its column, four answers down the rows TT, TF, FT, FF.</p>
+  <p data-pid="a986e8">How many columns can there be? The first row's answer is 1 or 0: two ways. The second row doubles that, the third doubles it again, and the fourth again. Two, four, eight, sixteen. There are sixteen columns, so there are sixteen machines on two letters, and rung 1 has a statement for every one of them.</p>
+  <div class="tblwrap"><table class="tt"><tr><th>column</th><th>statement</th><th>where rung 1 met it</th></tr><tr><td>1 1 1 1</td><td>⊤</td><td>the totally true, 1f2</td></tr><tr><td>1 1 1 0</td><td>P ∨ Q</td><td>or, 1c5</td></tr><tr><td>1 1 0 1</td><td>Q ⇒ P</td><td>the if turned about, 1e14</td></tr><tr><td>1 1 0 0</td><td>P</td><td>P alone; Q does nothing</td></tr><tr><td>1 0 1 1</td><td>P ⇒ Q</td><td>if, 1d1</td></tr><tr><td>1 0 1 0</td><td>Q</td><td>Q alone; P does nothing</td></tr><tr><td>1 0 0 1</td><td>P ⇔ Q</td><td>exactly when, 1d5</td></tr><tr><td>1 0 0 0</td><td>P ∧ Q</td><td>and, 1c1</td></tr><tr><td>0 1 1 1</td><td>¬(P ∧ Q)</td><td>not both</td></tr><tr><td>0 1 1 0</td><td>P ⊕ Q</td><td>or but not both, 1c11</td></tr><tr><td>0 1 0 1</td><td>¬Q</td><td>the denial of Q</td></tr><tr><td>0 1 0 0</td><td>P ∧ ¬Q</td><td>P without Q, 1e8</td></tr><tr><td>0 0 1 1</td><td>¬P</td><td>the denial of P</td></tr><tr><td>0 0 1 0</td><td>¬P ∧ Q</td><td>Q without P</td></tr><tr><td>0 0 0 1</td><td>¬P ∧ ¬Q</td><td>neither</td></tr><tr><td>0 0 0 0</td><td>⊥</td><td>the totally false, 1b3</td></tr></table></div>
+  <p data-pid="8cd1c8">The list folds in the middle. Take any line in the top half and count the same distance up from the bottom: the two columns are opposite in every row, so each statement is the denial of the other. ⊤ faces ⊥, or faces neither, and faces not both, exactly when faces or but not both.</p>
+  <p data-pid="24a960">One letter has two rows, so it has four columns: 1 1 is ⊤, 1 0 is P, 0 1 is ¬P, and 0 0 is ⊥. There are four machines on one letter.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·comp.3.1</span><span class="ph understand">understand</span>Why are there exactly sixteen machines on two letters? What would the count be if a row could come out three ways and not two?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1comp4">
+  <h2 class="sthead"><span class="stno">1comp4</span>Every Column Can Be Built</h2>
+  <p data-pid="1d5e66">A builder does not keep sixteen kinds of part on the shelf. Three are enough: a not part, an and part and an or part, each one a small machine from 1e2. 1e16 gave the recipe that reaches any column from those three.</p>
+  <p data-pid="fc5dba">For each row where the column has 1, write the and of what that row says: the letter where the row has T, its denial where the row has F. Then join the pieces with or.</p>
+  <p data-pid="c1f570">Take the column 1 0 0 1. It has 1 in the rows TT and FF. The row TT gives the piece P ∧ Q. The row FF gives ¬P ∧ ¬Q. Join them:</p>
+  <div class="eqline" data-tex="(P \land Q) \lor (\neg P \land \neg Q)"></div>
+  <p data-pid="aa1150">That build uses two nots, two ands and one or: five parts. Its column is 1 0 0 1, the exactly-when machine, built without an exactly-when part.</p>
+  <p data-pid="538804">The column 0 0 0 0 has no row with 1, so the recipe has no pieces to join. P ∧ ¬P does the job: it is a clash (1b4), and it gives 0 in every row.</p>
+  <p data-pid="acda9d">The recipe does not care how many letters there are. A hall has three smoke sensors, and the alarm should sound when at least two of them say smoke. One sensor alone might be dust. Let P, Q and R be “sensor p says smoke”, and the same for q and r. The column wanted, down the eight rows:</p>
+  <div class="tblwrap"><table class="tt"><tr><th>P</th><th>Q</th><th>R</th><th>alarm</th></tr><tr><td>T</td><td>T</td><td>T</td><td>1</td></tr><tr><td>T</td><td>T</td><td>F</td><td>1</td></tr><tr><td>T</td><td>F</td><td>T</td><td>1</td></tr><tr><td>T</td><td>F</td><td>F</td><td>0</td></tr><tr><td>F</td><td>T</td><td>T</td><td>1</td></tr><tr><td>F</td><td>T</td><td>F</td><td>0</td></tr><tr><td>F</td><td>F</td><td>T</td><td>0</td></tr><tr><td>F</td><td>F</td><td>F</td><td>0</td></tr></table></div>
+  <p data-pid="32cd22">Four rows have 1, so the recipe writes four pieces and joins them:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;(P \land Q \land R)\\ \lor\ &amp;(P \land Q \land \neg R)\\ \lor\ &amp;(P \land \neg Q \land R)\\ \lor\ &amp;(\neg P \land Q \land R)\end{aligned}"></div>
+  <p data-pid="4750d7">Count the parts. Each piece joins three things, which takes two and parts, so eight ands. Joining four pieces takes three ors. Each letter is denied once, so three nots. Fourteen parts.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·comp.4.1</span><span class="ph understand">understand</span>What is the recipe that builds any column from not, and and or parts?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1comp5">
+  <h2 class="sthead"><span class="stno">1comp5</span>The Same Job With Fewer Parts</h2>
+  <p data-pid="1aeb70">The recipe always reaches the column. It does not promise the smallest build. 1e14 says what a builder may do about that: two statements with the same column do the same job, so any build with the same column will serve.</p>
+  <p data-pid="6653b6">Start small. 1f8 took (P ∧ Q) ∨ (P ∧ ¬Q) and brought it down to P. As a build, that is two ands, an or and a not, four parts, replaced by a plain wire from switch p. 1f8 marked one step of that chain as needing Q settled. Here Q is “switch q is on”, and a switch is always settled: it is on or it is off.</p>
+  <p data-pid="645602">Now the alarm. Here is a shorter statement, found by asking what the four rows share: in each of them, some two sensors both say smoke.</p>
+  <div class="eqline" data-tex="(P \land Q) \lor (P \land R) \lor (Q \land R)"></div>
+  <p data-pid="684c29">That is three ands and two ors, five parts. Is it the same machine? The table decides, as 1g4 said a table still does.</p>
+  <div class="tblwrap"><table class="tt"><tr><th>P</th><th>Q</th><th>R</th><th>P ∧ Q</th><th>P ∧ R</th><th>Q ∧ R</th><th>the or of the three</th><th>wanted</th></tr><tr><td>T</td><td>T</td><td>T</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>T</td><td>T</td><td>F</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr><tr><td>T</td><td>F</td><td>T</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr><tr><td>T</td><td>F</td><td>F</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>F</td><td>T</td><td>T</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td></tr><tr><td>F</td><td>T</td><td>F</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>F</td><td>F</td><td>T</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>F</td><td>F</td><td>F</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr></table></div>
+  <p data-pid="88a196">The last two columns match in every row. Five parts do the job of fourteen.</p>
+  <p data-pid="fa210d">One more rewrite takes a part off. The first two pieces are both “P and something”, so read spread and over or backward, as 1f8 did, and pull the P out in front:</p>
+  <div class="eqline" data-tex="\bigl(P \land (Q \lor R)\bigr) \lor (Q \land R)"></div>
+  <p data-pid="052601">Two ands and two ors: four parts. Fourteen, then five, then four, and the alarm sounds in exactly the same rows each time.</p>
+  <p data-pid="a95644">Every part costs something, takes up room, and can fail. So the rewrites of 1f are a builder's tools: each one changes the build and leaves the column alone.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·comp.5.1</span><span class="ph understand">understand</span>Why may a builder swap one build for another, and what has to be checked first?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1comp6">
+  <h2 class="sthead"><span class="stno">1comp6</span>Moves to Watch Out For</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{“Three}\allowbreak \text{ switches,}\allowbreak \text{ so}\allowbreak \text{ three}\allowbreak \text{ things}\allowbreak \text{ can}\allowbreak \text{ be}\allowbreak \text{ told}\allowbreak \text{ apart.”}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; That counts the switches. What tells things apart is a setting, and three switches have eight.
+\text{“There}\allowbreak \text{ are}\allowbreak \text{ sixteen}\allowbreak \text{ machines}\allowbreak \text{ on}\allowbreak \text{ two}\allowbreak \text{ letters,}\allowbreak \text{ so}\allowbreak \text{ the}\allowbreak \text{ table}\allowbreak \text{ has}\allowbreak \text{ sixteen}\allowbreak \text{ rows.”}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; Two letters have four rows. Sixteen is the number of columns that four rows can carry.
+\text{“These}\allowbreak \text{ two}\allowbreak \text{ builds}\allowbreak \text{ use}\allowbreak \text{ different}\allowbreak \text{ parts,}\allowbreak \text{ so}\allowbreak \text{ they}\allowbreak \text{ do}\allowbreak \text{ different}\allowbreak \text{ jobs.”}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; The job is the column. Nothing has been said yet about the columns; fill them in and compare.
+\text{“The}\allowbreak \text{ two}\allowbreak \text{ builds}\allowbreak \text{ agreed}\allowbreak \text{ in}\allowbreak \text{ the}\allowbreak \text{ three}\allowbreak \text{ rows}\allowbreak \text{ I}\allowbreak \text{ tried,}\allowbreak \text{ so}\allowbreak \text{ they}\allowbreak \text{ are}\allowbreak \text{ the}\allowbreak \text{ same}\allowbreak \text{ machine.”}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; P ∨ Q and P ⊕ Q agree in the rows TF, FT and FF. They differ in the row TT.
+\text{“The}\allowbreak \text{ recipe}\allowbreak \text{ gave}\allowbreak \text{ this}\allowbreak \text{ build,}\allowbreak \text{ so}\allowbreak \text{ no}\allowbreak \text{ smaller}\allowbreak \text{ one}\allowbreak \text{ exists.”}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; The recipe was made to reach the column. It was never made to count parts. The alarm went from fourteen to four.
+\text{“The}\allowbreak \text{ column}\allowbreak \text{ 1}\allowbreak \text{ 0}\allowbreak \text{ 1}\allowbreak \text{ 1}\allowbreak \text{ is}\allowbreak \text{ Q}\allowbreak \text{ }\Rightarrow \allowbreak \text{ P.”}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; 1 0 1 1 is P ⇒ Q, with its 0 in the row TF. The if turned about has the column 1 1 0 1 (1e14).
+\text{“The}\allowbreak \text{ short}\allowbreak \text{ statement}\allowbreak \text{ looks}\allowbreak \text{ right,}\allowbreak \text{ so}\allowbreak \text{ swap}\allowbreak \text{ it}\allowbreak \text{ in.}\allowbreak \text{ The}\allowbreak \text{ table}\allowbreak \text{ can}\allowbreak \text{ wait.”}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; Trading one build for another rests on the columns matching, so the column comes first. For three switches that is eight rows.
+\text{“Five}\allowbreak \text{ switches}\allowbreak \text{ for}\allowbreak \text{ the}\allowbreak \text{ alphabet}\allowbreak \text{ leaves}\allowbreak \text{ six}\allowbreak \text{ settings}\allowbreak \text{ spare,}\allowbreak \text{ so}\allowbreak \text{ use}\allowbreak \text{ four.”}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; Four switches have sixteen settings and there are twenty-six letters. Ten letters would have no setting of their own.
+\text{“Keep}\allowbreak \text{ the}\allowbreak \text{ recipe's}\allowbreak \text{ build;}\allowbreak \text{ it}\allowbreak \text{ works.”}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; It does work. The cost is ten parts that do nothing the other four do not.
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·comp.6.1</span><span class="ph understand">understand</span>Why is “The recipe gave this build, so no smaller one exists” a move to watch out for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">1·comp.7.1</span><span class="tagq">do</span>A machine has six switches. How many settings does it have? Show the doubling.</div>
+  <div class="chq"><span class="chid">1·comp.7.2</span><span class="tagq">do</span>A week has seven days. What is the fewest switches that can tell them apart, and how many settings are left over?</div>
+  <div class="chq"><span class="chid">1·comp.7.3</span><span class="tagq">do</span>Find the column of ¬(P ⇒ Q) by filling in its table. Which line of the list is it?</div>
+  <div class="chq"><span class="chid">1·comp.7.4</span><span class="tagq">do</span>Pick three lines from the top half of the list. For each, find the line that faces it, and check that the two columns are opposite in every row.</div>
+  <div class="chq"><span class="chid">1·comp.7.5</span><span class="tagq">do</span>Use the recipe to build the column 1 1 0 1. Count the parts. Then find its line in the list, and say how many parts the statement there needs if only not, and and or parts are on the shelf.</div>
+  <div class="chq"><span class="chid">1·comp.7.6</span><span class="tagq">make</span>Three switches, and a lamp that should be lit when exactly one of them is on. Write the column, use the recipe, and count the parts.</div>
+  <div class="chq"><span class="chid">1·comp.7.7</span><span class="tagq">do</span>Bring (P ∨ Q) ∧ (P ∨ ¬Q) down to a single letter. Name the rewrite at each step, and check the result against the table.</div>
+  <div class="chq"><span class="chid">1·comp.7.8</span><span class="tagq">converse</span>One person writes a statement with two letters and at least five parts. The other looks for a build with fewer parts and the same column. Swap over. Who found the bigger saving?</div>
+  <div class="chq"><span class="chid">1·comp.7.9</span><span class="tagq">open</span>The alarm came down to four parts. Can it be built from three? How would you know when to stop looking?</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r01phys.html">← 1·phys · can a light bulb work out an and?</a><a href="r01g.html">1g · too many rows →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="22406a">What one switch holds is a <b>bit</b>. A part that works as one of 1e2's machines is a <b>gate</b>: an <b>AND gate</b>, an <b>OR gate</b>, a <b>NOT gate</b>. The machine with column 0 1 1 1 is <b>NAND</b>, the one with 0 0 0 1 is <b>NOR</b>, and the one with 0 1 1 0 is <b>XOR</b>. A machine on letters, taken as nothing but its column, is a <b>truth function</b>. A statement in the shape the recipe gives is in <b>disjunctive normal form</b>. The alarm's machine is the <b>majority function</b>.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
