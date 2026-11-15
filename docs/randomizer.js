@@ -20007,6 +20007,64 @@ QP.push({id:'42·logi.work',step:'42·logi',mode:'work',label:'chains and cuts',
       ['s4',[['\\text{the tasks total 21 days}','given'],['\\text{the project takes 21 days}','sum']],2,1,'It is the longest chain: 15.'],
       ['s5',[['p_j - q_i \\le \\text{cost on every route, equal where used}','prices'],['\\text{the plan is cheapest}','route-price']],2,0,'Prices at the ports prove it.'],
       ['s6',[['\\text{a corner of the shipping plans}','given'],['\\text{the routes in use hold no cycle}','tree-corner']],2,0,'So whole supplies give whole shipments.']],[]); }});
+/* ----- annex 42·now Can we trust a proof no one can read: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·now.work',step:'42·now',mode:'work',label:'charges on the map',open:()=>measured('42·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const n5=12, n7=rnd(6), n5b=n5+n7, right=String(n5b), wrong=UQAX(right,[String(12),String(12-n7),String(n7),String(6*n7)],3); if(wrong.length<3) return null;
+      return {index:'q:42·now.work[c;'+n7+']', lines:[['\\text{a flat graph of triangles, every dot of 5, 6 or 7 links}','charges 6 − d add to 12'],[n7+' \\text{ dots of 7 links}','']], ask:'How many dots of 5 links does it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Charge-count: each 5 carries +1, each 6 carries 0, each 7 carries −1; they add to 12, so fives − '+n7+' = 12, fives = '+right+'.'}; }
+    const V=4+rnd(20), E=3*V-6, F=2*V-4, ask2=rnd(2), right=String(ask2?E:F), wrong=UQAX(right,[String(ask2?F:E),String(3*V),String(V+2),String(2*V)],3); if(wrong.length<3) return null;
+    return {index:'q:42·now.work[v;'+V+';'+ask2+']', lines:[['V = '+V,'a flat graph whose faces are all triangles']], ask:'How many '+(ask2?'links':'faces')+' does it have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each face has 3 links and each link 2 faces, so 3F = 2E; with V − E + F = 2, E = 3V − 6 = '+E+' and F = 2V − 4 = '+F+'.'}; }},
+  {id:'42·now.word',step:'42·now',mode:'word',label:'four colours',open:()=>measured('42·now'),make(){
+    const F=rnd(3), Q=[['In 1879 a proof of four colours swapped two colours along one chain at a dot of five neighbours.','Does one swap always free a colour?','no: two chains can cross, which was the mistake'],['In 2005 a proof checker checked the whole four-colour proof.','Is it now a proof without trust?','no: the trust moves to the program and the core; it does not vanish'],['A student says a proof no one can read through is no more certain than a guess.','Is that so?','no: it is a check anyone can repeat; a guess is not']];
+    const wrong=[['yes: one swap always works','yes, at five neighbours','no: no swap ever frees one'],['yes: checked means certain','yes, if two checkers agree','no: it was found wrong'],['yes: unread means unsure','yes, for computer proofs','no: it is more certain than any proof read by hand']][F];
+    return {index:'q:42·now.word['+F+']', a3:['42·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['The swap at one chain can undo the swap at the other.','A checked proof rests on the core and the machine that runs it.','A repeated check is evidence a guess lacks.'][F]}; }},
+  {id:'42·now.line',step:'42·now',mode:'proof',label:'what the charges license',open:()=>measured('42·now'),make(){
+    return line28('42·now.line',[
+      ['f1',[['\\text{a dot of five neighbours}','given'],['\\text{one swap always frees a colour}','swap']],2,1,'The 1879 mistake; two chains can cross.'],
+      ['f2',[['\\text{every flat graph}','given'],['\\text{a dot of five next to one of five or six}','pair']],2,1,'Only when every dot has five or more.'],
+      ['f3',[['\\text{a computer checked it}','given'],['\\text{a proof without trust}','checked']],2,1,'The trust moves to the program and the core.'],
+      ['f4',[['\\text{faces all triangles},\\ V \\ge 3','flat'],['\\sum (6 - d) = 12','charge-count']],2,0,'6V − 2E with E = 3V − 6.'],
+      ['f5',[['\\text{every dot has at least five links}','given'],['\\text{a five next to a five or six}','unavoidable-pair']],2,0,'Moving charge shows one must appear.']],[]); }});
+/* ----- annex 42·now2 How big must order be: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·now2.work',step:'42·now2',mode:'work',label:'squares mod 17',open:()=>measured('42·now2'),make(){
+    const ask=rnd(2);
+    if(ask){ const n=[17,20,30,43][rnd(4)], q=n*(n-1)*(n-2)*(n-3)/24, v=q*Math.pow(2,-5), right=DECAX(v,1), wrong=UQAX(right,[DECAX(q*Math.pow(2,-6),1),DECAX(q,0),'0',DECAX(q/2,1)],3); if(wrong.length<3) return null;
+      return {index:'q:42·now2.work[r;'+n+']', lines:[['K_{'+n+'}, \\text{ each link coloured by a fair toss}','two colours'],['\\binom{'+n+'}{4} = '+q.toLocaleString('en').replace(/,/g,' '),'sets of four dots']], ask:'On average, how many one-colour sets of four?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each set of four has 6 links, all one colour with chance 2 · 2⁻⁶ = 2⁻⁵: '+q+' · 2⁻⁵ ≈ '+right+'.'}; }
+    const S=[1,2,4,8,9,13,15,16], a=rnd(17), b=(a+1+rnd(16))%17, d=Math.min((a-b+17)%17,(b-a+17)%17), linked=S.includes((a-b+17)%17);
+    const right=linked?'linked: '+d+' is a square remainder':'not linked: '+d+' is no square remainder', wrong=[linked?'not linked: '+d+' is no square remainder':'linked: '+d+' is a square remainder','linked: every pair is','not linked: no pair is'];
+    return {index:'q:42·now2.work[s;'+a+';'+b+']', lines:[['\\text{square remainders by 17: } 1, 2, 4, 8, 9, 13, 15, 16','the square party'],['\\text{dots } '+a+' \\text{ and } '+b,'']], ask:'Are they linked?', right, opts:shuffle([right,...wrong]), lead:'', why:'Link two dots when their difference leaves a square remainder; −1 is a square by 17, so the order does not matter: '+a+' − '+b+' leaves '+((a-b+17)%17)+'.'}; }},
+  {id:'42·now2.word',step:'42·now2',mode:'word',label:'the party of 43',open:()=>measured('42·now2'),make(){
+    const F=rnd(3), Q=[['A student says R(5, 5) is unknown only because no one has searched hard enough.','Is that so?','no: there are at least 10²¹⁹ classes of colourings; no search finishes'],['To show R(4, 4) > 17, a student plans to check every colouring of K₁₇.','Is that needed?','no: one colouring with no one-colour four is enough'],['A 2023 bound lowered the upper base for R(k, k).','Does it settle R(k, k) for large k?','no: the gap between √2 and the new base is open']];
+    const wrong=[['yes: a big enough computer will do it','yes, by next year','no: R(5, 5) is known'],['yes: every one must be checked','yes, by machine','no: R(4, 4) is 17'],['yes: it is now exact','yes, above k = 100','no: it raised the base']][F];
+    return {index:'q:42·now2.word['+F+']', a3:['42·now2.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['The colourings of K₄₃ number 2⁹⁰³.','Square-party: the graph of square remainders has no four all linked or all unlinked.','It lowers the upper base only.'][F]}; }},
+  {id:'42·now2.line',step:'42·now2',mode:'proof',label:'what the colourings license',open:()=>measured('42·now2'),make(){
+    return line28('42·now2.line',[
+      ['r1',[['R(5, 5) \\text{ unknown}','given'],['\\text{no one has searched hard enough}','search']],2,1,'At least 10²¹⁹ classes; no search finishes.'],
+      ['r2',[['\\text{a random colouring of } K_{17}','given'],['\\text{no one-colour } K_4','random']],2,1,'On average about 74 of them.'],
+      ['r3',[['\\text{the 2023 bound}','given'],['R(k, k) \\text{ settled for large } k','bound']],2,1,'It lowers the upper base.'],
+      ['r4',[['R(4, 4) \\gt 17','claim'],['\\text{every colouring of } K_{17} \\text{ checked}','needs']],2,1,'One colouring with none is enough.'],
+      ['r5',[['\\text{the 17-dot square party}','given'],['\\text{no four all linked, no four all unlinked}','square-party']],2,0,'So R(4, 4) > 17.']],[]); }});
+/* ----- annex 42·phys How do tiny magnets agree: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'42·phys.work',step:'42·phys',mode:'work',label:'agreement and the point',open:()=>measured('42·phys'),make(){
+    const ask=rnd(3), th=x=>(Math.exp(x)-Math.exp(-x))/(Math.exp(x)+Math.exp(-x));
+    if(ask===2){ const K=[0.5,1,2][rnd(3)], k=[2,5,10][rnd(3)], v=Math.pow(th(K),k), right=DECAX(v,4), wrong=UQAX(right,[DECAX(th(K),4),DECAX(k*th(K),3),DECAX(Math.pow(th(K),1/k),4),DECAX(th(K*k),4)],3); if(wrong.length<3) return null;
+      return {index:'q:42·phys.work[r;'+K+';'+k+']', lines:[['J/kT = '+K,'a long ring, no field'],['\\text{two arrows } '+k+' \\text{ apart}','']], ask:'On average, how much do they agree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Agreement falls as (tanh K)^k = (tanh '+K+')^'+k+' ≈ '+right+'; it dies out along the ring.'}; }
+    if(ask===1){ const q=[4,6,8][rnd(3)], Tc=[300,770,1043][rnd(3)], J=8.617e-5*Tc/q, right=DECAX(J,4)+' eV', wrong=UQAX(right,[DECAX(8.617e-5*Tc,4)+' eV',DECAX(8.617e-5*Tc*q,3)+' eV',DECAX(2*J,4)+' eV',DECAX(J/2,4)+' eV'],3); if(wrong.length<3) return null;
+      return {index:'q:42·phys.work[j;'+q+';'+Tc+']', lines:[['T_c = '+Tc+' \\text{ K},\\ \\ q = '+q,'agreement appears below'],['k = 8.617 \\times 10^{-5} \\text{ eV/K}','']], ask:'By the average-field technique, about what is J?', right, opts:shuffle([right,...wrong]), lead:'', why:'Average-field: kT_c = qJ, so J = 8.617 × 10⁻⁵ × '+Tc+' ÷ '+q+' ≈ '+right+'.'}; }
+    const K=[0.25,0.5,1,2][rnd(4)], right=DECAX(th(K),3), wrong=UQAX(right,[DECAX(Math.exp(-K),3),DECAX(K,3),DECAX(1/(1+Math.exp(-K)),3),DECAX(th(K/2),3)],3); if(wrong.length<3) return null;
+    return {index:'q:42·phys.work[p;'+K+']', lines:[['J/kT = '+K,'two linked arrows, no field']], ask:'On average, how much do they agree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pair-agreement: tanh('+K+') = (e^'+K+' − e^(−'+K+')) ÷ (e^'+K+' + e^(−'+K+')) ≈ '+right+'.'}; }},
+  {id:'42·phys.word',step:'42·phys',mode:'word',label:'iron and memory',open:()=>measured('42·phys'),make(){
+    const F=rnd(3), Q=[['A long ring of tiny magnets has neighbours that agree well.','Does the ring agree across its whole length?','no: agreement between arrows k apart falls as (tanh K)^k'],['A network stores patterns as low points of its energy and has N arrows.','Does it recall every stored pattern, however many?','no: past about 0.14N patterns, stored ones stop being low points'],['A student says iron agrees because its atoms are magnets pulling on each other.','Is that why?','no: that pull is about 10⁻⁵ eV; J comes from the swap sign']];
+    const wrong=[['yes: neighbours agree, so all do','yes, below room warmth','no: neighbours never agree'],['yes: every one','yes, if N is large','no: it recalls none'],['yes: magnets pull magnets','yes, at room warmth','no: iron does not agree']][F];
+    return {index:'q:42·phys.word['+F+']', a3:['42·phys.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Ring-grid: the ring has no agreement in the whole at any temperature above zero.','Downhill-update finds a low point, but too many patterns crowd each other out.','Iron’s 1043 K gives J of about 0.01 eV, far above the magnets’ pull.'][F]}; }},
+  {id:'42·phys.line',step:'42·phys',mode:'proof',label:'what the arrows license',open:()=>measured('42·phys'),make(){
+    return line28('42·phys.line',[
+      ['i1',[['\\text{neighbours agree}','given'],['\\text{a long ring agrees across its length}','ring']],2,1,'Agreement k apart falls as (tanh K)ᵏ.'],
+      ['i2',[['\\text{the square grid}','given'],['kT_c = 4J','exact']],2,1,'That is the average-field guess; the exact value is 2.269J.'],
+      ['i3',[['\\text{iron agrees}','seen'],['\\text{its atoms are magnets pulling on each other}','pull']],2,1,'Their pull is about 10⁻⁵ eV; J comes from the swap sign.'],
+      ['i4',[['\\text{a memory}','given'],['\\text{it recalls every stored pattern}','memory']],2,1,'Past about 0.14N patterns, stored ones stop being low points.'],
+      ['i5',[['s_i \\text{ set to the sign of its field}','update'],['\\text{the energy never rises}','downhill-update']],2,0,'The arrow then agrees with its field.'],
+      ['i6',[['\\text{two linked arrows, no field}','given'],['\\text{agreement } \\tanh(J/kT)','pair-agreement']],2,0,'Weights e^(±J/kT) for agree and disagree.']],[]); }});
 /* ===== Annex pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
