@@ -16818,6 +16818,27 @@ QP.push({id:'4·crypt.work',step:'4·crypt',mode:'work',label:'keys that add and
       ['k5',[['there are 26 keys','given'],['a code-breaker needs 26 tries','one try for each key']],2,1,'Key 0 changes nothing, and key 26 is key 0: 25 tries.'],
       ['k6',[['a scrambled alphabet has 26! keys','given'],['no one can break it','too many keys to try']],2,1,'It falls to counting letters: size is not enough.'],
       ['k7',[['y is 24','given'],['shift₃(y) is b','24 + 3 = 27, remainder 1']],2,0,'Keep the remainder by 26: 1 is b.']],[]); }});
+/* ----- annex 5·bio Why do peas come three to one?: Work, Word Problems, Check Proofs ----- */
+const GCDAX=(a,b)=>b?GCDAX(b,a%b):a, FRAX=(p,q)=>{ const g=GCDAX(p,q); return (p/g)+'/'+(q/g); };
+const GTAX={RR:['R','R'],Rr:['R','r'],rr:['r','r']};
+QP.push({id:'5·bio.work',step:'5·bio',mode:'work',label:'counting the cells of a cross',open:()=>measured('5·bio'),make(){
+    const ks=Object.keys(GTAX), a=pick(ks), b=pick(ks), ask=pick(['wrinkled','smooth','Rr']), cells=[]; GTAX[a].forEach(x=>GTAX[b].forEach(y=>cells.push(x+y)));
+    const hit=cells.filter(c=>ask==='wrinkled'?c==='rr':ask==='smooth'?c.includes('R'):(c==='Rr'||c==='rR')).length, right=FRAX(hit,4)==='0/1'?'0':FRAX(hit,4)==='1/1'?'1':FRAX(hit,4);
+    const wrong=UQAX(right,['0','1/4','1/2','3/4','1','1/3','2/3'],3); if(wrong.length<3) return null;
+    return {index:'q:5·bio.work['+a+';'+b+';'+ask+']', lines:[['a '+a+' parent crossed with an '+b+' parent','given'],['each gives one of its two copies, each equally likely','stages-multiply: 2 · 2 = 4 cases']], ask:'What is the chance that a seed is '+(ask==='Rr'?'Rr':ask)+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'The four equally likely cells are '+cells.join(', ')+'. '+hit+' of 4 are '+ask+(ask==='smooth'?' (smooth wherever an R is present)':'')+'.'}; }},
+  {id:'5·bio.word',step:'5·bio',mode:'word',label:'two genes in one garden',open:()=>measured('5·bio'),make(){
+    const T=pick([['smooth and yellow',9],['smooth and green',3],['wrinkled and yellow',3],['wrinkled and green',1],['smooth or yellow',15],['wrinkled',4],['green',4]]), n=pick([160,320,480,640,800,1600]), exp=n*T[1]/16;
+    const right=String(exp), wrong=UQAX(right,[n*3/4,n/2,n*T[1]/9,n/16,n*9/16,n*(T[1]+1)/16].map(x=>String(Math.round(x))),3); if(wrong.length<3) return null;
+    return {index:'q:5·bio.word['+T[0]+';'+n+']', a3:['5·bio.word',DASH,DASH], story:'A gardener crosses two pea plants that are each Rr for surface (R smooth, r wrinkled) and Yy for colour (Y yellow, y green), and plants '+n+' of the seeds. The two genes are separate stages.', lines:[], ask:'About how many plants should come from seeds that are '+T[0]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stages-multiply: 4 · 4 = 16 equally likely cells, '+T[1]+' of them '+T[0]+' (9 : 3 : 3 : 1). '+T[1]+'/16 of '+n+' is '+exp+'; a ratio of chances, so the count will be near it, not exactly it.'}; }},
+  {id:'5·bio.line',step:'5·bio',mode:'proof',label:'what a cross licenses',open:()=>measured('5·bio'),make(){
+    return line28('5·bio.line',[
+      ['g1',[['Rr × Rr','the cross'],['smooth : wrinkled = 3 : 1','3 of the 4 cells have an R']],2,0,'RR, Rr, rR are smooth; rr is wrinkled.'],
+      ['g2',[['smooth : wrinkled = 3 : 1','given'],['of these four peas, three are smooth','the ratio']],2,1,'The ratio is of chances: four peas may all be wrinkled.'],
+      ['g3',[['Rr × Rr gives RR, Rr, rr','the kinds'],['each has chance 1/3','three kinds']],2,1,'The equally likely cases are the four pairs: 1/4, 1/2, 1/4.'],
+      ['g4',[['smooth has chance 3/4 and yellow 3/4, as separate stages','given'],['smooth and yellow has chance 9/16','the probability of both is the product']],2,0,'3/4 · 3/4 = 9/16.'],
+      ['g5',[['smooth has chance 3/4 and yellow 3/4','given'],['smooth or yellow has chance 3/4 + 3/4','add the chances']],2,1,'That is more than 1. Only wrinkled green fails: 15/16.'],
+      ['g6',[['a smooth parent × rr gives 41 smooth, 39 wrinkled','counted'],['the smooth parent was Rr','wrinkled seeds appeared']],2,0,'An RR parent gives no wrinkled seed at all.'],
+      ['g7',[['smooth is dominant','given'],['most peas in the world are smooth','dominance']],2,1,'Dominance says what a hybrid shows, not how common either allele is.']],[]); }});
 /* ----- annex 5·chem The Weighing Ledger: Work, Word Problems, Check Proofs ----- */
 const RXAX=[{eq:'C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O',a:['C₃H₈',44,1],b:['O₂',32,5],p:['CO₂',44,3],q:['H₂O',18,4]},
   {eq:'CH₄ + 2 O₂ → CO₂ + 2 H₂O',a:['CH₄',16,1],b:['O₂',32,2],p:['CO₂',44,1],q:['H₂O',18,2]},
@@ -16841,6 +16862,25 @@ QP.push({id:'5·chem.work',step:'5·chem',mode:'work',label:'grams through the m
       ['m5',[['1 mol of fuel CₓH_y makes 3 mol CO₂ and 4 mol H₂O','measured'],['the fuel is C₃H₈','one C per CO₂, two H per water']],2,0,'x = 3, y = 8.'],
       ['m6',[['the fuel is C₃H₈','from the smoke'],['its atoms are joined in one known way','the ledger']],2,1,'The ledger counts atoms; two different molecules can share a formula.'],
       ['m7',[['(p, b, c, d) = (p, 5p, 3p, 4p)','every balancing'],['1 : 5 : 3 : 4 is the balanced change','take p = 1']],2,0,'Every answer is a scaling of 1 : 5 : 3 : 4.']],[]); }});
+/* ----- annex 5·nav Reading the clock and the calendar: Work, Word Problems, Check Proofs ----- */
+const DAYSAX=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+QP.push({id:'5·nav.work',step:'5·nav',mode:'work',label:'reading a count of seconds',open:()=>measured('5·nav'),make(){
+    const t=10000+rnd(290000), d=Math.floor(t/86400), h=Math.floor(t%86400/3600), m=Math.floor(t%3600/60), s=t%60, R=(d,h,m,s)=>d+' d '+h+' h '+m+' min '+s+' s';
+    const right=R(d,h,m,s), wrong=UQAX(right,[R(d,h,Math.floor(t%3600/100)%60,s),R(d,Math.floor(t/3600)%100,m,s),R(d,h,s,m),R(d+1,(h+24-1)%24,m,s),R(Math.floor(t/100000),h,m,s)],3); if(wrong.length<3) return null;
+    return {index:'q:5·nav.work['+t+']', lines:[[t.toLocaleString('en').replace(/,/g,' ')+' s','given']], ask:'Read it as days, hours, minutes and seconds.', right, opts:shuffle([right,...wrong]), lead:'', why:'Clock-reading technique: divide by 60 (seconds left '+s+'), by 60 again (minutes left '+m+'), by 24 (hours left '+h+'): '+right+'.'}; }},
+  {id:'5·nav.word',step:'5·nav',mode:'word',label:'what day of the week',open:()=>measured('5·nav'),make(){
+    const y0=2020+rnd(12), n=1+rnd(6), d0=rnd(7), leap=y=>(y%4===0&&y%100!==0)||y%400===0; let days=0; for(let y=y0+1;y<=y0+n;y++) days+=leap(y)?366:365;
+    const at=DAYSAX[(d0+days)%7], right=at, wrong=UQAX(right,[DAYSAX[(d0+n)%7],DAYSAX[(d0+days+1)%7],DAYSAX[(d0+days+6)%7],DAYSAX[d0]],3); if(wrong.length<3) return null;
+    return {index:'q:5·nav.word['+y0+';'+n+';'+d0+']', a3:['5·nav.word',DASH,DASH], story:'A ferry first sailed on 1 March '+y0+', a '+DAYSAX[d0]+'. Its crew mark the day each year.', lines:[], ask:'On what day of the week does 1 March '+(y0+n)+' fall?', right, opts:shuffle([right,...wrong]), lead:'', why:'From 1 March to 1 March a year holds 365 days, or 366 when the February in between has 29 days. In all '+days+' days; '+days+' = 7 · '+Math.floor(days/7)+' + '+(days%7)+', so add '+(days%7)+' days to '+DAYSAX[d0]+' (remainders-add): '+at+'.'}; }},
+  {id:'5·nav.line',step:'5·nav',mode:'proof',label:'what a clock licenses',open:()=>measured('5·nav'),make(){
+    return line28('5·nav.line',[
+      ['n1',[['100 000 = 60 · 1666 + 40','divide by 60'],['100 000 s = 1666 min 40 s','one-split, base 60']],2,0,'40 < 60, so the split is the only one.'],
+      ['n2',[['1.5 h','given'],['1 h 50 min','the places after the point']],2,1,'Tenths of an hour, not minutes: 0.5 h = 30 min.'],
+      ['n3',[['22:00 + 3 h','given'],['01:00 the next day','[22] + [3] = [1] in ℕ/∼₂₄']],2,0,'The hours roll over at 24.'],
+      ['n4',[['4 divides 1900','given'],['1900 was a leap year','one leap day in every 4 years']],2,1,'100 divides 1900 and 400 does not: 1900 had 365 days.'],
+      ['n5',[['365 = 7 · 52 + 1','divide by 7'],['a date moves one weekday on in a year of 365 days','remainders-add']],2,0,'52 whole weeks and 1 day.'],
+      ['n6',[['3 h 50 min + 20 min','given'],['3 h 70 min','add the minutes']],2,1,'The minutes place stays below 60: 4 h 10 min.'],
+      ['n7',[['97 leap years in every 400','the fourth guess'],['the calendar year is 365.2425 days','97/400 = 0.2425']],2,0,'365 + 97/400.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
