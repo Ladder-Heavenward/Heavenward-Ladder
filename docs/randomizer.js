@@ -16719,6 +16719,128 @@ QP.push({id:'46l.unbuild',step:'46l',label:'what can’t be built, by hand',open
 const UQAX=(right,c,n)=>{ const o=[]; c.forEach(x=>{ x=String(x); if(x!==String(right)&&!o.includes(x)&&o.length<(n||3)) o.push(x); }); return o; };
 const PTAILAX=(m,s)=>{ let t=Math.exp(-m), c=t; for(let k=1;k<=s;k++){ t*=m/k; c+=t; } return 1-c; }; /* the chance of more than s, for a rare count with average m */
 const SHELFAX=(m,a)=>{ let s=0; while(PTAILAX(m,s)>a&&s<2000) s++; return s; };
+/* ----- annex 2·bio Is a Whale a Fish?: Work, Word Problems, Check Proofs ----- */
+const ANAX=[['a Chinook salmon',{backbone:1,gills:1,fins:1,water:1}],['a lingcod',{backbone:1,gills:1,fins:1,water:1}],['an orca',{backbone:1,lungs:1,fins:1,water:1,milk:1}],['a harbor seal',{backbone:1,lungs:1,fins:1,water:1,milk:1}],['a lungfish',{backbone:1,gills:1,lungs:1,fins:1,water:1}],['an octopus',{gills:1,water:1}],['a big brown bat',{backbone:1,lungs:1,milk:1}],['a green sea turtle',{backbone:1,lungs:1,fins:1,water:1}],['a black bear',{backbone:1,lungs:1,milk:1}]];
+const FTAX={backbone:'has a backbone',gills:'breathes with gills',lungs:'breathes with lungs',fins:'swims with fins or flippers',water:'lives in the water',milk:'feeds its young on milk'};
+QP.push({id:'2·bio.work',step:'2·bio',mode:'work',label:'counting a whole branch',open:()=>measured('2·bio'),make(){
+    const L='pqrstuvw'.split(''), n=6+rnd(3), par=[null]; for(let i=1;i<n;i++) par.push(rnd(i));
+    const kids=i=>par.map((p,j)=>p===i?j:-1).filter(j=>j>=0), desc=i=>{ let o=[]; kids(i).forEach(j=>{ o.push(j); o=o.concat(desc(j)); }); return o; };
+    const cand=[...Array(n).keys()].filter(i=>i>0&&desc(i).length>0); if(!cand.length) return null; const a=pick(cand), g=desc(a).length+1;
+    const right=String(g), wrong=UQAX(right,[g-1,kids(a).length+1,kids(a).length,n-g,g+1,n],3); if(wrong.length<3) return null;
+    return {index:'q:2·bio.work['+par.join(',')+';'+a+']', lines:[...Array(n).keys()].filter(i=>i>0).map(i=>[L[i]+' is a child of '+L[par[i]],'given']), ask:'How many members has the whole branch g'+L[a]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'A whole branch holds the ancestor and every descendant (keep-every-descendant technique): '+L[a]+', then '+desc(a).map(j=>L[j]).join(', ')+'. That is '+g+'.'}; }},
+  {id:'2·bio.word',step:'2·bio',mode:'word',label:'a sift by features',open:()=>measured('2·bio'),make(){
+    const ks=Object.keys(FTAX), c=shuffle(ks.slice()).slice(0,1+rnd(2)), list=shuffle(ANAX.slice()).slice(0,5+rnd(2)), pass=list.filter(([,f])=>c.every(k=>f[k]));
+    const right=String(pass.length), wrong=UQAX(right,[pass.length+1,pass.length-1,list.length-pass.length,list.length,0,pass.length+2].filter(x=>x>=0),3); if(wrong.length<3) return null;
+    return {index:'q:2·bio.word['+c.join('+')+';'+list.map(x=>x[0]).join(',')+']', a3:['2·bio.word',DASH,DASH], story:'A field guide sifts the living things it meets by one condition: a member '+c.map(k=>FTAX[k]).join(', and ')+'. On one shore walk it meets '+list.map(x=>x[0]).join(', ')+'.', lines:[], ask:'How many of them are in the sift?', right, opts:shuffle([right,...wrong]), lead:'', why:'A kind made by a condition holds exactly what passes it: '+(pass.length?pass.map(x=>x[0]).join(', '):'none of them')+'.'}; }},
+  {id:'2·bio.line',step:'2·bio',mode:'proof',label:'what a branch licenses',open:()=>measured('2·bio'),make(){
+    return line28('2·bio.line',[
+      ['w1',[['y ∈ gₚ and x d y','given'],['x ∈ gₚ','the keep-every-descendant technique']],2,0,'A whole branch never lets a descendant of its members out.'],
+      ['w2',[['J35 ∈ J pod, and J pod ⊆ the whales','given'],['J35 ∈ the whales','the chain technique for part of']],2,0,'One ∈ at the bottom, then ⊆: J35 is a whale.'],
+      ['w3',[['J pod is a set of whales','given'],['J pod ∈ the whales','J pod is made of whales']],2,1,'A set of whales is a part of the whales: J pod ⊆ the whales.'],
+      ['w4',[['f ⊆ gₒ','given'],['f is a whole branch','a part of a whole branch']],2,1,'A part of a whole branch need not be one: the orca is in gₒ and not in f.'],
+      ['w5',[['the Southern Residents are endangered, and J35 is one of them','given'],['J35 is endangered','what is true of the kind']],2,1,'A claim about the set need not hold of each member.'],
+      ['w6',[['gₚ holds the salmon and the lungfish','given'],['gₚ holds the orca','o ∈ gₚ, the orca d o, keep every descendant']],2,0,'p is o or an ancestor of o, so o ∈ gₚ, and the orca is descended from o.'],
+      ['w7',[['the orca fails the sift by gills and fins','given'],['a whale is no fish in any sense','the orca ∉ f']],2,1,'Only by that condition. Taken as a whole branch, fish holds the whale.']],[]); }});
+/* ----- annex 2·comp What Does a Computer Check When It Reads "if"?: Work, Word Problems, Check Proofs ----- */
+const RDAX=(e,v,seen)=>{ if(typeof e==='string'){ seen.push(e); return v[e]; } if(e[0]==='¬') return !RDAX(e[1],v,seen);
+  const l=RDAX(e[1],v,seen); if(e[0]==='∧'&&!l) return false; if(e[0]==='∨'&&l) return true; return RDAX(e[2],v,seen); };
+const SHAX=e=>typeof e==='string'?e:e[0]==='¬'?'¬'+SHAX(e[1]):(typeof e[1]==='string'||e[1][0]==='¬'?SHAX(e[1]):'('+SHAX(e[1])+')')+' '+e[0]+' '+(typeof e[2]==='string'||e[2][0]==='¬'?SHAX(e[2]):'('+SHAX(e[2])+')');
+const LTAX=a=>a.length===1?a[0]+' only':a.length===2?a[0]+' and '+a[1]:a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+QP.push({id:'2·comp.work',step:'2·comp',mode:'work',label:'what a machine reads',open:()=>measured('2·comp'),make(){
+    const F=pick([['∧','P','Q'],['∨','P','Q'],['∨',['∧','P','Q'],'R'],['∧',['∨','P','Q'],'R'],['∧','P',['∨','Q','R']],['∨','P',['∧','Q','R']],['∨',['¬','P'],'Q'],['∧',['¬','P'],['∨','Q','R']]]);
+    const v={P:!!rnd(2),Q:!!rnd(2),R:!!rnd(2)}, seen=[], val=RDAX(F,v,seen), used=['P','Q','R'].filter(x=>SHAX(F).includes(x)), row=used.map(x=>v[x]?'T':'F').join('');
+    const right=LTAX(seen), cands=[['P'],['P','Q'],['P','R'],['P','Q','R'],['Q'],['Q','R']].filter(a=>a.every(x=>used.includes(x))).map(LTAX), wrong=UQAX(right,shuffle(cands),3); if(wrong.length<3) return null;
+    return {index:'q:2·comp.work['+SHAX(F)+';'+row+']', lines:[['if '+SHAX(F)+', then act','the instruction'],['the row is '+row+' ('+used.join(', ')+')','read off the sensors']], ask:'Reading left first and stopping early, which letters does the machine read?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stop-early technique: an and with a false left side and an or with a true left side are fixed. It reads '+LTAX(seen)+', and the condition is '+(val?'T':'F')+'.'}; }},
+  {id:'2·comp.word',step:'2·comp',mode:'word',label:'a guard on the left',open:()=>measured('2·comp'),make(){
+    const S=pick([
+      {k:'ferry',a:'F',b:'L',op:'∧',ta:'a ferry is in the slip',tb:'the ferry in the slip has its car deck level with the ramp',act:'wave the cars on'},
+      {k:'toll',a:'G',b:'B',op:'∨',ta:'the car carries a Good To Go pass',tb:'the driver pays at the booth (reading it asks the driver to pay)',act:'lift the gate'},
+      {k:'orchard',a:'D',b:'N',op:'∧',ta:'the soil at the sensor is dry',tb:'no rain is forecast for tonight',act:'open the valve'}]);
+    const turned=rnd(2), A=!!rnd(2), B=!!rnd(2), first=turned?S.b:S.a, second=turned?S.a:S.b, v={[S.a]:A,[S.b]:B}, seen=[], val=RDAX([S.op,first,second],v,seen);
+    const readsB=seen.includes(S.b), what=val?S.act:'skip the command';
+    const right=(readsB?'it reads '+S.b:'it never reads '+S.b)+', and it does: '+what;
+    const wrong=UQAX(right,[(readsB?'it never reads '+S.b:'it reads '+S.b)+', and it does: '+what,(readsB?'it reads '+S.b:'it never reads '+S.b)+', and it does: '+(val?'skip the command':S.act),(readsB?'it never reads '+S.b:'it reads '+S.b)+', and it does: '+(val?'skip the command':S.act)],3); if(wrong.length<3) return null;
+    return {index:'q:2·comp.word['+S.k+';'+turned+';'+(+A)+(+B)+']', a3:['2·comp.word',DASH,DASH], story:'Let '+S.a+' be “'+S.ta+'” and '+S.b+' be “'+S.tb+'”. The program reads: if '+first+' '+S.op+' '+second+', '+S.act+'. Right now '+S.a+' is '+(A?'T':'F')+(S.k==='ferry'&&!A?' (so '+S.b+' names nothing)':' and '+S.b+' is '+(B?'T':'F'))+'.', lines:[], ask:'Reading left first and stopping early, what does the machine read, and what does it do?', right, opts:shuffle([right,...wrong]), lead:'', why:'It reads '+LTAX(seen)+'. '+(seen.length===1?'The left side fixes the answer, so the right side is never read. ':'The left side does not fix it, so it reads the right side too. ')+'The condition is '+(val?'T, so it does the command.':'F, so it skips the command.')}; }},
+  {id:'2·comp.line',step:'2·comp',mode:'proof',label:'what a condition licenses',open:()=>measured('2·comp'),make(){
+    return line28('2·comp.line',[
+      ['c1',[['P is F','the row'],['P ∧ Q is F, whatever Q is','the stop-early technique']],2,0,'A false left side fixes an and.'],
+      ['c2',[['P is T','the row'],['P ∧ Q is T, whatever Q is','the stop-early technique']],2,1,'A true left side fixes an or, not an and: P ∧ Q waits on Q.'],
+      ['c3',[['F ∧ L is safe to read left first','the guard'],['L ∧ F is safe to read left first','the turn-about technique']],2,1,'Turn-about keeps the column; it never says which side is read first. With the slip empty, L names nothing.'],
+      ['c4',[['G ∨ B','the condition'],['B ∨ G','the turn-about technique, as a statement']],2,0,'As statements they have the same column.'],
+      ['c5',[['if D ∧ ¬R, open the valve','the instruction'],['“open the valve” is checked when the condition is T','the then part']],2,1,'The then part is done or skipped, never checked.'],
+      ['c6',[['P','a line'],['P ∨ Q','add an option']],2,0,'From P, add an option gives P ∨ Q for any Q.'],
+      ['c7',[['¬P and P ∧ Q','one line'],['the line equals ⊥','keep left, then the clash']],2,0,'Keep left gives P beside ¬P.']],[]); }});
+/* ----- annex 3·comp Can a Program Run Forever?: Work, Word Problems, Check Proofs ----- */
+const NMAX=['0','1','2','3','4','5','6','7','8'], CARSAX=['van','truck','bike','bus','camper','sedan','pickup'];
+QP.push({id:'3·comp.work',step:'3·comp',mode:'work',label:'counting the passes',open:()=>measured('3·comp'),make(){
+    const kind=rnd(3); let lines, right, why, ix;
+    if(kind===0){ const k=rnd(6), m=rnd(8), out=k<=m; right=out?String(m-k):'it never stops'; ix=[0,k,m];
+      lines=[['start: x is '+NMAX[k],'given'],['while x ≠ '+NMAX[m]+': x becomes S(x)','the loop']];
+      why=out?'Each pass makes the next one: '+NMAX.slice(k,m+1).join(', ')+'. The test fails at '+m+', after '+(m-k)+' passes.':'From '+k+' the next ones are '+(k+1)+', '+(k+2)+', … and never come back down to '+m+'; the test never fails.'; }
+    else if(kind===1){ const k=1+rnd(7); right=String(k); ix=[1,k]; lines=[['start: x is '+NMAX[k],'given'],['while x ≠ 0: x becomes ⋃x','the loop']];
+      why='Merging back undoes the next one: '+NMAX.slice(0,k+1).reverse().join(', ')+'. That is '+k+' passes.'; }
+    else { const n=2+rnd(5), u=shuffle(CARSAX.slice()).slice(0,n); right=String(n); ix=[2,n]; lines=[['start: u is {'+u.join(', ')+'}','given'],['while u ≠ ∅: pick a member c of u; u becomes u ∖ {c}','the loop']];
+      why='Shrinking-work technique: each pass takes one member out and puts nothing back, so the '+n+' members are gone after '+n+' passes, in any order.'; }
+    const r=right==='it never stops'?null:+right, wrong=UQAX(right,(r===null?['0','1','4','5']:[r+1,r-1,'it never stops',r+2]).map(String).filter(x=>x!=='-1'),3); if(wrong.length<3) return null;
+    return {index:'q:3·comp.work['+ix.join(';')+']', lines, ask:'How many passes does the loop make before it stops?', right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'3·comp.word',step:'3·comp',mode:'word',label:'a signal that comes back',open:()=>measured('3·comp'),make(){
+    const cyc=pick([['green','yellow','red'],['green','flashing green','yellow','red'],['walk','flashing hand','steady hand']]), s=rnd(cyc.length), N=5+rnd(40), at=cyc[(s+N)%cyc.length];
+    const right=at, wrong=UQAX(right,[cyc[(s+N+1)%cyc.length],cyc[(s+N+cyc.length-1)%cyc.length],cyc[s],'the loop has stopped'],3); if(wrong.length<3) return null;
+    return {index:'q:3·comp.word['+cyc.length+';'+s+';'+N+']', a3:['3·comp.word',DASH,DASH], story:'A crossing signal in Eugene is run by a loop: while x is a colour of the signal, x becomes the colour after x. The colours go '+cyc.join(', then ')+', and then back to '+cyc[0]+'. It starts at '+cyc[s]+'.', lines:[], ask:'What does it show after '+N+' passes?', right, opts:shuffle([right,...wrong]), lead:'', why:'Back-again technique: it comes back every '+cyc.length+' passes and never stops. '+N+' passes is '+Math.floor(N/cyc.length)+' full rounds and '+(N%cyc.length)+' more, so it shows '+at+'.'}; }},
+  {id:'3·comp.line',step:'3·comp',mode:'proof',label:'what a loop licenses',open:()=>measured('3·comp'),make(){
+    return line28('3·comp.line',[
+      ['l1',[['start: x is 1; while x ≠ ∅: x becomes S(x)','the loop'],['the loop never stops','the next-never-empty technique']],2,0,'S(y) ≠ ∅ for every y, so the test is true before every pass.'],
+      ['l2',[['a loop has run for a year without stopping','watched'],['it runs forever','a long watch']],2,1,'Every watch ends; the next pass may stop it. Only an argument shows it never stops.'],
+      ['l3',[['the test and body look only at x, and x comes back to a value it had','given'],['the loop runs forever','the back-again technique']],2,0,'From that value it repeats what it did, and comes back again.'],
+      ['l4',[['each pass takes a member out of the inductive set I and puts nothing back','the loop'],['I empties and the loop stops','the shrinking-work technique']],2,1,'That technique is for sets you can write down. I never empties.'],
+      ['l5',[['start: x is {1}; while x ≠ 4: x becomes S(x)','the loop'],['x reaches 4 and the loop stops','the next one after a set']],2,1,'The next one after a set outside the run stays outside it (3c13): the test never fails.'],
+      ['l6',[['start: x is 4; while x ≠ 0: x becomes ⋃x','the loop'],['the loop stops after 4 passes','merging back']],2,0,'4, 3, 2, 1, 0.'],
+      ['l7',[['a checker reads any program and answers “stops” or “runs forever”','supposed'],['it is always right','it can try every program']],2,1,'The program that asks about itself and does the opposite refutes any checker.']],[]); }});
+/* ----- annex 4·crypt Shift ciphers: Work, Word Problems, Check Proofs ----- */
+const ABAX='abcdefghijklmnopqrstuvwxyz', SHAXc=(w,k)=>w.split('').map(c=>ABAX[(ABAX.indexOf(c)+k)%26]).join('');
+QP.push({id:'4·crypt.work',step:'4·crypt',mode:'work',label:'keys that add and undo',open:()=>measured('4·crypt'),make(){
+    const kind=rnd(3), k=1+rnd(25), m=1+rnd(25); let lines, ask, right, cands, why, ix;
+    if(kind===0){ right=String((k+m)%26); cands=[k+m,(k*m)%26,Math.abs(k-m),(k+m+1)%26,26-((k+m)%26)]; ix=[0,k,m]; lines=[['shift by '+k+', then shift by '+m,'given']]; ask='Which single key does the same?'; why='Shifts-add technique: the remainder of '+k+' + '+m+' by 26 is '+((k+m)%26)+'.'; }
+    else if(kind===1){ right=String(26-k); cands=[k,26+k,25-k,27-k,(2*k)%26]; ix=[1,k]; lines=[['a message shifted by '+k,'given']]; ask='Which key undoes it?'; why='Key-back technique: the key back from '+k+' is the j with '+k+' + j = 26, so '+(26-k)+'.'; }
+    else { const p=ABAX[rnd(26)], r=ABAX[(ABAX.indexOf(p)+k)%26]; right=r; cands=[ABAX[(ABAX.indexOf(p)+k+1)%26],ABAX[(ABAX.indexOf(p)+26-k)%26],ABAX[(ABAX.indexOf(p)+k+25)%26],ABAX[k%26]]; ix=[2,p,k]; lines=[['the letter '+p+' (number '+ABAX.indexOf(p)+')','given'],['shift it by '+k,'count on, and start again past z']]; ask='Which letter comes out?'; why=p+' is '+ABAX.indexOf(p)+'; '+ABAX.indexOf(p)+' + '+k+' = '+(ABAX.indexOf(p)+k)+', whose remainder by 26 is '+((ABAX.indexOf(p)+k)%26)+', the letter '+r+'.'; }
+    const wrong=UQAX(right,cands.map(String).filter(x=>x!==''),3); if(wrong.length<3) return null;
+    return {index:'q:4·crypt.work['+ix.join(';')+']', lines, ask, right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'4·crypt.word',step:'4·crypt',mode:'word',label:'a note in a shift cipher',open:()=>measured('4·crypt'),make(){
+    const w=pick(['salmon','ferry','harbor','orchard','cedar','tide','island','summit','river','lantern']), k=1+rnd(25), c=SHAXc(w,k);
+    const right=w, wrong=UQAX(right,[SHAXc(w,(2*k)%26||1),SHAXc(c,k),SHAXc(w,1),SHAXc(w,25)],3); if(wrong.length<3) return null;
+    return {index:'q:4·crypt.word['+w+';'+k+']', a3:['4·crypt.word',DASH,DASH], story:'A note reads “'+c+'”. It was made by shifting every letter of a word by '+k+'.', lines:[], ask:'What was the word?', right, opts:shuffle([right,...wrong]), lead:'', why:'Key-back technique: shift every letter by '+(26-k)+', since '+k+' + '+(26-k)+' = 26: '+c+' becomes '+w+'.'}; }},
+  {id:'4·crypt.line',step:'4·crypt',mode:'proof',label:'what a shift licenses',open:()=>measured('4·crypt'),make(){
+    return line28('4·crypt.line',[
+      ['k1',[['shift₉ then shift₅','given'],['the same as shift₁₄','the shifts-add technique']],2,0,'Keys add: 9 + 5 = 14.'],
+      ['k2',[['shift₉ then shift₅','given'],['the same as shift₄₅','keys multiply']],2,1,'Keys add, they do not multiply: shift by 14.'],
+      ['k3',[['a message shifted by 3','given'],['shifting by 3 again undoes it','the key-back technique']],2,1,'Shifting by 3 again is shifting by 6. The key back is 23.'],
+      ['k4',[['shift₃₀','given'],['it is the same as shift₄','only the remainder by 26 matters']],2,0,'30 = 26 + 4.'],
+      ['k5',[['there are 26 keys','given'],['a code-breaker needs 26 tries','one try for each key']],2,1,'Key 0 changes nothing, and key 26 is key 0: 25 tries.'],
+      ['k6',[['a scrambled alphabet has 26! keys','given'],['no one can break it','too many keys to try']],2,1,'It falls to counting letters: size is not enough.'],
+      ['k7',[['y is 24','given'],['shift₃(y) is b','24 + 3 = 27, remainder 1']],2,0,'Keep the remainder by 26: 1 is b.']],[]); }});
+/* ----- annex 5·chem The Weighing Ledger: Work, Word Problems, Check Proofs ----- */
+const RXAX=[{eq:'C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O',a:['C₃H₈',44,1],b:['O₂',32,5],p:['CO₂',44,3],q:['H₂O',18,4]},
+  {eq:'CH₄ + 2 O₂ → CO₂ + 2 H₂O',a:['CH₄',16,1],b:['O₂',32,2],p:['CO₂',44,1],q:['H₂O',18,2]},
+  {eq:'2 H₂ + O₂ → 2 H₂O',a:['H₂',2,2],b:['O₂',32,1],p:['H₂O',18,2],q:null},
+  {eq:'N₂ + 3 H₂ → 2 NH₃',a:['N₂',28,1],b:['H₂',2,3],p:['NH₃',17,2],q:null}];
+const GAX=x=>(Math.round(x*10)/10)+' g', R2AX=x=>String(Math.round(x*100)/100), RUNAX=x=>R2AX(x)+(x===1?' run':' runs');
+QP.push({id:'5·chem.work',step:'5·chem',mode:'work',label:'grams through the mole ratio',open:()=>measured('5·chem'),make(){
+    const R=pick(RXAX), mol=pick([0.5,1,1.5,2,3,4]), [an,am,ac]=R.a, T=pick([R.b,R.p].concat(R.q?[R.q]:[])), [tn,tm,tc]=T, g=mol*ac*am, out=mol*tc*tm;
+    const right=GAX(out), wrong=UQAX(right,[GAX(mol*ac*tm),GAX(mol*tm),GAX(g*tc),GAX(out/2),GAX(g)],3); if(wrong.length<3) return null;
+    return {index:'q:5·chem.work['+RXAX.indexOf(R)+';'+mol+';'+tn+']', lines:[[R.eq,'the balanced change'],[GAX(g)+' of '+an+' ('+am+' g/mol)','given']], ask:'How many grams of '+tn+' ('+tm+' g/mol) does it '+(T===R.b?'take':'make')+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Grams to moles: '+GAX(g)+' / '+am+' = '+(mol*ac)+' mol '+an+'. Mole ratio '+tc+' : '+ac+': '+(mol*tc)+' mol '+tn+'. Moles to grams: '+(mol*tc)+' · '+tm+' = '+GAX(out)+'.'}; }},
+  {id:'5·chem.word',step:'5·chem',mode:'word',label:'the limiting reagent',open:()=>measured('5·chem'),make(){
+    const R=pick([RXAX[2],RXAX[3]]), [an,am,ac]=R.a, [bn,bm,bc]=R.b, [pn,pm,pc]=R.p, ma=pick([1,2,3,4,5,6]), mb=pick([1,2,3,4,5,6]); const runs=Math.min(ma/ac,mb/bc); if(ma/ac===mb/bc) return null;
+    const lim=ma/ac<mb/bc?an:bn, out=runs*pc*pm, right=GAX(out), wrong=UQAX(right,[GAX(Math.max(ma/ac,mb/bc)*pc*pm),GAX(ma*am+mb*bm),GAX(runs*pm),GAX((ma+mb)*pm)],3); if(wrong.length<3) return null;
+    return {index:'q:5·chem.word['+RXAX.indexOf(R)+';'+ma+';'+mb+']', a3:['5·chem.word',DASH,DASH], story:'A flask holds '+GAX(ma*am)+' of '+an+' and '+GAX(mb*bm)+' of '+bn+'. They react: '+R.eq+'. ('+an+' '+am+' g/mol, '+bn+' '+bm+' g/mol, '+pn+' '+pm+' g/mol.)', lines:[], ask:'How many grams of '+pn+' can it make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Moles over coefficient: '+an+' '+RUNAX(ma/ac)+', '+bn+' '+RUNAX(mb/bc)+'. The lesser wins: '+lim+' limits, '+RUNAX(runs)+', '+R2AX(runs*pc)+' mol '+pn+' = '+GAX(out)+'.'}; }},
+  {id:'5·chem.line',step:'5·chem',mode:'proof',label:'what the ledger licenses',open:()=>measured('5·chem'),make(){
+    return line28('5·chem.line',[
+      ['m1',[['C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O','balanced'],['the oxygen atoms are 10 on each side','count O: 5 · 2 = 3 · 2 + 4']],2,0,'10 = 6 + 4.'],
+      ['m2',[['H₂ + O₂ → H₂O does not balance','the oxygen count'],['H₂ + O₂ → H₂O₂ balances it','change the formula']],2,1,'Balancing changes the coefficients, never the formulas: 2 H₂ + O₂ → 2 H₂O.'],
+      ['m3',[['28 g N₂ and 9 g H₂: 1 mol and 4.5 mol','grams to moles'],['H₂ limits, since 4.5 > 1','the larger number of moles']],2,1,'Moles over coefficient: 1 run on N₂, 1.5 on H₂. The lesser wins: N₂ limits.'],
+      ['m4',[['37 g go in','the ledger'],['37 g come out, as product and leftover','in is out']],2,0,'Mass is kept: 34 g of ammonia and 3 g of hydrogen left.'],
+      ['m5',[['1 mol of fuel CₓH_y makes 3 mol CO₂ and 4 mol H₂O','measured'],['the fuel is C₃H₈','one C per CO₂, two H per water']],2,0,'x = 3, y = 8.'],
+      ['m6',[['the fuel is C₃H₈','from the smoke'],['its atoms are joined in one known way','the ledger']],2,1,'The ledger counts atoms; two different molecules can share a formula.'],
+      ['m7',[['(p, b, c, d) = (p, 5p, 3p, 4p)','every balancing'],['1 : 5 : 3 : 4 is the balanced change','take p = 1']],2,0,'Every answer is a scaling of 1 : 5 : 3 : 4.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
