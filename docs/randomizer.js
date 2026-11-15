@@ -19724,6 +19724,28 @@ QP.push({id:'38·now2.work',step:'38·now2',mode:'work',label:'how long the list
       ['g4',[['\\text{a machine search}','given'],['\\text{it reaches every true statement of arithmetic}','search']],2,1,'It reaches only what PA reaches; U is true and unreached.'],
       ['g5',[['G \\text{ listed},\\ G \\text{ reaches } \\varphi','given'],['\\text{the search finds a proof in finitely many steps}','search-finds']],2,0,'The proof is at some place on the list.'],
       ['g6',[['\\text{a proof in a calculus}','given'],['\\text{only its statement needs reading}','two-checks']],2,0,'The core certifies the rest.']],[]); }});
+/* ----- annex 39·bio Is a neuron a gate: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'39·bio.work',step:'39·bio',mode:'work',label:'thresholds and windows',open:()=>measured('39·bio'),make(){
+    const ask=rnd(2);
+    if(ask){ const tau=[10,20][rnd(2)], k=[6,8,10][rnd(3)], d=k+1+rnd(k-1), v=tau*Math.log(k/(d-k)), right=DECAX(v,2)+' ms', wrong=UQAX(right,[DECAX(tau*Math.log(d/k),2)+' ms',DECAX(tau*k/(d-k),2)+' ms',tau+' ms',DECAX(tau*Math.log((d-k)/k),2).replace('-','−')+' ms'],3); if(wrong.length<3) return null;
+      return {index:'q:39·bio.work[w;'+tau+';'+k+';'+d+']', lines:[['\\tau = '+tau+' \\text{ ms},\\ \\ d = '+d,'a leaking cell and its threshold'],['\\text{two kicks of } '+k,'at 0 and at Δ']], ask:'Within what Δ do the two kicks fire it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Coincidence-window: Δ ≤ τ ln(k ÷ (d − k)) = '+tau+' ln('+k+' ÷ '+(d-k)+') ≈ '+right+'.'}; }
+    const G=[['both',[1,1],2],['either',[1,1],1],['not-and',[-1,-1],-1]][rnd(3)], x=[rnd(2),rnd(2)], s=G[1][0]*x[0]+G[1][1]*x[1], out=s>=G[2]?1:0, f=n=>String(n).replace('-','−');
+    const right=out?'it fires: the sum '+f(s)+' reaches '+f(G[2]):'it stays quiet: the sum '+f(s)+' is below '+f(G[2]), wrong=[out?'it stays quiet: the sum '+f(s)+' is below '+f(G[2]):'it fires: the sum '+f(s)+' reaches '+f(G[2]),'it fires whenever any input is 1','it never fires'];
+    return {index:'q:39·bio.work[g;'+G[0]+';'+x.join('')+']', lines:[['\\text{weights } '+f(G[1][0])+', '+f(G[1][1])+',\\ \\text{threshold } '+f(G[2]),'a unit'],['\\text{inputs } '+x[0]+', '+x[1],'']], ask:'What does the unit do?', right, opts:shuffle([right,...wrong]), lead:'', why:'Weighted-threshold: ('+f(G[1][0])+') · '+x[0]+' + ('+f(G[1][1])+') · '+x[1]+' = '+f(s)+', against the threshold '+f(G[2])+'; this unit is '+G[0]+'.'}; }},
+  {id:'39·bio.word',step:'39·bio',mode:'word',label:'rings and rates',open:()=>measured('39·bio'),make(){
+    const F=rnd(2);
+    if(F){ const n=[3,4,5,6,7][rnd(5)], odd=n%2, right=odd?'it runs as a clock':'it holds a state and does not run', wrong=[odd?'it holds a state and does not run':'it runs as a clock','it falls silent for good','every cell fires at once'];
+      return {index:'q:39·bio.word[r;'+n+']', a3:['39·bio.word',DASH,DASH], story:'A ring of '+n+' steadily driven cells, each silenced by the one before.', lines:[], ask:'What does the ring do?', right, opts:shuffle([right,...wrong]), lead:'', why:'Inhibitory-ring: an odd ring cannot settle, so it runs, with period n(δ + τ ln(RI/(RI − d))); an even ring holds a state.'}; }
+    const t=[1,2,4,5][rnd(4)], right='below '+DECAX(1000/t,0)+' a second', wrong=['as fast as the drive asks','exactly '+DECAX(1000/t,0)+' a second','below '+DECAX(500/t,0)+' a second'];
+    return {index:'q:39·bio.word[c;'+t+']', a3:['39·bio.word',DASH,DASH], story:'A leaking cell rests '+t+' ms after each spike. A lab turns its drive up and up.', lines:[], ask:'How fast can it fire?', right, opts:shuffle([right,...wrong]), lead:'', why:'Rate-ceiling: the rate is 1/(t_r + τ ln(RI/(RI − d))), which rises with the drive and never reaches 1/t_r = '+DECAX(1000/t,0)+' a second.'}; }},
+  {id:'39·bio.line',step:'39·bio',mode:'proof',label:'what the cell licenses',open:()=>measured('39·bio'),make(){
+    return line28('39·bio.line',[
+      ['n1',[['\\text{one threshold unit}','given'],['\\text{it gives either-but-not-both}','one unit']],2,1,'One straight cut; it needs two layers.'],
+      ['n2',[['\\text{a stronger drive}','given'],['\\text{the cell fires as fast as we like}','drive']],2,1,'The rest t_r caps the rate below 1/t_r.'],
+      ['n3',[['\\text{two kicks}','given'],['\\text{they always add to fire the cell}','kicks']],2,1,'Only within the window τ ln(k/(d − k)).'],
+      ['n4',[['\\text{a ring of cells that silence each other}','given'],['\\text{always a clock}','ring']],2,1,'An even ring holds a state; only an odd ring runs.'],
+      ['n5',[['\\text{weights } 1, 1,\\ \\text{threshold } 2','a unit'],['\\text{it is both}','weighted-threshold']],2,0,'It fires only when both inputs are 1.'],
+      ['n6',[['\\text{weight } -1,\\ \\text{threshold } 0','a unit'],['\\text{it is not}','weighted-threshold']],2,0,'Input 0 gives 0, which reaches 0; input 1 gives −1, which does not.']],[]); }});
 /* ----- annex 39·chem Why Is a Chip Made of Sand?: Work, Word Problems, Check Proofs ----- */
 const SUPAX=k=>String(k).split('').map(c=>c==='-'?'⁻':'⁰¹²³⁴⁵⁶⁷⁸⁹'[+c]).join('');
 QP.push({id:'39·chem.work',step:'39·chem',mode:'work',label:'electrons and holes in balance',open:()=>measured('39·chem'),make(){
@@ -19745,6 +19767,64 @@ QP.push({id:'39·chem.work',step:'39·chem',mode:'work',label:'electrons and hol
       ['s5',[['gallium is in column 13 and arsenic in column 15','given'],['GaAs can build silicon’s crystal','the eight-a-pair technique']],2,0,'3 + 5 = 8 outer electrons between the pair.'],
       ['s6',[['boron’s keep-share is 0.8','given'],['one more freeze cleans the boron out','the freeze-out technique']],2,1,'Each pass keeps 0.8 of its share: boron has to come out by chemistry.'],
       ['s7',[['n-type and p-type silicon are joined, each doped 10¹⁶','given'],['the bands bend by 0.716 V and μ is one level throughout','the one-level technique']],2,0,'0.358 + 0.358 = 0.716 V; joined materials in balance have one μ.']],[]); }});
+/* ----- annex 39·now How little energy can a switch spend: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'39·now.work',step:'39·now',mode:'work',label:'ramps and barriers',open:()=>measured('39·now'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const f0=[1e9,1e12][rnd(2)], t=[3.15e7,3.15e8][rnd(2)], e=[1e-3,1e-6,1e-9][rnd(3)], v=Math.log(f0*t/e), right=DECAX(v,1)+' kT', wrong=UQAX(right,[DECAX(Math.log10(f0*t/e),1)+' kT',DECAX(Math.log(f0*t),1)+' kT',DECAX(v/2,1)+' kT',DECAX(2*v,1)+' kT'],3); if(wrong.length<3) return null;
+      return {index:'q:39·now.work[b;'+f0+';'+t+';'+e+']', lines:[['f_0 = '+SCAX(f0,0).replace('1 × ','')+' \\text{ tries a second}','against the barrier'],['t = '+SCAX(t,3)+' \\text{ s},\\ \\ \\varepsilon = '+SCAX(e,0).replace('1 × ',''),'']], ask:'How high must the barrier be?', right, opts:shuffle([right,...wrong]), lead:'', why:'Holding-barrier: E ≥ kT ln(f₀t ÷ ε) = kT ln '+SCAX(f0*t/e,2)+' ≈ '+right+'.'}; }
+    if(ask===1){ const x=[2,5,10,50,100][rnd(5)], right=DECAX(2/x,3), wrong=UQAX(right,[DECAX(1/x,3),DECAX(1/(2*x),3),DECAX(x/2,2),DECAX(1-1/x,3)],3); if(wrong.length<3) return null;
+      return {index:'q:39·now.work[r;'+x+']', lines:[['T = '+x+'\\,RC','the length of the ramp'],['\\text{a step loses } \\tfrac12 CV^2','']], ask:'What share of the step’s heat does the ramp lose?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slow-ramp: (RC/T) C V² ÷ ½CV² = 2RC/T = 2 ÷ '+x+' = '+right+'.'}; }
+    const RC=[1,2,5][rnd(3)], E=[1,4,9][rnd(3)], P=[0.01,0.04,0.25][rnd(3)], T=Math.sqrt(RC*E/P), right=DECAX(T,2), wrong=UQAX(right,[DECAX(RC*E/P,2),DECAX(Math.sqrt(RC*P/E),3),DECAX(2*Math.sqrt(RC*E*P),3),DECAX(Math.sqrt(E/P),2)],3); if(wrong.length<3) return null;
+    return {index:'q:39·now.work[t;'+RC+';'+E+';'+P+']', lines:[['RC = '+RC+',\\ \\ CV^2 = '+E,'the store'],['P_\\ell = '+P,'the leak']], ask:'What ramp length T* spends the least energy?', right, opts:shuffle([right,...wrong]), lead:'', why:'Best-ramp: T* = √(RC · CV² ÷ P_ℓ) = √('+RC+' · '+E+' ÷ '+P+') ≈ '+right+'.'}; }},
+  {id:'39·now.word',step:'39·now',mode:'word',label:'the frugal circuit',open:()=>measured('39·now'),make(){
+    const F=rnd(3), Q=[['A designer swaps in a smaller resistance to cut the heat of switching a store with a sudden step.','Does it?','no: a step loses ½CV² whatever R; only the time of a ramp cuts it'],['A circuit ramps its charge back to the supply, but its gates have already forgotten their inputs.','Can it get the charge back?','no: only while each gate’s inputs are still held'],['An engineer slows the ramps further and further to save energy.','Does it always save more?','no: leak grows with the wait; past T* the energy rises']];
+    const wrong=[['yes: less resistance, less heat','yes, by the ratio of resistances','no: it doubles the heat'],['yes: a slow ramp gives back any charge','yes, if it is slow enough','no: charge can never go back'],['yes: the slower, the better','yes, until it stops','no: slower always costs more']][F];
+    return {index:'q:39·now.word['+F+']', a3:['39·now.word',DASH,DASH], story:Q[F][0], lines:[], ask:Q[F][1], right:Q[F][2], opts:shuffle([Q[F][2],...wrong]), lead:'', why:['Slow-ramp: the heat falls as (RC/T) C V², which needs T long against RC.','Undo-gate: the gate must forget nothing until its output has been given back.','Best-ramp: ramp heat plus leak P_ℓT is least at T*.'][F]}; }},
+  {id:'39·now.line',step:'39·now',mode:'proof',label:'what the ramp licenses',open:()=>measured('39·now'),make(){
+    return line28('39·now.line',[
+      ['e1',[['\\text{a smaller resistance}','given'],['\\text{less heat from a step}','resistance']],2,1,'A step loses ½CV² whatever R.'],
+      ['e2',[['\\text{a slow ramp}','given'],['\\text{it gives back the charge of any gate}','ramp']],2,1,'Only while its inputs are still held.'],
+      ['e3',[['\\text{a slower ramp}','given'],['\\text{always better}','slower']],2,1,'Leak grows with the wait; past T* the energy rises.'],
+      ['e4',[['\\text{a held bit}','given'],['\\text{it spends its barrier energy}','barrier']],2,1,'It sits behind it for nothing.'],
+      ['e5',[['T \\gg RC','a ramp'],['\\text{heat} \\approx (RC/T)\\,CV^2','slow-ramp']],2,0,'It heads to 0 as T grows.'],
+      ['e6',[['\\text{ramp heat plus leak}','given'],['\\text{least at } T^* = \\sqrt{RC \\cdot CV^2/P_\\ell}','best-ramp']],2,0,'Where the two parts are equal.']],[]); }});
+/* ----- annex 39·phys Why does silicon have a gap: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'39·phys.work',step:'39·phys',mode:'work',label:'bands, gap and donors',open:()=>measured('39·phys'),make(){
+    const ask=rnd(3);
+    if(ask===2){ const M=[[0.26,11.7],[0.2,11.7],[0.067,12.9]][rnd(3)], v=13.6*M[0]/(M[1]*M[1]), right=DECAX(1000*v,1)+' meV', wrong=UQAX(right,[DECAX(1000*13.6*M[0]/M[1],0)+' meV',DECAX(1000*13.6/(M[1]*M[1]),1)+' meV',DECAX(1000*13.6*M[0]*M[0]/M[1],0)+' meV',DECAX(13.6*1000,0)+' meV'],3); if(wrong.length<3) return null;
+      return {index:'q:39·phys.work[d;'+M[0]+';'+M[1]+']', lines:[['m^* = '+M[0]+',\\ \\ \\varepsilon = '+M[1],'a material'],['\\text{one extra electron on a donor}','']], ask:'How tightly is it held?', right, opts:shuffle([right,...wrong]), lead:'', why:'Donor: 13.6 eV × m* ÷ ε² = 13.6 × '+M[0]+' ÷ '+DECAX(M[1]*M[1],2)+' ≈ '+right+'; warmth, kT ≈ 26 meV, frees it at once.'}; }
+    if(ask===1){ const a=[0.66,1.12,1.42][rnd(3)], b=[0.66,1.12,1.42,3.4].filter(x=>x>a)[0], kT=0.0259, v=Math.exp((b-a)/(2*kT)), right=SCAX(v,2)+' times', wrong=UQAX(right,[SCAX(Math.exp((b-a)/kT),2)+' times',SCAX(b/a,2)+' times',SCAX(Math.exp((b-a)/(4*kT)),2)+' times',SCAX(Math.exp(b/(2*kT)),2)+' times'],3); if(wrong.length<3) return null;
+      return {index:'q:39·phys.work[g;'+a+';'+b+']', lines:[['E_g = '+a+' \\text{ eV and } '+b+' \\text{ eV}','two gaps'],['kT = 0.0259 \\text{ eV}','room warmth']], ask:'How many times as many carriers does the smaller gap have?', right, opts:shuffle([right,...wrong]), lead:'', why:'Gap-crossing: e^(−E_g/2kT), so the ratio is e^('+DECAX(b-a,2)+' ÷ 0.0518) ≈ '+right+'.'}; }
+    const t=[0.5,1,2,3][rnd(4)], N=[2,3,4,10][rnd(4)], w=4*t*Math.cos(Math.PI/(N+1)), right=DECAX(w,3)+' eV', wrong=UQAX(right,[DECAX(4*t,3)+' eV',DECAX(2*t,3)+' eV',DECAX(N*t,3)+' eV',DECAX(2*t*Math.cos(Math.PI/(N+1)),3)+' eV'],3); if(wrong.length<3) return null;
+    return {index:'q:39·phys.work[b;'+t+';'+N+']', lines:[['N = '+N+' \\text{ atoms in a row}','one level each'],['t = '+t+' \\text{ eV}','the leak to a neighbour']], ask:'How wide is the band, lowest level to highest?', right, opts:shuffle([right,...wrong]), lead:'', why:'Level-spread: E₀ − 2t cos(kπ/(N + 1)); from k = 1 to k = N the width is 4t cos(π/'+(N+1)+') ≈ '+right+', just under 4t.'}; }},
+  {id:'39·phys.word',step:'39·phys',mode:'word',label:'the diode on the bench',open:()=>measured('39·phys'),make(){
+    const F=rnd(2);
+    if(F){ const dv=[0.06,0.12,0.18][rnd(3)], v=Math.exp(dv/0.0259), right='about '+DECAX(v,1)+' times', wrong=UQAX(right,['about '+DECAX(1+dv,2)+' times','about '+DECAX(Math.exp(dv/0.0518),1)+' times','about '+DECAX(dv/0.0259,2)+' times'],3); if(wrong.length<3) return null;
+      return {index:'q:39·phys.word[v;'+dv+']', a3:['39·phys.word',DASH,DASH], story:'A student pushes a silicon diode forward and raises the push by '+dv+' V, at room warmth, Vₜ = 0.0259 V.', lines:[], ask:'How much does the current grow?', right, opts:shuffle([right,...wrong]), lead:'', why:'Junction-voltage: the current over the barrier grows as e^(V/Vₜ): e^('+dv+' ÷ 0.0259) ≈ '+DECAX(v,1)+'.'}; }
+    const right='its lower band is exactly full, so a push can move no electron', wrong=['it has no outer electrons','its electrons are bound to the nuclei for good','it has no bands'];
+    return {index:'q:39·phys.word[f]', a3:['39·phys.word',DASH,DASH], story:'A child asks why pure, cold silicon barely conducts, when every atom has four outer electrons.', lines:[], ask:'Why?', right, opts:shuffle([right,...wrong]), lead:'', why:'Full-band: a band whose every level is filled carries no current, and silicon’s gap of 1.12 eV separates full from empty.'}; }},
+  {id:'39·phys.line',step:'39·phys',mode:'proof',label:'what the bands license',open:()=>measured('39·phys'),make(){
+    return line28('39·phys.line',[
+      ['i1',[['\\text{silicon barely conducts}','seen'],['\\text{it has no free electrons}','electrons']],2,1,'It has four outer electrons an atom; its band is full, so a push moves none.'],
+      ['i2',[['N \\text{ atoms}','given'],['\\text{a band is one level}','band']],2,1,'N atoms give N levels, packed into a band of width under 4t.'],
+      ['i3',[['\\text{doping}','given'],['\\text{it adds a band}','doping']],2,1,'It adds levels just inside the gap, freed by warmth.'],
+      ['i4',[['V_{bi}','the junction'],['\\text{it drives a current through a wire}','barrier']],2,1,'Joining the ends sets up equal and opposite steps at the contacts.'],
+      ['i5',[['\\text{a larger gap}','given'],['\\text{exponentially fewer carriers}','gap-crossing']],2,0,'The share is about e^(−E_g/2kT).'],
+      ['i6',[['\\text{a band partly filled}','a metal'],['\\text{a push moves electrons}','full-band']],2,0,'They shift into the empty levels just above.']],[]); }});
+/* ----- annex 40·eng How do you know the compiler is right: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'40·eng.work',step:'40·eng',mode:'work',label:'a second opinion',open:()=>measured('40·eng'),make(){
+    const a=1+rnd(9), b=1+rnd(9), same=rnd(2), A=a*b+a, B=same?A:A+1+rnd(3);
+    const right=same?'neither is shown right: agreement only fails to find a fault':'at least one compiler is wrong, but not which', wrong=same?['both are right','the newer is right','at least one compiler is wrong']:['the newer compiler is wrong','both are right','neither is shown right: agreement only fails to find a fault'];
+    return {index:'q:40·eng.work['+a+';'+b+';'+same+']', lines:[['\\text{one program, two compilers}','x = '+a+',\\ y = '+b],['\\text{runs end with } '+A+' \\text{ and } '+B,'from the same start']], ask:'What follows?', right, opts:shuffle([right,...wrong]), lead:'', why:'Second-opinion: '+(same?'agreement proves neither right.':'a disagreement proves a fault, in one of them at least, and does not say which.')}; }},
+  {id:'40·eng.word',step:'40·eng',mode:'word',label:'a thousand tests',open:()=>measured('40·eng'),make(){
+    const n=[100,1000,10000][rnd(3)], right='no: tests try rows, and there are endlessly many', wrong=['yes: '+n.toLocaleString('en').replace(/,/g,' ')+' tests is enough','yes, if they all agree','no: tests cannot pass'];
+    return {index:'q:40·eng.word['+n+']', a3:['40·eng.word',DASH,DASH], story:'A team compiles a program two ways and runs '+n.toLocaleString('en').replace(/,/g,' ')+' tests; every run agrees.', lines:[], ask:'Is the compiler now shown right?', right, opts:shuffle([right,...wrong]), lead:'', why:'Second-opinion: if they agree, neither is shown right; '+n.toLocaleString('en').replace(/,/g,' ')+' rows of endlessly many leave the rest untried.'}; }},
+  {id:'40·eng.line',step:'40·eng',mode:'proof',label:'what the runs license',open:()=>measured('40·eng'),make(){
+    return line28('40·eng.line',[
+      ['c1',[['\\text{a thousand tests passed}','tests'],['\\text{the compiler is right}','tested']],2,1,'Tests try rows; there are endlessly many.'],
+      ['c2',[['\\text{the two compilers disagree}','runs'],['\\text{the newer is wrong}','newer']],2,1,'A disagreement shows one is wrong, not which.'],
+      ['c3',[['\\text{the two compilers disagree}','runs'],['\\text{at least one breaks the demand}','second-opinion']],2,0,'From the same start, the same program must end in the same state.'],
+      ['c4',[['\\text{the two compilers agree}','runs'],['\\text{both are right}','agree']],2,1,'Agreement only fails to find a fault.']],[]); }});
 /* ===== Annex pools end ===== */
 /* ===== Laundry 5, last part (spliced after every other terms*.js): a pool that sets no lead gets one, so a wrong answer never reads "The line holds by ..." ===== */
 QP.forEach(Q=>{ const mk=Q.make; Q.make=function(){ const q=mk.call(this); if(q&&typeof q.index==='string'&&q.index.startsWith('q:')&&q.lead==='') q.lead='The answer is “'+q.right+'”. '; return q; }; });
