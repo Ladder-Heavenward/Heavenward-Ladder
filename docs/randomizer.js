@@ -17278,6 +17278,76 @@ QP.push({id:'11·econ.work',step:'11·econ',mode:'work',label:'where they meet',
       ['m5',[['\\text{a supply with a jump}','the bumper crop'],['\\text{there is a meeting price}','every market has one']],2,1,'A jump can skip over demand.'],
       ['m6',[['Q(p) = S(p) \\text{ below } 20,\\ D(p) \\text{ above}','the lesser'],['Q \\text{ is continuous at } 20','glued-functions']],2,0,'Both pieces arrive at 4000.'],
       ['m7',[['Q(p)','what is sold'],['= \\tfrac12\\,(S(p) + D(p))','the average']],2,1,'The lesser of the two: a box is sold only when sent and bought.']],[]); }});
+/* ----- annex 12·comp What can a machine with no memory check: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'12·comp.work',step:'12·comp',mode:'work',label:'the remainder machine',open:()=>measured('12·comp'),make(){
+    const v=5+rnd(250), w=v.toString(2); let r=0; const path=[0]; for(const d of w){ r=(2*r+ +d)%3; path.push(r); }
+    const right='state '+r+(r===0?', accept':', reject'), wrong=UQAX(right,['state 0, accept','state 1, reject','state 2, reject','state '+r+(r===0?', reject':', accept'),('state '+((r+1)%3))+(((r+1)%3)===0?', accept':', reject')],3); if(wrong.length<3) return null;
+    return {index:'q:12·comp.work['+v+']', lines:[['w = '+w,'a numeral in twos'],['r \\mapsto 2r + d \\bmod 3','each digit d']], ask:'Where does the machine end, from state 0?', right, opts:shuffle([right,...wrong]), lead:'', why:'States after each digit: '+path.join(', ')+'. Remainder-machine: it ends at the remainder of '+v+' by 3, which is '+r+'.'}; }},
+  {id:'12·comp.word',step:'12·comp',mode:'word',label:'a sentence, or not',open:()=>measured('12·comp'),make(){
+    const n=1+rnd(5), kind=rnd(5); let s;
+    if(kind===0) s='a'.repeat(n)+'b'.repeat(n); else if(kind===1) s='a'.repeat(n+1)+'b'.repeat(n); else if(kind===2) s='a'.repeat(n)+'b'.repeat(n+1); else if(kind===3){ s='a'.repeat(n)+'b'.repeat(n); const i=rnd(s.length-1); s=s.slice(0,i)+s[i+1]+s[i]+s.slice(i+2); if(s==='a'.repeat(n)+'b'.repeat(n)) return null; } else s='a'.repeat(n)+'S'+'b'.repeat(n);
+    const yes=kind===0;
+    const right=yes?'a sentence: a\u207f b\u207f with n = '+n:kind===4?'reachable, but no sentence: it keeps S':'no sentence: it is not a\u207f b\u207f', wrong=yes?['no sentence: it is not a\u207f b\u207f','reachable, but no sentence: it keeps S','a sentence only for a longer string']:UQAX(right,['a sentence: a\u207f b\u207f with n = '+n,'no sentence: it is not a\u207f b\u207f','reachable, but no sentence: it keeps S','a sentence: the techniques go in any order'],3);
+    return {index:'q:12·comp.word['+s+']', a3:['12·comp.word',DASH,DASH], story:'A grammar has two techniques: S \u2192 aSb and S \u2192 ab, starting from S.', lines:[], ask:'What is the string '+s+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Sentences technique: the sentences are exactly a\u207f b\u207f with n \u2265 1, plain letters only. '+(yes?s+' is a'+'\u207f b\u207f with n = '+n+': S, then aSb '+(n>2?'and so on ':'')+(n>1?n-1+' time'+(n>2?'s':'')+', then ab.':'once, ab.'):kind===4?s+' is reached on the way, but a sentence has no placeholder.':s+' is not of that form.')}; }},
+  {id:'12·comp.line',step:'12·comp',mode:'proof',label:'what a machine licenses',open:()=>measured('12·comp'),make(){
+    return line28('12·comp.line',[
+      ['n1',[['\\text{I can\u2019t build a machine for it}','given'],['\\text{none exists}','no-memory wall']],2,1,'That is a report on you; the wall is a proof about every machine.'],
+      ['n2',[['\\text{a machine with } q \\text{ states}','given'],['\\text{it checks } a^nb^n \\text{ if } q \\text{ is large}','more states']],2,1,'The proof works for every q: it fails on a\u2071b\u2071 against a\u02b2b\u2071, i < j \u2264 q.'],
+      ['n3',[['S \\to aSb,\\ \\ S \\to ab','the grammar'],['aaSbb \\text{ is a sentence}','reachable']],2,1,'A sentence is plain letters: aaSbb is reachable but no sentence.'],
+      ['n4',[['h_i - h_{i+1} = \\pm 1','a walk'],['\\text{it jumps from } 0 \\text{ to } -2','one step']],2,1,'Step-walk: it moves by one, so it passes \u22121.'],
+      ['n5',[['S \\to aSb,\\ \\ S \\to ab','the grammar'],['ba \\text{ is a sentence}','any order']],2,1,'Only what the techniques build: ba is no sentence.'],
+      ['n6',[['r \\mapsto 2r + d \\bmod 3','the machine'],['\\text{after } w,\\ \\text{the state is } w \\bmod 3','remainder-machine']],2,0,'Reading d after w makes 2w + d, and remainders add and multiply.'],
+      ['n7',[['\\text{depths } 0, \\dots, k \\text{ and a dead state}','k + 2 states'],['\\text{it checks balanced strings of depth at most } k','bounded-depth']],2,0,'By step-walk, a walk above k passes k + 1 and dies.']],[]); }});
+/* ----- annex 12·eng Will the shelf hold: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'12·eng.work',step:'12·eng',mode:'work',label:'support pushes and the worst bend',open:()=>measured('12·eng'),make(){
+    const L=[1.2,1.8,2,2.4,3,3.6][rnd(6)], P=[300,400,500,600,800,900,1200][rnd(7)], ask=rnd(3);
+    if(ask===0){ const d=Math.round(L*(1+rnd(5))/6*100)/100, RB=P*d/L, RA=P-RB; if(Math.abs(RB*10-Math.round(RB*10))>1e-9) return null;
+      const right='R_A = '+DECAX(RA,1)+' N, R_B = '+DECAX(RB,1)+' N', wrong=UQAX(right,['R_A = '+DECAX(RB,1)+' N, R_B = '+DECAX(RA,1)+' N','R_A = '+DECAX(P/2,1)+' N, R_B = '+DECAX(P/2,1)+' N','R_A = '+DECAX(P*d,1)+' N, R_B = '+DECAX(P*(L-d),1)+' N'],3); if(wrong.length<3||Math.abs(RA-RB)<1e-9) return null;
+      return {index:'q:12·eng.work[r;'+L+';'+P+';'+d+']', lines:[['P = '+P+'\\ \\text{N at } d = '+d+'\\ \\text{m}','a load'],['\\text{supports at } 0 \\text{ and } L = '+L+'\\ \\text{m}','A and B']], ask:'How hard does each support push?', right:'$'+right.replace(/ N/g,'\\ \\text{N}')+'$', opts:shuffle([right,...wrong]).map(o=>'$'+o.replace(/ N/g,'\\ \\text{N}')+'$'), lead:'', why:'Support-pushes: R_B = Pd/L = ('+P+' \u00b7 '+d+')/'+L+' = '+DECAX(RB,1)+' N, and R_A = P \u2212 R_B = '+DECAX(RA,1)+' N. The nearer support takes more.'}; }
+    if(ask===1){ const M=P*L/4, right=DECAX(M,1)+' N\u00b7m', wrong=UQAX(right,[DECAX(P*L/2,1)+' N\u00b7m',DECAX(P*L/8,1)+' N\u00b7m',DECAX(P*L,1)+' N\u00b7m',DECAX(P*L*L/8,1)+' N\u00b7m'],3); if(wrong.length<3) return null;
+      return {index:'q:12·eng.work[m;'+L+';'+P+']', lines:[['P = '+P+'\\ \\text{N},\\ \\ L = '+L+'\\ \\text{m}','one load that can move along the span']], ask:'What is the worst turning effect it can bend the beam with?', right, opts:shuffle([right,...wrong]), lead:'', why:'Worst-place: at the middle, PL/4 = '+P+' \u00b7 '+L+'/4 = '+right+'.'}; }
+    const w=[100,150,200,250,300,400][rnd(6)], M=w*L*L/8, right=DECAX(M,1)+' N\u00b7m', wrong=UQAX(right,[DECAX(w*L/8,1)+' N\u00b7m',DECAX(w*L*L/4,1)+' N\u00b7m',DECAX(w*L*L/2,1)+' N\u00b7m',DECAX(w*L/4,1)+' N\u00b7m'],3); if(wrong.length<3) return null;
+    return {index:'q:12·eng.work[w;'+L+';'+w+']', lines:[['w = '+w+'\\ \\text{N/m},\\ \\ L = '+L+'\\ \\text{m}','a load spread evenly over the span']], ask:'What is the greatest turning effect in the beam?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-load: at the middle, wL\u00b2/8 = '+w+' \u00b7 '+L+'\u00b2/8 = '+right+'.'}; }},
+  {id:'12·eng.word',step:'12·eng',mode:'word',label:'a safety factor',open:()=>measured('12·eng'),make(){
+    const L=[0.8,0.9,1,1.2][rnd(4)], w=[200,250,300,400,500][rnd(5)], sf=[2,3,4][rnd(3)], M=w*L*L/8, cap=Math.round(M*sf*(0.7+rnd(70)/100)), ok=cap>=sf*M;
+    if(Math.abs(cap-sf*M)<1) return null;
+    const right=ok?'yes: '+cap+' N\u00b7m is at least '+sf+' \u00d7 '+DECAX(M,1):'no: it needs at least '+DECAX(sf*M,1)+' N\u00b7m', wrong=ok?['no: it needs at least '+DECAX(sf*M*2,1)+' N\u00b7m','no: '+cap+' N\u00b7m is less than '+DECAX(w*L*L/2*sf,1),'yes, but only for a quarter of the load']:['yes: '+cap+' N\u00b7m is more than '+DECAX(M,1),'yes: '+cap+' N\u00b7m is at least '+DECAX(sf*w*L/8,1),'no: it needs at least '+DECAX(M/sf,1)+' N\u00b7m'];
+    return {index:'q:12·eng.word['+L+';'+w+';'+sf+';'+cap+']', a3:['12·eng.word',DASH,DASH], story:'A shelf of span '+L+' m will carry books spread evenly, '+w+' N on each metre. The plank is rated for a turning effect of '+cap+' N\u00b7m, and the code asks for a safety factor of '+sf+'.', lines:[], ask:'Does the plank pass?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spread-load: the worst turning effect is wL\u00b2/8 = '+w+' \u00b7 '+L+'\u00b2/8 = '+DECAX(M,1)+' N\u00b7m. The factor multiplies it: capacity \u2265 '+sf+' \u00d7 '+DECAX(M,1)+' = '+DECAX(sf*M,1)+'. '+(ok?cap+' passes.':cap+' falls short.')}; }},
+  {id:'12·eng.line',step:'12·eng',mode:'proof',label:'what the beam licenses',open:()=>measured('12·eng'),make(){
+    return line28('12·eng.line',[
+      ['k1',[['\\text{a load at } 0.6\\ \\text{m of } 2.4\\ \\text{m}','given'],['\\text{each support takes half}','two supports']],2,1,'Only with the load at the middle: here the near one takes three quarters.'],
+      ['k2',[['\\text{one load at } 0.6\\ \\text{m}','given'],['\\text{the plank bends hardest at its middle}','a beam']],2,1,'For one load it bends hardest under the load.'],
+      ['k3',[['\\text{a spread load},\\ wL^2/8','given'],['\\text{twice the span, twice the bend}','L doubles']],2,1,'(2L)\u00b2 = 4L\u00b2: four times the bend.'],
+      ['k4',[['\\text{safety factor } 4','the code'],['\\text{capacity} \\ge 4 \\times \\text{the worst load}','the factor multiplies']],2,0,'Not a quarter of the load: the factor multiplies the worst case.'],
+      ['k5',[['\\text{loads and strengths, rounded}','for the check'],['\\text{each to the nearest}','rounding']],2,1,'Loads round up and strengths round down.'],
+      ['k6',[['R_A \\lt 0','the push'],['\\text{a small push}','R_A']],2,1,'A pull the support must supply; a trestle cannot, and the plank tips.'],
+      ['k7',[['P \\text{ at } d,\\ \\text{supports at } 0, L','given'],['R_B = Pd/L','turning effects about A']],2,0,'Support-pushes: R_B \u00b7 L = P \u00b7 d.']],[]); }});
+/* ----- annex 12·phys How does a small push lift a heavy weight: Work, Word Problems, Check Proofs ----- */
+const DECAX=(v,k)=>String(Math.round(v*Math.pow(10,k||3))/Math.pow(10,k||3));
+QP.push({id:'12·phys.work',step:'12·phys',mode:'work',label:'the balance point',open:()=>measured('12·phys'),make(){
+    const n=3, w=[], x=[]; for(let i=0;i<n;i++){ w.push(1+rnd(8)); x.push(rnd(9)/2); } const W=w.reduce((a,b)=>a+b,0), M=w.reduce((a,b,i)=>a+b*x[i],0), p=M/W, avg=x.reduce((a,b)=>a+b,0)/n;
+    if(Math.abs(p-avg)<0.05) return null;
+    const right=DECAX(p)+' m', wrong=UQAX(right,[DECAX(avg)+' m',DECAX(M)+' m',DECAX(M/n)+' m',DECAX(W/ (x.reduce((a,b)=>a+b,0)||1))+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:12·phys.work['+w.join(',')+';'+x.join(',')+']', lines:w.map((v,i)=>[v+'\\ \\text{kg at }'+x[i]+'\\ \\text{m}','on the bar']), ask:'Where does the bar balance?', right, opts:shuffle([right,...wrong]), lead:'', why:'Balance-formula: the weighted average, ('+w.map((v,i)=>v+' \u00b7 '+x[i]).join(' + ')+')/'+W+' = '+DECAX(M)+'/'+W+(Math.abs(p*1000-Math.round(p*1000))>1e-9?' \u2248 ':' = ')+right+'. Not the plain average of the positions, '+DECAX(avg)+'.'}; }},
+  {id:'12·phys.word',step:'12·phys',mode:'word',label:'levers and gears',open:()=>measured('12·phys'),make(){
+    if(rnd(2)){ const g=[[12,36],[10,30],[15,45],[16,48],[20,40],[12,48],[18,36],[14,42]], a=g[rnd(8)], b=g[rnd(8)], m1=a[0]/a[1], m2=b[0]/b[1], m=m1*m2, rpm=[60,90,120,180,240][rnd(5)]*(1/m)/ (1/m);
+      const F=v=>{ const d=Math.round(1/v); return Math.abs(1/v-d)<1e-9?'1/'+d:DECAX(v); }, out=rpm*m;
+      if(Math.abs(out*100-Math.round(out*100))>1e-9) return null;
+      const right=DECAX(out,2)+' turns a minute', wrong=UQAX(right,[DECAX(rpm*(m1+m2),2)+' turns a minute',DECAX(rpm/m,2)+' turns a minute',DECAX(rpm*m1,2)+' turns a minute',DECAX(rpm*m2,2)+' turns a minute'],3); if(wrong.length<3) return null;
+      return {index:'q:12·phys.word[g;'+a+';'+b+';'+rpm+']', a3:['12·phys.word',DASH,DASH], story:'A winch has two meshes. A '+a[0]+'-tooth gear drives a '+a[1]+'-tooth gear, and a '+b[0]+'-tooth gear on that shaft drives a '+b[1]+'-tooth gear. The crank turns the first gear '+rpm+' times a minute.', lines:[], ask:'How fast does the last gear turn?', right, opts:shuffle([right,...wrong]), lead:'', why:'Gear-train: the ratios multiply, '+a[0]+'/'+a[1]+' \u00b7 '+b[0]+'/'+b[1]+' = '+F(m)+'. So '+rpm+' \u00b7 '+F(m)+' = '+DECAX(out,2)+'. They do not add.'}; }
+    const L=[600,800,900,1000,1200,1500][rnd(6)], a=[0.1,0.2,0.25,0.3,0.5][rnd(5)], b=[1,1.2,1.5,2,2.5][rnd(5)], E=L*a/b;
+    if(Math.abs(E*100-Math.round(E*100))>1e-9) return null;
+    const right=DECAX(E,2)+' N', wrong=UQAX(right,[DECAX(L*b/a,2)+' N',DECAX(L-E,2)+' N',DECAX(L*a,2)+' N',DECAX(L/2,2)+' N'],3); if(wrong.length<3) return null;
+    return {index:'q:12·phys.word[l;'+L+';'+a+';'+b+']', a3:['12·phys.word',DASH,DASH], story:'A crowbar rests on a stone. A rock pushing down with '+L+' N sits '+a+' m from the stone on one side; a hand pushes '+b+' m from the stone on the other.', lines:[], ask:'What push of the hand just balances the rock?', right, opts:shuffle([right,...wrong]), lead:'', why:'Law of the lever: the turning effects match, '+L+' \u00b7 '+a+' = E \u00b7 '+b+', so E = '+right+'. The hand moves '+DECAX(b/a,2)+' times as far as the rock: no energy is free.'}; }},
+  {id:'12·phys.line',step:'12·phys',mode:'proof',label:'what the lever licenses',open:()=>measured('12·phys'),make(){
+    return line28('12·phys.line',[
+      ['h1',[['5\\ \\text{kg moved to } 0.5\\ \\text{m}','given'],['\\text{the balance point is } 1.625\\ \\text{m}','the plain average']],2,1,'The balance point is the weighted average: 37/24 \u2248 1.54 m.'],
+      ['h2',[['\\text{weights in kilograms}','both sides'],['\\text{the balance point is the same}','the 9.8 is on both sides']],2,0,'Multiplying-keeps-answers lets the 9.8 go.'],
+      ['h3',[['50\\ \\text{N over } 12\\ \\text{cm}','the hand'],['600\\ \\text{N over } 1\\ \\text{cm}','the same energy']],2,0,'Both are 6 J: the price of force is distance.'],
+      ['h4',[['\\tfrac13 \\text{ and } \\tfrac14','two meshes'],['\\tfrac13 + \\tfrac14','the train']],2,1,'Gear-train: the ratios multiply, 1/12.'],
+      ['h5',[['(-12/30)(-30/36)','with an idler'],['12/36','the idler cancels']],2,0,'The idler\u2019s teeth cancel; only its turning flips.'],
+      ['h6',[['T(0) \\lt 0 \\lt T(L)','the turning effect'],['\\text{a balance point } 0 \\lt p \\lt L','in-between-value']],2,0,'T is continuous along a rigid bar.'],
+      ['h7',[['\\text{a loose hinge in the bar}','given'],['\\text{a balance point exists}','in-between-value']],2,1,'T may jump at the hinge: the hypothesis fails.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
