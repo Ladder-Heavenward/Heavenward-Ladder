@@ -18053,6 +18053,95 @@ QP.push({id:'20·phys.work',step:'20·phys',mode:'work',label:'flip the target, 
       ['p4',[['A,\\ B \\text{ on one side of the mirror}','given'],['\\text{flip } A \\text{ and } B \\text{ both}','flip-the-target']],2,1,'Flipping both leaves them on one side: flip one.'],
       ['p5',[['\\text{two mirrors at right angles}','a corner'],['\\text{every ray comes back the way it came}','corner']],2,0,'Each mirror flips one part of the direction; both together make a half turn.'],
       ['p6',[['\\text{in air } 0.8','run over length'],['\\text{in water } 0.8 / 1.33 \\approx 0.60','the bend']],2,0,'The ray steepens going in.']],[]); }});
+/* ----- annex 21·bio How a sunflower packs its seeds: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'21·bio.work',step:'21·bio',mode:'work',label:'spokes and misses',open:()=>measured('21·bio'),make(){
+    const ask=rnd(2);
+    if(ask){ const P=[[1,3],[2,5],[3,8],[1,4],[3,7],[2,7],[4,9],[5,13],[19,50],[3,10]][rnd(10)], right=String(P[1]), wrong=UQAX(right,[String(P[0]),String(P[0]+P[1]),String(P[1]-P[0]),String(2*P[1]),String(P[1]+1)],3); if(wrong.length<3) return null;
+      return {index:'q:21·bio.work[s;'+P.join('/')+']', lines:[['\\alpha = \\tfrac{'+P[0]+'}{'+P[1]+'} \\text{ of a turn}','the fixed turn']], ask:'On how many spokes do the seeds sit?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spoke: (n + '+P[1]+') · '+P[0]+'∕'+P[1]+' = n · '+P[0]+'∕'+P[1]+' + '+P[0]+', and whole turns change nothing. So seeds '+P[1]+' apart share a ray: '+P[1]+' spokes, with empty wedges between.'}; }
+    const a=0.381966, q=[3,5,8,13,21,34,55,4,6,7,10][rnd(11)], qa=q*a, near=Math.round(qa), miss=qa-near, below=qa-Math.floor(qa);
+    const S=x=>(x>=0?'+':'−')+DECAX(Math.abs(x),4), right=S(miss), wrong=UQAX(right,[S(below),S(-miss),DECAX(qa,4),S(miss*2)],3); if(wrong.length<3) return null;
+    return {index:'q:21·bio.work[m;'+q+']', lines:[['\\alpha \\approx 0.381966','the golden turn'],['q = '+q,'seeds this far apart']], ask:'What is the miss of q, with its sign?', right, opts:shuffle([right,...wrong]), lead:'', why:'qα = '+DECAX(qa,5)+'. The miss is qα less the nearest whole number, '+near+': '+right+'. Its sign gives the way the arms lean.'}; }},
+  {id:'21·bio.word',step:'21·bio',mode:'word',label:'a fixed turn, seed after seed',open:()=>measured('21·bio'),make(){
+    const F=rnd(2);
+    if(F){ const n=[4,9,16,25,36,49,64,100,144,400][rnd(10)], c=[1,2,3][rnd(3)], right=(c*Math.sqrt(n))+' mm', wrong=UQAX(right,[(c*n)+' mm',(c*n/2)+' mm',(c*Math.sqrt(n)+1)+' mm',DECAX(c*Math.sqrt(n)/2,1)+' mm'],3); if(wrong.length<3) return null;
+      return {index:'q:21·bio.word[r;'+n+';'+c+']', a3:['21·bio.word',DASH,DASH], story:'In a sunflower head from the Sacramento Valley, seed n sits at reach c√n from the centre, with c = '+c+' mm.', lines:[], ask:'How far out is seed '+n+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Seed-place: '+c+' · √'+n+' = '+c+' · '+Math.sqrt(n)+' = '+right+'. Reach grows as the root, so each ring holds more seeds than the last.'}; }
+    const A=[[0.4,'2/5','5'],[0.375,'3/8','8'],[0.38,'19/50','50'],[0.3,'3/10','10'],[0.25,'1/4','4']][rnd(5)];
+    const right='no: '+A[0]+' is '+A[1]+', so the seeds sit on '+A[2]+' spokes with empty wedges between', wrong=['yes: '+A[0]+' is close to 0.382, so it packs nearly as well','yes: any turn near 137.5° fills the head','no: only a turn of exactly 137.5° puts seeds anywhere at all'];
+    return {index:'q:21·bio.word[t;'+A[0]+']', a3:['21·bio.word',DASH,DASH], story:'A breeder grows a plant whose head turns '+A[0]+' of a whole between seeds, close to the golden turn of about 0.382.', lines:[], ask:'Does a big head of this plant pack as well as a sunflower’s?', right, opts:shuffle([right,...wrong]), lead:'', why:'Spoke: a turn of p/q puts every seed on just q spokes, and the wedges widen as the head grows. Near a simple fraction is nearly as bad.'}; }},
+  {id:'21·bio.line',step:'21·bio',mode:'proof',label:'what the turn licenses',open:()=>measured('21·bio'),make(){
+    return line28('21·bio.line',[
+      ['g1',[['\\text{a turn near } 137.5^\\circ','given'],['\\text{it packs as well}','near is enough']],2,1,'0.38 of a turn is 19/50: 50 spokes, far out.'],
+      ['g2',[['\\text{arms on a sunflower head}','seen'],['\\text{the plant twisted}','the arms']],2,1,'They are seeds q apart, placed by one fixed turn.'],
+      ['g3',[['34\\alpha = 12.98684','the golden turn'],['\\text{miss of } 34 = +0.98684','less the whole below']],2,1,'The nearest whole number, 13: miss −0.01316.'],
+      ['g4',[['\\text{a measured head}','given'],['\\text{it shows neighbouring rabbit counts}','must']],2,1,'Only a turn near the golden one does; measured heads sometimes show others.'],
+      ['g5',[['\\alpha = \\tfrac{p}{q}','a simple fraction'],['\\text{every seed on one of } q \\text{ rays}','spoke']],2,0,'Seeds q apart differ by p whole turns.'],
+      ['g6',[['\\text{misses of } 34 \\text{ and } 55 \\text{ have opposite signs}','golden turn'],['34 \\text{ arms lean one way, } 55 \\text{ the other}','spiral-count']],2,0,'The sign of the miss gives the lean.']],[]); }});
+/* ----- annex 21·eng Why a piston pauses: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'21·eng.work',step:'21·eng',mode:'work',label:'where the piston is',open:()=>measured('21·eng'),make(){
+    const r=[40,50,60,75,81,90][rnd(6)], l=r*[3,3.5,4][rnd(3)], ask=rnd(2);
+    if(ask){ const p=l-Math.sqrt(l*l-r*r), right=DECAX(p,2)+' mm', wrong=UQAX(right,[DECAX(r*r/l,1)+' mm','0 mm',DECAX(Math.sqrt(l*l-r*r),2)+' mm',r+' mm'],3); if(wrong.length<3) return null;
+      return {index:'q:21·eng.work[q;'+r+';'+l+']', lines:[['r = '+r+' \\text{ mm},\\ \\ l = '+l+' \\text{ mm}','crank and rod'],['\\theta = 90^\\circ','a quarter turn']], ask:'How far past mid-stroke, toward the axle, is the piston?', right, opts:shuffle([right,...wrong]), lead:'', why:'Place: x(90°) = √('+l+'² − '+r+'²) ≈ '+DECAX(Math.sqrt(l*l-r*r),2)+' mm, and mid-stroke is l = '+l+' mm. Past it by l − √(l² − r²) ≈ '+right+'.'}; }
+    const th=[0,60,120,180][rnd(4)], x=r*Math.cos(DGAX(th))+Math.sqrt(l*l-r*r*Math.pow(Math.sin(DGAX(th)),2));
+    const right=DECAX(x,1)+' mm', wrong=UQAX(right,[DECAX(r*Math.cos(DGAX(th))+l,1)+' mm',DECAX(l+r,1)+' mm',DECAX(l-r*Math.cos(DGAX(th)),1)+' mm',DECAX(r*Math.cos(DGAX(th))+Math.sqrt(l*l-r*r),1)+' mm'],3); if(wrong.length<3) return null;
+    return {index:'q:21·eng.work[x;'+r+';'+l+';'+th+']', lines:[['r = '+r+' \\text{ mm},\\ \\ l = '+l+' \\text{ mm}','crank and rod'],['\\theta = '+th+'^\\circ','the crank’s turn']], ask:'How far from the axle is the piston?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Place: x = r cos θ + √(l² − r² sin² θ) = '+DECAX(r*Math.cos(DGAX(th)),2)+' + '+DECAX(Math.sqrt(l*l-r*r*Math.pow(Math.sin(DGAX(th)),2)),2)+' ≈ '+right+'.').replace('+ −','−')}; }},
+  {id:'21·eng.word',step:'21·eng',mode:'word',label:'how fast the piston moves',open:()=>measured('21·eng'),make(){
+    const N=[1200,1500,1800,2000,2400][rnd(5)], r=[60,75,81,90][rnd(4)], w=N*2*Math.PI/60, v=r/1000*w, F=rnd(2), avg=4*r/1000*N/60;
+    const right=DECAX(F?avg:v,1)+' m/s', wrong=UQAX(right,[DECAX(F?v:avg,1)+' m/s',DECAX(r/1000*N/60,1)+' m/s',DECAX((F?avg:v)*2,1)+' m/s',DECAX(2*r/1000*N,0)+' m/s'],3); if(wrong.length<3) return null;
+    return {index:'q:21·eng.word['+N+';'+r+';'+F+']', a3:['21·eng.word',DASH,DASH], story:'A truck diesel built in Kirkland turns its crank '+SPAX(N)+' times a minute. Its crank pin swings at r = '+r+' mm from the axle, so the stroke is '+(2*r)+' mm.', lines:[], ask:F?'What is the piston’s average speed over a turn?':'How fast does the piston move at a quarter turn?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Two strokes a turn: 2 · '+DECAX(2*r/1000,3)+' m every '+DECAX(60/N,4)+' s, about '+right+'.':'Piston-speed: ω = '+SPAX(N)+' · 2π ÷ 60 ≈ '+DECAX(w,2)+' rad/s, and at 90° the rod’s factor is 1, so the speed is rω = '+DECAX(r/1000,3)+' · '+DECAX(w,2)+' ≈ '+right+'.'}; }},
+  {id:'21·eng.line',step:'21·eng',mode:'proof',label:'what the crank licenses',open:()=>measured('21·eng'),make(){
+    return line28('21·eng.line',[
+      ['a1',[['\\text{a crank and a rod}','given'],['x = r\\cos\\theta + l','the place']],2,1,'Only with a slot; a rod gives r cos θ + √(l² − r² sin² θ).'],
+      ['a2',[['\\theta = 90^\\circ','a quarter turn'],['\\text{the piston at mid-stroke}','half the turn']],2,1,'Past it, by l − √(l² − r²).'],
+      ['a3',[['x = r\\cos\\theta + \\sqrt{l^2 - r^2\\sin^2\\theta}','place'],['x\' = -r\\omega\\sin\\theta','the slope']],2,1,'The slot’s speed; the rod multiplies it by 1 + r cos θ/√(l² − r² sin² θ).'],
+      ['a4',[['\\theta \\text{ in degrees}','given'],['\\text{the slope of } \\sin\\theta \\text{ is } \\cos\\theta','slope of sine']],2,1,'Only in radians; in degrees it is π/180 times the cosine.'],
+      ['a5',[['\\theta = 0 \\text{ and } \\theta = 180^\\circ','the ends'],['\\text{the piston stops}','pause']],2,0,'There the pin moves straight across the piston’s line: sin θ = 0.'],
+      ['a6',[['x(0) = l + r,\\ \\ x(\\pi) = l - r','the ends'],['\\text{a stroke of } 2r','place']],2,0,'(l + r) − (l − r) = 2r.']],[]); }});
+/* ----- annex 21·nav How a sailor finds latitude: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'21·nav.work',step:'21·nav',mode:'work',label:'noon sun and two mirrors',open:()=>measured('21·nav'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const h=30+rnd(50), d=(rnd(47)-23), phi=90-h+d; if(phi<1||phi>70) return null; const right=phi+'°', wrong=UQAX(right,[(90-h-d)+'°',(h+d)+'°',(90-h)+'°',(h-d)+'°'],3); if(wrong.length<3) return null;
+      return {index:'q:21·nav.work[n;'+h+';'+d+']', lines:[['\\text{noon sun height } '+h+'^\\circ','sighted'],[MNAX('\\delta = '+d+'^\\circ'),'the day’s table']], ask:'What is the latitude?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Noon: 90° less the sun’s height, plus δ: 90 − '+h+' + ('+d+') = '+phi+'°.')}; }
+    if(ask===1){ const b=[10,15,20,25,30,35,40,45,50,55][rnd(10)], right=(2*b)+'°', wrong=UQAX(right,[b+'°',(b/2)+'°',(90-b)+'°',(180-2*b)+'°'],3);
+      return {index:'q:21·nav.work[m;'+b+']', lines:[['\\text{the moving mirror turned by } '+b+'^\\circ','on the arc']], ask:'By how much has the seen star turned?', right, opts:shuffle([right,...wrong]), lead:'', why:'Two-mirror: two flips make a turn by twice the angle between the mirrors, 2 · '+b+' = '+right+'. So the scale is marked double.'}; }
+    const a=20+rnd(30), b=a+1+rnd(15), right=SPAX(60*(b-a))+' nautical miles', wrong=UQAX(right,[SPAX(b-a)+' nautical miles',SPAX(69*(b-a))+' nautical miles',SPAX(60*b-a)+' nautical miles',SPAX(360*(b-a))+' nautical miles'],3); if(wrong.length<3) return null;
+    return {index:'q:21·nav.work[d;'+a+';'+b+']', lines:[['\\text{pole star at } '+a+'^\\circ,\\ \\text{later at } '+b+'^\\circ','sailing due north']], ask:'How far north has the ship come?', right, opts:shuffle([right,...wrong]), lead:'', why:'Pole-star: the heights are the latitudes. A degree of latitude is 60 nautical miles: 60 · '+(b-a)+' = '+right+'.'}; }},
+  {id:'21·nav.word',step:'21·nav',mode:'word',label:'vectors carried forward',open:()=>measured('21·nav'),make(){
+    const th=[0,30,45,60,120,135,150,180][rnd(8)], v=[6,8,10,12][rnd(4)], t=[2,3,4,5][rnd(4)], D=v*t, n=D*Math.cos(DGAX(th)), e=D*Math.sin(DGAX(th));
+    const fmt=x=>{ const r=Math.round(x); return r===0?'no change':(r>0?r+' minutes north':(-r)+' minutes south'); };
+    const right=fmt(n), wrong=UQAX(right,[fmt(e),fmt(D),fmt(-n),fmt(n/60)==='no change'?fmt(D/2):fmt(n/60)],3); if(wrong.length<3) return null;
+    return {index:'q:21·nav.word['+th+';'+v+';'+t+']', a3:['21·nav.word',DASH,DASH], story:'A schooner out of Port Townsend holds heading '+H3AX(th)+' at '+v+' knots, a knot being a nautical mile an hour, for '+t+' hours.', lines:[], ask:'How much does its latitude change?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Reckoning: '+D+' miles at '+H3AX(th)+'; headings turn from north, so the north part is '+D+' cos '+th+'° ≈ '+DECAX(n,1)+' miles. A nautical mile is one minute of latitude: '+right+'.')}; }},
+  {id:'21·nav.line',step:'21·nav',mode:'proof',label:'what the sightings license',open:()=>measured('21·nav'),make(){
+    return line28('21·nav.line',[
+      ['l1',[['\\text{latitude } \\varphi','given'],['\\text{height of the pole star} = 90^\\circ - \\varphi','pole-star']],2,1,'That is its angle from overhead; its height is φ.'],
+      ['l2',[['\\text{the mirror turned } \\beta','given'],['\\text{the reading is } \\beta','one mirror']],2,1,'Two flips make a turn by 2β.'],
+      ['l3',[['\\text{run at heading } \\theta','given'],['(vt\\cos\\theta,\\ vt\\sin\\theta) \\text{ east, north}','parts']],2,1,'Headings turn from north: east is sin θ.'],
+      ['l4',[['\\text{a nautical mile}','defined'],['\\text{a minute of longitude}','a minute of arc']],2,1,'Of latitude; lines of longitude close in toward the poles.'],
+      ['l5',[['\\text{the pole star at } 47^\\circ','sighted'],['\\varphi = 47^\\circ \\pm 0.7^\\circ','pole-star']],2,0,'The star sits about 0.7° from the true pole.'],
+      ['l6',[['\\text{noon sun at } 50^\\circ,\\ \\delta = 0^\\circ','an equinox'],['\\varphi = 40^\\circ','noon']],2,0,'90° less 50°, plus 0°.']],[]); }});
+/* ----- annex 21·phys Why does a car stay on a curve: Work, Word Problems, Check Proofs ----- */
+const DGAX=x=>x*Math.PI/180, DEGAX=x=>x*180/Math.PI;
+QP.push({id:'21·phys.work',step:'21·phys',mode:'work',label:'slopes, curves and throws',open:()=>measured('21·phys'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const mu=[0.3,0.4,0.5,0.6,0.7,0.8,0.9][rnd(7)], a=DEGAX(Math.atan(mu)), right=Math.round(a)+'°', wrong=UQAX(right,[Math.round(DEGAX(Math.asin(mu)))+'°',Math.round(DEGAX(Math.acos(mu)))+'°',Math.round(mu*90)+'°',Math.round(90-a)+'°'],3); if(wrong.length<3) return null;
+      return {index:'q:21·phys.work[s;'+mu+']', lines:[['\\mu = '+mu,'the slope and the block']], ask:'What is the steepest slope the block holds on, to the nearest degree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slope: the block holds exactly when tan α ≤ μ, whatever it weighs. tan α = '+mu+' at α ≈ '+right+'.'}; }
+    if(ask===1){ const v=[10,15,20,25,30][rnd(5)], r=[40,50,80,100,150,200][rnd(6)], m=v*v/(r*9.8); if(m>1.2) return null; const right=DECAX(m,2), wrong=UQAX(right,[DECAX(v/(r*9.8),2),DECAX(v*v/r,2),DECAX(r*9.8/(v*v),2),DECAX(m*2,2)],3); if(wrong.length<3) return null;
+      return {index:'q:21·phys.work[c;'+v+';'+r+']', lines:[['v = '+v+' \\text{ m/s},\\ \\ r = '+r+' \\text{ m}','a flat curve'],['g \\approx 9.8 \\text{ m/s}^2','']], ask:'What is the least μ that holds the car on the curve?', right, opts:shuffle([right,...wrong]), lead:'', why:'Round: the car needs v² ÷ r = '+(v*v)+' ÷ '+r+' = '+DECAX(v*v/r,2)+' m/s² toward the centre; friction gives at most μ · 9.8. So μ ≥ '+right+'.'}; }
+    const v=[10,12,15,20,25][rnd(5)], th=[15,30,45,60,75][rnd(5)], R=v*v*Math.sin(DGAX(2*th))/9.8, right=Math.round(R)+' m', wrong=UQAX(right,[Math.round(v*v*Math.sin(DGAX(th))/9.8)+' m',Math.round(v*v/9.8)+' m',Math.round(2*R)+' m',Math.round(v*Math.sin(DGAX(2*th))/9.8)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:21·phys.work[t;'+v+';'+th+']', lines:[['v = '+v+' \\text{ m/s},\\ \\ \\theta = '+th+'^\\circ','thrown over level ground'],['g \\approx 9.8 \\text{ m/s}^2','']], ask:'How far away does the stone land, to the nearest metre?', right, opts:shuffle([right,...wrong]), lead:'', why:'Slant-throw: v² sin 2θ ÷ g = '+(v*v)+' · sin '+(2*th)+'° ÷ 9.8 ≈ '+right+'.'+(th!==45?' The angle '+(90-th)+'° lands it at the same place.':' 45° goes farthest.')}; }},
+  {id:'21·phys.word',step:'21·phys',mode:'word',label:'a road tilted for its curve',open:()=>measured('21·phys'),make(){
+    const F=rnd(2);
+    if(F){ const P=[[300,400],[600,800],[500,1200],[900,1200],[700,2400]][rnd(5)], s=Math.hypot(P[0],P[1]), right=SPAX(s)+' N', wrong=UQAX(right,[SPAX(P[0]+P[1])+' N',SPAX(P[1]-P[0])+' N',SPAX(Math.round((P[0]+P[1])/2))+' N'],3);
+      return {index:'q:21·phys.word[f;'+P.join(';')+']', a3:['21·phys.word',DASH,DASH], story:'Two tugs ease a barge off a dock in the port of Stockton. One pulls east with '+SPAX(P[0])+' N, the other north with '+SPAX(P[1])+' N.', lines:[], ask:'How big is the pull on the barge, the two together?', right, opts:shuffle([right,...wrong]), lead:'', why:'Vector: add part by part, '+SPAX(P[0])+' across and '+SPAX(P[1])+' up. The size is √('+SPAX(P[0])+'² + '+SPAX(P[1])+'²) = '+right+'. They add to '+SPAX(P[0]+P[1])+' only when both point the same way.'}; }
+    const v=[15,20,25,30][rnd(4)], r=[100,150,200,300,400][rnd(5)], a=DEGAX(Math.atan(v*v/(r*9.8))), right=Math.round(a)+'°', wrong=UQAX(right,[Math.round(DEGAX(Math.atan(v/(r*9.8))))+'°',Math.round(90-a)+'°',Math.round(DEGAX(Math.asin(Math.min(1,v*v/(r*9.8))))+2)+'°',Math.round(a*2)+'°'],3); if(wrong.length<3) return null;
+    return {index:'q:21·phys.word[t;'+v+';'+r+']', a3:['21·phys.word',DASH,DASH], story:'A highway ramp curves with radius '+r+' m, and its cars run at about '+v+' m/s. The builders tilt it so that a car at that speed needs no friction at all. Take g ≈ 9.8 m/s².', lines:[], ask:'At what tilt, to the nearest degree?', right, opts:shuffle([right,...wrong]), lead:'', why:'Tilt: tan α = v² ÷ (rg) = '+(v*v)+' ÷ '+DECAX(r*9.8,1)+' ≈ '+DECAX(v*v/(r*9.8),3)+', so α ≈ '+right+'. Slower cars lean on friction to keep from sliding in.'}; }},
+  {id:'21·phys.line',step:'21·phys',mode:'proof',label:'what the forces license',open:()=>measured('21·phys'),make(){
+    return line28('21·phys.line',[
+      ['f1',[['300 \\text{ N east},\\ 400 \\text{ N north}','two forces'],['700 \\text{ N}','they add']],2,1,'Only when the two point the same way; part by part, 500 N.'],
+      ['f2',[['\\text{a heavier block}','given'],['\\text{it slides sooner}','more weight']],2,1,'W cancels: tan α ≤ μ for every weight.'],
+      ['f3',[['\\text{round a curve at a steady speed}','given'],['\\text{no force needed}','steady']],2,1,'The direction changes: v²/r toward the centre.'],
+      ['f4',[['\\text{a stone whirled on a string}','given'],['\\text{the pull on it is outward}','it feels so']],2,1,'The string pulls it in; outward is only how it feels.'],
+      ['f5',[['\\text{thrown at } 30^\\circ \\text{ and at } 60^\\circ','same speed'],['\\text{the same landing place}','slant-throw']],2,0,'sin 60° = sin 120°: angles adding to 90° land together.'],
+      ['f6',[['20 \\text{ m/s on a curve of } 50 \\text{ m}','given'],['\\mu \\ge 0.82','round']],2,0,'400 ÷ 50 = 8, and 8 ÷ 9.8 ≈ 0.82.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
