@@ -16881,6 +16881,162 @@ QP.push({id:'5·nav.work',step:'5·nav',mode:'work',label:'reading a count of se
       ['n5',[['365 = 7 · 52 + 1','divide by 7'],['a date moves one weekday on in a year of 365 days','remainders-add']],2,0,'52 whole weeks and 1 day.'],
       ['n6',[['3 h 50 min + 20 min','given'],['3 h 70 min','add the minutes']],2,1,'The minutes place stays below 60: 4 h 10 min.'],
       ['n7',[['97 leap years in every 400','the fourth guess'],['the calendar year is 365.2425 days','97/400 = 0.2425']],2,0,'365 + 97/400.']],[]); }});
+/* ----- annex 6·chem Who gives up electrons: Work, Word Problems, Check Proofs ----- */
+/* [formula tex, element, count of x, the rest's sum, charge, name] */
+const OXAX=[['\\mathrm{Fe_2O_3}','Fe',2,-6,0,'rust'],['\\mathrm{NaOCl}','Cl',1,-1,0,'bleach'],['\\mathrm{MnO_2}','Mn',1,-4,0,'a flashlight cell'],['\\mathrm{Mn_2O_3}','Mn',2,-6,0,'a spent cell'],['\\mathrm{NH_4^{+}}','N',1,4,1,'an ion'],
+  ['\\mathrm{SO_4^{2-}}','S',1,-8,-2,'an ion'],['\\mathrm{NO_3^{-}}','N',1,-6,-1,'an ion'],['\\mathrm{KMnO_4}','Mn',1,-7,0,'a purple salt'],['\\mathrm{Cr_2O_7^{2-}}','Cr',2,-14,-2,'an ion'],['\\mathrm{CO_2}','C',1,-4,0,'a gas'],
+  ['\\mathrm{CH_4}','C',1,4,0,'natural gas'],['\\mathrm{H_2O_2}','O',2,2,0,'a peroxide'],['\\mathrm{NaH}','H',1,1,0,'a metal hydride'],['\\mathrm{PO_4^{3-}}','P',1,-8,-3,'an ion'],['\\mathrm{ClO_4^{-}}','Cl',1,-8,-1,'an ion'],['\\mathrm{Fe_3O_4}','Fe',3,-8,0,'magnetite']];
+const SGAX=v=>v>0?'+'+v:v<0?'−'+(-v):'0';
+const FRSAX=(p,q)=>{ if(p%q===0) return SGAX(p/q); const g=GCDAX(Math.abs(p),q); return (p<0?'−':'+')+Math.abs(p)/g+'/'+q/g; };
+QP.push({id:'6·chem.work',step:'6·chem',mode:'work',label:'charge-sum',open:()=>measured('6·chem'),make(){
+    const [f,el,n,rest,Q]=OXAX[rnd(OXAX.length)], x=Q-rest, right=FRSAX(x,n);
+    const wrong=UQAX(right,[SGAX(x),SGAX(-x/n|0)===right?SGAX(x+n):SGAX(Math.round(-x/n)),SGAX(Math.round((rest)/n)),FRSAX(x+2,n),FRSAX(x-2,n),SGAX(Math.round(x/n)+1)],3); if(wrong.length<3) return null;
+    return {index:'q:6·chem.work['+f+']', lines:[[f,'a particle with charge '+SGAX(Q)]], ask:'What is the oxidation number of '+el+' in it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Charge-sum: '+(n>1?n+'x':'x')+' + ('+SGAX(rest)+') = '+SGAX(Q)+', so '+(n>1?n+'x':'x')+' = '+SGAX(x)+(n>1?' and each '+el+' is '+right:'')+'.'+(n>1&&x%n?' The '+n+' atoms share '+SGAX(x)+'; the bond technique gives them different whole numbers, and only the sum is fixed here.':'')}; }},
+  {id:'6·chem.word',step:'6·chem',mode:'word',label:'the electrons balance',open:()=>measured('6·chem'),make(){
+    /* [metal, gives per atom, ion tex, story] with oxygen taking 4 per O2 */
+    const M=[['Fe',3,'Fe³⁺','An iron railing rusts in salt air.'],['Al',3,'Al³⁺','A bare aluminium ladder dulls as a thin coat of oxide forms.'],['Mg',2,'Mg²⁺','A strip of magnesium burns with a white flame.'],['Na',1,'Na⁺','A cut piece of sodium dulls in the air.'],['Cu',2,'Cu²⁺','A copper roof turns dark.'],['Zn',2,'Zn²⁺','A zinc coat on a fence post weathers.']][rnd(6)];
+    const a=M[1], b=4, g=GCDAX(a,b), L=a*b/g, nm=L/a, no=L/b, ask=rnd(2);
+    const right=String(ask?nm:L), wrong=UQAX(right,ask?[String(no),String(b),String(a),String(L),String(nm*2)]:[String(a+b),String(a),String(b),String(2*L),String(L/2)],3); if(wrong.length<3) return null;
+    return {index:'q:6·chem.word['+M[0]+';'+ask+']', a3:['6·chem.word',DASH,DASH], story:M[3]+' Each '+M[0]+' atom gives up '+a+' electron'+(a>1?'s':'')+' and becomes '+M[2]+'. Each O₂ molecule takes 4 and becomes two O²⁻.', lines:[], ask:ask?'In the balanced change, how many '+M[0]+' atoms go with '+no+' O₂?':'How many electrons are handed over in the smallest balanced change?', right, opts:shuffle([right,...wrong]), lead:'', why:'Electrons-balance: both halves reach lcm('+a+', 4) = '+L+'. So '+nm+' '+M[0]+' give '+L+', and '+no+' O₂ take'+(no===1?'s':'')+' '+L+'.'}; }},
+  {id:'6·chem.line',step:'6·chem',mode:'proof',label:'what charge-sum licenses',open:()=>measured('6·chem'),make(){
+    return line28('6·chem.line',[
+      ['c1',[['\\mathrm{Fe_2O_3}:\\ 2x + 3(-2) = 0','charge-sum'],['Fe is +6','5g']],2,1,'The two Fe share +6: each is +3.'],
+      ['c2',[['\\mathrm{H_2O_2}','a peroxide'],['O is −2','O is always −2']],2,1,'The O–O pair is split one and one: each O is −1.'],
+      ['c3',[['\\mathrm{NH_4^{+}}:\\ x + 4(+1) = +1','charge-sum, Q = +1'],['N is −3','5g']],2,0,'x = 1 − 4 = −3.'],
+      ['c4',[['\\mathrm{Cu} + \\mathrm{Ag^+} \\to \\mathrm{Cu^{2+}} + \\mathrm{Ag}','given'],['the change is balanced','the atoms balance']],2,1,'The charge does not: Cu + 2Ag⁺ → Cu²⁺ + 2Ag.'],
+      ['c5',[['\\mathrm{Fe} \\to \\mathrm{Fe^{3+}} + 3e^-','the iron half'],['iron is oxidized','its number rises']],2,0,'0 to +3: it gives up 3.'],
+      ['c6',[['\\mathrm{Na} + \\mathrm{Cl_2} \\to \\mathrm{NaCl}','no oxygen at all'],['nothing is oxidized','oxidation is taking in oxygen']],2,1,'Na gives up an electron, 0 to +1: oxidation is giving up electrons.'],
+      ['c7',[['\\mathrm{Zn}:\\ 0 \\to +2,\\ \\ \\mathrm{Mn}:\\ +4 \\to +3','the cell'],['\\mathrm{Zn} + 2\\,\\mathrm{MnO_2} \\to \\mathrm{ZnO} + \\mathrm{Mn_2O_3}','electrons-balance']],2,0,'Two Mn take what one Zn gives.'],
+      ['c8',[['\\mathrm{Cl_2} + 2\\,\\mathrm{NaOH} \\to \\mathrm{NaCl} + \\mathrm{NaOCl} + \\mathrm{H_2O}','bleach'],['chlorine is only reduced','0 to −1 in NaCl']],2,1,'The other Cl goes 0 to +1 in NaOCl: one element gives and takes.']],[]); }});
+/* ----- annex 6·logi Can every job get a driver: Work, Word Problems, Check Proofs ----- */
+const DRVAX=['Sarah','Randy','Mike','Terry','Claire'];
+const BOARDAX=()=>{ const nj=3+rnd(2), nd=3+rnd(3), D=[]; for(let j=0;j<nj;j++){ const s=[]; for(let d=0;d<nd;d++) if(rnd(100)<45) s.push(d); if(!s.length) s.push(rnd(nd)); D.push(s); } return {nj,nd,D}; };
+const FAIRAX=D=>{ let c=0; const go=(j,used)=>{ if(j===D.length){ c++; return; } D[j].forEach(d=>{ if(!used.includes(d)) go(j+1,used.concat([d])); }); }; go(0,[]); return c; };
+const BLOCKAX=D=>{ const n=D.length; for(let k=n;k>=1;k--) for(let m=0;m<(1<<n);m++){ let b=0,u=new Set(); for(let j=0;j<n;j++) if(m>>j&1){ b++; D[j].forEach(d=>u.add(d)); } if(b===k&&u.size<k) return [m,u]; } return null; };
+const ROWSAX=(D)=>D.map((s,j)=>['D(j_'+(j+1)+') = \\{'+s.map(d=>'\\text{'+DRVAX[d]+'}').join(', ')+'\\}','who can take load '+(j+1)]);
+QP.push({id:'6·logi.work',step:'6·logi',mode:'work',label:'counting assignments',open:()=>measured('6·logi'),make(){
+    const B=BOARDAX(), all=B.D.reduce((p,s)=>p*s.length,1), fair=FAIRAX(B.D), ask=rnd(2);
+    if(ask&&all===fair) return null;
+    const right=String(ask?fair:all), wrong=UQAX(right,ask?[String(all),String(fair+1),String(Math.max(0,fair-1)),String(fair*2),String(B.D.reduce((p,s)=>p+s.length,0))]:[String(fair),String(B.D.reduce((p,s)=>p+s.length,0)),String(all*2),String(all-1),String(Math.pow(B.nd,B.nj))],3); if(wrong.length<3) return null;
+    return {index:'q:6·logi.work['+ask+';'+JSON.stringify(B.D)+']', lines:ROWSAX(B.D), ask:ask?'How many fair assignments are there, giving no driver two loads?':'How many assignments are there, fair or not?', right, opts:shuffle([right,...wrong]), lead:'', why:ask?'Fair assignments do not simply multiply: the choices for one load depend on the others. Going load by load, never reusing a driver, gives '+fair+' of the '+all+'.':'Stages-multiply: one factor for each load, '+B.D.map(s=>s.length).join(' · ')+' = '+all+'.'}; }},
+  {id:'6·logi.word',step:'6·logi',mode:'word',label:'a blocking group',open:()=>measured('6·logi'),make(){
+    const B=BOARDAX(), fair=FAIRAX(B.D), bl=BLOCKAX(B.D), J=[];
+    const right=fair?'yes: a fair assignment exists':'no: some loads share too few drivers', wrong=fair?['no: some loads share too few drivers','no: there are fewer drivers than loads','only if one driver takes two loads']:['yes: a fair assignment exists','yes: there are as many drivers as loads','yes, if the loads are taken in turn'];
+    if(!fair&&!bl) return null; if(fair&&B.nd<B.nj) return null;
+    const used=new Set(); B.D.forEach(s=>s.forEach(d=>used.add(d)));
+    let why; if(fair){ let f=null; const go=(j,u)=>{ if(f) return; if(j===B.D.length){ f=u; return; } B.D[j].forEach(d=>{ if(!u.includes(d)) go(j+1,u.concat([d])); }); }; go(0,[]); why='One fair assignment: '+f.map((d,j)=>'load '+(j+1)+' to '+DRVAX[d]).join(', ')+'. There are '+fair+' in all.'; }
+    else { const [m,u]=bl; const js=[]; for(let j=0;j<B.nj;j++) if(m>>j&1) js.push(j+1); why='Blocking-group: loads '+js.join(', ')+' have between them only '+[...u].map(d=>DRVAX[d]).join(', ')+(u.size?'':'nobody')+', '+u.size+' driver'+(u.size===1?'':'s')+' for '+js.length+' loads. No-room forbids it.'; }
+    return {index:'q:6·logi.word['+JSON.stringify(B.D)+']', a3:['6·logi.word',DASH,DASH], story:'A dispatcher in Salinas has '+B.nj+' loads this morning and drivers '+DRVAX.slice(0,B.nd).join(', ')+'. The board says who can take each load.', lines:ROWSAX(B.D), ask:'Can every load get its own driver?', right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'6·logi.line',step:'6·logi',mode:'proof',label:'what the board licenses',open:()=>measured('6·logi'),make(){
+    return line28('6·logi.line',[
+      ['g1',[['3 \\cdot 3 \\cdot 2 \\cdot 5 = 90','stages-multiply'],['90 fair assignments','one per assignment']],2,1,'Most of the 90 give a driver two loads; only 16 are fair.'],
+      ['g2',[['D(g) \\cup D(s) \\cup D(f) = \\{\\text{Sarah}, \\text{Randy}\\}','three loads'],['no fair assignment','blocking-group, k = 3']],2,0,'3 loads, 2 drivers between them: no-room forbids a matching.'],
+      ['g3',[['five drivers, four loads','given'],['a fair assignment exists','more drivers than loads']],2,1,'Not enough: check every group of loads.'],
+      ['g4',[['picking in turn strands load t','down the board'],['no fair assignment exists','picking in turn failed']],2,1,'The order may be at fault: a swap can serve t.'],
+      ['g5',[['D(g) = D(s)','given'],['a choosing function for \\{D(g), D(s), D(t), D(v)\\} is an assignment','6b']],2,1,'That collection has three members; the picks are made by load, not by set.'],
+      ['g6',[['D(j) = \\varnothing','a load nobody can take'],['no fair assignment','a blocking group of one']],2,0,'One load, 0 drivers: blocking-group with k = 1.'],
+      ['g7',[['f(t) = \\text{Mike}:\\ 4;\\ \\ f(t) = \\text{Terry}:\\ 12','by cases on the tanker'],['16 fair assignments','separate-piles']],2,0,'The two cases share nothing: 4 + 12.']],[]); }});
+/* ----- annex 6·phys Can a scale be perfectly in tune: Work, Word Problems, Check Proofs ----- */
+const IVAX=[['2/1','an octave'],['3/2','a fifth'],['4/3','a fourth'],['5/4','a just major third'],['6/5','a minor third'],['9/8','a whole step'],['5/3','a major sixth']];
+QP.push({id:'6·phys.work',step:'6·phys',mode:'work',label:'stacking fifths, fitted',open:()=>measured('6·phys'),make(){
+    const m=2+rnd(5); let p=1,q=1; for(let i=0;i<m;i++) p*=3; let j=0; while(p>=2*q*Math.pow(2,0)&&p/Math.pow(2,j)>=2) j++; q=Math.pow(2,j);
+    const right=p+'/'+q, wrong=UQAX(right,[p+'/'+(q*2),p+'/'+(q/2),(3*m)+'/'+(2*m),p+'/'+Math.pow(2,m),(p-q)+'/'+q],3); if(wrong.length<3||q<2) return null;
+    return {index:'q:6·phys.work['+m+']', lines:[['(3/2)^{'+m+'}','a stack of '+m+' fifths']], ask:'Fit it into the octave: which ratio r, with 1 ≤ r < 2?', right, opts:shuffle([right,...wrong]), lead:'', why:'Power-of-a-fraction: (3/2)^'+m+' = '+p+'/'+Math.pow(2,m)+'. Divide by 2 until it is below 2: '+p+'/'+q+' ≈ '+(p/q).toFixed(4)+'.'}; }},
+  {id:'6·phys.word',step:'6·phys',mode:'word',label:'naming two sounds',open:()=>measured('6·phys'),make(){
+    const iv=IVAX[1+rnd(6)], [a,b]=iv[0].split('/').map(Number), lo=[55,82.5,110,73.5,41.25,98][rnd(6)], oc=rnd(2), hi=lo*a/b*(oc?2:1);
+    if(Math.abs(hi*100-Math.round(hi*100))>1e-9) return null;
+    const N=x=>oc?'an octave and '+x.replace(/^an? /,'a '):x, right=N(iv[1]);
+    const wrong=UQAX(right,shuffle(IVAX.slice(1).map(x=>N(x[1]))).concat([oc?iv[1]:'an octave and '+iv[1].replace(/^an? /,'a ')]),3); if(wrong.length<3) return null;
+    const F=x=>String(Math.round(x*100)/100);
+    return {index:'q:6·phys.word['+iv[0]+';'+lo+';'+oc+']', a3:['6·phys.word',DASH,DASH], story:'Two strings of a bass sound together. A tuner reads '+F(hi)+' Hz on one and '+F(lo)+' Hz on the other.', lines:[], ask:'What interval do they make?', right, opts:shuffle([right,...wrong]), lead:'', why:'Divide the higher by the lower: '+F(hi)+'/'+F(lo)+' = '+(oc?(2*a)+'/'+b:iv[0])+(oc?'; it is 2 or more, so fit it, dividing by 2 once: '+iv[0]:'')+', '+iv[1]+'.'}; }},
+  {id:'6·phys.line',step:'6·phys',mode:'proof',label:'what the numbers license',open:()=>measured('6·phys'),make(){
+    return line28('6·phys.line',[
+      ['p1',[['\\tfrac32 \\cdot \\tfrac43 = 2','fractions-of-rationals ii'],['a fifth and a fourth fill an octave','stacking multiplies']],2,0,'Tops times tops, bottoms times bottoms: 12/6 = 2.'],
+      ['p2',[['a fifth, then a fourth on top','given'],['\\tfrac32 + \\tfrac43 = 2','the intervals add']],2,1,'The ratios multiply; 3/2 + 4/3 = 17/6.'],
+      ['p3',[['(3/2)^{12} = 531441/4096','power-of-a-fraction'],['twelve fifths land on seven octaves','2^7 = 128']],2,1,'531441/524288 ≈ 1.0136: not 1.'],
+      ['p4',[['(3/2)^m = 2^n,\\ m \\ne 0','assumed'],['3^m = 2^{m+n}','cross-multiplying; powers-add-their-counts']],2,0,'3^m/2^m = 2^n/1, so 3^m · 1 = 2^m · 2^n.'],
+      ['p5',[['3^m = 2^{m+n}','given'],['3 = 2','one-prime-list']],2,0,'One number has one prime list; the first entries match.'],
+      ['p6',[['nobody has found the right m','given'],['some larger stack of fifths closes','the near misses get better']],2,1,'No-closing-fifths: (3/2)^m ≠ 2^n for every m ≠ 0.'],
+      ['p7',[['\\tfrac{81}{64} \\div \\tfrac54','the two thirds'],['= \\tfrac{81}{80}','multiply by the reciprocal; cancel 4']],2,0,'324/320 = 81/80, the syntonic comma.'],
+      ['p8',[['220\\ \\text{Hz and } 82.5\\ \\text{Hz}','two notes'],['a fourth','220/82.5 = 8/3']],2,1,'8/3 is wider than an octave: an octave and a fourth.'],
+      ['p9',[['tune every interval just','given'],['no comma is left','pure intervals']],2,1,'The comma hides between D and A: 40/27 is flat by 81/80.']],[]); }});
+/* ----- annex 6·stat How do you pick a fair sample: Work, Word Problems, Check Proofs ----- */
+const BINAX=(n,k)=>{ if(k<0||k>n) return 0; let r=1; for(let i=1;i<=k;i++) r=r*(n-k+i)/i; return Math.round(r); };
+QP.push({id:'6·stat.work',step:'6·stat',mode:'work',label:'each member’s chance',open:()=>measured('6·stat'),make(){
+    const N=12+rnd(40), k=2+rnd(6), two=rnd(2), F=(p,q)=>{ const g=GCDAX(p,q); return q/g===1?String(p/g):FRAX(p,q); };
+    if(two){ const right=BINAX(N-1,k-1).toLocaleString('en').replace(/,/g,' '), S=v=>v.toLocaleString('en').replace(/,/g,' ');
+      const wrong=UQAX(right,[S(BINAX(N,k-1)),S(BINAX(N-1,k)),S(BINAX(N,k)),S(BINAX(N-1,k-2)),S(BINAX(N-2,k-1))],3); if(wrong.length<3) return null;
+      return {index:'q:6·stat.work[c;'+N+';'+k+']', lines:[['N = '+N+',\\ k = '+k,'a fair sample of k from N']], ask:'How many of the samples hold one named member x?', right, opts:shuffle([right,...wrong]), lead:'', why:'x is in; pick the other k − 1 = '+(k-1)+' from the N − 1 = '+(N-1)+' others (choosing-counts-parts): C('+(N-1)+', '+(k-1)+') = '+right+'.'}; }
+    const right=F(k,N), wrong=UQAX(right,[F(1,BINAX(N,k)),F(1,N),F(k-1,N-1),F(k,N-k),F(1,k)],3); if(wrong.length<3) return null;
+    return {index:'q:6·stat.work[p;'+N+';'+k+']', lines:[['N = '+N+',\\ k = '+k,'a fair sample of k from N']], ask:'What is one member’s chance of being in the sample?', right, opts:shuffle([right,...wrong]), lead:'', why:'Fair-share technique: k/N = '+k+'/'+N+(right!==k+'/'+N?' = '+right:'')+'. The chance of one whole sample, 1/C(N, k), is another thing.'}; }},
+  {id:'6·stat.word',step:'6·stat',mode:'word',label:'right on average',open:()=>measured('6·stat'),make(){
+    const C=[['wells in a valley','wells','run dry in August'],['ferries in a fleet','ferries','run on batteries'],['schools in a district','schools','have a garden'],['orchards in a county','orchards','grow pears'],['lakes on a map','lakes','hold trout']][rnd(5)];
+    const N=20+rnd(41), m=2+rnd(Math.floor(N/2)), k=2+rnd(9), F=(p,q)=>{ const g=GCDAX(p,q); return q/g===1?String(p/g):FRAX(p,q); };
+    const right=F(k*m,N), wrong=UQAX(right,[F(m,N),F(k,N),F(m,k),F(k*m,N-m),String(Math.round(k*m/N)+1)],3); if(wrong.length<3) return null;
+    return {index:'q:6·stat.word['+N+';'+m+';'+k+']', a3:['6·stat.word',DASH,DASH], story:'There are '+N+' '+C[0]+', and '+m+' of the '+C[1]+' '+C[2]+'. A study draws '+k+' of the '+N+' fairly, from a drum.', lines:[], ask:'How many of the drawn '+C[1]+' '+C[2]+', on average?', right, opts:shuffle([right,...wrong]), lead:'', why:'Fair-sample technique: k · m/N = '+k+' · '+m+'/'+N+' = '+right+'. That is an average over all the samples; one sample holds a whole number.'}; }},
+  {id:'6·stat.line',step:'6·stat',mode:'proof',label:'what a fair sample licenses',open:()=>measured('6·stat'),make(){
+    return line28('6·stat.line',[
+      ['s1',[['\\binom{36}{4} = 58\\,905','choosing-counts-parts'],['Lane’s chance of being in is 1/58\\,905','fair']],2,1,'That is one sample’s chance; 6545 samples hold Lane, so 4/36.'],
+      ['s2',[['\\binom{35}{3} = 6545','parts holding Lane'],['6545/58\\,905 = 1/9','4/36 in lowest terms']],2,0,'Fair-share: k/N = 4/36.'],
+      ['s3',[['the first four in the alphabet','least-chooses'],['a fair sample of 4','the alphabet has no opinion']],2,1,'It names one part every time; the other 58 904 can never come.'],
+      ['s4',[['7 of 36 counties on the coast','given'],['a fair sample of 4 holds 7/9 of them on average','fair-sample: k · m/N']],2,0,'4 · 7/36 = 7/9.'],
+      ['s5',[['a fair sample of 4','given'],['it holds a coastal county','its share is 7/36 on average']],2,1,'Only on average; 23 751 samples hold none.'],
+      ['s6',[['2.4 million answers','a poll by mail'],['the poll is close','size']],2,1,'Size does not undo a tilted pick: the lean stays.'],
+      ['s7',[['tickets drawn from a mixed drum','no ticket put back'],['each part of 4 is equally likely','each part comes from 24 lists']],2,0,'Every ordered list of 4 is equally likely, and each part comes from 4 · 3 · 2 · 1 of them.'],
+      ['s8',[['the people who chose to answer','given'],['a fair sample','a pick']],2,1,'Answering depends on the answer, so the chances differ.']],[]); }});
+/* ----- annex 7·crypt Prove you know a secret without telling it: Work, Word Problems, Check Proofs ----- */
+const P2AX=n=>{ const v=Math.pow(2,n); return v<10000?String(v):v.toLocaleString('en').replace(/,/g,' '); };
+QP.push({id:'7·crypt.work',step:'7·crypt',mode:'work',label:'the cheat’s chance',open:()=>measured('7·crypt'),make(){
+    const n=3+rnd(18), ask=rnd(2);
+    if(ask){ const lim=[100,1000,10000,100000,1000000][rnd(5)]; let k=0; while(Math.pow(2,k)<lim) k++;
+      const right=String(k), wrong=UQAX(right,[String(k-1),String(k+1),String(Math.round(Math.log10(lim))),String(lim/2>40?Math.round(Math.log10(lim))*2:k+2)],3); if(wrong.length<3) return null;
+      return {index:'q:7·crypt.work[k;'+lim+']', lines:[['P(\\text{a cheat passes } n \\text{ rounds}) = 1/2^n','cheat’s-chance']], ask:'What is the fewest rounds that bring a cheat’s chance to 1 in '+lim.toLocaleString('en').replace(/,/g,' ')+' or less?', right, opts:shuffle([right,...wrong]), lead:'', why:'2^'+(k-1)+' = '+P2AX(k-1)+' is short of '+lim.toLocaleString('en').replace(/,/g,' ')+', and 2^'+k+' = '+P2AX(k)+' is not: '+k+' rounds.'}; }
+    const right='1 in '+P2AX(n), wrong=UQAX(right,['1 in '+(2*n),n+' in '+P2AX(n),'1 in '+P2AX(n-1),'1 in '+n,'1 in '+P2AX(n+1)],3); if(wrong.length<3) return null;
+    return {index:'q:7·crypt.work[n;'+n+']', lines:[[n+'\\text{ rounds, each called by a fair toss}','given']], ask:'What chance has a cheat of passing all '+n+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Cheat’s-chance: the rounds’ chances multiply, 1/2 taken '+n+' times, 1/2^'+n+', 1 in '+P2AX(n)+'. They do not add.'}; }},
+  {id:'7·crypt.word',step:'7·crypt',mode:'word',label:'cards behind the back',open:()=>measured('7·crypt'),make(){
+    const n=4+rnd(14), F=rnd(2);
+    const right=F?'1 in '+P2AX(n):'she is guessing, and one miss refutes that she can tell', wrong=F?UQAX(right,['1 in '+(2*n),'1 in '+P2AX(n-1),n+' in '+P2AX(n),'1 in 2'],3):['she still sees the colours: one miss is chance','nothing: a miss counts the same as a hit','she sees the colours with chance 1/2'];
+    if(wrong.length<3) return null;
+    const story='A friend who cannot tell red from green holds two cards that look the same to him. Mara says one is red and one green. Each round he hides both behind his back, tosses a coin to swap them or not, and she says whether he swapped.';
+    return {index:'q:7·crypt.word['+n+';'+F+']', a3:['7·crypt.word',DASH,DASH], story, lines:[], ask:F?'If the cards looked alike to Mara too, what chance has she of being right '+n+' rounds in a row?':'In round '+n+', after '+(n-1)+' right answers, Mara answers wrong. What follows?', right, opts:shuffle([right,...wrong]), lead:'', why:F?'Each round a guess is right with chance 1/2, and the tosses are fair, so the chances multiply: 1/2^'+n+', 1 in '+P2AX(n)+'.':'One who sees the colours is never wrong: the error of the test runs one way only. So a single miss shows she cannot tell them apart.'}; }},
+  {id:'7·crypt.line',step:'7·crypt',mode:'proof',label:'what the rounds license',open:()=>measured('7·crypt'),make(){
+    return line28('7·crypt.line',[
+      ['z1',[['she passed 20 rounds','given'],['she knows the word','the checker’s verdict']],2,1,'Or a 1 in 1 048 576 chance came off: the verdict carries its chance.'],
+      ['z2',[['each round: chance \\tfrac12','a fair toss'],['20 rounds: chance 20 \\cdot \\tfrac12','the rounds add']],2,1,'The chances multiply: 1/2²⁰.'],
+      ['z3',[['each round: chance \\tfrac12','a fair toss'],['20 rounds: chance 1/2^{20}','cheat’s-chance']],2,0,'1/2 taken 20 times: 1 in 1 048 576.'],
+      ['z4',[['the checker always calls left','his plan'],['a cheat still passes with chance \\tfrac12','one round']],2,1,'A cheat who knows the pattern goes in left and always passes: the call must be a fair toss.'],
+      ['z5',[['she fails one round','given'],['she does not know the word','one who knows never fails']],2,0,'The error runs one way only: a prover who knows always comes out where called.'],
+      ['z6',[['a film of 20 met calls','the record'],['she knows the word','the film proves it']],2,1,'A cut film from a stand-in looks the same; only the live tosses convince.'],
+      ['z7',[['he cannot check whether she knows','given'],['he cannot reason by cases on it','no split']],2,1,'Either-way: she knows or she does not; reason in each case.']],[]); }});
+/* ----- annex 7·phys What flows in a wire: Work, Word Problems, Check Proofs ----- */
+const NUMAX=x=>{ const r=Math.round(x*1000)/1000; return String(r).replace('-','\u2212'); };
+QP.push({id:'7·phys.work',step:'7·phys',mode:'work',label:'series and parallel',open:()=>measured('7·phys'),make(){
+    const P=[[6,3],[4,12],[10,15],[20,30],[3,6],[12,6],[60,30],[8,8],[2,6],[30,20],[10,40],[5,20]][rnd(12)], [a,b]=P, par=rnd(2), V=[6,9,12,24][rnd(4)];
+    const R=par?a*b/(a+b):a+b, ask=rnd(2);
+    if(ask){ const I=V/R; if(Math.abs(I*1000-Math.round(I*1000))>1e-9) return null;
+      const right=NUMAX(I)+' A', wrong=UQAX(right,[NUMAX(V/(a+b))+' A',NUMAX(V*(1/a+1/b))+' A',NUMAX(V/(1/a+1/b)/a)+' A',NUMAX(V/a)+' A',NUMAX(R/V)+' A',NUMAX(V*R)+' A'],3); if(wrong.length<3) return null;
+      return {index:'q:7·phys.work[I;'+a+';'+b+';'+par+';'+V+']', lines:[[V+'\\ \\text{V across }'+a+'\\ \\Omega\\text{ and }'+b+'\\ \\Omega\\text{ in '+(par?'parallel':'series')+'}','given']], ask:'What current does the battery send?', right, opts:shuffle([right,...wrong]), lead:'', why:(par?'Product over sum: '+a+' \u00b7 '+b+'/('+a+' + '+b+') = '+NUMAX(R)+' \u03a9':'In series, resistances add: '+a+' + '+b+' = '+R+' \u03a9')+'. The proportion law: I = V/R = '+V+'/'+NUMAX(R)+' = '+NUMAX(I)+' A.'}; }
+    if(Math.abs(R*1000-Math.round(R*1000))>1e-9) return null;
+    const right=NUMAX(R)+' \u03a9', wrong=UQAX(right,[NUMAX(par?a+b:a*b/(a+b))+' \u03a9',NUMAX(1/a+1/b)+' \u03a9',NUMAX((a+b)/2)+' \u03a9',NUMAX(a*b)+' \u03a9',NUMAX(Math.abs(a-b)||a/2)+' \u03a9'],3); if(wrong.length<3) return null;
+    return {index:'q:7·phys.work[R;'+a+';'+b+';'+par+']', lines:[[a+'\\ \\Omega\\text{ and }'+b+'\\ \\Omega\\text{ in '+(par?'parallel':'series')+'}','two resistors']], ask:'What single resistance do they act as?', right, opts:shuffle([right,...wrong]), lead:'', why:par?'Reciprocals add: 1/'+a+' + 1/'+b+' = '+(a+b)+'/'+(a*b)+'; turn it over, product over sum: '+NUMAX(R)+' \u03a9, less than either.':'The same current goes through both, so the drops add: '+a+' + '+b+' = '+R+' \u03a9.'}; }},
+  {id:'7·phys.word',step:'7·phys',mode:'word',label:'power at the wall',open:()=>measured('7·phys'),make(){
+    const A=[['kettle',1500],['toaster',900],['space heater',1200],['hair dryer',1800],['microwave oven',1000],['iron',960]][rnd(6)], V=120, W=A[1], ask=rnd(3), min=[2,3,4,5,6,10][rnd(6)];
+    let right,wrong,why,q;
+    if(ask===0){ right=NUMAX(W/V)+' A'; wrong=[NUMAX(V/W)+' A',NUMAX(W*V)+' A',NUMAX(W/V/2)+' A',NUMAX(W/V*2)+' A']; q='What current does it draw?'; why='P = IV, so I = P/V = '+W+'/'+V+' = '+NUMAX(W/V)+' A.'; }
+    else if(ask===1){ right=NUMAX(V*V/W)+' \u03a9'; wrong=[NUMAX(W/V)+' \u03a9',NUMAX(W/(V*V))+' \u03a9',NUMAX(V/W*100)+' \u03a9',NUMAX(W/V*V/10)+' \u03a9']; q='What is the resistance of its element, while it runs?'; why='P = V\u00b2/R, so R = V\u00b2/P = '+V+'\u00b2/'+W+' = '+NUMAX(V*V/W)+' \u03a9.'; }
+    else { const J=W*min*60; right=(J).toLocaleString('en').replace(/,/g,' ')+' J'; wrong=[(W*min).toLocaleString('en').replace(/,/g,' ')+' J',(J/1000).toLocaleString('en').replace(/,/g,' ')+' J',(W*min*3600).toLocaleString('en').replace(/,/g,' ')+' J',(J*2).toLocaleString('en').replace(/,/g,' ')+' J']; q='How much energy does it use in '+min+' minutes?'; why='A watt is a joule per second: '+W+' W \u00b7 '+(min*60)+' s = '+right+'.'; }
+    wrong=UQAX(right,wrong,3); if(wrong.length<3) return null;
+    return {index:'q:7·phys.word['+A[0]+';'+ask+';'+min+']', a3:['7·phys.word',DASH,DASH], story:'A '+W+' W '+A[0]+' is plugged into a '+V+' V outlet.', lines:[], ask:q, right, opts:shuffle([right,...wrong]), lead:'', why}; }},
+  {id:'7·phys.line',step:'7·phys',mode:'proof',label:'what the circuit laws license',open:()=>measured('7·phys'),make(){
+    return line28('7·phys.line',[
+      ['e1',[['6\\ \\Omega\\text{ and }3\\ \\Omega\\text{ in parallel}','given'],['9\\ \\Omega','resistances add']],2,1,'That is series: in parallel, product over sum, 2 \u03a9.'],
+      ['e2',[['\\tfrac16 + \\tfrac13 = \\tfrac12','reciprocals add'],['the pair is \\tfrac12\\ \\Omega','parallel']],2,1,'1/2 is the reciprocal of the answer: the pair is 2 \u03a9.'],
+      ['e3',[['V = V_1 + V_2 = IR_1 + IR_2','series, the same I'],['V = I(R_1 + R_2)','factoring']],2,0,'Spread turned about: the pair acts as one resistor.'],
+      ['e4',[['a red LED and 9 V','given'],['I = 9\\ \\text{V}/R_{\\text{LED}}','the proportion law']],2,1,'An LED is not a resistor: the proportion law is a fact about some materials only.'],
+      ['e5',[['I_2 = -2\\ \\text{A}','solving the loops'],['the circuit was drawn wrong','a negative current']],2,1,'Only the guessed arrow was wrong: 2 A flows the other way.'],
+      ['e6',[['P = IV,\\ \\ V = IR','given'],['P = I^2 R','substitution']],2,0,'P = I(IR).'],
+      ['e7',[['an ideal switch, open','given'],['it spends energy','the whole voltage is across its gap']],2,1,'Open, I = 0, so P = I \u00b7 V = 0.'],
+      ['e8',[['current in at a joint: 3 A','given'],['current out: 3 A','the junction law']],2,0,'Charge cannot pile up at a point in a steady circuit.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
