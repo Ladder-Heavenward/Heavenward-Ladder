@@ -18913,6 +18913,72 @@ QP.push({id:'28·phys.work',step:'28·phys',mode:'work',label:'tubes, streams an
       ['h4',[['\\text{a long narrow tube}','given'],['\\text{the stream technique}','pressure and speed']],2,1,'It needs no friction; in a long tube friction rules.'],
       ['h5',[['\\text{charge on a metal at rest}','given'],['\\text{it spreads through the metal}','charge moves']],2,1,'At rest it sits on the skin.'],
       ['h6',[['\\text{the field inside a metal at rest is } 0','enclosed-charge'],['\\text{no charge inside}','flux 0']],2,0,'Every closed surface inside has flux 0, so holds no charge.']],[]); }});
+/* ----- annex 29·nav Why fly over the pole to Asia: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'29·nav.work',step:'29·nav',mode:'work',label:'great circles',open:()=>measured('29·nav'),make(){
+    const ask=rnd(2);
+    if(ask){ const p=[30,40,47.6,50][rnd(4)], h=[30,45,60,75,90][rnd(5)], v=DEGAX(Math.acos(Math.cos(DGAX(p))*Math.sin(DGAX(h)))), right=DECAX(v,1)+'° N', wrong=UQAX(right,[DECAX(p+h/10,1)+'° N',DECAX(90-h,1)+'° N',DECAX(DEGAX(Math.acos(Math.cos(DGAX(p))*Math.cos(DGAX(h)))),1)+'° N',DECAX(p,1)+'° N'],3); if(wrong.length<3) return null;
+      return {index:'q:29·nav.work[f;'+p+';'+h+']', lines:[['\\varphi_P = '+p+'^\\circ \\text{ N}','the start'],['h_P = '+h+'^\\circ','the heading there, from north']], ask:'How far north does the great-circle route reach?', right, opts:shuffle([right,...wrong]), lead:'', why:'Kept-product: cos φ sin h is the same all along, and at the top sin h = 1. So cos φ_max = cos '+p+'° · sin '+h+'° ≈ '+DECAX(Math.cos(DGAX(p))*Math.sin(DGAX(h)),4)+', and φ_max ≈ '+right+'.'}; }
+    const p1=[0,20,30,45][rnd(4)], p2=[0,20,30,45,60][rnd(5)], dl=[30,45,60,90][rnd(4)], c=Math.sin(DGAX(p1))*Math.sin(DGAX(p2))+Math.cos(DGAX(p1))*Math.cos(DGAX(p2))*Math.cos(DGAX(dl)), d=DEGAX(Math.acos(c))*60;
+    const right=SPAX(Math.round(d/10)*10)+' nautical miles', wrong=UQAX(right,[SPAX(Math.round(dl*60*Math.cos(DGAX((p1+p2)/2))/10)*10+300)+' nautical miles',SPAX(Math.round(Math.hypot(dl,p2-p1)*60/10)*10)+' nautical miles',SPAX(Math.round(d/60))+' nautical miles',SPAX(Math.round(d*1.852/10)*10)+' nautical miles'],3); if(wrong.length<3) return null;
+    return {index:'q:29·nav.work[d;'+p1+';'+p2+';'+dl+']', lines:[['\\varphi_1 = '+p1+'^\\circ,\\ \\ \\varphi_2 = '+p2+'^\\circ \\text{ N}','two places'],['\\Delta\\lambda = '+dl+'^\\circ','apart in longitude']], ask:'How long is the great-circle route, to the nearest ten nautical miles?', right, opts:shuffle([right,...wrong]), lead:'', why:'Great-circle: cos δ = sin φ₁ sin φ₂ + cos φ₁ cos φ₂ cos Δλ ≈ '+DECAX(c,4)+', so δ ≈ '+DECAX(d/60,2)+'°. A minute of arc is a nautical mile: about '+right+'.'}; }},
+  {id:'29·nav.word',step:'29·nav',mode:'word',label:'the pole, the star and the ship',open:()=>measured('29·nav'),make(){
+    const Hc=20+rnd(50), mc=rnd(60), dm=(rnd(2)?1:-1)*(2+rnd(25)), tot=Hc*60+mc+dm, Ho=Math.floor(tot/60), mo=tot%60, f=(d,m)=>d+'° '+(m<10?'0':'')+m+'′';
+    const right=Math.abs(dm)+' nautical miles '+(dm>0?'toward':'away from')+' the star', wrong=UQAX(right,[Math.abs(dm)+' nautical miles '+(dm>0?'away from':'toward')+' the star',DECAX(Math.abs(dm)/60,2)+' nautical miles '+(dm>0?'toward':'away from')+' the star',Math.abs(dm)*60+' nautical miles '+(dm>0?'toward':'away from')+' the star'],3);
+    return {index:'q:29·nav.word['+Hc+';'+mc+';'+dm+']', a3:['29·nav.word',DASH,DASH], story:'A navigator on a crossing to Hawaii works out that, from the guessed place, a star should stand '+f(Hc,mc)+' high. The sextant reads '+f(Ho,mo)+'.', lines:[], ask:'Which way, and how far, should the guessed place move?', right, opts:shuffle([right,...wrong]), lead:'', why:'Star-circle: every place that sees the star at height H lies 90° − H from its ground point. The star stands '+Math.abs(dm)+'′ '+(dm>0?'higher':'lower')+' than worked out, so the ship is that much '+(dm>0?'nearer':'farther')+': one nautical mile for each minute of arc.'}; }},
+  {id:'29·nav.line',step:'29·nav',mode:'proof',label:'what the sphere licenses',open:()=>measured('29·nav'),make(){
+    return line28('29·nav.line',[
+      ['g1',[['\\text{a straight line on the straight-grid map}','drawn'],['\\text{the shortest route}','straight']],2,1,'It is a steady heading; the great circle bends toward the pole.'],
+      ['g2',[['\\text{a great-circle route}','given'],['\\text{one heading all the way}','a great circle']],2,1,'cos φ sin h is kept, not h.'],
+      ['g3',[['\\text{a route from Seattle to Asia}','given'],['\\text{it crosses the pole}','north']],2,1,'Only a far city on the opposite longitude; Seattle to Tokyo tops out at 54.3° N.'],
+      ['g4',[['\\text{a triangle on the earth}','given'],['\\text{its angles add to } \\pi','a triangle']],2,1,'More, by its area over R².'],
+      ['g5',[['\\cos\\gamma \\text{ to seven places}','given'],['\\text{every distance}','the cosine form']],2,1,'Near 1 it loses short distances; use the half-angle form.'],
+      ['g6',[['\\text{the star } 5\' \\text{ higher than worked out}','sighted'],['\\text{move } 5 \\text{ nautical miles toward it}','star-circle']],2,0,'One nautical mile for each minute of arc.']],[]); }});
+/* ----- annex 29·now Why GPS clocks are set to run slow: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'29·now.work',step:'29·now',mode:'work',label:'higher clocks run faster',open:()=>measured('29·now'),make(){
+    const ask=rnd(2);
+    if(ask){ const h=[10,50,100,184,500,1000,4000][rnd(7)], f=9.8*h/9e16, d=f*86400*1e9, right=DECAX(d,2)+' ns', wrong=UQAX(right,[DECAX(d/86400*3600,3)+' ns',DECAX(d*1000,1)+' ns',DECAX(f*1e9,6)+' ns',DECAX(d*2,2)+' ns'],3); if(wrong.length<3) return null;
+      return {index:'q:29·now.work[h;'+h+']', lines:[['h = '+h+' \\text{ m}','one clock above the other'],['g \\approx 9.8,\\ \\ c^2 \\approx 9 \\times 10^{16}','']], ask:'How much does the higher clock gain in a day, in billionths of a second?', right, opts:shuffle([right,...wrong]), lead:'', why:'Height-clock: gh∕c² = 9.8 · '+h+' ÷ (9 × 10¹⁶) ≈ '+SCAX(f,2)+' of each second, times 86 400 seconds: about '+right+'.'}; }
+    const hh=[1,2,5,10][rnd(4)], L=[3,4][rnd(2)], d=hh*1e-21*L*1000, right=SCAX(d,1)+' m', wrong=UQAX(right,[SCAX(hh*1e-21,1)+' m',SCAX(d*1000,1)+' m',SCAX(d/2,1)+' m',SCAX(hh*1e-21/L,1)+' m'],3); if(wrong.length<3) return null;
+    return {index:'q:29·now.work[a;'+hh+';'+L+']', lines:[['h = '+hh+' \\times 10^{-21}','a passing ripple'],['L = '+L+' \\text{ km}','arms set across each other']], ask:'By how much do the arms come to differ?', right, opts:shuffle([right,...wrong]), lead:'', why:'Arm-stretch: by hL, one growing while the other shrinks: '+hh+' × 10⁻²¹ · '+(L*1000)+' m ≈ '+right+'.'}; }},
+  {id:'29·now.word',step:'29·now',mode:'word',label:'thirty-eight millionths of a second a day',open:()=>measured('29·now'),make(){
+    const F=rnd(3), S=[['A GPS satellite’s clock moves fast and sits high. Uncorrected, what does it do against a clock on the ground?','it gains about 38 millionths of a second a day: its height gains more than its speed loses','Orbit-clock: the height gain wins over the speed loss, by about 38 microseconds a day.'],
+      ['Light runs about 11 km in 38 millionths of a second. Left uncorrected for a day, does a phone’s fix drift 11 km?','no: a gain shared by every satellite goes into the clock unknown b, though the time and the orbits drift','Clock-unknown: a shared gain shifts every ρᵢ alike, and b takes it; the fix barely moves.'],
+      ['One clock sits on the top floor of a tower, another in the basement. Which runs faster?','the top-floor clock, by about gh∕c² of each second','Height-clock: of two clocks at rest, the higher gains (Φ₂ − Φ₁)∕c².']][F];
+    const pool=['it gains about 38 millionths of a second a day: its height gains more than its speed loses','no: a gain shared by every satellite goes into the clock unknown b, though the time and the orbits drift','the top-floor clock, by about gh∕c² of each second','it only loses time, since it moves','yes: 11 km a day, and more each day','the basement clock, nearer the earth’s pull'];
+    const right=S[1], wrong=UQAX(right,pool,3);
+    return {index:'q:29·now.word['+F+']', a3:['29·now.word',DASH,DASH], story:'An engineer in Colorado Springs checks how the GPS clocks are set before launch.', lines:[], ask:S[0], right, opts:shuffle([right,...wrong]), lead:'', why:S[2]}; }},
+  {id:'29·now.line',step:'29·now',mode:'proof',label:'what the clocks license',open:()=>measured('29·now'),make(){
+    return line28('29·now.line',[
+      ['t1',[['\\text{a GPS clock moves}','given'],['\\text{it only loses time}','moving clocks run slow']],2,1,'Its height gains more than its speed loses.'],
+      ['t2',[['38\\ \\mu\\text{s a day, uncorrected}','the gain'],['\\text{the fix drifts } 11 \\text{ km a day}','c times the gain']],2,1,'b takes the shared gain; the time and the orbits drift.'],
+      ['t3',[['\\text{a passing ripple}','given'],['\\text{both arms stretch alike}','a stretch']],2,1,'One grows while the other shrinks.'],
+      ['t4',[['\\text{a ripple of size } h','given'],['\\text{the arms move by } h \\text{ metres}','arm-stretch']],2,1,'By a share: hL.'],
+      ['t5',[['\\text{a chirp}','given'],['\\text{its frequency rises in a straight line}','chirp']],2,1,'f^(−8⁄3) falls in a straight line.'],
+      ['t6',[['h = 184 \\text{ m}','the Space Needle'],['\\text{about } 2.0 \\times 10^{-14} \\text{ of each second}','height-clock']],2,0,'9.8 · 184 ÷ (9 × 10¹⁶) ≈ 2.0 × 10⁻¹⁴.']],[]); }});
+/* ----- annex 29·phys Why moving clocks run slow: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'29·phys.work',step:'29·phys',mode:'work',label:'gamma, turns and light',open:()=>measured('29·phys'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const v=[0.5,0.6,0.8,0.9,0.99][rnd(5)], g=1/Math.sqrt(1-v*v), right=DECAX(g,3), wrong=UQAX(right,[DECAX(1/(1-v),3),DECAX(Math.sqrt(1-v*v),3),DECAX(1/(1-v*v),3),DECAX(1+v,3)],3); if(wrong.length<3) return null;
+      return {index:'q:29·phys.work[g;'+v+']', lines:[['v = '+v+'c','a moving clock']], ask:'By what factor does it tick slower, seen from the ground?', right, opts:shuffle([right,...wrong]), lead:'', why:'Light-clock: γ = 1∕√(1 − v²∕c²) = 1∕√(1 − '+DECAX(v*v,4)+') ≈ '+right+'.'}; }
+    if(ask===1){ const a=[0.3,0.5,0.6,0.8,0.9][rnd(5)], b=[0.3,0.5,0.6,0.8][rnd(4)], v=(a+b)/(1+a*b), right=DECAX(v,3)+'c', wrong=UQAX(right,[DECAX(a+b,3)+'c',DECAX(Math.min(0.999,(a+b)/2),3)+'c',DECAX((a+b)/(1+a+b),3)+'c',DECAX(Math.sqrt(a*a+b*b),3)+'c'],3); if(wrong.length<3) return null;
+      return {index:'q:29·phys.work[s;'+a+';'+b+']', lines:[['v_1 = '+a+'c,\\ \\ v_2 = '+b+'c','along one line']], ask:'What do the two speeds combine to?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speeds-add: (v₁ + v₂)∕(1 + v₁v₂∕c²) = '+DECAX(a+b,2)+' ÷ '+DECAX(1+a*b,2)+' ≈ '+right+'. It never reaches c.'}; }
+    const t=[30,45,60,90,120,180][rnd(6)], d=2.43*(1-Math.cos(DGAX(t))), right=DECAX(d,2)+' pm', wrong=UQAX(right,[DECAX(2.43*Math.cos(DGAX(t)),2)+' pm',DECAX(2.43*Math.sin(DGAX(t)),2)+' pm','2.43 pm',DECAX(2.43*(1+Math.cos(DGAX(t))),2)+' pm'],3); if(wrong.length<3) return null;
+    return {index:'q:29·phys.work[c;'+t+']', lines:[['\\tfrac{h}{mc} \\approx 2.43 \\text{ pm}','for an electron'],['\\theta = '+t+'^\\circ','the turn of the scattered light']], ask:'How much longer is the scattered light’s wavelength?', right, opts:shuffle([right,...wrong]), lead:'', why:'Scattered-light: (h∕mc)(1 − cos θ) = 2.43 · (1 − cos '+t+'°) ≈ '+right+', whatever the light was.'}; }},
+  {id:'29·phys.word',step:'29·phys',mode:'word',label:'speeds add as turns',open:()=>measured('29·phys'),make(){
+    const a=[0.5,0.6,0.7,0.8][rnd(4)], b=[0.5,0.6,0.7,0.8,0.9][rnd(5)], F=rnd(2), v=(a+b)/(1+a*b);
+    if(F){ const right='still c', wrong=['c + '+a+'c','c − '+a+'c','a little over c']; 
+      return {index:'q:29·phys.word[l;'+a+']', a3:['29·phys.word',DASH,DASH], story:'A ship moving at '+a+'c past a station flashes a lamp forward.', lines:[], ask:'How fast does the station see the light go?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speeds-add with v₂ = c: ('+a+'c + c)∕(1 + '+a+') = c. The kept interval keeps light’s speed for every steady observer.'}; }
+    const right=DECAX(v,3)+'c', wrong=UQAX(right,[DECAX(a+b,2)+'c',DECAX(b,3)+'c',DECAX(Math.min(0.999,a*b+0.5),3)+'c'],3); if(wrong.length<3) return null;
+    return {index:'q:29·phys.word[s;'+a+';'+b+']', a3:['29·phys.word',DASH,DASH], story:'A ship moving at '+a+'c past a station fires a probe straight ahead, at '+b+'c as the ship measures it.', lines:[], ask:'How fast does the station see the probe go?', right, opts:shuffle([right,...wrong]), lead:'', why:'Speeds-add: ('+a+' + '+b+')∕(1 + '+a+' · '+b+') = '+DECAX(a+b,2)+' ÷ '+DECAX(1+a*b,2)+' ≈ '+right+'. Speeds combine as turns, not as sums.'}; }},
+  {id:'29·phys.line',step:'29·phys',mode:'proof',label:'what spacetime licenses',open:()=>measured('29·phys'),make(){
+    return line28('29·phys.line',[
+      ['r1',[['0.6c \\text{ and } 0.6c','two speeds along a line'],['1.2c','they add']],2,1,'Speeds combine as turns: 0.882c.'],
+      ['r2',[['\\text{a clock moving at } v','seen from the ground'],['\\text{it runs fast}','moving']],2,1,'Slow, seen from the ground, by γ.'],
+      ['r3',[['\\text{the ruler of spacetime}','kept-interval'],['c^2dt^2 + dx^2','like a plane']],2,1,'The minus sign is measured; with a plus sign light’s speed would not be kept.'],
+      ['r4',[['\\text{a collision at any speed}','given'],['p = mv \\text{ is kept}','momentum']],2,1,'γmv is kept; mv only nearly, far below c.'],
+      ['r5',[['\\text{a moving body}','given'],['E = mc^2','mass-energy']],2,1,'γmc²; mc² is the energy at rest.'],
+      ['r6',[['\\text{light}','no mass'],['\\text{it cannot push}','no mass']],2,1,'It has momentum E∕c.'],
+      ['r7',[['\\tanh u = 0.6','v = 0.6c'],['e^u = 2','mixing-turn']],2,0,'tanh u = (e²ᵘ − 1)∕(e²ᵘ + 1) = 3⁄5 at e²ᵘ = 4.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
