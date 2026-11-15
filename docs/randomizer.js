@@ -16719,6 +16719,7 @@ QP.push({id:'46l.unbuild',step:'46l',label:'what can’t be built, by hand',open
 const UQAX=(right,c,n)=>{ const o=[]; c.forEach(x=>{ x=String(x); if(x!==String(right)&&!o.includes(x)&&o.length<(n||3)) o.push(x); }); return o; };
 const PTAILAX=(m,s)=>{ let t=Math.exp(-m), c=t; for(let k=1;k<=s;k++){ t*=m/k; c+=t; } return 1-c; }; /* the chance of more than s, for a rare count with average m */
 const SHELFAX=(m,a)=>{ let s=0; while(PTAILAX(m,s)>a&&s<2000) s++; return s; };
+const MNAX=s=>String(s).replace(/(^|[ (\[,=])-(\d)/g,'$1\u2212$2'); /* unicode minus before digits */
 /* ----- annex 2·bio Is a Whale a Fish?: Work, Word Problems, Check Proofs ----- */
 const ANAX=[['a Chinook salmon',{backbone:1,gills:1,fins:1,water:1}],['a lingcod',{backbone:1,gills:1,fins:1,water:1}],['an orca',{backbone:1,lungs:1,fins:1,water:1,milk:1}],['a harbor seal',{backbone:1,lungs:1,fins:1,water:1,milk:1}],['a lungfish',{backbone:1,gills:1,lungs:1,fins:1,water:1}],['an octopus',{gills:1,water:1}],['a big brown bat',{backbone:1,lungs:1,milk:1}],['a green sea turtle',{backbone:1,lungs:1,fins:1,water:1}],['a black bear',{backbone:1,lungs:1,milk:1}]];
 const FTAX={backbone:'has a backbone',gills:'breathes with gills',lungs:'breathes with lungs',fins:'swims with fins or flippers',water:'lives in the water',milk:'feeds its young on milk'};
@@ -17348,6 +17349,97 @@ QP.push({id:'12·phys.work',step:'12·phys',mode:'work',label:'the balance point
       ['h5',[['(-12/30)(-30/36)','with an idler'],['12/36','the idler cancels']],2,0,'The idler\u2019s teeth cancel; only its turning flips.'],
       ['h6',[['T(0) \\lt 0 \\lt T(L)','the turning effect'],['\\text{a balance point } 0 \\lt p \\lt L','in-between-value']],2,0,'T is continuous along a rigid bar.'],
       ['h7',[['\\text{a loose hinge in the bar}','given'],['\\text{a balance point exists}','in-between-value']],2,1,'T may jump at the hinge: the hypothesis fails.']],[]); }});
+/* ----- annex 13·comp How does a calculator find a root: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'13·comp.work',step:'13·comp',mode:'work',label:'halving and tangents',open:()=>measured('13·comp'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const w=[1,2,4,8][rnd(4)], tol=[0.01,0.001,0.0001][rnd(3)]; let n=0; while(w/Math.pow(2,n)>tol) n++;
+      const right=String(n), wrong=UQAX(right,[String(n-1),String(n+1),String(Math.round(Math.log10(w/tol))),String(n*2)],3); if(wrong.length<3) return null;
+      return {index:'q:13·comp.work[n;'+w+';'+tol+']', lines:[['\\text{a trap of width } '+w,'f continuous, a zero inside']], ask:'How many halving rounds bring the trap to width '+tol+' or less?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each round halves the width: '+w+'/2^'+(n-1)+' = '+DECAX(w/Math.pow(2,n-1),6)+' is still too wide, and '+w+'/2^'+n+' = '+DECAX(w/Math.pow(2,n),6)+' is not. '+n+' rounds.'}; }
+    if(ask===1){ const k=[2,3,5,6,7,10][rnd(6)], p=Math.floor(Math.sqrt(k)), q=p+1, m=(p+q)/2, fm=m*m-k, np=fm<0?[m,q]:[p,m];
+      const right='['+np[0]+', '+np[1]+']', wrong=UQAX(right,['['+(fm<0?p:m)+', '+(fm<0?m:q)+']','['+p+', '+q+']','['+(p-0.5)+', '+p+']'],3); if(wrong.length<3) return null;
+      return {index:'q:13·comp.work[h;'+k+']', lines:[['f(x) = x^2 - '+k,'continuous'],['['+p+', '+q+']','a trap: f('+p+') = '+(p*p-k)+',\\ f('+q+') = '+(q*q-k)]], ask:'What is the trap after one halving?', right, opts:shuffle([right,...wrong]), lead:'', why:'The middle is '+m+', and f('+m+') = '+DECAX(fm,2)+(fm<0?', below 0, like f('+p+'): keep the half whose ends differ in sign, ['+m+', '+q+'].':', above 0, like f('+q+'): keep ['+p+', '+m+'].')}; }
+    const k=[2,3,5,7,10][rnd(5)], x=[1,2,3][rnd(3)], N=(x+k/x)/2, F=v=>DECAX(v,4);
+    const right=F(N), wrong=UQAX(right,[F(x-k/x),F(x+k/x),F((x*x-k)/(2*x)),F(k/x)],3); if(wrong.length<3) return null;
+    return {index:'q:13·comp.work[t;'+k+';'+x+']', lines:[['f(x) = x^2 - '+k,'f\'(x) = 2x'],['x = '+x,'a guess']], ask:'Where does one tangent step land?', right, opts:shuffle([right,...wrong]), lead:'', why:'N(x) = x \u2212 f(x)/f\'(x) = '+x+' \u2212 ('+(x*x-k)+')/'+(2*x)+' = '+right+'. That is (x + '+k+'/x)/2.'}; }},
+  {id:'13·comp.word',step:'13·comp',mode:'word',label:'dividing with no divide key',open:()=>measured('13·comp'),make(){
+    const k=[3,4,6,7,8,9][rnd(6)], x=[0.1,0.2,0.3][rnd(3)], e=x-1/k, N=x*(2-k*x);
+    if(N<=0) return null; const right=MNAX(DECAX(N,4)), wrong=UQAX(right,[DECAX(x*(2+k*x),4),DECAX(2*x-k,4),DECAX(x+ k*e*e,4),DECAX(1/k,4)].map(MNAX),3); if(wrong.length<3) return null;
+    return {index:'q:13·comp.word['+k+';'+x+']', a3:['13·comp.word',DASH,DASH], story:'An old machine could multiply and subtract but not divide. To find 1/'+k+', it ran the tangent step for f(x) = 1/x \u2212 '+k+', starting from '+x+'.', lines:[], ask:'What is its next guess?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Reciprocal-step: N(x) = x(2 \u2212 kx) = '+x+' \u00b7 (2 \u2212 '+DECAX(k*x,4)+') = '+right+'. The new error is \u2212k times the old error squared: \u2212'+k+' \u00b7 ('+DECAX(e,4)+')\u00b2 \u2248 '+DECAX(-k*e*e,4)+'.')}; }},
+  {id:'13·comp.line',step:'13·comp',mode:'proof',label:'what a root program licenses',open:()=>measured('13·comp'),make(){
+    return line28('13·comp.line',[
+      ['r1',[['\\text{the tangent step is faster}','given'],['\\text{use it alone}','speed']],2,1,'On x\u00b3 \u2212 2x + 2 from 0 it never arrives; the trap is what makes it safe.'],
+      ['r2',[['\\text{a trap of width } 10^{-12}','halving'],['\\text{a zero lies in it}','in-between-value']],2,1,'Only if f is continuous there; on a jump the traps close on no zero.'],
+      ['r3',[['\\text{keep halving}','a machine'],['\\text{until the width is } 0','halving']],2,1,'The machine\u2019s numbers have holes; stop when the middle is an end.'],
+      ['r4',[['\\text{the guesses stopped changing}','given'],['f(x) = 0','the machine']],2,1,'The machine\u2019s f(x) is rounded too; report the trap.'],
+      ['r5',[['x = 1/k + e','a guess'],['N(x) = 1/k - ke^2','reciprocal-step']],2,0,'x(2 \u2212 kx) = (1/k + e)(1 \u2212 ke) = 1/k \u2212 ke\u00b2.'],
+      ['r6',[['[p, q] \\text{ a trap},\\ \\text{width } w','given'],['\\text{after } n \\text{ rounds, width at most } w/2^n','safe-step']],2,0,'Every round at least halves the trap.'],
+      ['r7',[['f(m) \\text{ has the sign of } f(d)','one split'],['d \\leftarrow m,\\ \\text{then } c \\leftarrow m','both ends move']],2,1,'One box changes per split: the half kept must still be a trap.']],[]); }});
+/* ----- annex 13·eng How much power does a car need to climb: Work, Word Problems, Check Proofs ----- */
+const KWAX=v=>DECAX(v/1000,1)+' kW';
+QP.push({id:'13·eng.work',step:'13·eng',mode:'work',label:'force times speed',open:()=>measured('13·eng'),make(){
+    const m=[1000,1200,1500,1800,2000][rnd(5)], r=[0.02,0.04,0.05,0.06,0.08,0.1][rnd(6)], v=[10,15,20,25][rnd(4)], ask=rnd(2);
+    if(ask){ const F=[200,300,400,500,600,800][rnd(6)], right=KWAX(F*v), wrong=UQAX(right,[KWAX(F/v*1000),KWAX(F*v*v),KWAX(F+v),KWAX(F*v/2)],3); if(wrong.length<3) return null;
+      return {index:'q:13·eng.work[F;'+F+';'+v+']', lines:[['F = '+F+'\\ \\text{N},\\ \\ v = '+v+'\\ \\text{m/s}','a steady push along the motion']], ask:'What power does the push deliver?', right, opts:shuffle([right,...wrong]), lead:'', why:'Force-times-speed: P = Fv = '+F+' \u00b7 '+v+' = '+(F*v)+' W = '+right+'.'}; }
+    const P=m*9.8*r*v, right=KWAX(P), wrong=UQAX(right,[KWAX(m*9.8*v),KWAX(m*r*v),KWAX(m*9.8*r*v*v),KWAX(m*9.8*r)],3); if(wrong.length<3) return null;
+    return {index:'q:13·eng.work[c;'+m+';'+r+';'+v+']', lines:[['m = '+m+'\\ \\text{kg},\\ \\ r = '+r+',\\ \\ v = '+v+'\\ \\text{m/s}','a car on a grade']], ask:'What power goes into lifting the car alone?', right, opts:shuffle([right,...wrong]), lead:'', why:'Climbing-power: mgrv = '+m+' \u00b7 9.8 \u00b7 '+r+' \u00b7 '+v+' = '+DECAX(P,0)+' W \u2248 '+right+'.'}; }},
+  {id:'13·eng.word',step:'13·eng',mode:'word',label:'the steady climb',open:()=>measured('13·eng'),make(){
+    const m=[1200,1500,1800][rnd(3)], r=[0,0.03,0.05,0.06][rnd(4)], c=0.012, k=0.36, v=[15,20,25,30][rnd(4)], P=(m*9.8*(r+c)+k*v*v)*v;
+    const right=KWAX(P), wrong=UQAX(right,[KWAX((m*9.8*(r+c)+k*v*v)),KWAX(m*9.8*(r+c)*v),KWAX((m*9.8*r+k*v*v)*v),KWAX((m*9.8*(r+c)+k*v)*v)],3); if(wrong.length<3) return null;
+    return {index:'q:13·eng.word['+m+';'+r+';'+v+']', a3:['13·eng.word',DASH,DASH], story:'A car of '+m+' kg drives at a steady '+v+' m/s '+(r?'up a grade that rises '+r+' m for each metre of road':'on a level road')+'. Its tyres pull back with 0.012 of its weight, and the air with 0.36v\u00b2 newtons.', lines:[], ask:'What power must reach its wheels?', right, opts:shuffle([right,...wrong]), lead:'', why:'Steady-climb: P = (mg(r + c) + kv\u00b2)v = ('+m+' \u00b7 9.8 \u00b7 '+DECAX(r+c,3)+' + 0.36 \u00b7 '+v+'\u00b2) \u00b7 '+v+' \u2248 '+DECAX(P,0)+' W \u2248 '+right+'.'}; }},
+  {id:'13·eng.line',step:'13·eng',mode:'proof',label:'what power licenses',open:()=>measured('13·eng'),make(){
+    return line28('13·eng.line',[
+      ['p1',[['\\text{work over a minute}','given'],['\\text{the power at an instant}','work over time']],2,1,'That is the average, a chord; the power at an instant is the slope.'],
+      ['p2',[['15\\ \\text{m/s} \\to 30\\ \\text{m/s, level}','given'],['\\text{twice the power}','twice the speed']],2,1,'The air\u2019s share grows as v\u00b3: about 3.9 times the power.'],
+      ['p3',[['\\text{lifting } m \\text{ by } h','given'],['P = mgh','the power']],2,1,'That is work, in joules; the power is mg times the rate of rising.'],
+      ['p4',[['\\text{a steady speed}','no net force'],['\\text{no power is needed}','no acceleration']],2,1,'The wheels still push against the pullbacks, and force-times-speed prices the push.'],
+      ['p5',[['F \\text{ steady, along the motion}','given'],['P(t) = F\\,v(t)','the slope of } Fx(t)'.replace('}','')]],2,0,'Work is Fx(t); its slope is F v(t).'],
+      ['p6',[['330\\ \\text{kW at the engine}','given'],['330\\ \\text{kW at the road}','all of it reaches']],2,1,'Roughly a tenth is lost between engine and wheels.'],
+      ['p7',[['P(v) = (mg(r + c) + kv^2)v','steady-climb'],['P\'(v) = mg(r + c) + 3kv^2','slopes']],2,0,'The slope of kv\u00b3 is 3kv\u00b2.']],[]); }});
+/* ----- annex 13·nav How fast is the tide rising: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'13·nav.work',step:'13·nav',mode:'work',label:'the centred chord',open:()=>measured('13·nav'),make(){
+    const R=[3,3.6,4.2,4.8,5.4,6][rnd(6)], lo=[0.2,0.5,0.8,1.1][rnd(4)], T=6, h=t=>{ const s=t/T; return lo+R*(3*s*s-2*s*s*s); };
+    const t=1+rnd(4), H=[0,1,2,3,4,5,6].map(i=>Math.round(h(i)*100)/100), cc=(H[t+1]-H[t-1])/2, fw=H[t+1]-H[t], bw=H[t]-H[t-1];
+    const right=DECAX(cc,3)+' ft an hour', wrong=UQAX(right,[DECAX(fw,3)+' ft an hour',DECAX(bw,3)+' ft an hour',DECAX(H[t]/t,3)+' ft an hour',DECAX(R/6,3)+' ft an hour'],3); if(wrong.length<3) return null;
+    const hrs=['noon','1 p.m.','2 p.m.','3 p.m.','4 p.m.','5 p.m.','6 p.m.'];
+    return {index:'q:13·nav.work['+R+';'+lo+';'+t+']', lines:[[H.slice(t-1,t+2).map((v,i)=>'\\text{'+hrs[t-1+i]+'}: '+v).join(',\\ \\ '),'a tide table, ft']], ask:'What is the best reading of the rate at '+hrs[t]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'Centred-chord: the rise over the two hours around it, halved, ('+H[t+1]+' \u2212 '+H[t-1]+')/2 = '+right+'. The chord from '+hrs[t]+' to '+hrs[t+1]+' belongs to the half hour after.'}; }},
+  {id:'13·nav.word',step:'13·nav',mode:'word',label:'the twelfths law',open:()=>measured('13·nav'),make(){
+    const R=[2.4,3.6,4.8,6,7.2,9.6][rnd(6)], lo=[0.5,1,1.5,2][rnd(4)], n=1+rnd(5), tw=[1,2,3,3,2,1], cum=tw.slice(0,n).reduce((a,b)=>a+b,0), ask=rnd(2);
+    const P=['Moss Landing','Monterey','Half Moon Bay','Bodega Bay'][rnd(4)];
+    const right=ask?DECAX(tw[n-1]*R/12,2)+' ft':DECAX(lo+cum*R/12,2)+' ft', wrong=UQAX(right,ask?[DECAX(R/6,2)+' ft',DECAX(cum*R/12,2)+' ft',DECAX(tw[n%6]*R/12+0.1,2)+' ft',DECAX(R/12,2)+' ft',DECAX(R/4,2)+' ft']:[DECAX(lo+n*R/6,2)+' ft',DECAX(cum*R/12,2)+' ft',DECAX(lo+(cum+1)*R/12,2)+' ft',DECAX(lo+tw[n-1]*R/12,2)+' ft'],3); if(wrong.length<3) return null;
+    return {index:'q:13·nav.word['+R+';'+lo+';'+n+';'+ask+']', a3:['13·nav.word',DASH,DASH], story:'At '+P+', low water is '+lo+' ft at noon, and high water '+DECAX(lo+R,2)+' ft at 6 p.m.', lines:[], ask:ask?'By the twelfths law, how much does the water rise in hour '+n+'?':'By the twelfths law, how high is the water at '+n+' p.m.?', right, opts:shuffle([right,...wrong]), lead:'', why:'The range is '+R+' ft. The law climbs 1, 2, 3, 3, 2, 1 twelfths. '+(ask?'Hour '+n+' takes '+tw[n-1]+'/12 of '+R+' = '+right+'.':'After '+n+' hour'+(n>1?'s':'')+', '+cum+' twelfths: '+lo+' + '+cum+'/12 \u00b7 '+R+' = '+right+'.')}; }},
+  {id:'13·nav.line',step:'13·nav',mode:'proof',label:'what a tide table licenses',open:()=>measured('13·nav'),make(){
+    return line28('13·nav.line',[
+      ['d1',[['\\text{the rise from 7 to 8}','the table'],['\\text{the rate at 7 p.m.}','a chord']],2,1,'That chord belongs to 7:30; the centred chord, 6 to 8, is the better guess.'],
+      ['d2',[['R/T = 0.60\\ \\text{ft an hour}','Monterey'],['\\text{the rate all through the rise}','the average']],2,1,'That is the average; the middle runs at 0.90.'],
+      ['d3',[['\\text{Seattle\u2019s rise}','7 h 43 min'],['\\text{the twelfths law fits it}','any rise']],2,1,'It ran quicker early: 1.2 ft off at 3 p.m.'],
+      ['d4',[['h(t) = a + bt + ct^2','a stretch'],['\\text{the centred chord is the slope at } t','centred-chord']],2,0,'For a constant, a multiple of t and a multiple of t\u00b2 the centred chord is exact.'],
+      ['d5',[['s = (t - t_0)/T','given'],['h\'(t) = 6R(s - s^2)','the slope']],2,1,'Multiple-inside brings a factor 1/T: h\u2032(t) = 6R(s \u2212 s\u00b2)/T.'],
+      ['d6',[['\\text{the fastest hour of the table}','given'],['\\text{the instant of the fastest rate}','the hour']],2,1,'An hour\u2019s chord is an average over the hour; the instant lies somewhere near it.'],
+      ['d7',[['\\text{the law: } 1, 2, 3, 3, 2, 1','twelfths'],['\\text{the middle hours climb } R/4','3/12']],2,0,'3/12 = 1/4 of the range in each of hours 3 and 4.']],[]); }});
+/* ----- annex 13·phys How fast is a falling stone going right now: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'13·phys.work',step:'13·phys',mode:'work',label:'velocity at an instant',open:()=>measured('13·phys'),make(){
+    const t=1+rnd(6), ask=rnd(2), x=4.9*t*t, v=9.8*t;
+    if(ask){ const right=DECAX(x/t,2)+' m/s', wrong=UQAX(right,[DECAX(v,2)+' m/s',DECAX(x,2)+' m/s',DECAX(9.8,2)+' m/s',DECAX(2*v,2)+' m/s'],3); if(wrong.length<3) return null;
+      return {index:'q:13·phys.work[avg;'+t+']', lines:[['x(t) = 4.9\\,t^2','a stone dropped from rest, in m']], ask:'What is its average velocity over the first '+t+' s?', right, opts:shuffle([right,...wrong]), lead:'', why:'The chord: x('+t+')/'+t+' = '+DECAX(x,2)+'/'+t+' = '+right+'. The velocity at '+t+' s itself is the slope, 9.8 \u00b7 '+t+' = '+DECAX(v,2)+' m/s, twice the average.'}; }
+    const right=DECAX(v,2)+' m/s', wrong=UQAX(right,[DECAX(x/t,2)+' m/s',DECAX(x,2)+' m/s',DECAX(4.9*t,2)+' m/s',DECAX(9.8,2)+' m/s'],3); if(wrong.length<3) return null;
+    return {index:'q:13·phys.work[v;'+t+']', lines:[['x(t) = 4.9\\,t^2','a stone dropped from rest, in m']], ask:'How fast is it going at t = '+t+' s?', right, opts:shuffle([right,...wrong]), lead:'', why:'The slope of 4.9t\u00b2 is 9.8t, so v('+t+') = '+right+'. x('+t+')/'+t+' = '+DECAX(x/t,2)+' is the average over the first '+t+' s.'}; }},
+  {id:'13·phys.word',step:'13·phys',mode:'word',label:'thrown upward',open:()=>measured('13·phys'),make(){
+    const v0=[9.8,14.7,19.6,24.5,29.4][rnd(5)], T=v0/9.8, H=v0*v0/19.6, ask=rnd(3), t=Math.round((0.5+rnd(Math.round(2*T*2-1)))*0.5*100)/100;
+    let right,wrong,q,why;
+    if(ask===0){ right=DECAX(T,2)+' s'; wrong=[DECAX(2*T,2)+' s',DECAX(T/2,2)+' s',DECAX(v0,2)+' s',DECAX(T+1,2)+' s']; q='When does it reach the top?'; why='v(t) = '+v0+' \u2212 9.8t is 0 at t = '+v0+'/9.8 = '+right+'. There the velocity is 0; the acceleration is still \u22129.8 m/s\u00b2.'; }
+    else if(ask===1){ right=DECAX(H,3)+' m'; wrong=[DECAX(2*H,3)+' m',DECAX(v0*T,3)+' m',DECAX(H/2,3)+' m',DECAX(v0,3)+' m']; q='How high does it go?'; why='At the top, t = '+DECAX(T,2)+' s, and y = '+v0+'t \u2212 4.9t\u00b2 = '+DECAX(v0*T,2)+' \u2212 '+DECAX(4.9*T*T,3)+' = '+right+'.'; }
+    else { if(t<=0||t>=2*T) return null; const v=v0-9.8*t; right=DECAX(v,2)+' m/s'; wrong=[DECAX(-v===v?v+1:-v,2)+' m/s',DECAX(v0+9.8*t,2)+' m/s',DECAX(v0-4.9*t,2)+' m/s',DECAX(Math.abs(v)+9.8,2)+' m/s']; q='What is its velocity, measured upward, at t = '+t+' s?'; why='v(t) = '+v0+' \u2212 9.8t, so v('+t+') = '+right+(v<0?': negative, so it is coming down, at a speed of '+DECAX(-v,2)+' m/s.':'.'); }
+    wrong=UQAX(right,wrong.map(w=>w.replace(/^-/,'\u2212')),3).map(x=>x); right=right.replace(/^-/,'\u2212'); wrong=UQAX(right,wrong,3); if(wrong.length<3) return null;
+    return {index:'q:13·phys.word['+v0+';'+ask+';'+t+']', a3:['13·phys.word',DASH,DASH], story:'A ball is thrown straight up at '+v0+' m/s. Its height in metres is y(t) = '+v0+'t \u2212 4.9t\u00b2, t seconds later.', lines:[], ask:q, right, opts:shuffle([right,...wrong]), lead:'', why:why.replace(/= -/g,'= \u2212')}; }},
+  {id:'13·phys.line',step:'13·phys',mode:'proof',label:'what the slopes license',open:()=>measured('13·phys'),make(){
+    return line28('13·phys.line',[
+      ['y1',[['x(t) = 4.9\\,t^2','from rest'],['v(3) = x(3)/3 = 14.7\\ \\text{m/s}','velocity']],2,1,'That is the average over the first 3 s; v(3) = 9.8 \u00b7 3 = 29.4 m/s.'],
+      ['y2',[['v(t_{\\text{top}}) = 0','at the top'],['a = 0 \\text{ at the top}','it has stopped']],2,1,'The velocity is 0 there; its slope is \u22129.8 m/s\u00b2.'],
+      ['y3',[['x(t) = 4.9\\,t^2','from rest'],['v(t) = 9.8\\,t,\\ \\ a(t) = 9.8','slopes twice']],2,0,'The slope of t\u00b2 is 2t, and of t is 1.'],
+      ['y4',[['v(t) \\lt 0','measured upward'],['\\text{its speed is negative}','speed is v']],2,1,'Speed is |v(t)|: falling, v < 0 and the speed is positive.'],
+      ['y5',[['F = mg,\\ \\ F = ma','in empty space'],['\\text{a heavier body falls faster}','more force']],2,1,'a = (m \u00b7 g)/m = g: the mass cancels.'],
+      ['y6',[['x \\text{ in m},\\ t \\text{ in s}','given'],['v \\text{ in m/s},\\ a \\text{ in m/s}^2','a slope\u2019s unit']],2,0,'A slope\u2019s unit is the top\u2019s per the bottom\u2019s.'],
+      ['y7',[['v(t) = 3t^2','a speedometer'],['x(t) = t^3','a function with that slope']],2,1,'A slope cannot see where it started: x(t) = t\u00b3 + x(0).']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
