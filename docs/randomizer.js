@@ -17571,10 +17571,10 @@ QP.push({id:'15·econ.work',step:'15·econ',mode:'work',label:'money later, coun
       ['e1',[['\\$1200 \\text{ in payments for } \\$1100 \\text{ cash}','a deal'],['\\text{rate } 100/1100 \\approx 9\\%','the extra']],2,1,'The balance falls each month; the true rate is near 17.7% a year.'],
       ['e2',[['\\text{payments in different years}','given'],['\\text{add them}','a total']],2,1,'Bring each to today first, then add.'],
       ['e3',[['6\\% \\text{ a year as } 0.5\\% \\text{ a month}','given'],['6\\% \\text{ a year}','twelve months']],2,1,'1.005\u00b9\u00b2 \u2248 1.0617.'],
-      ['e4',[['1000/1.05^2','given'],['= 1000(1 - 2 \\cdot 0.05)','a short cut']],2,1,'1/1.05\u00b2 \u2248 0.907, not 0.9.'],
+      ['e4',[['1000/1.05^2','given'],['= 1000(1 - 2 \\cdot 0.05)','a short cut']],2,1,'Dividing by 1.05\u00b2 multiplies by about 0.907, not 0.9.'],
       ['e5',[['\\text{payments growing faster than } i,\\ \\text{forever}','given'],['\\text{a price}','endless-ratio-sum']],2,1,'Ratio at least 1: the sum has no total.'],
       ['e6',[['V = Mv\\,\\tfrac{1 - v^n}{1 - v}','finite-ratio-sum'],['V = M\\,\\tfrac{1 - (1 + j)^{-n}}{j}','v/(1 - v) = 1/j']],2,0,'v = 1/(1 + j), so 1 \u2212 v = j/(1 + j).'],
-      ['e7',[['\\$5000 \\text{ a year forever, at } 4\\%','given'],['\\$125\\,000','A/i']],2,0,'5000/0.04.']],[]); }});
+      ['e7',[['\\$5000 \\text{ a year forever, at } 4\\%','given'],['\\$125\\,000','A/i']],2,0,'5000 \u00f7 0.04.']],[]); }});
 /* ----- annex 15·eng How hard does water push on a dam: Work, Word Problems, Check Proofs ----- */
 const MNNAX=v=>v>=1e9?DECAX(v/1e9,2)+' GN':v>=1e6?DECAX(v/1e6,2)+' MN':DECAX(v/1e3,1)+' kN';
 QP.push({id:'15·eng.work',step:'15·eng',mode:'work',label:'the push, in thin strips',open:()=>measured('15·eng'),make(){
