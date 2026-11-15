@@ -17440,6 +17440,97 @@ QP.push({id:'13·phys.work',step:'13·phys',mode:'work',label:'velocity at an in
       ['y5',[['F = mg,\\ \\ F = ma','in empty space'],['\\text{a heavier body falls faster}','more force']],2,1,'a = (m \u00b7 g)/m = g: the mass cancels.'],
       ['y6',[['x \\text{ in m},\\ t \\text{ in s}','given'],['v \\text{ in m/s},\\ a \\text{ in m/s}^2','a slope\u2019s unit']],2,0,'A slope\u2019s unit is the top\u2019s per the bottom\u2019s.'],
       ['y7',[['v(t) = 3t^2','a speedometer'],['x(t) = t^3','a function with that slope']],2,1,'A slope cannot see where it started: x(t) = t\u00b3 + x(0).']],[]); }});
+/* ----- annex 14·bio Why are cells so small: Work, Word Problems, Check Proofs ----- */
+const TIMEAX=s=>s<120?DECAX(s,2)+' s':s<7200?DECAX(s/60,1)+' min':s<172800?DECAX(s/3600,1)+' h':DECAX(s/86400,1)+' days';
+QP.push({id:'14·bio.work',step:'14·bio',mode:'work',label:'x\u00b2 = 2Dt',open:()=>measured('14·bio'),make(){
+    const x=[1e-6,1e-5,1e-4,1e-3,1e-2,1e-1][rnd(6)], D=2e-9, t=x*x/(2*D), k=[2,3,10][rnd(3)], ask=rnd(2);
+    const XS={1e-6:'1 \u03bcm',1e-5:'10 \u03bcm',1e-4:'0.1 mm',1e-3:'1 mm',1e-2:'1 cm',1e-1:'10 cm'};
+    if(ask){ const right=String(k*k)+' times as long', wrong=UQAX(right,[k+' times as long',(2*k)+' times as long',DECAX(Math.sqrt(k),2)+' times as long',(k*k*k)+' times as long'],3); if(wrong.length<3) return null;
+      return {index:'q:14·bio.work[k;'+k+']', lines:[['x^2 = 2Dt','a random walk']], ask:'To spread '+k+' times as far, how much longer does it take?', right, opts:shuffle([right,...wrong]), lead:'', why:'t = x\u00b2/(2D): t grows with x\u00b2, so '+k+'\u00b2 = '+(k*k)+' times as long.'}; }
+    const right=TIMEAX(t), wrong=UQAX(right,[TIMEAX(t*10),TIMEAX(t*100),TIMEAX(t/100),TIMEAX(t/10)],3); if(wrong.length<3) return null;
+    return {index:'q:14·bio.work[t;'+x+']', lines:[['D \\approx 2 \\times 10^{-9}\\ \\text{m}^2\\text{/s}','oxygen in water']], ask:'About how long does oxygen take to spread '+XS[x]+'?', right, opts:shuffle([right,...wrong]), lead:'', why:'t = x\u00b2/(2D) = ('+XS[x]+')\u00b2/(4 \u00d7 10\u207b\u2079 m\u00b2/s) = '+(t>=1e5?'$'+t.toExponential(1).replace(/e\+?(-?\d+)/,' \\times 10^{$1}')+'$':String(Number(t.toPrecision(2))))+' s'+(t<120?'.':', about '+right+'.')}; }},
+  {id:'14·bio.word',step:'14·bio',mode:'word',label:'the thickest living sheet',open:()=>measured('14·bio'),make(){
+    const k=[2,4,9,16,0.25][rnd(5)], f=1/Math.sqrt(k), K=k===0.25?'a quarter':String(k);
+    const right='it is multiplied by '+DECAX(f,3), wrong=UQAX(right,['it is multiplied by '+DECAX(1/k,3),'it does not change','it is multiplied by '+DECAX(Math.sqrt(k),3),'it is multiplied by '+DECAX(1/(k*k),3)],3); if(wrong.length<3) return null;
+    return {index:'q:14·bio.word['+k+']', a3:['14·bio.word',DASH,DASH], story:'Oxygen spreads into a living sheet from both faces, and the sheet uses it at a steady rate q. The thickest sheet with oxygen everywhere has half-thickness L_max = \u221a(2Dc\u2080/q).', lines:[], ask:'A tissue is made to use oxygen '+(k>=1?k+' times as fast':'at a quarter of the rate')+'. What happens to L_max?', right, opts:shuffle([right,...wrong]), lead:'', why:'L_max goes as 1 over \u221aq. Multiplying q by '+K+' multiplies L_max by 1 over \u221a('+K+'), that is '+DECAX(f,3)+'. Not by 1 over '+K+'.'}; }},
+  {id:'14·bio.line',step:'14·bio',mode:'proof',label:'what diffusion licenses',open:()=>measured('14·bio'),make(){
+    return line28('14·bio.line',[
+      ['i1',[['x^2 = 2Dt','given'],['\\text{twice as far, twice as long}','t and x']],2,1,'Four times as long: t grows with x\u00b2.'],
+      ['i2',[['x/t = 2D/x','the average speed'],['\\text{at tiny } x \\text{ it is as fast as you like}','the premise']],2,1,'It would beat any real molecule\u2019s speed: the premise holds only over many collisions.'],
+      ['i3',[['c(0) = c_0 - qL^2/(2D) \\lt 0','a thick sheet'],['\\text{the core holds negative oxygen}','the formula']],2,1,'The premise failed first: a part with no oxygen cannot use it at rate q.'],
+      ['i4',[['q \\text{ doubles}','given'],['L_{\\max} \\text{ halves}','L_max']],2,1,'L_max shrinks by \u221a2, not by 2.'],
+      ['i5',[['c_0 - qL^2/(2D) \\ge 0','oxygen everywhere'],['L^2 \\le 2Dc_0/q','order-and-arithmetic-agree']],2,0,'q and D are positive.'],
+      ['i6',[['L^2 \\le 2Dc_0/q','given'],['L \\le \\sqrt{2Dc_0/q}','squares-keep-order']],2,0,'Squares keep order from 0 up.'],
+      ['i7',[['t(x) = x^2/(2D)','the premise turned around'],['x/t = 2D/x','divide']],2,0,'The average speed over the whole trip falls as the trip grows.']],[]); }});
+/* ----- annex 14·econ How much should a factory make: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'14·econ.work',step:'14·econ',mode:'work',label:'where profit is greatest',open:()=>measured('14·econ'),make(){
+    const p=[60,80,100,120,150][rnd(5)], a=[0.5,1,2,2.5][rnd(4)], F=[500,1000,1500,2000][rnd(4)], y=p/(2*a), G=p*y-F-a*y*y, ask=rnd(2);
+    if(Math.abs(y*10-Math.round(y*10))>1e-9||G<=0) return null;
+    if(ask){ const right='$'+DECAX(G,2), wrong=UQAX(right,['$'+DECAX(G+F,2),'$'+DECAX(p*y,2),'$'+DECAX(p*y-a*y*y/2-F,2),'$'+DECAX(G/y,2)],3); if(wrong.length<3) return null;
+      return {index:'q:14·econ.work[G;'+p+';'+a+';'+F+']', lines:[['G(y) = '+p+'y - '+F+' - '+(a===1?'':a)+'y^2','profit, dollars']], ask:'What is the greatest profit?', right:MNAX(right), opts:shuffle([right,...wrong]).map(MNAX), lead:'', why:MNAX('G\u2032(y) = '+p+' \u2212 '+(2*a)+'y is 0 at y = '+y+'; G\u2033 = \u2212'+(2*a)+' < 0, a top. G('+y+') = '+DECAX(p*y,2)+' \u2212 '+F+' \u2212 '+DECAX(a*y*y,2)+' = '+DECAX(G,2)+'.')}; }
+    const right=String(y), wrong=UQAX(right,[String(p/a),String(2*y),String(Math.round(F/p*10)/10),String(Math.round(Math.sqrt(F/a)*10)/10)],3); if(wrong.length<3) return null;
+    return {index:'q:14·econ.work[y;'+p+';'+a+';'+F+']', lines:[['G(y) = '+p+'y - '+F+' - '+(a===1?'':a)+'y^2','profit, dollars']], ask:'At what y is the profit greatest?', right, opts:shuffle([right,...wrong]), lead:'', why:'G\u2032(y) = '+p+' \u2212 '+(2*a)+'y = 0 at y = '+y+'. The fixed '+F+' has slope 0: it does not move the best y.'}; }},
+  {id:'14·econ.word',step:'14·econ',mode:'word',label:'a seller alone, and a tax',open:()=>measured('14·econ'),make(){
+    const A=[60,80,100][rnd(3)], b=[0.02,0.04,0.05][rnd(3)], c=[20,30,40][rnd(3)], t=[0,2,4,5,10][rnd(5)]; if(c+t>=A) return null;
+    const q=(A-c-t)/(2*b), p=A-b*q; if(Math.abs(q-Math.round(q))>1e-9) return null;
+    const right=q+' tons, at $'+DECAX(p,2), wrong=UQAX(right,[(A-c-t)/b+' tons, at $'+DECAX(c+t,2),q+' tons, at $'+DECAX(c+t,2),(A-c)/(2*b)+' tons, at $'+DECAX(A-b*(A-c)/(2*b),2),(q*2)+' tons, at $'+DECAX(A-2*b*q,2)],3); if(wrong.length<3) return null;
+    return {index:'q:14·econ.word['+A+';'+b+';'+c+';'+t+']', a3:['14·econ.word',DASH,DASH], story:'The only ready-mix concrete plant within a day\u2019s haul sells q tons a week at the price p(q) = '+A+' \u2212 '+b+'q dollars a ton. Each ton costs it $'+c+' to make'+(t?', and the county taxes each ton sold $'+t:'')+'.', lines:[], ask:'How much does it make, and at what price?', right, opts:shuffle([right,...wrong]), lead:'', why:'R(q) = '+A+'q \u2212 '+b+'q\u00b2, so R\u2032(q) = '+A+' \u2212 '+(2*b)+'q. It makes where R\u2032 = C\u2032 = '+(c+t)+': q = '+q+', and p('+q+') = '+DECAX(p,2)+'. R\u2032 is below p, so not where p = C\u2032.'}; }},
+  {id:'14·econ.line',step:'14·econ',mode:'proof',label:'what the slopes license',open:()=>measured('14·econ'),make(){
+    return line28('14·econ.line',[
+      ['g1',[['G(y)/y \\text{ greatest near } 38.7','profit per ton'],['\\text{the best output is } 38.7','the goal']],2,1,'A different goal: G itself is greatest at 50.'],
+      ['g2',[['R\'(q) = C\'(q)','given'],['\\text{a top of } G','slope 0']],2,1,'It may be a bottom: check G\u2033, or compare values.'],
+      ['g3',[['\\text{a seller alone}','given'],['\\text{it makes where } p = C\'','price meets cost']],2,1,'It makes where R\u2032 = C\u2032, and R\u2032 is below p.'],
+      ['g4',[['t = 5:\\ p \\text{ rises from } \\$44 \\text{ to } \\$46','a tax'],['\\text{the buyers pay all of it}','the tax']],2,1,'Here they pay 2 of each 5.'],
+      ['g5',[['\\text{a higher fixed cost}','given'],['\\text{a lower best output}','cost']],2,1,'Constant-has-slope-0: it decides only whether to open at all.'],
+      ['g6',[['G(y) = 100y - 1500 - y^2','the grower'],['y = 50','G\'(y) = 100 - 2y = 0']],2,0,'G\u2033 = \u22122 < 0: a top.'],
+      ['g7',[['C(q) + tq','a tax on each ton'],['\\text{the slope of cost is } C\'(q) + t','slopes add']],2,0,'The slope of tq is t.']],[]); }});
+/* ----- annex 14·logi Should we order often or order big: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'14·logi.work',step:'14·logi',mode:'work',label:'the best order',open:()=>measured('14·logi'),make(){
+    const Q=[200,250,300,400,500,600,800,1000][rnd(8)], d=[8,10,20,40,50][rnd(5)], h=[0.005,0.008,0.01,0.02,0.05][rnd(5)], K=h*Q*Q/(2*d);
+    if(Math.abs(K-Math.round(K))>1e-6||K<10||K>500) return null;
+    const right=String(Math.round(Q)), wrong=UQAX(right,[String(Math.round(Math.sqrt(K*d/h))),String(Math.round(2*K*d/h)),String(Math.round(Math.sqrt(2*K*h/d)*1000)),String(Math.round(Q*Math.SQRT2))],3); if(wrong.length<3) return null;
+    return {index:'q:14·logi.work['+K+';'+d+';'+h+']', lines:[['K = \\$'+K+',\\ \\ d = '+d+'\\ \\text{a day},\\ \\ h = \\$'+h,'cost of an order; sales; a unit\u2019s day on the shelf']], ask:'What is the best order size?', right, opts:shuffle([right,...wrong]), lead:'', why:'Q_b = \u221a(2Kd/h) = \u221a(2 \u00b7 '+K+' \u00b7 '+d+' \u00f7 '+h+') = \u221a'+Math.round(2*K*d/h)+' = '+right+'.'}; }},
+  {id:'14·logi.word',step:'14·logi',mode:'word',label:'a wrong order, and the lead time',open:()=>measured('14·logi'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const x=[0.5,0.8,1.25,1.5,2,1.4142][rnd(6)], r=(x+1/x)/2, S=x===1.4142?'\u221a2':String(x);
+      const right=DECAX(r,3)+' times the least', wrong=UQAX(right,[S+' times the least',DECAX(Math.abs(x-1)+1,3)+' times the least','the least: the order does not matter',DECAX(x*x,3)+' times the least'],3); if(wrong.length<3) return null;
+      return {index:'q:14·logi.word[x;'+x+']', a3:['14·logi.word',DASH,DASH], story:'A feed store orders '+S+' times its best order size, because its guess of the ordering cost was off.', lines:[], ask:'How does its yearly cost compare with the least?', right, opts:shuffle([right,...wrong]), lead:'', why:'T(Q)/T(Q_b) = \u00bd(x + 1/x) with x = '+S+': \u00bd('+DECAX(x,4)+' + '+DECAX(1/x,4)+') = '+DECAX(r,3)+'. The curve is level near its bottom.'}; }
+    if(ask===1){ const k=[2,4,9,0.5][rnd(4)], f=Math.sqrt(k);
+      const right=(f>1?'it grows by ':'it shrinks to ')+DECAX(f,3)+(f>1?' times':' of what it was'), wrong=UQAX(right,[(k>1?'it grows by ':'it shrinks to ')+k+(k>1?' times':' of what it was'),'it does not change',(k>1?'it grows by ':'it shrinks to ')+DECAX(k*k,3)+(k>1?' times':' of what it was'),(1/f>1?'it grows by ':'it shrinks to ')+DECAX(1/f,3)+(1/f>1?' times':' of what it was')],3); if(wrong.length<3) return null;
+      return {index:'q:14·logi.word[k;'+k+']', a3:['14·logi.word',DASH,DASH], story:'A store\u2019s daily sales '+(k>1?'grow '+k+' times':'fall by half')+', and nothing else changes.', lines:[], ask:'What happens to its best order size?', right, opts:shuffle([right,...wrong]), lead:'', why:'Q_b = \u221a(2Kd/h) goes as \u221ad: multiplying d by '+k+' multiplies Q_b by \u221a'+k+' \u2248 '+DECAX(f,3)+'.'}; }
+    const d=[10,20,30,40,50][rnd(5)], L=[2,3,4,5,7][rnd(5)], s=[0,10,20,25][rnd(4)];
+    const right=String(d*L+s)+' units', wrong=UQAX(right,[String(d*L)+' units',String(d+L+s)+' units',String(d*(L+1)+s)+' units',String(Math.round(Math.sqrt(d*L))+s)+' units'],3); if(wrong.length<3||!s&&d*L+s===d*L) {}
+    if(wrong.length<3) return null;
+    return {index:'q:14·logi.word[L;'+d+';'+L+';'+s+']', a3:['14·logi.word',DASH,DASH], story:'A hardware store sells '+d+' bags of feed a day. The truck comes '+L+' days after an order'+(s?', and the store keeps '+s+' bags back against uneven sales':'')+'.', lines:[], ask:'At what stock should it reorder?', right, opts:shuffle([right,...wrong]), lead:'', why:'Reorder at dL'+(s?' + s':'')+' = '+d+' \u00b7 '+L+(s?' + '+s:'')+' = '+right+': what sells while the truck is on its way'+(s?', plus the stock kept back.':'.')}; }},
+  {id:'14·logi.line',step:'14·logi',mode:'proof',label:'what the best order licenses',open:()=>measured('14·logi'),make(){
+    return line28('14·logi.line',[
+      ['j1',[['\\text{sales double}','given'],['\\text{the best order doubles}','Q_b']],2,1,'It grows by \u221a2.'],
+      ['j2',[['\\text{reorder at } dL','given'],['\\text{the shelf never empties}','the lead time']],2,1,'Only if every lead time sells exactly dL.'],
+      ['j3',[['\\text{the stock kept back}','s units'],['\\text{it costs nothing}','it is sold']],2,1,'It is there every day: hs a day.'],
+      ['j4',[['\\text{order } 1.5\\,Q_b','given'],['\\text{cost } 1.5\\,T(Q_b)','the order']],2,1,'About 1.08 T(Q_b): the curve is level near its bottom.'],
+      ['j5',[['\\text{two stores merge their stock}','given'],['\\text{the stock adds}','merging']],2,1,'Pooled, it is 1/\u221a2 of the sum.'],
+      ['j6',[['T(Q)/T(Q_b) = \\tfrac12(x + 1/x)','x = Q/Q_b'],['\\ge 1,\\ \\text{equal only at } x = 1','8g\u2019s means']],2,0,'The mean of x and 1/x is at least their geometric mean, 1.'],
+      ['j7',[['Q_b^2 = 2Kd/h','the best order'],['Kd = \\tfrac h2 Q_b^2','multiply by h/2']],2,0,'Multiplying-keeps-answers.']],[]); }});
+/* ----- annex 14·phys What stays the same when things crash: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'14·phys.work',step:'14·phys',mode:'work',label:'sticking together',open:()=>measured('14·phys'),make(){
+    const m1=[1,2,3,4,5,6][rnd(6)], m2=[1,2,3,4,5,6][rnd(6)], v1=[2,3,4,6,8][rnd(5)], v2=[0,-1,-2,-3,1,2][rnd(6)], V=(m1*v1+m2*v2)/(m1+m2);
+    if(Math.abs(V*100-Math.round(V*100))>1e-9) return null;
+    const S=v=>MNAX(DECAX(v,2))+' m/s', right=S(V), wrong=UQAX(right,[S((v1+v2)/2),S((m1*v1-m2*v2)/(m1+m2)),S(m1*v1+m2*v2),S((m1*v1+m2*Math.abs(v2))/(m1+m2)),S(-V)],3); if(wrong.length<3) return null;
+    return {index:'q:14·phys.work['+m1+';'+m2+';'+v1+';'+v2+']', lines:[[m1+'\\ \\text{kg at }'+MNAX(v1)+'\\ \\text{m/s}','cart A'],[m2+'\\ \\text{kg at }'+MNAX(v2)+'\\ \\text{m/s}','cart B, on the same line']], ask:'They collide and stick. What is their velocity after?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Momentum is kept, with its sign: '+m1+' \u00b7 '+v1+' + '+m2+' \u00b7 ('+v2+') = '+(m1*v1+m2*v2)+' kg\u00b7m/s, shared by '+(m1+m2)+' kg: '+DECAX(V,2)+' m/s.')}; }},
+  {id:'14·phys.word',step:'14·phys',mode:'word',label:'impulse',open:()=>measured('14·phys'),make(){
+    const m=[0.06,0.15,0.4,0.45,5,70][rnd(6)], nm={0.06:'tennis ball',0.15:'baseball',0.4:'volleyball',0.45:'soccer ball',5:'bowling ball',70:'climber'}[m], v=[4,5,8,10,20,30][rnd(6)], dt=[0.002,0.005,0.01,0.05,0.1,0.25][rnd(6)], bounce=rnd(2)&&m<1;
+    const dp=m*v*(bounce?2:1), F=dp/dt; if(F<1) return null;
+    const N=x=>DECAX(x,1)+' N', right=N(F), wrong=UQAX(right,[N(m*v/dt*(bounce?1:2)),N(dp*dt),N(m*9.8),N(dp)],3); if(wrong.length<3) return null;
+    return {index:'q:14·phys.word['+m+';'+v+';'+dt+';'+bounce+']', a3:['14·phys.word',DASH,DASH], story:'A '+m+' kg '+nm+' moving at '+v+' m/s '+(bounce?'hits a wall and comes straight back at '+v+' m/s':'is brought to rest')+', in '+dt+' s.', lines:[], ask:'What average force acted on it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Impulse: the average force is the change of momentum over the time. '+(bounce?'From +'+v+' to \u2212'+v+', the change is 2 \u00b7 '+m+' \u00b7 '+v:'From '+v+' to 0, the change is '+m+' \u00b7 '+v)+' = '+DECAX(dp,3)+' kg\u00b7m/s; over '+dt+' s, '+right+'. A longer stop, the same change, a smaller force.'}; }},
+  {id:'14·phys.line',step:'14·phys',mode:'proof',label:'what momentum licenses',open:()=>measured('14·phys'),make(){
+    return line28('14·phys.line',[
+      ['u1',[['\\text{two railcars couple}','a collision'],['\\text{kinetic energy is kept}','conservation']],2,1,'The coupled railcars lose 24 000 J; only momentum is kept in every collision.'],
+      ['u2',[['1\\ \\text{kg at } {+3},\\ 1\\ \\text{kg at } {-3}','two carts'],['\\text{total momentum } 6\\ \\text{kg\u00b7m/s}','speeds add']],2,1,'Momentum has a sign: the total is 0.'],
+      ['u3',[['\\text{a ball bounces off the floor}','given'],['\\text{its momentum is kept}','conservation']],2,1,'The floor, and the Earth behind it, push from outside the ball.'],
+      ['u4',[['\\text{a padded vest}','given'],['\\text{the impulse is lower}','padding']],2,1,'The same change of momentum; it lowers the average force by taking longer.'],
+      ['u5',[['F_{AB} = -F_{BA}','the third law'],['\\text{the accelerations are equal and opposite}','the effects']],2,1,'The forces are equal; the accelerations differ by mass.'],
+      ['u6',[['F_{AB} = -F_{BA}','no outside force'],['(p_A + p_B)\' = 0','the second law on each']],2,0,'p\u2032_A + p\u2032_B = F_BA + F_AB = 0: the total does not change.'],
+      ['u7',[['\\text{closest approach, a spring between}','given'],['\\text{the two move with one velocity}','the gap stops shrinking']],2,0,'At the least gap its slope is 0, so the two velocities agree.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
