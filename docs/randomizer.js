@@ -17847,6 +17847,121 @@ QP.push({id:'18·phys.work',step:'18·phys',mode:'work',label:'nearest and farth
       ['o4',[['r = \\ell - ex','the line'],['\\alpha = \\ell','the half long axis']],2,1,'\u03b1 = \u2113/(1 \u2212 e\u00b2); \u2113 is r at x = 0, above the sun.'],
       ['o5',[['q = \\ell/(1 + e),\\ Q = \\ell/(1 - e)','orbit-ends'],['e = (Q - q)/(Q + q)','run backwards']],2,0,'Q \u2212 q = 2\u2113e/(1 \u2212 e\u00b2) and Q + q = 2\u2113/(1 \u2212 e\u00b2).'],
       ['o6',[['\\text{the fit says how the places lie}','given'],['\\text{it explains why}','the fit']],2,1,'It says how they lie; the cause is held in trust.']],[]); }});
+/* ----- annex 19·bio Why not just burn the sugar: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'19·bio.work',step:'19·bio',mode:'work',label:'the drop, and the coins',open:()=>measured('19·bio'),make(){
+    const ask=rnd(2);
+    if(ask){ const D=[150,180,200,220,250,300][rnd(6)], c=[19,20,25,50][rnd(4)], m=[1,2,3,4][rnd(4)], k=Math.ceil(D/(m*c)); if(k<2) return null;
+      const right=String(k), wrong=UQAX(right,[String(Math.floor(D/c)),String(k+1),String(k-1),String(Math.ceil(D/c))],3); if(wrong.length<3) return null;
+      return {index:'q:19·bio.work[w;'+D+';'+c+';'+m+']', lines:[['\\text{drop } D = '+D+' \\text{ kJ}','route-free'],['\\text{coins of } '+c+' \\text{ kJ, at most } '+m+' \\text{ a step}','given']], ask:'What is the fewest steps that could bank the whole drop?', right, opts:shuffle([right,...wrong]), lead:'', why:'Whole-coins: at least D ÷ (mc) = '+D+' ÷ '+(m*c)+' ≈ '+DECAX(D/(m*c),2)+' steps, so '+k+'.'}; }
+    const C=[['NADH',-0.32],['a flavin carrier',-0.03],['ubiquinone',0.05],['cytochrome c',0.25]], a=C[rnd(C.length)], E2=[0.82,0.82,0.55,0.39][rnd(4)]; if(E2<=a[1]+0.1) return null;
+    const v=2*96.5*(E2-a[1]), right=Math.round(v)+' kJ', wrong=UQAX(right,[Math.round(96.5*(E2-a[1]))+' kJ',Math.round(2*96.5*Math.abs(E2+a[1]))+' kJ',Math.round(v*2)+' kJ',Math.round(2*(E2-a[1])*100)/100+' kJ'],3); if(wrong.length<3) return null;
+    return {index:'q:19·bio.work[d;'+a[0]+';'+E2+']', lines:[[MNAX('E_1 \\approx '+a[1]+' \\text{ V},\\ \\ E_2 \\approx +'+E2+' \\text{ V}'),'measured'],['2 \\text{ electrons per carrier, through four carriers between}','given']], ask:'How much energy per mole does the chain release?', right, opts:shuffle([right,...wrong]), lead:'', why:MNAX('Route-free: only the ends count. 2 · 96.5 · ('+E2+' − ('+a[1]+')) ≈ '+Math.round(v)+' kJ per mole; the carriers between drop out of the sum.')}; }},
+  {id:'19·bio.word',step:'19·bio',mode:'word',label:'a membrane as a battery',open:()=>measured('19·bio'),make(){
+    const p=[0.5,0.75,1,1.25][rnd(4)], v=[0.1,0.12,0.15,0.18,0.2][rnd(5)], coin=5.93*p+96.5*v, F=rnd(2), n=Math.ceil(50/coin);
+    const right=F?String(n):DECAX(coin,1)+' kJ', wrong=F?UQAX(right,[String(n+1),String(n-1),String(Math.floor(50/coin)||n+2),String(Math.round(50/(96.5*v))),String(n+2),String(n*2)],3):UQAX(right,[DECAX(96.5*v,1)+' kJ',DECAX(5.93*p,1)+' kJ',DECAX(2.58*p+96.5*v,1)+' kJ',DECAX(5.93*p*96.5*v,1)+' kJ'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:19·bio.word['+p+';'+v+';'+F+']', a3:['19·bio.word',DASH,DASH], story:'In a cell at 310 K, a membrane holds protons '+p+' pH units more crowded on one side, with '+v+' V across it, the crowded side the higher. RT ln 10 ≈ 5.93 kJ, and F ≈ 96.5 kJ per mole per volt.', lines:[], ask:F?'An ATP coin is worth about 50 kJ per mole. How many protons, at the fewest, must cross back to make one?':'What is a mole of protons crossing back worth?', right, opts:shuffle([right,...wrong]), lead:'', why:'Ratio-coin: 5.93 · '+p+' + 96.5 · '+v+' ≈ '+DECAX(coin,1)+' kJ per mole of protons.'+(F?' Whole coins: 50 ÷ '+DECAX(coin,1)+' ≈ '+DECAX(50/coin,2)+', so at least '+n+'.':'')}; }},
+  {id:'19·bio.line',step:'19·bio',mode:'proof',label:'what the chain licenses',open:()=>measured('19·bio'),make(){
+    return line28('19·bio.line',[
+      ['b1',[['\\text{a chain with more carriers}','given'],['\\text{more energy released}','more steps']],2,1,'Route-free: the sum collapses to the ends.'],
+      ['b2',[['\\text{sugar burned in a fire}','given'],['\\text{the energy banked faster}','a fast release']],2,1,'It is released faster; with nothing coupled, a fire banks none.'],
+      ['b3',[['\\text{glucose releases } 2870 \\text{ kJ}','measured'],['57 \\text{ ATP per glucose}','2870 ÷ 50']],2,1,'Whole-coins bounds what is banked; it does not promise it.'],
+      ['b4',[['(E_1 - E_0) + (E_2 - E_1) + (E_3 - E_2)','three steps'],['E_3 - E_0','the sum collapses']],2,0,'Route-free: each middle carrier comes in once with each sign.'],
+      ['b5',[['\\text{crowding protons from } C_1 \\text{ to } C_2','a membrane'],['RT\\,(C_2 - C_1)','the work']],2,1,'The work is an area under 1/V: a log, not a difference.'],
+      ['b6',[['\\text{a proton coin} \\approx 19 \\text{ kJ}','ratio-coin'],['\\text{one ATP coin needs at least } 3','whole-coins']],2,0,'2 · 19 = 38 falls short of 50; 3 · 19 = 57 does not.']],[]); }});
+/* ----- annex 19·chem Which moves leave a molecule unchanged: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'19·chem.work',step:'19·chem',mode:'work',label:'class times keepers',open:()=>measured('19·chem'),make(){
+    const G=[8,12,24,48][rnd(4)], ds=[1,2,3,4,6,8,12,24].filter(d=>G%d===0&&d<G), K=ds[rnd(ds.length)], C=G/K, ask=rnd(2);
+    if(ask){ const right=String(K), wrong=UQAX(right,[String(G-C),String(C),String(G*C),String(K*2),String(Math.max(1,K-1))],3); if(wrong.length<3) return null;
+      return {index:'q:19·chem.work[k;'+G+';'+C+']', lines:[['|G| = '+G,'the moves of the molecule'],['\\text{the class of } x \\text{ has } '+C+' \\text{ placements}','counted']], ask:'How many moves keep x?', right, opts:shuffle([right,...wrong]), lead:'', why:'Class-times-keepers: '+C+' · |K| = '+G+', so |K| = '+G+' ÷ '+C+' = '+K+'.'}; }
+    const right=String(C), wrong=UQAX(right,[String(K),String(G-K),String(G*K),String(C+1),String(C*2)],3); if(wrong.length<3) return null;
+    return {index:'q:19·chem.work[c;'+G+';'+K+']', lines:[['|G| = '+G,'the moves of the molecule'],['|K| = '+K,'the moves that keep x']], ask:'How many placements are in the class of x, the compound it draws?', right, opts:shuffle([right,...wrong]), lead:'', why:'Class-times-keepers: the class size times '+K+' is '+G+', so the class has '+G+' ÷ '+K+' = '+C+' placements.'}; }},
+  {id:'19·chem.word',step:'19·chem',mode:'word',label:'square or tetrahedron',open:()=>measured('19·chem'),make(){
+    const F=rnd(4), S=[
+      ['If the hydrogens sat at the corners of a flat square, how many compounds with two chlorines would there be?','2','Sides and diagonals: no move of the square turns a side into a diagonal. Check: 4 · 2 = 8 and 2 · 4 = 8.'],
+      ['If the hydrogens sat at the corners of a tetrahedron, how many compounds with two chlorines would there be?','1','Every two corners of a tetrahedron are joined, and a turn carries any edge to any other: all 6 pairs in one class. Check: 6 · 2 = 12.'],
+      ['If the hydrogens sat at the corners of a flat square, how many compounds with one chlorine would there be?','1','A quarter turn carries any corner to any other: all 4 in one class. Check: 4 · 2 = 8. This count cannot tell the square from the tetrahedron.'],
+      ['Chemists have only ever found one compound with two chlorines. Which guess does that kill?','the square','The square allows 2 such compounds, sides and diagonals; the tetrahedron allows 1. A count that disagrees with the shelf kills the guess.']][F];
+    const pool=F===3?['the square','the tetrahedron','both guesses','neither guess']:['1','2','3','4','6'];
+    const right=S[1], wrong=UQAX(right,pool,3);
+    return {index:'q:19·chem.word['+F+']', a3:['19·chem.word',DASH,DASH], story:'Methane is a carbon with four hydrogens round it. Nobody can see where the hydrogens sit. Swap some of them for chlorine, and count the different compounds that come out.', lines:[], ask:S[0], right, opts:shuffle([right,...wrong]), lead:'', why:S[2]}; }},
+  {id:'19·chem.line',step:'19·chem',mode:'proof',label:'what the moves license',open:()=>measured('19·chem'),make(){
+    return line28('19·chem.line',[
+      ['c1',[['\\text{two placements have the same atoms}','given'],['\\text{they are the same compound}','same formula']],2,1,'Where the atoms sit matters: benzene has three compounds with the same formula.'],
+      ['c2',[['15 \\text{ placements},\\ 12 \\text{ moves}','counted'],['\\tfrac{15}{12} \\text{ compounds}','placements over moves']],2,1,'Only when doing nothing is each placement’s only keeper; 15/12 is no count.'],
+      ['c3',[['|G| = 12,\\ |K| = 2','benzene, one chlorine'],['\\text{class size } 6','class-times-keepers']],2,0,'6 · 2 = 12.'],
+      ['c4',[['\\text{the count agrees with the shelf}','observed'],['\\text{the tetrahedron is proved}','the test']],2,1,'Agreement only lets a guess live; another count may still kill it.'],
+      ['c5',[['g\\,x = y','a move'],['\\{h : h\\,x = y\\} = gK','shifted copy']],2,0,'h x = y exactly when g⁻¹h keeps x.'],
+      ['c6',[['\\text{two turns of CO}_2 \\text{ about its axis}','different angles'],['\\text{two moves}','different turns']],2,1,'They make the same shuffle of the atoms, and count once.'],
+      ['c7',[['x \\text{ carried to } y,\\ y \\text{ carried to } z','moves'],['x \\text{ carried to } z','two moves in a row are a move']],2,0,'Carried-is-sorting: the group’s demands make it an equivalence.']],[]); }});
+/* ----- annex 19·comp How many ways can a puzzle cube be scrambled: Work, Word Problems, Check Proofs ----- */
+const LCMAX=a=>a.reduce((x,y)=>{ const g=(p,q)=>q?g(q,p%q):p; return x*y/g(x,y); },1);
+QP.push({id:'19·comp.work',step:'19·comp',mode:'work',label:'socks and shoes, and orders',open:()=>measured('19·comp'),make(){
+    const ask=rnd(2);
+    if(ask){ const ls=[[15,7,7,3],[4,4,3],[5,3,3],[6,4],[2,3,5],[9,6],[10,4,4],[8,6,3],[12,8],[7,4,2]][rnd(10)];
+      const v=LCMAX(ls), right=String(v), wrong=UQAX(right,[String(ls.reduce((a,b)=>a*b,1)),String(ls.reduce((a,b)=>a+b,0)),String(Math.max(...ls)),String(v*2)],3); if(wrong.length<3) return null;
+      return {index:'q:19·comp.work[o;'+ls.join(',')+']', lines:[['\\text{a string of twists moves its stickers in loops of } '+ls.join(',\\ '),'followed by hand']], ask:'How many times must the string be done to bring the cube back to the start?', right, opts:shuffle([right,...wrong]), lead:'', why:'Each loop comes back after a number of rounds its length divides. The order is the least number that '+ls.join(', ')+' all divide: '+right+'.'}; }
+    const F='RULFDB'; const n=2+rnd(3); const s=[]; for(let i=0;i<n;i++){ let f; do{ f=F[rnd(6)]; }while(s.length&&s[s.length-1][0]===f); s.push(f+(rnd(2)?'′':'')); }
+    const inv=t=>t.length>1?t[0]:t+'′', show=a=>a.join(' ');
+    const right=show(s.slice().reverse().map(inv)), wrong=UQAX(right,[show(s.map(inv)),show(s.slice().reverse()),show(s),show([inv(s[0]),...s.slice(1)])],3); if(wrong.length<3) return null;
+    return {index:'q:19·comp.work[u;'+show(s)+']', lines:[['\\text{the string } '+show(s).replace(/′/g,"'"),'done in order']], ask:'Which string undoes it?', right, opts:shuffle([right,...wrong]), lead:'', why:'Socks and shoes: the last twist done is the first undone, each turned the other way. So '+right+'.'}; }},
+  {id:'19·comp.word',step:'19·comp',mode:'word',label:'pulled apart and put back',open:()=>measured('19·comp'),make(){
+    const K=rnd(4), A=['yes: all three things no twist changes are as they should be','no: the corners’ twists do not add to whole turns','no: an odd number of edges sit the wrong way round','no: one of the corner and edge shuffles is even and the other odd'];
+    const c=[['every corner and edge in its place, every piece the right way','',0],['two corners swapped, and two edges swapped','',0],['every piece in place, one corner turned a third of a turn clockwise','',1],['every piece in place, one corner turned clockwise and another anticlockwise','',0],['every piece in place, one edge the wrong way round','',2],['every piece in place, two edges the wrong way round','',0],['two corners swapped, every edge in place, every piece the right way','',3],['two edges swapped, every corner in place, every piece the right way','',3],['every piece in place, two corners each turned a third clockwise','',1],['every piece in place, three edges the wrong way round','',2]].filter(x=>K===0?x[2]===0:x[2]===K||rnd(3)===0);
+    const pick=c[rnd(c.length)], right=A[pick[2]], wrong=A.filter(x=>x!==right);
+    return {index:'q:19·comp.word['+pick[0].length+';'+pick[2]+']', a3:['19·comp.word',DASH,DASH], story:'A solver pulls a puzzle cube apart and puts it back with '+pick[0]+'.', lines:[], ask:'Can the cube now be twisted back to solved?', right, opts:shuffle([right,...wrong]), lead:'', why:['The twist total is a whole number of turns, an even number of edges sit wrong, and the two shuffles have the same parity: the reach count says such a way can be twisted to solved.','Twist total: twisting keeps the corners’ twists adding to whole turns, and this way has a total that is not whole.','Twisting changes the number of wrong-way edges by 0 or 4, so it stays even; this way has it odd.','Every quarter turn is a loop of four corners and a loop of four edges: both shuffles change parity together. One swap alone breaks that.'][pick[2]]}; }},
+  {id:'19·comp.line',step:'19·comp',mode:'proof',label:'what the twists license',open:()=>measured('19·comp'),make(){
+    return line28('19·comp.line',[
+      ['q1',[['\\text{the string } R\\ U','done'],['\\text{its undo is } R\'\\ U\'','undo each twist']],2,1,'Socks and shoes: U′ first, then R′.'],
+      ['q2',[['\\text{a way of putting the cube back}','any'],['\\text{it can be twisted to solved}','twists reach all']],2,1,'One in twelve: three things no twist changes.'],
+      ['q3',[['\\text{one corner turned a third, all else solved}','given'],['\\text{one twist away}','a small change']],2,1,'Its twist total would be a third: never reached.'],
+      ['q4',[['R\\ U\\ R\'\\ U\'','do, do, undo, undo'],['\\text{at most three pieces move}','small-change']],2,1,'R and U share three pieces, not one: it moves seven.'],
+      ['q5',[['R \\text{ has order } 4,\\ U \\text{ has order } 4','order'],['R\\ U \\text{ has order } 16','orders multiply']],2,1,'105, not 16: R and U do not turn about.'],
+      ['q6',[['R^4 = e','order 4'],['R\' = R^3','one-answer']],2,0,'R³R = R⁴ = e, and an undo is unique.'],
+      ['q7',[['8! \\cdot 3^8 \\cdot 12! \\cdot 2^{12} \\text{ ways to put back}','take-apart'],['\\text{at most one in } 12 \\text{ reached}','reach count']],2,0,'3 twist totals, 2 parities, 2 counts of wrong-way edges: 12 copies of G.']],[]); }});
+/* ----- annex 19·crypt Can a letter ever stand for itself: Work, Word Problems, Check Proofs ----- */
+const SPAX=v=>v<10000?String(v):v.toLocaleString('en').replace(/,/g,' ');
+QP.push({id:'19·crypt.work',step:'19·crypt',mode:'work',label:'counting the settings',open:()=>measured('19·crypt'),make(){
+    const ask=rnd(3);
+    if(ask===0){ const n=3+rnd(6), v=n*(n-1)*(n-2), right=SPAX(v), wrong=UQAX(right,[SPAX(n*(n-1)*(n-2)/6),SPAX(n*n*n),SPAX(3*n),SPAX((n+1)*n*(n-1))],3); if(wrong.length<3) return null;
+      return {index:'q:19·crypt.work[w;'+n+']', lines:[['\\text{three wheels from a box of } '+n+',\\ \\text{in order}','the keeper’s choice']], ask:'How many wheel orders are there?', right, opts:shuffle([right,...wrong]), lead:'', why:'Count by stages: '+n+' for the first wheel, '+(n-1)+' for the second, '+(n-2)+' for the third: '+n+' · '+(n-1)+' · '+(n-2)+' = '+right+'.'}; }
+    if(ask===1){ const k=2+rnd(3), v=Math.pow(26,k), right=SPAX(v), wrong=UQAX(right,[SPAX(26*k),SPAX(Math.pow(k,26)>1e9?Math.pow(26,k-1):Math.pow(k,26)),SPAX(Math.pow(26,k+1)),SPAX(Math.pow(26,k-1))],3); if(wrong.length<3) return null;
+      return {index:'q:19·crypt.work[t;'+k+']', lines:[[k+' \\text{ wheels, each set to one of } 26 \\text{ turns}','the starting turns']], ask:'How many starting turns are there in all?', right, opts:shuffle([right,...wrong]), lead:'', why:'Stages multiply: 26 for each of '+k+' wheels, 26^'+k+' = '+right+'.'}; }
+    const p=1+rnd(3); let num=1; for(let i=0;i<2*p;i++) num*=26-i; let den=Math.pow(2,p); for(let i=2;i<=p;i++) den*=i; const v=num/den;
+    const right=SPAX(v), wrong=UQAX(right,[SPAX(num/Math.pow(2,p)),SPAX(num),SPAX(num/den*Math.pow(2,p)/ (p>1?1:2)),SPAX(v*2),SPAX(Math.round(v/2))],3); if(wrong.length<3) return null;
+    return {index:'q:19·crypt.work[b;'+p+']', lines:[[p+' \\text{ pair'+(p>1?'s':'')+' of letters swapped on the board}','the board']], ask:'How many ways are there to choose the pairs?', right, opts:shuffle([right,...wrong]), lead:'', why:'Choose the '+(2*p)+' letters in order: '+SPAX(num)+'. Forget the order within each pair (2^'+p+')'+(p>1?' and the order of the pairs ('+p+'!)':'')+': '+right+'.'}; }},
+  {id:'19·crypt.word',step:'19·crypt',mode:'word',label:'a letter never itself',open:()=>measured('19·crypt'),make(){
+    const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ', crib=['WEATHER','REPORT','GENERAL','NOTHING','ATTACK'][rnd(5)], L=crib.length;
+    let ct='', bad=[]; for(let t=0;t<60;t++){ ct=''; for(let i=0;i<L+3;i++) ct+=A[rnd(26)]; bad=[0,1,2,3].filter(o=>[...crib].some((c,i)=>ct[o+i]===c)); if(bad.length===1) break; }
+    if(bad.length!==1) return null; const o=bad[0], j=[...crib].findIndex((c,i)=>ct[o+i]===c);
+    const lab=x=>'starting at letter '+(x+1)+' of the intercept', right=lab(o), wrong=[0,1,2,3].filter(x=>x!==o).map(lab);
+    return {index:'q:19·crypt.word['+crib+';'+ct+']', a3:['19·crypt.word',DASH,DASH], story:'A listener has the intercept '+ct+' and guesses that the word '+crib+' lies in it, letter under letter, somewhere in its first four starting places.', lines:[], ask:'Which starting place can be ruled out without trying a single setting?', right, opts:shuffle([right,...wrong]), lead:'', why:'No-self: the machine never sends a letter to itself. Started at letter '+(o+1)+', the '+crib[j]+' of '+crib+' would sit under the letter '+crib[j]+' in the intercept.'}; }},
+  {id:'19·crypt.line',step:'19·crypt',mode:'proof',label:'what the wheels license',open:()=>measured('19·crypt'),make(){
+    return line28('19·crypt.line',[
+      ['k1',[['\\text{in through the wheels: } S','the way in'],['\\text{back through the wheels: } S','the same wheels']],2,1,'It is S⁻¹: each wheel backwards, in the other order.'],
+      ['k2',[['E = S^{-1} R\\, S','through and back'],['E^{-1} = S\\, R^{-1} S^{-1}','undo each part']],2,1,'Socks and shoes gives S⁻¹R⁻¹S, which is E.'],
+      ['k3',[['R = R^{-1}','the reflector pairs letters'],['E^{-1} = E','self-undo']],2,0,'E⁻¹ = S⁻¹R⁻¹S = S⁻¹RS = E.'],
+      ['k4',[['\\text{ten pairs on the board}','given'],['\\tbinom{26}{20} \\text{ ways}','choose the letters']],2,1,'That chooses the letters; the pairing still has to be counted.'],
+      ['k5',[['1.6 \\times 10^{20} \\text{ settings}','counted'],['\\text{no way in}','too many to try']],2,1,'Settings can be ruled out without being tried.'],
+      ['k6',[['R \\text{ sends no letter to itself}','the reflector'],['E \\text{ sends no letter to itself}','no-self']],2,0,'If E x = x, then R(Sx) = Sx: R would keep a letter.']],[]); }});
+/* ----- annex 19·eng What limits an engine's work per turn: Work, Word Problems, Check Proofs ----- */
+QP.push({id:'19·eng.work',step:'19·eng',mode:'work',label:'the squeeze-ratio cap',open:()=>measured('19·eng'),make(){
+    const r=[6,7,8,9,10,11,12,14][rnd(8)], e=1-Math.pow(r,-0.4), right=Math.round(100*e)+'%';
+    const wrong=UQAX(right,[Math.round(100*(1-1/r))+'%',Math.round(100*Math.pow(r,-0.4))+'%',Math.round(100*(1-Math.pow(r,-1.4)))+'%',Math.round(100*(1-Math.pow(r,-0.4))*0.5)+'%'],3); if(wrong.length<3) return null;
+    return {index:'q:19·eng.work[e;'+r+']', lines:[['r = '+r,'the squeeze ratio'],['\\text{four strokes, squeezed too fast to cool}','given']], ask:'What share of the fuel’s heat can the strokes turn into work, at most?', right, opts:shuffle([right,...wrong]), lead:'', why:'Squeeze-ratio: η = 1 − r^(−0.4) = 1 − '+r+'^(−0.4) ≈ 1 − '+DECAX(Math.pow(r,-0.4),3)+' ≈ '+right+', whatever the fuel.'}; }},
+  {id:'19·eng.word',step:'19·eng',mode:'word',label:'squeezed too fast to cool',open:()=>measured('19·eng'),make(){
+    const r=[6,8,9,10,12][rnd(5)], T=[280,290,300,310][rnd(4)], P=rnd(2), t=T*Math.pow(r,0.4), q=Math.pow(r,1.4);
+    const right=P?'about '+DECAX(q,1)+' times':'about '+Math.round(t)+' K', wrong=P?UQAX(right,['about '+r+' times','about '+DECAX(Math.pow(r,0.4),1)+' times','about '+DECAX(r*r,1)+' times'],3):UQAX(right,['about '+(T*r)+' K','about '+Math.round(T*q)+' K','about '+(T+r)+' K'],3);
+    if(wrong.length<3) return null;
+    return {index:'q:19·eng.word['+r+';'+T+';'+P+']', a3:['19·eng.word',DASH,DASH], story:'A tractor engine in a barn near Fresno squeezes its air into a space '+r+' times smaller, so fast that no heat gets out. The air goes in at '+T+' K.', lines:[], ask:P?'How many times the starting pressure is the squeezed air?':'How hot is the air at the end of the squeeze?', right, opts:shuffle([right,...wrong]), lead:'', why:P?'Fast-squeeze: the pressure ends r^1.4 = '+r+'^1.4 ≈ '+DECAX(q,1)+' times. Not r: the air also heats up.':'Fast-squeeze: the temperature ends r^0.4 times higher, '+T+' · '+r+'^0.4 ≈ '+T+' · '+DECAX(Math.pow(r,0.4),3)+' ≈ '+Math.round(t)+' K.'}; }},
+  {id:'19·eng.line',step:'19·eng',mode:'proof',label:'what the loop licenses',open:()=>measured('19·eng'),make(){
+    return line28('19·eng.line',[
+      ['e1',[['P \\text{ changes as } V \\text{ changes}','a stroke'],['W = P \\cdot V','work']],2,1,'Work is the area under P as V changes; a product only when P is fixed.'],
+      ['e2',[['\\text{air squeezed } r \\text{ times, no heat lost}','given'],['T_2/T_1 = r','the squeeze']],2,1,'That would need the pressure fixed; the fast squeeze gives r^0.4.'],
+      ['e3',[['\\text{a hotter fuel}','given'],['\\text{a higher cap on } \\eta','hotter is better']],2,1,'The temperatures cancel: only r is left.'],
+      ['e4',[['r \\text{ as big as you like}','given'],['\\eta = 1','squeeze-ratio']],2,1,'r^(−0.4) is never 0.'],
+      ['e5',[['\\text{one full turn of the engine}','a loop'],['W = \\text{the area inside the loop}','cycle-area']],2,0,'Out along the high curve, back along the low one: the difference of the areas.'],
+      ['e6',[['r = 10','given'],['\\eta \\le 1 - 10^{-0.4} \\approx 0.6','squeeze-ratio']],2,0,'10^(−0.4) ≈ 0.398.']],[]); }});
 /* ----- annex 32·bio Pharmacy Logic: Work, Word Problems, Check Proofs ----- */
 QP.push({id:'32·bio.work',step:'32·bio',mode:'work',label:'the shelf for a large count',open:()=>measured('32·bio'),make(){
     const n=pick([600,900,1200,1500,2000,2400,3000,4500,6000]), D=pick([28,30,60,90]), p=7/D, avg=n*p, w=Math.sqrt(n*p*(1-p)), shelf=Math.ceil(avg+2*w), A=Math.round(avg);
