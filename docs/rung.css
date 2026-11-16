@@ -1637,3 +1637,32 @@ a[href="laundry.html"][style]{display:inline-flex!important;align-items:center;j
   :root:not([data-theme="light"]) #desk .dtabs .x{background:#ff7a70!important;border-color:#ff7a70!important;color:var(--btn-dark,#141b24)!important}}
 :root[data-theme="dark"] #desk .dtabs button.dheights{background:#d9707c!important;border-color:#d9707c!important;color:var(--btn-dark,#141b24)!important}
 :root[data-theme="dark"] #desk .dtabs .x{background:#ff7a70!important;border-color:#ff7a70!important;color:var(--btn-dark,#141b24)!important}
+/* todo16 (Andrew 2026-11-16 11:32Z) */
+/* "one up" at the top and "one down" at the bottom show on passing into a new footing, then tuck themselves off screen after 2 s */
+body.fv.sw .fvdn{display:inline-block}
+.fvdn{bottom:calc(var(--lbh) + 44px)}
+.fvnav{transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .35s}
+.fvnav.fvup.tucked{transform:translate(-50%,calc(-100% - 24px));opacity:0;pointer-events:none}
+.fvnav.fvdn.tucked{transform:translate(-50%,calc(100% + 60px + var(--lbh)));opacity:0;pointer-events:none}
+.fvnav.fvup.fvpair.tucked{transform:translate(calc(-100% - 5px),calc(-100% - 24px))}
+/* previous and next screen at the left and right edges, on the line of "one down"; they show as a screen slides on, then tuck off screen */
+.swbar{top:0;bottom:var(--lbh);padding:0;align-items:center}
+.swnav{position:absolute;bottom:44px;transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .35s}
+.swnav.swl{left:8px}
+.swnav.swr{right:8px}
+.swnav.swl.tucked{transform:translateX(calc(-100% - 16px));opacity:0;pointer-events:none}
+.swnav.swr.tucked{transform:translateX(calc(100% + 16px));opacity:0;pointer-events:none}
+.swdots{position:absolute;left:50%;bottom:14px;transform:translateX(-50%)}
+.swdots .swpos{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+/* every screen sits centred in the space under its heading */
+body.fv.sw>.wrap{display:flex;flex-direction:column;align-items:center}
+body.fv.sw>.wrap>*{width:100%;max-width:70ch}
+body.fv.sw>.wrap>section.step.fv-on{flex:1 0 auto;display:flex;flex-direction:column}
+body.fv.sw>.wrap>section.step.fv-on>.sthead{order:-2}
+body.fv.sw>.wrap>section.step.fv-on::before{content:"";order:-1;flex:1 1 0}
+body.fv.sw>.wrap>section.step.fv-on::after{content:"";flex:1 1 0}
+body.fv.sw>.wrap>section.step.fv-on:has(>.sayback.sw-on)::before,body.fv.sw>.wrap>section.step.fv-on:has(>.sayback.sw-on)::after{display:none}
+@media (prefers-reduced-motion:reduce){.fvnav,.swnav{transition:none}}
+/* a summary's own screens (its head shown in parts) sit centred too */
+body.fv.sw>.wrap>section.step.fv-on:not(:has(.sw-on)){flex:0 0 auto}
+body.fv.sw>.wrap:not(:has(>section.step.fv-on .sw-on))>header.top.sw-hdr.fv-on{flex:1 0 auto;display:flex;flex-direction:column;justify-content:center}
