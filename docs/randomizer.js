@@ -17062,17 +17062,30 @@ const SHELFAX=(m,a)=>{ let s=0; while(PTAILAX(m,s)>a&&s<2000) s++; return s; };
 const MNAX=s=>String(s).replace(/(^|[ (\[,=])-(\d)/g,'$1\u2212$2'); /* unicode minus before digits */
 /* ----- annex 0·crypt How Can a Word Keep a Secret?: Work, Word Problems, Check Proofs (annex01, Andrew 2026-11-15 06:09Z) ----- */
 const NMAX0=['g','h','j','k','m','n','u','v','w','b'];
-QP.push({id:'0·crypt.work',step:'0·crypt',mode:'work',label:'a word passed down a row',open:()=>measured('0·crypt'),make(){
-    const n=2+rnd(3), L=shuffle(NMAX0.slice()).slice(0,n+1), turned=[]; const lines=[];
-    for(let i=0;i<n;i++){ const t=rnd(2)===1; turned.push(t); lines.push([t?L[i+1]+' = '+L[i]:L[i]+' = '+L[i+1],'given']); }
-    const kind=rnd(2); let ask, right, cands, why, ix;
-    if(kind===0){ lines.unshift(['O('+L[0]+')','given: the word '+L[0]+' opens the gate']);
-      right='O('+L[n]+')'; const out=NMAX0.find(x=>!L.includes(x));
-      cands=['O('+out+')',L[n]+' = O','O('+L[0]+' = '+L[n]+')',L[0]+' = '+out]; ask='Which fact do the swap axiom (0b5) and the chain technique (0b7) let you write?';
-      why='Turn about any sameness that runs the wrong way (0b6), chain the row to '+L[0]+' = '+L[n]+', and swap '+L[n]+' in for '+L[0]+': O('+L[n]+').'; ix=[0,L.join(''),turned.map(Number).join('')]; }
-    else { const k=turned.filter(Boolean).length; right=String(k); cands=[n,k+1,n-k,0,1,2,3,4].map(String).filter(x=>x!==right);
-      ask='How many lines must the turn-about technique (0b6) write before the row chains to '+L[0]+' = '+L[n]+'?';
-      why='Each given written the wrong way round needs one turn-about; '+(k===1?'one is':k+' are')+' written the wrong way round.'; ix=[1,L.join(''),turned.map(Number).join('')]; }
+QP.push({id:'0·crypt.work',step:'0·crypt',mode:'work',label:'passwords, keys and cover sentences',open:()=>measured('0·crypt'),make(){
+    const kind=rnd(3); let lines, ask, right, cands, why, ix;
+    if(kind===0){ /* a password copied down a row of checks, one copy made wrong */
+      const n=3+rnd(5), bad=2+rnd(n-1); lines=[['check 1 holds the source word','given: copied from the source']];
+      for(let i=2;i<=n;i++) lines.push([i===bad?'check '+i+' holds a word one letter off':'check '+i+' holds the word of check '+(i-1),'given']);
+      lines.push(['the source word is said at every check','given']);
+      right=String(bad-1); cands=[n,bad,n-bad,n-1,1,0].map(String).filter(x=>x!==right); ask='How many checks does the source word pass?';
+      why='The copies are the same as the source only up to check '+(bad-1)+'; from check '+bad+' on they hold another word, and close is not the same.'; ix=[0,n,bad]; }
+    else if(kind===1){ /* one codename handed to two things */
+      const C=shuffle(['Lantern','Marigold','Kestrel','Pebble','Juniper','Saffron']).slice(0,3), T=shuffle(['the plan','the meeting place','the date','the password','the parcel','the route']).slice(0,4);
+      const dup=rnd(3); lines=[[C[0]+' names '+T[0],'given: an agreement'],[C[1]+' names '+T[1],'given: an agreement'],[C[2]+' names '+T[2],'given: an agreement']];
+      lines.push([C[dup]+' names '+T[3],'given: a later agreement']);
+      right=T[dup]+' and '+T[3]; cands=[T[0]+' and '+T[1],T[1]+' and '+T[2],T[0]+' and '+T[2],T[(dup+1)%3]+' and '+T[3],T[(dup+2)%3]+' and '+T[3]].filter(x=>x!==right);
+      ask='Which two things will anyone who holds every agreement carry into one?';
+      why=C[dup]+' was handed to two things, '+T[dup]+' and '+T[3]+': turn one sameness about and chain, and their facts pass between them. The fault is in the givens.'; ix=[1,dup]; }
+    else { /* cover sentences: what a listener holding some keys can read */
+      const S=shuffle(['leave now','wait here','the plan is off','stay away','call home']).slice(0,3), W=['sentence A','sentence B','sentence C'];
+      const held=[0,1,2].filter(()=>rnd(2)===1), said=shuffle([0,1,2]).slice(0,2);
+      lines=[0,1,2].map(i=>[W[i]+' names “'+S[i]+'”','given: an agreement made ahead of time'])
+        .concat([['the listener shares the agreements for '+(held.length?held.map(i=>W[i]).join(' and '):'none of them'),'given'],[said.map(i=>W[i]).join(' and ')+' are said aloud','given']]);
+      const got=said.filter(i=>held.includes(i)).map(i=>'“'+S[i]+'”'); right=got.length?got.join(' and '):'none: only the plain words';
+      cands=['“'+S[said[0]]+'”','“'+S[said[1]]+'”','“'+S[said[0]]+'” and “'+S[said[1]]+'”','none: only the plain words',S.map(x=>'“'+x+'”').join(' and ')].filter(x=>x!==right);
+      ask='Which warnings can the listener read from what was said?';
+      why='A cover sentence names its warning only for those who share the agreement; to anyone else it says only its plain words.'; ix=[2,held.join(''),said.join('')]; }
     const wrong=UQAX(right,cands,3); if(wrong.length<3) return null;
     return {index:'q:0·crypt.work['+ix.join(';')+']', lines, ask, right, opts:shuffle([right,...wrong]), lead:'', why}; }},
   {id:'0·crypt.word',step:'0·crypt',mode:'word',label:'gates, cards and codenames',open:()=>measured('0·crypt'),make(){
@@ -17088,18 +17101,18 @@ QP.push({id:'0·crypt.work',step:'0·crypt',mode:'work',label:'a word passed dow
       story:n+' friends sit at lunch. '+k+' of them agreed beforehand that “'+nm+'” names '+thing+'. One of them says “'+nm+' is on Friday.” Everyone hears it.',
       lines:[], ask:'How many of the '+n+' can write that '+thing+' is on Friday?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Only those who hold the key, the sameness b = p, can swap (0b5). The other '+(n-k)+' have F(b) and nothing to swap it with. So '+k+'.'}; }},
-  {id:'0·crypt.line',step:'0·crypt',mode:'proof',label:'what a sameness kept back licenses',open:()=>measured('0·crypt'),make(){
+  {id:'0·crypt.line',step:'0·crypt',mode:'proof',label:'what a password, a key and a cover sentence license',open:()=>measured('0·crypt'),make(){
     return line28('0·crypt.line',[
-      ['c1',[['v = g, O(g)','given'],['O(v)','the swap axiom (0b5)']],2,0,'v is written where g stood.'],
-      ['c2',[['v = g','given'],['the visitor is a friend','the password check']],2,1,'The check earns v = g and nothing else. A word can be overheard.'],
-      ['c3',[['v = k, h = k','given'],['v = h','the chain technique (0b7)']],2,1,'The row does not run yet: turn h = k about to k = h first (0b6).'],
-      ['c4',[['k = s, h = s, s = h','given, given, turn-about (0b6)'],['k = h','the chain technique (0b7)']],2,0,'k = s and s = h run in a row.'],
-      ['c5',[['F(b), with no sameness for b','given'],['F(p)','the swap axiom (0b5)']],2,1,'Without the key b = p there is nothing to swap. That is Randy’s place.'],
-      ['c6',[['F(b), b = p','given'],['F(p)','the swap axiom (0b5)']],2,0,'Evita holds the key, so she swaps.'],
-      ['c7',[['“Bluebird” has eight letters, b = p','given'],['the surprise party has eight letters','the swap axiom (0b5)']],2,1,'The first statement is about the name, not the thing (0b10).'],
-      ['c8',[['T(w), w = S','given'],['T(S)','the swap axiom (0b5)']],2,0,'“… is what Dad is telling us” is about the statement, whatever its name.'],
-      ['c9',[['Dad said w, w = S','given'],['Dad said S','the swap axiom (0b5)']],2,1,'“said” is about the words, like “knows that” (0b10).'],
-      ['c10',[['k = s, k = u','given'],['s = u','turn-about, then chain']],2,0,'Every move is licensed; the fault is in the givens, one name handed to two things.']],[]); }});
+      ['c1',[['the word said is the word held','given'],['the check passes','the password check']],2,0,'The check asks one question, sameness, and here it holds.'],
+      ['c2',[['the check passes','given'],['the speaker is a friend','the password check']],2,1,'A pass earns the sameness of two words and nothing else. A word can be overheard.'],
+      ['c3',[['the word said is one letter off the word held','given'],['the check passes','the password check']],2,1,'Close is not the same.'],
+      ['c4',[['the card was copied from the source, and the source word is said','given'],['the check passes','copies passed down a row']],2,0,'The copy is the same as the source, so the source word is the word held.'],
+      ['c5',[['a codename is said aloud; the listener holds no key','given'],['the listener writes what the codename names','the swap axiom (0b5)']],2,1,'With no key there is no sameness to swap with.'],
+      ['c6',[['a codename is said aloud; the listener holds the key','given'],['the listener writes what the codename names','the swap axiom (0b5)']],2,0,'The key is the sameness, and the swap needs nothing more.'],
+      ['c7',[['one codename names two things','given'],['every later line is licensed, so every later line is true','the givens']],2,1,'Every move may be licensed and still end in a falsehood: the fault is in the givens.'],
+      ['c8',[['a cover sentence is said; the listener shares the agreement','given'],['the listener reads the warning','the key']],2,0,'The agreement names the warning with the sentence.'],
+      ['c9',[['a cover sentence is said before any agreement is made','given'],['the listener reads the warning','the key']],2,1,'The agreement comes first; before it the sentence says only its plain words.'],
+      ['c10',[['the codename describes the thing it names','given'],['the only way from the name to the thing is the key','a codename']],2,1,'A name that describes its thing gives it away; a good codename tells nothing.']],[]); }});
 /* ----- annex 1·comp How Many Machines Can Two Letters Have?: Work, Word Problems, Check Proofs (annex01, Andrew 2026-11-15 06:09Z) ----- */
 const W1CX=['one','two','three','four','five','six','seven','eight','nine','ten'];
 const COL1CX=[['1 1 1 1','⊤'],['1 1 1 0','P ∨ Q'],['1 1 0 1','Q ⇒ P'],['1 1 0 0','P'],['1 0 1 1','P ⇒ Q'],['1 0 1 0','Q'],['1 0 0 1','P ⇔ Q'],['1 0 0 0','P ∧ Q'],
