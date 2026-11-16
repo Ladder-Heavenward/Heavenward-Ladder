@@ -4041,7 +4041,7 @@ const KNC=(()=>{ const TAU=2*Math.PI;
     return [E((c,s)=>[2*c,s,0]),E((c,s)=>[0,2*c,s]),E((c,s)=>[s,0,2*c])]; };
   const LIB={
     ring:{name:'the plain ring',taught:1,comps:ring}, kink:{name:'the plain ring',taught:1,comps:kink},
-    tref:{name:'the overhand knot',taught:1,comps:()=>torus(2,3)}, fig8:{name:'the figure-eight knot',taught:1,comps:()=>TAIT.braid(()=>0,3,4,true,[[1,1],[2,-1],[1,1],[2,-1]],0.5,0.7).comps.map(c=>TAIT.even(c,900))},
+    tref:{name:'the overhand knot',taught:1,comps:()=>torus(2,3)}, fig8:{name:'the figure-eight knot',taught:1,comps:()=>TAIT.braid(()=>0,3,4,true,[[1,1],[2,-1],[1,1],[2,-1]],0.5,0.7).comps.map(c=>TAIT.even(c,520))},
     cinq:{name:'the five-crossing star',taught:1,comps:()=>torus(2,5)}, sept:{name:'the seven-petal knot',comps:()=>torus(2,7)},
     t34:{name:'the (3, 4) torus knot',comps:()=>torus(3,4)}, t35:{name:'the (3, 5) torus knot',comps:()=>torus(3,5)},
     hopf:{name:'two rings, linked once',taught:1,comps:()=>torus(2,2)}, sol:{name:'the doubly linked rings',comps:()=>torus(2,4)}, t36:{name:'three rings, each linked with the others',comps:()=>torus(3,3)}, borro:{name:'the Borromean rings',comps:borro} };
@@ -4050,12 +4050,17 @@ const KNC=(()=>{ const TAU=2*Math.PI;
   const segX=(a,b,c,d)=>{ const r=[b[0]-a[0],b[1]-a[1]], s=[d[0]-c[0],d[1]-c[1]], den=r[0]*s[1]-r[1]*s[0]; if(Math.abs(den)<1e-12) return null; const qp=[c[0]-a[0],c[1]-a[1]], t=(qp[0]*s[1]-qp[1]*s[0])/den, u=(qp[0]*r[1]-qp[1]*r[0])/den; return t>=0&&t<1&&u>=0&&u<1?[t,u]:null; };
   /* the crossings: where two pieces of the drawing cross, which lies on top, and its sign (+1 when the under strand passes from right to left, walking along the over strand) */
   function analyse(comps){ const X=[]; const L=comps.map(c=>c.length);
-    for(let A=0;A<comps.length;A++) for(let B=A;B<comps.length;B++){ const P=comps[A], Q=comps[B];
-      for(let i=0;i<P.length;i++){ const a=P[i], b=P[(i+1)%P.length];
-        for(let j=(A===B?i+2:0);j<Q.length;j++){ if(A===B&&(j+1)%Q.length===i) continue; const c=Q[j], d=Q[(j+1)%Q.length]; const h=segX(a,b,c,d); if(!h) continue;
+    /* 2026-11-16 (release check: a turned knot card's first deal took seconds): segments are bucketed in a grid, so only near pairs are tried; the crossings come out in the same order as before */
+    const SG=[]; comps.forEach((P,A)=>{ for(let i=0;i<P.length;i++) SG.push([A,i]); }); let gx0=1e9,gx1=-1e9,gy0=1e9,gy1=-1e9; comps.forEach(P=>P.forEach(p=>{ gx0=Math.min(gx0,p[0]); gx1=Math.max(gx1,p[0]); gy0=Math.min(gy0,p[1]); gy1=Math.max(gy1,p[1]); }));
+    const GN=48, cw=Math.max(gx1-gx0,gy1-gy0,1e-9)/GN, cell={}, put=(k,v)=>{ (cell[k]||(cell[k]=[])).push(v); };
+    SG.forEach((g,n)=>{ const P=comps[g[0]], a=P[g[1]], b=P[(g[1]+1)%P.length]; const i0=Math.floor((Math.min(a[0],b[0])-gx0)/cw), i1=Math.floor((Math.max(a[0],b[0])-gx0)/cw), j0=Math.floor((Math.min(a[1],b[1])-gy0)/cw), j1=Math.floor((Math.max(a[1],b[1])-gy0)/cw); for(let x=i0;x<=i1;x++) for(let y=j0;y<=j1;y++) put(x*4096+y,n); });
+    const tried=new Set(), FX=[];
+    for(const k in cell){ const L=cell[k]; for(let u=0;u<L.length;u++) for(let v=u+1;v<L.length;v++){ let p=L[u], q=L[v]; if(p>q){ const t=p; p=q; q=t; } const key=p*SG.length+q; if(tried.has(key)) continue; tried.add(key);
+      const [A,i]=SG[p], [B,j]=SG[q], P=comps[A], Q=comps[B]; if(A===B&&(j<i+2||(j+1)%Q.length===i)) continue; const a=P[i], b=P[(i+1)%P.length], c=Q[j], d=Q[(j+1)%Q.length]; const h=segX(a,b,c,d); if(!h) continue;
           const za=a[2]+(b[2]-a[2])*h[0], zc=c[2]+(d[2]-c[2])*h[1], tP=[b[0]-a[0],b[1]-a[1]], tQ=[d[0]-c[0],d[1]-c[1]];
           const ov=za>zc?{c:A,s:i+h[0]}:{c:B,s:j+h[1]}, un=za>zc?{c:B,s:j+h[1]}:{c:A,s:i+h[0]}, to=za>zc?tP:tQ, tu=za>zc?tQ:tP;
-          X.push({ov,un,sign:Math.sign(to[0]*tu[1]-to[1]*tu[0]),at:[a[0]+(b[0]-a[0])*h[0],a[1]+(b[1]-a[1])*h[0]]}); } } }
+          FX.push([key,{ov,un,sign:Math.sign(to[0]*tu[1]-to[1]*tu[0]),at:[a[0]+(b[0]-a[0])*h[0],a[1]+(b[1]-a[1])*h[0]]}]); } }
+    FX.sort((x,y)=>x[0]-y[0]).forEach(x=>X.push(x[1]));
     for(let i=X.length-1;i>0;i--) if(X.slice(0,i).some(y=>Math.hypot(y.at[0]-X[i].at[0],y.at[1]-X[i].at[1])<1e-7)) X.splice(i,1);
     /* arcs: each strand from one under-pass to the next */
     const unders=comps.map((_,k)=>X.filter(x=>x.un.c===k).map(x=>x.un.s).sort((p,q)=>p-q));
@@ -4115,7 +4120,7 @@ const TAIT=(()=>{ const TAU=2*Math.PI, ss=u=>u*u*(3-2*u);
     for(let k=0;k<N;k++){ const t=T*k/N; while(d[j+1]<t) j++; const a=c[j], b=c[(j+1)%c.length], f=(t-d[j])/((d[j+1]-d[j])||1); out.push([a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f,a[2]+(b[2]-a[2])*f]); } return out; };
   function make(R,lo,hi,alt){ R=R||Math.random; const L=lo+Math.floor(R()*(hi-lo+1)), one=R()<0.75; let k=null;
     for(let t=0;t<8;t++){ const c=make1(R,L,alt); if(c) k=c; if(c&&(!one||c.comps.length===1)) break; }
-    if(!k) return null; const tot=k.comps.reduce((s,c)=>s+c.length,0); k.comps=k.comps.map(c=>even(c,Math.max(120,Math.round(1400*c.length/tot)))); return k; }
+    if(!k) return null; const tot=k.comps.reduce((s,c)=>s+c.length,0); k.comps=k.comps.map(c=>even(c,Math.max(100,Math.round(800*c.length/tot)))); return k; }
   function make1(R,L,alt){ let k;
     if(R()<0.55){ const n=L<5?2+Math.floor(R()*2):2+Math.floor(R()*3); k=braid(R,Math.min(n,L),L,alt); } else k=plat(R,Math.max(3,L),alt);
     return k; }
@@ -4124,7 +4129,7 @@ const TKPICK=(lo,hi,alt)=>{ const k=TAIT.make(R,lo,hi,alt); if(!k) return null; 
 /* alternating: walking each strand, the crossings go over, under, over, under all the way round */
 const KNALT=k=>k.comps.every((c,ci)=>{ const ev=[]; k.info.X.forEach(x=>{ if(x.ov.c===ci) ev.push([x.ov.s,1]); if(x.un.c===ci) ev.push([x.un.s,0]); }); ev.sort((a,b)=>a[0]-b[0]); return ev.every((e,i)=>e[1]!==ev[(i+1)%ev.length][1]); });
 const KPRIME=[['3₁',[3]],['4₁',[2,2]],['5₁',[5]],['5₂',[3,2]],['6₁',[4,2]],['6₂',[3,1,2]],['6₃',[2,1,1,2]],['7₁',[7]],['7₂',[5,2]],['7₃',[4,3]],['7₄',[3,1,3]],['7₅',[3,2,2]],['7₆',[2,2,1,2]],['7₇',[2,1,1,1,2]]];
-const KPPICK=()=>{ const [nm,v]=pk(KPRIME), ring=v.length===1, k=ring?{comps:KNC.LIB[{3:'tref',5:'cinq',7:'sept'}[v[0]]].comps()}:TAIT.conway(v,R); if(!ring) k.comps=k.comps.map(c=>TAIT.even(c,900)); const mir=R()<0.5, comps=KNC.place(k.comps,ring?R()*2*Math.PI:(R()<0.5?0:Math.PI)+(R()-0.5)*0.2,mir), info=KNC.analyse(comps); return {id:'p'+nm,name:nm==='3₁'?'the overhand knot':nm==='4₁'?'the figure-eight knot':nm==='5₁'?'the five-crossing star':null,prime:nm,code:v,mir,comps,info,many:false}; };
+const KPPICK=()=>{ const [nm,v]=pk(KPRIME), ring=v.length===1, k=ring?{comps:KNC.LIB[{3:'tref',5:'cinq',7:'sept'}[v[0]]].comps()}:TAIT.conway(v,R); if(!ring) k.comps=k.comps.map(c=>TAIT.even(c,520)); const mir=R()<0.5, comps=KNC.place(k.comps,ring?R()*2*Math.PI:(R()<0.5?0:Math.PI)+(R()-0.5)*0.2,mir), info=KNC.analyse(comps); return {id:'p'+nm,name:nm==='3₁'?'the overhand knot':nm==='4₁'?'the figure-eight knot':nm==='5₁'?'the five-crossing star':null,prime:nm,code:v,mir,comps,info,many:false}; };
 K({id:'knotsign',step:'34m',steps:['34m'],title:'the signed crossing count of a knot drawing',make(){
   if(R()<0.8){ const r=R(), k=(r<0.3?null:r<0.5?KPPICK():TKPICK(3,9,R()<0.6))||KNPICK(['ring']); const w=k.info.writhe, n=k.info.n, plus=k.info.X.filter(x=>x.sign>0).length, right=sgn(w);
     const o=four(right,sh([sgn(-w),String(n),sgn(w+2),sgn(w-2),String(plus),sgn(w+1)]).filter(x=>x!==right)); if(!o) return null;
@@ -34277,3 +34282,5 @@ const pane=document.getElementById('dp-rand'); if(pane){ let box=pane.querySelec
 })();
 
 /* blankdraws r3 applied */
+
+/* knotspeed r3b applied */
