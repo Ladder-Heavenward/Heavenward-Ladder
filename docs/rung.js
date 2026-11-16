@@ -533,7 +533,7 @@ function placeHere(){
   if(!qs.length) return;
   const dn=el=>el.classList.contains('done');
   const first=qs.findIndex(el=>!dn(el));
-  if(first<0){ const box=document.querySelector('.sayback'); if(box){ const d=document.createElement('p'); d.className='pagedone'; d.textContent='Every question on this page is ticked, and its row on the ladder has ticked itself.'; const h2=box.querySelector('h2'); (h2||box).insertAdjacentElement('afterend',d); } return; }
+  if(first<0) return; /* todo16 (Andrew 2026-11-16 11:32Z): no "every question on this page is ticked" badge anywhere */
   /* qslide (Andrew 2026-11-14 17:40Z): no "you are here" tag beside a page's question any more */
 }
 
@@ -2302,12 +2302,16 @@ function footingView0(){
   /* 0.3.8 (Andrew 23:28): a page of one footing (start, how to read the ladder, the floor pages) opens with its title and its
      footing together, not on a title alone */
   const ONE=steps.length===1;
-  if(ONE) units[0].push(steps[0]); else steps.forEach(s=>units.push([s]));
+  /* todo16 (Andrew 2026-11-16 11:32Z, "the title page for how to read the ladder is blank, put the next page into it"): a page whose
+     head holds only its title and tags opens with its first footing on the same screen */
+  const BARE=!ONE&&units[0].every(el=>el.matches('script,style,template')||(el.matches('header.top')?![...el.children].some(c=>!c.matches('p.home,.pn,.tags,h1,script,style')&&c.textContent.trim()):!el.textContent.trim()));
+  const OFF=(ONE||BARE)?0:1; /* the unit that holds steps[i] is i+OFF */
+  if(ONE||BARE){ units[0].push(steps[0]); steps.slice(1).forEach(s=>units.push([s])); } else steps.forEach(s=>units.push([s]));
   /* 0.3.2 (Andrew 21:27): what follows the last footing (the standing questions, the measuring stick, the links) is not a footing:
      it is reached from the toolbox, or by a link to it; "next" on the last footing goes to the first footing of the next page */
   const tail=kids.slice(iN+1); if(tail.length) units.push(tail);
   /* footings between the first and the last that are not steps ride with the footing before them */
-  kids.slice(i0,iN+1).forEach(k=>{ if(!steps.includes(k)){ const prev=steps.filter(s=>kids.indexOf(s)<kids.indexOf(k)).pop(); units[steps.indexOf(prev)+1].push(k); } });
+  kids.slice(i0,iN+1).forEach(k=>{ if(!steps.includes(k)){ const prev=steps.filter(s=>kids.indexOf(s)<kids.indexOf(k)).pop(); units[steps.indexOf(prev)+OFF].push(k); } });
   units.forEach((u,n)=>u.forEach(el=>el.setAttribute('data-fvu',n)));
   const N=units.length, P=page(), LASTU=tail.length?N-2:N-1;
   /* the pages before and after on the climb: nav.nextrung as built, or the .pn rows pn() made of it (annex links relinked) */
@@ -2326,14 +2330,21 @@ function footingView0(){
   /* the blue sky waits until the top of the ladder is finished (Andrew 21:27) */
   const skyOpen=()=>window.LadderSky&&LadderSky.open&&LadderSky.open();
   const unitOf=el=>{ const u=el&&el.closest&&el.closest('[data-fvu]'); return u?+u.getAttribute('data-fvu'):-1; };
-  const idOf=n=>n===0?'top':(n===N-1&&tail.length?'end':steps[n-1].dataset.step);
+  const idOf=n=>n===0?'top':(n===N-1&&tail.length?'end':steps[n-OFF].dataset.step);
   let cur=0, on=false, busy=false;
-  const up=document.createElement('button'); up.type='button'; up.className='fvnav fvup'; up.innerHTML='<span aria-hidden="true">▲</span> next';
-  const dn=document.createElement('button'); dn.type='button'; dn.className='fvnav fvdn'; dn.innerHTML='<span aria-hidden="true">▼</span> previous';
+  const up=document.createElement('button'); up.type='button'; up.className='fvnav fvup'; up.innerHTML='<span aria-hidden="true">▲</span> one up';
+  const dn=document.createElement('button'); dn.type='button'; dn.className='fvnav fvdn'; dn.innerHTML='<span aria-hidden="true">▼</span> one down';
   const pos=document.createElement('span'); pos.className='fvpos'; up.appendChild(pos);
   const sky=document.createElement('button'); sky.type='button'; sky.className='fvnav fvup fvsky'; sky.innerHTML='<span aria-hidden="true">☁</span> blue sky'; sky.hidden=true;
   sky.onclick=()=>{ if(window.LadderSky) LadderSky.supply(); };
   document.body.append(up,dn); if(!window.LADDER_DESK) document.body.append(sky); /* 0.3.57: no blue sky on the desk */
+  /* todo16 (Andrew 2026-11-16 11:32Z): passing into a new footing shows "one up" at the top and "one down" at the bottom; after
+     2 seconds both tuck themselves off screen. A tap on the page (not on a control) brings them back for another 2 seconds. */
+  let tuckAt=null, tuckKey=null;
+  function tuck(force){ const k=cur+':'+P; if(!force&&k===tuckKey) return; tuckKey=k; up.classList.remove('tucked'); dn.classList.remove('tucked');
+    clearTimeout(tuckAt); tuckAt=setTimeout(()=>{ up.classList.add('tucked'); dn.classList.add('tucked'); },2000); }
+  window.LadderFV.untuck=()=>tuck(true);
+  document.addEventListener('click',e=>{ if(!on) return; const t=e.target; if(t.closest&&t.closest('a,button,input,textarea,select,label,summary,.pic,.mg,#desk,#lbar,#stick,.chq,.unlocknote,.slides,[contenteditable="true"]')) return; tuck(true); if(window.LadderSwipe&&LadderSwipe.untuck) LadderSwipe.untuck(); });
   const label=()=>{ const atEnd=cur>=LASTU, nextPage=atEnd?pageLink(1):null, prevPage=cur<=0?pageLink(-1):null;
     /* the blue sky button (Andrew 2026-11-14 17:40Z): on the floor 7 conclusion, the floor 8 summary and the last supplied infinity
        step, beside "next" where there is one; gone once every step has been supplied */
@@ -2342,7 +2353,7 @@ function footingView0(){
     sky.hidden=!on||!atEnd||!(spot||!nextPage)||!skyOpen()||!!(window.LadderSky&&LadderSky.caughtUp&&LadderSky.caughtUp());
     const pair=!sky.hidden&&!up.hidden; up.classList.toggle('fvpair',pair); sky.classList.toggle('fvpair',pair);
     up.setAttribute('aria-label','next: '+(atEnd?(nextPage||''):idOf(cur+1))); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):(prevPage||'')));
-    pos.textContent=!ONE&&cur>0&&cur<=steps.length?' · '+cur+' of '+steps.length:''; };
+    pos.textContent=''; tuck(); }; /* todo16: the badge says only "one up"; the tag line already counts the footings */
   /* 0.3.13 (Andrew 00:51): the page view's reveal ("next footing") hides the footings past the furthest opened; in the footing
      view, reaching a footing opens it, and the page view's record (steps:<page>) keeps up */
   const reveal=()=>{ units[cur].forEach(el=>{ if(el.hidden&&el.matches('section.step')) el.hidden=false; });
@@ -2427,7 +2438,7 @@ function footingView0(){
   window.LadderFV.toggle=()=>{ const el=units[cur]&&units[cur][0]; setMode(!on); if(!on&&el&&cur>0) el.scrollIntoView({block:'start'}); else if(on) go(cur,{instant:true,force:true}); };
   window.LadderFV.go=n=>go(n);
   window.LadderFV.here=()=>({id:idOf(cur),els:on?units[cur]:[...document.querySelectorAll('.wrap>section.class.step')].filter(s=>{ const r=s.getBoundingClientRect(); return r.top<innerHeight*.5&&r.bottom>0; }).slice(0,1)});
-  window.LadderFV.goId=id=>{ if(!on) setMode(true); const i=steps.findIndex(s=>s.dataset.step===id), n=id==='top'?0:id==='end'?N-1:(i<0?-1:ONE?0:1+i); go(n<0?0:n,{force:true}); };
+  window.LadderFV.goId=id=>{ if(!on) setMode(true); const i=steps.findIndex(s=>s.dataset.step===id), n=id==='top'?0:id==='end'?N-1:(i<0?-1:OFF+i); go(n<0?0:n,{force:true}); };
 }
 const ladmap=()=>window.LADMAP?Promise.resolve():new Promise(res=>{ const s=document.createElement('script'); s.src='ladmap.js'; s.onload=s.onerror=()=>res(); document.head.appendChild(s); });
 window.LadderFV.ladmap=ladmap;
@@ -3246,7 +3257,7 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 (function(){
 'use strict';
 if(window.LADDER_DESK) return;
-const PAGES=window.LADDER_SWIPE_PAGES||/^(r\d\d|floor\d|inf)/; /* Phase G floor 8: all rungs and the Endless floor */
+const PAGES=window.LADDER_SWIPE_PAGES||/^(r\d\d|floor\d|inf|intro$)/; /* todo16: how to read the ladder too */ /* Phase G floor 8: all rungs and the Endless floor */
 const ADVANCE_ON_SWIPE_LEFT=true; /* finger moves left = the row moves on, as pages turn; flip for the other reading */
 const pg=()=>window.ladderPage?ladderPage():'';
 const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap)(\s|$)/;
@@ -3319,12 +3330,14 @@ function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.ste
     if(ch.matches('.brk.brk-check')){ const rows=[...ch.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ ch.classList.add('sw-rows'); rows.forEach(r=>screens.push([r])); return; } } /* 2026-11-10 (Andrew 15:51): one move to a screen */ /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
     if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } screens.push([ch]); }); /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
   els.forEach(e=>{ if(e!==step&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('header.top,nav,.pn')) screens.push([e]); });
+  /* todo16: a page's title, opened with its first footing, rides with the first screen only */
+  const hdr=els.find(e=>e.matches&&e.matches('header.top')); if(hdr&&screens.length){ hdr.classList.add('sw-hdr'); [...hdr.children].filter(x=>!x.matches('p.home,.pn,script,style')).forEach(x=>screens[0].push(x)); }
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
 function ui(){ if(bar) return; bar=document.createElement('div'); bar.className='swbar'; bar.hidden=true;
-  L=document.createElement('button'); L.type='button'; L.className='swnav swl'; L.innerHTML='<span aria-hidden="true">◀</span>'; L.setAttribute('aria-label','previous screen');
-  R=document.createElement('button'); R.type='button'; R.className='swnav swr'; R.innerHTML='<span class="swpos"></span><span aria-hidden="true">▶</span>'; R.setAttribute('aria-label','next screen');
-  dots=document.createElement('div'); dots.className='swdots'; posEl=R.querySelector('.swpos');
-  bar.append(L,dots,R); document.body.appendChild(bar); L.onclick=()=>ret(null); R.onclick=()=>adv(null); }
+  L=document.createElement('button'); L.type='button'; L.className='swnav swl'; L.innerHTML='<span aria-hidden="true">◀</span> previous'; L.setAttribute('aria-label','previous screen');
+  R=document.createElement('button'); R.type='button'; R.className='swnav swr'; R.innerHTML='next <span aria-hidden="true">▶</span>'; R.setAttribute('aria-label','next screen');
+  dots=document.createElement('div'); dots.className='swdots'; posEl=document.createElement('span'); posEl.className='swpos';
+  bar.append(L,dots,R); document.body.appendChild(bar); /* todo16: previous and next sit at the left and right edges */ L.onclick=()=>ret(null); R.onclick=()=>adv(null); }
 const deckOf=el=>el&&el.closest&&el.closest('.slides');
 const api=deck=>deck&&(window.__steppers||[]).find(a=>a.container===deck)||null;
 const deckN=deck=>deck?deck.querySelectorAll('.dots i').length:0;
@@ -3342,8 +3355,10 @@ function show(i,opts){ opts=opts||{}; if(!screens.length) return; const prev=k; 
   if(anim){ screens[k].forEach(x=>{ void x.offsetWidth; x.classList.add(dir>0?'sw-in-f':'sw-in-b'); x.addEventListener('animationend',()=>x.classList.remove('sw-in-f','sw-in-b'),{once:true}); }); if(ghost) swGhostOut(ghost,dir); }
   if(!opts.keep) window.scrollTo(0,0);
   const n=screens.length; posEl.textContent=n>1?(k+1)+' / '+n:''; L.disabled=false; R.disabled=false;
-  dots.innerHTML=''; if(n>1&&n<=14) screens.forEach((s,j)=>{ const d=document.createElement('i'); d.className=(j===k?'on':'')+(s[0].classList.contains('sw-stub')?' stub':''); d.onclick=()=>show(j,{anim:true}); dots.appendChild(d); });
-  bar.hidden=!on||n<2; if(window.LadderNotices) LadderNotices.tick(); }
+  dots.innerHTML=''; if(n>1&&n<=14) screens.forEach((s,j)=>{ const d=document.createElement('i'); d.className=(j===k?'on':'')+(s[0].classList.contains('sw-stub')?' stub':''); d.onclick=()=>show(j,{anim:true}); dots.appendChild(d); }); else if(n>14) dots.appendChild(posEl);
+  bar.hidden=!on||n<2; untuck(); if(window.LadderNotices) LadderNotices.tick(); }
+/* todo16 (Andrew 2026-11-16 11:32Z): the arrows show as a screen slides on, then tuck themselves off screen after 2 seconds */
+let swTuck=null; function untuck(){ if(!L) return; L.classList.remove('tucked'); R.classList.remove('tucked'); clearTimeout(swTuck); swTuck=setTimeout(()=>{ L.classList.add('tucked'); R.classList.add('tucked'); },2000); }
 function adv(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matches('.slides')&&!cur.classList.contains('sw-stub')?cur:null; const A=a||api(deck);
   if(A&&A.i<deckN(A.container)-1){ A.show(A.i+1); return; }
   if(k<screens.length-1) show(k+1,{anim:true}); else if(window.LadderFV&&LadderFV.fwd) LadderFV.fwd({h:true}); }
@@ -3375,7 +3390,7 @@ document.addEventListener('keydown',e=>{ if(!on||e.defaultPrevented||e.altKey||e
   e.preventDefault(); e.stopPropagation(); if(e.key==='ArrowRight') adv(null); else ret(null); },true);
 /* a collapsed screen opens for this visit when tapped */
 document.addEventListener('click',e=>{ if(!on) return; const s=e.target.closest&&e.target.closest('.sw-stub.sw-on'); if(!s||s.classList.contains('sw-open')||e.target.closest('a,button,input')) return; s.classList.add('sw-open'); });
-window.LadderSwipe={show,adv,ret,screens:()=>screens,at:()=>k,on:()=>on};
+window.LadderSwipe={show,adv,ret,untuck,screens:()=>screens,at:()=>k,on:()=>on};
 })();
 
 /* ---- Phase G: unlock notices (Andrew 2026-11-09 16:26). One line when something new opens: a tool in the toolbox, an annex in the
