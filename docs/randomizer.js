@@ -1877,7 +1877,7 @@ K({id:'interval',step:'8h',steps:['8g','8h'],title:'an interval on the line',mak
     why:'The shaded stretch runs from '+sg(a)+' to '+sg(b)+'. A filled end is in the set (≤), an open end is not (<): '+fix(right)+'.'}); }});
 
 /* 8i: a parabola: its zeros, its middle, the formula's b */
-K({id:'quadzeros',step:'8i',title:'reading a parabola',make(F__){ const T__=F__||LPICK(this,'g.quadzeros',()=>LX(LRG(-4,2),LRG(1,5),[1,1,-1,0.5,-0.5],['zeros','mid','b']).filter(([p,d,k,w])=>p+d<=4&&(w!=='b'||k===1))); if(!T__) return null; const p=T__[0], q=p+T__[1]; if(q>4) return null; const k=T__[2], f=x=>k*(x-p)*(x-q), what=T__[3]; if(what==='b'&&k!==1) return null;
+K({id:'quadzeros',step:'8i',steps:['8i','9e']/* studygraph: graphs are built at 9e */,title:'reading a parabola',make(F__){ const T__=F__||LPICK(this,'g.quadzeros',()=>LX(LRG(-4,2),LRG(1,5),[1,1,-1,0.5,-0.5],['zeros','mid','b']).filter(([p,d,k,w])=>p+d<=4&&(w!=='b'||k===1))); if(!T__) return null; const p=T__[0], q=p+T__[1]; if(q>4) return null; const k=T__[2], f=x=>k*(x-p)*(x-q), what=T__[3]; if(what==='b'&&k!==1) return null;
   const vy=f((p+q)/2); if(Math.abs(vy)>6) return null; const fig=svg({x:[-5.5,5.5],y:[Math.min(-1,vy-1),Math.max(1,vy+1)],xl:'x',yl:'y',sy:1,ly:2,parts:[{t:'fn',f,from:-5.5,to:5.5}],alt:'a parabola'});
   let right, o, ask, why;
   if(what==='zeros'){ right='x = '+sg(p)+' and x = '+sg(q); o=four(right,['x = '+sg(-p)+' and x = '+sg(-q),'x = '+dec((p+q)/2),'x = '+sg(p-1)+' and x = '+sg(q+1),'x = '+sg(p)+' and x = '+sg(q+1)]); ask='Where is y = 0?'; why='The curve meets the x-axis at '+sg(p)+' and '+sg(q)+'; those are the zeros, the roots of the quadratic.'; }
@@ -2569,7 +2569,7 @@ K({id:'contour',step:'28k',steps:['28a','28k'],title:'a surface read off its con
   const F={bowl:(x,y)=>(x-a)*(x-a)+(y-b)*(y-b),saddle:(x,y)=>(x-a)*(x-a)-(y-b)*(y-b),ridge:(x,y)=>-(x-a)*(x-a),hill2:(x,y)=>-((x-a)*(x-a)+2*(y-b)*(y-b))}[kind];
   const lv=[...Array(9)].map((_,i)=>(i-4)*2), seg=[]; const N=40, X=i=>-4.5+9*i/N; for(let i=0;i<N;i++) for(let j=0;j<N;j++){ const x0=X(i),x1=X(i+1),y0=X(j),y1=X(j+1), v=[F(x0,y0),F(x1,y0),F(x1,y1),F(x0,y1)], P=[[x0,y0],[x1,y0],[x1,y1],[x0,y1]];
       lv.forEach(L=>{ const pts=[]; for(let e=0;e<4;e++){ const p=v[e]-L, q=v[(e+1)%4]-L; if(p*q<0){ const t=p/(p-q); pts.push([P[e][0]+(P[(e+1)%4][0]-P[e][0])*t,P[e][1]+(P[(e+1)%4][1]-P[e][1])*t]); } } if(pts.length===2) seg.push(pts); }); }
-  const parts=seg.map(s=>({t:'line',pts:s})), what=pk(kind==='ridge'?['shape','dir']:['shape','flat','dir']); /* a ridge is flat along a whole line, not at a point */
+  const parts=seg.map(s=>({t:'line',pts:s})), what=pk(kind==='ridge'||!measured('28l')/* studygraph: flat points on a contour map are built at 28l */?['shape','dir']:['shape','flat','dir']); /* a ridge is flat along a whole line, not at a point */
   let right, o, ask, why;
   if(what==='shape'){ const nm={bowl:'a bowl, lowest in the middle',saddle:'a saddle, up one way and down the other',ridge:'a ridge, highest along a line',hill2:'a hill, highest in the middle'}; right=nm[kind]; o=four(right,Object.values(nm)); ask='Each loop is a level: points at one height (levels go up by 2; the middle value is '+dec(F(a,b))+'). What is the surface’s shape?'; why='Level loops round a point mean a top or a bottom; crossing lines mean a saddle; parallel lines mean a ridge or valley. Here: '+right+'. Check the heights on each side.'; }
   else if(what==='flat'){ if(kind==='ridge') return null; right='('+a+', '+b+')'; o=four(right,['('+b+', '+a+')','(0, 0)','('+(-a)+', '+(-b)+')','('+(a+1)+', '+b+')','('+a+', '+(b+1)+')','('+(a-1)+', '+b+')']); ask='At which point is the surface flat in every direction (both partial slopes 0)?'; why='The levels close in on ('+a+', '+b+'): there both partial slopes are 0, the gradient vanishes. Elsewhere the levels are spaced and the gradient points across them.'; }
@@ -2769,7 +2769,7 @@ K({id:'fmatch',step:'32e',steps:['32a','32e'],title:'which spectrum goes with th
     why:'Each term a sin nx puts a bar of height a at frequency n: '+fs.map((n,i)=>'height '+as[i]+' at '+n).join(', ')+'. Projecting the wave onto each turning reads off exactly these sizes (coefficients as projections).'}); }});
 
 /* Andrew 14:04Z, 37f/32i: two waves of one wavelength summed, through a filter */
-K({id:'wavefilter',step:'37f',steps:['32i','37f'],title:'two waves summed, through a filter',make(){ const A1=pk([1,2,3]), A2=pk([1,2,3]), ph=pk([0,60,90,120,180]), fq=pk([200,500,1000,2000,4000]), kind=pk(['low','high','level']), cut=pk([300,800,1500,3000]);
+K({id:'wavefilter',step:'37f',steps:['32i','37f'],title:'two waves summed, through a filter',make(){ const A1=pk([1,2,3]), A2=pk([1,2,3]), ph=pk([0,60,90,120,180]), fq=pk([200,500,1000,2000,4000]), kind=measured('37h')/* studygraph: low- and high-pass filters are named at 37h */?pk(['low','high','level']):'level', cut=pk([300,800,1500,3000]);
   const amp=Math.sqrt(A1*A1+A2*A2+2*A1*A2*Math.cos(ph*Math.PI/180)), w=x=>A1*Math.sin(x)+A2*Math.sin(x+ph*Math.PI/180);
   const fig=plane([{t:'fn',f:x=>A1*Math.sin(x),from:0,to:4*Math.PI,n:300,dash:1},{t:'fn',f:x=>A2*Math.sin(x+ph*Math.PI/180),from:0,to:4*Math.PI,n:300,dash:1,k:'b'},{t:'fn',f:w,from:0,to:4*Math.PI,n:300}],'two waves of one wavelength and their sum',{x:[0,4*Math.PI],y:[-6.5,6.5],sx:Math.PI/2,sy:1,lx:Math.PI,ly:2,xl:'time',yl:'push'});
   if(kind==='level'){ const thr=pk([2,3,4]), right=amp>thr+1e-9?'yes: the sum peaks at '+dec(r2(amp)):'no: the sum peaks at '+dec(r2(amp)), o=four(right,[amp>thr?'no: the sum peaks at '+dec(r2(amp)):'yes: the sum peaks at '+dec(r2(amp)),'yes: the sum peaks at '+(A1+A2),'no: the sum peaks at '+Math.max(A1,A2),'no: they cancel to 0']); if(!o) return null;
@@ -2918,7 +2918,7 @@ K({id:'boxread',step:'5i',steps:['5i','16j'],title:'one expression as a rectangl
 
 /* Andrew 14:19Z "Elliptical foci": the foci read off, with the scale link (Andrew 14:18Z: the answer hinges on reading the magnitude) */
 const TRIP=[[5,4,3],[5,3,4],[13,12,5],[13,5,12],[17,15,8],[17,8,15],[25,24,7],[25,7,24],[10,8,6],[10,6,8],[15,12,9],[15,9,12]];
-K({id:'foci',step:'18e',steps:['18e','18h'],title:'an ellipse and its foci',make(){ const [a,b,c]=pk(TRIP), up=R()<0.35, sc=pk([1,1,2,10,100,0.5]), what=pk(['foci','sum','ecc','bounce','fromfoci']); const A=a*sc, B=b*sc, C=c*sc, u=4/a;
+K({id:'foci',step:'18e',steps:['18e','18h'],title:'an ellipse and its foci',make(){ const [a,b,c]=pk(TRIP), up=R()<0.35, sc=pk([1,1,2,10,100,0.5]), what=pk(measured('20·phys')/* studygraph: the bounce law is built at 20·phys */?['foci','sum','ecc','bounce','fromfoci']:['foci','sum','ecc','fromfoci']); const A=a*sc, B=b*sc, C=c*sc, u=4/a;
   const pts=[]; for(let i=0;i<=200;i++){ const t=2*Math.PI*i/200, x=a*Math.cos(t)*u, y=b*Math.sin(t)*u; pts.push(up?[y,x]:[x,y]); } const F=up?[[0,c*u],[0,-c*u]]:[[c*u,0],[-c*u,0]];
   const step=a*sc/4, fig=svg({x:[-4.6,4.6],y:[-4.6,4.6],sx:1,sy:1,lx:1,ly:1,kx:step,ky:step,xl:'x',yl:'y',parts:[{t:'line',pts},{t:'dots',pts:F}],alt:'an ellipse with its two foci'});
   const n=v=>dec(Math.round(v*1000)/1000), axisWord=up?'(0, ±':'(±', P=v=>axisWord+n(v)+(up?')':', 0)');
@@ -12029,15 +12029,24 @@ function names(D){ const out=[]; const LET={fn:'fgkrst',mat:'ABCDE',perm:'στρ
   D.chain.forEach(c=>{ let nx=nm; if(c.L.id==='13d.slope') nx=nm.endsWith('″')?let_('fn',++ix.fn,'f'):nm.endsWith('′')?nm.slice(0,-1)+'″':nm+'′';
     else if(c.L.from===c.L.to&&c.L.rename!==false&&c.L.from!=='num'){ ix[c.L.to]=(ix[c.L.to]||0)+1; nx=let_(c.L.to,ix[c.L.to],'f'); }
     else if(c.L.from!==c.L.to){ ix[c.L.to]=ix[c.L.to]===undefined?0:ix[c.L.to]+1; nx=let_(c.L.to,ix[c.L.to],'x'); }
-    out.push([nm,nx]); nm=nx; }); return out; }
+    out.push([nm,nx]); nm=nx; });
+  /* studynames: only the seed is called n; a later link that reads a number reads the number in hand */
+  D.chain.forEach((c,i)=>{ if(c.in&&c.in.k==='num'&&(i>0||D.sd.val.k!=='num')) out[i][0]='the number in hand'; }); return out; }
 const pstr=p=>{ if(!p) return ''; const k=Object.keys(p).filter(k=>!k.startsWith('_')); if(!k.length) return ''; return '['+k.map(x=>p[x]&&p[x].p!==undefined?qs(p[x]):Array.isArray(p[x])?p[x].join(' '):String(p[x])).join(',')+']'; };
 const foot=D=>[D.S0.id+'['+D.sd.ix+']',D.chain.map(c=>c.L.id+pstr(c.p)).join('+')];
 const seedLine=D=>{ const NM=names(D), v=D.sd.val; return KIND[v.k].seed(v,NM.length?NM[0][0]:'f'); };
 /* a Work card shows no worked values, so a link whose result a later instruction names by its letter says what to call it */
 const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+/* studynames: a result is named by its letter (from names) or by the name it carries itself (a function of two inputs, a grid G after a row move);
+   a capital may stand right before another letter, as B in Bx or BG */
+const ownName=v=>{ try{ const t=KIND[v.k]&&KIND[v.k].seed?String(KIND[v.k].seed(v,'')):''; const m=t.match(/^([\p{Lu}\p{Ll}ωθφψηℓ])(?=\s*(?:\(|=|:))/u); return m?m[1]:''; }catch(e){ return ''; } };
 function callIt(D,NM){ const says=D.chain.map((c,i)=>c.L.say(c.p,NM[i][0],c.in));
-  D.chain.forEach((c,i)=>{ const nx=NM[i][1]; if(!nx||nx===NM[i][0]||c.o.k==='num'||c.o.k==='word') return; const rx=new RegExp('(^|[^\\p{L}′″])'+esc(nx)+'(?![\\p{L}′″])','u');
-    if(says.slice(i+1).some(s=>rx.test(s))) says[i]=/\?$/.test(says[i])?says[i]+' Call the result '+nx+'.':says[i]+'; call the result '+nx; });
+  D.chain.forEach((c,i)=>{ if(c.o.k==='num'||c.o.k==='word') return; const LK=new Set(['fn','mat','perm','cx','vec','seq','set','st']), cands=[ownName(c.o),LK.has(c.o.k)&&NM[i][1]!==NM[i][0]?NM[i][1]:''].filter((x,j,a)=>x&&a.indexOf(x)===j);
+    for(const nx of cands){ const up=/^\p{Lu}$/u.test(nx), rx=new RegExp('(^|[^\\p{L}′″∂])'+esc(nx)+(up?'(?=$|[^\\p{L}′″₀-₉]|\\p{L}(?!\\p{L}))':'(?![\\p{L}′″₀-₉])'),'u'), def=new RegExp(esc(nx)+'(?:\\([^)]*\\))?(?:\\s*=| is )','u');
+      const j=says.slice(i+1).findIndex(s=>rx.test(s)); if(j<0) continue;
+      if(!def.test(says[i+1+j])){ says[i]=/\?$/.test(says[i])?says[i]+' Call the result '+nx+'.':says[i]+'; call the result '+nx; break; } } });
+  /* the number in hand written before a letter or a bracket is multiplied by it */
+  for(let i=0;i<says.length;i++) says[i]=String(says[i]).replace(/the number in hand(?=[\p{L}(])/gu,'the number in hand · ');
   return says; }
 function workCard(P,used){ for(let t=0;t<20;t++){ const D=deal(P); if(!D) return null; if(KIND[D.out.k].answer===false) continue; const W=wrongs(D); const vals=[]; W.forEach(w=>{ if(!vals.some(v=>veq(v.v,w.v))) vals.push(w); });
     /* workcover: a verdict has few other answers, so a chain that ends in a word is dealt with the choices that exist */
@@ -12055,6 +12064,9 @@ function proofCard(P,used){ for(let t=0;t<20;t++){ const D=deal(P,CH.pref.links?
       rows.push([c.L.line(o,c.p,NM[i][0],NM[i][1],cur),c.L.cite(c.o,c.p)]); cur=o; }
     if(!ok) continue; const bad=at+2, [sd,lk]=foot(D), index='cp:'+sd+'.'+lk+'#'+bad; if(used&&used[index]) continue;
     if(rows[bad-1][0]===D.chain[at].L.line(D.chain[at].o,D.chain[at].p,NM[at][0],NM[at][1],D.chain[at].in)) continue;
+    /* studypfnames: a line whose result a later line reads by a new letter says what it is called */
+    D.chain.forEach((c,i)=>{ const nx=NM[i][1]; if(!nx||nx===NM[i][0]||!c.o||c.o.k==='num'||c.o.k==='word'||!rows[i+1]) return; const rx=new RegExp('(^|[^\\p{L}′″∂])'+esc(nx)+'(?![\\p{L}′″₀-₉])','u');
+      if(!rx.test(rows[i+1][0])&&rows.slice(i+2).some(r=>rx.test(r[0]))) rows[i+1][0]+='; call it '+nx; });
     const nums=shuffle(rows.map((_,i)=>i+1).filter(i=>i!==bad&&i!==1)).slice(0,3); if(nums.length<3) nums.push(1);
     return {index,a3:[sd,lk,DASH],step:D.steps.slice().sort((a,b)=>rungOfS(b)-rungOfS(a))[0],steps:D.steps,stack:true,chain:true,lines:rows,ask:'One line does not follow from what it cites. Which line is the bad line?',
       right:'line '+bad,opts:shuffle(['line '+bad,...nums.slice(0,3).map(i=>'line '+i)]),lead:'The bad line is line '+bad+'. ',
@@ -26626,7 +26638,7 @@ const old=CH.wordCard;
 CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q=trainCard(P,used); if(q) return q; } return old.apply(this,arguments); };
 /* seeds given in words (a sentence, a story: a kind marked words:true) are dealt as Word Problems too: the same chain the Work card deals,
    told as a story. Their share grows with how many such seeds are open, as the web's does. */
-{ const base=CH.workCard, prev=CH.wordCard, wordy=s=>!!(CH.KIND[s.kind||'fn']||{}).words, cap1=s=>s[0].toUpperCase()+s.slice(1), ORD=['First','Then','Next','After that','Last'];
+{ const base=CH.workCard, prev=CH.wordCard, wordy=s=>!!(CH.KIND[s.kind||'fn']||{}).words, cap1=s=>/^\p{L}[₀-₉′]*(?:\(| =|:|ₙ)/u.test(s)?s:s[0].toUpperCase()+s.slice(1)/* studycap */, ORD=['First','Then','Next','After that','Last'];
   CH.wordSeedCard=function(P,used){ const steps=new Set(CH.SEEDS.filter(s=>wordy(s)&&CH.openStep(s.step,P)).map(s=>s.step)); if(!steps.size) return null;
     const P2={use:x=>steps.has(x.step)&&(!P||P.use(x))};
     for(let t=0;t<4;t++){ const q=base.call(this,P2,null); if(!q||!q.chain||!q.lines||q.lines.length<3) continue; const sid=String(q.a3[0]).replace(/\[.*$/,''), S0=CH.SEEDS.find(s=>s.id===sid); if(!S0||!wordy(S0)) continue;
@@ -26647,7 +26659,7 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
    A Word Problems pool is made only where the step has a seed given in words or a link told as a story (story:true). ===== */
 { const stepsOf=new Set(); CH.SEEDS.forEach(s=>stepsOf.add(s.step)); CH.L.forEach(l=>{ try{ (l.steps0?l.steps0():l.steps(new Set())).forEach(s=>stepsOf.add(s)); }catch(e){} });
   const wordyK=k=>!!(CH.KIND[k||'fn']||{}).words, storySteps=new Set(); CH.SEEDS.forEach(s=>{ if(wordyK(s.kind)) storySteps.add(s.step); }); CH.L.forEach(l=>{ if(l.story){ try{ (l.steps0?l.steps0():l.steps(new Set())).forEach(s=>storySteps.add(s)); }catch(e){} } });
-  const cap1=s=>s[0].toUpperCase()+s.slice(1), ORD=['First','Then','Next','After that'];
+  const cap1=s=>/^\p{L}[₀-₉′]*(?:\(| =|:|ₙ)/u.test(s)?s:s[0].toUpperCase()+s.slice(1)/* studycap */, ORD=['First','Then','Next','After that'];
   const tell=q=>{ if(!q||!q.chain||!q.lines||q.lines.length<3||q.story) return q; const says=q.lines.slice(1).map((l,i,a)=>(i===a.length-1&&i>0?'Last':ORD[Math.min(i,3)])+', '+l[0].replace(/^\d+\. /,'')+(/[.?]$/.test(l[0])?'':'.'));
     return Object.assign({},q,{index:'cws:'+String(q.index).replace(/^c:/,''),story:cap1(q.lines[0][0])+'. '+says.join(' '),lines:[],ask:'What comes out?'}); };
   CH.chainPool=function(step,mode){ const r=rungOf(step), P2={use:x=>rungOf(x.step)===r,anchor:step}, keep=CH.pref, g=typeof gearPref==='function'?gearPref(mode):{};
@@ -26680,6 +26692,101 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
   CH.L.forEach(l=>{ const w=wait[l.id]; if(!w) return; const st=l.steps; l.steps=function(){ const s=(st.apply(l,arguments)||[]).slice(); if(!s.includes(w)) s.push(w); return s; }; l.steps0=()=>{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }; });
 })();
 /* ===== end of ownseeds ===== */
+/* ===== studywait (Andrew 2026-11-18 03:42Z: "the agent-citation run should correct seeds that are not solvable"; his 02:58Z rule:
+   a link whose math the ladder has not built yet waits for the later pool that builds it). The answer study found links dealt
+   before the step that teaches what they use; each now waits for that step. ===== */
+(function(){
+  const wait={
+    '1f.noAisB':'2c',                                                  /* "no A is B" read over a set, sets are built at 2c */
+    '1b.blame':'3a','1d.nest':'3a','1b.closed':'3a','1a.foot':'3a',    /* worked with letters standing for claims, built at 3a */
+    '14i.zerozero':'17f',                                              /* 0 to the power 0 */
+    '13g.square':'15a', '13e.melts':'16j',
+    '27d.grid':'27l','27f.swapped':'27l',                              /* the middle sum, built at 27l */
+    '35g.dust':'35h',
+    '3·comp.loop':'4j',                                                /* even and odd */
+    '4e.split':'5b','2c.domain':'5b',                                  /* negative numbers */
+    '4e.back':'5c',                                                    /* fractions */
+    '2i.sift':'4j','2j.everysome':'4j','2e.keep':'4j'                               /* even, odd, prime and multiple, built at 4j */
+  };
+  CH.L.forEach(l=>{ const w=wait[l.id]; if(!w) return; const st=l.steps; l.steps=function(){ const s=(st.apply(l,arguments)||[]).slice(); if(!s.includes(w)) s.push(w); return s; }; l.steps0=()=>{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }; });
+})();
+/* ===== end of studywait ===== */
+/* ===== studyn (answer study, 2026-11-18): seven links that read a number say "n" for it in their own words. When the number they read
+   is not the seed n, they now say that n is the number in hand. ===== */
+(function(){
+  const HN='the number in hand';
+  const fix={'8h.triangle':1,'8h.within':1,'8h.beyond':1,'4k.sumto':1,'4k.rowstep':1,'4c.odds':1,'18a.share':1};
+  CH.L.forEach(l=>{ if(!fix[l.id]&&l.from==='num'){ const sy=l.say; l.say=function(p,nm){ const s=String(sy.apply(l,arguments)); return nm===HN?s.replace(/, (\p{L}) the number(?=$|[;,.])/u,', $1 '+HN):s; }; return; } if(!fix[l.id]) return; const sy=l.say; l.say=function(p,nm){ let s=String(sy.apply(l,arguments)); if(nm!==HN) return s;
+    if(l.id==='18a.share') return s.replace('from the number n to n','from n to n')+', n '+HN;
+    return s.replace(/, n the number$/,', n '+HN).replace('where n is the number you have','where n is '+HN); }; });
+})();
+/* ===== end of studyn ===== */
+/* ===== studywords (answer study, 2026-11-18): wording that used a name the ladder has not taught by then, or said the wrong thing ===== */
+(function(){
+  const wrap=(id,f)=>{ const l=CH.L.find(x=>x.id===id); if(!l) return; const sy=l.say; l.say=function(){ return f(String(sy.apply(l,arguments)),arguments); }; };
+  const wrapLine=(id,f)=>{ const l=CH.L.find(x=>x.id===id); if(!l||!l.line) return; const ln=l.line; l.line=function(){ return f(String(ln.apply(l,arguments))); }; };
+  /* "cube" is first named at 13g1 */
+  wrap('4g.cube',s=>s.replace('take the cube of the number you have','raise the number you have to the power 3'));
+  wrapLine('4g.cube',s=>s.replace(/^the cube of /,'to the power 3, '));
+  /* the rung 1 name of the move is carry-through */
+  wrap('1e.agree',s=>s.replace('the if-out move writes Q','carry-through writes Q'));
+  /* 4k orders no arrangements and names no shuffles */
+  wrap('4k.arrange',s=>s.replace('in dictionary order, 1234 first;','from least to greatest read as numbers, 1234 first and 1243 next;').replace(', as a shuffle',', as the arrows that send 1 to its first figure, 2 to its second, and so on'));
+  /* the graft count is of trees without a root */
+  wrap('42·bio.trees',s=>s.replace('count the trees of descent, with a root, that have','count the trees of descent, with no root, that have'));
+  /* the slope of one thing against another is not a named technique */
+  wrap('13e.against',s=>s.replace(/, take the slope of (.+) against z$/,(m,f)=>', the slope of '+f+' against z is the slope of '+f+' divided by the slope of z, each against x: find it'));
+  /* a walk's animals: which of them have the feature is not in the ladder, so the link says it */
+  if(typeof ANAX!=='undefined'&&typeof FTAX!=='undefined'){ const fk=f=>Object.keys(FTAX).find(k=>FTAX[k]===f);
+    ['2·bio.sift','2·bio.count'].forEach(id=>wrap(id,s=>s.replace(/“a member ([^”]+)”/,(m,ft)=>{ const k=fk(ft); if(!k) return m; const who=ANAX.filter(a=>a[1][k]).map(a=>a[0]); return m+' ('+who.slice(0,-1).join(', ')+' and '+who[who.length-1]+' each '+ft.replace(/^has /,'have ').replace(/^feeds its /,'feed their ').replace(/^lives /,'live ').replace(/^breathes /,'breathe ').replace(/^swims /,'swim ')+'; nothing else on the walk does)'; }))); }
+  /* the stack instructions are not defined on the ladder, so the link says what they do */
+  wrap('40j.stack',s=>s.replace('; give the top of the stack',' (push puts a number on top of the pile; add and times each take the top two off and put back their sum or product); give the top of the stack'));
+  /* "which height" let any height between the ends fit */
+  wrap('12a.ivt',s=>s.replace(': which height is f sure to take?',': f is sure to take the height halfway between them. Which height is that?'));
+  /* f = 0 everywhere keeps products too */
+  wrap('19e.sign',s=>s.replace('and f is not 1 everywhere:','and f is neither 0 everywhere nor 1 everywhere:'));
+  /* every smaller δ serves too; the widest is the one asked for */
+  wrap('24c.width',s=>s.replace('which δ serves every fₖ for a given ε?','what is the widest δ that serves every fₖ for a given ε?'));
+  const wrapAct=(id,ok)=>{ const l=CH.L.find(x=>x.id===id); if(!l) return; const a=l.act; l.act=function(s,p){ if(!ok(s,p||{})) return null; return a.apply(l,arguments); }; };
+  wrapAct('24c.width',s=>s&&s.v&&s.v.q===1&&Math.abs(s.v.p)>=2);
+  wrapAct('31d.circle',s=>s&&s.v&&s.v.p!==0);
+  /* 1i is written i */
+  const one=t=>typeof t==='string'?t.replace(/(^|[−\-\s(+])1i(?![\d])/g,'$1i'):t;
+  CH.L.forEach(l=>{ if(l.to!=='word') return; const a=l.act, sl=l.slips; l.act=function(){ const o=a.apply(l,arguments); return o&&typeof o.s==='string'?Object.assign({},o,{s:one(o.s)}):o; };
+    if(sl) l.slips=function(){ return (sl.apply(l,arguments)||[]).map(w=>w&&typeof w.s==='string'?Object.assign({},w,{s:one(w.s)}):w); }; });
+  /* the size bars are built at 8h */
+  wrap('7e.cases',s=>s.replace(/: find \|f\((.+)\)\|$/,(m,x)=>': find the larger of f('+x+') and −f('+x+')'));
+  /* at rung 3 only 0 to 4 have names */
+  { const S=CH.SEEDS.find(x=>x.id==='3e.below'); if(S){ const mk=S.make; S.make=function(F){ if(F&&F>5) return null; for(let t=0;t<20;t++){ const r=mk.apply(S,arguments); if(r&&r.val&&r.val.s&&r.val.s.length<=5) return r; if(F) return null; } return null; }; } }
+  /* held: the ladder never teaches these. "True" counted by earned columns (1a), and how many lines a detour cut removes (38n): told to Andrew */
+  ['1a.true','38n.cut'].forEach(id=>{ const i=CH.L.findIndex(x=>x.id===id); if(i>=0) CH.L.splice(i,1); });
+})();
+/* ===== end of studywords ===== */
+/* ===== studydomain (answer study, 2026-11-18): links dealt where their technique does not hold. A slope at a point needs the function
+   on an open stretch round it; an area from 0 needs the function whole on [0, x²]; remainders are built for counting numbers only
+   (5·cb2); the sixteenth sum needs an even number of strips; four dimensions are not built. Each such deal is now refused. ===== */
+(function(){
+  const fq=v=>v&&v.q?v.p/v.q:NaN;
+  const evf=(t,x)=>{ if(!t) return NaN; switch(t.t){ case 'n': return fq(t.v); case 'x': return x;
+    case '+': return t.a.reduce((r,u)=>r+evf(u,x),0); case '*': return t.a.reduce((r,u)=>r*evf(u,x),1);
+    case '^': { const b=evf(t.b,x), e=t.e; if(!isFinite(b)) return NaN; if(e.q===1) return Math.pow(b,e.p); if(b<0) return e.q%2?-Math.pow(-b,e.p/e.q)*(e.p%2?1:-1):NaN; return Math.pow(b,e.p/e.q); }
+    case 'f': { const a=evf(t.a,x); return t.f==='exp'?Math.exp(a):t.f==='log'?(a>0?Math.log(a):NaN):t.f==='sin'?Math.sin(a):t.f==='cos'?Math.cos(a):NaN; } }
+    return NaN; };
+  const fin=y=>isFinite(y)&&Math.abs(y)<1e7;
+  const near=(t,x)=>[-1e-2,-1e-3,1e-3,1e-2].every(h=>fin(evf(t,x+h)))&&fin(evf(t,x));
+  const whole=(t,a,b)=>{ for(let i=0;i<=64;i++){ if(!fin(evf(t,a+(b-a)*i/64))) return false; } return true; };
+  const wrapAct=(l,ok)=>{ const a=l.act; l.act=function(s,p){ if(!ok(s,p||{})) return null; return a.apply(l,arguments); }; };
+  CH.L.forEach(l=>{
+    if(l.pt&&l.from==='fn'&&l.id!=='13j.three'&&l.id!=='16b.movingend') wrapAct(l,(s,p)=>!s||!s.t||!p.x||near(s.t,fq(p.x)));
+    if(l.id==='16b.movingend') wrapAct(l,(s,p)=>!s||!s.t||!p.x||whole(s.t,0,fq(p.x)*fq(p.x)));
+    if(l.id==='13e.rootslope') wrapAct(l,s=>!s||!s.t||[-3,-2,-1,-0.5,0.5,1,2,3].some(x=>evf(s.t,x)>0));
+    if(['5·cb2.add','5·cb2.mul','5·cb2.pow','5·cb2.powmod','5·cb2.class'].includes(l.id)) wrapAct(l,s=>!s||!s.v||s.v.p>=0);
+    if(l.id==='23l.simpson') wrapAct(l,(s,p)=>{ if(!p.h) return true; const N=p.len*p.h.q/p.h.p; return Number.isInteger(N)&&N%2===0; });
+    if(l.id==='33·now.pressure') wrapAct(l,s=>!s||!s.m||Math.abs(s.m.reduce((t,r,i)=>t+fq(r[i]),0))<1e-12); /* the technique holds only for a flow with no spread */
+    if(l.id==='28j.rim'){ const mk=l.make; l.make=function(){ const p=mk.apply(l,arguments); return p&&p.i===2?{i:Math.random()<0.5?0:1}:p; }; }
+  });
+})();
+/* ===== end of studydomain ===== */
 /* ===== end of chains ===== */
 
 for(let i=QP.length-1;i>=0;i--) if(qmode(QP[i])==='read') QP.splice(i,1); /* the Understanding pools now live in the crosswalk (rgraph) */
