@@ -21034,8 +21034,18 @@ function sizedMake(S,z){ if(S.sized) return S.sizes.includes(z)?S.sized(z):null;
 const SZV={}; function sizedVals(S,z){ const k=S.id+'|'+z; if(!SZV[k]){ const o=[], seen=new Set(); for(let i=0;i<300&&o.length<40;i++){ let r=null; try{ r=S.make(); }catch(e){ if(e&&e.over) throw e; } if(r&&r.val&&sizeOf(r.val)===z){ const id=r.ix!=null?String(r.ix):JSON.stringify(r.val); if(!seen.has(id)){ seen.add(id); o.push(r); } } } SZV[k]=o; } return SZV[k]; }
 const SZC={}; function sizesOf(S){ if(S.sized) return new Set(S.sizes); if(S.tuples) return new Set(Object.keys(sizeRolls(S)).map(Number)); if(!SZC[S.id]){ const s=new Set(); for(let i=0;i<12;i++){ let r=null; try{ r=S.make(); }catch(e){} if(r&&r.val){ const z=sizeOf(r.val); if(z!==null) s.add(z); } } SZC[S.id]=s; } return SZC[S.id]; }
 const FZ={};
-function deal(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.terms||0;
-  const open=L.filter(l=>{ try{ return l.steps0().every(st=>openStep(st,P)); }catch(e){ return false; } });
+const AFAIL={}, ISA={}, WOPEN={};
+function deal(P,want,terms){ if(!(P&&P.anchor)||(CH.adl&&Date.now()>CH.adl)) return deal0(P&&P.anchor?Object.assign({},P,{anchor:null}):P,want,terms); /* after a fifth of a second the pool stops insisting on its own step, so a draw is never held up */ const w0=want||CH.pref.links||0, rA=rungOfS(P.anchor), now=Date.now(), tm=terms||CH.pref.terms||0;
+  /* a way of dealing the step that has failed three times running is left alone for a minute, so a step that cannot be dealt one way does not cost the search each draw */
+  const tryP=(tag,PP,w)=>{ const k=P.anchor+'|'+tag+'|'+w+'|'+tm, a=AFAIL[k]; if(a&&a.n>=3&&now<a.t) return null; if(CH.dl&&Date.now()>CH.dl) throw {over:1}; const D=deal0(PP,w,terms); if(D) delete AFAIL[k]; else { const b=AFAIL[k]||(AFAIL[k]={n:0,t:0}); b.n++; b.t=now+60000; } return D; };
+  const ws=[...new Set([w0,3,2])]; let D=null; for(const w of ws){ D=tryP('a',P,w); if(D) return D; }
+  /* no seed of the rung gives a value the step's link takes: the earlier seeds it does take are lent, and the step's link is the first link */
+  const PL=Object.assign({},P,{lendA:1}); for(const w of ws){ D=tryP('l',PL,w); if(D) return D; }
+  /* the step's link is a dead end inside its rung: the chain may run through the rungs below it (none later), the step's link first, or second after one earlier link */
+  const PW=Object.assign({},P,{use:x=>rungOfS(x.step)<=rA,wide:'r'+rA}); for(const [m,w] of ws.map(w=>[1,w]).concat([[2,2],[2,3]])){ D=tryP('w'+m,Object.assign({},PW,{lendA:m}),w); if(D) return D; }
+  return deal0(Object.assign({},P,{anchor:null}),want,terms); }
+function deal0(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.terms||0; const anchor=(P&&P.anchor)||null, isAm=anchor?(ISA[anchor]||(ISA[anchor]=new Map())):new Map(), isA=l=>{ let v=isAm.get(l); if(v===undefined){ try{ v=l.steps0().includes(anchor); }catch(e){ v=false; } isAm.set(l,v); } return v; }, lendA=anchor?(P.lendA||0):0; let S0A=false, needA=false;
+  const wo=P&&P.wide?WOPEN[P.wide]:null, open=wo&&wo.t>Date.now()?wo.open:L.filter(l=>{ try{ return l.steps0().every(st=>openStep(st,P)); }catch(e){ return false; } }); if(P&&P.wide&&open!==(wo&&wo.open)) WOPEN[P.wide]={t:Date.now()+2000,open}; /* the links of the rungs below, listed once every two seconds */
   const memo={}; const can=(k,m)=>{ const key=k+'|'+m; if(key in memo) return memo[key]; memo[key]=false;
     const ok=m===0?!!(KIND[k]&&KIND[k].answer!==false):open.some(l=>l.from===k&&can(l.to,m-1)); memo[key]=ok; return ok; };
   const kindOf=S=>S.kind||'fn', lens=k=>[2,3,4,5].filter(m=>can(k,m));
@@ -21043,12 +21053,15 @@ function deal(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.t
   /* seedlend: a switched-on link depends on a seed of the kind it takes; where no switched-on seed is of that kind, the seeds of the nearest earlier rung reached are lent */
   if(P){ const have=new Set(seeds.map(kindOf)), firstR={}; open.forEach(l=>{ if(have.has(l.from)) return; const r=rungOfS(l.steps0()[0]); if(!(l.from in firstR)||r<firstR[l.from]) firstR[l.from]=r; });
     for(const k in firstR){ const c=SEEDS.filter(s=>kindOf(s)===k&&rungOfS(s.step)<=firstR[k]&&openStep(s.step,null)); if(!c.length) continue; const near=Math.max(...c.map(s=>rungOfS(s.step))); seeds=seeds.concat(c.filter(s=>rungOfS(s.step)===near)); } }
+  if(anchor){ const rk=new Set(open.filter(isA).map(l=>l.from)); for(let d=0;d<4;d++) open.forEach(m=>{ if(rk.has(m.to)) rk.add(m.from); }); seeds=seeds.filter(s=>s.step===anchor||rk.has(kindOf(s)));
+    if(lendA){ const fk=new Set(open.filter(isA).map(l=>l.from)), rA=rungOfS(anchor); if(lendA===2){ const f2=new Set(); open.forEach(l=>{ if(fk.has(l.to)) f2.add(l.from); }); fk.clear(); f2.forEach(k=>fk.add(k)); }
+      seeds=SEEDS.filter(s=>fk.has(kindOf(s))&&s.step!==anchor&&rungOfS(s.step)<=rA&&openStep(s.step,null)); if(lendA===2) seeds=seeds.sort((a,b)=>rungOfS(b.step)-rungOfS(a.step)).slice(0,12); } }
   seeds=seeds.filter(s=>want?can(kindOf(s),want):lens(kindOf(s)).some(m=>m<=4)); if(!seeds.length) return null;
   if(terms){ const sz=seeds.filter(s=>KIND[kindOf(s)]&&KIND[kindOf(s)].size&&sizesOf(s).has(terms)); if(sz.length) seeds=sz; else terms=0; }
   const sizeOk=sd=>!terms||sizeOf(sd.val)===null||sizeOf(sd.val)===terms;
   /* the links that take the value in hand and can still end the chain in `left` more links */
   const cands=(cur,sd,prev,left)=>{ const out=[];
-    for(const l of open){ if(l.from!==cur.k||!can(l.to,left)||(prev&&l.id===prev.id&&l.from===l.to&&l.id!=='13d.slope')||(l.poly&&!toPoly(cur.t))) continue;
+    for(const l of open){ if(l.from!==cur.k||(needA&&!isA(l))) continue; if(!can(l.to,left)||(prev&&l.id===prev.id&&l.from===l.to&&l.id!=='13d.slope')||(l.poly&&!toPoly(cur.t))) continue;
       let p=null, o=null; try{ p=l.make?l.make(cur):{}; if(p===null) continue;
         if(l.pt){ for(const x of shuffle((sd.pts||[0,1,-1,2]).slice())){ p.x=Q(x); o=norm(l.act(cur,p)); if(o&&KIND[o.k]&&KIND[o.k].ok(o)) break; o=null; } }
         else { o=norm(l.act(cur,p)); if(o&&!(KIND[o.k]&&KIND[o.k].ok(o))) o=null; }
@@ -21059,13 +21072,13 @@ function deal(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.t
   const order=(ok,usedR)=>ok.map(c=>({c,k:Math.pow(Math.random(),1/(usedR.has(rungL(c))?1:3))})).sort((a,b)=>b.k-a.k).map(x=>x.c);
   /* depth-first: the chain of exactly n links from the seed value sd, or null if none exists within the search budget */
   const grow=(sd,n,budget,r0)=>{ const B={n:budget};
-    const go=(cur,i,prev,usedR,chain)=>{ if(i===n) return chain; if(B.n--<=0) return null; let ok=cands(cur,sd,prev,n-i-1);
+    const go=(cur,i,prev,usedR,chain)=>{ const sat=!anchor||S0A||chain.some(c=>isA(c.L)); if(i===n) return sat?chain:null; if(B.n--<=0) return null; needA=!sat&&(i===n-1||(lendA&&i===lendA-1)); let ok=cands(cur,sd,prev,n-i-1); needA=false;
       if(i===n-1&&usedR.size<2){ const fresh=ok.filter(c=>!usedR.has(rungL(c))); if(fresh.length) ok=fresh; }
-      for(const C of order(ok,usedR)){ const u=new Set(usedR); u.add(rungL(C)); const r=go(C.o,i+1,C.L,u,chain.concat([{L:C.L,p:C.p,o:C.o,in:cur}])); if(r) return r; if(B.n<=0) return null; }
+      for(const C of (sat?order(ok,usedR):order(ok.filter(c=>isA(c.L)),usedR).concat(order(ok.filter(c=>!isA(c.L)),usedR)))){ const u=new Set(usedR); u.add(rungL(C)); const r=go(C.o,i+1,C.L,u,chain.concat([{L:C.L,p:C.p,o:C.o,in:cur}])); if(r) return r; if(B.n<=0) return null; }
       return null; };
     return go(sd.val,0,null,new Set([r0]),[]); };
-  const build=(S0,sd,budget)=>{ const ns=want?[want]:shuffle(lens(sd.val.k).filter(m=>m<=4)); for(const n of ns){ const ch=grow(sd,n,budget,rungOfS(S0.step)); if(ch) return ch; } return null; };
-  const key=open.map(l=>l.id).join(',')+'|'+want+'|'+terms, Z=FZ[key]||(FZ[key]={});
+  const build=(S0,sd,budget)=>{ S0A=!!anchor&&S0.step===anchor; const ns=want?[want]:shuffle(lens(sd.val.k).filter(m=>m<=4)); for(const n of ns){ const ch=grow(sd,n,anchor&&!lendA?budget*2:budget,rungOfS(S0.step)); if(ch) return ch; } return null; };
+  const key=open.map(l=>l.id).join(',')+'|'+want+'|'+terms+'|'+(anchor||'')+(lendA?'+'+lendA:''), Z=FZ[key]||(FZ[key]={});
   /* the values of a seed known to carry a chain here: found once, from up to 24 of its own values */
   /* a value of the seed: under Terms, one of its listed values of that size; otherwise a fresh make */
   const fresh=S0=>{ if(terms&&(S0.sized||S0.tuples)) return sizedMake(S0,terms); /* built at the asked size */ let sd=null; try{ sd=S0.make(); }catch(e){ if(e&&e.over) throw e; } return sd; };
@@ -25041,7 +25054,7 @@ WL.push(
 /* every link and seed added here: refuse quietly on a bad input instead of throwing */
 const fine=r=>{ if(!r||!r.k) return false; if(r.k==='num') return !!r.v&&Number.isFinite(r.v.p)&&Number.isFinite(r.v.q)&&r.v.q>0&&!big(r.v); if(/NaN|undefined|Infinity/.test(JSON.stringify(r))) return false; const K=KIND[r.k]; try{ return !K||!K.ok||K.ok(r); }catch(e){ return false; } };
 for(let i=L0;i<L.length;i++){ const l=L[i]; ['act','slips','make','say','line','cite'].forEach(k=>{ const f=l[k]; if(typeof f!=='function') return; l[k]=function(){ try{ const r=f.apply(this,arguments);
-  if(k==='slips') return (r||[]).filter(w=>w&&w.why&&fine(w)); if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); }
+  if(k==='slips') return (r||[]).map(w=>!w||w.k?w:w.t?Object.assign({},w,{k:'fn'}):w.v?Object.assign({},w,{k:'num'}):w).filter(w=>w&&w.why&&fine(w)); /* slipkind2 */ if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); }
 for(let i=S0;i<SEEDS.length;i++){ const s=SEEDS[i], mk=s.make; s.make=function(){ try{ return mk.apply(this,arguments); }catch(e){ return null; } }; }
 L.forEach(l=>{ if(!l.steps0) l.steps0=()=>{ try{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }catch(e){ return [l.id.split('.')[0]]; } }; });
 })();
@@ -25249,7 +25262,7 @@ TW('8d.noholes','the no-holes-system technique',p=>'between '+HN+' and '+HN+' + 
   [['an end is named, which is not between',(n,p)=>qs(n)],['the gap is taken as a hole with nothing in it',()=> 'none']],(n,o,p)=>'between '+qs(n)+' and '+qs(qa(n,Q(1,p.k)))+': '+o,kp);
 
 for(let i=L0;i<L.length;i++){ const l=L[i]; ['act','slips','make','say','line','cite'].forEach(k=>{ const f=l[k]; if(typeof f!=='function') return; l[k]=function(){ try{ const r=f.apply(this,arguments);
-  if(k==='slips') return (r||[]).filter(w=>w&&w.why&&fine(w)); if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
+  if(k==='slips') return (r||[]).map(w=>!w||w.k?w:w.t?Object.assign({},w,{k:'fn'}):w.v?Object.assign({},w,{k:'num'}):w).filter(w=>w&&w.why&&fine(w)); /* slipkind2 */ if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
 L.forEach(l=>{ if(!l.steps0) l.steps0=()=>{ try{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }catch(e){ return [l.id.split('.')[0]]; } }; });
 })();
 /* ===== Chains, part th2: homes for the Techs Read entries, rungs 4 to 9 (Andrew 2026-11-15 14:06Z) ===== */
@@ -25417,7 +25430,7 @@ TW('9a.domran',"domain and range",p=>'f = {(1, '+HN+'), (2, '+HN+' + '+p.a+'), (
   [['the domain is given',()=> '{1, 2, 3}'],['each output is listed every time it comes',(n,p)=>'{'+qs(n)+', '+qs(qa(n,F(p.a)))+', '+qs(n)+'}'],['only the first output is kept',(n,p)=>'{'+qs(n)+'}']],
   (n,o)=>'ran f = '+o,()=>({a:ri(1,6)}));
 for(let i=L0;i<L.length;i++){ const l=L[i]; ['act','slips','make','say','line','cite'].forEach(k=>{ const f=l[k]; if(typeof f!=='function') return; l[k]=function(){ try{ const r=f.apply(this,arguments);
-  if(k==='slips') return (r||[]).filter(w=>w&&w.why&&fine(w)); if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
+  if(k==='slips') return (r||[]).map(w=>!w||w.k?w:w.t?Object.assign({},w,{k:'fn'}):w.v?Object.assign({},w,{k:'num'}):w).filter(w=>w&&w.why&&fine(w)); /* slipkind2 */ if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
 L.forEach(l=>{ if(!l.steps0) l.steps0=()=>{ try{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }catch(e){ return [l.id.split('.')[0]]; } }; });
 })();
 /* ===== Chains, part th3: homes for the Techs Read entries, rungs 9 to 17 (Andrew 2026-11-15 14:06Z) ===== */
@@ -25643,7 +25656,7 @@ TW('17·phys.lump','the lump supposition','a wave of frequency f: which energy c
   [['a half lump is let in',n=>(W(n)+0.5)+'hf'],['the energy is split into a fraction of a lump',n=>'hf/'+(W(n)+1)],['the lumps are taken to be f each, not hf',n=>W(n)+'f']],
   (n,o)=>'energy comes in whole lumps of hf: '+o);
 for(let i=L0;i<L.length;i++){ const l=L[i]; ['act','slips','make','say','line','cite'].forEach(k=>{ const f=l[k]; if(typeof f!=='function') return; l[k]=function(){ try{ const r=f.apply(this,arguments);
-  if(k==='slips') return (r||[]).filter(w=>w&&w.why&&fine(w)); if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
+  if(k==='slips') return (r||[]).map(w=>!w||w.k?w:w.t?Object.assign({},w,{k:'fn'}):w.v?Object.assign({},w,{k:'num'}):w).filter(w=>w&&w.why&&fine(w)); /* slipkind2 */ if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
 L.forEach(l=>{ if(!l.steps0) l.steps0=()=>{ try{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }catch(e){ return [l.id.split('.')[0]]; } }; });
 })();
 /* ===== Chains, part th4: homes for the Techs Read entries, rungs 18 to 30 (Andrew 2026-11-15 14:06Z) ===== */
@@ -25858,7 +25871,7 @@ T('30c.slope','the area-slope-nearly technique',p=>'F(x) = ∫ from 0 to x of '+
   [['F is given instead',(n,p)=>qm(n,Q(p.a*p.a,2))],['the slope of f is given',n=>n],['the integral is taken at a twice',(n,p)=>qm(n,F(2*p.a))]],
   (n,o,p)=>'F′('+m(p.a)+') = f('+m(p.a)+') = '+qs(o),()=>({a:ri(1,6)}));
 for(let i=L0;i<L.length;i++){ const l=L[i]; ['act','slips','make','say','line','cite'].forEach(k=>{ const f=l[k]; if(typeof f!=='function') return; l[k]=function(){ try{ const r=f.apply(this,arguments);
-  if(k==='slips') return (r||[]).filter(w=>w&&w.why&&fine(w)); if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
+  if(k==='slips') return (r||[]).map(w=>!w||w.k?w:w.t?Object.assign({},w,{k:'fn'}):w.v?Object.assign({},w,{k:'num'}):w).filter(w=>w&&w.why&&fine(w)); /* slipkind2 */ if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
 L.forEach(l=>{ if(!l.steps0) l.steps0=()=>{ try{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }catch(e){ return [l.id.split('.')[0]]; } }; });
 })();
 /* ===== Chains, part th5: homes for the Techs Read entries, rungs 31 to 47 (Andrew 2026-11-15 14:06Z) ===== */
@@ -26006,7 +26019,7 @@ TW('44·cb27.dn','the D-plus-N technique','A = ['+HN+' 1; 0 '+HN+'] = D + N: fin
   [['A is taken as D',n=>gr([[n,1],[0,n]])],['N is given',()=> gr([[0,1],[0,0]])],['the corner is moved into D',n=>gr([[n,1],[0,0]])]],
   (n,o)=>'D = '+o+', N = [0 1; 0 0], DN = ND');
 for(let i=L0;i<L.length;i++){ const l=L[i]; ['act','slips','make','say','line','cite'].forEach(k=>{ const f=l[k]; if(typeof f!=='function') return; l[k]=function(){ try{ const r=f.apply(this,arguments);
-  if(k==='slips') return (r||[]).filter(w=>w&&w.why&&fine(w)); if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
+  if(k==='slips') return (r||[]).map(w=>!w||w.k?w:w.t?Object.assign({},w,{k:'fn'}):w.v?Object.assign({},w,{k:'num'}):w).filter(w=>w&&w.why&&fine(w)); /* slipkind2 */ if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
 L.forEach(l=>{ if(!l.steps0) l.steps0=()=>{ try{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }catch(e){ return [l.id.split('.')[0]]; } }; });
 })();
 /* ===== Chains, part th6: homes for the Techs Read entries, the logic floor (Andrew 2026-11-15 14:06Z) ===== */
@@ -26205,7 +26218,7 @@ T('7·phys.switch','an ideal switch spends nothing',p=>p.on?'an ideal switch is 
   [['the reading is taken as the power',n=>W(n)],['the reading is squared',n=>W(n)*W(n)],['half the reading is taken',n=>Q(W(n),2)]],
   (n,o)=>'either way an ideal switch spends no energy: '+qs(o),()=>({on:Math.random()<0.5}));
 for(let i=L0;i<L.length;i++){ const l=L[i]; ['act','slips','make','say','line','cite'].forEach(k=>{ const f=l[k]; if(typeof f!=='function') return; l[k]=function(){ try{ const r=f.apply(this,arguments);
-  if(k==='slips') return (r||[]).filter(w=>w&&w.why&&fine(w)); if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
+  if(k==='slips') return (r||[]).map(w=>!w||w.k?w:w.t?Object.assign({},w,{k:'fn'}):w.v?Object.assign({},w,{k:'num'}):w).filter(w=>w&&w.why&&fine(w)); /* slipkind2 */ if(k==='act') return r&&fine(r)?r:null; return r; }catch(e){ return k==='slips'?[]:k==='act'||k==='make'?null:''; } }; }); l.th=1; }
 L.forEach(l=>{ if(!l.steps0) l.steps0=()=>{ try{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }catch(e){ return [l.id.split('.')[0]]; } }; });
 })();
 /* ===== Long Check Proofs (Andrew 2026-11-14 02:17Z: "proofs need a bunch of different approaches"; sample approved 02:49Z) =====
@@ -35731,12 +35744,12 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
   const cap1=s=>s[0].toUpperCase()+s.slice(1), ORD=['First','Then','Next','After that'];
   const tell=q=>{ if(!q||!q.chain||!q.lines||q.lines.length<3||q.story) return q; const says=q.lines.slice(1).map((l,i,a)=>(i===a.length-1&&i>0?'Last':ORD[Math.min(i,3)])+', '+l[0].replace(/^\d+\. /,'')+(/[.?]$/.test(l[0])?'':'.'));
     return Object.assign({},q,{index:'cws:'+String(q.index).replace(/^c:/,''),story:cap1(q.lines[0][0])+'. '+says.join(' '),lines:[],ask:'What comes out?'}); };
-  CH.chainPool=function(step,mode){ const r=rungOf(step), P2={use:x=>rungOf(x.step)===r}, keep=CH.pref, g=typeof gearPref==='function'?gearPref(mode):{};
-    CH.pref={links:g.links||0,terms:g.terms||0}; const dl0=CH.dl; CH.dl=Date.now()+600;
-    try{ let any=null; for(let t=0;t<6;t++){ let q=mode==='proof'?CH.proofCard(P2,null):mode==='work'?CH.workCard(P2,null):CH.workCard(P2,null); if(!q) break; if(mode==='word') q=tell(q);
+  CH.chainPool=function(step,mode){ const r=rungOf(step), P2={use:x=>rungOf(x.step)===r,anchor:step}, keep=CH.pref, g=typeof gearPref==='function'?gearPref(mode):{};
+    CH.pref={links:g.links||0,terms:g.terms||0}; const dl0=CH.dl; CH.dl=Date.now()+600; CH.adl=Date.now()+200;
+    try{ let any=null; for(let t=0;t<10;t++){ let q=mode==='proof'?CH.proofCard(P2,null):mode==='work'?CH.workCard(P2,null):CH.workCard(P2,null); if(!q) break; if(mode==='word') q=tell(q);
         if(mode==='word'&&!q.story) continue; if((q.steps||[]).includes(step)||q.step===step) return q; any=any||q; } return any; }
     catch(e){ if(e&&e.over) return null; throw e; }
-    finally{ CH.pref=keep; CH.dl=dl0; } };
+    finally{ CH.pref=keep; CH.dl=dl0; CH.adl=0; } };
   [...stepsOf].forEach(step=>{ ['work','proof','word'].forEach(mode=>{ if(mode==='word'&&!storySteps.has(step)) return;
     if(!(CH.RETIRED||[]).some(r=>r.pool.step===step&&qmode(r.pool)===mode)) return; /* a chain pool takes the place of a retired pool of the same step and kind, and no other */
     QP.push({id:step+'.chains.'+mode,step,mode,label:'seeds and links',chain:true,open:()=>measured(step),make:()=>CH.chainPool(step,mode)}); }); });
