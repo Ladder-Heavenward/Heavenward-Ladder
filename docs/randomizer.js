@@ -21039,7 +21039,11 @@ function deal(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.t
   const memo={}; const can=(k,m)=>{ const key=k+'|'+m; if(key in memo) return memo[key]; memo[key]=false;
     const ok=m===0?!!(KIND[k]&&KIND[k].answer!==false):open.some(l=>l.from===k&&can(l.to,m-1)); memo[key]=ok; return ok; };
   const kindOf=S=>S.kind||'fn', lens=k=>[2,3,4,5].filter(m=>can(k,m));
-  let seeds=SEEDS.filter(s=>openStep(s.step,P)&&(want?can(kindOf(s),want):lens(kindOf(s)).some(m=>m<=4))); if(!seeds.length) return null;
+  let seeds=SEEDS.filter(s=>openStep(s.step,P));
+  /* seedlend: a switched-on link depends on a seed of the kind it takes; where no switched-on seed is of that kind, the seeds of the nearest earlier rung reached are lent */
+  if(P){ const have=new Set(seeds.map(kindOf)), firstR={}; open.forEach(l=>{ if(have.has(l.from)) return; const r=rungOfS(l.steps0()[0]); if(!(l.from in firstR)||r<firstR[l.from]) firstR[l.from]=r; });
+    for(const k in firstR){ const c=SEEDS.filter(s=>kindOf(s)===k&&rungOfS(s.step)<=firstR[k]&&openStep(s.step,null)); if(!c.length) continue; const near=Math.max(...c.map(s=>rungOfS(s.step))); seeds=seeds.concat(c.filter(s=>rungOfS(s.step)===near)); } }
+  seeds=seeds.filter(s=>want?can(kindOf(s),want):lens(kindOf(s)).some(m=>m<=4)); if(!seeds.length) return null;
   if(terms){ const sz=seeds.filter(s=>KIND[kindOf(s)]&&KIND[kindOf(s)].size&&sizesOf(s).has(terms)); if(sz.length) seeds=sz; else terms=0; }
   const sizeOk=sd=>!terms||sizeOf(sd.val)===null||sizeOf(sd.val)===terms;
   /* the links that take the value in hand and can still end the chain in `left` more links */
@@ -21099,9 +21103,10 @@ function callIt(D,NM){ const says=D.chain.map((c,i)=>c.L.say(c.p,NM[i][0],c.in))
     if(says.slice(i+1).some(s=>rx.test(s))) says[i]=/\?$/.test(says[i])?says[i]+' Call the result '+nx+'.':says[i]+'; call the result '+nx; });
   return says; }
 function workCard(P,used){ for(let t=0;t<20;t++){ const D=deal(P); if(!D) return null; if(KIND[D.out.k].answer===false) continue; const W=wrongs(D); const vals=[]; W.forEach(w=>{ if(!vals.some(v=>veq(v.v,w.v))) vals.push(w); });
-    if(vals.length<3) continue; const pickW=shuffle(vals).slice(0,3), right=vshow(D.out), [sd,lk]=foot(D), index='c:'+sd+'.'+lk; if(used&&used[index]) continue;
+    /* workcover: a verdict has few other answers, so a chain that ends in a word is dealt with the choices that exist */
+    if(vals.length<(D.out.k==='word'?1:3)) continue; const pickW=shuffle(vals).slice(0,3), right=vshow(D.out), [sd,lk]=foot(D), index='c:'+sd+'.'+lk; if(used&&used[index]) continue;
     const NM=names(D), says=callIt(D,NM), lines=[[seedLine(D),'the seed: '+D.S0.label]].concat(D.chain.map((c,i)=>[(i+1)+'. '+says[i], c.L.cite(c.o,c.p)]));
-    const W1=pickW.map(w=>vshow(w.v)); if(new Set([right,...W1]).size<4) continue;
+    const W1=pickW.map(w=>vshow(w.v)); if(new Set([right,...W1]).size<1+pickW.length) continue;
     return {index,a3:[sd,lk,DASH],step:D.steps.slice().sort((a,b)=>rungOfS(b)-rungOfS(a))[0],steps:D.steps,chain:true,lines,ask:'Carry the seed through the links in order. What comes out?',right,opts:shuffle([right,...W1]),lead:'It is '+right+'. ',
       why:D.chain.map((c,i)=>c.L.line(c.o,c.p,NM[i][0],NM[i][1],c.in)).join('; ')+'. '+pickW.map(w=>vshow(w.v)+' comes from link '+(w.at+1)+', where '+w.why+'.').join(' ')}; }
   return null; }
@@ -35740,6 +35745,20 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
   ['work','proof','word'].forEach(mode=>{ const has=new Set(QP.filter(P=>qmode(P)===mode).map(P=>String(rungOf(P.step))));
     [...(mode==='word'?storySteps:stepsOf)].forEach(step=>{ const r=rungOf(step); if(r<5||has.has(String(r))) return; QP.push({id:step+'.chains.'+mode,step,mode,label:'seeds and links',chain:true,open:()=>measured(step),make:()=>CH.chainPool(step,mode)}); }); }); }
 })();
+/* ===== ownseeds (Andrew 2026-11-18 02:58Z): "if the ladder has built the math at the point those links exist, then they should have a
+   relevant seed in their own pool, and if not they should wait until the later pool (when the math is built)".
+   Fourteen links took a kind of thing whose first seed sat higher up the ladder. Four already waited on the later step. Of the rest:
+   - the math is built on the link's own step, so the step gets a seed of its own (the later seed's maker, on this step):
+     28a (functions of two inputs, 28a1), 35b and 35g (endless strings of 0s and 1s, 9a4 and 35g2);
+   - the math is built later, so the link waits for that step: 34c.cut and 34e.out are worked on a network of dots and links,
+     built at 42a; 28j.swirl, 28j.flux and 28n.segment are written on a form ω, built at 29·cb28. ===== */
+(function(){
+  const own=[['28h.boxfns','28a.twoknobs','28a','polynomials in x and y'],['39a.strings','35b.rows','35b','strings of 1s and 0s'],['39a.strings','35g.strings','35g','strings of 1s and 0s']];
+  own.forEach(([from,id,step,label])=>{ const S=CH.SEEDS.find(s=>s.id===from); if(!S||CH.SEEDS.some(s=>s.id===id)) return; const c=Object.assign({},S,{id,step,label}); c.make=function(){ return S.make.apply(S,arguments); }; if(S.tuples) c.tuples=function(){ return S.tuples.apply(S,arguments); }; if(S.sized) c.sized=function(){ return S.sized.apply(S,arguments); }; CH.SEEDS.push(c); });
+  const wait={'34c.cut':'42a','34e.out':'42a','28j.swirl':'29·cb28','28j.flux':'29·cb28','28n.segment':'29·cb28'};
+  CH.L.forEach(l=>{ const w=wait[l.id]; if(!w) return; const st=l.steps; l.steps=function(){ const s=(st.apply(l,arguments)||[]).slice(); if(!s.includes(w)) s.push(w); return s; }; l.steps0=()=>{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }; });
+})();
+/* ===== end of ownseeds ===== */
 /* ===== end of chains ===== */
 
 for(let i=QP.length-1;i>=0;i--) if(qmode(QP[i])==='read') QP.splice(i,1); /* the Understanding pools now live in the crosswalk (rgraph) */
