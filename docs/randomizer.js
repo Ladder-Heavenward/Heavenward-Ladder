@@ -60,7 +60,8 @@ const LS=window.LS||window.localStorage;
 const get=(k,d)=>{ try{ return JSON.parse(LS.getItem(k)||'')||d; }catch(e){ return d; } };
 const put=(k,v)=>{ try{ LS.setItem(k,JSON.stringify(v)); }catch(e){} };
 /* drawlag: an answer read from the record is kept until the record changes (rung.js raises __lsVer on every write); with no rung.js record there is no keeping */
-const lsVer=()=>window.LS?(window.__lsVer||0):NaN; const seenC={v:NaN,o:null};
+/* drawlag2: the Laundry's own writes (rand:...) are counted and taken off, so they do not empty what is kept */
+const lsVer=()=>{ const L=window.LS; if(!L) return NaN; if(!L.__randHook){ L.__randHook=1; window.__randW=window.__randW||0; ['setItem','removeItem'].forEach(fn=>{ const g=L[fn]; if(typeof g!=='function') return; L[fn]=function(k){ const v0=window.__lsVer||0, r=g.apply(this,arguments); if(/^rand:/.test(String(k))) window.__randW+=(window.__lsVer||0)-v0; return r; }; }); } return (window.__lsVer||0)-(window.__randW||0); }; const seenC={v:NaN,o:null};
 const seen=()=>{ const v=lsVer(); if(seenC.v!==v||!seenC.o){ seenC.o=get('cards:seen',{}); seenC.v=v; } return seenC.o; };
 const DESK=!!window.LADDER_DESK; /* 0.3.15: the desk opens every pool, so its words can be read and edited */
 let STK=null, STKG=null; /* stickdraw: while the Measuring Stick draws, the section's steps are open and nothing else; the gear is at full */
@@ -79,7 +80,7 @@ const UNDER=['0a','0b','1d','1f'];
 function jumpedPast(tag){ const m=String(tag).match(/^(\d+)/); if(!m) return false; const r=+m[1]; try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; const j=k.match(/^cert:in:r(\d+)$/); if(j&&+j[1]>r) return true; } }catch(e){} return false; }
 const stemC={M:null,by:null}; /* drawlag: the card map turned round once, not searched for every step */
 function tagStem(t){ const M=window.LADDER_CARDMAP||{}; if(stemC.M!==M){ const by=new Map(); for(const s in M) if(!by.has(M[s][0])) by.set(M[s][0],s); stemC.M=M; stemC.by=by; } const hit=stemC.by.get(t); if(hit!==undefined) return hit; return (typeof STEPS!=='undefined'&&STEPS[t])?STEPS[t][0]:null; }
-const reachC={}; function reached(tag){ const v=(window.__lsVer||0)+'|'+!!(window.LadderUnlock&&LadderUnlock.ready&&LadderUnlock.ready()); /* allunlock: recount once the ladder map is in */ if(reachC.v!==v){ for(const k in reachC) delete reachC[k]; reachC.v=v; } if(!(tag in reachC)) reachC[tag]=has(tag); return reachC[tag]; }
+const reachC={}; function reached(tag){ const v=(window.LS?lsVer():(window.__lsVer||0))+'|'+!!(window.LadderUnlock&&LadderUnlock.ready&&LadderUnlock.ready()); /* allunlock: recount once the ladder map is in */ if(reachC.v!==v){ for(const k in reachC) delete reachC[k]; reachC.v=v; } if(!(tag in reachC)) reachC[tag]=has(tag); return reachC[tag]; }
 function measured(tag){ if(STK) return STK.has(tag); if(DESK||reached(tag)) return true; /* laundryreach: every pool opens by reach (Andrew 14:51Z) */ const s=tagStem(tag); if(!s) return false; if(cert(s)) return true; if(UNDER.includes(tag)&&jumpedPast(tag)) return true;
   const W=window.LadderStick&&LadderStick.where(s); if(!W) return false; if(cert('floor'+W.fl+'concl')) return true;
   const c=cert(W.core[W.core.length-1]); if(c&&c.scope==='rung'&&W.core.includes(s)) return true;
@@ -12006,7 +12007,11 @@ function deal0(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.
      and the list grows (to 40) by trying two more of its own values each time it is dealt. */
   const known=S0=>{ if(Z[S0.id]) return Z[S0.id]; const vals=[]; for(let i=0;i<24&&vals.length<4;i++){ const sd=fresh(S0); if(sd&&sd.val&&sizeOk(sd)&&build(S0,sd,40)) vals.push(sd); } vals.n=0; vals.bad=0; vals.tries=0; return Z[S0.id]=vals; };
   const pool=seeds.slice();
-  while(pool.length){ const S0=LHALF(pool), vals=known(S0); if(!vals.length){ pool.splice(pool.indexOf(S0),1); continue; }
+  while(pool.length){ const S0=LHALF(pool); let vals=Z[S0.id];
+    if(!vals){ /* drawlag2 */ const sd0=fresh(S0), ch0=sd0&&sd0.val&&sizeOk(sd0)?build(S0,sd0,40):null;
+      if(ch0){ const v0=[sd0]; v0.n=1; v0.bad=0; v0.tries=0; Z[S0.id]=v0; const st0=new Set([S0.step]); ch0.forEach(c=>{ (c.L.steps(c.o.U||new Set())).forEach(s=>st0.add(s)); }); return {S0,sd:sd0,chain:ch0,out:ch0[ch0.length-1].o,steps:[...st0]}; }
+      vals=known(S0); }
+    if(!vals.length){ pool.splice(pool.indexOf(S0),1); continue; }
     if(vals.cat){ for(let k=0;k<2&&vals.length<40&&vals.tries<300;k++){ vals.tries++; const s2=fresh(S0); if(s2&&s2.val&&sizeOk(s2)&&build(S0,s2,40)) vals.push(s2); } }
     let sd=vals.cat?pick(vals):fresh(S0); let chain=sd&&sd.val&&sizeOk(sd)?build(S0,sd,vals.cat?400:40):null; if(!vals.cat) vals.n++;
     if(chain&&!vals.cat){ if(vals.length<12) vals.push(sd); else vals[rnd(vals.length)]=sd; }

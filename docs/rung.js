@@ -29,6 +29,7 @@ let raw=null, rec=null, mem=null, stale=true;
 const store=(()=>{ try{ const t='__ladder_t'; localStorage.setItem(t,'1'); localStorage.removeItem(t); return localStorage; }catch(e){ return null; } })();
 function load(){
   if(!store){ if(!mem) mem=blank(); return mem; }
+  if(dirty&&rec) return rec; /* savelater: the record in memory is ahead of the device's copy */
   if(rec&&raw!==null&&!stale) return rec; /* 2026-11-13: a full record is about half a megabyte; read it again only when another tab changed it */
   stale=false;
   let r=null; try{ r=store.getItem(RK); }catch(e){}
@@ -38,8 +39,12 @@ function load(){
   const b=blank(); for(const k in b) if(!(k in o)) o[k]=b[k];
   raw=r; rec=o; return rec;
 }
-function save(){ kc=null; window.__lsVer=(window.__lsVer||0)+1; if(!store) return; rec.updated=Date.now(); const s=JSON.stringify(rec);
+/* savelater: the record in memory changes at once; the copy on the device is written 0.12 s later, once for all the writes that came together, and at once when the page is hidden or left */
+let dirty=false, saveT=0;
+function flush(){ if(saveT){ clearTimeout(saveT); saveT=0; } if(!dirty||!store||!rec) return; dirty=false; rec.updated=Date.now(); const s=JSON.stringify(rec);
   try{ store.setItem(RK,s); raw=s; }catch(e){} }
+function save(){ kc=null; window.__lsVer=(window.__lsVer||0)+1; if(!store) return; dirty=true; if(!saveT) saveT=setTimeout(flush,120); }
+try{ addEventListener('pagehide',flush); addEventListener('beforeunload',flush); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') flush(); }); }catch(e){}
 /* each old storage name is a place in the record */
 function where(k){ let m;
   if(/:t$/.test(k)) return ['sync',k];
