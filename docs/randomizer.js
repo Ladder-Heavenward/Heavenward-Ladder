@@ -1616,10 +1616,10 @@ G.K({id:'polar',step:'21r',steps:['21c','21r'],title:'a curve by turning and rea
     const right=eq, ws=uniq(right,['r = '+A+fn+' '+arg(k===2?4:k-1),'r = '+A+fn+' '+arg(2*k),'r = 1 + '+fn+' '+arg(k),'r = '+A+fn+' '+arg(k+2),'r = '+A+fn+' '+arg(k+1)]).slice(0,3);
     return card(this,{ix:'roseq;'+k+';'+a+';'+fn+';'+tw,links:['21r.rose('+k+')','21r.which'], fig, ask:'Which equation draws this curve?', right, opts:sh([right,...ws]),
       why:'It has '+pet+' petals, each reaching '+a+' from the centre and touching it. r = cos kθ has k petals for odd k and 2k for even k, so k = '+k+'. A 1 + in front would keep r from 0 except at one point and give no petals.'}); }
-  if(fam==='limacon'){ const b=pk([0.5,1,1,2,3]), shape=b<1?'a dent':b===1?'a cusp (the cardioid)':'an inner loop', eq='r = 1 + '+(b===1?'':G.dec(b)+' ')+fn+' '+arg(1);
-    const fig=polsvg(polar(t=>1+b*trig(1,t),0,2*Math.PI,480)), bs=v=>v===0.5?'b = ½':'b = '+v, right=bs(b), opts=[right,...sh([0.5,1,b>1?(b===2?3:2):2,0].filter(v=>bs(v)!==right)).slice(0,3).map(bs)];
+  if(fam==='limacon'){ const b=pk([0.75,1,1,2,3]), shape=b<1?'a dent':b===1?'a cusp (the cardioid)':'an inner loop', eq='r = 1 + '+(b===1?'':G.dec(b)+' ')+fn+' '+arg(1);
+    const fig=polsvg(polar(t=>1+b*trig(1,t),0,2*Math.PI,480)), bs=v=>v===0.75?'b = ¾':'b = '+v, right=bs(b), opts=[right,...sh([0.75,1,b>1?(b===2?3:2):2,0].filter(v=>bs(v)!==right)).slice(0,3).map(bs)];
     return card(this,{ix:'lim;'+b+';'+fn+';'+tw,links:['21r.limaçon('+b+')','21r.shape'], fig, ask:'The curve is r = 1 + b '+fn+' '+arg(1)+'. Which b draws it?', right, opts:sh(opts),
-      why:'This limaçon has '+shape+'. r = 1 + b cos θ has a dent when b < 1, a cusp when b = 1 (the heart, the cardioid), and an inner loop when b > 1, where r turns negative. b = 0 would be a plain circle.'}); }
+      why:'This limaçon has '+shape+'. r = 1 + b cos θ has a dent when ½ < b < 1, none when b ≤ ½, a cusp when b = 1 (the heart, the cardioid), and an inner loop when b > 1, where r turns negative. b = 0 would be a plain circle.'}); }
   const c=pk([0.5,1,2]), turns=pk([1,2,3,4]), fig=polsvg(polar(t=>c*t,0,2*Math.PI*turns,360*turns)), reach=c*2*Math.PI*turns;
   const right=String(turns), ws=uniq(right,[String(turns+1),String(2*turns),String(turns===1?3:turns-1),String(turns+2),String(turns+3)]).slice(0,3);
   return card(this,{ix:'sp;'+c+';'+turns,links:['21r.spiral('+c+')','21r.turns'], fig, ask:'The spiral r = '+(c===1?'':c===0.5?'½':c)+'θ is drawn from θ = 0 until it stops. How many whole turns does it make?', right, opts:sh([right,...ws]),
@@ -11036,7 +11036,7 @@ const WI46=[
   ['Can no angle be cut in three?','some can: 90° can, as cos 30° = √3/2',['right: none can','all can','only 60° can'],'Third-of-angle technique.'],
   ['Is a root of an irreducible cubic over ℚ constructible?','no',['yes','yes, if real','only for x³ − 2'],'Degree-three technique.'],
   ['Is the circle not squared because π has degree 3?','no: π is a root of no polynomial over ℚ at all',['yes','yes, by the degree-three technique','no: π has degree 2'],'Another proof.'],
-  ['How is the 17-sided figure built?','three square-root steps after ℚ(√17)',['by a cube root','it cannot be','by marking the straightedge'],'Seventeen-arcs technique.']];
+  ['How is the 17-sided figure built?','two square-root steps after ℚ(√17)',['by a cube root','it cannot be','by marking the straightedge'],'Seventeen-arcs technique.']];
 QP.push({id:'46i.build',step:'46i',label:'what compass and straightedge can build',open:()=>measured('46i'),make(){ return writtenQ('46i.build',WI46); }});
 
 /* 46j Solving Cubics and Quartics by Hand */

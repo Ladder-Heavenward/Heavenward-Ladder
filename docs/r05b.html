@@ -58,14 +58,14 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p data-pid="78d1b4">Rung 4 can add any two numbers. Running adding backwards is another matter. Ask for a number x with 3 + x = 0. Since 3 names S(2), the next-on-the-left technique for plus turns 3 + x into S(2 + x), a next one, and 3c's next-never-empty technique says a next one is never 0. The same argument works for any number other than 0. Call it the gap-in-ℕ technique: <b>for every number k other than 0, no number x has k + x = 0.</b></p>
   <div class="brkkey"></div>
   <pre class="lines" data-k="ember" data-label="this step: the gap-in-ℕ technique">
-\text{let } a \in \mathbb N,\ \ a \ne 0;\ \ \text{assume } \exists x \in \mathbb N\,(a + x = 0) @@ aiming to refute
-\text{call such a number } x:\ \ a + x = 0 @@ use the some
-a = S(m) \text{ for a number } m @@ the zero-or-a-next technique; a ≠ 0, so the other option (the remaining-option technique); use the some
+\text{let } k \in \mathbb N,\ \ k \ne 0;\ \ \text{assume } \exists x \in \mathbb N\,(k + x = 0) @@ aiming to refute
+\text{call such a number } x:\ \ k + x = 0 @@ use the some
+k = S(m) \text{ for a number } m @@ the zero-or-a-next technique; k ≠ 0, so the other option (the remaining-option technique); use the some
 \htmlClass{new}{S(m)} + x = 0 @@ the swap axiom
 \htmlClass{new}{S(m + x)} = 0 @@ the next-on-the-left technique for plus, with the chain technique
 S(m + x) \ne 0 @@ the next-never-empty technique
 \bot @@ clash
-\neg\exists x \in \mathbb N\,(a + x = 0) \quad \blacksquare @@ close the somes; refute
+\neg\exists x \in \mathbb N\,(k + x = 0) \quad \blacksquare @@ close the somes; refute
   </pre>
   <p data-pid="76b022">More generally, 4h's at-most-is-adding technique says that b + x = k has an answer exactly when b ≤ k, and 4f's cancel for plus says there is then only one. So “what must be added to 3 to make 5?” has the answer 2. And “what must be added to 5 to make 3?” has none. An answer x would make 5 ≤ 3 by at-most-is-adding, and any-two-compare forbids that alongside 3 &lt; 5. Taking away works in ℕ only when there is enough to take.</p>
 <div class="eqline c6" data-tex="\begin{aligned}&amp;b + x = k \text{ has an answer} \Leftrightarrow b \leq k\\ &amp;3 + 2 = 5 \quad\text{so } x = 2\\ &amp;5 + x = 3 \Rightarrow 5 \leq 3;\ 3 &lt; 5\text{: } \bot\end{aligned}"></div>
@@ -94,11 +94,11 @@ S(m + x) \ne 0 @@ the next-never-empty technique
 <div class="eqline c6" data-tex="\begin{aligned}&amp;(5, 3) \quad\text{what added to 3 makes 5}\\ &amp;(3, 5) \quad\text{what added to 5 makes 3}\\ &amp;(k, b) \in \mathbb{N} \times \mathbb{N} \quad\text{an object}\end{aligned}"></div>
   <p data-pid="253ab9">But many pairs ask for the same amount. (3, 5), (0, 2) and (10, 12) each ask for whatever must be added to a number to land 2 short of it. They must make one new number, not three. When do two pairs ask for the same amount? Saying “k less b is c less d” seems to need the taking-away that is missing. The way round is to see what the sameness says when both amounts do exist.</p>
   <pre class="lines" data-k="ember" data-label="this step: where both amounts exist and are one amount e">
-b + e = a,\ \ \ d + e = c @@ suppose the one number e answers both questions
-a + d = (b + e) + d @@ the swap axiom, with the first sameness
-\phantom{a + d} = b + (e + d) @@ the regroup technique for plus
-\phantom{a + d} = b + (\htmlClass{new}{d + e}) @@ the turn-about technique for plus, inside
-\phantom{a + d} = \htmlClass{new}{b + c} @@ the swap axiom, with the second sameness
+b + e = k,\ \ \ d + e = c @@ suppose the one number e answers both questions
+k + d = (b + e) + d @@ the swap axiom, with the first sameness
+\phantom{k + d} = b + (e + d) @@ the regroup technique for plus
+\phantom{k + d} = b + (\htmlClass{new}{d + e}) @@ the turn-about technique for plus, inside
+\phantom{k + d} = \htmlClass{new}{b + c} @@ the swap axiom, with the second sameness
   </pre>
   <p data-pid="aa12c5">The last line mentions only adding. It makes sense for every two pairs, whether or not the amounts exist, so it can be the definition. (And it is the right one. Where both amounts do exist, k + d = b + c forces them to be the same, by cancel for plus. A question below asks for the column.)</p>
 <div class="eqline c6" data-tex="\begin{aligned}&amp;k + d = b + c \quad\text{adding only}\\ &amp;b + e = k,\ d + e^{\prime} = c\\ &amp;\text{so } e = e^{\prime} \quad\text{cancel for plus}\end{aligned}"></div>
@@ -169,13 +169,13 @@ a + d = (b + e) + d @@ the swap axiom, with the first sameness
   <h2 class="sthead"><span class="stno">5b6</span>An Equivalence</h2>
   <p data-pid="0690e5">Now the same-difference technique: <b>the relation ∼ on ℕ × ℕ is reflexive, symmetric and transitive.</b> The three properties are 2h11’s, read off dots in 2i13. Reflexive: k + b = b + k is turn-about for plus, so (k, b) ∼ (k, b). Symmetric: from k + d = b + c, the turn-about technique gives b + c = k + d. Turn-about for plus on each side then gives c + b = d + k, which is (c, d) ∼ (k, b). Transitive is the one that needs work, and it is where rung 4's cancelling comes in.</p>
   <pre class="lines" data-k="ember" data-label="this step: the same-difference technique, the transitive part">
-a + d = b + c,\ \ \ c + f = d + e @@ given (a, b) ∼ (c, d) and (c, d) ∼ (e, f); ﹀ ∼
-(a + d) + (c + f) = (b + c) + (d + e) @@ the swap axiom: the same thing added to each side, then each side swapped by a given line
-(a + d) + (\htmlClass{new}{f + c}) = (b + c) + (\htmlClass{new}{e + d}) @@ the turn-about technique for plus, inside, on each side
-(\htmlClass{new}{a + f}) + (d + c) = (\htmlClass{new}{b + e}) + (c + d) @@ the middle-swap technique, on each side
-(a + f) + (\htmlClass{new}{c + d}) = (b + e) + \htmlClass{keep}{(c + d)} @@ the turn-about technique for plus, inside, on the left
-\htmlClass{new}{a + f = b + e} @@ the cancel technique for plus: c + d is taken off both sides
-(a, b) \sim (e, f) \quad \blacksquare @@ ︿ ∼
+k + d = b + c,\ \ \ c + f = d + e @@ given (k, b) ∼ (c, d) and (c, d) ∼ (e, f); ﹀ ∼
+(k + d) + (c + f) = (b + c) + (d + e) @@ the swap axiom: the same thing added to each side, then each side swapped by a given line
+(k + d) + (\htmlClass{new}{f + c}) = (b + c) + (\htmlClass{new}{e + d}) @@ the turn-about technique for plus, inside, on each side
+(\htmlClass{new}{k + f}) + (d + c) = (\htmlClass{new}{b + e}) + (c + d) @@ the middle-swap technique, on each side
+(k + f) + (\htmlClass{new}{c + d}) = (b + e) + \htmlClass{keep}{(c + d)} @@ the turn-about technique for plus, inside, on the left
+\htmlClass{new}{k + f = b + e} @@ the cancel technique for plus: c + d is taken off both sides
+(k, b) \sim (e, f) \quad \blacksquare @@ ︿ ∼
   </pre>
   <p data-pid="00b047">So ∼ is a sameness relation, and all of 2h applies: the classes, and the classes-never-overlap technique, that two classes sharing a member are one class.</p>
 <div class="eqline c6" data-tex="\begin{aligned}&amp;\sim \text{ reflexive, symmetric, transitive}\\ &amp;[p] \cap [q] \neq \varnothing \Rightarrow [p] = [q]\end{aligned}"></div>
@@ -195,12 +195,12 @@ a + d = b + c,\ \ \ c + f = d + e @@ given (a, b) ∼ (c, d) and (c, d) ∼ (e, 
 <div class="eqline c6" data-tex="\begin{aligned}&amp;[a, b] = [(a, b)]\\ &amp;= \{(c, d) : (c, d) \sim (a, b)\}\end{aligned}"></div>
   <p data-pid="ae28b2">Same-class technique: <b>[k, b] = [c, d] exactly when k + d = b + c.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the same-class technique">
-(a, b) \in [a, b] @@ ∼ is reflexive (same-difference); ︿ the class
-\text{assume } (a, b) \sim (c, d):\ \ (a, b) \in [c, d] @@ ︿ the class
-\qquad [a, b] = [c, d] @@ the classes-never-overlap technique: the two classes share the member (a, b)
-\text{assume } [a, b] = [c, d]:\ \ (a, b) \in [c, d] @@ the swap axiom, with the first line
-\qquad (a, b) \sim (c, d) @@ ﹀ the class
-[a, b] = [c, d] \;\Leftrightarrow\; \htmlClass{new}{a + d = b + c} \quad \blacksquare @@ prove an if each way; ︿ ⇔; ﹀ ∼
+(k, b) \in [k, b] @@ ∼ is reflexive (same-difference); ︿ the class
+\text{assume } (k, b) \sim (c, d):\ \ (k, b) \in [c, d] @@ ︿ the class
+\qquad [k, b] = [c, d] @@ the classes-never-overlap technique: the two classes share the member (k, b)
+\text{assume } [k, b] = [c, d]:\ \ (k, b) \in [c, d] @@ the swap axiom, with the first line
+\qquad (k, b) \sim (c, d) @@ ﹀ the class
+[k, b] = [c, d] \;\Leftrightarrow\; \htmlClass{new}{k + d = b + c} \quad \blacksquare @@ prove an if each way; ︿ ⇔; ﹀ ∼
   </pre>
   <p class="eqline" data-pid="0f1545">From here on, <span data-tex-inline="\mathbb Z"></span> names the set of all the classes of ∼:</p>
   <div class="eqline" data-tex="\begin{aligned} &amp;\{c \in \mathcal P(\mathbb N \times \mathbb N) :\\ &amp;\quad \exists p \in \mathbb N \times \mathbb N\,(c = [p])\} \end{aligned}"></div>
@@ -234,10 +234,10 @@ a + d = b + c,\ \ \ c + f = d + e @@ given (a, b) ∼ (c, d) and (c, d) ∼ (e, 
   <p data-pid="3ac742"><b>To add two integers, add a member of each, entry by entry, and check the class of the answer does not depend on the members.</b></p>
   <p data-pid="1c215c">Where the amounts exist, adding them is easy to read off. Suppose b + e = k and d + e′ = c. Then (b + d) + (e + e′) = (b + e) + (d + e′) = k + c, by middle-swap. So the sum of the two missing amounts is what must be added to b + d to make k + c. So the sum of the pairs (k, b) and (c, d) should be (k + c, b + d). Before that can be a definition on classes, it must not matter which members were used. Honest-adding technique on ℤ: <b>if (k, b) ∼ (k′, b′) and (c, d) ∼ (c′, d′), then (k + c, b + d) ∼ (k′ + c′, b′ + d′).</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the honest-adding technique on ℤ">
-a + b' = b + a',\ \ \ c + d' = d + c' @@ given; ﹀ ∼
-(a + b') + (c + d') = (b + a') + (d + c') @@ the swap axiom, as in same-difference
-(\htmlClass{new}{a + c}) + (\htmlClass{new}{b' + d'}) = (\htmlClass{new}{b + d}) + (\htmlClass{new}{a' + c'}) @@ the middle-swap technique, on each side
-(a + c,\ b + d) \sim (a' + c',\ b' + d') \quad \blacksquare @@ ︿ ∼: first of each plus second of the other
+k + b' = b + k',\ \ \ c + d' = d + c' @@ given; ﹀ ∼
+(k + b') + (c + d') = (b + k') + (d + c') @@ the swap axiom, as in same-difference
+(\htmlClass{new}{k + c}) + (\htmlClass{new}{b' + d'}) = (\htmlClass{new}{b + d}) + (\htmlClass{new}{k' + c'}) @@ the middle-swap technique, on each side
+(k + c,\ b + d) \sim (k' + c',\ b' + d') \quad \blacksquare @@ ︿ ∼: first of each plus second of the other
   </pre>
   <p class="eqline" data-pid="016eb9">From here on, for integers x and y, <span data-tex-inline="x + y"></span> names <span data-tex-inline="[a + c,\ b + d]"></span>, where (a, b) is any member of x and (c, d) any member of y. Read it “x plus y”. The honest-adding technique on ℤ, with same-class, makes the name honest: every choice of members gives the same class. That is the general shape: a function on members gives a function on classes exactly when members of one class go to members of one class. Then the class of the answer stays put.</p>
 <div class="eqline c6" data-tex="\begin{aligned}&amp;[a, b] + [c, d] = [a + c,\ b + d]\end{aligned}"></div>
@@ -256,10 +256,10 @@ a + b' = b + a',\ \ \ c + d' = d + c' @@ given; ﹀ ∼
   <h2 class="sthead"><span class="stno">5b9</span>What a Product Must Ask</h2>
   <p data-pid="876638">Multiplying is harder to guess, so guess it where the amounts exist. Suppose k = b + e and c = d + e′, so that (k, b) asks for e and (c, d) asks for e′. The product should ask for ee′. Spread the products out with spread for times over plus:</p>
   <pre class="lines" data-k="ember" data-label="this step: what the product of two pairs must ask for">
-a = b + e,\ \ \ c = d + e' @@ suppose both amounts exist
-ac = bd + be' + ed + ee' @@ the swap axiom; spread for times over plus with turn-about for times, spreading each way; regroup for plus
-ad + bc = bd + ed + bd + be' @@ the swap axiom; spread for times over plus with turn-about for times, and spread for times over plus; regroup for plus
-ac + bd = (ad + bc) + \htmlClass{new}{ee'} @@ the same products on each side, by regroup for plus, turn-about for plus and middle-swap, with ee′ left over
+k = b + e,\ \ \ c = d + e' @@ suppose both amounts exist
+kc = bd + be' + ed + ee' @@ the swap axiom; spread for times over plus with turn-about for times, spreading each way; regroup for plus
+kd + bc = bd + ed + bd + be' @@ the swap axiom; spread for times over plus with turn-about for times, and spread for times over plus; regroup for plus
+kc + bd = (kd + bc) + \htmlClass{new}{ee'} @@ the same products on each side, by regroup for plus, turn-about for plus and middle-swap, with ee′ left over
   </pre>
   <p data-pid="4abec0">So the pair (kc + bd, kd + bc) asks for exactly ee′, the product of the two amounts. That pair uses only adding and multiplying of numbers, so it can be written for any two pairs. Honest-multiplying technique on ℤ: <b>if (k, b) ∼ (k′, b′) and (c, d) ∼ (c′, d′), then (kc + bd, kd + bc) ∼ (k′c′ + b′d′, k′d′ + b′c′).</b> Change one member at a time.</p>
 <div class="eqline c6" data-tex="\begin{aligned}&amp;(kc + bd,\ kd + bc) \quad\text{asks for } ee^{\prime}\\ &amp;(k, b) \sim (k^{\prime}, b^{\prime}),\ (c, d) \sim (c^{\prime}, d^{\prime})\\ &amp;\text{so } (kc + bd,\ kd + bc)\\ &amp;\qquad \sim (k^{\prime}c^{\prime} + b^{\prime}d^{\prime},\ k^{\prime}d^{\prime} + b^{\prime}c^{\prime})\end{aligned}"></div>
@@ -275,16 +275,16 @@ ac + bd = (ad + bc) + \htmlClass{new}{ee'} @@ the same products on each side, by
 <section class="class step" data-step="5b10">
   <h2 class="sthead"><span class="stno">5b10</span>Multiplying Classes</h2>
   <pre class="lines" data-k="ember" data-label="this step: the honest-multiplying technique on ℤ, changing the first member">
-a + b' = b + a' @@ given (a, b) ∼ (a′, b′); ﹀ ∼
-(ac + bd) + (a'd + b'c) = (ac + b'c) + (bd + a'd) @@ turn-about for plus inside; the middle-swap technique
-\phantom{(ac + bd) + (a'd + b'c)} = (a + b')c + (b + a')d @@ spread for times over plus with turn-about for times, turned about, twice
-\phantom{(ac + bd) + (a'd + b'c)} = (\htmlClass{new}{b + a'})c + (b + a')d @@ the given, by the swap axiom
-(ad + bc) + (a'c + b'd) = (ad + b'd) + (bc + a'c) @@ turn-about for plus inside; the middle-swap technique
-\phantom{(ad + bc) + (a'c + b'd)} = (a + b')d + (b + a')c @@ spread for times over plus with turn-about for times, turned about, twice
-\phantom{(ad + bc) + (a'c + b'd)} = (\htmlClass{new}{b + a'})d + (b + a')c @@ the given, by the swap axiom
-\phantom{(ad + bc) + (a'c + b'd)} = (b + a')c + (b + a')d @@ the turn-about technique for plus
-(ac + bd) + (a'd + b'c) = (ad + bc) + (a'c + b'd) @@ the two chains meet: the techniques turn-about and chain
-(ac + bd,\ ad + bc) \sim (a'c + b'd,\ a'd + b'c) @@ ︿ ∼
+k + b' = b + k' @@ given (k, b) ∼ (k′, b′); ﹀ ∼
+(kc + bd) + (k'd + b'c) = (kc + b'c) + (bd + k'd) @@ turn-about for plus inside; the middle-swap technique
+\phantom{(kc + bd) + (k'd + b'c)} = (k + b')c + (b + k')d @@ spread for times over plus with turn-about for times, turned about, twice
+\phantom{(kc + bd) + (k'd + b'c)} = (\htmlClass{new}{b + k'})c + (b + k')d @@ the given, by the swap axiom
+(kd + bc) + (k'c + b'd) = (kd + b'd) + (bc + k'c) @@ turn-about for plus inside; the middle-swap technique
+\phantom{(kd + bc) + (k'c + b'd)} = (k + b')d + (b + k')c @@ spread for times over plus with turn-about for times, turned about, twice
+\phantom{(kd + bc) + (k'c + b'd)} = (\htmlClass{new}{b + k'})d + (b + k')c @@ the given, by the swap axiom
+\phantom{(kd + bc) + (k'c + b'd)} = (b + k')c + (b + k')d @@ the turn-about technique for plus
+(kc + bd) + (k'd + b'c) = (kd + bc) + (k'c + b'd) @@ the two chains meet: the techniques turn-about and chain
+(kc + bd,\ kd + bc) \sim (k'c + b'd,\ k'd + b'c) @@ ︿ ∼
   </pre>
   <p data-pid="8f7c67">That changes the first member and keeps the class. The function reads the same with the two pairs exchanged. That is because ck + db = kc + bd and cb + dk = kd + bc by turn-about for times and turn-about for plus. So run the same column with (c, d) and (c′, d′) in the first place, and (k′, b′) kept fixed. It gives (k′c + b′d, k′d + b′c) ∼ (k′c′ + b′d′, k′d′ + b′c′). Same-difference's transitive part joins the two, and honest-multiplying on ℤ is proved. ∎</p>
 <div class="eqline c6" data-tex="\begin{aligned}&amp;ck + db = kc + bd,\quad cb + dk = kd + bc\\ &amp;\text{so the column runs with the pairs exchanged}\\ &amp;\text{transitive joins the two} \quad\blacksquare\end{aligned}"></div>
@@ -420,10 +420,10 @@ x(y + z) = [k, b]\,[c + e,\ d + f] @@ ﹀ + on ℤ
 <div class="eqline c6" data-tex="\begin{aligned}&amp;x - y = x + (-y)\end{aligned}"></div>
   <p data-pid="22cb74">First, the pairs were what they claimed to be. Pair-is-the-difference technique: <b>for numbers k and b, k − b = [k, b].</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the pair-is-the-difference technique">
-a - b = [a, 0] + (-[b, 0]) @@ the naming line; ﹀ −
-\phantom{a - b} = [a, 0] + [0, b] @@ ﹀ the negative
-\phantom{a - b} = [a + 0,\ 0 + b] @@ ﹀ + on ℤ
-\phantom{a - b} = [\htmlClass{new}{a, b}] \quad \blacksquare @@ plus-zero, zero-plus
+k - b = [k, 0] + (-[b, 0]) @@ the naming line; ﹀ −
+\phantom{k - b} = [k, 0] + [0, b] @@ ﹀ the negative
+\phantom{k - b} = [k + 0,\ 0 + b] @@ ﹀ + on ℤ
+\phantom{k - b} = [\htmlClass{new}{k, b}] \quad \blacksquare @@ plus-zero, zero-plus
   </pre>
   <p data-pid="43617b">So (3, 5) was “3 less 5” all along: 3 − 5 = [3, 5] = [0, 2] = −2. And where taking away already worked in ℕ, the new subtraction agrees with it. If k = b + c then k − b = [k, b] = [c, 0] = c, by same-class. So 4·stat's b − a, allowed there only when a ≤ b, is this subtraction, and that flag is closed. Now the technique the rung is named for, its first part. Subtraction technique: <b>for any integers x and y, y + (x − y) = x; and if y + z = x, then z = x − y.</b></p>
   <pre class="lines" data-k="ember" data-label="this step: the subtraction technique">
@@ -606,7 +606,7 @@ stepper('#sl1',[
   {k:'ember',kl:'the gap',t:R`3 + x = S(2) + x = ${N}{S(2 + x)} \ne 0`,n:`3 names S(2); next-on-the-left for plus moves the next-one out; next-never-empty says a next one is never 0. Gap-in-ℕ technique: no number added to a number other than 0 gives 0.`}
 ],{title:'The slides · the gap · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'naming by the question',t:col2([`b + e = a,\\ \\ d + e = c`,'one amount e answers both'],[`a + d = (b + e) + d = b + (d + e) = ${N}{b + c}`,'the swap axiom; regroup for plus; turn-about for plus; the swap axiom']),n:`Where the missing amounts exist and are one amount, the cross-sums agree. That line mentions only adding, so it can be the definition.`}
+  {k:'ember',kl:'naming by the question',t:col2([`b + e = k,\\ \\ d + e = c`,'one amount e answers both'],[`k + d = (b + e) + d = b + (d + e) = ${N}{b + c}`,'the swap axiom; regroup for plus; turn-about for plus; the swap axiom']),n:`Where the missing amounts exist and are one amount, the cross-sums agree. That line mentions only adding, so it can be the definition.`}
 ],{title:'The slides · naming by the question · ← → keys work'});
 stepper('#sl3',[
   {k:'ember',kl:'the relation',t:R`(a, b) \sim (c, d) \;\Leftrightarrow\; ${N}{a + d = b + c}`,n:`The cross-sum: first of each plus second of the other. It uses only adding, so it makes sense for every two pairs.`},
@@ -616,10 +616,10 @@ stepper('#sl4',[
   {k:'ember',kl:'the middle-swap technique',t:R`(x + y) + (u + w) = (x + ${N}{u}) + (${N}{y} + w)`,n:`The middle terms trade places, by regroup for plus and turn-about for plus alone. With regroup for times and turn-about for times it works for products too.`}
 ],{title:'The slides · the middle-swap technique · ← → keys work'});
 stepper('#sl5',[
-  {k:'ember',kl:'the same-difference technique',t:col2([`(a + d) + (c + f) = (b + c) + (d + e)`,'the two givens added'],[`(a + f) + (c + d) = (b + e) + ${K}{(c + d)}`,'turn-about for plus inside; middle-swap'],[`${N}{a + f = b + e}`,'cancel for plus']),n:`∎ The transitive part of same-difference. Reflexive is turn-about for plus; symmetric is the turn-about technique and turn-about for plus. So ∼ is an equivalence relation, and 2h's classes apply.`}
+  {k:'ember',kl:'the same-difference technique',t:col2([`(k + d) + (c + f) = (b + c) + (d + e)`,'the two givens added'],[`(k + f) + (c + d) = (b + e) + ${K}{(c + d)}`,'turn-about for plus inside; middle-swap'],[`${N}{k + f = b + e}`,'cancel for plus']),n:`∎ The transitive part of same-difference. Reflexive is turn-about for plus; symmetric is the turn-about technique and turn-about for plus. So ∼ is an equivalence relation, and 2h's classes apply.`}
 ],{title:'The slides · the same-difference technique · ← → keys work'});
 stepper('#sl6',[
-  {k:'ember',kl:'the integers',t:R`[a, b] = [c, d] \;\Leftrightarrow\; a + d = b + c\qquad \mathbb Z = \{[p] : p \in \mathbb N \times \mathbb N\}`,n:`The same-class technique, by classes-never-overlap. An integer is a whole class; a pair in it is a member. [3, 5] = [0, 2] = [10, 12].`}
+  {k:'ember',kl:'the integers',t:R`[k, b] = [c, d] \;\Leftrightarrow\; k + d = b + c\qquad \mathbb Z = \{[p] : p \in \mathbb N \times \mathbb N\}`,n:`The same-class technique, by classes-never-overlap. An integer is a whole class; a pair in it is a member. [3, 5] = [0, 2] = [10, 12].`}
 ],{title:'The slides · the integers · ← → keys work'});
 stepper('#sl7',[
   {k:'ember',kl:'adding classes',t:R`[3, 5] + [4, 1] = [${N}{7, 6}]`,n:`Add the members entry by entry. The class of (7, 6) is 1.`},
@@ -646,7 +646,7 @@ stepper('#sl13',[
   {k:'ember',kl:'the techniques carry over',t:R`x + (-x) = [a + b,\ b + a] = [0, 0] = ${N}{0}`,n:`Negative on ℤ, by turn-about for plus and same-class. The techniques of adding and multiplying carry over to integers: unpack, use rung 4's technique on the entries, pack.`}
 ],{title:'The slides · the techniques carry over · ← → keys work'});
 stepper('#sl14',[
-  {k:'ember',kl:'the pair is the difference',t:R`a - b = [a, 0] + [0, b] = [${N}{a, b}]`,n:`The pair-is-the-difference technique. (3, 5) was 3 less 5 all along: 3 − 5 = [3, 5] = −2.`},
+  {k:'ember',kl:'the pair is the difference',t:R`k - b = [k, 0] + [0, b] = [${N}{k, b}]`,n:`The pair-is-the-difference technique. (3, 5) was 3 less 5 all along: 3 − 5 = [3, 5] = −2.`},
   {k:'ember',kl:'the subtraction technique',t:R`y + (x - y) = (y + (-y)) + x = 0 + x = ${N}{x}`,n:`∎ Every subtraction has an answer, and only one: from y + z = x, add −y on the left of each side and z = x − y.`}
 ],{title:'The slides · the pair is the difference, and the subtraction technique · ← → keys work'});
 stepper('#sl15',[

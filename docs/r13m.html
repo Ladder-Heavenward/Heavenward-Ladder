@@ -137,7 +137,7 @@ x_4 = \tfrac{665857}{470832} = \htmlClass{new}{1.41421356237}469\cdots @@ off by
 N(x) - \sqrt2 = \dfrac{x^2 + 2}{2x} - \sqrt2 = \dfrac{x^2 - 2\sqrt2\,x + 2}{2x} @@ one bottom; (√2)² = 2
 = \htmlClass{new}{\dfrac{(x - \sqrt2)^2}{2x}} @@ square-of-a-difference turned about: the displacement pattern, squared
   </pre>
-  <p data-pid="6bc137">The new error is the old error squared, divided by 2x, about 2.8 near √2. And for any x &gt; 0 it is never negative, so after the first step every guess is above √2. The same happens for every polynomial, and the proof is 9g's factor technique with 13c's product technique.</p>
+  <p data-pid="6bc137">The new error is the old error squared, divided by 2x, about 2.8 near √2. And for any x &gt; 0 it is never negative. So after the first step, every guess is above √2. The same happens for every polynomial, and the proof is 9g's factor technique with 13c's product technique.</p>
   <p data-pid="d51766">Polynomial-guess-error technique: <b>for a polynomial, each new error is the old error squared, times a factor.</b> Precisely: let f be a polynomial with a zero r, and q the polynomial with f(x) = (x − r)q(x) (factor). Wherever f′(x) ≠ 0, N(x) − r = (x − r)² · q′(x)/f′(x).</p>
   <pre class="lines" data-k="ember" data-label="this step: the polynomial-guess-error technique">
 N(x) - r = (x - r) - \dfrac{f(x)}{f'(x)} = \dfrac{(x - r)\,f'(x) - f(x)}{f'(x)} @@ the line for N; one bottom
@@ -146,7 +146,8 @@ f'(x) = q(x) + (x - r)\,q'(x) @@ product for slopes on (x − r)q(x), with slope
 = \htmlClass{new}{(x - r)^2\,q'(x)} @@ negative on ℝ: the (x − r)q(x) cells cancel
 N(x) - r = \htmlClass{keep}{(x - r)^2 \cdot \dfrac{q'(x)}{f'(x)}} \quad \blacksquare @@ fractions-of-rationals
   </pre>
-  <p data-pid="648959">For x² − 2 with r = √2, q is x + √2 and q′ is 1, which gives the averaging step's line. For x³ − 2 with c = ∛2, q is x² + cx + c² and q′ is 2x + c, so N(x) − c = (x − c)²(2x + c)/(3x²). And at r itself, product for slopes gives f′(r) = q(r) and f″(r) = 2q′(r), so near r the factor q′(x)/f′(x) heads to f″(r)/(2f′(r)): 13d's second slope sets the constant.</p>
+  <p data-pid="648959">For x² − 2 with r = √2, q is x + √2 and q′ is 1, which gives the averaging step's line. For x³ − 2, take c = ∛2. Then q is x² + cx + c² and q′ is 2x + c. So N(x) − c = (x − c)²(2x + c)/(3x²).</p>
+  <p data-pid="ccfd0b">At r itself, product for slopes gives f′(r) = q(r) and f″(r) = 2q′(r). So near r, the factor q′(x)/f′(x) heads to f″(r)/(2f′(r)). 13d's second slope sets the constant.</p>
   <p data-pid="504cf9">Places-double technique: <b>once a guess is close enough, each new guess about doubles the number of correct places.</b> Precisely: Let f, r, q be as in polynomial-guess-error. Let d &gt; 0 be a distance. Suppose that on [r − d, r + d] there are bounds |q′(x)| ≤ C and |f′(x)| ≥ m &gt; 0. Here m is a bound, not a slope. Put K = C/m. Suppose |x₀ − r| ≤ d and K · |x₀ − r| ≤ ½. Then every guess xₙ lies in [r − d, r + d]. And K · |xₙ − r| ≤ (K · |x₀ − r|)^(2ⁿ).</p>
   <pre class="lines" data-k="ember" data-label="this step: the places-double technique, by induction on n">
 e_n = |x_n - r| @@ a step name for the n-th error
@@ -154,7 +155,8 @@ e_{n+1} = e_n^2 \cdot \dfrac{|q'(x_n)|}{|f'(x_n)|} \le \htmlClass{new}{K\,e_n^2}
 e_{n+1} \le (K e_n)\,e_n \le \tfrac12 e_n \le d @@ K eₙ ≤ K e₀ ≤ ½ by the hypothesis; so xₙ₊₁ stays in [r − d, r + d]
 K e_{n+1} \le (K e_n)^2 \le \big((K e_0)^{2^n}\big)^2 = \htmlClass{keep}{(K e_0)^{2^{n+1}}} \quad \blacksquare @@ multiply by K; powers-keep-order; the hypothesis; power-of-a-power (2ⁿ · 2 = 2ⁿ⁺¹); induction
   </pre>
-  <p data-pid="3f898c">For x² − 2 on [1, 2]: q′ = 1, so C = 1; f′(x) = 2x ≥ 2, so m = 2; K = ½. From x₀ = 3/2, K e₀ = ½ · 0.0858 ≈ 0.043, so K e₃ ≤ 0.043⁸, which is below 10⁻¹⁰. Three steps are guaranteed ten places, and the run above shows twelve. The exponent 2ⁿ is the doubling. For a function that is not a polynomial there is no factor to factor with. The same bound is true near a zero where the slope is not 0; that is held in trust until 14c proves it.</p>
+  <p data-pid="3f898c">Take x² − 2 on [1, 2]. q′ = 1, so C = 1. f′(x) = 2x ≥ 2, so m = 2. So K = ½. From x₀ = 3/2, K e₀ = ½ · 0.0858 ≈ 0.043. So K e₃ ≤ 0.043⁸, which is below 10⁻¹⁰. Three steps are guaranteed ten places, and the run above shows twelve. The exponent 2ⁿ is the doubling.</p>
+  <p data-pid="186dd2">For a function that is not a polynomial there is no factor to factor with. The same bound is true near a zero where the slope is not 0. That is held in trust until 14c proves it.</p>
   <section class="slides" id="sl3"><div class="eyebrow">The slides · places double · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
