@@ -40,6 +40,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p class="home"><a href="index.html">← the ladder</a><a href="r32chem.html">← 32·chem how do X-rays see inside a crystal?</a><a href="r32comp.html">next: 32·comp how does a photo shrink to a small file? →</a></p>
   <div class="tags"><span class="tag bio">32·bio · biology</span></div>
   <h1>Pharmacy Logic: Stocking for Chronic and Acute Conditions</h1>
+  <p data-pid="345f61">How much should a pharmacy stock for a need that comes every day, on some days, or with the seasons?</p>
   <p data-pid="24473a">A pharmacist asks two different questions about a condition.</p>
   <p data-pid="2a3b9a"><b>What is it like?</b> That is a description, and it is made of every and some.</p>
   <ul>
@@ -206,7 +207,44 @@ X = \text{the number of preventing inhalers asked for in a week} @@ from here on
 </section>
 
 <section class="class step" data-step="32bio7">
-  <h2 class="sthead"><span class="stno">32bio7</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">32bio7</span>The Waves Come With the Seasons</h2>
+  <p data-pid="a20dd6">Footing 4 treated each week alone: a wave week 1 week in 10, with no say about which. But the some weeks of influenza are not scattered over the year. They come every winter. For the town the need is some weeks, and for the year it is every year, in the same weeks. A need that comes back every year is a function that repeats, with a repeat of 52 weeks, and rung 32 says what a repeating function is made of.</p>
+  <p data-pid="183b2d">Count the weeks t from midwinter. Let the chance that week t is a wave week rise and fall with the year, from 2 in 10 at midwinter to none at midsummer, with the year's average still 1 in 10.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the wave chance through the year">
+w(t) = 0.1\,\big(1 + \cos(2\pi t/52)\big) @@ from here on; t in weeks from midwinter
+\tfrac{1}{52}\textstyle\sum_{t=0}^{51} w(t) = 0.1 @@ the cosine totals 0 over its repeat (32a1), so the year matches footing 4
+\text{average need: } 0.9\cdot 7 + 0.1\cdot 70 \text{ becomes } m(t) = (1 - w(t))\cdot 7 + w(t)\cdot 70 = 7 + 63\,w(t) @@ the whole-chance technique (30f3), on averages, week by week
+m(t) = 13.3 + 6.3\cos(2\pi t/52) @@ put in
+  </pre>
+  <p data-pid="be7a3b">Yearly-turning technique: <b>a weekly average need that repeats every year is a sum of turnings over a repeat of 52 weeks; its level is the year's average need, and its shadows on the yearly cosine and sine give how far the need swings and the week it peaks.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the yearly-turning technique">
+m(t) = c_0 + a_1\cos(2\pi t/52) + b_1\sin(2\pi t/52) + \cdots @@ the slide-and-stretch technique (32h2), with a repeat of T = 52
+c_0 = \tfrac{1}{52}\textstyle\sum_{t=0}^{51} m(t) = 13.3 @@ the level: the year's average need, footing 4's number
+a_1 = \tfrac{2}{52}\textstyle\sum_{t=0}^{51} m(t)\cos(2\pi t/52) = 6.3 @@ the sampled-turnings technique (32k1), on 52 weekly points
+b_1 = \tfrac{2}{52}\textstyle\sum_{t=0}^{51} m(t)\sin(2\pi t/52) = 0 @@ m is even about midwinter, so it needs cosines alone (32a3)
+\text{swing} = \sqrt{a_1^2 + b_1^2} = 6.3,\ \text{peak at week } 0 @@ the shadow on the yearly turning (32a2)
+  </pre>
+  <p data-pid="255ab6">The level alone is footing 4's number, 13.3, and it says nothing about when. The shadow on the yearly turning says the rest: the need swings 6.3 above and below the level, and it peaks at midwinter. Now the shelf can change with the week. For each week, take the least shelf whose short-chance in that week is at most 0.02, by the two-kinds technique (32bio4) with the week's own wave chance.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a shelf for each week">
+\text{week 0, midwinter: } w = 0.2,\ \text{shelf } 81 @@ 0.2 · (chance a wave week needs more than 81) = 0.017
+\text{weeks 0 to 20: shelf from 81 down to 63} @@ the wave chance is 2.5 in 100 or more, so the shelf must cover waves
+\text{weeks 21 to 31: shelf 13 or 14} @@ the wave chance is below 2 in 100, so quiet weeks alone set the shelf (22j2, average 7)
+\text{the year's average shelf: } 63.5 @@ against 77 held all year
+\text{shelf 77 all year: short-chance 0.018 over the year, 0.037 at midwinter} @@ the whole-chance technique (30f3)
+  </pre>
+  <p data-pid="527b94">The fixed shelf of footing 4 meets 2 weeks in 100 over the year, but not week by week: it is too much in summer and short nearly twice as often as promised in midwinter. The seasonal shelf meets the promise every week and holds less stock on average. The price of not knowing is smaller, because the season is something known.</p>
+  <p data-pid="129ea4">Asthma has a season too, the other way round. Pollen, smoke and summer heat make bad air a summer thing, so its chance is 0.1(1 − cos(2πt/52)), and the relieving inhaler's average need is 160 − 26.7 cos(2πt/52). The shadow on the yearly cosine is negative: the same yearly turning, peaking half a year away, at midsummer. One town, two seasons, and the pharmacy's busy weeks are spread over the year.</p>
+  <p data-pid="f0aab3">One turning is enough here because the wave chance was drawn as one smooth swell. A real season can be short and sharp: a few weeks of waves and a long quiet. Then the yearly turning alone is too blunt, and the recipe needs the faster turnings too, twice a year, three times a year, falling slower the sharper the corners (32h3).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·bio.7.1</span><span class="ph understand">understand</span>What does the yearly-turning technique say? <br>What does the shadow on the yearly turning tell a pharmacist that the year's average need does not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32bio8">
+  <h2 class="sthead"><span class="stno">32bio8</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
 \text{stock the average need}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; for broken bones that is 14 courses, short in 43 weeks of 100
 \text{stock so the shelf never runs short}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; no finite shelf does it; pick a short-chance and pay for it
@@ -223,7 +261,7 @@ X = \text{the number of preventing inhalers asked for in a week} @@ from here on
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">32·bio.7.1</span><span class="ph understand">understand</span>Why is “the same average need, so the same shelf” a move to watch out for?</li>
+      <li><span class="qid">32·bio.8.1</span><span class="ph understand">understand</span>Why is “the same average need, so the same shelf” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -232,15 +270,15 @@ X = \text{the number of preventing inhalers asked for in a week} @@ from here on
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">32·bio.8.1</span><span class="tagq">understand</span>Say what makes a condition chronic and what makes it acute, using every and some over one person's days. Then say why a broken bone, acute for each person, is a steady need for the town, and what makes asthma recurring.</div>
-  <div class="chq"><span class="chid">32·bio.8.2</span><span class="tagq">understand</span>What is the short-chance, and why does the pharmacist choose it instead of asking for a shelf that never runs short?</div>
-  <div class="chq"><span class="chid">32·bio.8.3</span><span class="tagq">do</span>A second town has 80,000 people and 12,000 on the daily tablet. Find the average number of packs in a week, the spread width, and the shelf. By what factor did the extra stock grow when the town grew by 4?</div>
-  <div class="chq"><span class="chid">32·bio.8.4</span><span class="tagq">do</span>In the first town the supplier's van starts coming every day. Using the day's average of 2 broken bones, find the least shelf with a short-chance of at most 0.02. The chances of more than s in a day are 0.323, 0.143, 0.053, 0.017, 0.005 for s = 2, 3, 4, 5, 6.</div>
-  <div class="chq"><span class="chid">32·bio.8.5</span><span class="tagq">do</span>For influenza, suppose wave weeks come 1 week in 20 instead of 1 in 10. Find the new average need. With a shelf of 22, what is the new short-chance? Is a shelf of 22 now within a short-chance of 0.05?</div>
-  <div class="chq"><span class="chid">32·bio.8.6</span><span class="tagq">converse</span>A medicine has an average need of 14 a week and its shelf, for a short-chance of 0.02, is 60. What can you say about whether its cases are independent?</div>
-  <div class="chq"><span class="chid">32·bio.8.6b</span><span class="tagq">do</span>A smoke warning now reaches the pharmacy two days before every bad-air week, and the van can come in one. What standing shelf of relieving inhalers does the pharmacy need, and what does it order on a warning?</div>
-  <div class="chq"><span class="chid">32·bio.8.7</span><span class="tagq">make</span>Pick a fifth condition and say which of the four it is most like. Give the two answers that decide it: can the people be listed, and does one case make the next more likely?</div>
-  <div class="chq"><span class="chid">32·bio.8.8</span><span class="tagq">open</span>The pharmacy holds 77 courses through quiet weeks, or it holds 14 and orders when the daily count climbs. What would you need to know about the supplier to choose? Who bears the cost of each choice when it goes wrong?</div>
+  <div class="chq"><span class="chid">32·bio.9.1</span><span class="tagq">understand</span>Say what makes a condition chronic and what makes it acute, using every and some over one person's days. Then say why a broken bone, acute for each person, is a steady need for the town, and what makes asthma recurring.</div>
+  <div class="chq"><span class="chid">32·bio.9.2</span><span class="tagq">understand</span>What is the short-chance, and why does the pharmacist choose it instead of asking for a shelf that never runs short?</div>
+  <div class="chq"><span class="chid">32·bio.9.3</span><span class="tagq">do</span>A second town has 80,000 people and 12,000 on the daily tablet. Find the average number of packs in a week, the spread width, and the shelf. By what factor did the extra stock grow when the town grew by 4?</div>
+  <div class="chq"><span class="chid">32·bio.9.4</span><span class="tagq">do</span>In the first town the supplier's van starts coming every day. Using the day's average of 2 broken bones, find the least shelf with a short-chance of at most 0.02. The chances of more than s in a day are 0.323, 0.143, 0.053, 0.017, 0.005 for s = 2, 3, 4, 5, 6.</div>
+  <div class="chq"><span class="chid">32·bio.9.5</span><span class="tagq">do</span>For influenza, suppose wave weeks come 1 week in 20 instead of 1 in 10. Find the new average need. With a shelf of 22, what is the new short-chance? Is a shelf of 22 now within a short-chance of 0.05?</div>
+  <div class="chq"><span class="chid">32·bio.9.6</span><span class="tagq">converse</span>A medicine has an average need of 14 a week and its shelf, for a short-chance of 0.02, is 60. What can you say about whether its cases are independent?</div>
+  <div class="chq"><span class="chid">32·bio.9.6b</span><span class="tagq">do</span>A smoke warning now reaches the pharmacy two days before every bad-air week, and the van can come in one. What standing shelf of relieving inhalers does the pharmacy need, and what does it order on a warning?</div>
+  <div class="chq"><span class="chid">32·bio.9.7</span><span class="tagq">make</span>Pick a fifth condition and say which of the four it is most like. Give the two answers that decide it: can the people be listed, and does one case make the next more likely?</div>
+  <div class="chq"><span class="chid">32·bio.9.8</span><span class="tagq">open</span>The pharmacy holds 77 courses through quiet weeks, or it holds 14 and orders when the daily count climbs. What would you need to know about the supplier to choose? Who bears the cost of each choice when it goes wrong?</div>
 </section>
 <div class="themecert themeend"></div>
 
@@ -248,11 +286,11 @@ X = \text{the number of preventing inhalers asked for in a week} @@ from here on
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The shelf is what stock-keepers call the order-up-to level, and one minus the short-chance is the cycle service level; the stock held above the average is safety stock. The rare count is the Poisson distribution. The two-kinds technique is the law of total variance, and a count whose spread is larger than its average, as for influenza, is called overdispersed. The trigger is a reorder point.</p>
+  <p>The shelf is what stock-keepers call the order-up-to level, and one minus the short-chance is the cycle service level; the stock held above the average is safety stock. The rare count is the Poisson distribution. The yearly-turning technique is a seasonal model by Fourier terms, or harmonic regression; the level is the mean and the swing is the amplitude of the annual harmonic. The two-kinds technique is the law of total variance, and a count whose spread is larger than its average, as for influenza, is called overdispersed. The trigger is a reorder point.</p>
   <h3>What is invented</h3>
-  <p>The town, every rate, the weekly van, the one-in-ten wave weeks and bad-air weeks, and the averages in each. The chance of a broken bone, 1 in 10,000 a day, is on the high side of real figures and was chosen to make the day's average 2. The two-kinds model of influenza is the simplest one that shows cases are not independent; a real wave runs over several weeks, and the model treats each week alone.</p>
+  <p>The town, every rate, the weekly van, the one-in-ten wave weeks and bad-air weeks, and the averages in each. The chance of a broken bone, 1 in 10,000 a day, is on the high side of real figures and was chosen to make the day's average 2. The two-kinds model of influenza is the simplest one that shows cases are not independent; a real wave runs over several weeks, and the model treats each week alone. The season in 7 is invented too: one smooth yearly swell for influenza and one for bad air, chosen so that each year's average matches footings 4 and 5.</p>
   <h3>What was computed</h3>
-  <p>The chances in the tables (0.430 down to 0.005; 0.135 to 0.143; the shelf of 77) were computed by adding the rare-events chances exactly. The shelf of 746 uses the bell, not the exact count, so its short-chance is about 0.023, slightly over the 0.02 the others meet.</p>
+  <p>The chances in the tables (0.430 down to 0.005; 0.135 to 0.143; the shelf of 77) were computed by adding the rare-events chances exactly. The weekly shelves of 7 (81 down to 13, the average 63.5, and 0.018 and 0.037 for a fixed 77) were computed the same way, week by week over 52 weeks. The shelf of 746 uses the bell, not the exact count, so its short-chance is about 0.023, slightly over the 0.02 the others meet.</p>
 </section>
 
 </div>

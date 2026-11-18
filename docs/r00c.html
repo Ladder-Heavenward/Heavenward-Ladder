@@ -1,10 +1,30 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>0c · Guess, Work</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="ladder-cert" content="rung"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>0c · Chains and Swaps</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
+<style>
+.toks{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:start}
+.tok{background:var(--sand);border:1px solid var(--grid);border-radius:8px;padding:10px;display:grid;gap:8px;min-width:0}
+.tok .nm{font-family:var(--serif);font-size:2rem;line-height:1;text-align:center;padding:6px;border-radius:50%;width:2.4em;height:2.4em;display:grid;place-items:center;margin:0 auto;border:2px solid var(--grid);background:var(--card)}
+.tok.lit .nm{border-color:var(--ember)}
+.facts{display:grid;gap:5px}
+.fact{font-family:var(--serif);font-size:.92rem;padding:5px 8px;border-radius:5px;border:1px solid var(--grid);background:var(--card);text-align:left;cursor:pointer;color:var(--ink);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center}
+.fact.sel{border-color:var(--ember)}
+.fact.carried{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 14%,var(--card))}
+.fact.blocked{border-style:dashed;color:var(--muted)}
+.fact .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fact.carried .k{color:var(--teal)}
+.link{display:grid;place-items:center;align-self:center;font-family:var(--serif);font-size:1.6rem;min-width:3ch;text-align:center;color:var(--muted);padding-top:1.2em}
+.link.eq{color:var(--ember)}
+.link small{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;color:var(--muted);display:block;text-align:center}
+.pf{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+@media (max-width:560px){.toks{grid-template-columns:1fr auto 1fr;gap:6px}.tok{padding:7px}.tok .nm{font-size:1.5rem}.fact{font-size:.82rem;grid-template-columns:1fr;gap:2px}.fact .k{justify-self:start}}
+.sel-letter{font-family:var(--mono);font-size:.8rem;color:var(--muted);display:flex;gap:4px;align-items:center;justify-content:center}
+.sel-letter select{padding:2px 4px;font-size:.9rem}
+</style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
    then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
@@ -32,76 +52,221 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r00crypt.html">← 0·crypt how can a word keep a secret?</a><a href="r00concl.html">next: 0·∎ conclusion →</a></p>
-  <div class="tags"><span class="tag proof">0c · support</span></div>
-  <h1>Guess, Work</h1>
-  <p class="fp" data-pid="4e54ae">Every statement is a guess at how things are. Nothing is exact, and everything is rigorous.</p>
-  <p class="gesture" data-pid="c61801">A short word can be correct about more than it could ever count. Working from what is said is deduction; working from what is seen is induction.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r00b.html">← 0b what it means to be the same</a><a href="r00crypt.html">next: 0·crypt how can a word keep a secret? →</a></p>
+  <div class="tags"><span class="tag proof">0c · proof</span></div>
+  <h1>Chains and Swaps</h1>
+  <p data-pid="5e0c11">This step gives that claim a companion: the axiom that a statement carried across a sameness may still be written. From those two it argues, in plain English, that sameness turns about and chains, and it works through the swaps that look like carrying a fact and are not. The arguments are told in words here, shown in lines on the rung's conclusion, and proved on <a href="r04a.html">4a</a>, one move to a line, each with its reason.</p>
+  <p class="gesture" data-pid="8a06ef">If this is the same thing as that, then whatever you have said of this, you may say of that, by putting that's name where this's name stood. A fact travels in no other way.</p>
 </header>
 
 <section class="class step" data-step="0c1">
-  <h2 class="sthead"><span class="stno">0c1</span>A Word Instead of a Count</h2>
-  <p data-pid="5b40fe"><b>“It is raining” is correct even when “a hundred and ten thousand raindrops are going to hit the roof in the next minute” is not.</b> The first statement counts nothing. The word “raining” holds every drop at once, however many fall, so the statement does not have to be exact to be correct.</p>
-  <p data-pid="8f0606">The second statement is exact, and that is why it is so easy to get wrong. One drop more or less and it fails. The short word gives up the detail and keeps the claim.</p>
+  <h2 class="sthead"><span class="stno">0c1</span>Swap Equals</h2>
+  <p data-pid="d3aaee">Start with a cat, and the principle of the rung page (<a href="r00.html#0cba59">rung 0</a>): Serena is the cat asleep on the mat, and grey, so the cat on the mat is grey. Everything about sameness is in that “of course”, and the ladder gives it an axiom so that an argument may cite it.</p>
+  <p data-pid="6d66f0">The companion axiom says what sameness is for. <b>If x and b are the same thing, a statement about x is just as true with b's name where x's stood.</b> Nothing beneath it proves it. It too is earned by what breaks without it: knowing that the cat on the mat is Serena would tell you nothing about the cat on the mat, and sameness would be a word that does no work. The axiom is true whether or not anyone ever writes a swap down; writing one is how you use it. It runs both ways: a statement about b is just as true with x's name where b's stood. In 0a's bracket writing, with P any statement with a gap:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Swap axiom.}\\ &amp;\quad\text{If } a = b, \text{ then wherever } P(a)\\ &amp;\quad\text{may be written, } P(b) \text{ may be}\\ &amp;\quad\text{written too, and the other way.}\end{aligned}"></div>
+  <p data-pid="374966">The swap writes b at whichever of x's places you choose: all of them, or some. Each place where x's name stands is one you may swap at or leave alone. You may not swap where some other name stands. The swap back works the same way.</p>
+  <p data-pid="d553c6">Here it is on the cat, in marks. Serena is the cat asleep on the mat: <span data-tex-inline="s = m">s = m</span>. Serena is grey: call “… is grey” P, so this is <span data-tex-inline="P(s)">P(s)</span>. By the swap axiom, you may write <span data-tex-inline="P(m)">P(m)</span>: the cat on the mat is grey. Writing it is a move, cited to the swap axiom. “Of course” is not a reason; the swap axiom is.</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\text{From } s = m \text{ and } P(s), \text{ write } \htmlClass{new}{P(m)}\text{:}\\ &amp;\quad\text{the cat on the mat is grey.}\end{aligned}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">0c1.1</span><span class="ph understand">understand</span>Why can “it is raining” be correct when the count of raindrops is not?</li>
+      <li><span class="qid">0c1.1</span><span class="ph understand">understand</span>What does the swap axiom say? <br>At which places may a swap be made?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="0c2">
-  <h2 class="sthead"><span class="stno">0c2</span>Working From What Is Said</h2>
-  <p data-pid="a7fee2"><b>Deduction works from statements already written, and writes only what they let you write.</b> <a href="r00b.html">0b</a>'s swap is one: from “Serena is the cat on the mat” and “Serena is grey”, you may write “the cat on the mat is grey”. Nothing is looked at. The work is all in the writing.</p>
-<div class="eqline c6" data-tex="\begin{aligned}&amp;s = m;\ P(s);\ \text{so } P(m) \quad\text{deduction}\end{aligned}"></div>
-  <p data-pid="87d0dd">The guess is in what you start from. If “Serena is grey” was a poor guess, deduction carries it forward faithfully, and the cat on the mat is just as poorly guessed.</p>
+  <h2 class="sthead"><span class="stno">0c2</span>Sameness Turns About</h2>
+  <p data-pid="5468c4">“x = b” says that the names name one thing. It does not, by itself, let you write “b = x”. That feels like nothing: of course, if x is b then b is x. But the turn is not an axiom. An axiom is earned by what breaks without it, and without this one the math does not break. It only becomes inconvenient. The mark's “from here on” line is a meaning, not a technique. The self-sameness axiom lets you write x = x. The swap axiom lets you carry a statement across a sameness, either way. Neither is “turn a sameness about”. So the turning has to be proved from the axioms, and so does every habit with the equal sign you have ever taken for granted.</p>
+  <p data-pid="4d5170">Now the earliest technique on the ladder. <b>A technique is a licensed way of getting a statement. It is proved from the axioms, as this one is, or built by saying what words mean, as an operator is. An axiom is neither: it is laid down.</b> The claim in words: if x is the same thing as b, then b is the same thing as x. In marks:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Turn-about technique.}\\ &amp;\quad\text{From } a = b, \text{ you may write } b = a.\end{aligned}"></div>
+  <p data-pid="97767e">First on the cat. From s = m, swap m in at s's place: m = m. Then swap s in at the right-hand place: m = s. Here is the same argument in letters, said slowly, because the trick in it recurs all the way up the ladder.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;s = m;\ \text{swap at } s\text{: } m = m\\ &amp;\text{swap } s \text{ in at the right: } m = s\end{aligned}"></div>
+  <p data-pid="3aee4c">We have <span data-tex-inline="x = b">x = b</span> and want <span data-tex-inline="b = x">b = x</span>. A swap needs a statement to work inside, and x = b is the one we have. Read it as a claim about x, with its gap at the left: “… = b”. That is the plan.</p>
+  <p data-pid="9064a9">Swap b in at x's place: <span data-tex-inline="b = b">b = b</span>. Now read b = b as a claim about b with its gap at the right: “b = …”. The swap axiom runs both ways, so with <span data-tex-inline="x = b">x = b</span> in hand, x may stand where b stood: <span data-tex-inline="b = x">b = x</span>. The left-hand b is left alone, and the axiom covers that: you swap at the places you choose. Choosing the places is the whole art. Swap at both places of b = b and you get <span data-tex-inline="x = x">x = x</span>, true and useless here.</p>
+  <p data-pid="439c67">A second road takes one swap, and starts from the self-sameness axiom. Start from <span data-tex-inline="x = x">x = x</span>, read it as “… = x”, and swap b in at the left: <span data-tex-inline="b = x">b = x</span>. Either road earns the turn, and either costs sentences to write. That cost is what a technique saves: once it is proved, “the turn-about technique” beside a sentence stands in for the swaps, and you hop past them.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;x = x;\ \text{swap } b \text{ in at the left: } b = x\end{aligned}"></div>
+  <p data-pid="66a8b4">That was an argument told in words. <a href="r01a.html">1a</a> gives the ladder's form for an argument, and <a href="r04a.html">4a</a> proves the turn-about technique, one move to a line, each with its reason; the rung's conclusion shows it in that shape ahead of time. From then on it may be cited by name, as an axiom may.</p>
+  <p data-pid="b7e2c4">Why build the turn as a technique, and not lay it down as an axiom? <b>The turn-about does something, rather than being something.</b> The swap axiom is how names are handed out into statements. A technique is how we work statements by their qualities, to reach the same claim with slightly different pieces.</p>
+  <p data-pid="88bd89">Take three lines. “Mike is the boy in the red cap, so the boy in the red cap is Mike”: this may be written. “Mike rides Spirit the horse, so Spirit rides Mike”: this may not. “Mike rides Spirit, so Spirit is ridden by Mike”: this may. Sameness and riding are both statements with two gaps, so the shape alone turns neither. Sameness turns because of what it is: the swap axiom carries any fact from one name to the other, and that is enough to turn it. Riding has no such axiom. It can only be read from its other end, in new words that make the same claim.</p>
+  <p data-pid="c43b5a">Put the moves together. From “Mike is the boy in the red cap” and “Mike rides Spirit”, “Spirit is ridden by the boy in the red cap” follows. No axiom licenses the change from “rides” to “is ridden by”; that is a technique, 1a's transform. So the swap axiom is not the act of swapping. It is the fact that what a swap writes may be written, whether or not any swap is ever chosen.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">0c2.1</span><span class="ph understand">understand</span>What does deduction work from? <br>Where does its guess sit?</li>
+      <li><span class="qid">0c2.1</span><span class="ph understand">understand</span>What is a technique, and how does it differ from an axiom? <br>How is the turn-about got from the axioms?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="0c3">
-  <h2 class="sthead"><span class="stno">0c3</span>Working From What Is Seen</h2>
-  <p data-pid="7c2258"><b>Induction works the other way: from cases to one word for all of them.</b> Drops on the window, on the street, on your sleeve, and you say “it is raining”. The word gathers the drops you saw and all the ones you didn't.</p>
-  <p data-pid="9f88b9">More cases make the guess harder to shake, but they never finish it. One dry patch under a tree does not undo “it is raining”. A dry sky would.</p>
+  <h2 class="sthead"><span class="stno">0c3</span>Sameness Chains</h2>
+  <p data-pid="64b040">The claim in words: <b>if x is the same thing as b, and b is the same thing as c, then x is the same thing as c.</b> A technique again, not an axiom. In marks:</p>
+  <div class="eqline" data-tex="\begin{aligned}&amp;\textbf{Chain technique.}\\ &amp;\quad\text{From } a = b \text{ and } b = c,\\ &amp;\quad\text{you may write } a = c.\end{aligned}"></div>
+  <p data-pid="f36154">First on the cat. Serena is the cat on the mat, s = m. The cat on the mat is Zoe's cat; call Zoe's cat a, so m = a. Read s = m as “s = …”, a claim about m, and swap a in: s = a. Serena is Zoe's cat.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;s = m;\ m = a;\\ &amp;\text{swap } a \text{ in for } m\text{: } s = a\end{aligned}"></div>
+  <p data-pid="19be17">In general it is the same trick, from the other side. Read <span data-tex-inline="x = b">x = b</span> as a claim about b: “x = …”. With <span data-tex-inline="b = c">b = c</span> in hand, the swap axiom puts c in b's place: <span data-tex-inline="x = c">x = c</span>. The self-sameness axiom was not needed, because the statements in hand already gave something to swap inside. To find a route, ask of each statement you have, “what is this a claim about?”. It is usually a claim about several things at once, and each is a way to use it.</p>
+  <p data-pid="2e27ba">Longer chains need no new technique; chain, and then chain again on the result. From <span data-tex-inline="x = b">x = b</span>, <span data-tex-inline="b = c">b = c</span> and <span data-tex-inline="c = d">c = d</span>: chain the first two to get <span data-tex-inline="x = c">x = c</span>, then chain that with c = d to get <span data-tex-inline="x = d">x = d</span>. That is the other thing a technique is for: once proved, it is carried out again and again, and its argument is not told again. Samenesses chained this way are said to run in a row: x = c and c = d run in a row to x = d.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;x = b;\ b = c;\ \text{so } x = c\\ &amp;x = c;\ c = d;\ \text{so } x = d\end{aligned}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">0c3.1</span><span class="ph understand">understand</span>What does induction work from? <br>Why do more cases never finish the guess?</li>
+      <li><span class="qid">0c3.1</span><span class="ph understand">understand</span>What does the chain technique say? <br>Why was the self-sameness axiom not needed?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="0c4">
-  <h2 class="sthead"><span class="stno">0c4</span>Rigor Out of Guesswork</h2>
-  <p data-pid="9815b1">Both kinds of work end in short words used as if they were exact. That is the economy of language: a word packed from many cases says no more than the cases can carry, so it stays correct while the details go wrong. It works so well that we don't even notice how messy the guess is.</p>
-  <aside class="nature">
-    <div class="eyebrow">Anexact, yet rigorous · the word that holds</div>
-    <p data-pid="6cbf4e"><b>A guess is rigorous when its words claim only what its cases can carry.</b> “It is raining” is anexact, because it never counts the drops. It is rigorous, because it claims nothing the drops could undo.</p>
-  </aside>
-  <p data-pid="e968ff">When the ladder later writes “every” with the mess taken out, it is this same word-for-all-the-cases, made exact.</p>
-  <p data-pid="5bf867"><b>It is the job of the ladder to show the methods of guesswork, so that nothing is lost.</b></p>
+  <h2 class="sthead"><span class="stno">0c4</span>Swapping at the Places You Choose</h2>
+  <p data-pid="338ff4">The swap axiom (<a href="#374966">0c1</a>) is more supple than the cat shows: a name can stand in a statement at several places, and each place is chosen separately. Let x name Zoe, and suppose Zoe is the baker; call the baker b, so <span data-tex-inline="x = b">x = b</span>. “x lives next door to x's sister” has x at two places. By the swap axiom, you may swap at either or both:</p>
+  <ul>
+    <li data-pid="35c233">at the left place: <b>b</b> lives next door to x's sister (the baker lives next door to Zoe's sister);</li>
+    <li data-pid="a42e55">at the right place: x lives next door to <b>b</b>'s sister (Zoe lives next door to the baker's sister);</li>
+    <li data-pid="8f664d">at both places: <b>b</b> lives next door to <b>b</b>'s sister (the baker lives next door to the baker's sister).</li>
+  </ul>
+  <p data-pid="95c3a2">All of these may be written. Each says something of the one woman under some arrangement of her names. Which one you want depends on what you mean to do next, and that is why the axiom leaves the choice of places to you.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;x = b;\ N(x, x)\\ &amp;N(b, x);\quad N(x, b);\quad N(b, b)\end{aligned}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">0c4.1</span><span class="ph understand">understand</span>How does a short word make a guess rigorous? <br>What does it give up?</li>
+      <li><span class="qid">0c4.1</span><span class="ph understand">understand</span>When a name stands at several places in a statement, what does the swap axiom leave to you?</li>
     </ol>
   </section>
 </section>
 
-<nav class="nextrung"><a href="r00crypt.html">← 0·crypt · how can a word keep a secret?</a><a href="r00concl.html">0·∎ · conclusion →</a></nav>
+<section class="class step" data-step="0c5">
+  <h2 class="sthead"><span class="stno">0c5</span>A Sameness, or a Claim</h2>
+  <p data-pid="56faec">Most statements make a claim about a thing: “Evita runs”, “Serena is grey”, “Gomez is a poodle”. Some say “is” and some do not, and the claim is the same. “Evita is a runner” and “Evita runs” are one claim, <span data-tex-inline="R(e)">R(e)</span>. The “is” only joins the description to its thing.</p>
+  <p data-pid="d23087">A sameness is another kind of statement: two gaps with the mark between them, saying that two names name one thing. “Serena is the cat asleep on the mat” is a sameness, <span data-tex-inline="s = m">s = m</span>. English says both kinds with “is”, so a claim can be mistaken for a sameness. <b>The test is the swap: x = b is a fair statement only if everything the argument will say of one can be said of the other.</b> “Serena” and “the cat asleep on the mat” pass: whatever you say of the cat, you have said of Serena. “Evita” and “a runner” fail, because “a runner” names no one thing for anything to be said of. “Evita is a runner” is a claim with one gap, R(e), with no sameness in it.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;R(e) \quad\text{a claim: Evita runs}\\ &amp;s = m \quad\text{a sameness: one cat}\end{aligned}"></div>
+  <p data-pid="cc8ee3">Two sentences can be the same the way two names can: one claim under two wordings. “Terry went for a jog” and “Terry went for a run” are different sentences that say the same of Terry. So a sameness may stand between names of claims, when the claims are one. The sentences stay different, as names do: “has the word ‘jog’ in it” may be said of only one of them. Much of mathematics is this move made carefully: writing a sentence again as a different sentence that makes the same claim.</p>
+  <p data-pid="563a7c">A word for a kind, like “poodle”, names no one thing, so “Gomez is a poodle” is a claim, not a sameness. Watch what happens if you write it as one anyway. Gomez and Finn are both poodles:</p>
+  <div class="eqline" data-tex="g = \text{poodle} \qquad f = \text{poodle}"></div>
+  <p data-pid="579fcc">As dogs, both are wrong from the start: each is a claim, S(g) and S(f), dressed as a sameness. (As breeds, Gomez's breed = Finn's breed is fair; but then g and f name breeds, not dogs.) Follow the techniques anyway. Turn the second about, then chain the first with it:</p>
+  <div class="eqline" data-wrong data-tex="\begin{aligned} &amp;\text{poodle} = f &amp;&amp;\text{turn-about}\\ &amp;g = f &amp;&amp;\text{chain, with } g = \text{poodle} \end{aligned}"></div>
+  <p data-pid="6ad7b9">Every step after the opening was correctly made, and the end is false: Gomez and Finn are different dogs, and now every fact about Gomez would carry to Finn. Written as claims, the start is <span data-tex-inline="S(g)">S(g)</span> and <span data-tex-inline="S(f)">S(f)</span>, nothing says <span data-tex-inline="g = f">g = f</span>, and there is no sameness for a fact to be carried across.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">0c5.1</span><span class="ph understand">understand</span>What is the test that tells a sameness from a claim? <br>Why is a word for a kind never one side of a sameness?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="0c6">
+  <h2 class="sthead"><span class="stno">0c6</span>Swaps That Are Not Moves</h2>
+  <p data-pid="bffe27"><b>Carrying a fact is licensed by one thing only: the things are the same thing.</b> Here are swaps that look like moves cited to the swap axiom and are not. In each, one of two things has gone wrong. What stands in the place of <span data-tex-inline="x = b">x = b</span> is not a sameness. Or what stands in the place of <span data-tex-inline="P(x)">P(x)</span> is not a statement about the thing.</p>
+  <ul class="wrongmoves">
+    <li data-pid="996e54">“s looks just like n; s is Zoe's cat; so n is Zoe's cat?” <b>Not licensed:</b> looking alike is not sameness. Serena and her look-alike Murphy are different cats, and only Serena is Zoe's.</li>
+    <li data-pid="7b6af9">“s is a cat; n is a cat; s is grey; so n is grey?” <b>Not licensed:</b> being of the same kind is not sameness. Cats differ, and nothing here says s = n.</li>
+    <li data-pid="35f2f7">“x = b; the name ‘x’ is in red ink; so the name ‘b’ is in red ink?” <b>Not licensed:</b> the statement is about the name, not the thing, and swapping inside a name is not licensed.</li>
+    <li data-pid="246942">“The new kid is the kid who won the spelling bee; Randy knows that the new kid sits by the window; so Randy knows that the spelling-bee winner sits by the window?” <b>Not licensed:</b> a “knows that” sentence is about Randy's knowledge, in which the name itself does work; it is not a plain statement about the kid.</li>
+  </ul>
+  <p data-pid="9bd898">The spelling-bee case fools people who have understood the rest. The new kid and the spelling-bee winner are the same person, so the sameness may be written. “The new kid sits by the window” is a statement about that person, so by the swap axiom the spelling-bee winner sits by the window. But “Randy knows that the new kid sits by the window” is a statement about Randy, and about what he would agree to under one name. He may never have heard that the names name the same person. Swapping inside his “knows that” changes what is said about him.</p>
+  <p data-pid="12c6db">The ladder keeps clear of such sentences. Its statements are about things, never about what anyone knows, believes, says or has heard. So a swap cited to the swap axiom is always safe where the ladder makes one.</p>
+  <p data-pid="ddb4d7">The ink case is the same failure in a plainer coat. 0a gave quote marks their job: a name between them is mentioned, and the statement is about the name. The swap axiom is about facts of things, so no swap is ever made between quote marks. When x = b, the things are the same, and the names are still different names. “‘x’ is in red ink” says nothing about whether “‘b’ is in red ink”.</p>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · declare the tokens the same and watch a fact carry across</div>
+    <div class="panels">
+      <div class="panel">
+        <div class="chips" role="group" aria-label="the claim between them" id="rel"><span class="m" style="color:var(--muted)">the line you have:</span><button data-rel="none" class="on">nothing yet</button><button data-rel="eq">they are the same thing</button><button data-rel="like">they look alike</button><button data-rel="kind">they are the same kind</button></div>
+        <div class="toks">
+          <div class="tok" id="tokA"><div class="sel-letter">call it <select id="la"></select></div><div class="nm" id="nmA">x</div><div class="facts" id="fA"></div></div>
+          <div class="link" id="lnk"></div>
+          <div class="tok" id="tokB"><div class="sel-letter">call it <select id="lb"></select></div><div class="nm" id="nmB">b</div><div class="facts" id="fB"></div></div>
+        </div>
+        <div class="cap">Each token is a thing with facts said of it. Tap a fact to choose it. Choose the line you have about the tokens: only a sameness lets the chosen fact carry across (teal). A dashed fact is about the token's name, not the thing, and never carries. Choose the letters as you like; the readout follows your choice.</div>
+      </div>
+      <div class="panel">
+        <div class="eqbox" id="eqb"></div>
+        <div class="pf" id="pfn"></div>
+        <div class="cap">The readout says what the statement you have lets you write about the chosen fact, or why it lets you write nothing. Try: choose “they look alike” and ask for a carry; then choose a sameness and choose the dashed fact.</div>
+      </div>
+    </div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">0c6.1</span><span class="ph understand">understand</span>Which two things can go wrong in a swap that looks like a move and is not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="0c7">
+  <h2 class="sthead"><span class="stno">0c7</span>Finding a Route</h2>
+  <p data-pid="ee3d3a">To find a route, start from what you want and ask what would give it. You want <span data-tex-inline="d = x">d = x</span>, and you have <span data-tex-inline="x = b">x = b</span>, <span data-tex-inline="b = c">b = c</span> and <span data-tex-inline="c = d">c = d</span>. Nothing you have has d on the left, so the last step must be a turn-about, and the thing to turn is <span data-tex-inline="x = d">x = d</span>. And x = d is the chain: x = b with b = c gives <span data-tex-inline="x = c">x = c</span>, and that with c = d gives x = d. The route: chain, chain again, turn about.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;x = b;\ b = c;\ \text{so } x = c\\ &amp;x = c;\ c = d;\ \text{so } x = d\\ &amp;\text{turn about: } d = x\end{aligned}"></div>
+  <p data-pid="8510ca">Try the other order: turn each statement about (<span data-tex-inline="d = c">d = c</span>, <span data-tex-inline="c = b">c = b</span>, <span data-tex-inline="b = x">b = x</span>) and chain those. Both routes work, and this one is longer. There is never only the one route, and finding a shorter one is a pleasure the ladder means you to have.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;d = c;\ c = b;\ b = x \quad\text{each turned}\\ &amp;\text{so } d = b;\ \text{so } d = x\end{aligned}"></div>
+  <p data-pid="d3ab23">Here is everything you may write with the equal sign, so far. A sameness of any name with itself (the self-sameness axiom). A statement about b, from a statement about x and x = b, at the places you choose, and the same the other way (the swap axiom). A sameness turned about (the turn-about technique). Two samenesses chained into one (the chain technique). Nothing is carried across a likeness, a kind, a mention, or a “knows that”, or across a claim written as if it were a sameness. That is the whole of the sign's techniques on the ground floor.</p>
+  <p data-pid="f0c1a7">Notice a loop, like the language loop of <a href="r00a.html">0a</a>. The self-sameness axiom justifies the equal sign. The swap axiom justifies breaking speech into names and statements. Yet the axioms could only be written once 0a had defined names and statements, and this step the equal sign. For such a loop the ladder works in foreclosure (<a href="intro.html#ea75d9">introduction, 6</a>): the thing is held in trust, flagged where it is first used, and finished later. 0a opened three flags for this step: the equal sign it listed, the fact that a statement about a name is not a statement about its thing, and its language loop. This step closes the first two, the second in 0c6. The loop stays stepped around until <a href="r04d.html">4d</a>. This step opens one flag of its own: the turn-about and chain techniques are argued here in words, and <a href="r04a.html">4a</a> proves them; the rung's conclusion shows them in lines ahead of time. Foreclosure is the only foreshadowing the ladder has, and every one is flagged where it opens and closed where it is finished. Some things take a while to assemble, so the ladder steers the boat while building it. Apologies if a bit of water leaks.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">0c7.1</span><span class="ph understand">understand</span>How do you find a route? <br>What may be written with the equal sign so far?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">The proof itself is only partly built until 4a builds it. So these standing questions wait here for whoever wants them. Argue them in plain words for now.</p>
+  <div class="chq"><span class="chid">0c.4.1</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{For any claim } P \text{ with a gap,}"></span> <span data-tex-inline="\text{wherever } P(x) \text{ may be written, } P(b) \text{ may be written.}"></span></span>Show that x and b are the same.</div>
+  <div class="chq"><span class="chid">0c.4.2</span><span class="tagq">world</span><span class="givens"><span class="gtx">Rung 0 brings in the self-sameness axiom first, and the swap axiom second.</span></span>Did we have to build self-sameness before swap? <br>Build, if you can, a world where swap comes before self-sameness.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r00b.html">← 0b · what it means to be the same</a><a href="r00crypt.html">0·crypt · how can a word keep a secret? →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>Accepted names</h3>
-  <p>Working from what is said is deduction; working from cases to a statement is induction. Philosophers call the trouble that more cases never finish a guess the problem of induction.</p>
+  <h3>Who said it first</h3>
+  <p>The chain technique is Euclid's first common notion, “things which are equal to the same thing are also equal to one another”, said of sameness rather than of size. The “knows that” case is Frege's, from “On Sense and Reference” (1892), told with the evening star and the morning star, which are both the planet Venus; the lesson tells it with the new kid.</p>
+  <p>Accepted names: the swap axiom is substitution of equals (or Leibniz's law); the turn-about technique is symmetry; the chain technique is transitivity.</p>
 </section>
 </div>
 
 <script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper}=Rung;
+
+/* ---------- the tokens ---------- */
+const FA=[{t:'is grey',k:'thing'},{t:'sleeps on the mat',k:'thing'},{t:'belongs to Zoe',k:'thing'},{t:'has its name in red ink',k:'name'}];
+const FB=[{t:'purrs when fed',k:'thing'},{t:'has its name in blue ink',k:'name'}];
+let rel='none', sel={side:'A',i:0}, LA='x', LB='b';
+const la=document.getElementById('la'), lb=document.getElementById('lb');
+'abcdefghijklmnopqrstuvwxyz'.split('').forEach(ch=>{ la.add(new Option(ch,ch)); lb.add(new Option(ch,ch)); });
+la.value='x'; lb.value='b';
+const fA=document.getElementById('fA'), fB=document.getElementById('fB'), lnk=document.getElementById('lnk'), eqb=document.getElementById('eqb'), pfn=document.getElementById('pfn');
+function other(side){ return side==='A'?'B':'A'; }
+function name(side){ return side==='A'?LA:LB; }
+function render(){
+  LA=la.value; LB=lb.value; if(LA===LB){ lb.value=LB=LA==='b'?'c':'b'; }
+  document.getElementById('nmA').textContent=LA; document.getElementById('nmB').textContent=LB;
+  const eq=rel==='eq';
+  document.getElementById('tokA').classList.toggle('lit',eq); document.getElementById('tokB').classList.toggle('lit',eq);
+  lnk.className='link'+(eq?' eq':''); lnk.innerHTML= rel==='none'?'<span>?</span><small>no line</small>': eq?`<span>${LA} = ${LB}</span><small>given</small>`: rel==='like'?`<span>?</span><small>look alike</small>`:`<span>?</span><small>same kind</small>`;
+  const chosen=(sel.side==='A'?FA:FB)[sel.i];
+  const carriesTo=eq&&chosen.k==='thing'?other(sel.side):null;
+  [[fA,FA,'A'],[fB,FB,'B']].forEach(([el,L,side])=>{ el.innerHTML='';
+    L.forEach((f,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='fact'+(f.k==='name'?' blocked':'')+(sel.side===side&&sel.i===i?' sel':''); b.innerHTML=`<span>${name(side)} ${f.t}</span><span class="k">${f.k==='name'?'about the name':'given'}</span>`; b.onclick=()=>{ sel={side,i}; render(); }; el.appendChild(b); });
+    if(carriesTo===side){ const b=document.createElement('button'); b.type='button'; b.className='fact carried'; b.innerHTML=`<span>${name(side)} ${chosen.t}</span><span class="k">the swap axiom</span>`; b.onclick=()=>{}; el.appendChild(b); }
+  });
+  const x=name(sel.side), y=name(other(sel.side)); const F=t=>`\\text{${t}}`;
+  let T, note;
+  const G=(...r)=>'\\begin{gathered}'+r.join('\\\\[2pt] ')+'\\end{gathered}';
+  if(rel==='none'){ T=G(`\\text{you have: } ${x}\\ ${F(chosen.t)}`,`\\text{and nothing between } ${x} \\text{ and } ${y}`); note='Nothing carries: a swap needs a sameness, and you have none.'; }
+  else if(rel!=='eq'){ T=G(`\\text{you have: } ${x}\\ ${F(rel==='like'?'looks just like':'is the same kind as')}\\ ${y}`,`\\text{and } ${x}\\ ${F(chosen.t)}`,`${y}\\ ${F(chosen.t)}\\,?`,`\\text{not licensed}`); note=(rel==='like'?'Looking alike':'Being of the same kind')+' is not sameness. What you have is not “'+x+' = '+y+'”, so the swap axiom does not apply, and the fact stays where it was.'; }
+  else if(chosen.k==='name'){ T=G(`\\text{you have: } ${x} = ${y}`,`\\text{and the name “}${x}\\text{” }${F(chosen.t.replace('has its name ','is '))}`,`\\text{the name “}${y}\\text{” }${F(chosen.t.replace('has its name ','is '))}\\,?`,`\\text{not licensed}`); note='The sameness is granted, but this fact is about the name, not the thing. The names are different even when the thing is the same; a swap by the swap axiom is made only inside statements about the thing.'; }
+  else { T=G(`\\text{you have: } ${x} = ${y} \\text{ and } P(${x})`,`\\text{you may write } \\htmlClass{new}{P(${y})}\\text{: } ${y}\\ ${F(chosen.t)}`); note='P is “… '+chosen.t+'”. A statement about '+x+' is a statement about the thing, and the thing is '+y+' too; so the same statement may be written of '+y+'.'; }
+  tex(eqb,T,true); pfn.textContent=note;
+}
+document.querySelectorAll('[data-rel]').forEach(b=>b.onclick=()=>{ rel=b.dataset.rel; document.querySelectorAll('[data-rel]').forEach(x=>x.classList.toggle('on',x===b)); render(); });
+la.onchange=render; lb.onchange=render;
+render();
+
+})();
+</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

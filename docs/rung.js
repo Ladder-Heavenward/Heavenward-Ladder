@@ -200,6 +200,33 @@ addEventListener('storage',e=>{ if(e.key===RK||e.key===null){ raw=null; stale=tr
   const mv=[]; ks.forEach(k=>{ if(!/^(marks:|rand:|sq:)/.test(k)&&k!=='ladder:lastFooting'&&k!=='ladder:furthest') return; const v=LS.getItem(k); if(v==null) return; const nk=/^sq:/.test(k)?tg(k):k, nv=tg(v); if(nk!==k||nv!==v) mv.push([k,nk,nv]); });
   mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
   LS.setItem(F,String(Date.now())); }catch(e){} })();
+/* 0.67.50 rung 0 split + 32bio7 tick move (Andrew passed 2026-11-18 16:21Z), once, under ladder:mvFeet5. Same rules as split0b/renum0.py and renum32bio.py:
+   r00c -> r00d, 0c1-4 -> 0d1-4, 0c.N -> 0d.N; 0b3 -> 0b4, 0b4 -> 0b5, 0b5..0b11 -> 0c1..0c7 (r00b#0b5.. -> r00c#0c1..); standing 0b.4.2/3/4 -> 0c.4.1/0c.4.2/0b.4.2;
+   32bio7 -> 32bio8, 32·bio.7.k -> 32·bio.8.k, 32·bio.8.k -> 32·bio.9.k. A climber who had passed the old 0b page has passed the new 0c page too. */
+(function(){ const F='ladder:mvFeet5'; try{ if(LS.getItem(F)!=null) return;
+  const LB='(?<![\\w#.\\-/&;~$])', c4=k=>'0c'+(+k-4);
+  const RULES=[
+    [/r00b\.html#0b(3|4)(?!\w)/g, (m,a)=>'r00b.html#0b'+(+a+1)], [/r00b#0b(3|4)(?!\w)/g, (m,a)=>'r00b#0b'+(+a+1)],
+    [/r00b\.html#0b(5|6|7|8|9|10|11)(?!\w)/g, (m,a)=>'r00c.html#'+c4(a)], [/r00b#0b(5|6|7|8|9|10|11)(?!\w)/g, (m,a)=>'r00c#'+c4(a)],
+    [/r00c\.html#0c([1-4])(?!\w)/g, (m,a)=>'r00d.html#0d'+a], [/r00c#0c([1-4])(?!\w)/g, (m,a)=>'r00d#0d'+a],
+    [new RegExp(LB+'r00c(?!\\w)','g'), ()=>'r00d'],
+    [new RegExp(LB+'0c(?=[1-4](?!\\w|\\.\\d{2})|\\.(?!\\d{2})|(?!\\w))','g'), ()=>'0d'],
+    [new RegExp(LB+'0b\\.4\\.([234])(?!\\d)','g'), (m,a)=>({'2':'0c.4.1','3':'0c.4.2','4':'0b.4.2'})[a]],
+    [new RegExp(LB+'0b(3|4|5|6|7|8|9|10|11)(?!\\w|\\.\\d{2})','g'), (m,a)=>(a==='3'||a==='4')?'0b'+(+a+1):c4(a)],
+    [/32·bio\.8\.(?=\w)/g, ()=>'32·bio.9.'], [/32·bio\.7\.(?=\d)/g, ()=>'32·bio.8.'], [/(?<![\w#])32bio7(?!\w)/g, ()=>'32bio8'] ];
+  const tg=v=>{ const prot=[]; let t=String(v); RULES.forEach(([re,f])=>{ t=t.replace(re,(...a)=>{ prot.push(f(...a)); return ''+(prot.length-1)+''; }); });
+    while(t.indexOf('')>=0) t=t.replace(/(\d+)/g,(m,k)=>prot[+k]); return t; };
+  const ks=[]; for(let i=0;i<LS.length;i++){ const k=LS.key(i); if(k) ks.push(k); }
+  const mv=[]; ks.forEach(k=>{ if(!/^(marks:|rand:|sq:|steps:|cert:|note:|mg:)/.test(k)&&!/^(pages:done|cards:seen|ladder:lastFooting|ladder:furthest)$/.test(k)) return; const v=LS.getItem(k); if(v==null) return;
+    const nk=/^(sq:|steps:|cert:|note:|mg:|marks:)/.test(k)?tg(k):k, nv=tg(v); if(nk!==k||nv!==v) mv.push([k,nk,nv]); });
+  mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
+  /* marks are kept under the page title: the old 0b title splits into the new 0b and 0c pages */
+  try{ const OK='marks:0b · The Same as Itself', o=JSON.parse(LS.getItem(OK)||'null'); if(o){ const b={}, c={};
+    Object.keys(o).forEach(k=>{ (/(^|[^\w.])0c\d/.test(k)?c:b)[k]=o[k]; });
+    const put=(key,obj)=>{ if(!Object.keys(obj).length) return; let cur={}; try{ cur=JSON.parse(LS.getItem(key)||'{}')||{}; }catch(e){} LS.setItem(key,JSON.stringify(Object.assign(obj,cur))); };
+    put('marks:0b · What It Means to Be the Same',b); put('marks:0c · Chains and Swaps',c); LS.removeItem(OK); } }catch(e){}
+  try{ const P=JSON.parse(LS.getItem('pages:done')||'null'); if(P&&P.r00b&&P.r00b.v&&!(P.r00c&&P.r00c.v)){ P.r00c=Object.assign({},P.r00b); LS.setItem('pages:done',JSON.stringify(P)); } }catch(e){}
+  LS.setItem(F,String(Date.now())); }catch(e){} })();
 
 (function(){
 'use strict';
