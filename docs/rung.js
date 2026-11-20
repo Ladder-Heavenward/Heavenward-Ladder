@@ -2016,38 +2016,51 @@ function nonskid(){
     else { const b=gt.querySelector('button'); if(b){ b.dataset.k='gt'; b.onclick=()=>{ hide=hide.includes('gt')?hide.filter(x=>x!=='gt'):hide.concat(['gt']); apply(); }; } } }
   apply();
 }
-/* every Greek letter on the page, named with its case, under the header (Andrew, 2026-10-28) */
-function greek(){
-  const top=document.querySelector('header.top'); if(!top||document.querySelector('.greekkey')) return;
-  const N={α:'alpha',β:'beta',γ:'gamma',δ:'delta',ε:'epsilon',ζ:'zeta',η:'eta',θ:'theta',ι:'iota',κ:'kappa',λ:'lambda',μ:'mu',ν:'nu',ξ:'xi',π:'pi',ρ:'rho',σ:'sigma',τ:'tau',υ:'upsilon',φ:'phi',χ:'chi',ψ:'psi',ω:'omega'};
-  const T={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',sigma:'σ',tau:'τ',phi:'φ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Phi:'Φ',Psi:'Ψ',Omega:'Ω'};
-  const main=[...document.querySelectorAll('header.top,section.class,section.pic,section.slides,section.sayback,section.qs,section.questions,section.star')];
-  let txt=main.map(e=>e.textContent).join(' ');
-  document.querySelectorAll('[data-tex],[data-tex-inline]').forEach(e=>{ txt+=' '+(e.getAttribute('data-tex')||'')+' '+(e.getAttribute('data-tex-inline')||''); });
-  txt=txt.replace(/∞[^\s·.,;:()]\u200e?/g,' ').replace(/\\([A-Za-z]+)/g,(m,w)=>T[w]?' '+T[w]+' ':m).replace(/ϕ/g,'φ').replace(/ϵ/g,'ε');
-  const seen=[];
-  for(const ch of txt){ const lo=ch.toLowerCase(); if(N[lo]&&!seen.includes(ch)) seen.push(ch); }
-  if(!seen.length) return;
-  seen.sort((a,b)=>txt.indexOf(a)-txt.indexOf(b));
-  const k=document.createElement('p'); k.className='greekkey';
-  k.textContent='Greek letters on this page: '+seen.map(ch=>{ const lo=ch.toLowerCase(); return ch+' '+(ch===lo?'small ':'capital ')+N[lo]; }).join(' · ');
-  top.appendChild(k);
-}
-/* every curly capital on the page, named by its shape: "curly P" (Andrew, 2026-10-30) */
-function curly(){
-  const top=document.querySelector('header.top'); if(!top||document.querySelector('.curlykey')) return;
-  const U='𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵', A=[...U];
-  const main=[...document.querySelectorAll('header.top,section.class,section.pic,section.slides,section.sayback,section.qs,section.questions,section.star')];
-  let txt=main.map(e=>e.textContent).join(' ');
-  document.querySelectorAll('[data-tex],[data-tex-inline]').forEach(e=>{ txt+=' '+(e.getAttribute('data-tex')||'')+' '+(e.getAttribute('data-tex-inline')||''); });
-  txt=txt.replace(/\\mathcal\s*\{?\s*([A-Z])/g,(m,c)=>' '+A[c.charCodeAt(0)-65]+' ');
-  const seen=[];
-  for(const ch of txt){ const i=A.indexOf(ch); if(i>=0&&!seen.includes(ch)) seen.push(ch); }
-  if(!seen.length) return;
-  seen.sort((a,b)=>txt.indexOf(a)-txt.indexOf(b));
-  const k=document.createElement('p'); k.className='greekkey curlykey';
-  k.textContent='Curly letters on this page: '+seen.map(ch=>ch+' curly '+String.fromCharCode(65+A.indexOf(ch))).join(' · ');
-  top.appendChild(k);
+/* names (Andrew 2026-11-20 06:44Z): each Greek or curly letter is named where it first appears on the page, never in a bundle line under the title.
+   In prose the name follows the letter: "φ (small phi)". In a TeX box, picture or table, one line right under that box names the letters it brings in.
+   A letter whose name the same paragraph already says is left alone. */
+function nameLetters(){
+  if(document.querySelector('.gname')) return;
+  const N={α:'alpha',β:'beta',γ:'gamma',δ:'delta',ε:'epsilon',ζ:'zeta',η:'eta',θ:'theta',ι:'iota',κ:'kappa',λ:'lambda',μ:'mu',ν:'nu',ξ:'xi',π:'pi',ρ:'rho',σ:'sigma',ς:'sigma',τ:'tau',υ:'upsilon',φ:'phi',χ:'chi',ψ:'psi',ω:'omega'};
+  const T={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',vartheta:'θ',iota:'ι',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',varrho:'ρ',sigma:'σ',varsigma:'ς',tau:'τ',upsilon:'υ',phi:'φ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Upsilon:'Υ',Phi:'Φ',Psi:'Ψ',Omega:'Ω'};
+  const C=[...'𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵'];
+  const norm=ch=>ch==='ϕ'?'φ':ch==='ϵ'?'ε':ch==='ϑ'?'θ':ch;
+  const isG=ch=>!!N[ch.toLowerCase()], isC=ch=>C.includes(ch);
+  const nameOf=ch=>isC(ch)?'curly '+String.fromCharCode(65+C.indexOf(ch)):(ch===ch.toLowerCase()?'small ':'capital ')+N[ch.toLowerCase()];
+  /* the letters a run of plain text shows, with where each sits; the mark after ∞ is a step's label, not a letter */
+  const scan=str=>{ const out=[]; let i=0, prev=''; for(const ch0 of str){ const ch=norm(ch0); if(prev!=='∞'&&(isG(ch)||isC(ch))) out.push({ch,i:i+ch0.length}); prev=ch0; i+=ch0.length; } return out; };
+  const texLetters=src=>{ const out=[]; String(src||'').replace(/\\mathcal\s*\{?\s*([A-Z])|\\([A-Za-z]+)|([^\\])/g,(m,c,w,x)=>{ let ch=c?C[c.charCodeAt(0)-65]:w?T[w]:x?norm(x):''; if(ch&&(isG(ch)||isC(ch))&&!out.includes(ch)) out.push(ch); return m; }); return out; };
+  const SKIP='script,style,template,h1,h2,h3,h4,.tags,.pn,nav,.eyebrow,.sthead,.stnext,.qid,button,.lbar,#lbar,.fvhead,.home,.gname,.brkkey,.phkey,.lockhint';
+  const seen=new Set(), notes=new Map();
+  /* the words of the letter's own paragraph, leaving out typeset maths (whose hidden source spells \sigma) and names already added */
+  const words=box=>{ let s=''; const w=n=>{ if(n.nodeType===3){ s+=n.data; return; } if(n.nodeType!==1||n.matches('.katex,[data-tex],[data-tex-inline],.gname,annotation,script,style')) return; n.childNodes.forEach(w); }; w(box); return s; };
+  const said=(el,ch)=>{ const box=el&&el.closest&&el.closest('p,li,td,th,dd,dt,figcaption,.cap,.row'); if(!box) return false; const w=N[ch.toLowerCase()], s=words(box); return w?new RegExp('\\b'+w+'\\b','i').test(s):new RegExp('\\bcurly '+String.fromCharCode(65+C.indexOf(ch))+'\\b').test(s); };
+  const note=(anchor,chs)=>{ if(!chs.length) return; let n=notes.get(anchor); if(!n){ n=document.createElement(anchor.matches('li')?'span':'p'); n.className='gname'; n.dataset.letters=''; anchor.after(n); notes.set(anchor,n); }
+    n.dataset.letters+=chs.join(''); n.textContent=[...n.dataset.letters].map(ch=>ch+' is '+nameOf(ch)).join('; ')+'.'; };
+  const blockOf=el=>el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline,.katex-display')||el;
+  const tex=el=>{ const fresh=texLetters((el.getAttribute('data-tex')||'')+' '+(el.getAttribute('data-tex-inline')||'')).filter(ch=>!seen.has(ch)); fresh.forEach(ch=>seen.add(ch)); const want=fresh.filter(ch=>!said(el,ch)); if(!want.length) return;
+    const inline=el.hasAttribute('data-tex-inline')&&!el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline');
+    if(inline){ const sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=' ('+want.map(ch=>ch+' is '+nameOf(ch)).join(', ')+')'; el.after(sp); }
+    else { let a=blockOf(el); if(a.matches('svg')&&a.closest('figure,.pic')) a=a.closest('figure,.pic'); note(a,want); } };
+  const text=t=>{ const hits=scan(t.data).filter(h=>{ if(seen.has(h.ch)) return false; seen.add(h.ch); return !said(t.parentElement,h.ch); }); if(!hits.length) return;
+    const host=t.parentElement; if(host.closest('svg,pre,.eqline,.eqline-words,.lines,.texline,table')){ let a=blockOf(host); if(a.matches('svg')&&a.closest('figure,.pic')) a=a.closest('figure,.pic'); note(a,hits.map(h=>h.ch)); return; }
+    /* a letter written onto its brackets, φ(x), keeps them: the name comes after the closing bracket, as "φ(x) (φ is small phi)" */
+    const end=(str,i)=>{ let j=i; while(j<str.length&&/[₀-₉ᵢⱼₖₙ′″'*]/.test(str[j])) j++; if(str[j]!=='(') return [j,false]; let d=0; for(let q=j;q<str.length;q++){ if(str[q]==='(') d++; else if(str[q]===')'&&!--d) return [q+1,true]; } return [i,false]; };
+    /* a letter standing as a word gets its name right after it; a letter inside a formula, e^(−κt), gets it where the clause ends, so the formula stays whole */
+    const str=t.data, ins=[], group=new Map();
+    const alone=h=>{ const st=h.i-[...h.ch].join('').length, pv=st>0?str[st-1]:' ', nx=h.i<str.length?str[h.i]:' '; return /[\s“‘]/.test(pv)&&/[\s,.;:?!”’]/.test(nx); };
+    hits.forEach(h=>{ const st=h.i-h.ch.length, [at,app]=st<=0||/[\s“‘]/.test(str[st-1])?end(str,h.i):[h.i,false]; if(app){ ins.push({at,txt:' ('+h.ch+' is '+nameOf(h.ch)+')'}); return; } if(alone(h)){ ins.push({at:h.i,txt:' ('+nameOf(h.ch)+')'}); return; }
+      const m=/[.;:?!](\s|$)/.exec(str.slice(h.i)), at2=m?h.i+m.index:str.replace(/\s+$/,'').length; (group.get(at2)||group.set(at2,[]).get(at2)).push(h.ch); });
+    group.forEach((chs,at)=>ins.push({at,txt:' ('+chs.map(ch=>ch+' is '+nameOf(ch)).join(', ')+')'}));
+    ins.sort((a,b)=>b.at-a.at).forEach(x=>{ const rest=t.splitText(x.at), sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=x.txt; rest.before(sp); }); };
+  const walk=node=>{ if(node.nodeType===3){ if(node.data.trim()) text(node); return; } if(node.nodeType!==1||node.matches(SKIP)) return;
+    if(node.hasAttribute('data-tex')||node.hasAttribute('data-tex-inline')){ tex(node); return; }
+    if(node.matches('.katex')){ const an=node.querySelector('annotation'); if(an){ if(node.closest('.katex-display')) node.closest('.katex-display').setAttribute('data-tex',an.textContent); else node.setAttribute('data-tex-inline',an.textContent); tex(node.closest('.katex-display')||node); } return; }
+    [...node.childNodes].forEach(walk); };
+  /* the whole page in reading order: title, steps, challenge, open questions, history, basement */
+  const R='header.top,section.class,section.pic,section.slides,section.sayback,section.qs,section.questions,section.star';
+  const roots=document.querySelector('.wrap')?[...document.querySelectorAll('.wrap > header.top, .wrap > section, .wrap > div')]:[...document.querySelectorAll(R)].filter(r=>!r.parentElement||!r.parentElement.closest(R));
+  roots.forEach(walk);
 }
 /* a table too wide for the screen, other than a truth table, stacks: each row becomes a card, each cell under its column's name */
 function stackTables(){
@@ -2112,7 +2125,7 @@ function pids(){ document.querySelectorAll('[data-pid]').forEach(p=>{ const id=p
   const per={}; const ps=[...document.querySelectorAll('header.top > p[data-pid], section.class p[data-pid]')].filter(p=>!(p.hasAttribute('data-collapsed')||!p.textContent.replace(/\s+/g,'')));
   for(const p of ps){ const top=!!p.closest('header.top'), st=p.closest('section.step'), k=top?info.label+'.top':(st?st.dataset.step:info.label); per[k]=(per[k]||0)+1; const ad=top?k+'.'+per[k]:k+'.0.'+per[k]; if(ad===h){ history.replaceState(null,'','#'+p.dataset.pid); break; } } }
 function toPid(){ const h=location.hash.slice(1); const t=h&&document.getElementById(h); if(t&&t.dataset&&t.dataset.pid) setTimeout(()=>t.scrollIntoView({block:'center'}),60); }
-ready(()=>{ document.documentElement.classList.add(window.LADDER_DESK?'isdesk':'isapp'); if(window.LADDER_DESK) document.documentElement.classList.add('lk-paint'); /* 2026-11-10 (Andrew 15:10): in the app the page stays hidden until the footing view's first paint (footingView), so it never shows the whole step first */ pids(); steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } txInit(); if(window.LADDER_DESK&&!foldPref()) setTimeout(()=>document.querySelectorAll('.rungs details.stidx').forEach(d=>d.open=true),0); setTimeout(foldAllButton,0); toPid(); reportQuestions(); pn(); nonskid(); greek(); curly();
+ready(()=>{ document.documentElement.classList.add(window.LADDER_DESK?'isdesk':'isapp'); if(window.LADDER_DESK) document.documentElement.classList.add('lk-paint'); /* 2026-11-10 (Andrew 15:10): in the app the page stays hidden until the footing view's first paint (footingView), so it never shows the whole step first */ pids(); steps(); const info=tagInfo(); if(info){ titles(info); addresses(info); edInit(); } txInit(); if(window.LADDER_DESK&&!foldPref()) setTimeout(()=>document.querySelectorAll('.rungs details.stidx').forEach(d=>d.open=true),0); setTimeout(foldAllButton,0); toPid(); reportQuestions(); pn(); nonskid(); nameLetters();
   const fit=()=>{ stackTables(); liftLong(); }; window.__fit=fit;
   setTimeout(fit,400); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(fit,100)); });
 })();
@@ -3301,8 +3314,12 @@ if(window.LADDER_DESK) return;
 const PAGES=window.LADDER_SWIPE_PAGES||/^(r\d\d|floor\d|inf|intro$)/; /* todo16: how to read the ladder too */ /* Phase G floor 8: all rungs and the Endless floor */
 const ADVANCE_ON_SWIPE_LEFT=true; /* finger moves left = the row moves on, as pages turn; flip for the other reading */
 const pg=()=>window.ladderPage?ladderPage():'';
-const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap)(\s|$)/;
+const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap|gname)(\s|$)/;
 const texbox=el=>!!(el&&el.matches&&(el.matches('pre,.eqline,.eqline-words,.lines,.texline,.katex-display')||el.querySelector('.katex-display,pre')));
+/* Andrew 2026-11-20 06:44Z: a screen with nothing on it vanishes; a heading alone is nothing */
+const SWHEAD='h1,h2,h3,h4,.tags,.eyebrow,.sthead,.fr,script,style,template';
+const swFull=x=>!x.hidden&&!x.matches(SWHEAD)&&(!!x.textContent.replace(/\s+/g,'')||x.matches('img,svg,canvas,video,iframe,figure,.pic,.slides,[data-tex],[data-tex-inline],table,input,hr')||!!x.querySelector('img,svg,canvas,video,iframe,[data-tex],[data-tex-inline],table,input,button'));
+const swDrop=list=>list.filter(sc=>sc.some(swFull));
 let screens=[], k=0, on=false, bar=null, L=null, R=null, posEl=null, dots=null, step=null;
 const folded=el=>el.hasAttribute('data-collapsed')||(el.matches('p[data-pid]')&&!el.textContent.replace(/\s+/g,'').replace(/^[\d\w.·]{1,16}$/,'').length); /* 2026-11-14: only an address alone is empty; a sentence with no comma (5.0.9) was being read as one */
 function clear(){ document.querySelectorAll('.brk.sw-rows').forEach(b=>{ if(!b.closest('.fvghost')) b.classList.remove('sw-rows','sw-has'); }); document.querySelectorAll('[data-sw]').forEach(x=>{ if(x.closest('.fvghost')) return; /* the outgoing footing keeps its screen while it leaves */ x.removeAttribute('data-sw'); x.classList.remove('sw-on','sw-open','sw-stub'); }); screens=[]; }
@@ -3364,7 +3381,7 @@ function buildChunks(els){
   expand(step); [...step.children].forEach(add);
   if(lead.length){ if(items.length) items[items.length-1].push(...lead); else items.push(lead.splice(0)); }
   els.forEach(e=>{ if(e!==step&&e!==hdr&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('nav,.pn')) items.push([e]); });
-  screens=items;
+  screens=swDrop(items);
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
 function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return; if(CHUNKPAGE.test(pg())&&els.length&&els[0]&&els.some(e=>e.matches&&e.matches('header.top'))){ buildChunks(els); return; } expand(step);
   [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
@@ -3373,6 +3390,7 @@ function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.ste
   els.forEach(e=>{ if(e!==step&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('header.top,nav,.pn')) screens.push([e]); });
   /* todo16: a page's title, opened with its first footing, rides with the first screen only */
   const hdr=els.find(e=>e.matches&&e.matches('header.top')); if(hdr&&screens.length){ hdr.classList.add('sw-hdr'); [...hdr.children].filter(x=>!x.matches('p.home,.pn,script,style')).forEach(x=>screens[0].push(x)); }
+  screens=swDrop(screens);
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
 function ui(){ if(bar) return; bar=document.createElement('div'); bar.className='swbar'; bar.hidden=true;
   L=document.createElement('button'); L.type='button'; L.className='swnav swl'; L.innerHTML='<span aria-hidden="true">◀</span> previous'; L.setAttribute('aria-label','previous screen');
