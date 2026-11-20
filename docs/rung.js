@@ -2329,7 +2329,14 @@ function nameLetters(){ NL.run(); }
 function stackTables(){
   document.querySelectorAll('table').forEach(t=>{
     if(t.classList.contains('stack')||t.closest('.pic,.slides,#lbar,.lbar')) return;
-    const box=t.closest('.tablewrap')||t.parentElement; if(!(t.scrollWidth>box.clientWidth+2)) return;
+    const box=t.closest('.tablewrap')||t.parentElement; let wide;
+    if(t.getClientRects().length) wide=t.scrollWidth>box.clientWidth+2;
+    else { /* a table in a footing not showing yet: measured as a copy at the page's text width */
+      const wr=document.querySelector('.wrap')||document.body, cs=getComputedStyle(wr), w=(wr.clientWidth||window.innerWidth)-parseFloat(cs.paddingLeft||0)-parseFloat(cs.paddingRight||0), probe=document.createElement('div');
+      probe.style.cssText='position:absolute;left:-9999px;top:0;visibility:hidden;width:'+Math.max(200,w)+'px';
+      const c=box.cloneNode(true); c.classList.remove('sw-split'); probe.appendChild(c); document.body.appendChild(probe);
+      const ct=c.matches('table')?c:c.querySelector('table'); wide=!!ct&&ct.scrollWidth>c.clientWidth+2; probe.remove(); }
+    if(!wide) return;
     const cells=[...t.querySelectorAll('td')].map(td=>td.textContent.trim());
     if(!cells.length||cells.filter(c=>/^(T|F|0|1|)$/.test(c)).length>cells.length/2) return;
     const hr=[...t.querySelectorAll('tr')].find(r=>r.querySelector('th')&&!r.querySelector('td')); if(!hr) return;
@@ -3643,7 +3650,8 @@ function splitText(el,n){ /* el's sentences into n parts, each wrapped in span.s
 function fitWide(root){ root.querySelectorAll('.rows .row .m, .eqbox').forEach(m=>{ if(m.closest('.rl,.rl-off,[hidden]')||!m.getClientRects().length) return; if(m.dataset.fw===String(m.clientWidth)) return;
   m.style.fontSize=''; const k=m.clientWidth/Math.max(1,m.scrollWidth); if(k<0.995) m.style.fontSize=Math.max(0.7,k*0.97).toFixed(3)+'em'; m.dataset.fw=String(m.clientWidth); }); }
 function fitScreens(list){ const room=FITROOM(), had=document.body.classList.contains('sw'); document.body.classList.remove('sw'); const out=[];
-  try{ list.forEach(sc=>sc.forEach(el=>{ try{ fitWide(el.parentElement||el); }catch(_){} }));
+  try{ try{ stackTables(); }catch(_){} /* a table too wide for the screen stacks into cards now that it can be measured */
+    list.forEach(sc=>sc.forEach(el=>{ try{ fitWide(el.parentElement||el); }catch(_){} }));
     list.forEach(sc=>{ let parts=[sc]; const room=FITROOM()-(sc.some(x=>x.closest&&x.closest('header.top'))?90:0); /* a screen that carries the page's title has less room */
     for(let pass=0;pass<3;pass++){ const next=[]; let cut=false;
       parts.forEach(s=>{ const hs=s.map(tall), h=hs.reduce((a,b)=>a+b,0); if(h<=room){ next.push(s); return; }
