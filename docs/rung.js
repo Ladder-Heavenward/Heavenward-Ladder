@@ -2340,6 +2340,13 @@ function stackTables(){
     const cells=[...t.querySelectorAll('td')].map(td=>td.textContent.trim());
     if(!cells.length||cells.filter(c=>/^(T|F|0|1|)$/.test(c)).length>cells.length/2) return;
     const hr=[...t.querySelectorAll('tr')].find(r=>r.querySelector('th')&&!r.querySelector('td')); if(!hr) return;
+    const trs=[...t.querySelectorAll('tr')];
+    /* a table of one to three rows across many columns turns on its side: each column becomes a row, so it can be cut across slides */
+    if(trs.length<=4&&hr.children.length>=4&&!t.querySelector('[rowspan],[colspan]')){
+      const grid=trs.map(r=>[...r.children]), n=Math.max(...grid.map(r=>r.length)), body=t.tBodies[0]||t;
+      const rows=[]; for(let i=0;i<n;i++){ const r=document.createElement('tr'); grid.forEach(cs=>{ if(cs[i]) r.appendChild(cs[i]); }); rows.push(r); }
+      if(t.tHead) t.tHead.remove(); [...t.tBodies].forEach(b=>{ if(b!==body) b.remove(); }); body.innerHTML=''; rows.forEach(r=>body.appendChild(r));
+      t.classList.add('sideways'); return; }
     const heads=[...hr.children].map(th=>th.textContent.trim());
     t.querySelectorAll('tr').forEach(r=>{ if(r===hr) return; [...r.children].forEach((c,i)=>{ if(heads[i]) c.setAttribute('data-h',heads[i]); }); });
     hr.classList.add('stackhead'); t.classList.add('stack');
@@ -3647,8 +3654,8 @@ function splitText(el,n){ /* el's sentences into n parts, each wrapped in span.s
   const spans=g.map(gs=>{ const sp=document.createElement('span'); sp.className='swc'; const nodes=gs.flat(); nodes[0].parentNode.insertBefore(sp,nodes[0]); nodes.forEach(x=>sp.appendChild(x)); return sp; });
   el.classList.add('sw-split'); return spans; }
 /* a proof row or a TeX line wider than the screen is set smaller until it fits (not below 70%), so it never scrolls sideways or down inside its box */
-function fitWide(root){ root.querySelectorAll('.rows .row .m, .eqbox').forEach(m=>{ if(m.closest('.rl,.rl-off,[hidden]')||!m.getClientRects().length) return; if(m.dataset.fw===String(m.clientWidth)) return;
-  m.style.fontSize=''; const k=m.clientWidth/Math.max(1,m.scrollWidth); if(k<0.995) m.style.fontSize=Math.max(0.7,k*0.97).toFixed(3)+'em'; m.dataset.fw=String(m.clientWidth); }); }
+function fitWide(root){ root.querySelectorAll('.rows .row .m, .eqbox').forEach(m=>{ if(m.closest('.rl,.rl-off,[hidden]')||!m.getClientRects().length) return; if(m.dataset.fw===String(m.clientWidth)&&m.scrollWidth<=m.clientWidth+1) return; /* measured again once the fonts have loaded */
+  m.style.fontSize=''; const k=m.clientWidth/Math.max(1,m.scrollWidth); if(k<0.995) { const base=parseFloat(getComputedStyle(m).fontSize)/Math.max(1,parseFloat(getComputedStyle(m.parentElement).fontSize)); m.style.fontSize=(base*Math.max(0.7,k*0.97)).toFixed(3)+'em'; } m.dataset.fw=String(m.clientWidth); }); }
 function fitScreens(list){ const room=FITROOM(), had=document.body.classList.contains('sw'); document.body.classList.remove('sw'); const out=[];
   try{ try{ stackTables(); }catch(_){} /* a table too wide for the screen stacks into cards now that it can be measured */
     list.forEach(sc=>sc.forEach(el=>{ try{ fitWide(el.parentElement||el); }catch(_){} }));
@@ -3736,6 +3743,7 @@ function show(i,opts){ opts=opts||{}; if(!screens.length) return; const prev=k; 
   document.querySelectorAll('.brk.sw-rows').forEach(b=>b.classList.toggle('sw-has',!!b.querySelector(':scope>.rows>.row.sw-on')));
   if(anim){ screens[k].forEach(x=>{ void x.offsetWidth; x.classList.add(dir>0?'sw-in-f':'sw-in-b'); x.addEventListener('animationend',()=>x.classList.remove('sw-in-f','sw-in-b'),{once:true}); }); if(ghost) swGhostOut(ghost,dir); }
   if(!opts.keep) window.scrollTo(0,0);
+  try{ screens[k].forEach(x=>fitWide(x.parentElement||x)); }catch(_){}
   if(window.LadderRoll) LadderRoll.fitAll();
   const n=screens.length; posEl.textContent=n>1?(k+1)+' / '+n:''; L.disabled=false; R.disabled=false;
   dots.innerHTML=''; if(n>1&&n<=14) screens.forEach((s,j)=>{ const d=document.createElement('i'); d.className=(j===k?'on':'')+(s[0].classList.contains('sw-stub')?' stub':''); d.onclick=()=>show(j,{anim:true}); dots.appendChild(d); }); else if(n>14) dots.appendChild(posEl);
