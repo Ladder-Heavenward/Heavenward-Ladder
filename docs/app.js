@@ -80,9 +80,10 @@
     if (!/Android/.test(ua) || !/Chrome\//.test(ua) || /SamsungBrowser|EdgA|OPR|Firefox/.test(ua)) return;
     if (!window.matchMedia || !matchMedia('(display-mode: standalone)').matches || !navigator.getInstalledRelatedApps) return;
     if (Date.now() - (A.shortcutAsked || 0) < 30 * 864e5) return;
+    if (/install\.html$/.test(location.pathname)) return; /* the install page says it already */
     navigator.getInstalledRelatedApps().then(apps => {
       if (!Array.isArray(apps) || apps.some(a => a.platform === 'webapp') || (bar && !bar.hidden)) return;
-      banner('This Ladder icon is a shortcut, not the full app, so Chrome\'s logo can show when it opens. Install the full app to open straight onto the Ladder. Your record stays as it is.', [
+      banner('This Ladder icon is a shortcut. Install the full app? Your record stays as it is.', [
         ['Install the full app', () => { A.shortcutAsked = Date.now(); saveA(); hide(); location.href = CHROME_INSTALL; }],
         ['Not now', () => { A.shortcutAsked = Date.now(); saveA(); hide(); }]]);
     }).catch(() => {});
