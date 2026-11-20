@@ -228,17 +228,244 @@ addEventListener('storage',e=>{ if(e.key===RK||e.key===null){ raw=null; stale=tr
   try{ const P=JSON.parse(LS.getItem('pages:done')||'null'); if(P&&P.r00b&&P.r00b.v&&!(P.r00c&&P.r00c.v)){ P.r00c=Object.assign({},P.r00b); LS.setItem('pages:done',JSON.stringify(P)); } }catch(e){}
   LS.setItem(F,String(Date.now())); }catch(e){} })();
 
+/* ---- roll (embeds) ---- */
+/* roll: the roll-out for slide decks, and one frame for decks and pictures (embeds thread, Andrew 2026-11-20 05:13Z, passed 05:45Z).
+   - A deck sits in one frame that fits the screen. Tap the bottom half to go on, the top half to go back
+     (keys: down / space / page down on, up / page up back). Left and right keep their job: screens; on a deck's screen
+     the screen arrows walk the deck first, so nothing is skipped.
+   - One tap is one move. Worked lines (pre.lines, "TeX @@ reason") roll out a line a tap: the line joins the board,
+     its new part lit, and its reason shows in the words below at the same moment. A hand-made slide whose maths has
+     several rows (gathered / aligned) is shown a row a tap, its note cut at sentences and semicolons to go with the
+     rows. The wording never changes: a note is only shown in parts.
+   - The board keeps the working so far (earlier lines dimmed), so a bigger deck carries more on each slide.
+   - Each row is typeset once, the first time it is shown. Nothing is cloned.
+   - A picture (section.pic) gets the same frame: its parts as tabs on a narrow screen, the caption behind
+     "how to read it", the drawing shrunk so the frame fits the screen.
+   window.LadderRoll = { fromPre, fromSteps, mount, lines, deck, framePic, pics, fitAll, rowsOf, pieces } */
+(function(){
+'use strict';
+const KO={throwOnError:false,strict:false,trust:true};
+/* a step page opened as ?embed=pic shows only its picture, in the frame: this is how Techs Read and the Tech Deck show a technique's picture.
+   In that mode the page keeps no record (nothing is written to storage) and its keys do not walk the ladder. */
+const EMBED=/[?&]embed=pic\b/.test(location.search);
+if(EMBED){ window.LADDER_EMBED='pic'; document.documentElement.classList.add('embed-pic');
+  try{ Storage.prototype.setItem=function(){}; Storage.prototype.removeItem=function(){}; Storage.prototype.clear=function(){}; }catch(e){}
+  addEventListener('keydown',e=>{ if(!/INPUT|SELECT|TEXTAREA|BUTTON/.test((e.target&&e.target.tagName)||'')) e.stopImmediatePropagation(); },true); }
+function typeset(el,t){ if(window.katex){ try{ katex.render('\\displaystyle '+t,el,Object.assign({},KO,{displayMode:false})); return; }catch(e){} } el.textContent=t; }
+const WRONG=/\b(illegal|fake|tempting)\b|not allowed/i;
+
+/* rows of a gathered / aligned / array block, cut at its top-level \\ */
+function rowsOf(t){ t=String(t||'').trim();
+  const m=t.match(/^\\begin\{(gathered|aligned)\}([\s\S]*)\\end\{\1\}$/); if(!m) return t?[t]:[];
+  const env=m[1], body=m[2], out=[]; let br=0, env2=0, cur='';
+  for(let i=0;i<body.length;i++){ const c=body[i];
+    if(body.startsWith('\\begin{',i)) env2++; else if(body.startsWith('\\end{',i)) env2--;
+    if(c==='\\'&&body[i+1]==='\\'&&!br&&!env2){ out.push(cur); cur=''; i++; continue; }
+    if(c==='\\'&&i+1<body.length){ cur+=c+body[i+1]; i++; continue; }
+    if(c==='{') br++; else if(c==='}') br--; cur+=c; }
+  out.push(cur);
+  const tr=s=>{ s=s.trim(); const m=s.match(/\\+$/); return m&&m[0].length%2?s+' ':s; }; /* a row that ends in a control space keeps it */
+  const rows=out.map(tr).filter(Boolean).map(s=>env==='gathered'?s:tr(amp(s))).filter(Boolean);
+  /* a row that cannot stand alone (\left with its \right on another row) keeps the block whole */
+  const ok=s=>(s.match(/\\left\b/g)||[]).length===(s.match(/\\right\b/g)||[]).length&&bal(s);
+  return rows.length&&rows.every(ok)&&(rows.length>1||env==='aligned')?rows:[t]; }
+/* an aligned row on its own: the alignment marks go, and a second column (maths && its words) goes on the line below */
+function amp(s){ let o='', k=0; for(let i=0;i<s.length;i++){ const c=s[i]; if(c==='\\'){ o+=c+(s[i+1]||''); i++; continue; } if(c==='&'){ k++; if(k>1&&k%2===0) o+='\\newline '; continue; } o+=c; } return o; }
+function bal(s){ let d=0; for(let i=0;i<s.length;i++){ const c=s[i]; if(c==='\\'){ i++; continue; } if(c==='{') d++; else if(c==='}'){ d--; if(d<0) return false; } } return d===0; }
+
+/* a note cut into pieces that join back to exactly the note */
+function pieces(n,want){ n=String(n||''); if(want<2||!n.trim()) return [n];
+  if(/<[a-z!\/]/i.test(n)) return [n]; /* a note that carries markup is shown whole */
+  const cut=(s,re)=>{ const out=[]; let from=0, m; re.lastIndex=0; while((m=re.exec(s))){ const e=m.index+m[0].length; out.push(s.slice(from,e)); from=e; } out.push(s.slice(from)); return out.filter(x=>x.length); };
+  let p=cut(n,/[.!?][”’")\]]?\s+(?=[A-Z0-9“‘"(¬∀∃ℝℕℤℚ])/g);
+  p=p.flatMap(s=>cut(s,/;\s+/g)); /* sentences, then semicolons: the finest cut, grouped to the rows below */
+  return p; }
+function groups(arr,k){ const out=[]; for(let r=0;r<k;r++) out.push(arr.slice(Math.floor(r*arr.length/k),Math.floor((r+1)*arr.length/k))); return out; }
+
+/* worked lines -> a roll */
+function fromPre(pre){ const label=pre.dataset.label||'';
+  const k=(pre.dataset.wrong!==undefined||/not allowed|illegal/i.test(label))?'wrong':(pre.dataset.k||'teal');
+  const items=pre.textContent.split('\n').map(s=>s.trim()).filter(Boolean).map((line,i)=>{ const [t,n]=line.split('@@').map(s=>(s||'').trim()); return {rows:t?[t]:[],text:n||'',no:String(i+1),si:i}; });
+  return {k,label,items}; }
+
+/* hand-made slides ({k,kl,t,n}) -> a roll; a slide with several rows rolls out a row a tap */
+function fromSteps(steps,opts){ opts=opts||{}; const items=[]; let first=null;
+  steps.forEach((s,si)=>{ const k=(s.k&&(s.wrong||WRONG.test(s.kl||'')))?'wrong':(s.k||'teal'); if(!first) first=k;
+    const rows=rowsOf(s.t), ps=pieces(s.n,rows.length), b=Math.max(1,Math.min(rows.length||1,ps.length));
+    const rg=rows.length?groups(rows,b):[[]], pg=groups(ps,b);
+    for(let j=0;j<b;j++) items.push({grp:j===0?(s.kl||''):null,k,si,rows:rg[j]||[],text:(pg[j]||[]).join(''),prior:pg.slice(0,j).map(g=>g.join('')).join('')}); });
+  return {k:first||'teal',label:opts.title||'',items}; }
+
+/* the frame */
+let active=null; const frames=new Set();
+function words(el,t){ if(/<[a-z!\/]/i.test(t)) el.innerHTML=t; else el.innerHTML=t.replace(/&(?!(?:[a-z]+|#\d+|#x[0-9a-f]+);)/gi,'&amp;').replace(/</g,'&lt;'); }
+/* a row too wide for the board (a long sentence set as maths cannot break) is set smaller until it fits, down to 60%; past that the row scrolls */
+function squeeze(r){ if(!r.clientWidth) return; if(r.dataset.sqw===String(r.clientWidth)) return; r.style.fontSize=''; const k=r.clientWidth/r.scrollWidth; if(k<0.995){ r.style.fontSize=Math.max(0.6,k*0.97).toFixed(3)+'em'; } r.dataset.sqw=String(r.clientWidth); }
+function mount(host,roll,opts){ opts=opts||{};
+  const el=document.createElement('div'); el.className='rl k-'+(roll.k||'teal'); el.tabIndex=0; el.setAttribute('role','group'); el.setAttribute('aria-roledescription','slides'); if(roll.label) el.setAttribute('aria-label',roll.label);
+  el.innerHTML='<div class="rl-bar"><i></i></div><div class="rl-head"><span class="rl-lab"></span><span class="rl-pos"></span></div><div class="rl-board" aria-live="polite"></div><div class="rl-say" aria-live="polite"></div>'
+    +'<div class="rl-tap up" aria-hidden="true">▲ tap above to go back</div><div class="rl-tap dn" aria-hidden="true">▼ tap below to go on</div>';
+  const lab=el.querySelector('.rl-lab'), pos=el.querySelector('.rl-pos'), bar=el.querySelector('.rl-bar i'), board=el.querySelector('.rl-board'), say=el.querySelector('.rl-say');
+  const up=el.querySelector('.rl-tap.up'), dn=el.querySelector('.rl-tap.dn');
+  if(roll.label) lab.textContent=roll.label; else lab.innerHTML='&nbsp;';
+  const N=roll.items.length, rowEls=[], grpEls=[];
+  roll.items.forEach((it,j)=>{ if(it.grp){ const g=document.createElement('div'); g.className='rl-grp hid'; g.textContent=it.grp; board.appendChild(g); grpEls.push([j,g]); }
+    rowEls[j]=it.rows.map(t=>{ const r=document.createElement('div'); r.className='rl-row hid'; r.dataset.t=t; board.appendChild(r); return r; }); });
+  if(roll.stage){ board.classList.add('rl-stage'); board.appendChild(roll.stage); }
+  let i=-1;
+  function show(n,dir){ if(!N) return; n=Math.max(0,Math.min(N-1,n)); const moved=n!==i, was=i<0?-1:roll.items[i].si; i=n; const it=roll.items[i];
+    el.className='rl'+(roll.stage?' rl-fig':'')+' k-'+(it.k||roll.k||'teal')+(i===0?' at-start':'')+(i===N-1?' at-end':'');
+    rowEls.forEach((rs,j)=>rs.forEach(r=>{ const on=j<=i; r.classList.toggle('hid',!on); if(on&&!r.dataset.done){ typeset(r,r.dataset.t); r.dataset.done='1'; }
+      r.classList.toggle('now',j===i); r.classList.toggle('past',j<i); r.classList.remove('fresh'); }));
+    grpEls.forEach(([j,g])=>g.classList.toggle('hid',j>i));
+    if(roll.stage) light(roll.stage,it.hl);
+    rowEls.forEach((rs,j)=>{ if(j<=i) rs.forEach(squeeze); });
+    if(moved&&dir>0) rowEls[i].forEach(r=>{ void r.offsetWidth; r.classList.add('fresh'); });
+    say.innerHTML=''; if(it.no){ const no=document.createElement('span'); no.className='rl-no'; no.textContent=it.no+' of '+N; say.appendChild(no); }
+    if(it.prior){ const o=document.createElement('span'); o.className='old'; words(o,it.prior); say.appendChild(o); }
+    const c=document.createElement('span'); c.className='cur'+(moved?' fresh':''); words(c,it.text); say.appendChild(c);
+    if(window.Rung&&Rung.renderAll) try{ Rung.renderAll(say); }catch(e){}
+    say.classList.toggle('empty',!it.text&&!it.prior);
+    pos.textContent=(i+1)+' / '+N; bar.style.width=((i+1)/N*100)+'%';
+    const last=rowEls[i][rowEls[i].length-1]||(grpEls.find(x=>x[0]===i)||[])[1];
+    if(last){ const want=last.offsetTop+last.offsetHeight-board.clientHeight+10; if(want>board.scrollTop) board.scrollTop=want; const top=(rowEls[i][0]||last).offsetTop-8; if(top<board.scrollTop) board.scrollTop=top; }
+    if(opts.onshow&&it.si!==was) try{ opts.onshow(it.si); }catch(e){} }
+  function next(){ flash(dn); if(i<N-1) show(i+1,1); else if(opts.onEnd) opts.onEnd(); }
+  function back(){ flash(up); if(i>0) show(i-1,-1); else if(opts.onStart) opts.onStart(); }
+  function flash(x){ x.classList.remove('flash'); void x.offsetWidth; x.classList.add('flash'); }
+  let sx=0, sy=0, st=0;
+  el.addEventListener('pointerdown',e=>{ sx=e.clientX; sy=e.clientY; st=Date.now(); active=api; });
+  el.addEventListener('pointerup',e=>{ if(e.button>0) return; if(Math.hypot(e.clientX-sx,e.clientY-sy)>12||Date.now()-st>700) return;
+    if(e.target.closest('a,button,input,select,textarea,summary')) return; const sel=window.getSelection&&getSelection(); if(sel&&String(sel).length) return;
+    const r=el.getBoundingClientRect(); if(e.clientY<r.top+r.height/2) back(); else next(); });
+  el.addEventListener('focus',()=>{ active=api; });
+  const api={el,show,next,back,get i(){ return i; },get n(){ return N; },get slide(){ return i<0?0:roll.items[i].si; },toSlide(s){ const j=roll.items.findIndex(x=>x.si===s); if(j>=0) show(j,0); }};
+  el.__roll=api; frames.add(el); host.appendChild(el); show(0,0); if(!active) active=api; return api; }
+document.addEventListener('keydown',e=>{ if(e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey) return; if(!active||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.target.isContentEditable||!active.el.isConnected||!active.el.getClientRects().length) return;
+  if(document.querySelector('#desk.open,#stick,#agreebox:not([hidden])')||document.body.classList.contains('stickopen')||document.body.classList.contains('cardsopen')||document.body.classList.contains('toolpage')) return;
+  if(e.key==='ArrowDown'||e.key==='PageDown'||(e.key===' '&&e.target===active.el)){ e.preventDefault(); active.next(); }
+  else if(e.key==='ArrowUp'||e.key==='PageUp'){ e.preventDefault(); active.back(); } });
+
+/* on a footing's screen the frame runs from where it stands down to the footing arrows */
+function floorY(){ let b=window.innerHeight; const lb=document.getElementById('lbar'); if(lb&&lb.getClientRects().length) b=Math.min(b,lb.getBoundingClientRect().top);
+  return b-92; /* the footing arrows and the screen arrows stand in the 80px above the bar; they tuck away and come back, so the frame never counts on their room */ }
+function fitOne(el){ if(!el.isConnected){ frames.delete(el); return; } if(!el.getClientRects().length) return;
+  if(EMBED){ const h=window.innerHeight+'px'; if(el.style.height!==h) el.style.height=h; if(el.__fit) el.__fit(); return; }
+  if(el.closest('#desk,#stick,.dk-pane')||!document.body.classList.contains('sw')){ el.style.height=''; if(el.__fit) el.__fit(); return; }
+  const top=el.getBoundingClientRect().top+window.scrollY, h=Math.round(Math.max(300,Math.min(820,floorY()-top)));
+  if(el.style.height!==h+'px') el.style.height=h+'px'; if(el.__fit) el.__fit();
+  const r=el.__roll; if(r&&r.i>=0) r.show(r.i,0); }
+let fitT=0; function fitAll(){ cancelAnimationFrame(fitT); fitT=requestAnimationFrame(()=>frames.forEach(fitOne)); }
+addEventListener('resize',fitAll); addEventListener('orientationchange',fitAll);
+
+/* on the site: worked lines and hand-made decks */
+const swipe=d=>{ const S=window.LadderSwipe; if(S&&S.on&&S.on()){ if(d>0) S.adv(null); else S.ret(null); } };
+const ENDS={onEnd:()=>swipe(1),onStart:()=>swipe(-1)};
+function lines(pre){ const roll=fromPre(pre); if(!roll.items.length) return null; const host=document.createElement('div'); host.className='rl-host lines'; if(pre.dataset.label) host.dataset.label=pre.dataset.label;
+  ['data-pid','data-collapsed','id'].forEach(a=>{ if(pre.hasAttribute(a)) host.setAttribute(a,pre.getAttribute(a)); });
+  if(host.hasAttribute('data-collapsed')) host.dataset.addr='lines';
+  pre.replaceWith(host); mount(host,roll,ENDS); return host; }
+function deck(container,steps,opts){ opts=opts||{}; const eb=container.querySelector(':scope>.eyebrow');
+  let title=(opts.title||(eb&&eb.textContent)||'').replace(/\s*·\s*←\s*→\s*keys work\s*$/i,'').replace(/^\s*the (slides|steps)\s*·\s*/i,'').replace(/\s*·\s*advance or return.*$/i,'').trim();
+  if(/^the (slides|steps)$/i.test(title)) title='';
+  if(eb) eb.remove(); container.classList.add('rl-deck');
+  const r=mount(container,fromSteps(steps,{title}),Object.assign({onshow:opts.onshow?si=>opts.onshow(si,steps[si]):null},ENDS));
+  return {container,show:k=>r.toSlide(Math.max(0,Math.min(steps.length-1,k))),get i(){ return r.slide; },roll:r}; }
+
+/* the same frame round a picture (section.pic) */
+function framePic(sec,opts){ opts=opts||{}; if(sec.dataset.rl) return sec.__pic; sec.dataset.rl='1';
+  const eb=sec.querySelector(':scope>.eyebrow'), ebt=eb?eb.textContent.trim():'The picture';
+  const wrap=sec.querySelector(':scope>.panels'), panels=[...(wrap||sec).querySelectorAll(':scope>.panel')];
+  const parts=ebt.split(/\s+·\s+/); const title=parts.slice(1).join(' · ')||parts[0]||'The picture';
+  const named=parts.slice(1).map(p=>{ const m=p.match(/^(left|right|top|bottom|above|below|first|second|then)\s*:\s*(.+)$/i); return m?m[2].split(',')[0].trim():null; }).filter(Boolean);
+  const el=document.createElement('div'); el.className='rl rl-pic k-'+(opts.k||'ember');
+  el.innerHTML='<div class="rl-head"><span class="rl-lab"></span><button type="button" class="rl-info" aria-expanded="false">how to read it</button></div><div class="rl-tabs" role="tablist"></div><div class="rl-body"></div><div class="rl-cap" hidden></div>';
+  el.querySelector('.rl-lab').textContent=title;
+  const tabs=el.querySelector('.rl-tabs'), body=el.querySelector('.rl-body'), cap=el.querySelector('.rl-cap'), info=el.querySelector('.rl-info');
+  /* captions: the picture's own, and each part's */
+  const own=[...sec.querySelectorAll(':scope>.cap')], per=panels.map(p=>[...p.querySelectorAll(':scope>.cap')]);
+  own.concat(per.flat()).forEach(c=>c.remove());
+  [...sec.childNodes].forEach(n=>{ if(n!==eb) body.appendChild(n); });
+  let on=0; const multi=panels.length>1;
+  if(multi) panels.forEach((p,j)=>{ const b=document.createElement('button'); b.type='button'; b.setAttribute('role','tab'); const lb=p.querySelector(':scope>.lbl'); let t=named.length===panels.length?named[j]:(lb&&lb.textContent.trim())||''; if(!t||t.length>34) t=named.length===panels.length?named[j].slice(0,32)+'…':String(j+1);
+      b.textContent=t; b.onclick=()=>pick(j); tabs.appendChild(b); });
+  else tabs.remove();
+  const tabbed=()=>multi&&el.clientWidth<700;
+  function pick(j){ on=j; lay(); }
+  const lab=el.querySelector('.rl-lab'), full=parts.slice(1);
+  function lay(){ const tb=tabbed(); el.classList.toggle('rl-tabbed',tb); lab.textContent=tb&&named.length===panels.length&&full.length===panels.length?full[on]:title; /* on a tab the heading is that part's own words */ if(multi){ tabs.hidden=!tb; panels.forEach((p,k)=>p.classList.toggle('rl-off',tb&&k!==on)); [...tabs.children].forEach((b,k)=>{ b.classList.toggle('on',k===on); b.setAttribute('aria-selected',String(k===on)); }); }
+    cap.innerHTML=''; const cs=own.concat(multi&&tb?per[on]||[]:per.flat()); cs.forEach(c=>{ const p=document.createElement('p'); p.innerHTML=c.innerHTML; cap.appendChild(p); });
+    if(!cs.length){ info.hidden=true; cap.hidden=true; info.setAttribute('aria-expanded','false'); } else info.hidden=false; fit(); }
+  info.onclick=()=>{ const o=cap.hidden; cap.hidden=!o; info.setAttribute('aria-expanded',String(o)); };
+  el.addEventListener('pointerdown',e=>{ if(!cap.hidden&&!e.target.closest('.rl-cap,.rl-info')){ cap.hidden=true; info.setAttribute('aria-expanded','false'); } });
+  /* shrink the drawings so the body fits the frame; never below 42% of it: past that the body scrolls inside the frame */
+  const drawn=()=>[...body.querySelectorAll('canvas,svg')].filter(c=>!c.closest('.katex,button,.rl-off,[hidden]')&&c.getClientRects().length&&c.getBoundingClientRect().height>90);
+  /* a drawing is only made smaller if it keeps its shape when narrowed: one that holds its own height (drawn at a fixed size by its page) is put back and left alone */
+  function fit(){ const cvs=drawn(); cvs.forEach(c=>{ if(c.dataset.rlmw){ c.style.maxWidth=''; delete c.dataset.rlmw; } }); if(!cvs.length||!el.style.height) return;
+    let tries=0; const step=()=>{ const over=body.scrollHeight-body.clientHeight; if(over<=1||tries++>4) return; const live=drawn().filter(c=>!c.dataset.rlno); if(!live.length) return;
+        const tall=live.reduce((a,c)=>a+c.getBoundingClientRect().height,0), floor=body.clientHeight*0.42; if(tall<=floor) return; const k=Math.max(floor/tall,(tall-over-2)/tall); if(k>=0.995) return;
+        const was=live.map(c=>{ const r=c.getBoundingClientRect(); return [r.width,r.height]; });
+        live.forEach((c,j)=>{ c.style.maxWidth=Math.floor(was[j][0]*k)+'px'; c.dataset.rlmw='1'; if(!c.style.marginInline) c.style.marginInline='auto'; });
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{ let undone=false; live.forEach((c,j)=>{ const r=c.getBoundingClientRect(); if(!r.width||!r.height||!was[j][1]) return;
+            if(Math.abs(r.width/r.height-was[j][0]/was[j][1])>0.04*was[j][0]/was[j][1]){ c.style.maxWidth=''; delete c.dataset.rlmw; c.dataset.rlno='1'; undone=true; } });
+          if(undone) tries=Math.max(0,tries-1); step(); })); };
+    requestAnimationFrame(step); }
+  if(eb) eb.remove(); sec.appendChild(el); frames.add(el); let lw=0; el.__fit=()=>{ if(multi&&tabbed()!==el.classList.contains('rl-tabbed')){ lay(); return; } const w=el.clientWidth+'x'+el.style.height; if(w!==lw){ lw=w; fit(); } };
+  lay(); const api={el,pick,fit}; sec.__pic=api; return api; }
+function pics(root){ let n=0; figs(root); (root||document).querySelectorAll('section.pic:not([data-rl])').forEach(s=>{ if(s.closest('#desk,#stick,.fvghost')) return; try{ framePic(s); n++; }catch(e){} }); if(EMBED) embed(); fitAll(); return n; }
+
+/* a plain drawing (a graph figure, a grid, a diagram: nothing to tap or drag) gets the frame too. One that carries a story
+   (data-story, a list of [words, what to light]) becomes slides: each slide lights its part of the drawing and dims the rest.
+   What to light is a list of marks, any of which lights a part: a colour name (ember, teal, gold, plum, ink, muted, grid, moss, sand),
+   a tag (line, polyline, polygon, path, rect, circle, text), ~words (a label holding those words), #n or #a-b (the nth part of the
+   drawing, from 0), r2 / c3 / head (a table's row, column, heading); marks joined by + must all hold. No marks: the whole drawing. */
+const partsOf=st=>{ const out=[]; st.querySelectorAll('svg').forEach(v=>{ if(v.closest('.katex')) return; [...v.children].forEach(c=>{ if(!/^(defs|title|desc|style)$/i.test(c.tagName)) out.push(c); }); });
+  st.querySelectorAll('table').forEach(t=>{ [...t.rows].forEach((tr,r)=>[...tr.cells].forEach((c,ci)=>{ c.dataset.rlr=String(r); c.dataset.rlc=String(ci+1); out.push(c); })); }); return out; };
+function hit(el,idx,m){ return m.split('+').every(t=>{ t=t.trim(); if(!t) return true;
+  if(t[0]==='~'){ return /^(text|td|th)$/i.test(el.tagName)&&el.textContent.indexOf(t.slice(1))>=0; }
+  if(t[0]==='#'){ const q=t.slice(1).split('-').map(Number); return idx>=q[0]&&idx<=(q.length>1?q[1]:q[0]); }
+  if(t==='head') return el.tagName==='TH'; if(/^r\d+$/.test(t)) return el.tagName==='TD'&&el.dataset.rlr===t.slice(1); if(/^c\d+$/.test(t)) return /^T[DH]$/.test(el.tagName)&&el.dataset.rlc===t.slice(1);
+  if(/^(line|polyline|polygon|path|rect|circle|ellipse|text|g|image)$/.test(t)) return el.tagName.toLowerCase()===t;
+  return (el.getAttribute('style')||'').indexOf('var(--'+t+')')>=0; }); }
+function light(stage,hl){ const ps=stage.__parts||(stage.__parts=partsOf(stage)); const bySvg=new Map(); const all=!hl||!hl.length;
+  ps.forEach(el=>{ const root=el.ownerSVGElement||el.closest('table'); const k=bySvg.get(root)||0; bySvg.set(root,k+1); const on=all||hl.some(m=>hit(el,k,m)); el.classList.toggle('rl-dim',!on); el.classList.toggle('rl-lit',on&&!all); }); }
+function figFrame(box){ if(box.dataset.rl) return; box.dataset.rl='1'; let story=null; try{ story=JSON.parse(box.getAttribute('data-story')||'null'); }catch(e){}
+  if(story&&story.length){ const stage=document.createElement('div'); stage.className='rl-figs'; [...box.childNodes].forEach(n=>stage.appendChild(n));
+    box.classList.add('rl-host'); const r=mount(box,{k:'teal',label:box.dataset.label||'The figure',stage,items:story.map((x,si)=>({rows:[],text:x[0]||'',hl:x[1]||[],si}))},ENDS); return; }
+  const el=document.createElement('div'); el.className='rl rl-pic rl-plain k-teal'; el.innerHTML='<div class="rl-head"><span class="rl-lab"></span></div><div class="rl-body"></div>'; el.querySelector('.rl-lab').textContent=box.dataset.label||'The figure';
+  const body=el.querySelector('.rl-body'); [...box.childNodes].forEach(n=>body.appendChild(n)); box.appendChild(el); }
+const FIGSEL='.gfigs,figure.ghcell,section.step div.circ,section.class div.circ';
+function figs(root){ (root||document).querySelectorAll(FIGSEL).forEach(b=>{ if(b.dataset.rl||b.closest('#desk,#stick,.fvghost,.rl,.pic,.dk-pfpane')) return; try{ figFrame(b); }catch(e){} }); }
+
+/* the picture button on a technique's card (Techs Read, Tech Deck): the pages that have a picture are listed by patch.py */
+const PICS=new Set('inf51 r00c r01b r01c r01d r01e r01f r02b r02bio r02comp r02d r02e r02f r02g r02h r02i r02j r02stat r03a r03c r03comp r03d r03f r04b r04c r04comp r04crypt r04d r04e r04f r04g r04h r04i r04j r04k r04l r04stat r05b r05bio r05c r05cb2 r05chem r05d r05e r05eng r05f r05g r05h r05i r05j r05nav r05stat r06b r06c r06chem r06d r06e r06logi r06phys r06stat r07b r07c r07cb4 r07cb6 r07crypt r07d r07e r07econ r07f r07logi r07phys r07then r08a r08b r08c r08cb5 r08cb6 r08comp r08d r08e r08econ r08eng r08f r08g r08h r08i r08phys r08stat r09a r09b r09bio r09c r09cb4 r09chem r09crypt r09d r09e r09f r09g r09h r09phys r09stat r10a r10b r10bio r10c r10crypt r10d r10e r10econ r10f r10g r10logi r10phys r11a r11b r11c r11chem r11crypt r11d r11e r11econ r11f r12a r12b r12c r12comp r12d r12e r12econ r12eng r12phys r13a r13b r13c r13chem r13comp r13d r13e r13econ r13eng r13f r13g r13h r13i r13j r13k r13l r13m r13nav r13phys r13stat r14a r14b r14bio r14c r14chem r14d r14e r14econ r14f r14g r14h r14i r14logi r14phys r14stat r15a r15b r15c r15chem r15d r15e r15econ r15eng r15f r15g r15h r15i r15phys r15stat r16a r16b r16bio r16c r16cb12 r16d r16e r16econ r16eng r16f r16g r16h r16i r16j r16logi r16nav r16phys r16then r17a r17b r17bio r17c r17chem r17comp r17crypt r17d r17e r17f r17g r17h r17i r17j r17k r17phys r17stat r17then r18a r18b r18c r18cb13 r18cb16 r18chem r18d r18e r18econ r18eng r18f r18g r18h r18i r18j r18logi r18nav r18phys r19a r19b r19c r19chem r19d r19e r19eng r19f r20a r20b r20c r20cb19 r20cb8 r20cb9 r20chem r20d r20e r20f r20g r20h r20i r20j r20nav r20phys r21a r21b r21bio r21c r21cb18 r21cb20 r21d r21e r21eng r21f r21g r21h r21i r21j r21m r21p r21q r21r r22a r22chem r22comp r22crypt r22d r22econ r22logi r22nav r22now r22phys r22stat r23a r23d r23eng r23f r23nav r23phys r24b r24bio r24e r24eng r24i r24j r24k r24l r24now r24phys r24then r25cb7 r25chem r25econ r25eng r25now r26cb24 r26phys r26then r27cb24 r27chem r27crypt r27econ r27nav r27now r27phys r27then r28bio r28econ r28logi r28now r28phys r28then r29cb28 r29cb3 r29nav r29now r29phys r29then r29time r30bio r30comp r30econ r30logi r30nav r30now r30phys r30then r32c r32eng r32nav r32phys r34bio r34cb18 r34now r34phys'.split(' ')); /* 350 pages with a picture, listed by patch.py */
+const escA=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function picBtn(m){ if(!m||!m.file||!PICS.has(m.file)||EMBED) return ''; return '<button type="button" class="dk-pf dk-pic" data-pic="'+escA(m.file)+'" data-pid="'+escA(m.pid||'')+'" data-name="'+escA(m.name||'')+'" aria-expanded="false">picture</button>'; }
+document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.dk-pic'); if(!b) return; const card=b.closest('.dmv'); if(!card) return;
+  let pane=card.querySelector(':scope>.dk-picpane'); if(!pane){ pane=document.createElement('div'); pane.className='dk-picpane'; pane.hidden=true; card.appendChild(pane); }
+  const open=pane.hidden; pane.hidden=!open; b.setAttribute('aria-expanded',String(open)); b.classList.toggle('on',open); if(!open||pane.firstChild) return;
+  const f=document.createElement('iframe'); f.title='the picture'+(b.dataset.name?': '+b.dataset.name:''); f.src=b.dataset.pic+'.html?embed=pic'+(b.dataset.pid?'&pid='+encodeURIComponent(b.dataset.pid):''); pane.appendChild(f); });
+function embed(){ const pid=(location.search.match(/[?&]pid=([^&#]+)/)||[])[1]; let sec=null;
+  if(pid){ try{ const p=document.querySelector('[data-pid="'+decodeURIComponent(pid).replace(/["\\]/g,'')+'"]'), st=p&&p.closest('section.step'); sec=st&&st.querySelector('section.pic'); }catch(e){} }
+  sec=sec||document.querySelector('section.pic'); if(!sec) return; if(!sec.dataset.rl) try{ framePic(sec); }catch(e){}
+  document.body.appendChild(sec); sec.classList.add('embed-on'); fitAll(); }
+
+window.LadderRoll={fromPre,fromSteps,mount,lines,deck,framePic,pics,figs,light,fitAll,rowsOf,pieces,picBtn,hasPic:f=>PICS.has(f)};
+})();
+/* ---- end roll ---- */
 (function(){
 'use strict';
 const KO={throwOnError:false,strict:false,trust:true};
 function tex(el,t,disp){ if(t==null) t=el.getAttribute('data-tex')||el.getAttribute('data-tex-inline')||el.textContent;
   if(window.katex){ try{ katex.render(t,el,Object.assign({},KO,{displayMode:!!disp})); return; }catch(e){} } el.textContent=t; }
+const ROLL=()=>!!window.LadderRoll&&!window.LADDER_DESK; /* embeds: the app rolls decks out; the desk keeps the page view */
 const CS=()=>getComputedStyle(document.documentElement);
 function col(n){ return CS().getPropertyValue(n.startsWith('--')?n:'--'+n).trim(); }
 
 /* worked lines */
 function buildLines(root){
   root.querySelectorAll('pre.lines').forEach(pre=>{
+    if(ROLL()&&pre.dataset.k!=='check'&&pre.closest('section.step,section.class')&&!pre.closest('#desk,#stick,.dk-pfpane,.fvghost,.pic,.panel,.extra,[data-noroll]')&&pre.textContent.split('\n').filter(s=>s.trim()).length>1){ try{ if(LadderRoll.lines(pre)) return; }catch(e){} }
     const label=pre.dataset.label||'';
     /* a wrong proof (moves to watch out for, a move that fails) is always red, never the colour of a valid move */
     const k=(pre.dataset.wrong!==undefined||/not allowed|illegal/i.test(label))?'wrong':(pre.dataset.k||'teal');
@@ -270,6 +497,7 @@ let activeStepper=null;
 function stepper(container,steps,opts){
   if(typeof container==='string') container=document.querySelector(container);
   opts=opts||{};
+  if(ROLL()&&container&&!container.closest('#desk,#stick')&&steps&&steps.length){ try{ const R=LadderRoll.deck(container,steps,opts); (window.__steppers=window.__steppers||[]).push(R); return R; }catch(e){} } /* listed with the steppers so a #slide-N link still lands */
   if(!container.querySelector('.eyebrow')){ const e=document.createElement('div'); e.className='eyebrow'; e.textContent=opts.title||'The steps · advance or return, one at a time'; container.appendChild(e); }
   const sl=document.createElement('div'); sl.className='slide';
   const ctl=document.createElement('div'); ctl.className='ctl';
@@ -871,7 +1099,7 @@ function deskScroll(){ if(deskScroll.done) return; deskScroll.done=1;
 
 function ready(f){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',f); else f(); }
 window.Rung={tex,col,stepper,plane,ready,renderAll,_desk:deskHTML};
-ready(()=>{ renderAll(document);
+ready(()=>{ renderAll(document); if(ROLL()) setTimeout(()=>{ try{ LadderRoll.pics(document); }catch(e){} },0);
   [...document.querySelectorAll('.wrap h2,.wrap h3')].forEach((h,i)=>{ if(!h.id) h.id='sec-'+(i+1); });
   // marks run after the page script has had its turn
   setTimeout(marks,0);
@@ -1451,7 +1679,7 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
     const keyOf=f=>{ const G=window.LADDER_DECKGROUPS; if(G.step[f]) return G.step[f]; const m=String(f).match(/^r(\d\d)([a-z]*)\d*$/); if(!m) return G.other; return (m[2]&&G.annex[m[2]])||G.rung[String(+m[1])]||G.other; };
     const PROOF={technique:1,rewrite:1};
     const card=(m,i)=>'<div class="dmv"><b>'+esc(m.name)+(m.accepted?' <span class="acc">('+esc(m.accepted)+')</span>':'')+'</b> <span class="kd">'+esc(m.kind)+'</span>'+(m.tex?'<div class="mt" data-t="'+esc(m.tex)+'"></div>':'')+'<div class="mw">'+esc(m.words)+'</div>'
-      +'<div class="dk-foot"><a class="mwhere" href="'+esc(m.file)+'.html'+(m.pid?'#'+esc(m.pid):'')+'">built at '+esc(m.tag)+' →</a>'+(PROOF[m.kind]&&m.pid?'<button type="button" class="dk-pf" data-i="'+i+'" aria-expanded="false">proof</button>':'')+'</div>'
+      +'<div class="dk-foot"><a class="mwhere" href="'+esc(m.file)+'.html'+(m.pid?'#'+esc(m.pid):'')+'">built at '+esc(m.tag)+' →</a>'+(PROOF[m.kind]&&m.pid?'<button type="button" class="dk-pf" data-i="'+i+'" aria-expanded="false">proof</button>':'')+(window.LadderRoll&&LadderRoll.picBtn?LadderRoll.picBtn(m):'')+'</div>'
       +(PROOF[m.kind]&&m.pid?'<div class="dk-pfpane" hidden></div>':'')+'</div>';
     const tex=sc=>{ if(window.katex) sc.querySelectorAll('.mt:not(.done)').forEach(el=>{ el.classList.add('done'); try{ katex.render(el.dataset.t,el,{throwOnError:false,strict:false,trust:true}); }catch(e){ el.textContent=el.dataset.t; } }); };
     const draw=()=>{ const M=window.LADDER_MOVES, G=window.LADDER_DECKGROUPS; if(!M||!G){ list.textContent=''; return; } const U=window.LadderUnlock;
@@ -1502,7 +1730,7 @@ window.LadderDrum=(function(){ const SAY=['Laundry Day']; /* Andrew 00:24Z: 'jus
       /* techsread: the tech's text is escaped, so a "<" in its words (Σ_{t<T}) no longer opens a stray tag that nests the next cards */
       const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
       /* techsread: a card built on this page is marked "mine", not "here": placeHere() removes every .here on the page whenever a mark changes, and took the Built here cards with it */
-      const card=m=>'<div class="dmv'+(m.file===page?' mine':'')+'"><b>'+esc(m.name)+(m.accepted?' <span class="acc">('+esc(m.accepted)+')</span>':'')+'</b> <span class="kd">'+esc(m.kind)+(m.file===page?' · built here':' · '+esc(m.tag))+'</span>'+(m.tex?'<div class="mt" data-t="'+esc(m.tex)+'"></div>':'')+'<div class="mw">'+esc(m.words)+'</div>'+(m.pid?'<a class="mwhere" href="'+(m.file===page?'':m.file+'.html')+'#'+m.pid+'">'+(m.file===page?'where it is built, on this page':'where it is built')+' →</a>':'')+'</div>';
+      const card=m=>'<div class="dmv'+(m.file===page?' mine':'')+'"><b>'+esc(m.name)+(m.accepted?' <span class="acc">('+esc(m.accepted)+')</span>':'')+'</b> <span class="kd">'+esc(m.kind)+(m.file===page?' · built here':' · '+esc(m.tag))+'</span>'+(m.tex?'<div class="mt" data-t="'+esc(m.tex)+'"></div>':'')+'<div class="mw">'+esc(m.words)+'</div>'+(m.pid?'<a class="mwhere" href="'+(m.file===page?'':m.file+'.html')+'#'+m.pid+'">'+(m.file===page?'where it is built, on this page':'where it is built')+' →</a>':'')+(window.LadderRoll&&LadderRoll.picBtn?LadderRoll.picBtn(m):'')+'</div>';
       const mine=(ids||[]).map(i=>M.moves[i]), built=mine.filter(m=>m.file===page), used=mine.filter(m=>m.file!==page);
       const fold=(cls,name,list,open)=>list.length?'<details class="dfold '+cls+'"'+(open?' open':'')+'><summary><span>'+name+'</span><b>'+list.length+'</b></summary>'+list.map(card).join('')+'</details>':'';
       if(!built.length&&(used.length||ax.length)) note.textContent='This step builds no named tech of its own. What it uses is folded below; tap a pill to open it.';
@@ -2398,7 +2626,7 @@ function footingView0(){
   function tuck(force){ const k=cur+':'+P; if(!force&&k===tuckKey) return; tuckKey=k; up.classList.remove('tucked'); dn.classList.remove('tucked');
     clearTimeout(tuckAt); tuckAt=setTimeout(()=>{ up.classList.add('tucked'); dn.classList.add('tucked'); },2000); }
   window.LadderFV.untuck=()=>tuck(true);
-  document.addEventListener('click',e=>{ if(!on) return; const t=e.target; if(t.closest&&t.closest('a,button,input,textarea,select,label,summary,.pic,.mg,#desk,#lbar,#stick,.chq,.unlocknote,.slides,[contenteditable="true"]')) return; tuck(true); if(window.LadderSwipe&&LadderSwipe.untuck) LadderSwipe.untuck(); });
+  document.addEventListener('click',e=>{ if(!on) return; const t=e.target; if(t.closest&&t.closest('a,button,input,textarea,select,label,summary,.pic,.mg,#desk,#lbar,#stick,.chq,.unlocknote,.slides,.rl,[contenteditable="true"]')) return; tuck(true); if(window.LadderSwipe&&LadderSwipe.untuck) LadderSwipe.untuck(); });
   const label=()=>{ const atEnd=cur>=LASTU, nextPage=atEnd?pageLink(1):null, prevPage=cur<=0?pageLink(-1):null;
     /* the blue sky button (Andrew 2026-11-14 17:40Z): on the floor 7 conclusion, the floor 8 summary and the last supplied infinity
        step, beside "next" where there is one; gone once every step has been supplied */
@@ -2456,7 +2684,7 @@ function footingView0(){
     const b=e.key==='ArrowUp'?up:dn; if(b.hidden) return; e.preventDefault(); b.click(); });
   /* one finger: past the top edge of a footing, pulling down climbs to the next; past its bottom edge, pushing up goes back */
   let sy=null, sx=0, mode=0;
-  const shut=t=>!!(t.closest&&t.closest('.slides,.pic,canvas,input,textarea,select,button,a,.mg,#desk,#lbar,.chq,.sayback .qid,.swbar,.unlocknote'));
+  const shut=t=>!!(t.closest&&t.closest('.rl,.slides,.pic,canvas,input,textarea,select,button,a,.mg,#desk,#lbar,.chq,.sayback .qid,.swbar,.unlocknote'));
   addEventListener('touchstart',e=>{ if(!on||busy||e.touches.length!==1||shut(e.target)) { sy=null; return; }
     sy=e.touches[0].clientY; sx=e.touches[0].clientX;
     const atTop=wrap.getBoundingClientRect().top>=-2, atFoot=innerHeight+scrollY>=document.documentElement.scrollHeight-4;
@@ -3400,6 +3628,7 @@ function ui(){ if(bar) return; bar=document.createElement('div'); bar.className=
 const deckOf=el=>el&&el.closest&&el.closest('.slides');
 const api=deck=>deck&&(window.__steppers||[]).find(a=>a.container===deck)||null;
 const deckN=deck=>deck?deck.querySelectorAll('.dots i').length:0;
+const rollOf=()=>{ for(const x of (screens[k]||[])){ if(!x.querySelector||(x.classList.contains('sw-stub')&&!x.classList.contains('sw-open'))) continue; const r=x.querySelector(':scope>.rl'); if(r&&r.__roll) return r.__roll; } return null; };
 /* 2026-11-10 (Andrew 15:10, "an animation that lets you feel like there's motion"): the old screen leaves as a ghost, the new one slides in */
 const SWREDUCE=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function swGhost(els){ try{ const g=document.createElement('div'); g.className='swghost'; g.style.cssText='position:fixed;inset:0;z-index:30;pointer-events:none;overflow:hidden';
@@ -3413,6 +3642,7 @@ function show(i,opts){ opts=opts||{}; if(!screens.length) return; const prev=k; 
   document.querySelectorAll('.brk.sw-rows').forEach(b=>b.classList.toggle('sw-has',!!b.querySelector(':scope>.rows>.row.sw-on')));
   if(anim){ screens[k].forEach(x=>{ void x.offsetWidth; x.classList.add(dir>0?'sw-in-f':'sw-in-b'); x.addEventListener('animationend',()=>x.classList.remove('sw-in-f','sw-in-b'),{once:true}); }); if(ghost) swGhostOut(ghost,dir); }
   if(!opts.keep) window.scrollTo(0,0);
+  if(window.LadderRoll) LadderRoll.fitAll();
   const n=screens.length; posEl.textContent=n>1?(k+1)+' / '+n:''; L.disabled=false; R.disabled=false;
   dots.innerHTML=''; if(n>1&&n<=14) screens.forEach((s,j)=>{ const d=document.createElement('i'); d.className=(j===k?'on':'')+(s[0].classList.contains('sw-stub')?' stub':''); d.onclick=()=>show(j,{anim:true}); dots.appendChild(d); }); else if(n>14) dots.appendChild(posEl);
   bar.hidden=!on||n<2; untuck(); if(window.LadderNotices) LadderNotices.tick(); }
@@ -3420,9 +3650,11 @@ function show(i,opts){ opts=opts||{}; if(!screens.length) return; const prev=k; 
 let swTuck=null; function untuck(){ if(!L) return; L.classList.remove('tucked'); R.classList.remove('tucked'); clearTimeout(swTuck); swTuck=setTimeout(()=>{ L.classList.add('tucked'); R.classList.add('tucked'); },2000); }
 function adv(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matches('.slides')&&!cur.classList.contains('sw-stub')?cur:null; const A=a||api(deck);
   if(A&&A.i<deckN(A.container)-1){ A.show(A.i+1); return; }
+  const RL=rollOf(); if(RL&&RL.i<RL.n-1){ RL.show(RL.i+1,1); return; }
   if(k<screens.length-1) show(k+1,{anim:true}); else if(window.LadderFV&&LadderFV.fwd) LadderFV.fwd({h:true}); }
 function ret(a){ const cur=screens[k]&&screens[k][0]; const deck=cur&&cur.matches('.slides')&&!cur.classList.contains('sw-stub')?cur:null; const A=a||api(deck);
   if(A&&A.i>0){ A.show(A.i-1); return; }
+  const RL=rollOf(); if(RL&&RL.i>0){ RL.show(RL.i-1,-1); return; }
   if(k>0) show(k-1,{anim:true}); else if(window.LadderFV&&LadderFV.back){ LadderFV.wantLast=true; LadderFV.back({h:true}); } }
 /* the footing view tells us each time it paints a footing */
 window.LadderFV=window.LadderFV||{};
