@@ -71,7 +71,24 @@
       ['Save a copy', () => { try { LadderRecord.export(); A.copied = Date.now(); saveA(); } catch (e) {} hide(); }],
       ['Not now', () => { A.asked = Date.now(); saveA(); hide(); }]]);
   }
-  window.addEventListener('load', () => { check().then(remind, remind); });
+  /* Andrew 2026-11-20: a home-screen SHORTCUT opens through Chrome, so Chrome's logo can show before the ladder.
+     The full app (a real install) opens on the ladder's own navy screen. On Android Chrome, when this window is a
+     shortcut, offer the full app: the button opens the install page in Chrome, where the install offer is made. */
+  const CHROME_INSTALL = 'intent://ladder-heavenward.github.io/Heavenward-Ladder/install.html#Intent;scheme=https;package=com.android.chrome;end';
+  function shortcutCheck() {
+    const ua = navigator.userAgent;
+    if (!/Android/.test(ua) || !/Chrome\//.test(ua) || /SamsungBrowser|EdgA|OPR|Firefox/.test(ua)) return;
+    if (!window.matchMedia || !matchMedia('(display-mode: standalone)').matches || !navigator.getInstalledRelatedApps) return;
+    if (Date.now() - (A.shortcutAsked || 0) < 30 * 864e5) return;
+    if (/install\.html$/.test(location.pathname)) return; /* the install page says it already */
+    navigator.getInstalledRelatedApps().then(apps => {
+      if (!Array.isArray(apps) || apps.some(a => a.platform === 'webapp') || (bar && !bar.hidden)) return;
+      banner('This Ladder icon is a shortcut. Install the full app? Your record stays as it is.', [
+        ['Install the full app', () => { A.shortcutAsked = Date.now(); saveA(); hide(); location.href = CHROME_INSTALL; }],
+        ['Not now', () => { A.shortcutAsked = Date.now(); saveA(); hide(); }]]);
+    }).catch(() => {});
+  }
+  window.addEventListener('load', () => { check().then(remind, remind).then(() => setTimeout(shortcutCheck, 2500)); });
   /* a phone keeps an installed app alive in the background, so 'load' can be days old: check again whenever the
      app comes back into view or comes back online, at most once every ten minutes */
   let lastCheck = Date.now();
