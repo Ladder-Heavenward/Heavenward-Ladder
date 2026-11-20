@@ -4260,6 +4260,138 @@ K({id:'gline',step:'28·chem',steps:['18c','28·chem'],title:'the turning temper
   const o=four(right,ws.filter(w=>w!==right)); if(!o) return null;
   return card(this,{ix:[dH,dS,what].join(','),links,fig,ask,right,opts:o,why}); }});
 })();
+/* ===== Read Graph, part W: a world drawn as an arrow chart (Andrew 2026-11-20 06:39Z, the arrow chart of forall x: Calgary;
+   07:29Z "start the arrows"). Four kinds for 2b19 A World for a Line and 2b20 Two Things Are Enough:
+   pairsoff (read a two-gap statement's extension off the arrows), lineso (which line with every and some is so in the world),
+   witness (the thing that makes a some so, or that an every fails on), worldfor (the small world where two lines come apart).
+   The things are a, b, c, d and nothing else; an arrow from x to y says R(x, y), a loop says R(x, x).
+   Loaded before the turn-around. pairsoff takes a twin (the pairs given, pick the chart); the other three are in NOTWIN,
+   since their question names a line and a sibling picture could make the same answer true. ===== */
+(function(){
+const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph, {uniq}=G, {fgraph}=G.F;
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const card=(k,o)=>Object.assign({index:'g:'+k.id+'['+o.ix+']'+(o.links&&o.links.length?'.'+o.links.join('+'):''), a3:['g.'+k.id+'['+o.ix+']',(o.links&&o.links.length?o.links.join('+'):k.step),'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+const four=(right,c)=>{ const ws=uniq(right,c).slice(0,3); return ws.length<3?null:sh([right,...ws]); };
+const K=G.K, NM='abcd', nm=i=>NM[i];
+
+/* a world: n things and the pairs R holds of */
+function mkWorld(n,p){ const S=[]; for(let i=0;i<n;i++) for(let j=0;j<n;j++) if(R()<(i===j?p*0.8:p)) S.push([i,j]); return S; }
+const hasIn=S=>(a,b)=>S.some(e=>e[0]===a&&e[1]===b);
+const POS={2:[[90,80],[230,80]],3:[[70,160],[160,60],[250,160]],4:[[80,65],[240,65],[240,175],[80,175]]}, SIZE={2:[320,150],3:[320,225],4:[320,240]};
+const SPOS={2:[[60,62],[160,62]],3:[[50,112],[110,48],[170,112]]}, SSIZE={2:[220,118],3:[220,160]};
+function chart(n,S,small){ const pos=(small?SPOS:POS)[n], [W,H]=(small?SSIZE:SIZE)[n], cy=pos.reduce((s,p)=>s+p[1],0)/n, has=hasIn(S);
+  const N=pos.map(([x,y],i)=>({x,y,s:nm(i),r:small?12:15})), E=[];
+  S.forEach(([a,b])=>{ if(a===b) E.push({a,b,loop:1,ang:n===2?-90:(pos[a][1]>cy?90:-90)}); else E.push({a,b,bend:has(b,a)?10:0}); });
+  return fgraph(N,E,W,H,'a world of '+n+' things, with an arrow from x to y where R(x, y) is so'); }
+const ixOf=(n,S)=>n+';'+S.map(e=>e.join('')).join('.');
+const things=n=>n===2?'a and b':n===3?'a, b and c':'a, b, c and d';
+const RULE='An arrow from x to y says R(x, y) is so; a loop says R(x, x).';
+
+/* the lines, each with its test in a world and one clause of reason, so or not so */
+const I=n=>[...Array(n).keys()];
+const LINES=[
+ {id:'AE',  t:'∀x ∃y R(x, y)', f:(n,h)=>I(n).every(x=>I(n).some(y=>h(x,y))),
+   why:(n,h,v)=>v?'every thing has an arrow out':nm(I(n).find(x=>!I(n).some(y=>h(x,y))))+' has no arrow out'},
+ {id:'EA',  t:'∃x ∀y R(x, y)', f:(n,h)=>I(n).some(x=>I(n).every(y=>h(x,y))),
+   why:(n,h,v)=>v?nm(I(n).find(x=>I(n).every(y=>h(x,y))))+' has an arrow to every thing, itself too':'no thing has an arrow to every thing ('+I(n).map(x=>nm(x)+' has none to '+(y=>y===x?'itself':nm(y))(I(n).find(y=>!h(x,y)))).join('; ')+')'},
+ {id:'EAi', t:'∃y ∀x R(x, y)', f:(n,h)=>I(n).some(y=>I(n).every(x=>h(x,y))),
+   why:(n,h,v)=>v?'every thing, '+nm(I(n).find(y=>I(n).every(x=>h(x,y))))+' itself too, has an arrow to '+nm(I(n).find(y=>I(n).every(x=>h(x,y)))):'no thing gets an arrow from every thing ('+I(n).map(y=>nm(y)+' gets none from '+(x=>x===y?'itself':nm(x))(I(n).find(x=>!h(x,y)))).join('; ')+')'},
+ {id:'AEi', t:'∀y ∃x R(x, y)', f:(n,h)=>I(n).every(y=>I(n).some(x=>h(x,y))),
+   why:(n,h,v)=>v?'every thing has an arrow in':nm(I(n).find(y=>!I(n).some(x=>h(x,y))))+' has no arrow in'},
+ {id:'Al',  t:'∀x R(x, x)', f:(n,h)=>I(n).every(x=>h(x,x)),
+   why:(n,h,v)=>v?'every thing has a loop':nm(I(n).find(x=>!h(x,x)))+' has no loop'},
+ {id:'El',  t:'∃x R(x, x)', f:(n,h)=>I(n).some(x=>h(x,x)),
+   why:(n,h,v)=>v?nm(I(n).find(x=>h(x,x)))+' has a loop':'no thing has a loop'},
+ {id:'An',  t:'∀x ¬R(x, x)', f:(n,h)=>I(n).every(x=>!h(x,x)),
+   why:(n,h,v)=>v?'no thing has a loop':nm(I(n).find(x=>h(x,x)))+' has a loop'},
+ {id:'Eni', t:'∃x ∀y ¬R(y, x)', f:(n,h)=>I(n).some(x=>I(n).every(y=>!h(y,x))),
+   why:(n,h,v)=>v?nm(I(n).find(x=>I(n).every(y=>!h(y,x))))+' has no arrow in':'every thing has an arrow in'},
+ {id:'Eno', t:'∃x ∀y ¬R(x, y)', f:(n,h)=>I(n).some(x=>I(n).every(y=>!h(x,y))),
+   why:(n,h,v)=>v?nm(I(n).find(x=>I(n).every(y=>!h(x,y))))+' has no arrow out':'every thing has an arrow out'},
+ {id:'Sy',  t:'∀x ∀y (R(x, y) ⇒ R(y, x))', f:(n,h)=>I(n).every(x=>I(n).every(y=>!h(x,y)||h(y,x))),
+   why:(n,h,v)=>v?'every arrow has one back':(([x,y])=>nm(x)+' has an arrow to '+nm(y)+' and '+nm(y)+' has none back')((()=>{ for(const x of I(n)) for(const y of I(n)) if(h(x,y)&&!h(y,x)) return [x,y]; })())}];
+const LN=id=>LINES.find(l=>l.id===id);
+const verdict=(l,n,h)=>{ const v=l.f(n,h); return l.t+' is '+(v?'so':'not so')+': '+l.why(n,h,v); };
+
+/* ---------- 2b19: the extension of a two-gap statement, read off the arrows ---------- */
+const pairs=S=>S.slice().sort((p,q)=>p[0]-q[0]||p[1]-q[1]).map(([a,b])=>'('+nm(a)+', '+nm(b)+')').join(', ');
+K({id:'pairsoff',step:'2b',title:'the pairs an arrow chart holds',make(){
+  const n=3, S=mkWorld(n,0.4), has=hasIn(S); if(S.length<3||S.length>5) return null;
+  const off=S.filter(([a,b])=>a!==b); if(off.length<2||off.every(([a,b])=>has(b,a))) return null;   /* turning the pairs round must change the list */
+  const right=pairs(S), turned=pairs(S.map(([a,b])=>[b,a]));
+  const one=(()=>{ const e=pk(off.filter(([a,b])=>!has(b,a))); return pairs(S.map(p=>p===e?[e[1],e[0]]:p)); })();
+  const loops=S.filter(([a,b])=>a===b), noLoop=I(n).filter(i=>!has(i,i));
+  const c=[turned,one];
+  if(loops.length) c.push(pairs(off)); else { const j=pk(noLoop); c.push(pairs(S.concat([[j,j]]))); }
+  const drop=pk(off); c.push(pairs(S.filter(p=>p!==drop)));
+  const o=four(right,c); if(!o) return null;
+  return card(this,{ix:ixOf(n,S),links:['2b.world','2b.extension'],fig:chart(n,S),
+    ask:'The things are '+things(n)+', and nothing else. '+RULE+' Which list of pairs is the extension of R(x, y)?',right,opts:o,
+    why:'Each arrow from x to y puts the pair (x, y) in the extension, in that order'+(loops.length?', and a loop puts in a thing paired with itself':'')+': '+right+'. A pair turned round is a different pair: it reads the arrow backwards.'}); }});
+
+/* ---------- 2b19: the same reading the other way: the pairs given, pick the chart ---------- */
+K({id:'chartfor',step:'2b',title:'the arrow chart for a list of pairs',make(){
+  const n=3, S=mkWorld(n,0.4), has=hasIn(S), LET=['picture A','picture B','picture C','picture D']; if(S.length<3||S.length>5) return null;
+  const off=S.filter(([a,b])=>a!==b), oneway=off.filter(([a,b])=>!has(b,a)); if(off.length<2||!oneway.length) return null;
+  const key=T=>pairs(T), c=[S.map(([a,b])=>[b,a])];   /* every arrow turned round */
+  { const e=pk(oneway); c.push(S.map(p=>p===e?[e[1],e[0]]:p)); }   /* one arrow turned round */
+  const loops=S.filter(([a,b])=>a===b), noLoop=I(n).filter(i=>!has(i,i));
+  if(loops.length&&noLoop.length){ const l=pk(loops), j=pk(noLoop); c.push(S.map(p=>p===l?[j,j]:p)); }   /* a loop on the wrong thing */
+  if(loops.length) c.push(S.filter(p=>p[0]!==p[1])); else { const j=pk(noLoop); c.push(S.concat([[j,j]])); }   /* a loop lost, or one too many */
+  { const d=pk(off); c.push(S.filter(p=>p!==d)); }   /* an arrow missing */
+  const seen=new Set([key(S)]), ws=[]; c.forEach(T=>{ if(!seen.has(key(T))&&ws.length<3){ seen.add(key(T)); ws.push(T); } }); if(ws.length<3) return null;
+  const all=sh([S,...ws]), html={}; all.forEach((T,i)=>{ html[LET[i]]=chart(n,T,true); }); const right=LET[all.indexOf(S)];
+  return card(this,{ix:ixOf(n,S)+';'+all.map(T=>ixOf(n,T)).join('|'),links:['2b.world','2b.extension'],fig:'',html,right,opts:LET.slice(),
+    ask:'A world has the things '+things(n)+', and nothing else. The extension of R(x, y) is: '+pairs(S)+'. '+RULE+' Which picture is that world?',
+    why:'Each pair (x, y) is one arrow from x to y, and a thing paired with itself is a loop. Only '+right+' has exactly these arrows, each pointing the way its pair is written.'}); }});
+
+/* ---------- 2b19: which line is so in this world ---------- */
+/* a wrong line that differs from the right one only in the order or the kind of its signs is dealt first */
+const NEAR={AE:['EAi','EA','AEi'],EA:['AE','EAi','Al'],EAi:['AE','AEi','EA'],AEi:['EAi','AE','EA'],Al:['El','An','EA'],El:['Al','An'],An:['El','Al'],Eni:['Eno','AEi','An'],Eno:['Eni','AE','An'],Sy:['Al','AE','AEi']};
+K({id:'lineso',step:'2b',title:'the line that is so in the world',make(){
+  const n=3, S=mkWorld(n,0.38), h=hasIn(S); if(S.length<2||S.length>6) return null;
+  const so=LINES.filter(l=>l.f(n,h)), no=LINES.filter(l=>!l.f(n,h)); if(!so.length||no.length<3) return null;
+  const r=pk(so), near=(NEAR[r.id]||[]).map(LN).filter(l=>no.includes(l));
+  const ws=near.concat(sh(no.filter(l=>!near.includes(l)))).slice(0,3), o=four(r.t,ws.map(l=>l.t)); if(!o) return null;
+  return card(this,{ix:ixOf(n,S)+';'+r.id,links:['2b.world','2b.every-some'],fig:chart(n,S),
+    ask:'The things are '+things(n)+', and nothing else. '+RULE+' Which line is so in this world?',right:r.t,opts:o,
+    why:verdict(r,n,h)+'. '+ws.map(l=>verdict(l,n,h)).join('. ')+'. An every must hold of every thing on the list, and a some needs one thing that does it.'}); }});
+
+/* ---------- 2b19: the thing that does it ---------- */
+const WIT=[
+ {id:'EA', say:'∃x ∀y R(x, y) is so in this world. Which thing is the x that makes it so?', f:(n,h,x)=>I(n).every(y=>h(x,y)), why:x=>nm(x)+' has an arrow to every thing on the list, itself too'},
+ {id:'EAi',say:'∃y ∀x R(x, y) is so in this world. Which thing is the y that makes it so?', f:(n,h,y)=>I(n).every(x=>h(x,y)), why:y=>'every thing on the list, '+nm(y)+' itself too, has an arrow to '+nm(y)},
+ {id:'AE', say:'∀x ∃y R(x, y) is not so in this world. Which thing does it fail on?', f:(n,h,x)=>!I(n).some(y=>h(x,y)), why:x=>nm(x)+' has no arrow out, so there is no y for it'},
+ {id:'AEi',say:'∀y ∃x R(x, y) is not so in this world. Which thing does it fail on?', f:(n,h,y)=>!I(n).some(x=>h(x,y)), why:y=>nm(y)+' has no arrow in, so there is no x for it'},
+ {id:'Al', say:'∀x R(x, x) is not so in this world. Which thing does it fail on?', f:(n,h,x)=>!h(x,x), why:x=>nm(x)+' has no loop'},
+ {id:'Eni',say:'∃x ∀y ¬R(y, x) is so in this world. Which thing is the x that makes it so?', f:(n,h,x)=>I(n).every(y=>!h(y,x)), why:x=>'no thing on the list has an arrow to '+nm(x)}];
+K({id:'witness',step:'2b',title:'the thing that makes the line so, or that it fails on',make(){
+  const n=4, w=pk(WIT), S=mkWorld(n,w.id==='Al'?0.55:w.id==='EA'||w.id==='EAi'?0.5:0.3), h=hasIn(S); if(S.length<4||S.length>10) return null;
+  if(w.id==='Al'){ I(n).forEach(i=>{ if(!h(i,i)&&R()<0.6) S.push([i,i]); }); }
+  const h2=hasIn(S), yes=I(n).filter(x=>w.f(n,h2,x)); if(yes.length!==1) return null;
+  const right=nm(yes[0]), o=sh(I(n).map(nm));
+  return card(this,{ix:ixOf(n,S)+';'+w.id,links:['2b.world','2b.every-some'],fig:chart(n,S),
+    ask:'The things are '+things(n)+', and nothing else. '+RULE+' '+w.say,right,opts:o,
+    why:(t=>/^[a-d] /.test(t)?t:t[0].toUpperCase()+t.slice(1))(w.why(yes[0]))   /* a thing's name keeps its small letter */+'. No other thing on the list does that.'}); }});
+
+/* ---------- 2b20: one small world where two lines come apart ---------- */
+const APART=[['AE','EAi'],['AEi','EA'],['AE','EA'],['AEi','EAi'],['El','Al'],['AE','Al'],['AEi','Al'],['Sy','Al'],['Eni','Eno'],['Eno','Eni'],['El','EA'],['AE','Sy']];
+K({id:'worldfor',step:'2b',title:'the world where two lines come apart',make(){
+  const [p,q]=pk(APART).map(LN), n=pk([2,2,3]), LET=['picture A','picture B','picture C','picture D'];
+  const want={}, seen=new Set();   /* one picture with p so and q not; the other three from the three other cases, as many as can be made */
+  for(let t=0;t<200;t++){ const S=mkWorld(n,pk([0.3,0.5,0.7])), h=hasIn(S), key=(p.f(n,h)?'1':'0')+(q.f(n,h)?'1':'0'), id=ixOf(n,S);
+    if(seen.has(id)||!S.length) continue; seen.add(id); (want[key]=want[key]||[]).push(S); }
+  if(!want['10']) return null; const hit=want['10'][0];
+  const rest=[]; ['11','00','01'].forEach(k=>{ if(want[k]) rest.push(want[k][0]); });
+  ['11','00','01'].forEach(k=>{ (want[k]||[]).slice(1).forEach(S=>{ if(rest.length<3) rest.push(S); }); });
+  if(rest.length<3) return null;
+  const all=sh([hit,...rest.slice(0,3)]), html={}; all.forEach((S,i)=>{ html[LET[i]]=chart(n,S,true); });
+  const right=LET[all.indexOf(hit)], h=hasIn(hit);
+  const others=all.map((S,i)=>S===hit?'':LET[i].replace('picture ','')+': '+(g=>(p.f(n,g)?'both are so':q.f(n,g)?'only the second is so':'neither is so'))(hasIn(S))).filter(Boolean).join('; ');
+  return card(this,{ix:p.id+'/'+q.id+';'+all.map(S=>ixOf(n,S)).join('|'),links:['2b.world','2b.apart'],fig:'',html,right,opts:LET.slice(),
+    ask:'Each picture is a world of '+(n===2?'two':'three')+' things. '+RULE+' To show that '+p.t+' and '+q.t+' do not say the same, find a world where the first is so and the second is not. Which picture is one?',
+    why:'In '+right+', '+verdict(p,n,h)+'; '+verdict(q,n,h)+'. One world where they come apart is enough. '+others+'.'}); }});
+})();
 /* ===== Read Graph, part X: the rule book as an arrow chart, for the annex 2·crypt · Who May Open What? (footing 2crypt8, The Rule Book as an Arrow Chart;
    2·crypt thread and Andrew 2026-11-20 07:31Z, 07:46Z: arrow diagrams in the annex, in the same style as 2b19's).
    Holders a, b, c on the left, things kept k, m, n on the right; an arrow from a holder to a thing kept says the holder may
@@ -4361,7 +4493,7 @@ function turnMake(k){ return function(){
     fig:'', html, wide, right, opts:LET.slice(), ask:'Turned around: '+c.ask+' The answer is '+c.right+'. In which picture?',
     why:'In '+right+' the answer is '+c.right+'. '+c.why+' In the other pictures the same question gives '+sib.map(s=>s.right).join(', ')+'.'}; }; }
 /* kinds whose question changes with every picture so that no three siblings share it (t4 sweep, 2026-11-14): no twin */
-const NOTWIN=['openpairs','openline','passreach','whichgrid','hill','gline','pie','stemplot','margin','residplot','area3','impltan','keepdrop','slopeat·recip','mvt','column','landing','slopepic','wave4','specsum','composed','ivt','taylor','sphere','isfn','overfit','heat','waveeq','huecircle','colourfade',
+const NOTWIN=['pairsoff','chartfor','lineso','witness','worldfor','openpairs','openline','passreach','whichgrid','hill','gline','pie','stemplot','margin','residplot','area3','impltan','keepdrop','slopeat·recip','mvt','column','landing','slopepic','wave4','specsum','composed','ivt','taylor','sphere','isfn','overfit','heat','waveeq','huecircle','colourfade',
   /* part F (2026-11-15): kinds whose siblings rarely share a question */ 'swing','fewcolours','layers','square','commit','uphill','boxat','matching','treelen','knotcolours','uprightcase',
   /* Andrew 14:54Z: the picture does not change with the answer, so four different-looking pictures cannot be found */ 'benford','ringclock','slopeat·sin'];
 base.forEach(k=>{ if(k.id.indexOf('turn·')===0||NOTWIN.includes(k.id)) return; G.KINDS.push({id:'turn·'+k.id,step:k.step,steps:k.steps,title:k.title+', turned around',turned:true,make:turnMake(k)}); });
