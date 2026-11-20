@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1·crypt · Can a Clue Give the Key Away?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+table.tt th{white-space:nowrap}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r01comp.html">← 1·comp how many machines can two letters have?</a><a href="r01g.html">next: 1g too many rows →</a></p>
+  <div class="tags"><span class="tag crypt">1·crypt · cryptography</span></div>
+  <h1>Can a Clue Give the Key Away?</h1>
+  <p data-pid="0f36d1">Rung 1 built statements out of letters, listed every way the letters can come out, and worked lines by techs. Keeping a secret uses exactly that, and so does breaking one.</p>
+  <p data-pid="5f47a3">A key is one row. A clue is a statement, and it crosses out every row where it comes out false. Clues join as an and, a clue said again in new words tells nothing, and a lock that explains its refusal has given a clue. The one who keeps the secret has the same tools. They can also say a thing that is not so, and there are two ways to do it: one that clashes, and one that fits.</p>
+</header>
+
+<section class="class step" data-step="1crypt1">
+  <h2 class="sthead"><span class="stno">1crypt1</span>A Key Is a Row</h2>
+  <p data-pid="ced416">A lock has three switches. Each one is up or down. Let P be “the first switch is up”, Q be “the second switch is up”, and R be “the third switch is up”. Each of these is settled, because a switch is up or it is down (1comp1).</p>
+  <p data-pid="cd4f66">One setting of the three switches opens the lock. That setting is the key. A setting is a row (1e6), so the key is one row out of eight:</p>
+  <div class="eqline" data-tex="\text{TTT}\quad \text{TTF}\quad \text{TFT}\quad \text{TFF}\quad \text{FTT}\quad \text{FTF}\quad \text{FFT}\quad \text{FFF}"></div>
+  <p data-pid="2aea12">Someone who knows the key is a code maker. Someone who wants the key and was not given it is a listener. The listener hears what is said near the lock and works with it.</p>
+  <p data-pid="8f8438">At the start the listener holds all eight rows, and any of them could be the key. <b>Breaking a code is crossing out rows until one is left.</b></p>
+  <p data-pid="84590e">On this page the key is the row TFT: first switch up, second down, third up. The listener does not know that.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·crypt.1.1</span><span class="ph understand">understand</span>Why is a key a row, and not a letter? <br>A key is on three letters. How many rows does a listener hold before hearing anything?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1crypt2">
+  <h2 class="sthead"><span class="stno">1crypt2</span>A Leak Is a Statement</h2>
+  <p data-pid="3a7796">The code maker says, where the listener can hear: “The first switch or the third is up.” In marks that is P ∨ R.</p>
+  <p data-pid="3450c1">That is not the key. But the listener reasons like this: the speaker knows the key, and what they said is so. Then the key is a row where P ∨ R gives 1. So fill in the column (1e8).</p>
+  <div class="tblwrap"><table class="tt"><tr><th>P</th><th>Q</th><th>R</th><th>P ∨ R</th></tr><tr><td>T</td><td>T</td><td>T</td><td>1</td></tr><tr><td>T</td><td>T</td><td>F</td><td>1</td></tr><tr><td>T</td><td>F</td><td>T</td><td>1</td></tr><tr><td>T</td><td>F</td><td>F</td><td>1</td></tr><tr><td>F</td><td>T</td><td>T</td><td>1</td></tr><tr><td>F</td><td>T</td><td>F</td><td>0</td></tr><tr><td>F</td><td>F</td><td>T</td><td>1</td></tr><tr><td>F</td><td>F</td><td>F</td><td>0</td></tr></table></div>
+  <p data-pid="9bbad7">Two rows give 0, the rows FTF and FFF. The key is not one of those, so the listener crosses them out. Six rows are left.</p>
+  <p data-pid="20618b">A statement about the key that reaches a listener is a leak. <b>A leak crosses out every row where it gives 0.</b></p>
+  <p data-pid="3c81bd">How much a leak tells is how many rows it crosses out. P ∨ R crossed out two. The plain statement R would have crossed out four. A statement that cannot fail, such as P ∨ ¬P for a switch, gives 1 in every row (1e9) and crosses out none: saying it tells nothing. 1c6 called “or” the word for being vague on purpose, and here is what the vagueness is worth, counted in rows.</p>
+  <p data-pid="b94527">Look at what the listener leaned on: that what was said is so. Nothing in the table checked that. 1crypt6 and 1crypt7 come back to it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·crypt.2.1</span><span class="ph understand">understand</span>What does a leak do to the rows a listener holds? <br>Which statements, said as leaks, cross out no row at all?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1crypt3">
+  <h2 class="sthead"><span class="stno">1crypt3</span>Leaks Pile Up as an And</h2>
+  <p data-pid="f45bf5">On another day the listener hears a second thing: “If the first switch is up, the second is down.” That is P ⇒ ¬Q. Later still, a third: “The first and third switches sit the same way.” That is P ⇔ R.</p>
+  <p data-pid="bea89c">Taken one at a time, none of the three is much. The first leaves six rows, the second leaves six, and the third leaves four.</p>
+  <p data-pid="b40cec">But the listener holds all three. By join (1c2) the listener holds their and:</p>
+  <div class="eqline" data-tex="(P \lor R) \land (P \Rightarrow \neg Q) \land (P \Leftrightarrow R)"></div>
+  <p data-pid="91b387">An and gives 1 only in a row where every part gives 1 (1e2). So a row crossed out by any one leak is crossed out for good.</p>
+  <div class="tblwrap"><table class="tt"><tr><th>P</th><th>Q</th><th>R</th><th>P ∨ R</th><th>P ⇒ ¬Q</th><th>P ⇔ R</th><th>all three</th></tr><tr><td>T</td><td>T</td><td>T</td><td>1</td><td>0</td><td>1</td><td>0</td></tr><tr><td>T</td><td>T</td><td>F</td><td>1</td><td>0</td><td>0</td><td>0</td></tr><tr><td>T</td><td>F</td><td>T</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>T</td><td>F</td><td>F</td><td>1</td><td>1</td><td>0</td><td>0</td></tr><tr><td>F</td><td>T</td><td>T</td><td>1</td><td>1</td><td>0</td><td>0</td></tr><tr><td>F</td><td>T</td><td>F</td><td>0</td><td>1</td><td>1</td><td>0</td></tr><tr><td>F</td><td>F</td><td>T</td><td>1</td><td>1</td><td>0</td><td>0</td></tr><tr><td>F</td><td>F</td><td>F</td><td>0</td><td>1</td><td>1</td><td>0</td></tr></table></div>
+  <p data-pid="9337e5">Eight rows, then six, then four, then one. The row left is TFT, and that is the key.</p>
+  <p data-pid="e3603b">Nobody told the listener the key. No leak was the key. <b>Leaks join, and their and can be the key when no one of them is.</b> A code maker who checks each sentence on its own, and finds each one harmless, has checked the wrong thing. What matters is the and of everything that has got out.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·crypt.3.1</span><span class="ph understand">understand</span>Three leaks each leave several rows. Why can the three together leave one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1crypt4">
+  <h2 class="sthead"><span class="stno">1crypt4</span>Two Leaks That Say the Same Thing</h2>
+  <p data-pid="7c7b83">The listener hears one more sentence: “The first two switches are not both up.” That is ¬(P ∧ Q). It sounds new. Is it?</p>
+  <p data-pid="9591d0">Start from the second leak and rewrite it by 1f3's list.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one leak, rewritten">
+P \Rightarrow \neg Q @@ the second leak
+= \neg P \lor \neg Q @@ if-as-or
+\htmlClass{new}{= \neg (P \land Q)} @@ not-through for and, read backward
+  </pre>
+  <p data-pid="8ae250">The first rewrite, read in that direction, is for settled statements (1f4). P is about a switch, and a switch is settled.</p>
+  <p data-pid="da932d">So the new sentence and the second leak have the same column (1e14). They give 0 in the same rows, and those rows are crossed out already. The listener has been told the same thing twice. Say-it-again (1f3) puts it in marks: a statement joined to itself by and is just the statement.</p>
+  <p data-pid="73f4d1"><b>A leak with the same column as what the listener already holds tells nothing new.</b></p>
+  <p data-pid="30b9fd">This cuts both ways. A code maker who has to say something can say an old leak in new words, and it costs nothing. A listener should not count sentences. Before a clue is counted as news, ask whether it crosses out any row that is still standing. If it does not, it is an old clue in a new coat.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·crypt.4.1</span><span class="ph understand">understand</span>When does a second leak tell a listener nothing new?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1crypt5">
+  <h2 class="sthead"><span class="stno">1crypt5</span>A Lock That Says Why You Failed</h2>
+  <p data-pid="d11992">A different lock now. A gate takes a word, and opens only if the word passes a rule. The rule is meant to be secret. Let D be “the word has a digit in it” and C be “the word has a capital letter in it”. The rule is D ∧ C.</p>
+  <p data-pid="3dd7ae">A listener who does not know the rule tries the word “lantern”. The gate stays shut. What does the gate say?</p>
+  <p data-pid="800f8a">A quiet gate says: “No.” The listener learns that this one word fails, and nothing about why.</p>
+  <p data-pid="65de9c">An explaining gate says: “No. Your word has no digit, or it has no capital.” That is ¬D ∨ ¬C. Where did the gate get that sentence? It took what it would mean for its rule to fail, ¬(D ∧ C), and pushed the not inward, as 1f7 does. The listener can push it back out:</p>
+  <pre class="lines" data-k="ember" data-label="this page: a refusal, pushed back out">
+\neg D \lor \neg C @@ what the gate said
+\htmlClass{new}{= \neg (D \land C)} @@ not-through for and, read backward
+  </pre>
+  <p data-pid="3b04b4">The gate refused because ¬(D ∧ C). So what it wants is D ∧ C. The refusal has handed over the rule.</p>
+  <p data-pid="1ea490"><b>A refusal that explains itself is a leak.</b> To say exactly how a rule failed is to say the rule with a not in front, and a not is one rewrite away from being taken off.</p>
+  <p data-pid="8f33c8">Gates explain anyway, because an honest visitor who mistyped needs the help. Every word of that help is also heard by the listener. The code maker has to choose how much to say, and 1c6's tech is the tool for saying less: from “no digit”, add an option and say “no digit, or no capital”. Vaguer than either is the quiet gate's “No.”</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·crypt.5.1</span><span class="ph understand">understand</span>Why does saying how a rule failed tell the rule?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1crypt6">
+  <h2 class="sthead"><span class="stno">1crypt6</span>A Falsehood in Plain Sight</h2>
+  <p data-pid="925672">Back to the three switches. Until now everything the code maker said was so. The code maker also knows that someone is listening, and knows how a listener works: join the statements, cross out the rows.</p>
+  <p data-pid="878233">So the code maker says the three leaks of 1crypt3, and then a fourth sentence: “The third switch is down.” That is ¬R, and it is not so. The key is TFT.</p>
+  <p data-pid="a68556">The listener joins all four. The three leaks left one row, TFT, and in that row ¬R gives 0. No row is left.</p>
+  <p data-pid="bf3c99">Statements that leave no row cannot all be so together (1e18). Worked as a line they come to ⊥, and 1b5 said what that line can tell: that its statements cannot stand together, and not which one is to blame. Then 1b10 applies. <b>When nothing is true, everything is permitted:</b> from this line the listener may write “the key is TTT”, or “the key is FFF”, or anything at all, and each is worth nothing.</p>
+  <p data-pid="32c18d">Three of the four statements are so. Each would be good as a given on its own. Joined in one line with the fourth, they come to ⊥ with it. <b>One statement that is not so makes the whole line totally false, the true statements included.</b></p>
+  <p data-pid="086275">The listener can try to mend it by dropping one statement and seeing what is left.</p>
+  <div class="tblwrap"><table class="tt"><tr><th>statement dropped</th><th>rows left</th></tr><tr><td>¬R</td><td>TFT</td></tr><tr><td>P ⇔ R</td><td>TFF</td></tr><tr><td>P ∨ R</td><td>FTF, FFF</td></tr><tr><td>P ⇒ ¬Q</td><td>none</td></tr></table></div>
+  <p data-pid="2186de">Before the fourth sentence the listener held one row. Now the listener holds four, and nothing in the statements says which. The one sentence gave back most of the cover that three leaks had taken away.</p>
+  <p data-pid="22ddc0">The code maker's friend is not troubled. The two of them agreed beforehand: “The fourth thing I say will not be so.” The friend drops it and reads the other three, and all three are so. To someone who knows where to look, the falsehood is in plain sight, and the true things said around it stay good.</p>
+  <p data-pid="dcb102">For anyone working a line, the lesson is 1b10's. After a clash, stop. Nothing written from ⊥ is news. Go back to the givens and ask where each one came from (1a5).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·crypt.6.1</span><span class="ph understand">understand</span>A listener's statements clash. What are they worth together? <br>Why can the line not say which statement to drop?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1crypt7">
+  <h2 class="sthead"><span class="stno">1crypt7</span>A Line That Follows but Isn't True</h2>
+  <p data-pid="b455f4">The falsehood of 1crypt6 clashed with the rest, and the clash warned the listener. There is a quieter way.</p>
+  <p data-pid="02cf5c">Go back to 1crypt3 and tell the story differently. Suppose the key was never TFT. Suppose it is FTT, and the code maker chose the three sentences with care. “The first switch or the third is up” is so. “If the first switch is up, the second is down” is so. “The first and third switches sit the same way” is not so.</p>
+  <p data-pid="aaeb3a">Now read the listener's work in 1crypt3 again. Every column is filled in correctly. The and is taken correctly. One row is left, TFT. Nothing clashes, so nothing warns. The listener walks to the lock, sets TFT, and the lock stays shut.</p>
+  <p data-pid="0aa2d6">The same thing happens in a line. Say the listener has seen with their own eyes that the third switch is up.</p>
+  <pre class="lines" data-k="ember" data-label="this page: every step earned, and not so">
+R @@ given: seen
+P \Leftrightarrow R @@ given: overheard
+P @@ exactly-when carries along (1d6)
+P \Rightarrow \neg Q @@ given: overheard
+\htmlClass{new}{\neg Q} @@ carry an if through (1d3)
+  </pre>
+  <p data-pid="043799">Every step has its reason. Every statement in the column is earned (1e12). And with the key FTT, the third line is not so and neither is the last.</p>
+  <p data-pid="1b7126">1e13 kept three words apart: so, valid and earned. This is why. The techs promise one thing: in a row where the givens all give 1, what they write gives 1 too. The real row was never such a row, so the techs promised nothing about it. 1a6 said that what falls out of a line cannot fail <i>if the givens hold</i>. All of the code maker's work went into that “if”.</p>
+  <p data-pid="65a89b"><b>Induction faithfully carries forward errors introduced into the process.</b> A chain of techs carries whatever it is handed. Handed a statement that is not so, it carries that as well as it carries a truth, to the end of the chain and into every line built on it.</p>
+  <p data-pid="c78d42">Notice how little the code maker did. Two of the three sentences were so. No tech was broken. The listener did all the reasoning, and did it well. This is strategic honesty with tactical deception: honest nearly everywhere, and not so in the one place that steers the row.</p>
+  <p data-pid="0825a1">Set the two plants side by side. One that clashes leaves the listener with nothing, and knowing it. One that fits leaves the listener with a wrong answer, and sure of it.</p>
+  <p data-pid="a70700">The guard is the same for both, and it is not in the steps. <b>Checking the steps is not checking the givens.</b> For each given, ask where it came from (1a5). “Seen” and “overheard” are different reasons, and a given that was only overheard is worth what its speaker is worth. Where it matters, reach the same statement a second way, from givens that do not come from the same mouth.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·crypt.7.1</span><span class="ph understand">understand</span>Every step of a chain has its reason, and the last line is not so. Where is the fault? <br>What does checking the steps leave unchecked?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1crypt8">
+  <h2 class="sthead"><span class="stno">1crypt8</span>One More Switch Doubles the Guessing</h2>
+  <p data-pid="cf411f">A listener who has heard nothing can still try rows, one after another. Three switches have eight rows, so the eighth try opens the lock at the latest.</p>
+  <p data-pid="8f1e8e">The code maker's answer is another switch. Each new switch doubles the rows (1g1, 1comp2): four switches have sixteen, five have thirty-two, and ten have more than a thousand. 1g1 met the doubling as a burden, a table too long to fill in. For a code maker it is the whole protection. The listener is the one who has to fill in the table.</p>
+  <p data-pid="93032b">Now count a leak the same way. The plain statement “the third switch is up” crosses out half the rows, whatever the number of switches. <b>A switch doubles the rows and one good leak halves them back.</b> Ten switches and ten leaks like that leave one row.</p>
+  <p data-pid="97434b">So the number of switches does not say how safe a lock is. What says it is the number of rows still standing after everything that has got out. 1crypt3's lock had eight rows on paper and one in fact.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·crypt.8.1</span><span class="ph understand">understand</span>Why does the number of letters in a key not say how many rows a listener still has to try?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="1crypt9">
+  <h2 class="sthead"><span class="stno">1crypt9</span>Moves to Watch Out For</h2>
+  <p data-pid="f908d6">Each move below looks like one of this page's moves. Each has a tag that says what is wrong with it, or what it costs.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{“The}\allowbreak \text{ sentence}\allowbreak \text{ was}\allowbreak \text{ not}\allowbreak \text{ the}\allowbreak \text{ key,}\allowbreak \text{ so}\allowbreak \text{ nothing}\allowbreak \text{ was}\allowbreak \text{ given}\allowbreak \text{ away.”}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; Nothing has been said yet about the rows. A leak is measured by the rows it crosses out, so fill in its column and count.
+\text{“Each}\allowbreak \text{ of}\allowbreak \text{ the}\allowbreak \text{ three}\allowbreak \text{ leaks}\allowbreak \text{ leaves}\allowbreak \text{ at}\allowbreak \text{ least}\allowbreak \text{ four}\allowbreak \text{ rows,}\allowbreak \text{ so}\allowbreak \text{ together}\allowbreak \text{ they}\allowbreak \text{ leave}\allowbreak \text{ at}\allowbreak \text{ least}\allowbreak \text{ four.”}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; Leaks join as an and, and an and gives 1 only where every part does. The rows crossed out pile up. In 1crypt3 they left one.
+\text{“This}\allowbreak \text{ clue}\allowbreak \text{ is}\allowbreak \text{ worded}\allowbreak \text{ differently}\allowbreak \text{ from}\allowbreak \text{ the}\allowbreak \text{ last,}\allowbreak \text{ so}\allowbreak \text{ it}\allowbreak \text{ is}\allowbreak \text{ news.”}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; News is a row crossed out that was still standing. P ⇒ ¬Q and ¬(P ∧ Q) are worded differently and have the same column.
+\text{“The}\allowbreak \text{ gate}\allowbreak \text{ only}\allowbreak \text{ said}\allowbreak \text{ why}\allowbreak \text{ it}\allowbreak \text{ refused.}\allowbreak \text{ It}\allowbreak \text{ never}\allowbreak \text{ said}\allowbreak \text{ the}\allowbreak \text{ rule.”}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; Why it refused is the rule with a not in front. Not-through, read backward, takes the not off.
+\text{“My}\allowbreak \text{ statements}\allowbreak \text{ clash.}\allowbreak \text{ From}\allowbreak \text{ the}\allowbreak \text{ totally}\allowbreak \text{ false}\allowbreak \text{ I}\allowbreak \text{ may}\allowbreak \text{ write}\allowbreak \text{ anything,}\allowbreak \text{ so}\allowbreak \text{ I}\allowbreak \text{ write:}\allowbreak \text{ the}\allowbreak \text{ key}\allowbreak \text{ is}\allowbreak \text{ TTT.”}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; 1b10 does permit the writing. The cost is that it is worth nothing: “the key is FFF” was permitted just as well.
+\text{“The}\allowbreak \text{ four}\allowbreak \text{ statements}\allowbreak \text{ clash,}\allowbreak \text{ so}\allowbreak \text{ the}\allowbreak \text{ one}\allowbreak \text{ I}\allowbreak \text{ heard}\allowbreak \text{ last}\allowbreak \text{ is}\allowbreak \text{ the}\allowbreak \text{ one}\allowbreak \text{ that}\allowbreak \text{ is}\allowbreak \text{ not}\allowbreak \text{ so.”}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; A line that comes to ⊥ does not say which statement is to blame (1b5). Dropping each in turn left four rows, not one.
+\text{“Every}\allowbreak \text{ step}\allowbreak \text{ has}\allowbreak \text{ its}\allowbreak \text{ reason,}\allowbreak \text{ so}\allowbreak \text{ the}\allowbreak \text{ last}\allowbreak \text{ line}\allowbreak \text{ is}\allowbreak \text{ so.”}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; Every step having its reason makes the last line earned (1e12). Whether it is so rests on the givens, and nobody has checked them.
+\text{“Nothing}\allowbreak \text{ clashes,}\allowbreak \text{ so}\allowbreak \text{ nothing}\allowbreak \text{ was}\allowbreak \text{ planted.”}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; A clash shows that statements cannot all be so together. No clash shows only that they can be. A plant that fits clashes with nothing.
+\text{“I}\allowbreak \text{ caught}\allowbreak \text{ one}\allowbreak \text{ statement}\allowbreak \text{ that}\allowbreak \text{ is}\allowbreak \text{ not}\allowbreak \text{ so.}\allowbreak \text{ Everything}\allowbreak \text{ else}\allowbreak \text{ that}\allowbreak \text{ speaker}\allowbreak \text{ said}\allowbreak \text{ can}\allowbreak \text{ go}\allowbreak \text{ in}\allowbreak \text{ the}\allowbreak \text{ bin.”}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; It is safe. The cost is every true thing said around it, which a friend with the agreement is reading right now.
+\text{“Ten}\allowbreak \text{ switches,}\allowbreak \text{ so}\allowbreak \text{ the}\allowbreak \text{ listener}\allowbreak \text{ has}\allowbreak \text{ more}\allowbreak \text{ than}\allowbreak \text{ a}\allowbreak \text{ thousand}\allowbreak \text{ rows}\allowbreak \text{ to}\allowbreak \text{ try.”}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; Count the leaks first. The rows to try are the rows still standing, and that number comes after the leaks, not before.
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">1·crypt.9.1</span><span class="ph understand">understand</span>Why is “Nothing clashes, so nothing was planted” a move to watch out for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">1·crypt.10.1</span><span class="tagq">do</span>A key is a row on P, Q, R. Leak: ¬P ∨ Q. <br>Which rows are crossed out?</div>
+  <div class="chq"><span class="chid">1·crypt.10.2</span><span class="tagq">do</span>A key is a row on P, Q, R. Leaks: Q ⇒ P; ¬(P ∧ R); Q ∨ R. <br>Which rows are left?</div>
+  <div class="chq"><span class="chid">1·crypt.10.3</span><span class="tagq">make</span>A key is a row on P, Q, R. Leaks: Q ⇒ P; ¬(P ∧ R); Q ∨ R. <br>Write one more leak that leaves exactly one row, and is not a single letter or its denial.</div>
+  <div class="chq"><span class="chid">1·crypt.10.4</span><span class="tagq">do</span>Leaks: Q ⇒ P, then ¬P ⇒ ¬Q. P and Q are settled. <br>Show that the second crosses out no further row.</div>
+  <div class="chq"><span class="chid">1·crypt.10.5</span><span class="tagq">do</span>A refusal reads ¬L ∧ ¬Y. <br>What rule was tested? <br>Name the rewrite.</div>
+  <div class="chq"><span class="chid">1·crypt.10.6</span><span class="tagq">do</span>A listener holds P ∨ Q, ¬P, ¬Q and R. <br>Show that no row is left. <br>One of the first three was planted. For each choice of plant, which row is left?</div>
+  <div class="chq"><span class="chid">1·crypt.10.7</span><span class="tagq">converse</span>One person writes four statements about a row on P, Q, R. Exactly one is not so, and nothing clashes. The other finds the row the four point to. Then the first shows the real row. <br>Could the second have told from the statements alone?</div>
+  <div class="chq"><span class="chid">1·crypt.10.8</span><span class="tagq">open</span>A listener cannot check any given by looking. <br>Is there anything left to do against a plant that fits?</div>
+  <div class="chq"><span class="chid">1·crypt.10.9</span><span class="tagq">do</span>A key is a row on five letters. <br>How many rows? <br>A leak gives the last letter. How many rows now? <br>How many leaks like it leave one row?</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r01comp.html">← 1·comp · how many machines can two letters have?</a><a href="r01g.html">1g · too many rows →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="196e5d">All the rows a key could be are the <b>key space</b>. Trying every row in turn is an <b>exhaustive search</b>, also called <b>brute force</b>. Statements that cannot all be so together are <b>inconsistent</b>. A lock that answers a try with more than yes or no is said to leak through its <b>error messages</b>. A statement that is not so, said on purpose to mislead, is <b>disinformation</b>. An argument that is valid and whose given lines are all so is called a <b>sound argument</b>; 1e13 used “sound” for techs, and both uses are accepted.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
