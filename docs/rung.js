@@ -3628,12 +3628,41 @@ function chunkList(ul){ if(ul.dataset.swc) return ul.dataset.swc==='1'?LISTS.get
   const g=groups(lis,li=>words(li.textContent)+8,CMAX); if(!g) return null;
   /* a part is the items themselves, marked by their first: data-sw goes on each item of a part */
   ul.dataset.swc='1'; ul.classList.add('sw-split'); LISTS.set(ul,g); return g; }
+/* fit (Andrew 2026-11-20 08:26Z: no slide needs a scroll). Each screen is measured once it is built; one taller than the room between the
+   title and the screen arrows is cut: a paragraph (or a part of one) into fewer sentences a screen, a table into fewer rows (its head row
+   stays on every part), a list into fewer items. What cannot be cut (a picture, a TeX box) is left as it is. */
+const FITROOM=()=>Math.max(260,window.innerHeight-340);
+const tall=el=>{ const r=el.getBoundingClientRect(); const cs=getComputedStyle(el); return r.height+(parseFloat(cs.marginTop)||0)+(parseFloat(cs.marginBottom)||0); };
+function cutBy(units,hs,room){ const out=[[]]; let acc=0; units.forEach((u,i)=>{ if(out[out.length-1].length&&acc+hs[i]>room){ out.push([]); acc=0; } out[out.length-1].push(u); acc+=hs[i]; }); return out.length>1?out:null; }
+function splitText(el,n){ /* el's sentences into n parts, each wrapped in span.swc; el is a paragraph or a part of one */
+  const ss=sentences(el); if(ss.length<2) return null; n=Math.min(n,ss.length); const w=ss.map(s=>words(s.map(x=>x.textContent).join(''))||1), all=w.reduce((a,b)=>a+b,0), per=all/n, g=[[]]; let acc=0;
+  ss.forEach((s,i)=>{ if(g[g.length-1].length&&g.length<n&&acc+w[i]/2>per*g.length) g.push([]); g[g.length-1].push(s); acc+=w[i]; }); if(g.length<2) return null;
+  const spans=g.map(gs=>{ const sp=document.createElement('span'); sp.className='swc'; const nodes=gs.flat(); nodes[0].parentNode.insertBefore(sp,nodes[0]); nodes.forEach(x=>sp.appendChild(x)); return sp; });
+  el.classList.add('sw-split'); return spans; }
+function fitScreens(list){ const room=FITROOM(), had=document.body.classList.contains('sw'); document.body.classList.remove('sw'); const out=[];
+  try{ list.forEach(sc=>{ let parts=[sc];
+    for(let pass=0;pass<3;pass++){ const next=[]; let cut=false;
+      parts.forEach(s=>{ const hs=s.map(tall), h=hs.reduce((a,b)=>a+b,0); if(h<=room){ next.push(s); return; }
+        let bi=0; hs.forEach((x,i)=>{ if(x>hs[bi]) bi=i; }); const e=s[bi], rest=h-hs[bi], left=s.slice(0,bi), right=s.slice(bi+1); let pieces=null;
+        if(e.matches('p,span.swc')&&!e.querySelector('.katex-display,pre,.eqline,table,img,svg')){ const sp=splitText(e,Math.ceil(hs[bi]/Math.max(120,room-rest))); if(sp) pieces=sp.map(x=>[x]); }
+        else if(e.matches('table')){ const trs=[...e.querySelectorAll('tr')], head=trs.filter(r=>r.querySelector('th')&&!r.querySelector('td')).slice(0,1), body=trs.filter(r=>!head.includes(r));
+          const hh=head.reduce((a,r)=>a+tall(r),0), g=cutBy(body,body.map(tall),Math.max(120,room-rest-hh)); if(g){ e.classList.add('sw-split'); pieces=g; } }
+        else if(e.matches('ul,ol')){ const lis=[...e.children].filter(x=>x.matches('li')), g=cutBy(lis,lis.map(tall),Math.max(120,room-rest)); if(g){ e.classList.add('sw-split'); pieces=g; } }
+        else if(e.matches('.tablewrap')&&e.querySelector('table')){ const t=e.querySelector('table'), trs=[...t.querySelectorAll('tr')], head=trs.filter(r=>r.querySelector('th')&&!r.querySelector('td')).slice(0,1), body=trs.filter(r=>!head.includes(r));
+          const hh=head.reduce((a,r)=>a+tall(r),0), g=cutBy(body,body.map(tall),Math.max(120,room-rest-hh)); if(g){ e.classList.add('sw-split'); t.classList.add('sw-split'); pieces=g; } }
+        if(!pieces){ next.push(s); return; } cut=true;
+        pieces.forEach((pc,i)=>next.push((i===0?left:[]).concat(pc,i===pieces.length-1?right:[]))); });
+      parts=next; if(!cut) break; }
+    out.push(...parts); }); }
+  finally{ if(had) document.body.classList.add('sw'); }
+  return out; }
 function buildChunks(els){
   const hdr=els.find(e=>e.matches&&e.matches('header.top')); const items=[], lead=[];
   const add=el=>{ if(el.hidden||el.matches('script,style,template,nav,.pn,.home,.stnext')) return;
     if(el.matches('p[data-pid]')&&folded(el)){ return; }
     if(el.matches('h1,.tags,h2,h3,h4,.eyebrow,.fr,.sthead')){ lead.push(el); return; } /* a heading rides with the screen after it */
     if(el.matches('.cl-body')){ if(getComputedStyle(el).display==='none') return; [...el.children].forEach(add); return; }
+    if(el.matches('aside')&&!el.hasAttribute('data-collapsed')&&el.children.length>1){ el.classList.add('sw-split'); [...el.children].forEach(add); return; } /* Andrew 2026-11-20 08:26Z: an "Anexact, yet rigorous" box is a series of slides */
     if(el.matches('.cl-lock')&&getComputedStyle(el).display==='none') return;
     if(el.matches('.brk.brk-check')){ const rows=[...el.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ el.classList.add('sw-rows'); rows.forEach(r=>{ items.push(lead.splice(0).concat([r])); }); return; } }
     if(ATTACH.test(el.className||'')&&items.length&&!(texbox(el)&&items[items.length-1].some(texbox))&&!lead.length){ items[items.length-1].push(el); return; }
@@ -3641,19 +3670,30 @@ function buildChunks(els){
     if(parts){ parts.forEach((x,i)=>items.push((i?[]:lead.splice(0)).concat(Array.isArray(x)?x:[x]))); return; }
     items.push(lead.splice(0).concat([el])); };
   if(hdr){ hdr.classList.add('sw-hdr'); [...hdr.children].forEach(add); }
-  expand(step); [...step.children].forEach(add);
+  if(step){ expand(step); [...step.children].forEach(add); }
   if(lead.length){ if(items.length) items[items.length-1].push(...lead); else items.push(lead.splice(0)); }
   els.forEach(e=>{ if(e!==step&&e!==hdr&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('nav,.pn')) items.push([e]); });
-  screens=swDrop(items);
+  screens=swDrop(fitScreens(items));
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
-function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return; if(CHUNKPAGE.test(pg())&&els.length&&els[0]&&els.some(e=>e.matches&&e.matches('header.top'))){ buildChunks(els); return; } expand(step);
-  [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
+function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step){ if(els.some(e=>e.matches&&e.matches('header.top'))) buildChunks(els); return; } /* Andrew 2026-11-20: a page's opening (title and summary, no step) is screens too, so it never scrolls */ if(CHUNKPAGE.test(pg())&&els.length&&els[0]&&els.some(e=>e.matches&&e.matches('header.top'))){ buildChunks(els); return; } expand(step);
+  const put=ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
+    /* Andrew 2026-11-20 08:26Z: an "Anexact, yet rigorous" box is a series of slides. Its heading rides with its first part, each part is a screen,
+       and the box is drawn round whichever part is showing (.sw-split hides the box on the other screens) */
+    if(ch.matches('aside')&&!ch.hasAttribute('data-collapsed')&&ch.children.length>1){ let hold=[];
+      [...ch.children].forEach(x=>{ if(x.matches('.eyebrow,h3,h4')){ hold.push(x); return; } const n=screens.length; put(x);
+        if(hold.length){ if(screens.length>n) screens[n].unshift(...hold); else if(screens.length) screens[screens.length-1].push(...hold); else screens.push(hold.slice()); hold=[]; } });
+      if(hold.length){ if(screens.length) screens[screens.length-1].push(...hold); else screens.push(hold); }
+      ch.classList.add('sw-split'); return; }
     if(ch.matches('.brk.brk-check')){ const rows=[...ch.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ ch.classList.add('sw-rows'); rows.forEach(r=>screens.push([r])); return; } } /* 2026-11-10 (Andrew 15:51): one move to a screen */ /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
-    if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } screens.push([ch]); }); /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
+    if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
+    /* Andrew 2026-11-20 08:26Z: a long paragraph is shown a few sentences at a time, as on the summaries; its wording and address never change */
+    if(ch.matches('p')){ const parts=chunkP(ch); if(parts){ parts.forEach(x=>screens.push([x])); return; } }
+    screens.push([ch]); };
+  [...step.children].forEach(put);
   els.forEach(e=>{ if(e!==step&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('header.top,nav,.pn')) screens.push([e]); });
   /* todo16: a page's title, opened with its first footing, rides with the first screen only */
   const hdr=els.find(e=>e.matches&&e.matches('header.top')); if(hdr&&screens.length){ hdr.classList.add('sw-hdr'); [...hdr.children].filter(x=>!x.matches('p.home,.pn,script,style')).forEach(x=>screens[0].push(x)); }
-  screens=swDrop(screens);
+  screens=swDrop(fitScreens(screens));
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
 function ui(){ if(bar) return; bar=document.createElement('div'); bar.className='swbar'; bar.hidden=true;
   L=document.createElement('button'); L.type='button'; L.className='swnav swl'; L.innerHTML='<span aria-hidden="true">◀</span> previous'; L.setAttribute('aria-label','previous screen');
