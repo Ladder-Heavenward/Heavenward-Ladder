@@ -302,6 +302,7 @@ function words(el,t){ if(/<[a-z!\/]/i.test(t)) el.innerHTML=t; else el.innerHTML
 /* a row too wide for the board (a long sentence set as maths cannot break) is set smaller until it fits, down to 60%; past that the row scrolls */
 function squeeze(r){ if(!r.clientWidth) return; if(r.dataset.sqw===String(r.clientWidth)) return; r.style.fontSize=''; const k=r.clientWidth/r.scrollWidth; if(k<0.995){ r.style.fontSize=Math.max(0.6,k*0.97).toFixed(3)+'em'; } r.dataset.sqw=String(r.clientWidth); }
 function mount(host,roll,opts){ opts=opts||{};
+  try{ if(window.LadderNameItems) LadderNameItems(roll,host); }catch(e){} /* the letter-name pass may add to the items' words before anything is drawn */
   const el=document.createElement('div'); el.className='rl k-'+(roll.k||'teal'); el.tabIndex=0; el.setAttribute('role','group'); el.setAttribute('aria-roledescription','slides'); if(roll.label) el.setAttribute('aria-label',roll.label);
   el.innerHTML='<div class="rl-bar"><i></i></div><div class="rl-head"><span class="rl-lab"></span><span class="rl-pos"></span></div><div class="rl-board" aria-live="polite"></div><div class="rl-say" aria-live="polite"></div>'
     +'<div class="rl-tap up" aria-hidden="true">▲ tap above to go back</div><div class="rl-tap dn" aria-hidden="true">▼ tap below to go on</div>';
@@ -355,6 +356,9 @@ function fitOne(el){ if(!el.isConnected){ frames.delete(el); return; } if(!el.ge
   if(EMBED){ const h=window.innerHeight+'px'; if(el.style.height!==h) el.style.height=h; if(el.__fit) el.__fit(); return; }
   if(el.closest('#desk,#stick,.dk-pane')||!document.body.classList.contains('sw')){ el.style.height=''; if(el.__fit) el.__fit(); return; }
   const top=el.getBoundingClientRect().top+window.scrollY; let h=Math.round(Math.max(300,Math.min(820,floorY()-top)));
+  { /* whatever stands under the frame on the same screen (a letter-name line, a caption) keeps its room above the screen arrows */
+    const host=el.closest('.sw-on'); if(host){ let last=null; for(let n=host.nextElementSibling;n;n=n.nextElementSibling){ if(n.classList.contains('sw-on')&&n.getClientRects().length) last=n; }
+      if(last){ const cs=getComputedStyle(last); const under=Math.ceil(last.getBoundingClientRect().bottom+(parseFloat(cs.marginBottom)||0)-host.getBoundingClientRect().bottom); if(under>0&&under<=160) h=Math.max(300,h-under); } } }
   if(el.parentElement&&el.parentElement.matches('figure.ghcell')){ const st=el.querySelector('.rl-figs'); if(st&&st.offsetHeight) h=Math.max(h,Math.min(820,st.offsetHeight+186)); } /* grid figures stand several to a screen: each frame is tall enough for its whole drawing and three lines of words */
   if(el.style.height!==h+'px') el.style.height=h+'px'; if(el.__fit) el.__fit();
   const r=el.__roll; if(r&&r.i>=0) r.show(r.i,0); }
