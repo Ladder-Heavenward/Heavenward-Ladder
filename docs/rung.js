@@ -297,9 +297,9 @@ function fromSteps(steps,opts){ opts=opts||{}; const items=[]; let first=null;
   return {k:first||'teal',label:opts.title||'',items}; }
 
 /* the frame */
-/* set something smaller until it fits: the largest size from 75% up that fits, found by halving (a table re-wraps as it shrinks, so the height does not follow the size in a straight line);
-   if 75% is not enough the thing keeps its full size, readable, and its box scrolls */
-const ZMIN=0.75;
+/* set something smaller until it fits: the largest size from 72% up that fits, found by halving (a table re-wraps as it shrinks, so the height does not follow the size in a straight line);
+   if 72% is not enough the thing keeps its full size, readable, and its box scrolls */
+const ZMIN=0.72;
 function zoomFit(set,fits,has){ set(''); if(!has||fits()) return 1; set(String(ZMIN)); if(!fits()){ set(''); return 0; } let lo=ZMIN, hi=1; for(let t=0;t<5;t++){ const m=(lo+hi)/2; set(m.toFixed(3)); if(fits()) lo=m; else hi=m; } set(lo.toFixed(3)); return lo; }
 let active=null; const frames=new Set();
 function words(el,t){ if(/<[a-z!\/]/i.test(t)) el.innerHTML=t; else el.innerHTML=t.replace(/&(?!(?:[a-z]+|#\d+|#x[0-9a-f]+);)/gi,'&amp;').replace(/</g,'&lt;'); }
@@ -324,7 +324,7 @@ function mount(host,roll,opts){ opts=opts||{};
       r.classList.toggle('now',j===i); r.classList.toggle('past',j<i); r.classList.remove('fresh'); }));
     grpEls.forEach(([j,g])=>g.classList.toggle('hid',j>i));
     if(roll.stage){ light(roll.stage,it.hl);
-      /* a drawing taller than its stage is set smaller until it fits, down to 75%; one that would have to go smaller keeps its size and the stage brings the lit part into view */
+      /* a drawing taller than its stage is set smaller until it fits, down to 72%; one that would have to go smaller keeps its size and the stage brings the lit part into view */
       { const bd0=roll.stage.parentElement; if(bd0) zoomFit(k=>{ roll.stage.style.zoom=k; },()=>bd0.scrollHeight<=bd0.clientHeight+1,bd0.clientHeight); }
       const bd=roll.stage.closest('.rl-board'); if(bd&&bd.scrollHeight>bd.clientHeight+4){ const L=[...roll.stage.querySelectorAll('.rl-lit')]; if(!L.length) bd.scrollTop=0; else { const B=bd.getBoundingClientRect(); let t=1e9,b=-1e9; L.forEach(x=>{ const r=x.getBoundingClientRect(); if(r.width||r.height){ t=Math.min(t,r.top); b=Math.max(b,r.bottom); } });
         if(t<1e9&&(t<B.top+30||b>B.bottom-4)) bd.scrollTop+=Math.round(t-B.top-34); } } }
@@ -349,7 +349,7 @@ function mount(host,roll,opts){ opts=opts||{};
     more.hidden=false;
     for(const x of kids){ if(keep.has(x)) break; if(x.classList.contains('hid')) continue; x.classList.add('rl-gone'); if(board.scrollHeight<=board.clientHeight+1) break; }
     if(!kids.some(x=>x.classList.contains('rl-gone'))) more.hidden=true;
-    if(board.scrollHeight>board.clientHeight+1){ const k=Math.max(0.7,(board.clientHeight-8)/board.scrollHeight); board.style.fontSize=(1.12*k).toFixed(3)+'rem'; rowEls[i].forEach(r=>{ delete r.dataset.sqw; squeeze(r); }); }
+    if(board.scrollHeight>board.clientHeight+1){ const k=Math.max(0.7,(board.clientHeight-16)/board.scrollHeight); board.style.fontSize=(1.12*k).toFixed(3)+'rem'; rowEls[i].forEach(r=>{ delete r.dataset.sqw; squeeze(r); }); }
     board.scrollTop=0; if(board.scrollHeight>board.clientHeight+1){ const last=rowEls[i][rowEls[i].length-1]; if(last){ const top=(rowEls[i][0]||last).offsetTop-8; board.scrollTop=top; } } }
   function next(){ flash(dn); if(i<N-1) show(i+1,1); else if(opts.onEnd) opts.onEnd(); }
   function back(){ flash(up); if(i>0) show(i-1,-1); else if(opts.onStart) opts.onStart(); }
@@ -428,9 +428,12 @@ function framePic(sec,opts){ opts=opts||{}; if(sec.dataset.rl) return sec.__pic;
   /* shrink the drawings so the body fits the frame; never below 42% of it: past that the body scrolls inside the frame */
   const drawn=()=>[...body.querySelectorAll('canvas,svg')].filter(c=>!c.closest('.katex,button,.rl-off,[hidden]')&&c.getClientRects().length&&c.getBoundingClientRect().height>90);
   /* a drawing is only made smaller if it keeps its shape when narrowed: one that holds its own height (drawn at a fixed size by its page) is put back and left alone */
-  /* what the drawings cannot give back, the whole body gives: its parts are set smaller together until the body fits, down to 75%, and not at all if that is not enough (Andrew 2026-11-20 08:26Z: no scroll inside the frame where it can be helped) */
+  /* what the drawings cannot give back, the whole body gives: its parts are set smaller together until the body fits, down to 72%, and not at all if that is not enough (Andrew 2026-11-20 08:26Z: no scroll inside the frame where it can be helped) */
   function unzoom(){ [...body.children].forEach(c=>{ if(c.style.zoom) c.style.zoom=''; }); }
-  function zf(){ unzoom(); if(!el.style.height) return; zoomFit(k=>{ [...body.children].forEach(c=>{ if(k===''||(!c.classList.contains('rl-off')&&c.getClientRects().length)) c.style.zoom=k; }); },()=>body.scrollHeight<=body.clientHeight+1,body.clientHeight); }
+  function zf(){ unzoom(); if(!el.style.height) return; zoomFit(k=>{ [...body.children].forEach(c=>{ if(k===''||(!c.classList.contains('rl-off')&&c.getClientRects().length)) c.style.zoom=k; }); },()=>body.scrollHeight<=body.clientHeight+1,body.clientHeight);
+    /* a machine that redraws itself after the change of size is looked at once more when it has settled */
+    if(!zft){ zft=setTimeout(()=>{ zft=0; if(el.isConnected&&body.clientHeight&&body.scrollHeight>body.clientHeight+1){ zft=-1; zf(); zft=0; } },420); } }
+  let zft=0;
   function fit(){ unzoom(); const cvs=drawn(); cvs.forEach(c=>{ if(c.dataset.rlmw){ c.style.maxWidth=''; delete c.dataset.rlmw; } }); if(!el.style.height) return; if(!cvs.length){ zf(); return; }
     let tries=0; const step=()=>{ const over=body.scrollHeight-body.clientHeight; if(over<=1) return; if(tries++>4){ zf(); return; } const live=drawn().filter(c=>!c.dataset.rlno); if(!live.length){ zf(); return; }
         const tall=live.reduce((a,c)=>a+c.getBoundingClientRect().height,0), floor=body.clientHeight*0.42; if(tall<=floor){ zf(); return; } const k=Math.max(floor/tall,(tall-over-2)/tall); if(k>=0.995){ zf(); return; }
