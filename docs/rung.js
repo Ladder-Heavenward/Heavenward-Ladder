@@ -2253,58 +2253,100 @@ function nonskid(){
 }
 /* names (Andrew 2026-11-20 06:44Z): each Greek or curly letter is named where it first appears on the page, never in a bundle line under the title.
    In prose the name follows the letter: "φ (small phi)". In a TeX box, picture or table, one line right under that box names the letters it brings in.
-   A letter whose name the same paragraph already says is left alone. */
-function nameLetters(){
-  if(document.querySelector('.gname')) return;
+   A letter whose name the same paragraph already says is left alone.
+   Rolled decks and worked lines draw one item at a time, so the roll hands us its items before it draws (LadderNameItems, called first in mount). */
+const NL=(()=>{
   const N={α:'alpha',β:'beta',γ:'gamma',δ:'delta',ε:'epsilon',ζ:'zeta',η:'eta',θ:'theta',ι:'iota',κ:'kappa',λ:'lambda',μ:'mu',ν:'nu',ξ:'xi',π:'pi',ρ:'rho',σ:'sigma',ς:'sigma',τ:'tau',υ:'upsilon',φ:'phi',χ:'chi',ψ:'psi',ω:'omega'};
   const T={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',vartheta:'θ',iota:'ι',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',varrho:'ρ',sigma:'σ',varsigma:'ς',tau:'τ',upsilon:'υ',phi:'φ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Upsilon:'Υ',Phi:'Φ',Psi:'Ψ',Omega:'Ω'};
   const C=[...'𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵'];
   const norm=ch=>ch==='ϕ'?'φ':ch==='ϵ'?'ε':ch==='ϑ'?'θ':ch;
   const isG=ch=>!!N[ch.toLowerCase()], isC=ch=>C.includes(ch);
   const nameOf=ch=>isC(ch)?'curly '+String.fromCharCode(65+C.indexOf(ch)):(ch===ch.toLowerCase()?'small ':'capital ')+N[ch.toLowerCase()];
-  /* the letters a run of plain text shows, with where each sits; the mark after ∞ is a step's label, not a letter */
-  const scan=str=>{ const out=[]; let i=0, prev=''; for(const ch0 of str){ const ch=norm(ch0); if(prev!=='∞'&&(isG(ch)||isC(ch))) out.push({ch,i:i+ch0.length}); prev=ch0; i+=ch0.length; } return out; };
+  /* the letters a run of text shows, with where each ends; the mark after ∞ is a step's label, not a letter; in an html string, tags and entities are skipped */
+  const scan=(str,html)=>{ const out=[]; let i=0, prev='', tag=false, ent=false; for(const ch0 of str){ if(html){ if(ch0==='<') tag=true; else if(ch0==='&') ent=true; }
+      if(!tag&&!ent){ const ch=norm(ch0); if(prev!=='∞'&&(isG(ch)||isC(ch))) out.push({ch,i:i+ch0.length}); }
+      if(html){ if(ch0==='>') tag=false; else if(ch0===';'||ch0===' ') ent=false; } prev=ch0; i+=ch0.length; } return out; };
   const texLetters=src=>{ const out=[]; String(src||'').replace(/\\mathcal\s*\{?\s*([A-Z])|\\([A-Za-z]+)|([^\\])/g,(m,c,w,x)=>{ let ch=c?C[c.charCodeAt(0)-65]:w?T[w]:x?norm(x):''; if(ch&&(isG(ch)||isC(ch))&&!out.includes(ch)) out.push(ch); return m; }); return out; };
-  const SKIP='script,style,template,h1,h2,h3,h4,.tags,.pn,nav,.eyebrow,.sthead,.stnext,.qid,button,.lbar,#lbar,.fvhead,.home,.gname,.brkkey,.phkey,.lockhint';
-  const seen=new Set(), notes=new Map();
-  /* the words of the letter's own paragraph, leaving out typeset maths (whose hidden source spells \sigma) and names already added */
-  const words=box=>{ let s=''; const w=n=>{ if(n.nodeType===3){ s+=n.data; return; } if(n.nodeType!==1||n.matches('.katex,[data-tex],[data-tex-inline],.gname,annotation,script,style')) return; n.childNodes.forEach(w); }; w(box); return s; };
-  const said=(el,ch)=>{ const box=el&&el.closest&&el.closest('p,li,td,th,dd,dt,figcaption,.cap,.row'); if(!box) return false; const w=N[ch.toLowerCase()], s=words(box); return w?new RegExp('\\b'+w+'\\b','i').test(s):new RegExp('\\bcurly '+String.fromCharCode(65+C.indexOf(ch))+'\\b').test(s); };
-  const note=(anchor,chs)=>{ if(!chs.length) return; let n=notes.get(anchor); if(!n){ n=document.createElement(anchor.matches('li')?'span':'p'); n.className='gname'; n.dataset.letters=''; anchor.after(n); notes.set(anchor,n); }
-    n.dataset.letters+=chs.join(''); n.textContent=[...n.dataset.letters].map(ch=>ch+' is '+nameOf(ch)).join('; ')+'.'; };
-  const blockOf=el=>el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline,.katex-display')||el;
-  const tex=el=>{ const fresh=texLetters((el.getAttribute('data-tex')||'')+' '+(el.getAttribute('data-tex-inline')||'')).filter(ch=>!seen.has(ch)); fresh.forEach(ch=>seen.add(ch)); const want=fresh.filter(ch=>!said(el,ch)); if(!want.length) return;
-    const inline=el.hasAttribute('data-tex-inline')&&!el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline');
-    if(inline){ const sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=' ('+want.map(ch=>ch+' is '+nameOf(ch)).join(', ')+')'; el.after(sp); }
-    else { let a=blockOf(el); if(a.matches('svg')&&a.closest('figure,.pic')) a=a.closest('figure,.pic'); note(a,want); } };
-  const text=t=>{ const hits=scan(t.data).filter(h=>{ if(seen.has(h.ch)) return false; seen.add(h.ch); return !said(t.parentElement,h.ch); }); if(!hits.length) return;
-    const host=t.parentElement; if(host.closest('svg,pre,.eqline,.eqline-words,.lines,.texline,table')){ let a=blockOf(host); if(a.matches('svg')&&a.closest('figure,.pic')) a=a.closest('figure,.pic'); note(a,hits.map(h=>h.ch)); return; }
-    /* a letter written onto its brackets, φ(x), keeps them: the name comes after the closing bracket, as "φ(x) (φ is small phi)" */
-    const end=(str,i)=>{ let j=i; while(j<str.length&&/[₀-₉ᵢⱼₖₙ′″'*]/.test(str[j])) j++; if(str[j]!=='(') return [j,false]; let d=0; for(let q=j;q<str.length;q++){ if(str[q]==='(') d++; else if(str[q]===')'&&!--d) return [q+1,true]; } return [i,false]; };
-    /* a letter standing as a word gets its name right after it; a letter inside a formula, e^(−κt), gets it where the clause ends, so the formula stays whole */
-    const str=t.data, ins=[], group=new Map();
-    const alone=h=>{ const st=h.i-[...h.ch].join('').length, pv=st>0?str[st-1]:' ', nx=h.i<str.length?str[h.i]:' '; return /[\s“‘]/.test(pv)&&/[\s,.;:?!”’]/.test(nx); };
-    hits.forEach(h=>{ const st=h.i-h.ch.length, [at,app]=st<=0||/[\s“‘]/.test(str[st-1])?end(str,h.i):[h.i,false]; if(app){ ins.push({at,txt:' ('+h.ch+' is '+nameOf(h.ch)+')'}); return; } if(alone(h)){ ins.push({at:h.i,txt:' ('+nameOf(h.ch)+')'}); return; }
-      const m=/[.;:?!](\s|$)/.exec(str.slice(h.i)), at2=m?h.i+m.index:str.replace(/\s+$/,'').length; (group.get(at2)||group.set(at2,[]).get(at2)).push(h.ch); });
+  const saysName=(s,ch)=>{ const w=N[ch.toLowerCase()]; return w?new RegExp('\\b'+w+'\\b','i').test(s):new RegExp('\\bcurly '+String.fromCharCode(65+C.indexOf(ch))+'\\b').test(s); };
+  /* where each name goes in a run of text: a letter standing as a word gets its name right after it, "δ (small delta)";
+     a letter written onto its brackets keeps them, "φ(x) (φ is small phi)"; a letter inside a formula gets it where the clause ends, so the formula stays whole */
+  const plan=(str,hits)=>{ const ins=[], group=new Map();
+    const end=i=>{ let j=i; while(j<str.length&&/[₀-₉ᵢⱼₖₙ′″'*]/.test(str[j])) j++; if(str[j]!=='(') return [j,false]; let d=0; for(let q=j;q<str.length;q++){ if(str[q]==='(') d++; else if(str[q]===')'&&!--d) return [q+1,true]; } return [i,false]; };
+    hits.forEach(h=>{ const st=h.i-h.ch.length, pv=st>0?str[st-1]:' ', nx=h.i<str.length?str[h.i]:' ';
+      const [at,app]=/[\s“‘>]/.test(pv)?end(h.i):[h.i,false]; if(app){ ins.push({at,txt:' ('+h.ch+' is '+nameOf(h.ch)+')'}); return; }
+      if(/[\s“‘>]/.test(pv)&&/[\s,.;:?!”’<]/.test(nx)){ ins.push({at:h.i,txt:' ('+nameOf(h.ch)+')'}); return; }
+      const m=/[.;:?!](\s|$|<)/.exec(str.slice(h.i)), at2=m?h.i+m.index:str.replace(/\s+$/,'').length; (group.get(at2)||group.set(at2,[]).get(at2)).push(h.ch); });
     group.forEach((chs,at)=>ins.push({at,txt:' ('+chs.map(ch=>ch+' is '+nameOf(ch)).join(', ')+')'}));
-    ins.sort((a,b)=>b.at-a.at).forEach(x=>{ const rest=t.splitText(x.at), sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=x.txt; rest.before(sp); }); };
-  const walk=node=>{ if(node.nodeType===3){ if(node.data.trim()) text(node); return; } if(node.nodeType!==1||node.matches(SKIP)) return;
-    if(node.hasAttribute('data-tex')||node.hasAttribute('data-tex-inline')){ tex(node); return; }
-    if(node.matches('.katex')){ const an=node.querySelector('annotation'); if(an){ if(node.closest('.katex-display')) node.closest('.katex-display').setAttribute('data-tex',an.textContent); else node.setAttribute('data-tex-inline',an.textContent); tex(node.closest('.katex-display')||node); } return; }
-    [...node.childNodes].forEach(walk); };
-  /* the whole page in reading order: title, steps, challenge, open questions, history, basement */
+    return ins.sort((a,b)=>b.at-a.at); };
+  const SKIP='script,style,template,h1,h2,h3,h4,.tags,.pn,nav,.eyebrow,.sthead,.stnext,.qid,button,.lbar,#lbar,.fvhead,.home,.gname,.brkkey,.phkey,.lockhint';
   const R='header.top,section.class,section.pic,section.slides,section.sayback,section.qs,section.questions,section.star';
-  const roots=document.querySelector('.wrap')?[...document.querySelectorAll('.wrap > header.top, .wrap > section, .wrap > div')]:[...document.querySelectorAll(R)].filter(r=>!r.parentElement||!r.parentElement.closest(R));
-  roots.forEach(walk);
-}
+  const roots=()=>document.querySelector('.wrap')?[...document.querySelectorAll('.wrap > header.top, .wrap > section, .wrap > div')]:[...document.querySelectorAll(R)].filter(r=>!r.parentElement||!r.parentElement.closest(R));
+  const rolls=[]; let ran=false; const seen=new Set();
+  const rollLetters=roll=>{ const out=[]; (roll.items||[]).forEach(it=>{ texLetters((it.rows||[]).join(' ')).concat(scan(it.text||'',true).map(h=>h.ch)).forEach(ch=>{ if(!out.includes(ch)) out.push(ch); }); }); return out; };
+  /* the letters the page shows before a point, without changing anything: text, TeX, and the rolls that stand earlier */
+  const before=stop=>{ const got=new Set(); let done=false;
+    const w=n=>{ if(done) return; if(n===stop){ done=true; return; } if(n.nodeType===3){ scan(n.data).forEach(h=>got.add(h.ch)); return; } if(n.nodeType!==1||n.matches(SKIP)) return;
+      if(n.__nlRoll){ rollLetters(n.__nlRoll).forEach(ch=>got.add(ch)); return; }
+      if(n.hasAttribute('data-tex')||n.hasAttribute('data-tex-inline')){ texLetters((n.getAttribute('data-tex')||'')+' '+(n.getAttribute('data-tex-inline')||'')).forEach(ch=>got.add(ch)); return; }
+      [...n.childNodes].forEach(w); };
+    roots().forEach(w); return got; };
+  /* a roll's own items, named in place before it draws; a later piece of the same slide repeats the earlier pieces in its prior, so that is patched too */
+  const nameRoll=(roll,had)=>{ const items=roll.items||[];
+    items.forEach((it,j)=>{ const fromRows=texLetters((it.rows||[]).join(' ')).filter(ch=>!had.has(ch)); fromRows.forEach(ch=>had.add(ch));
+      const old=it.text||'', plain=old.replace(/<[^>]*>/g,' ');
+      const hits=scan(old,true).filter(h=>{ if(had.has(h.ch)) return false; had.add(h.ch); return !saysName(plain,h.ch); });
+      let s=old; plan(s,hits).forEach(x=>{ s=s.slice(0,x.at)+x.txt+s.slice(x.at); });
+      const rowNames=fromRows.filter(ch=>!saysName(plain,ch)); if(rowNames.length) s=(s?s.replace(/\s+$/,'').replace(/([^.!?:;])$/,'$1.')+' ':'')+rowNames.map(ch=>ch+' is '+nameOf(ch)).join('; ')+'.';
+      if(s!==old){ it.text=s; for(let q=j+1;q<items.length;q++){ const o=items[q]; if(o.si===it.si&&o.prior&&o.prior.includes(old)) o.prior=o.prior.replace(old,s); } } }); };
+  const items=(roll,host)=>{ if(!roll||!host||host.__nlRoll) return; host.__nlRoll=roll; rolls.push(host);
+    const had=before(host);
+    nameRoll(roll,had); if(ran) rollLetters(roll).forEach(ch=>seen.add(ch)); };
+  const run=()=>{ if(ran||document.querySelector('.gname')) return; ran=true;
+    const notes=new Map();
+    const words=box=>{ let s=''; const w=n=>{ if(n.nodeType===3){ s+=n.data; return; } if(n.nodeType!==1||n.matches('.katex,[data-tex],[data-tex-inline],.gname,annotation,script,style')) return; n.childNodes.forEach(w); }; w(box); return s; };
+    const said=(el,ch)=>{ const box=el&&el.closest&&el.closest('p,li,td,th,dd,dt,figcaption,.cap,.row'); return !!box&&saysName(words(box),ch); };
+    const note=(anchor,chs)=>{ if(!chs.length) return; let n=notes.get(anchor); if(!n){ n=document.createElement(anchor.matches('li')?'span':'p'); n.className='gname'; n.dataset.letters=''; anchor.after(n); notes.set(anchor,n); }
+      n.dataset.letters+=chs.join(''); n.textContent=[...n.dataset.letters].map(ch=>ch+' is '+nameOf(ch)).join('; ')+'.'; };
+    const blockOf=el=>{ let a=el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline,.katex-display')||el; if(a.matches('svg')&&a.closest('figure,.pic')) a=a.closest('figure,.pic'); return a; };
+    const tex=el=>{ const fresh=texLetters((el.getAttribute('data-tex')||'')+' '+(el.getAttribute('data-tex-inline')||'')).filter(ch=>!seen.has(ch)); fresh.forEach(ch=>seen.add(ch)); const want=fresh.filter(ch=>!said(el,ch)); if(!want.length) return;
+      const inline=el.hasAttribute('data-tex-inline')&&!el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline');
+      if(inline){ const sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=' ('+want.map(ch=>ch+' is '+nameOf(ch)).join(', ')+')'; el.after(sp); }
+      else note(blockOf(el),want); };
+    const text=t=>{ const hits=scan(t.data).filter(h=>{ if(seen.has(h.ch)) return false; seen.add(h.ch); return !said(t.parentElement,h.ch); }); if(!hits.length) return;
+      if(t.parentElement.closest('svg,pre,.eqline,.eqline-words,.lines,.texline,table')){ note(blockOf(t.parentElement),hits.map(h=>h.ch)); return; }
+      plan(t.data,hits).forEach(x=>{ const rest=t.splitText(x.at), sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=x.txt; rest.before(sp); }); };
+    const walk=node=>{ if(node.nodeType===3){ if(node.data.trim()) text(node); return; } if(node.nodeType!==1||node.matches(SKIP)) return;
+      if(node.__nlRoll){ rollLetters(node.__nlRoll).forEach(ch=>seen.add(ch)); return; } /* named in its items already */
+      if(node.hasAttribute('data-tex')||node.hasAttribute('data-tex-inline')){ tex(node); return; }
+      if(node.matches('.katex')){ const an=node.querySelector('annotation'); if(an){ if(node.closest('.katex-display')) node.closest('.katex-display').setAttribute('data-tex',an.textContent); else node.setAttribute('data-tex-inline',an.textContent); tex(node.closest('.katex-display')||node); } return; }
+      [...node.childNodes].forEach(walk); };
+    roots().forEach(walk); };
+  return {run,items};
+})();
+window.LadderNameItems=NL.items;
+function nameLetters(){ NL.run(); }
 /* a table too wide for the screen, other than a truth table, stacks: each row becomes a card, each cell under its column's name */
 function stackTables(){
   document.querySelectorAll('table').forEach(t=>{
     if(t.classList.contains('stack')||t.closest('.pic,.slides,#lbar,.lbar')) return;
-    const box=t.closest('.tablewrap')||t.parentElement; if(!(t.scrollWidth>box.clientWidth+2)) return;
+    const box=t.closest('.tablewrap')||t.parentElement; let wide;
+    if(t.getClientRects().length) wide=t.scrollWidth>box.clientWidth+2;
+    else { /* a table in a footing not showing yet: measured as a copy at the page's text width */
+      const wr=document.querySelector('.wrap')||document.body, cs=getComputedStyle(wr), w=(wr.clientWidth||window.innerWidth)-parseFloat(cs.paddingLeft||0)-parseFloat(cs.paddingRight||0), probe=document.createElement('div');
+      probe.style.cssText='position:absolute;left:-9999px;top:0;visibility:hidden;width:'+Math.max(200,w)+'px';
+      const c=box.cloneNode(true); c.classList.remove('sw-split'); probe.appendChild(c); document.body.appendChild(probe);
+      const ct=c.matches('table')?c:c.querySelector('table'); wide=!!ct&&ct.scrollWidth>c.clientWidth+2; probe.remove(); }
+    if(!wide) return;
     const cells=[...t.querySelectorAll('td')].map(td=>td.textContent.trim());
     if(!cells.length||cells.filter(c=>/^(T|F|0|1|)$/.test(c)).length>cells.length/2) return;
     const hr=[...t.querySelectorAll('tr')].find(r=>r.querySelector('th')&&!r.querySelector('td')); if(!hr) return;
+    const trs=[...t.querySelectorAll('tr')];
+    /* a table of one to three rows across many columns turns on its side: each column becomes a row, so it can be cut across slides */
+    if(trs.length<=4&&hr.children.length>=4&&!t.querySelector('[rowspan],[colspan]')){
+      const grid=trs.map(r=>[...r.children]), n=Math.max(...grid.map(r=>r.length)), body=t.tBodies[0]||t;
+      const rows=[]; for(let i=0;i<n;i++){ const r=document.createElement('tr'); grid.forEach(cs=>{ if(cs[i]) r.appendChild(cs[i]); }); rows.push(r); }
+      if(t.tHead) t.tHead.remove(); [...t.tBodies].forEach(b=>{ if(b!==body) b.remove(); }); body.innerHTML=''; rows.forEach(r=>body.appendChild(r));
+      t.classList.add('sideways'); return; }
     const heads=[...hr.children].map(th=>th.textContent.trim());
     t.querySelectorAll('tr').forEach(r=>{ if(r===hr) return; [...r.children].forEach((c,i)=>{ if(heads[i]) c.setAttribute('data-h',heads[i]); }); });
     hr.classList.add('stackhead'); t.classList.add('stack');
@@ -3600,12 +3642,55 @@ function chunkList(ul){ if(ul.dataset.swc) return ul.dataset.swc==='1'?LISTS.get
   const g=groups(lis,li=>words(li.textContent)+8,CMAX); if(!g) return null;
   /* a part is the items themselves, marked by their first: data-sw goes on each item of a part */
   ul.dataset.swc='1'; ul.classList.add('sw-split'); LISTS.set(ul,g); return g; }
+/* fit (Andrew 2026-11-20 08:26Z: no slide needs a scroll). Each screen is measured once it is built; one taller than the room between the
+   title and the screen arrows is cut: a paragraph (or a part of one) into fewer sentences a screen, a table into fewer rows (its head row
+   stays on every part), a list into fewer items. What cannot be cut (a picture, a TeX box) is left as it is. */
+const FITROOM=()=>Math.max(260,window.innerHeight-340);
+const tall=el=>{ const r=el.getBoundingClientRect(); const cs=getComputedStyle(el); return r.height+(parseFloat(cs.marginTop)||0)+(parseFloat(cs.marginBottom)||0); };
+function cutBy(units,hs,room){ const out=[[]]; let acc=0; units.forEach((u,i)=>{ if(out[out.length-1].length&&acc+hs[i]>room){ out.push([]); acc=0; } out[out.length-1].push(u); acc+=hs[i]; }); return out.length>1?out:null; }
+function splitText(el,n){ /* el's sentences into n parts, each wrapped in span.swc; el is a paragraph or a part of one */
+  const ss=sentences(el); if(ss.length<2) return null; n=Math.min(n,ss.length); const w=ss.map(s=>words(s.map(x=>x.textContent).join(''))||1), all=w.reduce((a,b)=>a+b,0), per=all/n, g=[[]]; let acc=0;
+  ss.forEach((s,i)=>{ if(g[g.length-1].length&&g.length<n&&acc+w[i]/2>per*g.length) g.push([]); g[g.length-1].push(s); acc+=w[i]; }); if(g.length<2) return null;
+  const spans=g.map(gs=>{ const sp=document.createElement('span'); sp.className='swc'; const nodes=gs.flat(); nodes[0].parentNode.insertBefore(sp,nodes[0]); nodes.forEach(x=>sp.appendChild(x)); return sp; });
+  el.classList.add('sw-split'); return spans; }
+/* a proof row or a TeX line wider than the screen is set smaller until it fits (not below 70%), so it never scrolls sideways or down inside its box */
+function fitWide(root){ root.querySelectorAll('.rows .row .m, .eqbox').forEach(m=>{ if(m.closest('.rl,.rl-off,[hidden]')||!m.getClientRects().length) return; if(m.dataset.fw===String(m.clientWidth)&&m.scrollWidth<=m.clientWidth+1) return; /* measured again once the fonts have loaded */
+  m.style.fontSize=''; const k=m.clientWidth/Math.max(1,m.scrollWidth); if(k<0.995) { const base=parseFloat(getComputedStyle(m).fontSize)/Math.max(1,parseFloat(getComputedStyle(m.parentElement).fontSize)); m.style.fontSize=(base*Math.max(0.7,k*0.97)).toFixed(3)+'em'; 
+    /* still too wide at the smallest size: a line that is mostly words may wrap between its words */
+    if(m.scrollWidth>m.clientWidth+2&&m.querySelector('.katex .mord.text')){ m.classList.add('fwrap'); m.style.fontSize=''; m.querySelectorAll('.katex .mord.text').forEach(t=>{ const w=document.createTreeWalker(t,NodeFilter.SHOW_TEXT); let n; while((n=w.nextNode())) if(n.nodeValue.includes('\u00a0')) n.nodeValue=n.nodeValue.replace(/\u00a0/g,' '); }); } } m.dataset.fw=String(m.clientWidth); }); }
+function fitScreens(list){ const room=FITROOM(), had=document.body.classList.contains('sw'); document.body.classList.remove('sw'); const out=[];
+  try{ try{ stackTables(); }catch(_){} /* a table too wide for the screen stacks into cards now that it can be measured */
+    list.forEach(sc=>sc.forEach(el=>{ try{ fitWide(el.parentElement||el); }catch(_){} }));
+    list.forEach(sc=>{ let parts=[sc]; const room=FITROOM()-(sc.some(x=>x.closest&&x.closest('header.top'))?90:0); /* a screen that carries the page's title has less room */
+    for(let pass=0;pass<3;pass++){ const next=[]; let cut=false;
+      parts.forEach(s=>{ const hs=s.map(tall), h=hs.reduce((a,b)=>a+b,0); if(h<=room){ next.push(s); return; }
+        let bi=0; hs.forEach((x,i)=>{ if(x>hs[bi]) bi=i; }); const e=s[bi], rest=h-hs[bi], left=s.slice(0,bi), right=s.slice(bi+1); let pieces=null;
+        if(e.matches('p,span.swc')&&!e.querySelector('pre,.eqline,table,img,svg')){ const sp=splitText(e,Math.ceil(hs[bi]/Math.max(120,room-rest))); if(sp) pieces=sp.map(x=>[x]); }
+        else if(e.matches('table')){ const trs=[...e.querySelectorAll('tr')], head=trs.filter(r=>r.querySelector('th')&&!r.querySelector('td')).slice(0,1), body=trs.filter(r=>!head.includes(r));
+          const hh=head.reduce((a,r)=>a+tall(r),0), g=cutBy(body,body.map(tall),Math.max(120,room-rest-hh)); if(g){ e.classList.add('sw-split'); pieces=g; } }
+        else if(e.matches('ul,ol')){ const lis=[...e.children].filter(x=>x.matches('li')), g=cutBy(lis,lis.map(tall),Math.max(120,room-rest)); if(g){ e.classList.add('sw-split'); pieces=g; } }
+        else if(e.matches('div')&&e.querySelector(':scope>table')){ const t=e.querySelector(':scope>table'), trs=[...t.querySelectorAll('tr')], head=trs.filter(r=>r.querySelector('th')&&!r.querySelector('td')).slice(0,1), body=trs.filter(r=>!head.includes(r));
+          const hh=head.reduce((a,r)=>a+tall(r),0), g=cutBy(body,body.map(tall),Math.max(120,room-rest-hh)); if(g){ e.classList.add('sw-split'); t.classList.add('sw-split'); pieces=g; } }
+        /* any other box of several parts (a claim, a box of lines): its parts, a few to a screen; the box is drawn round the part showing */
+        else if(!e.matches('table,figure,svg,img,canvas,.pic,.slides,.rl,.rl-host,pre,.katex-display,[data-tex]')){ const kids=[...e.children].filter(x=>!x.matches('script,style,template')&&x.getClientRects().length);
+          if(kids.length>1){ const g=cutBy(kids,kids.map(tall),Math.max(120,room-rest)); if(g){ e.classList.add('sw-split'); pieces=g; } } }
+        /* a drawing taller than the room is drawn smaller, keeping its shape */
+        if(!pieces&&e.matches('svg,img,figure')&&!e.closest('.rl')){ const g=e.matches('figure')?e.querySelector(':scope>svg,:scope>img'):e; if(g&&!g.dataset.fitH){ g.dataset.fitH='1'; g.style.maxHeight=Math.max(200,room-rest)+'px'; g.style.width='auto'; g.style.maxWidth='100%'; next.push(s); cut=true; return; } }
+        /* what cannot be cut is given a screen of its own, apart from what stood with it */
+        if(!pieces&&s.length>1){ const g=cutBy(s,hs,room); if(g){ g.forEach(x=>next.push(x)); cut=true; return; } }
+        if(!pieces){ next.push(s); return; } cut=true;
+        pieces.forEach((pc,i)=>next.push((i===0?left:[]).concat(pc,i===pieces.length-1?right:[]))); });
+      parts=next; if(!cut) break; }
+    out.push(...parts); }); }
+  finally{ if(had) document.body.classList.add('sw'); }
+  return out; }
 function buildChunks(els){
   const hdr=els.find(e=>e.matches&&e.matches('header.top')); const items=[], lead=[];
   const add=el=>{ if(el.hidden||el.matches('script,style,template,nav,.pn,.home,.stnext')) return;
     if(el.matches('p[data-pid]')&&folded(el)){ return; }
     if(el.matches('h1,.tags,h2,h3,h4,.eyebrow,.fr,.sthead')){ lead.push(el); return; } /* a heading rides with the screen after it */
     if(el.matches('.cl-body')){ if(getComputedStyle(el).display==='none') return; [...el.children].forEach(add); return; }
+    if(el.matches('aside')&&!el.hasAttribute('data-collapsed')&&el.children.length>1){ el.classList.add('sw-split'); [...el.children].forEach(add); return; } /* Andrew 2026-11-20 08:26Z: an "Anexact, yet rigorous" box is a series of slides */
     if(el.matches('.cl-lock')&&getComputedStyle(el).display==='none') return;
     if(el.matches('.brk.brk-check')){ const rows=[...el.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ el.classList.add('sw-rows'); rows.forEach(r=>{ items.push(lead.splice(0).concat([r])); }); return; } }
     if(ATTACH.test(el.className||'')&&items.length&&!(texbox(el)&&items[items.length-1].some(texbox))&&!lead.length){ items[items.length-1].push(el); return; }
@@ -3613,19 +3698,30 @@ function buildChunks(els){
     if(parts){ parts.forEach((x,i)=>items.push((i?[]:lead.splice(0)).concat(Array.isArray(x)?x:[x]))); return; }
     items.push(lead.splice(0).concat([el])); };
   if(hdr){ hdr.classList.add('sw-hdr'); [...hdr.children].forEach(add); }
-  expand(step); [...step.children].forEach(add);
+  if(step){ expand(step); [...step.children].forEach(add); }
   if(lead.length){ if(items.length) items[items.length-1].push(...lead); else items.push(lead.splice(0)); }
   els.forEach(e=>{ if(e!==step&&e!==hdr&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('nav,.pn')) items.push([e]); });
-  screens=swDrop(items);
+  screens=swDrop(fitScreens(items));
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
-function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step) return; if(CHUNKPAGE.test(pg())&&els.length&&els[0]&&els.some(e=>e.matches&&e.matches('header.top'))){ buildChunks(els); return; } expand(step);
-  [...step.children].forEach(ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
+function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step){ if(els.some(e=>e.matches&&e.matches('header.top'))) buildChunks(els); return; } /* Andrew 2026-11-20: a page's opening (title and summary, no step) is screens too, so it never scrolls */ if(CHUNKPAGE.test(pg())&&els.length&&els[0]&&els.some(e=>e.matches&&e.matches('header.top'))){ buildChunks(els); return; } expand(step);
+  const put=ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
+    /* Andrew 2026-11-20 08:26Z: an "Anexact, yet rigorous" box is a series of slides. Its heading rides with its first part, each part is a screen,
+       and the box is drawn round whichever part is showing (.sw-split hides the box on the other screens) */
+    if(ch.matches('aside')&&!ch.hasAttribute('data-collapsed')&&ch.children.length>1){ let hold=[];
+      [...ch.children].forEach(x=>{ if(x.matches('.eyebrow,h3,h4')){ hold.push(x); return; } const n=screens.length; put(x);
+        if(hold.length){ if(screens.length>n) screens[n].unshift(...hold); else if(screens.length) screens[screens.length-1].push(...hold); else screens.push(hold.slice()); hold=[]; } });
+      if(hold.length){ if(screens.length) screens[screens.length-1].push(...hold); else screens.push(hold); }
+      ch.classList.add('sw-split'); return; }
     if(ch.matches('.brk.brk-check')){ const rows=[...ch.querySelectorAll(':scope>.rows>.row')]; if(rows.length>1){ ch.classList.add('sw-rows'); rows.forEach(r=>screens.push([r])); return; } } /* 2026-11-10 (Andrew 15:51): one move to a screen */ /* 2026-11-10 (Andrew 12:08): an emptied or collapsed paragraph is no screen; the chain closes up */
-    if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } screens.push([ch]); }); /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
+    if(ATTACH.test(ch.className||'')&&screens.length&&!(texbox(ch)&&screens[screens.length-1].some(texbox))){ screens[screens.length-1].push(ch); return; } /* 2026-11-10 (Andrew 15:44): one TeX box to a screen */
+    /* Andrew 2026-11-20 08:26Z: a long paragraph is shown a few sentences at a time, as on the summaries; its wording and address never change */
+    if(ch.matches('p')){ const parts=chunkP(ch); if(parts){ parts.forEach(x=>screens.push([x])); return; } }
+    screens.push([ch]); };
+  [...step.children].forEach(put);
   els.forEach(e=>{ if(e!==step&&e.matches&&e.matches('section,figure,.slides,.pic')&&!e.matches('header.top,nav,.pn')) screens.push([e]); });
   /* todo16: a page's title, opened with its first footing, rides with the first screen only */
   const hdr=els.find(e=>e.matches&&e.matches('header.top')); if(hdr&&screens.length){ hdr.classList.add('sw-hdr'); [...hdr.children].filter(x=>!x.matches('p.home,.pn,script,style')).forEach(x=>screens[0].push(x)); }
-  screens=swDrop(screens);
+  screens=swDrop(fitScreens(screens));
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
 function ui(){ if(bar) return; bar=document.createElement('div'); bar.className='swbar'; bar.hidden=true;
   L=document.createElement('button'); L.type='button'; L.className='swnav swl'; L.innerHTML='<span aria-hidden="true">◀</span> previous'; L.setAttribute('aria-label','previous screen');
@@ -3649,6 +3745,7 @@ function show(i,opts){ opts=opts||{}; if(!screens.length) return; const prev=k; 
   document.querySelectorAll('.brk.sw-rows').forEach(b=>b.classList.toggle('sw-has',!!b.querySelector(':scope>.rows>.row.sw-on')));
   if(anim){ screens[k].forEach(x=>{ void x.offsetWidth; x.classList.add(dir>0?'sw-in-f':'sw-in-b'); x.addEventListener('animationend',()=>x.classList.remove('sw-in-f','sw-in-b'),{once:true}); }); if(ghost) swGhostOut(ghost,dir); }
   if(!opts.keep) window.scrollTo(0,0);
+  try{ screens[k].forEach(x=>fitWide(x.parentElement||x)); }catch(_){}
   if(window.LadderRoll) LadderRoll.fitAll();
   const n=screens.length; posEl.textContent=n>1?(k+1)+' / '+n:''; L.disabled=false; R.disabled=false;
   dots.innerHTML=''; if(n>1&&n<=14) screens.forEach((s,j)=>{ const d=document.createElement('i'); d.className=(j===k?'on':'')+(s[0].classList.contains('sw-stub')?' stub':''); d.onclick=()=>show(j,{anim:true}); dots.appendChild(d); }); else if(n>14) dots.appendChild(posEl);
