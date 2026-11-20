@@ -352,14 +352,16 @@ document.addEventListener('keydown',e=>{ if(e.defaultPrevented||e.altKey||e.ctrl
 /* on a footing's screen the frame runs from where it stands down to the footing arrows */
 function floorY(){ let b=window.innerHeight; const lb=document.getElementById('lbar'); if(lb&&lb.getClientRects().length) b=Math.min(b,lb.getBoundingClientRect().top);
   return b-92; /* the footing arrows and the screen arrows stand in the 80px above the bar; they tuck away and come back, so the frame never counts on their room */ }
+const RO=typeof ResizeObserver==='function'?new ResizeObserver(()=>fitAll()):null;
 function fitOne(el){ if(!el.isConnected){ frames.delete(el); return; } if(!el.getClientRects().length) return;
   if(EMBED){ const h=window.innerHeight+'px'; if(el.style.height!==h) el.style.height=h; if(el.__fit) el.__fit(); return; }
   if(el.closest('#desk,#stick,.dk-pane')||!document.body.classList.contains('sw')){ el.style.height=''; if(el.__fit) el.__fit(); return; }
   const top=el.getBoundingClientRect().top+window.scrollY; let h=Math.round(Math.max(300,Math.min(820,floorY()-top)));
   { /* whatever stands under the frame on the same screen (a letter-name line, a caption) keeps its room above the screen arrows */
     const host=el.closest('.sw-on'); if(host){ let last=null; for(let n=host.nextElementSibling;n;n=n.nextElementSibling){ if(n.classList.contains('sw-on')&&n.getClientRects().length) last=n; }
-      if(last){ const cs=getComputedStyle(last); const under=Math.ceil(last.getBoundingClientRect().bottom+(parseFloat(cs.marginBottom)||0)-host.getBoundingClientRect().bottom); if(under>0&&under<=160) h=Math.max(300,h-under); } } }
+      if(last){ const cs=getComputedStyle(last); const under=Math.ceil(last.getBoundingClientRect().bottom+(parseFloat(cs.marginBottom)||0)-host.getBoundingClientRect().bottom); if(under>0&&under<=240) h=Math.max(300,h-under); if(RO&&!last.__rlro){ last.__rlro=1; RO.observe(last); } } } } /* 240: a dividend box under a worked line keeps its room too; it is watched because its words settle after the fonts load */
   if(el.parentElement&&el.parentElement.matches('figure.ghcell')){ const st=el.querySelector('.rl-figs'); if(st&&st.offsetHeight) h=Math.max(h,Math.min(820,st.offsetHeight+186)); } /* grid figures stand several to a screen: each frame is tall enough for its whole drawing and three lines of words */
+  el.style.minHeight=h<340?h+'px':''; /* the style sheet holds a frame to 340px; a frame that makes room for a box under it may go to 300 */
   if(el.style.height!==h+'px') el.style.height=h+'px'; if(el.__fit) el.__fit();
   const r=el.__roll; if(r&&r.i>=0) r.show(r.i,0); }
 let fitT=0; function fitAll(){ cancelAnimationFrame(fitT); fitT=requestAnimationFrame(()=>frames.forEach(fitOne)); }
