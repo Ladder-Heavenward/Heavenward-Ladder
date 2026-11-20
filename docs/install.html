@@ -76,18 +76,35 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   var btn=document.getElementById('getbtn'), note=document.getElementById('getnote'), ios=document.getElementById('ioshow');
   var onSite=/github\.io$/.test(location.hostname)&&('serviceWorker' in navigator);
   var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
-  var isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  var ua=navigator.userAgent, isAndroid=/Android/.test(ua), isFirefox=/Firefox|FxiOS/.test(ua);
+  var isChrome=isAndroid&&/Chrome\//.test(ua)&&!/SamsungBrowser|EdgA|OPR|Firefox/.test(ua);
+  var isIOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  var CHROME='intent://ladder-heavenward.github.io/Heavenward-Ladder/install.html#Intent;scheme=https;package=com.android.chrome;end';
+  var SHORTCUT='Avoid “Add to Home screen”: it makes only a shortcut, which opens through the browser and can show the browser’s logo first.';
+  /* Andrew 2026-11-20: install the whole app, never just a shortcut. true = the full app is installed here, false = not, null = cannot tell */
+  function fullApp(){ try{ if(!navigator.getInstalledRelatedApps) return Promise.resolve(null);
+    return navigator.getInstalledRelatedApps().then(function(a){ return Array.isArray(a)?a.some(function(x){ return x.platform==='webapp'; }):null; },function(){ return null; }); }catch(e){ return Promise.resolve(null); } }
   function ready(){ btn.disabled=false; btn.textContent='Install the ladder'; note.textContent='Free. Works offline once installed.'; }
-  if(standalone){ btn.textContent='The ladder is installed'; btn.disabled=true; note.textContent='You are using the installed app. Share it with the code below.'; }
+  if(standalone){ btn.textContent='The ladder is installed'; btn.disabled=true; note.textContent='You are using the installed app. Share it with the code below.';
+    if(isChrome) fullApp().then(function(r){ if(r!==false) return;
+      btn.disabled=false; btn.textContent='Install the full app';
+      note.textContent='This copy is a home-screen shortcut, not the full app, so Chrome’s logo can show when it opens. The button opens this page in Chrome: press Install the ladder there. Your record stays as it is. Once the full app is on your phone, remove the old shortcut.';
+      btn.onclick=function(){ location.href=CHROME; }; }); }
   else if(!onSite){ btn.textContent='Go to the install page'; btn.onclick=function(){ location.href=URL; }; note.textContent='The app installs from its own site.'; }
   else if(isIOS){ btn.textContent='How to install on iPhone'; btn.onclick=function(){ ios.hidden=false; ios.scrollIntoView({behavior:'smooth',block:'center'}); }; }
+  else if(isFirefox){ btn.textContent='Open in another browser'; btn.disabled=!isAndroid;
+    note.textContent='Firefox can only add a shortcut to the ladder, not install the whole app. For the full app, open this page in Chrome, Edge or Samsung Internet.';
+    if(isAndroid) btn.onclick=function(){ location.href=CHROME; }; }
   else {
-    btn.onclick=function(){ var e=window.__bip; if(!e){ note.textContent='Your browser has not offered the install. If the ladder is already installed on this device, the browser will not offer it twice: open it from your apps. Otherwise wait a moment, or use the browser menu (⋮): Install app, or Add to Home screen. In Firefox, the ladder works as a normal page.'; return; }
+    btn.onclick=function(){ var e=window.__bip; if(!e){
+        fullApp().then(function(r){ note.textContent=r===true?'The full app is already installed on this device. Open it from your apps.'
+          :'Your browser has not offered the install yet. Wait a moment and press again, or open the browser menu (⋮) and choose Install app. '+SHORTCUT; }); return; }
       e.prompt(); e.userChoice.then(function(c){ window.__bip=null; note.textContent=c&&c.outcome==='accepted'?'Installed. Look for the ladder among your apps.':'Not installed. Press the button again any time.'; }); };
     /* listen here too, so the button works even while an older saved copy of the app's script is in charge */
     window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); window.__bip=e; ready(); });
     if(window.__bip) ready(); document.addEventListener('ladder-installable',ready);
     window.addEventListener('appinstalled',function(){ btn.textContent='Installed'; btn.disabled=true; note.textContent='Look for the ladder among your apps.'; });
+    fullApp().then(function(r){ if(r===true&&!window.__bip){ btn.textContent='The ladder is installed'; btn.disabled=true; note.textContent='The full app is already on this device. Open it from your apps.'; } });
   }
   document.getElementById('copybtn').onclick=function(){ var b=this; try{ navigator.clipboard.writeText(URL).then(function(){ b.textContent='link copied'; }); }catch(e){} };
   if(navigator.share){ var s=document.getElementById('sharebtn'); s.hidden=false; s.onclick=function(){ navigator.share({title:'The Ladder',url:URL}).catch(function(){}); }; }
