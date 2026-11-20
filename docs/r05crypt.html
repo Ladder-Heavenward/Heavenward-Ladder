@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5·crypt · Is There a Recipe for Working Out Secrets?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script><style>pre.celltext{font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--card);border:1px solid var(--grid);border-radius:8px;padding:10px 12px;margin:10px 0}</style></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r05eng.html">← 5·eng how do gears change speed?</a><a href="r05k.html">next: 5k working with the gap →</a></p>
+  <div class="tags"><span class="tag crypt">5·crypt · cryptography</span></div>
+  <h1>Is There a Recipe for Working Out Secrets?</h1>
+  <p data-pid="d112af">A secret that nobody can work out has not been sent. Two friends hide a number by doing things to it, and the one who receives it undoes them, last thing first. An algorithm can do that much. What it hands back may still be a recipe for biscuits and gravy.</p>
+</header>
+
+<section class="class step" data-step="5crypt1">
+  <h2 class="sthead"><span class="stno">5crypt1</span>A Secret Nobody Can Read</h2>
+  <p data-pid="89a572">Is there a recipe for working out secrets?</p>
+  <p data-pid="7cb686">Evita wants to tell Randy which bus to take, and Mike is listening. So she hides the number as well as she can. She adds to it, she multiplies it, she squares it, and she tells nobody what she did. Then she says the result out loud: “1,370.”</p>
+  <p data-pid="45af6f">Mike cannot get the bus number out of that. Neither can Randy.</p>
+  <p data-pid="77bb13">Evita hid the number to the best standard on every count, and the hiding stopped caring who was at the other end. Mike and Randy stand in the same place. Each of them holds 1,370 and nothing else.</p>
+  <p data-pid="2324e7"><b>A secret that nobody can work out has not been sent.</b></p>
+  <p data-pid="ed349e">So hiding is half of the work. The other half is the way back, and it has to be made at the same time as the hiding. The way back is this step's subject. Rung 5 is the floor for it: the rung made room to undo.</p>
+  <p data-pid="7584a7">From here on, in this step, the <b>message</b> is the number Evita means, the <b>sent number</b> is the number she says out loud, and <b>working it out</b> is getting the message from the sent number.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.1.1</span><span class="ph understand">understand</span>Why has a secret that nobody can work out not been sent? <br>What does Randy need that Mike must not have?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt2">
+  <h2 class="sthead"><span class="stno">5crypt2</span>Hiding Is a Story of What Was Done</h2>
+  <p data-pid="f4bea8">What does Randy have to hold, to get the message back?</p>
+  <p data-pid="eb2ef2">Start again, and this time Evita and Randy settle the hiding beforehand, away from Mike. “Multiply the bus number by 3, then add 5.”</p>
+  <p data-pid="23fd5c">Call the message m and the sent number s. 5g1 gives a letter this job: it stands for a number not yet known.</p>
+  <div class="eqline" data-tex="s = 3 \cdot  m + 5"></div>
+  <p data-pid="79b6d3">The bus is number 9. Evita works out 3 · 9 + 5 and says, “32.”</p>
+  <p data-pid="c0f6cf">5g5 read a line like this as a story of what was done to the letter: m was multiplied by 3, and then 5 was added. The story has steps, the steps have an order, and each step has a number of its own.</p>
+  <p data-pid="28aa48"><b>The sent number can be heard by anyone. What is kept is the story: the steps, their order, and the number in each step.</b></p>
+  <p data-pid="4d1314">Mike holds 32. Randy holds 32 and the story.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.2.1</span><span class="ph understand">understand</span>What are the three things in a story of what was done? <br>Which of them does a listener hear?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt3">
+  <h2 class="sthead"><span class="stno">5crypt3</span>Undo From the End</h2>
+  <p data-pid="696d2f">Randy holds 32 and the story. How does he get to 9?</p>
+  <p data-pid="f3e1e3">5g5 gave the order: undo the story from its end. The last thing done is the first undone. It is the order of shoes and socks. On go the socks and then the shoes. Off come the shoes and then the socks.</p>
+  <p data-pid="342e14">The last thing Evita did was add 5. Adding −5 undoes that. Before it she multiplied by 3. Multiplying by 1/3 undoes that.</p>
+  <!--gfig 5crypt3--><div class="gfigs" data-gfig="5crypt3"><svg class="gfig" viewBox="0 0 360 218" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="a strip: 9 is multiplied by 3 to give 27, then 5 is added to give 32; underneath, the undos run back from 32 to 27 by adding negative 5, then from 27 to 9 by multiplying by one third"><rect x="14" y="62" width="60" height="40" rx="8" style="fill:var(--card);stroke:var(--ink);stroke-width:1.8"/><text x="44" y="89" text-anchor="middle" style="font:700 14px Nunito,system-ui,sans-serif;fill:var(--ink)">9</text><rect x="150" y="62" width="60" height="40" rx="8" style="fill:var(--card);stroke:var(--ink);stroke-width:1.8"/><text x="180" y="89" text-anchor="middle" style="font:700 14px Nunito,system-ui,sans-serif;fill:var(--ink)">27</text><rect x="286" y="62" width="60" height="40" rx="8" style="fill:var(--card);stroke:var(--ink);stroke-width:1.8"/><text x="316" y="89" text-anchor="middle" style="font:700 14px Nunito,system-ui,sans-serif;fill:var(--ink)">32</text><text x="44" y="120" text-anchor="middle" style="font:12px Nunito,system-ui,sans-serif;fill:var(--muted)">the message</text><text x="316" y="120" text-anchor="middle" style="font:12px Nunito,system-ui,sans-serif;fill:var(--muted)">the sent number</text><line x1="78" y1="74" x2="137.0" y2="74.0" style="stroke:var(--ink);stroke-width:2;stroke-linecap:round"/><polygon points="146,74 137.0,69.5 137.0,78.5" style="fill:var(--ink)"/><text x="112.0" y="64" text-anchor="middle" style="font:600 13px Nunito,system-ui,sans-serif;fill:var(--ink)">· 3</text><line x1="214" y1="74" x2="273.0" y2="74.0" style="stroke:var(--ink);stroke-width:2;stroke-linecap:round"/><polygon points="282,74 273.0,69.5 273.0,78.5" style="fill:var(--ink)"/><text x="248.0" y="64" text-anchor="middle" style="font:600 13px Nunito,system-ui,sans-serif;fill:var(--ink)">+ 5</text><line x1="282" y1="92" x2="223.0" y2="92.0" style="stroke:var(--gold);stroke-width:2;stroke-linecap:round"/><polygon points="214,92 223.0,96.5 223.0,87.5" style="fill:var(--gold)"/><text x="248.0" y="110" text-anchor="middle" style="font:600 13px Nunito,system-ui,sans-serif;fill:var(--ink)">+ (−5)</text><line x1="146" y1="92" x2="87.0" y2="92.0" style="stroke:var(--gold);stroke-width:2;stroke-linecap:round"/><polygon points="78,92 87.0,96.5 87.0,87.5" style="fill:var(--gold)"/><text x="112.0" y="110" text-anchor="middle" style="font:600 13px Nunito,system-ui,sans-serif;fill:var(--ink)">· 1/3</text><text x="44" y="28" text-anchor="start" style="font:12px Nunito,system-ui,sans-serif;fill:var(--muted)" dx="-30">the story, run forwards</text><text x="14" y="172" text-anchor="start" style="font:12px Nunito,system-ui,sans-serif;fill:var(--muted)">The lower arrows are the undos.</text><text x="14" y="192" text-anchor="start" style="font:12px Nunito,system-ui,sans-serif;fill:var(--muted)">The last step done is the first undone.</text></svg></div><!--/gfig 5crypt3-->
+  <pre class="lines" data-k="ember" data-label="this page: working it out, with the story">
+3 \cdot  m + 5 = 32 @@ the story, and the sent number
+3 \cdot  m = 27 @@ add −5 to both sides, undoing the last thing done (5g5)
+m = 9 @@ multiply both sides by 1/3, which is not 0 (5g5)
+3 \cdot  9 + 5 = 32 @@ the check: run the story forwards on the answer
+  </pre>
+  <p data-pid="4adc63">Each line is licensed by 5g: the same change to both sides, and the answers are kept.</p>
+  <p data-pid="1c9874">The last line is not decoration. Randy runs Evita's story forwards on his answer and gets the number she said. If he had not, he would know that something went wrong before he got on a bus.</p>
+  <p data-pid="c7de54"><b>Working it out: undo the last step first, then the one before, to the start of the story. Then run the story forwards as a check.</b></p>
+  <p data-pid="d54a54">See what the wrong order gives. Multiply 32 by 1/3 first and then add −5, and the answer is 17/3. No bus has that number.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.3.1</span><span class="ph understand">understand</span>In which order are the steps of a story undone, and why that order? <br>What is the check for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt4">
+  <h2 class="sthead"><span class="stno">5crypt4</span>Every Step Needs Its Undo</h2>
+  <p data-pid="032478">Can every step be undone?</p>
+  <p data-pid="9eaeee">Rung 5 was built to answer that. Among the counting numbers, adding and multiplying run forwards and get stuck running backwards (5a10). The integers and the fractions made room.</p>
+  <p data-pid="8fc631">Adding a number c is undone by adding −c, and every number has its negative (5b13). So an adding step can always be undone.</p>
+  <p data-pid="21b4a7">Multiplying by a number p is undone by multiplying by its reciprocal, and p has a reciprocal exactly when p is not 0 (5c10, 5e4).</p>
+  <p data-pid="871fd6">Now let Evita use a step with no undo. “Multiply by 0, then add 5.” Anything times 0 is 0 (5e2). Bus 9 gives 5. Bus 14 gives 5. Every bus gives 5. No number times 0 gets the message back (5e5). Mike learns nothing from the 5, and Randy learns nothing either.</p>
+  <p data-pid="fa57a4">There is a quieter case. “Square it, then add 1.” The message 9 gives 82. So does −9, since (−p)² = p² (5g6). The squaring can be walked back, and the way back forks.</p>
+  <!--gfig 5crypt4--><div class="gfigs" data-gfig="5crypt4"><svg class="gfig" viewBox="0 0 360 212" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="the messages 9 and negative 9 are both squared to 81, and 1 is added to give 82: two messages share one sent number"><rect x="14" y="24" width="60" height="40" rx="8" style="fill:var(--card);stroke:var(--ink);stroke-width:1.8"/><text x="44" y="51" text-anchor="middle" style="font:700 14px Nunito,system-ui,sans-serif;fill:var(--ink)">9</text><rect x="14" y="104" width="60" height="40" rx="8" style="fill:var(--card);stroke:var(--ink);stroke-width:1.8"/><text x="44" y="131" text-anchor="middle" style="font:700 14px Nunito,system-ui,sans-serif;fill:var(--ink)">−9</text><rect x="150" y="64" width="60" height="40" rx="8" style="fill:var(--card);stroke:var(--ink);stroke-width:1.8"/><text x="180" y="91" text-anchor="middle" style="font:700 14px Nunito,system-ui,sans-serif;fill:var(--ink)">81</text><rect x="286" y="64" width="60" height="40" rx="8" style="fill:var(--card);stroke:var(--ink);stroke-width:1.8"/><text x="316" y="91" text-anchor="middle" style="font:700 14px Nunito,system-ui,sans-serif;fill:var(--ink)">82</text><line x1="78" y1="50" x2="137.5" y2="71.0" style="stroke:var(--ink);stroke-width:2;stroke-linecap:round"/><polygon points="146,74 139.0,66.8 136.0,75.2" style="fill:var(--ink)"/><line x1="78" y1="118" x2="137.5" y2="97.0" style="stroke:var(--ink);stroke-width:2;stroke-linecap:round"/><polygon points="146,94 136.0,92.8 139.0,101.2" style="fill:var(--ink)"/><line x1="214" y1="84" x2="273.0" y2="84.0" style="stroke:var(--ink);stroke-width:2;stroke-linecap:round"/><polygon points="282,84 273.0,79.5 273.0,88.5" style="fill:var(--ink)"/><text x="112" y="40" text-anchor="middle" style="font:600 13px Nunito,system-ui,sans-serif;fill:var(--ink)">square</text><text x="112" y="134" text-anchor="middle" style="font:600 13px Nunito,system-ui,sans-serif;fill:var(--ink)">square</text><text x="248" y="72" text-anchor="middle" style="font:600 13px Nunito,system-ui,sans-serif;fill:var(--ink)">+ 1</text><text x="14" y="172" text-anchor="start" style="font:12px Nunito,system-ui,sans-serif;fill:var(--muted)">Two messages arrive at one sent number.</text><text x="14" y="192" text-anchor="start" style="font:12px Nunito,system-ui,sans-serif;fill:var(--muted)">Going back from 81, the way forks.</text></svg></div><!--/gfig 5crypt4-->
+  <div class="tblwrap"><table class="tt"><tr><th>Step</th><th>Its undo</th><th>When the undo is there</th></tr><tr><td>add c</td><td>add −c</td><td>always (5b13)</td></tr><tr><td>multiply by p</td><td>multiply by 1/p</td><td>when p is not 0 (5c10)</td></tr><tr><td>multiply by 0</td><td>none</td><td>never (5e5)</td></tr><tr><td>square</td><td>none that gives one answer</td><td>two messages share each sent number (5g6)</td></tr></table></div>
+  <p data-pid="0a53f1"><b>A step with no undo hides the message from everybody, the friend as well. A step whose way back forks leaves the friend with cases.</b></p>
+  <p data-pid="4fd632">A fork can be closed, and rung 2 has the tool. If both friends know beforehand that the message is a bus number, the domain of m is the positive numbers (2c2), and of the two ways back from 82 only 9 is in it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.4.1</span><span class="ph understand">understand</span>Which steps can always be undone, which only on a condition, and which never? <br>What does a fork in the way back leave the friend with?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt5">
+  <h2 class="sthead"><span class="stno">5crypt5</span>What the Receiver Holds</h2>
+  <p data-pid="33f631">What is the whole of what Randy needs?</p>
+  <p data-pid="bf1a1d">Put the last three footings in one list. This is the method for working it out.</p>
+  <div class="tblwrap"><table class="tt"><tr><th></th><th>What is held</th><th>Where it comes from</th></tr><tr><td>1</td><td>the sent number</td><td>said out loud; anyone has it</td></tr><tr><td>2</td><td>the steps of the story, in order</td><td>settled beforehand, and kept</td></tr><tr><td>3</td><td>the number in each step</td><td>settled beforehand, and kept</td></tr><tr><td>4</td><td>an undo for each step</td><td>rung 5: a negative, or a reciprocal</td></tr><tr><td>5</td><td>the domain of the message</td><td>settled beforehand; it closes any fork</td></tr><tr><td>6</td><td>the check</td><td>the story, run forwards on the answer</td></tr></table></div>
+  <p data-pid="0e9046">Only the first row travels. Rows 2, 3 and 5 are the secret, and they were held before anything was said. Rows 4 and 6 are not secret at all. They are rung 5's techniques, and Mike has them too.</p>
+  <p data-pid="639cc9"><b>The one who receives needs the story. The undoing itself is open to anyone who has the story.</b></p>
+  <p data-pid="930f7b">That is why the story has to be kept. Nothing in the undoing is hard. If Mike gets rows 2 and 3, he does what Randy does, in the same four lines.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.5.1</span><span class="ph understand">understand</span>Which rows of the list are kept, which are said, and which does everybody hold? <br>What follows if a listener gets the kept rows?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt6">
+  <h2 class="sthead"><span class="stno">5crypt6</span>The Undoing Is an Algorithm</h2>
+  <p data-pid="bb4f84">Does Randy have to think it through afresh each time?</p>
+  <p data-pid="d6da34">He does not. Look at what he did in 5crypt3. He held a number, and a list of steps not yet undone. He undid the last step on the list and struck it off. Then he looked whether any step was left.</p>
+  <p data-pid="f0f51b">4l1 has a name for work of that shape. It is an algorithm, and it has five parts.</p>
+  <div class="tblwrap"><table class="tt"><tr><th>Part (4l1)</th><th>In working it out</th></tr><tr><td>state</td><td>the number in hand, and the steps not yet undone</td></tr><tr><td>start</td><td>the sent number, and the whole story</td></tr><tr><td>stop test</td><td>no step is left</td></tr><tr><td>move</td><td>undo the last step left, and strike it off</td></tr><tr><td>output</td><td>the number in hand</td></tr></table></div>
+  <p data-pid="b4abd4">It stops, by 4l2. Each move leaves one step fewer, and a count of steps cannot get smaller for ever.</p>
+  <p data-pid="abc8bd">Its answer is right, by 4l3. One statement is true at the start and is kept by every move: the steps not yet undone, run forwards on the message, give the number in hand. At the stop no step is left, so the number in hand is the message.</p>
+  <p data-pid="f336bc">Evita's hiding is a function (4d2): each message is paired with one sent number. The undoing is an algorithm that walks the same pairs the other way.</p>
+  <p data-pid="d18dc6"><b>An algorithm can match a function. Given the story, it gets the message back every time, and nobody has to think.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.6.1</span><span class="ph understand">understand</span>What are the five parts of the algorithm for working it out? <br>Why does it stop, and why is its answer right?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt7">
+  <h2 class="sthead"><span class="stno">5crypt7</span>Working It Out Without the Story</h2>
+  <p data-pid="362f63">Mike has no story. Is there anything for him to work with?</p>
+  <p data-pid="d07de0">There is, and it is the same method. 5g1 said what to do with a number you do not know: give it a letter. Mike does not know the number multiplied by, so he calls it p. He does not know the number added, so he calls it b. He guesses the shape of the story, one multiplying and one adding, and writes it down.</p>
+  <div class="eqline" data-tex="s = p \cdot  m + b"></div>
+  <p data-pid="0fca7e">Now he needs facts. On Monday he heard 32, and later he saw the friends board bus 9. On Tuesday he heard 20 and saw them board bus 5. Each day is one condition on his two letters.</p>
+  <pre class="lines" data-k="ember" data-label="this page: working the story out">
+p \cdot  9 + b = 32 @@ Monday
+p \cdot  5 + b = 20 @@ Tuesday
+p \cdot  4 = 12 @@ take the second line from the first (5g8)
+p = 3 @@ multiply both sides by 1/4 (5g5)
+3 \cdot  5 + b = 20,\ \text{so}\ b = 5 @@ put p into Tuesday's line and add −15
+3 \cdot  9 + 5 = 32 @@ the check, on Monday
+  </pre>
+  <p data-pid="ce0bd1">Two unknowns, two conditions (5g8). Mike holds the story now, and on Wednesday he will work the message out as fast as Randy does.</p>
+  <p data-pid="20de25">So a hiding made only of steps lasts until a listener has seen enough. If Evita and Randy want more than that, they need a hiding that is not made of steps.</p>
+  <p data-pid="d4427e"><b>Working it out without the story is the same work, one level up: a letter for each thing not known, a condition for each thing seen, the same change to both sides, and a check.</b></p>
+  <p data-pid="45b323">Some things come out with no bus seen at all. 5k2 showed that a process can look closed and still give up facts. Suppose the story is “double it, then add 1” and the messages are counting numbers. Then every sent number is odd, whatever the message is. A listener who hears only odd numbers, day after day, has learned something about the story, and no letter was filled in.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.7.1</span><span class="ph understand">understand</span>What does a listener write down for each thing not known, and for each thing seen? <br>How many things seen did it take to get a story with two numbers in it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt8">
+  <h2 class="sthead"><span class="stno">5crypt8</span>More of the Same Is Not Deeper</h2>
+  <p data-pid="f55048">Evita hears what Mike did. Can she make the story safe by making it longer?</p>
+  <p data-pid="3cfe24">She tries four steps. “Multiply by 3, add 5, multiply by 2, add 4.”</p>
+  <div class="eqline" data-tex="s = 2 \cdot  (3 \cdot  m + 5) + 4"></div>
+  <p data-pid="a5367b">Randy now has four undos to do where he had two. Look at what Mike has. Spreading (5d5) opens the bracket.</p>
+  <div class="eqline" data-tex="s = 6 \cdot  m + 14"></div>
+  <p data-pid="c8a53f">The four steps are one multiplying and one adding. Mike's guess at the shape was right before and it is right again. Two days of watching still give him p = 6 and b = 14.</p>
+  <p data-pid="9ea32f"><b>A longer story of the same kind of step costs the friend more work, and costs the listener nothing more.</b></p>
+  <p data-pid="24b14c">So there are two costs to keep apart. One is what the friend pays to work the message out with the story. The other is what a listener pays to work it out without. Hiding is worth doing when the second is far above the first.</p>
+  <p data-pid="594356">Evita's first try, in 5crypt1, sent both costs out of reach together. Her long story raised only the friend's. What she wants is a step that is quick to do, quick to undo with the story, and slow to work out without it. Adding and multiplying on the fractions are not such steps. Rung 5 made them easy to undo for everybody, and that was the whole point of the rung.</p>
+  <p data-pid="9ac12b"><b>Each weakness found is a reason to go deeper and look for another kind of step. More of the same kind does not go deeper.</b></p>
+  <p data-pid="6351be">What Evita and Randy need is a kind of hiding that no algorithm walks back. They have had one since rung 0, and 5crypt9 comes to it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.8.1</span><span class="ph understand">understand</span>Why does a longer story of adding and multiplying give a listener no more work? <br>What are the two costs, and which should be high?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt9">
+  <h2 class="sthead"><span class="stno">5crypt9</span>What the Algorithm Hands Back</h2>
+  <p data-pid="b293a2">The algorithm has stopped, and its output is right. Has Randy worked the secret out? What if the code isn't simple, but hides more code?</p>
+  <p data-pid="0b8539">This time Evita sends a long message, one number for each letter, as the two of them settled. Randy's algorithm turns the numbers back into letters. He reads what came out.</p>
+  <p data-pid="d582bc">“Biscuits and gravy. Six cups of flour. Two cups of butter. Keep the butter cold. Rest seven minutes.” It goes on like that for more than twenty lines.</p>
+  <p data-pid="c813b9">Nothing went wrong. The check passes on every number. And a recipe for biscuits and gravy is not what Evita meant to tell him.</p>
+  <p data-pid="d33fa1">The message was hidden twice. The second hiding was done with numbers, and an algorithm has undone it. The first hiding was done before any number was written, with the tools of rungs 0 to 3, and it is still on.</p>
+  <div class="tblwrap"><table class="tt"><tr><th>Rung</th><th>What it lets the two of them do</th><th>Inside the recipe</th></tr><tr><td>0</td><td>give a thing any name they choose (0a2), and let a whole sentence be the name of a statement (0a9)</td><td>“biscuits” names the bus stop by the mill</td></tr><tr><td>1</td><td>say a line that is true and beside the point</td><td>the butter should be kept cold, and that line carries nothing; so do twenty others</td></tr><tr><td>2</td><td>settle the domain beforehand (2c2), so that a number picks from what they chose</td><td>the “two” of the butter is taken from the buses, not from the cups; the “seven” of the rest is taken from the hours, not from the minutes</td></tr><tr><td>3</td><td>let what a word names move on when the week does (3c1)</td><td>next week the dish is cobbler, and it names another stop</td></tr></table></div>
+  <p data-pid="8a9c93">Call that first hiding <b>style and guile</b>. Style is how a thing is said. Guile is saying one thing to mean another.</p>
+  <p data-pid="19f102"><b>The algorithm gives back what was sent. It does not give back what was meant.</b></p>
+  <p data-pid="09dc95">Randy can read the recipe, because he was there when the names were chosen. So the list in 5crypt5 was one row short.</p>
+  <div class="tblwrap"><table class="tt"><tr><th></th><th>What is held</th><th>Where it comes from</th></tr><tr><td>7</td><td>what the words of the message stand for</td><td>chosen by the two of them, and chosen again when they like</td></tr></table></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.9.1</span><span class="ph understand">understand</span>What does the algorithm hand back, and what is still hidden in it? <br>Which rungs' tools did the first hiding use?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt10">
+  <h2 class="sthead"><span class="stno">5crypt10</span>No Algorithm for Style and Guile</h2>
+  <p data-pid="3133bc">Mike has the story by now (5crypt7). Can he build an algorithm for the rest?</p>
+  <p data-pid="f1e803">He tries. He watches for a month and works out the agreement: in a recipe for biscuits and gravy, the cups of butter are the bus, and the first word is the place. He writes that down as an algorithm. Find the line with the butter. Read off its number.</p>
+  <p data-pid="4c4a43">The next week the message comes out as a recipe for berry cobbler. The bus is in the berries now. His algorithm finds a butter line, reads its number, and sends him to the wrong stop.</p>
+  <p data-pid="624954">The change cost Evita and Randy one new agreement, made in a minute. A name is chosen, not found (0a2), so it can be chosen again. It cost Mike his whole algorithm. 4l1 said that an algorithm is its five parts, and that nothing else may happen between moves. Noticing that the subject has changed is not one of the parts.</p>
+  <p data-pid="65a410">Suppose that by some miracle Mike builds an algorithm that reads every kind of recipe. The next message comes out as a schedule for the maintenance of a motor pool: forklifts and telehandlers, oil changes and tyre checks, for a fleet that does not exist anywhere.</p>
+  <p data-pid="7ffb96"><b>An algorithm can match an algorithm or a function. It cannot be tuned to a choice that is made again as soon as it is caught.</b></p>
+  <p data-pid="977540">So working it out has two parts, and they are not the same kind of work. Undoing what was done is an algorithm, and anybody with the story can run it. Reading what was meant is not an algorithm. It takes somebody who was party to the choosing, or somebody with guile enough to guess it.</p>
+  <p data-pid="8fec1e">That is also the answer to 5crypt8. The other kind of hiding Evita was looking for is cheap for the friend, who holds the agreement, and it is out of reach of a listener's algorithm. It is not out of reach of a listener who thinks.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.10.1</span><span class="ph understand">understand</span>What can an algorithm match, and what can it not be tuned to? <br>Why does a change of subject cost the friends so little and the listener so much?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5crypt11">
+  <h2 class="sthead"><span class="stno">5crypt11</span>Moves to Watch Out For</h2>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{Sending}\allowbreak \text{ with}\allowbreak \text{ no}\allowbreak \text{ way}\allowbreak \text{ back.} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; Evita hides the number and settles nothing with Randy. Test: what does the one who receives hold that a listener does not?
+\text{Undoing}\allowbreak \text{ the}\allowbreak \text{ steps}\allowbreak \text{ in}\allowbreak \text{ the}\allowbreak \text{ order}\allowbreak \text{ they}\allowbreak \text{ were}\allowbreak \text{ done.} @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; From 32, multiplying by 1/3 and then adding −5 gives 17/3. Test: which step was done last?
+\text{Using}\allowbreak \text{ a}\allowbreak \text{ step}\allowbreak \text{ with}\allowbreak \text{ no}\allowbreak \text{ undo.} @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; Multiplying by 0 sends every message to one sent number. Test: does each step have a negative or a reciprocal to undo it?
+\text{Taking}\allowbreak \text{ one}\allowbreak \text{ way}\allowbreak \text{ back}\allowbreak \text{ where}\allowbreak \text{ the}\allowbreak \text{ way}\allowbreak \text{ forks.} @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; From 82, under “square it, then add 1”, both 9 and −9 fit. Test: was the domain of the message settled beforehand?
+\text{Leaving}\allowbreak \text{ out}\allowbreak \text{ the}\allowbreak \text{ check.} @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; The answer may be right, and nothing shows it. Test: does the story, run forwards on the answer, give the sent number?
+\text{Making}\allowbreak \text{ the}\allowbreak \text{ story}\allowbreak \text{ longer}\allowbreak \text{ with}\allowbreak \text{ more}\allowbreak \text{ of}\allowbreak \text{ the}\allowbreak \text{ same}\allowbreak \text{ kind}\allowbreak \text{ of}\allowbreak \text{ step.} @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; The friend does more undos, and a listener does the same work as before. Test: does the long story spread out into a short one?
+\text{Taking}\allowbreak \text{ the}\allowbreak \text{ undoing}\allowbreak \text{ for}\allowbreak \text{ the}\allowbreak \text{ secret.} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; The undos are rung 5's, and everybody holds them. Test: which rows of the list in 5crypt5 are kept?
+\text{Taking}\allowbreak \text{ what}\allowbreak \text{ the}\allowbreak \text{ algorithm}\allowbreak \text{ hands}\allowbreak \text{ back}\allowbreak \text{ for}\allowbreak \text{ what}\allowbreak \text{ was}\allowbreak \text{ meant.} @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; The output is a recipe for biscuits and gravy, and the check passes. Test: was anything agreed about what the words stand for?
+\text{Tuning}\allowbreak \text{ an}\allowbreak \text{ algorithm}\allowbreak \text{ to}\allowbreak \text{ one}\allowbreak \text{ subject.} @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; It reads biscuits and gravy, and the next message is berry cobbler. Test: what does the algorithm do when the subject changes?
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·crypt.11.1</span><span class="ph understand">understand</span>Which of these moves stop the friend from reading the message, and which help a listener?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">5·crypt.12.1</span><span class="tagq">converse</span>One of you hides a number by any steps you like and says only the result. <br>The other tries to get the number back. <br>What did the second one ask for first?</div>
+  <div class="chq"><span class="chid">5·crypt.12.2</span><span class="tagq">do</span>The story is “add 4, then multiply by 2”. <br>Write it as a line with m and s. <br>Work out the sent number for the message 7.</div>
+  <div class="chq"><span class="chid">5·crypt.12.3</span><span class="tagq">do</span>The story is “multiply by 4, then add −3, then multiply by 2”. <br>The sent number is 50. <br>Work the message out, one line for each undo, and check it.</div>
+  <div class="chq"><span class="chid">5·crypt.12.4</span><span class="tagq">do</span>The story is “multiply by 3, then add 5” and the sent number is 32. <br>Undo the steps in the order they were done. <br>What comes out? <br>Which line of the check shows that it is wrong?</div>
+  <div class="chq"><span class="chid">5·crypt.12.5</span><span class="tagq">do</span>The story is “square it, then add −4”, and the sent number is 21. <br>Write every message that fits. <br>The friends had settled that messages are positive. <br>Which one is meant?</div>
+  <div class="chq"><span class="chid">5·crypt.12.6</span><span class="tagq">make</span>Write a story of three steps in which every step has an undo. <br>Write another in which one step has none. <br>Give both to a friend with a sent number, and see which one comes back.</div>
+  <div class="chq"><span class="chid">5·crypt.12.7</span><span class="tagq">do</span>Randy holds the sent number 26 and the story “multiply by some number, then add 2”, and he has forgotten the number. <br>Which row is he missing? <br>Write the line he is left with, and say why he cannot finish.</div>
+  <div class="chq"><span class="chid">5·crypt.12.8</span><span class="tagq">do</span>The story is “multiply by 3, then add 5” and the sent number is 32. <br>Write the state at the start and after each move, to the stop. <br>Say what the stop test found each time.</div>
+  <div class="chq"><span class="chid">5·crypt.12.9</span><span class="tagq">do</span>A listener guesses the shape s = p · m + b. <br>The message 2 was sent as 11, and the message 6 was sent as 23. <br>Work out p and b, and check them on both.</div>
+  <div class="chq"><span class="chid">5·crypt.12.10</span><span class="tagq">do</span>The story is “multiply by 6, then add 3” and the messages are counting numbers. <br>Without knowing any message, say one thing that is true of every sent number.</div>
+  <div class="chq"><span class="chid">5·crypt.12.11</span><span class="tagq">converse</span>One of you settles a story with one multiplying and one adding and keeps it. <br>Send three messages with it, and afterwards show two of them. <br>The other works the story out and reads the third.</div>
+  <div class="chq"><span class="chid">5·crypt.12.12</span><span class="tagq">do</span>The story is “add 2, multiply by 5, add −1, multiply by 2”. <br>Write it as a line, and then as one multiplying and one adding. <br>How many undos does the friend do with the long story, and how many with the short one?</div>
+  <div class="chq"><span class="chid">5·crypt.12.13</span><span class="tagq">open</span>What would a step have to be like, to be quick to undo with the story and slow to work out without it? <br>Does any step from rungs 0 to 5 come near?</div>
+  <div class="chq"><span class="chid">5·crypt.12.14</span><span class="tagq">make</span>Hide one sentence twice: first by an agreement about what some words stand for, then by a story of steps. <br>Give a friend the story and not the agreement. <br>What comes back to you?</div>
+  <div class="chq"><span class="chid">5·crypt.12.15</span><span class="tagq">converse</span>One of you settles an agreement about what the words of a recipe stand for, and sends three messages. <br>The other writes a fixed rule for reading them. <br>Then the first changes the subject. <br>How many messages did the rule last?</div>
+  <div class="chq"><span class="chid">5·crypt.12.16</span><span class="tagq">open</span>The subject of the messages keeps changing. <br>Is there anything left in them that a listener could still count?</div>
+  <div class="chq"><span class="chid">5·crypt.12.17</span><span class="tagq">do</span>A story reads “multiply by 0, then add 7, then multiply by 2”, and it comes with no check. <br>Name each move from this step that has been made.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r05eng.html">← 5·eng · how do gears change speed?</a><a href="r05k.html">5k · working with the gap →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="7daf17">Hiding a message by steps is <b>encryption</b>, and working it out with the story is <b>decryption</b>. The message is the <b>plaintext</b> and the sent number is the <b>ciphertext</b>. The kept numbers of the story are the <b>key</b>. A step that can be undone is <b>invertible</b>, and its undo is its <b>inverse</b>. A story of one multiplying and one adding is an <b>affine cipher</b>. Working a story out from messages that were seen together with their sent numbers is a <b>known-plaintext attack</b>. A step that is quick to do and slow to undo without something kept is a <b>trapdoor function</b>.</p>
+  <p data-pid="047ec6">An agreement that some words stand for other things is a <b>code</b>, as against a <b>cipher</b>, which works on the letters or numbers whatever they say. Hiding a message inside another that looks ordinary is <b>steganography</b>. Working a hidden message out without the story is <b>cryptanalysis</b>.</p>
+  <h3>A bus schedule in a recipe</h3>
+  <p data-pid="913968">Here is the whole thing done once, both hidings, on a real message. Evita wants to tell Randy: take bus 2, at 7 o'clock, from the stop by the mill.</p>
+  <p data-pid="de3d9c"><b>The first hiding: style and guile.</b> On Sunday the two of them agree what the parts of a recipe stand for. Nothing is written down.</p>
+  <div class="tblwrap"><table class="tt"><tr><th>In the recipe</th><th>What it stands for</th></tr><tr><td>the dish named first</td><td>the stop: biscuits are the mill, cobbler is the library</td></tr><tr><td>the cups of butter</td><td>the number of the bus</td></tr><tr><td>the minutes the dough rests</td><td>the hour</td></tr></table></div>
+  <p data-pid="918a3a">Three lines would be enough to carry that: biscuits, two cups of butter, rest seven minutes. But three lines are not a recipe, and anyone who has baked would see it. A recipe for biscuits runs to twenty or thirty lines. So Evita writes all of it, twenty-six lines, and it is a recipe a person could bake from. Three of the lines carry the message. The other twenty-three are there to be a recipe.</p>
+  <pre class="celltext">biscuits
+makes twenty four
+six cups flour
+two spoons baking powder
+one spoon salt
+one spoon sugar
+two cups butter
+two cups buttermilk
+heat the oven hot
+mix the flour and the powder
+add the salt and the sugar
+cut the butter small
+keep the butter cold
+rub it into the flour
+stop at pea size
+pour in the buttermilk
+stir until it holds
+turn it out on a board
+fold the dough four times
+pat it one inch thick
+rest seven minutes
+cut rounds straight down
+set them close on a pan
+brush the tops with milk
+bake fifteen minutes
+serve them warm</pre>
+  <p data-pid="c6d26e"><b>The second hiding: a substitution cipher.</b> Each letter is swapped for another letter by one fixed table. The table here is the plainest kind, the shifted alphabet of 4·crypt: letters name the numbers 0 to 25, and the story has one step, “add 3”, starting again after z. So b becomes E, i becomes L, and x, y, z become A, B, C. The message is written small and its secret form in capitals, as 4·crypt does.</p>
+  <pre class="celltext">ELVFXLWV
+PDNHV WZHQWB IRXU
+VLA FXSV IORXU
+WZR VSRRQV EDNLQJ SRZGHU
+RQH VSRRQ VDOW
+RQH VSRRQ VXJDU
+WZR FXSV EXWWHU
+WZR FXSV EXWWHUPLON
+KHDW WKH RYHQ KRW
+PLA WKH IORXU DQG WKH SRZGHU
+DGG WKH VDOW DQG WKH VXJDU
+FXW WKH EXWWHU VPDOO
+NHHS WKH EXWWHU FROG
+UXE LW LQWR WKH IORXU
+VWRS DW SHD VLCH
+SRXU LQ WKH EXWWHUPLON
+VWLU XQWLO LW KROGV
+WXUQ LW RXW RQ D ERDUG
+IROG WKH GRXJK IRXU WLPHV
+SDW LW RQH LQFK WKLFN
+UHVW VHYHQ PLQXWHV
+FXW URXQGV VWUDLJKW GRZQ
+VHW WKHP FORVH RQ D SDQ
+EUXVK WKH WRSV ZLWK PLON
+EDNH ILIWHHQ PLQXWHV
+VHUYH WKHP ZDUP</pre>
+  <p data-pid="fe3517">Those twenty-six lines are what Evita sends, where Mike can read them.</p>
+  <p data-pid="c1da04"><b>Working it out, with the story.</b> Randy holds the story, “add 3”. Its undo is “add −3”, and the algorithm of 5crypt6 runs it on every letter: E back to b, L back to i, V back to s. Out comes the recipe, all twenty-six lines. Then he reads it by the agreement, and he reads only three lines of it. Line 1 names the dish, biscuits, so the stop is the mill. Line 7 has the cups of butter, two, so bus 2. Line 21 has the minutes of rest, seven, so 7 o'clock. He passes over the rest.</p>
+  <p data-pid="331386"><b>Working it out, without the story.</b> Mike has only the capitals. He does what 5crypt7 did: he gives the unknown shift a letter, k, and looks for a condition on it. W comes 58 times, more than any other letter, and the word WKH comes 11 times. In English t is among the commonest letters and “the” is the commonest word. If W is t, then 19 + k = 22, and k = 3. He tries it and the lines turn into words, which is his check. A shift has only 25 stories to try in any case.</p>
+  <p data-pid="87a8ec">So Mike's algorithm stops, and its output is right: a recipe for biscuits, twenty-six lines of it. Now he holds eleven numbers: twenty four, six, two, one, one, two, two, four, one, seven, fifteen. Nothing in his output says that any of them is a bus, or which. He does not hold the bus, the hour or the stop, and no further step of his algorithm will make them. The longer and better the recipe, the more places there are for three lines to sit. Next week the dish is cobbler.</p>
+  <p data-pid="561974">A scrambled alphabet in place of the shift would give Mike more counting to do and Randy a longer table to hold. It would not change what comes out at the end. The recipe is where the secret is.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
