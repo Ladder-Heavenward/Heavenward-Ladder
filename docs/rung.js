@@ -3655,7 +3655,9 @@ function splitText(el,n){ /* el's sentences into n parts, each wrapped in span.s
   el.classList.add('sw-split'); return spans; }
 /* a proof row or a TeX line wider than the screen is set smaller until it fits (not below 70%), so it never scrolls sideways or down inside its box */
 function fitWide(root){ root.querySelectorAll('.rows .row .m, .eqbox').forEach(m=>{ if(m.closest('.rl,.rl-off,[hidden]')||!m.getClientRects().length) return; if(m.dataset.fw===String(m.clientWidth)&&m.scrollWidth<=m.clientWidth+1) return; /* measured again once the fonts have loaded */
-  m.style.fontSize=''; const k=m.clientWidth/Math.max(1,m.scrollWidth); if(k<0.995) { const base=parseFloat(getComputedStyle(m).fontSize)/Math.max(1,parseFloat(getComputedStyle(m.parentElement).fontSize)); m.style.fontSize=(base*Math.max(0.7,k*0.97)).toFixed(3)+'em'; } m.dataset.fw=String(m.clientWidth); }); }
+  m.style.fontSize=''; const k=m.clientWidth/Math.max(1,m.scrollWidth); if(k<0.995) { const base=parseFloat(getComputedStyle(m).fontSize)/Math.max(1,parseFloat(getComputedStyle(m.parentElement).fontSize)); m.style.fontSize=(base*Math.max(0.7,k*0.97)).toFixed(3)+'em'; 
+    /* still too wide at the smallest size: a line that is mostly words may wrap between its words */
+    if(m.scrollWidth>m.clientWidth+2&&m.querySelector('.katex .mord.text')){ m.classList.add('fwrap'); m.style.fontSize=''; m.querySelectorAll('.katex .mord.text').forEach(t=>{ const w=document.createTreeWalker(t,NodeFilter.SHOW_TEXT); let n; while((n=w.nextNode())) if(n.nodeValue.includes('\u00a0')) n.nodeValue=n.nodeValue.replace(/\u00a0/g,' '); }); } } m.dataset.fw=String(m.clientWidth); }); }
 function fitScreens(list){ const room=FITROOM(), had=document.body.classList.contains('sw'); document.body.classList.remove('sw'); const out=[];
   try{ try{ stackTables(); }catch(_){} /* a table too wide for the screen stacks into cards now that it can be measured */
     list.forEach(sc=>sc.forEach(el=>{ try{ fitWide(el.parentElement||el); }catch(_){} }));
