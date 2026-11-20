@@ -301,7 +301,8 @@ let active=null; const frames=new Set();
 function words(el,t){ if(/<[a-z!\/]/i.test(t)) el.innerHTML=t; else el.innerHTML=t.replace(/&(?!(?:[a-z]+|#\d+|#x[0-9a-f]+);)/gi,'&amp;').replace(/</g,'&lt;'); }
 /* a row too wide for the board (a long sentence set as maths cannot break) is set smaller until it fits, down to 60%; past that the row scrolls */
 function squeeze(r){ if(!r.clientWidth) return; if(r.dataset.sqw===String(r.clientWidth)) return; r.style.fontSize=''; const k=r.clientWidth/r.scrollWidth; if(k<0.995){ r.style.fontSize=Math.max(0.6,k*0.97).toFixed(3)+'em'; } r.dataset.sqw=String(r.clientWidth); }
-function mount(host,roll,opts){ try{ if(window.LadderNameItems) LadderNameItems(roll,host); }catch(e){} opts=opts||{};
+function mount(host,roll,opts){ opts=opts||{};
+  try{ if(window.LadderNameItems) LadderNameItems(roll,host); }catch(e){} /* the letter-name pass may add to the items' words before anything is drawn */
   const el=document.createElement('div'); el.className='rl k-'+(roll.k||'teal'); el.tabIndex=0; el.setAttribute('role','group'); el.setAttribute('aria-roledescription','slides'); if(roll.label) el.setAttribute('aria-label',roll.label);
   el.innerHTML='<div class="rl-bar"><i></i></div><div class="rl-head"><span class="rl-lab"></span><span class="rl-pos"></span></div><div class="rl-board" aria-live="polite"></div><div class="rl-say" aria-live="polite"></div>'
     +'<div class="rl-tap up" aria-hidden="true">▲ tap above to go back</div><div class="rl-tap dn" aria-hidden="true">▼ tap below to go on</div>';
@@ -318,7 +319,9 @@ function mount(host,roll,opts){ try{ if(window.LadderNameItems) LadderNameItems(
     rowEls.forEach((rs,j)=>rs.forEach(r=>{ const on=j<=i; r.classList.toggle('hid',!on); if(on&&!r.dataset.done){ typeset(r,r.dataset.t); r.dataset.done='1'; }
       r.classList.toggle('now',j===i); r.classList.toggle('past',j<i); r.classList.remove('fresh'); }));
     grpEls.forEach(([j,g])=>g.classList.toggle('hid',j>i));
-    if(roll.stage) light(roll.stage,it.hl);
+    if(roll.stage){ light(roll.stage,it.hl); /* a drawing taller than its frame: bring the lit part into view */
+      const bd=roll.stage.closest('.rl-board'); if(bd&&bd.scrollHeight>bd.clientHeight+4){ const L=[...roll.stage.querySelectorAll('.rl-lit')]; if(!L.length) bd.scrollTop=0; else { const B=bd.getBoundingClientRect(); let t=1e9,b=-1e9; L.forEach(x=>{ const r=x.getBoundingClientRect(); if(r.width||r.height){ t=Math.min(t,r.top); b=Math.max(b,r.bottom); } });
+        if(t<1e9&&(t<B.top+30||b>B.bottom-4)) bd.scrollTop+=Math.round(t-B.top-34); } } }
     rowEls.forEach((rs,j)=>{ if(j<=i) rs.forEach(squeeze); });
     if(moved&&dir>0) rowEls[i].forEach(r=>{ void r.offsetWidth; r.classList.add('fresh'); });
     say.innerHTML=''; if(it.no){ const no=document.createElement('span'); no.className='rl-no'; no.textContent=it.no+' of '+N; say.appendChild(no); }
@@ -352,7 +355,11 @@ function floorY(){ let b=window.innerHeight; const lb=document.getElementById('l
 function fitOne(el){ if(!el.isConnected){ frames.delete(el); return; } if(!el.getClientRects().length) return;
   if(EMBED){ const h=window.innerHeight+'px'; if(el.style.height!==h) el.style.height=h; if(el.__fit) el.__fit(); return; }
   if(el.closest('#desk,#stick,.dk-pane')||!document.body.classList.contains('sw')){ el.style.height=''; if(el.__fit) el.__fit(); return; }
-  const top=el.getBoundingClientRect().top+window.scrollY, h=Math.round(Math.max(300,Math.min(820,floorY()-top)));
+  const top=el.getBoundingClientRect().top+window.scrollY; let h=Math.round(Math.max(300,Math.min(820,floorY()-top)));
+  { /* whatever stands under the frame on the same screen (a letter-name line, a caption) keeps its room above the screen arrows */
+    const host=el.closest('.sw-on'); if(host){ let last=null; for(let n=host.nextElementSibling;n;n=n.nextElementSibling){ if(n.classList.contains('sw-on')&&n.getClientRects().length) last=n; }
+      if(last){ const cs=getComputedStyle(last); const under=Math.ceil(last.getBoundingClientRect().bottom+(parseFloat(cs.marginBottom)||0)-host.getBoundingClientRect().bottom); if(under>0&&under<=160) h=Math.max(300,h-under); } } }
+  if(el.parentElement&&el.parentElement.matches('figure.ghcell')){ const st=el.querySelector('.rl-figs'); if(st&&st.offsetHeight) h=Math.max(h,Math.min(820,st.offsetHeight+186)); } /* grid figures stand several to a screen: each frame is tall enough for its whole drawing and three lines of words */
   if(el.style.height!==h+'px') el.style.height=h+'px'; if(el.__fit) el.__fit();
   const r=el.__roll; if(r&&r.i>=0) r.show(r.i,0); }
 let fitT=0; function fitAll(){ cancelAnimationFrame(fitT); fitT=requestAnimationFrame(()=>frames.forEach(fitOne)); }
@@ -419,7 +426,7 @@ function pics(root){ let n=0; figs(root); (root||document).querySelectorAll('sec
    What to light is a list of marks, any of which lights a part: a colour name (ember, teal, gold, plum, ink, muted, grid, moss, sand),
    a tag (line, polyline, polygon, path, rect, circle, text), ~words (a label holding those words), #n or #a-b (the nth part of the
    drawing, from 0), r2 / c3 / head (a table's row, column, heading); marks joined by + must all hold. No marks: the whole drawing. */
-const partsOf=st=>{ const out=[]; st.querySelectorAll('svg').forEach(v=>{ if(v.closest('.katex')) return; [...v.children].forEach(c=>{ if(!/^(defs|title|desc|style)$/i.test(c.tagName)) out.push(c); }); });
+const partsOf=st=>{ const out=[]; st.querySelectorAll('svg').forEach(v=>{ if(v.closest('.katex')) return; const gh=v.classList.contains('ghsvg'); /* a grid figure keeps its drawing in one clipped group: its parts are the group's children */ [...v.children].forEach(c=>{ if(/^(defs|title|desc|style)$/i.test(c.tagName)) return; if(gh&&c.tagName.toLowerCase()==='g') [...c.children].forEach(d=>out.push(d)); else out.push(c); }); });
   st.querySelectorAll('table').forEach(t=>{ [...t.rows].forEach((tr,r)=>[...tr.cells].forEach((c,ci)=>{ c.dataset.rlr=String(r); c.dataset.rlc=String(ci+1); out.push(c); })); }); return out; };
 function hit(el,idx,m){ return m.split('+').every(t=>{ t=t.trim(); if(!t) return true;
   if(t[0]==='~'){ return /^(text|td|th)$/i.test(el.tagName)&&el.textContent.indexOf(t.slice(1))>=0; }
