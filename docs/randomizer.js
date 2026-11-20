@@ -4260,6 +4260,77 @@ K({id:'gline',step:'28·chem',steps:['18c','28·chem'],title:'the turning temper
   const o=four(right,ws.filter(w=>w!==right)); if(!o) return null;
   return card(this,{ix:[dH,dS,what].join(','),links,fig,ask,right,opts:o,why}); }});
 })();
+/* ===== Read Graph, part X: the rule book as an arrow chart, for the annex 2·crypt · Who May Open What? (footing 2crypt8, The Rule Book as an Arrow Chart;
+   2·crypt thread and Andrew 2026-11-20 07:31Z, 07:46Z: arrow diagrams in the annex, in the same style as 2b19's).
+   Holders a, b, c on the left, things kept k, m, n on the right; an arrow from a holder to a thing kept says the holder may
+   open it. A dashed arrow from the outsider e to a holder says e can pass for that holder. No page props (annex question rule).
+   Three kinds: openpairs (the pairs off the chart), openline (which of the four every/some lines is so, or is not so),
+   passreach (what e can open by following a pass-for arrow and then a may-open arrow).
+   Load after part W and before the turn-around, and only once the 2·crypt page is on the ladder. All three go in NOTWIN. ===== */
+(function(){
+const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph, {uniq}=G, {fgraph}=G.F;
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const card=(k,o)=>Object.assign({index:'g:'+k.id+'['+o.ix+']'+(o.links&&o.links.length?'.'+o.links.join('+'):''), a3:['g.'+k.id+'['+o.ix+']',(o.links&&o.links.length?o.links.join('+'):k.step),'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+const four=(right,c)=>{ const ws=uniq(right,c).slice(0,3); return ws.length<3?null:sh([right,...ws]); };
+const K=G.K, STEP='2·crypt', STEPS=['2·crypt'], H='abc', T='kmn', I3=[0,1,2];
+const list=a=>a.length===0?'nothing':a.length===1?a[0]:a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+
+/* a rule book: which holder may open which thing kept; P: the holders e can pass for (reach only) */
+function book(p){ const S=[]; I3.forEach(i=>I3.forEach(j=>{ if(R()<p) S.push([i,j]); })); return S; }
+const mayIn=S=>(i,j)=>S.some(e=>e[0]===i&&e[1]===j);
+function chart(S,P){ const lx=P?150:100, rx=P?270:230, ys=[45,115,185];
+  const N=I3.map(i=>({x:lx,y:ys[i],s:H[i],r:15})).concat(I3.map(j=>({x:rx,y:ys[j],s:T[j],shape:'box',w:32,h:30})));
+  const E=S.map(([i,j])=>({a:i,b:3+j}));
+  if(P){ N.push({x:40,y:115,s:'e',r:15}); P.forEach(i=>E.push({a:6,b:i,dash:1,hi:1})); }
+  return fgraph(N,E,320,230,'a rule book as an arrow chart: holders on the left, things kept on the right'+(P?', and an outsider with dashed arrows to the holders it can pass for':'')); }
+const ixOf=(S,P)=>S.map(e=>e.join('')).join('.')+(P?';'+P.join(''):'');
+const WHO='The holders are a, b and c, on the left. The things kept are k, m and n, on the right. An arrow from a holder to a thing kept says the holder may open it.';
+
+/* ---------- the pairs the chart holds ---------- */
+const pairs=S=>S.slice().sort((p,q)=>p[0]-q[0]||p[1]-q[1]).map(([i,j])=>'('+H[i]+', '+T[j]+')').join(', ');
+K({id:'openpairs',step:STEP,steps:STEPS,title:'the pairs a rule book holds',make(){
+  const S=book(0.42), may=mayIn(S); if(S.length<3||S.length>5) return null;
+  const right=pairs(S), turned=S.slice().sort((p,q)=>p[1]-q[1]||p[0]-q[0]).map(([i,j])=>'('+T[j]+', '+H[i]+')').join(', ');
+  const free=[]; I3.forEach(i=>I3.forEach(j=>{ if(!may(i,j)) free.push([i,j]); }));
+  const d=pk(S), a=pk(free), m=pk(S), to=pk(free.filter(f=>f[0]===m[0]||f[1]===m[1]).concat(free));
+  const c=[turned, pairs(S.map(p=>p===m?to:p)) /* one arrow read to the wrong end */, pairs(S.filter(p=>p!==d)) /* one arrow missed */, pairs(S.concat([a])) /* one pair too many */];
+  const o=four(right,c); if(!o) return null;
+  return card(this,{ix:ixOf(S),links:['2b.extension','2·crypt.chart'],fig:chart(S),
+    ask:WHO+' Which list of pairs is the extension of “x may open y”?',right,opts:o,
+    why:'Each arrow from a holder x to a thing kept y puts the pair (x, y) in the extension, holder first: '+right+'. A pair turned round would say a thing kept may open a holder.'}); }});
+
+/* ---------- which line is so, or is not so ---------- */
+const LINES=[
+ {t:'Every thing kept can be opened by some holder.', f:m=>I3.every(j=>I3.some(i=>m(i,j))),
+   why:(m,v)=>v?'every thing kept has an arrow coming in':'no arrow comes in to '+T[I3.find(j=>!I3.some(i=>m(i,j)))]},
+ {t:'Some holder can open every thing kept.', f:m=>I3.some(i=>I3.every(j=>m(i,j))),
+   why:(m,v)=>v?H[I3.find(i=>I3.every(j=>m(i,j)))]+' has an arrow to all three things kept':'no holder has an arrow to all three things kept'},
+ {t:'Every holder can open something.', f:m=>I3.every(i=>I3.some(j=>m(i,j))),
+   why:(m,v)=>v?'every holder has an arrow going out':'no arrow goes out from '+H[I3.find(i=>!I3.some(j=>m(i,j)))]},
+ {t:'Some thing kept can be opened by every holder.', f:m=>I3.some(j=>I3.every(i=>m(i,j))),
+   why:(m,v)=>v?'all three holders have an arrow to '+T[I3.find(j=>I3.every(i=>m(i,j)))]:'no thing kept has an arrow from all three holders'}];
+K({id:'openline',step:STEP,steps:STEPS,title:'the line that is so in the rule book',make(){
+  const S=book(pk([0.3,0.45,0.6])), may=mayIn(S); if(S.length<2||S.length>7) return null;
+  const v=LINES.map(l=>l.f(may)), so=v.filter(Boolean).length; if(so!==1&&so!==3) return null;   /* one line stands alone, so or not so */
+  const want=so===1, r=LINES[v.indexOf(want)], o=sh(LINES.map(l=>l.t));
+  const say=l=>'“'+l.t.slice(0,-1)+'” is '+(l.f(may)?'so':'not so')+': '+l.why(may,l.f(may));
+  return card(this,{ix:ixOf(S)+';'+(want?'so':'not'),links:['2b.every-some','2·crypt.chart'],fig:chart(S),
+    ask:WHO+(want?' Which line is so in this rule book?':' Which line is not so in this rule book?'),right:r.t,opts:o,
+    why:say(r)+'. '+LINES.filter(l=>l!==r).map(say).join('. ')+'.'}); }});
+
+/* ---------- what the outsider can reach: a pass-for arrow, then a may-open arrow ---------- */
+K({id:'passreach',step:STEP,steps:STEPS,title:'what an outsider can reach by two arrows',make(){
+  const S=book(0.4), may=mayIn(S); if(S.length<3||S.length>6) return null;
+  const P=R()<0.6?[rn(3)]:sh(I3).slice(0,2).sort(), opens=i=>I3.filter(j=>may(i,j));
+  const got=I3.filter(j=>P.some(i=>may(i,j))), name=a=>list(a.map(j=>T[j]));
+  const right=name(got), others=I3.filter(i=>!P.includes(i));
+  const c=[name(I3.filter(j=>others.some(i=>may(i,j)))) /* the holders e cannot pass for */, name(I3.filter(j=>I3.some(i=>may(i,j)))) /* every thing any holder may open */,
+           name(I3.filter(j=>!got.includes(j))) /* the rest */].concat(sh(I3.map(i=>name(opens(i)))), sh([name([0]),name([1]),name([2]),name([0,1]),name([1,2]),name([0,2]),'nothing']));
+  const o=four(right,c); if(!o) return null;
+  return card(this,{ix:ixOf(S,P),links:['2·crypt.chart','2·crypt.pass-for'],fig:chart(S,P),
+    ask:WHO+' e is an outsider, and a dashed arrow from e to a holder says e can pass for that holder. Following a dashed arrow and then a may-open arrow, which things kept can e reach?',right,opts:o,
+    why:P.map(i=>'e can pass for '+H[i]+', and '+H[i]+' may open '+name(opens(i))).join('; ')+'. So e can reach '+right+'. An arrow from a holder e cannot pass for does not help e.'}); }});
+})();
 /* ===== Read Graph, the turn-around link (Andrew 2026-11-14 14:08Z: "For each graph we make we can turn it around: which graph/table/map
    represents the statement provided"). Loaded last. For every kind already registered, a twin kind deals the same question backwards:
    the question and its answer are given, and four pictures of that kind are offered; exactly one has that answer. The twins draw their
@@ -4290,7 +4361,7 @@ function turnMake(k){ return function(){
     fig:'', html, wide, right, opts:LET.slice(), ask:'Turned around: '+c.ask+' The answer is '+c.right+'. In which picture?',
     why:'In '+right+' the answer is '+c.right+'. '+c.why+' In the other pictures the same question gives '+sib.map(s=>s.right).join(', ')+'.'}; }; }
 /* kinds whose question changes with every picture so that no three siblings share it (t4 sweep, 2026-11-14): no twin */
-const NOTWIN=['whichgrid','hill','gline','pie','stemplot','margin','residplot','area3','impltan','keepdrop','slopeat·recip','mvt','column','landing','slopepic','wave4','specsum','composed','ivt','taylor','sphere','isfn','overfit','heat','waveeq','huecircle','colourfade',
+const NOTWIN=['openpairs','openline','passreach','whichgrid','hill','gline','pie','stemplot','margin','residplot','area3','impltan','keepdrop','slopeat·recip','mvt','column','landing','slopepic','wave4','specsum','composed','ivt','taylor','sphere','isfn','overfit','heat','waveeq','huecircle','colourfade',
   /* part F (2026-11-15): kinds whose siblings rarely share a question */ 'swing','fewcolours','layers','square','commit','uphill','boxat','matching','treelen','knotcolours','uprightcase',
   /* Andrew 14:54Z: the picture does not change with the answer, so four different-looking pictures cannot be found */ 'benford','ringclock','slopeat·sin'];
 base.forEach(k=>{ if(k.id.indexOf('turn·')===0||NOTWIN.includes(k.id)) return; G.KINDS.push({id:'turn·'+k.id,step:k.step,steps:k.steps,title:k.title+', turned around',turned:true,make:turnMake(k)}); });
