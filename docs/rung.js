@@ -311,12 +311,14 @@ function mount(host,roll,opts){ opts=opts||{};
   const N=roll.items.length, rowEls=[], grpEls=[];
   roll.items.forEach((it,j)=>{ if(it.grp){ const g=document.createElement('div'); g.className='rl-grp hid'; g.textContent=it.grp; board.appendChild(g); grpEls.push([j,g]); }
     rowEls[j]=it.rows.map(t=>{ const r=document.createElement('div'); r.className='rl-row hid'; r.dataset.t=t; board.appendChild(r); return r; }); });
+  if(roll.stage){ board.classList.add('rl-stage'); board.appendChild(roll.stage); }
   let i=-1;
   function show(n,dir){ if(!N) return; n=Math.max(0,Math.min(N-1,n)); const moved=n!==i, was=i<0?-1:roll.items[i].si; i=n; const it=roll.items[i];
-    el.className='rl k-'+(it.k||roll.k||'teal')+(i===0?' at-start':'')+(i===N-1?' at-end':'');
+    el.className='rl'+(roll.stage?' rl-fig':'')+' k-'+(it.k||roll.k||'teal')+(i===0?' at-start':'')+(i===N-1?' at-end':'');
     rowEls.forEach((rs,j)=>rs.forEach(r=>{ const on=j<=i; r.classList.toggle('hid',!on); if(on&&!r.dataset.done){ typeset(r,r.dataset.t); r.dataset.done='1'; }
       r.classList.toggle('now',j===i); r.classList.toggle('past',j<i); r.classList.remove('fresh'); }));
     grpEls.forEach(([j,g])=>g.classList.toggle('hid',j>i));
+    if(roll.stage) light(roll.stage,it.hl);
     rowEls.forEach((rs,j)=>{ if(j<=i) rs.forEach(squeeze); });
     if(moved&&dir>0) rowEls[i].forEach(r=>{ void r.offsetWidth; r.classList.add('fresh'); });
     say.innerHTML=''; if(it.no){ const no=document.createElement('span'); no.className='rl-no'; no.textContent=it.no+' of '+N; say.appendChild(no); }
@@ -398,15 +400,42 @@ function framePic(sec,opts){ opts=opts||{}; if(sec.dataset.rl) return sec.__pic;
   el.addEventListener('pointerdown',e=>{ if(!cap.hidden&&!e.target.closest('.rl-cap,.rl-info')){ cap.hidden=true; info.setAttribute('aria-expanded','false'); } });
   /* shrink the drawings so the body fits the frame; never below 42% of it: past that the body scrolls inside the frame */
   const drawn=()=>[...body.querySelectorAll('canvas,svg')].filter(c=>!c.closest('.katex,button,.rl-off,[hidden]')&&c.getClientRects().length&&c.getBoundingClientRect().height>90);
+  /* a drawing is only made smaller if it keeps its shape when narrowed: one that holds its own height (drawn at a fixed size by its page) is put back and left alone */
   function fit(){ const cvs=drawn(); cvs.forEach(c=>{ if(c.dataset.rlmw){ c.style.maxWidth=''; delete c.dataset.rlmw; } }); if(!cvs.length||!el.style.height) return;
-    let tries=0; const step=()=>{ const over=body.scrollHeight-body.clientHeight; if(over<=1||tries++>4) return; const live=drawn(); if(!live.length) return;
+    let tries=0; const step=()=>{ const over=body.scrollHeight-body.clientHeight; if(over<=1||tries++>4) return; const live=drawn().filter(c=>!c.dataset.rlno); if(!live.length) return;
         const tall=live.reduce((a,c)=>a+c.getBoundingClientRect().height,0), floor=body.clientHeight*0.42; if(tall<=floor) return; const k=Math.max(floor/tall,(tall-over-2)/tall); if(k>=0.995) return;
-        live.forEach(c=>{ const w=c.getBoundingClientRect().width; c.style.maxWidth=Math.floor(w*k)+'px'; c.dataset.rlmw='1'; if(!c.style.marginInline) c.style.marginInline='auto'; });
-        requestAnimationFrame(()=>requestAnimationFrame(step)); };
+        const was=live.map(c=>{ const r=c.getBoundingClientRect(); return [r.width,r.height]; });
+        live.forEach((c,j)=>{ c.style.maxWidth=Math.floor(was[j][0]*k)+'px'; c.dataset.rlmw='1'; if(!c.style.marginInline) c.style.marginInline='auto'; });
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{ let undone=false; live.forEach((c,j)=>{ const r=c.getBoundingClientRect(); if(!r.width||!r.height||!was[j][1]) return;
+            if(Math.abs(r.width/r.height-was[j][0]/was[j][1])>0.04*was[j][0]/was[j][1]){ c.style.maxWidth=''; delete c.dataset.rlmw; c.dataset.rlno='1'; undone=true; } });
+          if(undone) tries=Math.max(0,tries-1); step(); })); };
     requestAnimationFrame(step); }
   if(eb) eb.remove(); sec.appendChild(el); frames.add(el); let lw=0; el.__fit=()=>{ if(multi&&tabbed()!==el.classList.contains('rl-tabbed')){ lay(); return; } const w=el.clientWidth+'x'+el.style.height; if(w!==lw){ lw=w; fit(); } };
   lay(); const api={el,pick,fit}; sec.__pic=api; return api; }
-function pics(root){ let n=0; (root||document).querySelectorAll('section.pic:not([data-rl])').forEach(s=>{ if(s.closest('#desk,#stick,.fvghost')) return; try{ framePic(s); n++; }catch(e){} }); if(EMBED) embed(); fitAll(); return n; }
+function pics(root){ let n=0; figs(root); (root||document).querySelectorAll('section.pic:not([data-rl])').forEach(s=>{ if(s.closest('#desk,#stick,.fvghost')) return; try{ framePic(s); n++; }catch(e){} }); if(EMBED) embed(); fitAll(); return n; }
+
+/* a plain drawing (a graph figure, a grid, a diagram: nothing to tap or drag) gets the frame too. One that carries a story
+   (data-story, a list of [words, what to light]) becomes slides: each slide lights its part of the drawing and dims the rest.
+   What to light is a list of marks, any of which lights a part: a colour name (ember, teal, gold, plum, ink, muted, grid, moss, sand),
+   a tag (line, polyline, polygon, path, rect, circle, text), ~words (a label holding those words), #n or #a-b (the nth part of the
+   drawing, from 0), r2 / c3 / head (a table's row, column, heading); marks joined by + must all hold. No marks: the whole drawing. */
+const partsOf=st=>{ const out=[]; st.querySelectorAll('svg').forEach(v=>{ if(v.closest('.katex')) return; [...v.children].forEach(c=>{ if(!/^(defs|title|desc|style)$/i.test(c.tagName)) out.push(c); }); });
+  st.querySelectorAll('table').forEach(t=>{ [...t.rows].forEach((tr,r)=>[...tr.cells].forEach((c,ci)=>{ c.dataset.rlr=String(r); c.dataset.rlc=String(ci+1); out.push(c); })); }); return out; };
+function hit(el,idx,m){ return m.split('+').every(t=>{ t=t.trim(); if(!t) return true;
+  if(t[0]==='~'){ return /^(text|td|th)$/i.test(el.tagName)&&el.textContent.indexOf(t.slice(1))>=0; }
+  if(t[0]==='#'){ const q=t.slice(1).split('-').map(Number); return idx>=q[0]&&idx<=(q.length>1?q[1]:q[0]); }
+  if(t==='head') return el.tagName==='TH'; if(/^r\d+$/.test(t)) return el.tagName==='TD'&&el.dataset.rlr===t.slice(1); if(/^c\d+$/.test(t)) return /^T[DH]$/.test(el.tagName)&&el.dataset.rlc===t.slice(1);
+  if(/^(line|polyline|polygon|path|rect|circle|ellipse|text|g|image)$/.test(t)) return el.tagName.toLowerCase()===t;
+  return (el.getAttribute('style')||'').indexOf('var(--'+t+')')>=0; }); }
+function light(stage,hl){ const ps=stage.__parts||(stage.__parts=partsOf(stage)); const bySvg=new Map(); const all=!hl||!hl.length;
+  ps.forEach(el=>{ const root=el.ownerSVGElement||el.closest('table'); const k=bySvg.get(root)||0; bySvg.set(root,k+1); const on=all||hl.some(m=>hit(el,k,m)); el.classList.toggle('rl-dim',!on); el.classList.toggle('rl-lit',on&&!all); }); }
+function figFrame(box){ if(box.dataset.rl) return; box.dataset.rl='1'; let story=null; try{ story=JSON.parse(box.getAttribute('data-story')||'null'); }catch(e){}
+  if(story&&story.length){ const stage=document.createElement('div'); stage.className='rl-figs'; [...box.childNodes].forEach(n=>stage.appendChild(n));
+    box.classList.add('rl-host'); const r=mount(box,{k:'teal',label:box.dataset.label||'The figure',stage,items:story.map((x,si)=>({rows:[],text:x[0]||'',hl:x[1]||[],si}))},ENDS); return; }
+  const el=document.createElement('div'); el.className='rl rl-pic rl-plain k-teal'; el.innerHTML='<div class="rl-head"><span class="rl-lab"></span></div><div class="rl-body"></div>'; el.querySelector('.rl-lab').textContent=box.dataset.label||'The figure';
+  const body=el.querySelector('.rl-body'); [...box.childNodes].forEach(n=>body.appendChild(n)); box.appendChild(el); }
+const FIGSEL='.gfigs,figure.ghcell,section.step div.circ,section.class div.circ';
+function figs(root){ (root||document).querySelectorAll(FIGSEL).forEach(b=>{ if(b.dataset.rl||b.closest('#desk,#stick,.fvghost,.rl,.pic,.dk-pfpane')) return; try{ figFrame(b); }catch(e){} }); }
 
 /* the picture button on a technique's card (Techs Read, Tech Deck): the pages that have a picture are listed by patch.py */
 const PICS=new Set('inf51 r00c r01b r01c r01d r01e r01f r02b r02bio r02comp r02d r02e r02f r02g r02h r02i r02j r02stat r03a r03c r03comp r03d r03f r04b r04c r04comp r04crypt r04d r04e r04f r04g r04h r04i r04j r04k r04l r04stat r05b r05bio r05c r05cb2 r05chem r05d r05e r05eng r05f r05g r05h r05i r05j r05nav r05stat r06b r06c r06chem r06d r06e r06logi r06phys r06stat r07b r07c r07cb4 r07cb6 r07crypt r07d r07e r07econ r07f r07logi r07phys r07then r08a r08b r08c r08cb5 r08cb6 r08comp r08d r08e r08econ r08eng r08f r08g r08h r08i r08phys r08stat r09a r09b r09bio r09c r09cb4 r09chem r09crypt r09d r09e r09f r09g r09h r09phys r09stat r10a r10b r10bio r10c r10crypt r10d r10e r10econ r10f r10g r10logi r10phys r11a r11b r11c r11chem r11crypt r11d r11e r11econ r11f r12a r12b r12c r12comp r12d r12e r12econ r12eng r12phys r13a r13b r13c r13chem r13comp r13d r13e r13econ r13eng r13f r13g r13h r13i r13j r13k r13l r13m r13nav r13phys r13stat r14a r14b r14bio r14c r14chem r14d r14e r14econ r14f r14g r14h r14i r14logi r14phys r14stat r15a r15b r15c r15chem r15d r15e r15econ r15eng r15f r15g r15h r15i r15phys r15stat r16a r16b r16bio r16c r16cb12 r16d r16e r16econ r16eng r16f r16g r16h r16i r16j r16logi r16nav r16phys r16then r17a r17b r17bio r17c r17chem r17comp r17crypt r17d r17e r17f r17g r17h r17i r17j r17k r17phys r17stat r17then r18a r18b r18c r18cb13 r18cb16 r18chem r18d r18e r18econ r18eng r18f r18g r18h r18i r18j r18logi r18nav r18phys r19a r19b r19c r19chem r19d r19e r19eng r19f r20a r20b r20c r20cb19 r20cb8 r20cb9 r20chem r20d r20e r20f r20g r20h r20i r20j r20nav r20phys r21a r21b r21bio r21c r21cb18 r21cb20 r21d r21e r21eng r21f r21g r21h r21i r21j r21m r21p r21q r21r r22a r22chem r22comp r22crypt r22d r22econ r22logi r22nav r22now r22phys r22stat r23a r23d r23eng r23f r23nav r23phys r24b r24bio r24e r24eng r24i r24j r24k r24l r24now r24phys r24then r25cb7 r25chem r25econ r25eng r25now r26cb24 r26phys r26then r27cb24 r27chem r27crypt r27econ r27nav r27now r27phys r27then r28bio r28econ r28logi r28now r28phys r28then r29cb28 r29cb3 r29nav r29now r29phys r29then r29time r30bio r30comp r30econ r30logi r30nav r30now r30phys r30then r32c r32eng r32nav r32phys r34bio r34cb18 r34now r34phys'.split(' ')); /* 350 pages with a picture, listed by patch.py */
@@ -421,7 +450,7 @@ function embed(){ const pid=(location.search.match(/[?&]pid=([^&#]+)/)||[])[1]; 
   sec=sec||document.querySelector('section.pic'); if(!sec) return; if(!sec.dataset.rl) try{ framePic(sec); }catch(e){}
   document.body.appendChild(sec); sec.classList.add('embed-on'); fitAll(); }
 
-window.LadderRoll={fromPre,fromSteps,mount,lines,deck,framePic,pics,fitAll,rowsOf,pieces,picBtn,hasPic:f=>PICS.has(f)};
+window.LadderRoll={fromPre,fromSteps,mount,lines,deck,framePic,pics,figs,light,fitAll,rowsOf,pieces,picBtn,hasPic:f=>PICS.has(f)};
 })();
 /* ---- end roll ---- */
 (function(){
