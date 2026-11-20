@@ -301,7 +301,7 @@ let active=null; const frames=new Set();
 function words(el,t){ if(/<[a-z!\/]/i.test(t)) el.innerHTML=t; else el.innerHTML=t.replace(/&(?!(?:[a-z]+|#\d+|#x[0-9a-f]+);)/gi,'&amp;').replace(/</g,'&lt;'); }
 /* a row too wide for the board (a long sentence set as maths cannot break) is set smaller until it fits, down to 60%; past that the row scrolls */
 function squeeze(r){ if(!r.clientWidth) return; if(r.dataset.sqw===String(r.clientWidth)) return; r.style.fontSize=''; const k=r.clientWidth/r.scrollWidth; if(k<0.995){ r.style.fontSize=Math.max(0.6,k*0.97).toFixed(3)+'em'; } r.dataset.sqw=String(r.clientWidth); }
-function mount(host,roll,opts){ opts=opts||{};
+function mount(host,roll,opts){ try{ if(window.LadderNameItems) LadderNameItems(roll,host); }catch(e){} opts=opts||{};
   const el=document.createElement('div'); el.className='rl k-'+(roll.k||'teal'); el.tabIndex=0; el.setAttribute('role','group'); el.setAttribute('aria-roledescription','slides'); if(roll.label) el.setAttribute('aria-label',roll.label);
   el.innerHTML='<div class="rl-bar"><i></i></div><div class="rl-head"><span class="rl-lab"></span><span class="rl-pos"></span></div><div class="rl-board" aria-live="polite"></div><div class="rl-say" aria-live="polite"></div>'
     +'<div class="rl-tap up" aria-hidden="true">▲ tap above to go back</div><div class="rl-tap dn" aria-hidden="true">▼ tap below to go on</div>';
@@ -2246,50 +2246,78 @@ function nonskid(){
 }
 /* names (Andrew 2026-11-20 06:44Z): each Greek or curly letter is named where it first appears on the page, never in a bundle line under the title.
    In prose the name follows the letter: "φ (small phi)". In a TeX box, picture or table, one line right under that box names the letters it brings in.
-   A letter whose name the same paragraph already says is left alone. */
-function nameLetters(){
-  if(document.querySelector('.gname')) return;
+   A letter whose name the same paragraph already says is left alone.
+   Rolled decks and worked lines draw one item at a time, so the roll hands us its items before it draws (LadderNameItems, called first in mount). */
+const NL=(()=>{
   const N={α:'alpha',β:'beta',γ:'gamma',δ:'delta',ε:'epsilon',ζ:'zeta',η:'eta',θ:'theta',ι:'iota',κ:'kappa',λ:'lambda',μ:'mu',ν:'nu',ξ:'xi',π:'pi',ρ:'rho',σ:'sigma',ς:'sigma',τ:'tau',υ:'upsilon',φ:'phi',χ:'chi',ψ:'psi',ω:'omega'};
   const T={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',vartheta:'θ',iota:'ι',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',varrho:'ρ',sigma:'σ',varsigma:'ς',tau:'τ',upsilon:'υ',phi:'φ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Upsilon:'Υ',Phi:'Φ',Psi:'Ψ',Omega:'Ω'};
   const C=[...'𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵'];
   const norm=ch=>ch==='ϕ'?'φ':ch==='ϵ'?'ε':ch==='ϑ'?'θ':ch;
   const isG=ch=>!!N[ch.toLowerCase()], isC=ch=>C.includes(ch);
   const nameOf=ch=>isC(ch)?'curly '+String.fromCharCode(65+C.indexOf(ch)):(ch===ch.toLowerCase()?'small ':'capital ')+N[ch.toLowerCase()];
-  /* the letters a run of plain text shows, with where each sits; the mark after ∞ is a step's label, not a letter */
-  const scan=str=>{ const out=[]; let i=0, prev=''; for(const ch0 of str){ const ch=norm(ch0); if(prev!=='∞'&&(isG(ch)||isC(ch))) out.push({ch,i:i+ch0.length}); prev=ch0; i+=ch0.length; } return out; };
+  /* the letters a run of text shows, with where each ends; the mark after ∞ is a step's label, not a letter; in an html string, tags and entities are skipped */
+  const scan=(str,html)=>{ const out=[]; let i=0, prev='', tag=false, ent=false; for(const ch0 of str){ if(html){ if(ch0==='<') tag=true; else if(ch0==='&') ent=true; }
+      if(!tag&&!ent){ const ch=norm(ch0); if(prev!=='∞'&&(isG(ch)||isC(ch))) out.push({ch,i:i+ch0.length}); }
+      if(html){ if(ch0==='>') tag=false; else if(ch0===';'||ch0===' ') ent=false; } prev=ch0; i+=ch0.length; } return out; };
   const texLetters=src=>{ const out=[]; String(src||'').replace(/\\mathcal\s*\{?\s*([A-Z])|\\([A-Za-z]+)|([^\\])/g,(m,c,w,x)=>{ let ch=c?C[c.charCodeAt(0)-65]:w?T[w]:x?norm(x):''; if(ch&&(isG(ch)||isC(ch))&&!out.includes(ch)) out.push(ch); return m; }); return out; };
-  const SKIP='script,style,template,h1,h2,h3,h4,.tags,.pn,nav,.eyebrow,.sthead,.stnext,.qid,button,.lbar,#lbar,.fvhead,.home,.gname,.brkkey,.phkey,.lockhint';
-  const seen=new Set(), notes=new Map();
-  /* the words of the letter's own paragraph, leaving out typeset maths (whose hidden source spells \sigma) and names already added */
-  const words=box=>{ let s=''; const w=n=>{ if(n.nodeType===3){ s+=n.data; return; } if(n.nodeType!==1||n.matches('.katex,[data-tex],[data-tex-inline],.gname,annotation,script,style')) return; n.childNodes.forEach(w); }; w(box); return s; };
-  const said=(el,ch)=>{ const box=el&&el.closest&&el.closest('p,li,td,th,dd,dt,figcaption,.cap,.row'); if(!box) return false; const w=N[ch.toLowerCase()], s=words(box); return w?new RegExp('\\b'+w+'\\b','i').test(s):new RegExp('\\bcurly '+String.fromCharCode(65+C.indexOf(ch))+'\\b').test(s); };
-  const note=(anchor,chs)=>{ if(!chs.length) return; let n=notes.get(anchor); if(!n){ n=document.createElement(anchor.matches('li')?'span':'p'); n.className='gname'; n.dataset.letters=''; anchor.after(n); notes.set(anchor,n); }
-    n.dataset.letters+=chs.join(''); n.textContent=[...n.dataset.letters].map(ch=>ch+' is '+nameOf(ch)).join('; ')+'.'; };
-  const blockOf=el=>el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline,.katex-display')||el;
-  const tex=el=>{ const fresh=texLetters((el.getAttribute('data-tex')||'')+' '+(el.getAttribute('data-tex-inline')||'')).filter(ch=>!seen.has(ch)); fresh.forEach(ch=>seen.add(ch)); const want=fresh.filter(ch=>!said(el,ch)); if(!want.length) return;
-    const inline=el.hasAttribute('data-tex-inline')&&!el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline');
-    if(inline){ const sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=' ('+want.map(ch=>ch+' is '+nameOf(ch)).join(', ')+')'; el.after(sp); }
-    else { let a=blockOf(el); if(a.matches('svg')&&a.closest('figure,.pic')) a=a.closest('figure,.pic'); note(a,want); } };
-  const text=t=>{ const hits=scan(t.data).filter(h=>{ if(seen.has(h.ch)) return false; seen.add(h.ch); return !said(t.parentElement,h.ch); }); if(!hits.length) return;
-    const host=t.parentElement; if(host.closest('svg,pre,.eqline,.eqline-words,.lines,.texline,table')){ let a=blockOf(host); if(a.matches('svg')&&a.closest('figure,.pic')) a=a.closest('figure,.pic'); note(a,hits.map(h=>h.ch)); return; }
-    /* a letter written onto its brackets, φ(x), keeps them: the name comes after the closing bracket, as "φ(x) (φ is small phi)" */
-    const end=(str,i)=>{ let j=i; while(j<str.length&&/[₀-₉ᵢⱼₖₙ′″'*]/.test(str[j])) j++; if(str[j]!=='(') return [j,false]; let d=0; for(let q=j;q<str.length;q++){ if(str[q]==='(') d++; else if(str[q]===')'&&!--d) return [q+1,true]; } return [i,false]; };
-    /* a letter standing as a word gets its name right after it; a letter inside a formula, e^(−κt), gets it where the clause ends, so the formula stays whole */
-    const str=t.data, ins=[], group=new Map();
-    const alone=h=>{ const st=h.i-[...h.ch].join('').length, pv=st>0?str[st-1]:' ', nx=h.i<str.length?str[h.i]:' '; return /[\s“‘]/.test(pv)&&/[\s,.;:?!”’]/.test(nx); };
-    hits.forEach(h=>{ const st=h.i-h.ch.length, [at,app]=st<=0||/[\s“‘]/.test(str[st-1])?end(str,h.i):[h.i,false]; if(app){ ins.push({at,txt:' ('+h.ch+' is '+nameOf(h.ch)+')'}); return; } if(alone(h)){ ins.push({at:h.i,txt:' ('+nameOf(h.ch)+')'}); return; }
-      const m=/[.;:?!](\s|$)/.exec(str.slice(h.i)), at2=m?h.i+m.index:str.replace(/\s+$/,'').length; (group.get(at2)||group.set(at2,[]).get(at2)).push(h.ch); });
+  const saysName=(s,ch)=>{ const w=N[ch.toLowerCase()]; return w?new RegExp('\\b'+w+'\\b','i').test(s):new RegExp('\\bcurly '+String.fromCharCode(65+C.indexOf(ch))+'\\b').test(s); };
+  /* where each name goes in a run of text: a letter standing as a word gets its name right after it, "δ (small delta)";
+     a letter written onto its brackets keeps them, "φ(x) (φ is small phi)"; a letter inside a formula gets it where the clause ends, so the formula stays whole */
+  const plan=(str,hits)=>{ const ins=[], group=new Map();
+    const end=i=>{ let j=i; while(j<str.length&&/[₀-₉ᵢⱼₖₙ′″'*]/.test(str[j])) j++; if(str[j]!=='(') return [j,false]; let d=0; for(let q=j;q<str.length;q++){ if(str[q]==='(') d++; else if(str[q]===')'&&!--d) return [q+1,true]; } return [i,false]; };
+    hits.forEach(h=>{ const st=h.i-h.ch.length, pv=st>0?str[st-1]:' ', nx=h.i<str.length?str[h.i]:' ';
+      const [at,app]=/[\s“‘>]/.test(pv)?end(h.i):[h.i,false]; if(app){ ins.push({at,txt:' ('+h.ch+' is '+nameOf(h.ch)+')'}); return; }
+      if(/[\s“‘>]/.test(pv)&&/[\s,.;:?!”’<]/.test(nx)){ ins.push({at:h.i,txt:' ('+nameOf(h.ch)+')'}); return; }
+      const m=/[.;:?!](\s|$|<)/.exec(str.slice(h.i)), at2=m?h.i+m.index:str.replace(/\s+$/,'').length; (group.get(at2)||group.set(at2,[]).get(at2)).push(h.ch); });
     group.forEach((chs,at)=>ins.push({at,txt:' ('+chs.map(ch=>ch+' is '+nameOf(ch)).join(', ')+')'}));
-    ins.sort((a,b)=>b.at-a.at).forEach(x=>{ const rest=t.splitText(x.at), sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=x.txt; rest.before(sp); }); };
-  const walk=node=>{ if(node.nodeType===3){ if(node.data.trim()) text(node); return; } if(node.nodeType!==1||node.matches(SKIP)) return;
-    if(node.hasAttribute('data-tex')||node.hasAttribute('data-tex-inline')){ tex(node); return; }
-    if(node.matches('.katex')){ const an=node.querySelector('annotation'); if(an){ if(node.closest('.katex-display')) node.closest('.katex-display').setAttribute('data-tex',an.textContent); else node.setAttribute('data-tex-inline',an.textContent); tex(node.closest('.katex-display')||node); } return; }
-    [...node.childNodes].forEach(walk); };
-  /* the whole page in reading order: title, steps, challenge, open questions, history, basement */
+    return ins.sort((a,b)=>b.at-a.at); };
+  const SKIP='script,style,template,h1,h2,h3,h4,.tags,.pn,nav,.eyebrow,.sthead,.stnext,.qid,button,.lbar,#lbar,.fvhead,.home,.gname,.brkkey,.phkey,.lockhint';
   const R='header.top,section.class,section.pic,section.slides,section.sayback,section.qs,section.questions,section.star';
-  const roots=document.querySelector('.wrap')?[...document.querySelectorAll('.wrap > header.top, .wrap > section, .wrap > div')]:[...document.querySelectorAll(R)].filter(r=>!r.parentElement||!r.parentElement.closest(R));
-  roots.forEach(walk);
-}
+  const roots=()=>document.querySelector('.wrap')?[...document.querySelectorAll('.wrap > header.top, .wrap > section, .wrap > div')]:[...document.querySelectorAll(R)].filter(r=>!r.parentElement||!r.parentElement.closest(R));
+  const rolls=[]; let ran=false; const seen=new Set();
+  const rollLetters=roll=>{ const out=[]; (roll.items||[]).forEach(it=>{ texLetters((it.rows||[]).join(' ')).concat(scan(it.text||'',true).map(h=>h.ch)).forEach(ch=>{ if(!out.includes(ch)) out.push(ch); }); }); return out; };
+  /* the letters the page shows before a point, without changing anything: text, TeX, and the rolls that stand earlier */
+  const before=stop=>{ const got=new Set(); let done=false;
+    const w=n=>{ if(done) return; if(n===stop){ done=true; return; } if(n.nodeType===3){ scan(n.data).forEach(h=>got.add(h.ch)); return; } if(n.nodeType!==1||n.matches(SKIP)) return;
+      if(n.__nlRoll){ rollLetters(n.__nlRoll).forEach(ch=>got.add(ch)); return; }
+      if(n.hasAttribute('data-tex')||n.hasAttribute('data-tex-inline')){ texLetters((n.getAttribute('data-tex')||'')+' '+(n.getAttribute('data-tex-inline')||'')).forEach(ch=>got.add(ch)); return; }
+      [...n.childNodes].forEach(w); };
+    roots().forEach(w); return got; };
+  /* a roll's own items, named in place before it draws; a later piece of the same slide repeats the earlier pieces in its prior, so that is patched too */
+  const nameRoll=(roll,had)=>{ const items=roll.items||[];
+    items.forEach((it,j)=>{ const fromRows=texLetters((it.rows||[]).join(' ')).filter(ch=>!had.has(ch)); fromRows.forEach(ch=>had.add(ch));
+      const old=it.text||'', plain=old.replace(/<[^>]*>/g,' ');
+      const hits=scan(old,true).filter(h=>{ if(had.has(h.ch)) return false; had.add(h.ch); return !saysName(plain,h.ch); });
+      let s=old; plan(s,hits).forEach(x=>{ s=s.slice(0,x.at)+x.txt+s.slice(x.at); });
+      const rowNames=fromRows.filter(ch=>!saysName(plain,ch)); if(rowNames.length) s=(s?s.replace(/\s+$/,'').replace(/([^.!?:;])$/,'$1.')+' ':'')+rowNames.map(ch=>ch+' is '+nameOf(ch)).join('; ')+'.';
+      if(s!==old){ it.text=s; for(let q=j+1;q<items.length;q++){ const o=items[q]; if(o.si===it.si&&o.prior&&o.prior.includes(old)) o.prior=o.prior.replace(old,s); } } }); };
+  const items=(roll,host)=>{ if(!roll||!host||host.__nlRoll) return; host.__nlRoll=roll; rolls.push(host);
+    const had=before(host);
+    nameRoll(roll,had); if(ran) rollLetters(roll).forEach(ch=>seen.add(ch)); };
+  const run=()=>{ if(ran||document.querySelector('.gname')) return; ran=true;
+    const notes=new Map();
+    const words=box=>{ let s=''; const w=n=>{ if(n.nodeType===3){ s+=n.data; return; } if(n.nodeType!==1||n.matches('.katex,[data-tex],[data-tex-inline],.gname,annotation,script,style')) return; n.childNodes.forEach(w); }; w(box); return s; };
+    const said=(el,ch)=>{ const box=el&&el.closest&&el.closest('p,li,td,th,dd,dt,figcaption,.cap,.row'); return !!box&&saysName(words(box),ch); };
+    const note=(anchor,chs)=>{ if(!chs.length) return; let n=notes.get(anchor); if(!n){ n=document.createElement(anchor.matches('li')?'span':'p'); n.className='gname'; n.dataset.letters=''; anchor.after(n); notes.set(anchor,n); }
+      n.dataset.letters+=chs.join(''); n.textContent=[...n.dataset.letters].map(ch=>ch+' is '+nameOf(ch)).join('; ')+'.'; };
+    const blockOf=el=>{ let a=el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline,.katex-display')||el; if(a.matches('svg')&&a.closest('figure,.pic')) a=a.closest('figure,.pic'); return a; };
+    const tex=el=>{ const fresh=texLetters((el.getAttribute('data-tex')||'')+' '+(el.getAttribute('data-tex-inline')||'')).filter(ch=>!seen.has(ch)); fresh.forEach(ch=>seen.add(ch)); const want=fresh.filter(ch=>!said(el,ch)); if(!want.length) return;
+      const inline=el.hasAttribute('data-tex-inline')&&!el.closest('pre,table,figure,svg,.pic,.eqline,.eqline-words,.lines,.texline');
+      if(inline){ const sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=' ('+want.map(ch=>ch+' is '+nameOf(ch)).join(', ')+')'; el.after(sp); }
+      else note(blockOf(el),want); };
+    const text=t=>{ const hits=scan(t.data).filter(h=>{ if(seen.has(h.ch)) return false; seen.add(h.ch); return !said(t.parentElement,h.ch); }); if(!hits.length) return;
+      if(t.parentElement.closest('svg,pre,.eqline,.eqline-words,.lines,.texline,table')){ note(blockOf(t.parentElement),hits.map(h=>h.ch)); return; }
+      plan(t.data,hits).forEach(x=>{ const rest=t.splitText(x.at), sp=document.createElement('span'); sp.className='gname gname-in'; sp.textContent=x.txt; rest.before(sp); }); };
+    const walk=node=>{ if(node.nodeType===3){ if(node.data.trim()) text(node); return; } if(node.nodeType!==1||node.matches(SKIP)) return;
+      if(node.__nlRoll){ rollLetters(node.__nlRoll).forEach(ch=>seen.add(ch)); return; } /* named in its items already */
+      if(node.hasAttribute('data-tex')||node.hasAttribute('data-tex-inline')){ tex(node); return; }
+      if(node.matches('.katex')){ const an=node.querySelector('annotation'); if(an){ if(node.closest('.katex-display')) node.closest('.katex-display').setAttribute('data-tex',an.textContent); else node.setAttribute('data-tex-inline',an.textContent); tex(node.closest('.katex-display')||node); } return; }
+      [...node.childNodes].forEach(walk); };
+    roots().forEach(walk); };
+  return {run,items};
+})();
+window.LadderNameItems=NL.items;
+function nameLetters(){ NL.run(); }
 /* a table too wide for the screen, other than a truth table, stacks: each row becomes a card, each cell under its column's name */
 function stackTables(){
   document.querySelectorAll('table').forEach(t=>{
