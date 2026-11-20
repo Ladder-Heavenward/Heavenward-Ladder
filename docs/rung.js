@@ -297,6 +297,10 @@ function fromSteps(steps,opts){ opts=opts||{}; const items=[]; let first=null;
   return {k:first||'teal',label:opts.title||'',items}; }
 
 /* the frame */
+/* set something smaller until it fits: the largest size from 72% up that fits, found by halving (a table re-wraps as it shrinks, so the height does not follow the size in a straight line);
+   if 72% is not enough the thing keeps its full size, readable, and its box scrolls */
+const ZMIN=0.72;
+function zoomFit(set,fits,has){ set(''); if(!has||fits()) return 1; set(String(ZMIN)); if(!fits()){ set(''); return 0; } let lo=ZMIN, hi=1; for(let t=0;t<5;t++){ const m=(lo+hi)/2; set(m.toFixed(3)); if(fits()) lo=m; else hi=m; } set(lo.toFixed(3)); return lo; }
 let active=null; const frames=new Set();
 function words(el,t){ if(/<[a-z!\/]/i.test(t)) el.innerHTML=t; else el.innerHTML=t.replace(/&(?!(?:[a-z]+|#\d+|#x[0-9a-f]+);)/gi,'&amp;').replace(/</g,'&lt;'); }
 /* a row too wide for the board (a long sentence set as maths cannot break) is set smaller until it fits, down to 60%; past that the row scrolls */
@@ -319,9 +323,7 @@ function mount(host,roll,opts){ opts=opts||{};
     rowEls.forEach((rs,j)=>rs.forEach(r=>{ const on=j<=i; r.classList.toggle('hid',!on); if(on&&!r.dataset.done){ typeset(r,r.dataset.t); r.dataset.done='1'; }
       r.classList.toggle('now',j===i); r.classList.toggle('past',j<i); r.classList.remove('fresh'); }));
     grpEls.forEach(([j,g])=>g.classList.toggle('hid',j>i));
-    if(roll.stage){ light(roll.stage,it.hl); /* a drawing taller than its frame: bring the lit part into view */
-      const bd=roll.stage.closest('.rl-board'); if(bd&&bd.scrollHeight>bd.clientHeight+4){ const L=[...roll.stage.querySelectorAll('.rl-lit')]; if(!L.length) bd.scrollTop=0; else { const B=bd.getBoundingClientRect(); let t=1e9,b=-1e9; L.forEach(x=>{ const r=x.getBoundingClientRect(); if(r.width||r.height){ t=Math.min(t,r.top); b=Math.max(b,r.bottom); } });
-        if(t<1e9&&(t<B.top+30||b>B.bottom-4)) bd.scrollTop+=Math.round(t-B.top-34); } } }
+    if(roll.stage) light(roll.stage,it.hl);
     rowEls.forEach((rs,j)=>{ if(j<=i) rs.forEach(squeeze); });
     if(moved&&dir>0) rowEls[i].forEach(r=>{ void r.offsetWidth; r.classList.add('fresh'); });
     say.innerHTML=''; if(it.no){ const no=document.createElement('span'); no.className='rl-no'; no.textContent=it.no+' of '+N; say.appendChild(no); }
@@ -332,7 +334,31 @@ function mount(host,roll,opts){ opts=opts||{};
     pos.textContent=(i+1)+' / '+N; bar.style.width=((i+1)/N*100)+'%';
     const last=rowEls[i][rowEls[i].length-1]||(grpEls.find(x=>x[0]===i)||[])[1];
     if(last){ const want=last.offsetTop+last.offsetHeight-board.clientHeight+10; if(want>board.scrollTop) board.scrollTop=want; const top=(rowEls[i][0]||last).offsetTop-8; if(top<board.scrollTop) board.scrollTop=top; }
+    if(roll.stage) stageFit(); /* after the words are in: the words pane takes its room from the stage */
+    fold();
     if(opts.onshow&&it.si!==was) try{ opts.onshow(it.si); }catch(e){} }
+  /* the board never scrolls inside (Andrew 2026-11-20 08:26Z): when the working so far is taller than the board, the earliest lines fold away under a mark,
+     the lines of the current tap always stay; if those alone are too tall they are set smaller, down to 70% */
+  function stageFit(){
+      /* a drawing taller than its stage is set smaller until it fits, down to 72%; one that would have to go smaller keeps its size and the stage brings the lit part into view */
+      { const bd0=roll.stage.parentElement; if(bd0){ bd0.style.overflowY=''; const fits0=()=>bd0.scrollHeight<=bd0.clientHeight+1; const zr=zoomFit(k=>{ roll.stage.style.zoom=k; },fits0,bd0.clientHeight);
+          /* too tall even at the smallest size (Andrew 2026-11-20 19:10Z): when the lit part is small enough the drawing keeps its full size and the stage shows the lit part, with no scroll for the reader;
+             when the whole drawing is lit, or the lit part is taller than the stage, the drawing is shown whole, as small as that takes (never below 40%) */
+          if(zr===0&&bd0.clientHeight){ const L=[...roll.stage.querySelectorAll('.rl-lit')]; let t=1e9,bb=-1e9; L.forEach(x=>{ const r=x.getBoundingClientRect(); if(r.width||r.height){ t=Math.min(t,r.top); bb=Math.max(bb,r.bottom); } });
+            let lo=0.4, hi=ZMIN; roll.stage.style.zoom=String(lo); for(let q=0;q<5;q++){ const m=(lo+hi)/2; roll.stage.style.zoom=m.toFixed(3); if(fits0()) lo=m; else hi=m; }
+            if(lo>=0.6||!L.length||bb-t>bd0.clientHeight-44) roll.stage.style.zoom=lo.toFixed(3); /* nearly fits, or all of it is lit: whole */
+            else { roll.stage.style.zoom=''; bd0.style.overflowY='hidden'; } } } }
+      const bd=roll.stage.closest('.rl-board'); if(bd&&bd.scrollHeight>bd.clientHeight+4){ const L=[...roll.stage.querySelectorAll('.rl-lit')]; if(!L.length) bd.scrollTop=0; else { const B=bd.getBoundingClientRect(); let t=1e9,b=-1e9; L.forEach(x=>{ const r=x.getBoundingClientRect(); if(r.width||r.height){ t=Math.min(t,r.top); b=Math.max(b,r.bottom); } });
+        if(t<1e9&&(t<B.top+30||b>B.bottom-4)) bd.scrollTop+=Math.round(t-B.top-34); } } }
+  const more=document.createElement('div'); more.className='rl-more'; more.textContent='⋯'; more.hidden=true; more.setAttribute('aria-hidden','true'); if(!roll.stage) board.insertBefore(more,board.firstChild);
+  function fold(){ if(roll.stage||i<0) return; const kids=[...board.children].filter(x=>x!==more); kids.forEach(x=>x.classList.remove('rl-gone')); more.hidden=true; board.style.fontSize='';
+    if(!board.clientHeight||board.scrollHeight<=board.clientHeight+1) return;
+    const keep=new Set(rowEls[i]); let g=null; grpEls.forEach(([j,x])=>{ if(j<=i) g=x; }); if(g&&roll.items[i].grp) keep.add(g); if(!keep.size&&g) keep.add(g);
+    more.hidden=false;
+    for(const x of kids){ if(keep.has(x)) break; if(x.classList.contains('hid')) continue; x.classList.add('rl-gone'); if(board.scrollHeight<=board.clientHeight+1) break; }
+    if(!kids.some(x=>x.classList.contains('rl-gone'))) more.hidden=true;
+    if(board.scrollHeight>board.clientHeight+1){ const k=Math.max(0.7,(board.clientHeight-16)/board.scrollHeight); board.style.fontSize=(1.12*k).toFixed(3)+'rem'; rowEls[i].forEach(r=>{ delete r.dataset.sqw; squeeze(r); }); }
+    board.scrollTop=0; if(board.scrollHeight>board.clientHeight+1){ const last=rowEls[i][rowEls[i].length-1]; if(last){ const top=(rowEls[i][0]||last).offsetTop-8; board.scrollTop=top; } } }
   function next(){ flash(dn); if(i<N-1) show(i+1,1); else if(opts.onEnd) opts.onEnd(); }
   function back(){ flash(up); if(i>0) show(i-1,-1); else if(opts.onStart) opts.onStart(); }
   function flash(x){ x.classList.remove('flash'); void x.offsetWidth; x.classList.add('flash'); }
@@ -352,14 +378,16 @@ document.addEventListener('keydown',e=>{ if(e.defaultPrevented||e.altKey||e.ctrl
 /* on a footing's screen the frame runs from where it stands down to the footing arrows */
 function floorY(){ let b=window.innerHeight; const lb=document.getElementById('lbar'); if(lb&&lb.getClientRects().length) b=Math.min(b,lb.getBoundingClientRect().top);
   return b-92; /* the footing arrows and the screen arrows stand in the 80px above the bar; they tuck away and come back, so the frame never counts on their room */ }
+const RO=typeof ResizeObserver==='function'?new ResizeObserver(()=>fitAll()):null;
 function fitOne(el){ if(!el.isConnected){ frames.delete(el); return; } if(!el.getClientRects().length) return;
   if(EMBED){ const h=window.innerHeight+'px'; if(el.style.height!==h) el.style.height=h; if(el.__fit) el.__fit(); return; }
   if(el.closest('#desk,#stick,.dk-pane')||!document.body.classList.contains('sw')){ el.style.height=''; if(el.__fit) el.__fit(); return; }
   const top=el.getBoundingClientRect().top+window.scrollY; let h=Math.round(Math.max(300,Math.min(820,floorY()-top)));
   { /* whatever stands under the frame on the same screen (a letter-name line, a caption) keeps its room above the screen arrows */
     const host=el.closest('.sw-on'); if(host){ let last=null; for(let n=host.nextElementSibling;n;n=n.nextElementSibling){ if(n.classList.contains('sw-on')&&n.getClientRects().length) last=n; }
-      if(last){ const cs=getComputedStyle(last); const under=Math.ceil(last.getBoundingClientRect().bottom+(parseFloat(cs.marginBottom)||0)-host.getBoundingClientRect().bottom); if(under>0&&under<=160) h=Math.max(300,h-under); } } }
+      if(last){ const cs=getComputedStyle(last); const under=Math.ceil(last.getBoundingClientRect().bottom+(parseFloat(cs.marginBottom)||0)-host.getBoundingClientRect().bottom); if(under>0&&under<=240) h=Math.max(300,h-under); if(RO&&!last.__rlro){ last.__rlro=1; RO.observe(last); } } } } /* 240: a dividend box under a worked line keeps its room too; it is watched because its words settle after the fonts load */
   if(el.parentElement&&el.parentElement.matches('figure.ghcell')){ const st=el.querySelector('.rl-figs'); if(st&&st.offsetHeight) h=Math.max(h,Math.min(820,st.offsetHeight+186)); } /* grid figures stand several to a screen: each frame is tall enough for its whole drawing and three lines of words */
+  el.style.minHeight=h<340?h+'px':''; /* the style sheet holds a frame to 340px; a frame that makes room for a box under it may go to 300 */
   if(el.style.height!==h+'px') el.style.height=h+'px'; if(el.__fit) el.__fit();
   const r=el.__roll; if(r&&r.i>=0) r.show(r.i,0); }
 let fitT=0; function fitAll(){ cancelAnimationFrame(fitT); fitT=requestAnimationFrame(()=>frames.forEach(fitOne)); }
@@ -386,7 +414,7 @@ function framePic(sec,opts){ opts=opts||{}; if(sec.dataset.rl) return sec.__pic;
   const parts=ebt.split(/\s+·\s+/); const title=parts.slice(1).join(' · ')||parts[0]||'The picture';
   const named=parts.slice(1).map(p=>{ const m=p.match(/^(left|right|top|bottom|above|below|first|second|then)\s*:\s*(.+)$/i); return m?m[2].split(',')[0].trim():null; }).filter(Boolean);
   const el=document.createElement('div'); el.className='rl rl-pic k-'+(opts.k||'ember');
-  el.innerHTML='<div class="rl-head"><span class="rl-lab"></span><button type="button" class="rl-info" aria-expanded="false">how to read it</button></div><div class="rl-tabs" role="tablist"></div><div class="rl-body"></div><div class="rl-cap" hidden></div>';
+  el.innerHTML='<div class="rl-head"><span class="rl-lab"></span><button type="button" class="rl-info" aria-expanded="false">how to read it</button></div><div class="rl-tabs" role="tablist"></div><div class="rl-body"></div><div class="rl-pager" hidden><button type="button" class="pv" aria-label="previous part">◀</button><span class="rl-dots"></span><button type="button" class="nx" aria-label="next part">▶</button></div><div class="rl-cap" hidden></div>';
   el.querySelector('.rl-lab').textContent=title;
   const tabs=el.querySelector('.rl-tabs'), body=el.querySelector('.rl-body'), cap=el.querySelector('.rl-cap'), info=el.querySelector('.rl-info');
   /* captions: the picture's own, and each part's */
@@ -408,9 +436,52 @@ function framePic(sec,opts){ opts=opts||{}; if(sec.dataset.rl) return sec.__pic;
   /* shrink the drawings so the body fits the frame; never below 42% of it: past that the body scrolls inside the frame */
   const drawn=()=>[...body.querySelectorAll('canvas,svg')].filter(c=>!c.closest('.katex,button,.rl-off,[hidden]')&&c.getClientRects().length&&c.getBoundingClientRect().height>90);
   /* a drawing is only made smaller if it keeps its shape when narrowed: one that holds its own height (drawn at a fixed size by its page) is put back and left alone */
-  function fit(){ const cvs=drawn(); cvs.forEach(c=>{ if(c.dataset.rlmw){ c.style.maxWidth=''; delete c.dataset.rlmw; } }); if(!cvs.length||!el.style.height) return;
-    let tries=0; const step=()=>{ const over=body.scrollHeight-body.clientHeight; if(over<=1||tries++>4) return; const live=drawn().filter(c=>!c.dataset.rlno); if(!live.length) return;
-        const tall=live.reduce((a,c)=>a+c.getBoundingClientRect().height,0), floor=body.clientHeight*0.42; if(tall<=floor) return; const k=Math.max(floor/tall,(tall-over-2)/tall); if(k>=0.995) return;
+  /* what the drawings cannot give back, the whole body gives: its parts are set smaller together until the body fits, down to 72%, and not at all if that is not enough (Andrew 2026-11-20 08:26Z: no scroll inside the frame where it can be helped) */
+  function unzoom(){ [...body.children].forEach(c=>{ if(c.style.zoom) c.style.zoom=''; }); }
+  /* a machine too tall even at the smallest size is dealt out in parts (Andrew 2026-11-20 19:10Z "I do want that"): its pieces, in their own order, fill one part of the frame
+     after another, and a small bar under the body steps between the parts. A piece out of sight keeps its width (the same .rl-off the tabs use), so a drawing is not redrawn wrong. */
+  const pager=el.querySelector('.rl-pager'), dots=pager.querySelector('.rl-dots'), pv=pager.querySelector('.pv'), nx=pager.querySelector('.nx'); let pages=null, pg=0, pk=1;
+  function unpage(){ if(pages){ pages.forEach(P=>P.forEach(x=>x.classList.remove('rl-off'))); pages=null; } pager.hidden=true; el.classList.remove('rl-paged'); }
+  function showPg(k){ if(!pages) return; pg=Math.max(0,Math.min(pages.length-1,k)); pages.forEach((P,j)=>P.forEach(x=>x.classList.toggle('rl-off',j!==pg))); dots.textContent=(pg+1)+' / '+pages.length; pv.disabled=pg===0; nx.disabled=pg===pages.length-1; body.scrollTop=0;
+    /* each part at the largest size it fits by itself */ for(const k of [1,0.93,0.86,0.79,ZMIN]){ [...body.children].forEach(c=>{ c.style.zoom=k===1?'':String(k); }); if(k<=pk||body.scrollHeight<=body.clientHeight+1) break; }
+    trim(); requestAnimationFrame(()=>requestAnimationFrame(trim)); }
+  /* a drawing that comes up taller than it was measured (it redraws when it is shown) is narrowed until its part fits, never below half */
+  function trim(){ if(!pages) return; const over=body.scrollHeight-body.clientHeight; if(over<=1) return; const live=drawn(); if(!live.length) return; const tall=live.reduce((a,c)=>a+c.getBoundingClientRect().height,0); if(!tall) return; const k=Math.max(0.5,(tall-over-2)/tall);
+    live.forEach(c=>{ const w=c.getBoundingClientRect().width; c.style.maxWidth=Math.floor(w*k)+'px'; c.dataset.rlmw='1'; if(!c.style.marginInline) c.style.marginInline='auto'; }); }
+  pv.onclick=()=>showPg(pg-1); nx.onclick=()=>showPg(pg+1);
+  function paginate(){ body.querySelectorAll('[data-rlmw]').forEach(c=>{ c.style.maxWidth=''; delete c.dataset.rlmw; });
+    const vis=x=>[...x.children].filter(c=>!c.matches('script,style,template')&&!c.classList.contains('rl-off')&&c.getClientRects().length);
+    let items=vis(multi&&tabbed()?panels[on]:(panels.length===1?panels[0]:body));
+    while(items.length===1&&!items[0].matches('canvas,svg,table,.tablewrap,.eqbox,.katex-display')&&vis(items[0]).length>1) items=vis(items[0]);
+    if(items.length<2) return false;
+    pager.hidden=false; el.classList.add('rl-paged'); const fits=()=>body.scrollHeight<=body.clientHeight+1;
+    const deal=k=>{ [...body.children].forEach(c=>{ c.style.zoom=k===1?'':String(k); }); const Q=[[]]; items.forEach(x=>x.classList.add('rl-off'));
+      for(const x of items){ x.classList.remove('rl-off'); if(Q[Q.length-1].length&&!fits()){ Q[Q.length-1].forEach(y=>y.classList.add('rl-off')); Q.push([]); } Q[Q.length-1].push(x); } return Q; };
+    /* as few parts as the smallest size allows, then the largest size that still gives that few */
+    const whole=Q=>Q.every((pp,j)=>{ Q.forEach((qq,i)=>qq.forEach(x=>x.classList.toggle('rl-off',i!==j))); return fits(); }); /* no part runs over by itself (one piece taller than the body) */
+    /* a piece taller than the body even at the smallest size is opened into its own pieces, where it has any */
+    const atom='canvas,svg,table,.tablewrap,.eqbox,.katex-display,button,input,select,label,p';
+    for(let pass=0;pass<2;pass++){ [...body.children].forEach(c=>{ c.style.zoom=String(ZMIN); }); let opened=false; const next=[];
+      for(const x of items){ items.forEach(y=>y.classList.toggle('rl-off',y!==x)); next.forEach(y=>y.classList.add('rl-off'));
+        if(!fits()&&!x.matches(atom)&&vis(x).length>1){ const kids=vis(x); x.classList.remove('rl-off'); next.push(...kids); opened=true; } else next.push(x); }
+      items.forEach(y=>y.classList.remove('rl-off')); next.forEach(y=>y.classList.remove('rl-off')); items=next; if(!opened) break; }
+    const least=deal(ZMIN).length; let P=null; for(const k of [1,0.93,0.86,0.79,ZMIN]){ P=deal(k); pk=k; if(P.length<=least&&(k===ZMIN||whole(P))) break; }
+    /* a small heading goes with what it heads */
+    for(let j=0;j<P.length-1;j++){ while(P[j].length>1&&P[j][P[j].length-1].matches('.lbl,.lh,h3,h4,h5,h6,.eyebrow')) P[j+1].unshift(P[j].pop()); }
+    pages=P; if(P.length<2){ unpage(); return false; } showPg(Math.min(pg,P.length-1)); return true; }
+  function zf(){ unzoom(); if(!el.style.height) return; unpage(); const zr=zoomFit(k=>{ [...body.children].forEach(c=>{ if(k===''||(!c.classList.contains('rl-off')&&c.getClientRects().length)) c.style.zoom=k; }); },()=>body.scrollHeight<=body.clientHeight+1,body.clientHeight);
+    if(zr===0) paginate();
+    /* a machine that redraws itself after the change of size is looked at once more when it has settled */
+    if(!zft){ zft=setTimeout(()=>{ zft=0; if(el.isConnected&&body.clientHeight&&body.scrollHeight>body.clientHeight+1){ zft=-1; zf(); zft=0; } },420); } }
+  let zft=0;
+  /* a machine that grows while it runs (a result box filling, a list getting longer) is fitted again when it has outgrown the body; at most six times in three seconds, so two sizes can never chase each other */
+  let grT=0, grN=0, grAt=0; const grow=typeof ResizeObserver==='function'?new ResizeObserver(()=>{ clearTimeout(grT); grT=setTimeout(()=>{ if(!el.isConnected||!el.style.height||!body.clientHeight||body.scrollHeight<=body.clientHeight+1) return;
+      if(pages){ trim(); if(body.scrollHeight<=body.clientHeight+1) return; }
+      const now=Date.now(); if(now-grAt>3000){ grAt=now; grN=0; } if(grN++<6) zf(); },180); }):null;
+  if(grow){ [...body.children].forEach(c=>grow.observe(c)); panels.forEach(p=>[...p.children].forEach(c=>grow.observe(c))); }
+  function fit(){ unzoom(); unpage(); const cvs=drawn(); cvs.forEach(c=>{ if(c.dataset.rlmw){ c.style.maxWidth=''; delete c.dataset.rlmw; } }); if(!el.style.height) return; if(!cvs.length){ zf(); return; }
+    let tries=0; const step=()=>{ const over=body.scrollHeight-body.clientHeight; if(over<=1) return; if(tries++>4){ zf(); return; } const live=drawn().filter(c=>!c.dataset.rlno); if(!live.length){ zf(); return; }
+        const tall=live.reduce((a,c)=>a+c.getBoundingClientRect().height,0), floor=body.clientHeight*0.42; if(tall<=floor){ zf(); return; } const k=Math.max(floor/tall,(tall-over-2)/tall); if(k>=0.995){ zf(); return; }
         const was=live.map(c=>{ const r=c.getBoundingClientRect(); return [r.width,r.height]; });
         live.forEach((c,j)=>{ c.style.maxWidth=Math.floor(was[j][0]*k)+'px'; c.dataset.rlmw='1'; if(!c.style.marginInline) c.style.marginInline='auto'; });
         requestAnimationFrame(()=>requestAnimationFrame(()=>{ let undone=false; live.forEach((c,j)=>{ const r=c.getBoundingClientRect(); if(!r.width||!r.height||!was[j][1]) return;
