@@ -3639,17 +3639,28 @@ function splitText(el,n){ /* el's sentences into n parts, each wrapped in span.s
   ss.forEach((s,i)=>{ if(g[g.length-1].length&&g.length<n&&acc+w[i]/2>per*g.length) g.push([]); g[g.length-1].push(s); acc+=w[i]; }); if(g.length<2) return null;
   const spans=g.map(gs=>{ const sp=document.createElement('span'); sp.className='swc'; const nodes=gs.flat(); nodes[0].parentNode.insertBefore(sp,nodes[0]); nodes.forEach(x=>sp.appendChild(x)); return sp; });
   el.classList.add('sw-split'); return spans; }
+/* a proof row or a TeX line wider than the screen is set smaller until it fits (not below 70%), so it never scrolls sideways or down inside its box */
+function fitWide(root){ root.querySelectorAll('.rows .row .m, .eqbox').forEach(m=>{ if(m.closest('.rl,.rl-off,[hidden]')||!m.getClientRects().length) return; if(m.dataset.fw===String(m.clientWidth)) return;
+  m.style.fontSize=''; const k=m.clientWidth/Math.max(1,m.scrollWidth); if(k<0.995) m.style.fontSize=Math.max(0.7,k*0.97).toFixed(3)+'em'; m.dataset.fw=String(m.clientWidth); }); }
 function fitScreens(list){ const room=FITROOM(), had=document.body.classList.contains('sw'); document.body.classList.remove('sw'); const out=[];
-  try{ list.forEach(sc=>{ let parts=[sc];
+  try{ list.forEach(sc=>sc.forEach(el=>{ try{ fitWide(el.parentElement||el); }catch(_){} }));
+    list.forEach(sc=>{ let parts=[sc]; const room=FITROOM()-(sc.some(x=>x.closest&&x.closest('header.top'))?90:0); /* a screen that carries the page's title has less room */
     for(let pass=0;pass<3;pass++){ const next=[]; let cut=false;
       parts.forEach(s=>{ const hs=s.map(tall), h=hs.reduce((a,b)=>a+b,0); if(h<=room){ next.push(s); return; }
         let bi=0; hs.forEach((x,i)=>{ if(x>hs[bi]) bi=i; }); const e=s[bi], rest=h-hs[bi], left=s.slice(0,bi), right=s.slice(bi+1); let pieces=null;
-        if(e.matches('p,span.swc')&&!e.querySelector('.katex-display,pre,.eqline,table,img,svg')){ const sp=splitText(e,Math.ceil(hs[bi]/Math.max(120,room-rest))); if(sp) pieces=sp.map(x=>[x]); }
+        if(e.matches('p,span.swc')&&!e.querySelector('pre,.eqline,table,img,svg')){ const sp=splitText(e,Math.ceil(hs[bi]/Math.max(120,room-rest))); if(sp) pieces=sp.map(x=>[x]); }
         else if(e.matches('table')){ const trs=[...e.querySelectorAll('tr')], head=trs.filter(r=>r.querySelector('th')&&!r.querySelector('td')).slice(0,1), body=trs.filter(r=>!head.includes(r));
           const hh=head.reduce((a,r)=>a+tall(r),0), g=cutBy(body,body.map(tall),Math.max(120,room-rest-hh)); if(g){ e.classList.add('sw-split'); pieces=g; } }
         else if(e.matches('ul,ol')){ const lis=[...e.children].filter(x=>x.matches('li')), g=cutBy(lis,lis.map(tall),Math.max(120,room-rest)); if(g){ e.classList.add('sw-split'); pieces=g; } }
-        else if(e.matches('.tablewrap')&&e.querySelector('table')){ const t=e.querySelector('table'), trs=[...t.querySelectorAll('tr')], head=trs.filter(r=>r.querySelector('th')&&!r.querySelector('td')).slice(0,1), body=trs.filter(r=>!head.includes(r));
+        else if(e.matches('div')&&e.querySelector(':scope>table')){ const t=e.querySelector(':scope>table'), trs=[...t.querySelectorAll('tr')], head=trs.filter(r=>r.querySelector('th')&&!r.querySelector('td')).slice(0,1), body=trs.filter(r=>!head.includes(r));
           const hh=head.reduce((a,r)=>a+tall(r),0), g=cutBy(body,body.map(tall),Math.max(120,room-rest-hh)); if(g){ e.classList.add('sw-split'); t.classList.add('sw-split'); pieces=g; } }
+        /* any other box of several parts (a claim, a box of lines): its parts, a few to a screen; the box is drawn round the part showing */
+        else if(!e.matches('table,figure,svg,img,canvas,.pic,.slides,.rl,.rl-host,pre,.katex-display,[data-tex]')){ const kids=[...e.children].filter(x=>!x.matches('script,style,template')&&x.getClientRects().length);
+          if(kids.length>1){ const g=cutBy(kids,kids.map(tall),Math.max(120,room-rest)); if(g){ e.classList.add('sw-split'); pieces=g; } } }
+        /* a drawing taller than the room is drawn smaller, keeping its shape */
+        if(!pieces&&e.matches('svg,img,figure')&&!e.closest('.rl')){ const g=e.matches('figure')?e.querySelector(':scope>svg,:scope>img'):e; if(g&&!g.dataset.fitH){ g.dataset.fitH='1'; g.style.maxHeight=Math.max(200,room-rest)+'px'; g.style.width='auto'; g.style.maxWidth='100%'; next.push(s); cut=true; return; } }
+        /* what cannot be cut is given a screen of its own, apart from what stood with it */
+        if(!pieces&&s.length>1){ const g=cutBy(s,hs,room); if(g){ g.forEach(x=>next.push(x)); cut=true; return; } }
         if(!pieces){ next.push(s); return; } cut=true;
         pieces.forEach((pc,i)=>next.push((i===0?left:[]).concat(pc,i===pieces.length-1?right:[]))); });
       parts=next; if(!cut) break; }
