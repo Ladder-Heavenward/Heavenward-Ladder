@@ -3270,15 +3270,15 @@ function understand(el){ const P=get('pages:done',{}), M=window.LADMAP||[], U=wi
     :'<p class="sk-n">Nothing is reached yet. Each step’s understanding questions come here as soon as you reach it.</p>';
   while(h.firstChild) el.appendChild(h.firstChild); if(window.LadderSkyAQ) LadderSkyAQ.add(el); /* aqsky */ }
 function tools(body,here){ const KEY='ladder:aq', LBL={un:'Understanding',cw:'Crosswalk',ms:'Measuring Stick',sq:'Standing Questions'}, K=['un','cw','ms','sq'];
-  let on=[]; try{ on=JSON.parse(localStorage.getItem(KEY)||'[]')||[]; }catch(e){} if(!Array.isArray(on)) on=[]; if(here&&!on.includes('sq')) on.push('sq');
+  let on=[]; try{ on=JSON.parse(localStorage.getItem(KEY)||'[]')||[]; }catch(e){} if(!Array.isArray(on)) on=[]; let cur=here?'sq':(K.find(k=>on.includes(k))||null); /* toggle21: the panes switch, one open at a time */
   const pane={}; K.forEach(k=>{ const d=document.createElement('div'); d.className='aq-pane aq-p-'+k; d.hidden=true; pane[k]=d; });
   while(body.firstChild) pane.sq.appendChild(body.firstChild);
   const bar=document.createElement('p'); bar.className='sk-tools aq-bar'; bar.innerHTML=K.map(k=>'<button type="button" class="aq-b aq-b-'+k+'" data-k="'+k+'" aria-pressed="false">'+LBL[k]+'</button>').join('');
   body.appendChild(bar); K.forEach(k=>body.appendChild(pane[k])); if(window.LadderCrosswalk) K.forEach(k=>LadderCrosswalk.floors(pane[k],k)); /* aqreorg */
   const fill={ un:()=>{ understand(pane.un); if(window.LadderUnwrap) LadderUnwrap.bind(pane.un); }, /* aqunwrap */ cw:()=>{ if(window.LadderCrosswalk) LadderCrosswalk.fill(pane.cw); else if(window.LadderCards) LadderCards.open(pane.cw); }, ms:()=>{ if(window.LadderMeasure&&LadderMeasure.fill) LadderMeasure.fill(pane.ms,close); }, sq:()=>{} }, made={sq:true};
   const set=(k,v)=>{ pane[k].hidden=!v; const b=bar.querySelector('[data-k="'+k+'"]'); b.setAttribute('aria-pressed',String(v)); b.classList.toggle('on',v); if(v&&!made[k]){ made[k]=true; fill[k](); } };
-  K.forEach(k=>set(k,on.includes(k)));
-  bar.querySelectorAll('.aq-b').forEach(b=>b.onclick=()=>{ const k=b.dataset.k, v=pane[k].hidden; set(k,v); on=K.filter(x=>!pane[x].hidden); try{ localStorage.setItem(KEY,JSON.stringify(on)); }catch(e){} }); }
+  K.forEach(k=>set(k,k===cur));
+  bar.querySelectorAll('.aq-b').forEach(b=>b.onclick=()=>{ const k=b.dataset.k; cur=(k===cur)?null:k; K.forEach(x=>set(x,x===cur)); try{ localStorage.setItem(KEY,JSON.stringify(cur?[cur]:[])); }catch(e){} }); }
 /* the toolbox list */
 function list(here){ here=typeof here==='string'?here:null; close(); const body=frame('','');
   box.querySelector('.sk-top span').textContent='answering questions'; box.querySelector('.sk-top').dataset.slug='earn stars'; body.innerHTML='<p class="sk-q">Gathering them…</p>';

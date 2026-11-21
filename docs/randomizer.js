@@ -4501,9 +4501,10 @@ base.forEach(k=>{ if(k.id.indexOf('turn·')===0||NOTWIN.includes(k.id)) return; 
 
 /* Laundry counters (Andrew 2026-11-14 16:00Z, 16:07Z): "correct" in this kind's button colour; today's score (when competing) in the Standing button's dark blue */
 const rzToday=()=>{ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
-function rzCtrHtml(mode,MD){ const k=(get('rand:rightk',{})[mode]||0), td=Math.ceil((get('rand:days',{})[rzToday()]||0)-1e-9);
+function rzCtrN(mode){ const rk=get('rand:rightk',{}), on=(rzCtrN.on&&rzCtrN.on.length)?rzCtrN.on:[mode]; return on.reduce((t,m)=>t+(rk[m]||0),0); } /* toggle21 */
+function rzCtrHtml(mode,MD){ const k=rzCtrN(mode), td=Math.ceil((get('rand:days',{})[rzToday()]||0)-1e-9);
   return '<div class="rzctr rzm-'+mode+'"><div class="rzc"><b class="rzck">'+k+'</b><span>correct</span></div>'+(competing()?'<div class="rzc rzcs"><b class="rzct">'+td+'</b><span>today’s score</span></div>':'')+'</div>'; }
-function rzCtr(box,mode){ const a=box.querySelector('.rzck'), b=box.querySelector('.rzct'); if(a) a.textContent=(get('rand:rightk',{})[mode]||0); if(b) b.textContent=Math.ceil((get('rand:days',{})[rzToday()]||0)-1e-9); }
+function rzCtr(box,mode){ const a=box.querySelector('.rzck'), b=box.querySelector('.rzct'); if(a) a.textContent=rzCtrN(mode); if(b) b.textContent=Math.ceil((get('rand:days',{})[rzToday()]||0)-1e-9); }
 /* Laundry top and bottom (Andrew 2026-11-14 15:53Z): kind buttons in the Answering Questions colours; Report, Settings, Another question */
 function rzUi(box){
   if(!document.getElementById('rzui')){ const s=document.createElement('style'); s.id='rzui';
@@ -27091,7 +27092,10 @@ function avail(mode){ const oS=SEEDS.filter(s=>s.open()), kinds=oS.map(s=>SKIND[
   if(mode==='word') return (BANK.some(b=>b.open()&&!b.kind)&&oO.some(o=>o.word)&&kinds.some(k=>['add','times','num'].includes(k)))||(BANK.some(b=>b.open()&&b.kind==='prop')&&kinds.includes('say'))||qp('word');
   return !!(window.LadderReadGraph&&window.LadderReadGraph.KINDS.some(rgOpen)); }
 const OPENS={proof:'0b',work:'1f',word:'1d',read:'1e'};
-function modeNow(){ const m=(get('rand:mode',null)||{}).m||'proof'; /* kept as an object: the record hands a bare word back unquoted */ if(MODES.some(M=>M.id===m)&&avail(m)) return m; const f=MODES.find(M=>avail(M.id)); return f?f.id:m; }
+/* toggle21: the kinds are toggles; rand:kinds holds the ones switched on, first read from the old one-kind switch (rand:mode) */
+function kindsSet(){ let k=get('rand:kinds',null); if(!k||typeof k!=='object'){ k={}; k[(get('rand:mode',null)||{}).m||'proof']=1; } return k; }
+function kindsOn(){ const k=kindsSet(), on=MODES.map(M=>M.id).filter(m=>k[m]&&avail(m)); if(on.length||!MODES.some(M=>k[M.id])) return on; const f=MODES.find(M=>avail(M.id)); return f?[f.id]:[]; } /* none of the chosen kinds open yet: the first open kind stands in */
+function modeNow(){ const on=kindsOn(); if(on.length) return on[0]; const f=MODES.find(M=>avail(M.id)); return f?f.id:'proof'; }
 
 function build(mode){
   mode=mode||modeNow();
@@ -27108,7 +27112,7 @@ function build(mode){
     const P={isOff, seeds:SEEDS.filter(s=>s.open()), bank:BANK.filter(b=>b.open()), links:LINKS.filter(use), qps:QP.filter(use), ops:OPS.filter(use),
       cps:CARDP.filter(C=>use(C)&&C.ready()), openL:LINKS.filter(l=>l.open()), moves:MOVES.filter(use), use};
     const q=MAKE[mode](P,used,last); if(q){ q.stray=stray; q.mode=mode; return q; } }
-  return {closed:'The rungs switched on hold no fresh question of this kind. Switch on another rung under the gear, or pick another kind above. Each step you pass adds its pools.'};
+  return {closed:'The rungs switched on hold no fresh question of this kind. Switch on another rung under the gear, or switch on another kind above. Each step you pass adds its pools.'};
 }
 
 /* ===== Laundry 6 (Andrew 2026-11-11 13:10Z): pools named in words, a tree closed to the floor level, and a score =====
@@ -27193,13 +27197,18 @@ function render(box){
   if((!window.LADDER_CARDMAP||!window.LADDER_SQIDS)&&S&&!render.maps){ render.maps=1; box.innerHTML='<p class="dnote rzwait"></p>'; Promise.all([S.maps(),load('sq/ids.js')]).then(()=>render(box)); return; }
   cardPools(); const wantD=[]; /* Read Graph draws no crosswalk decks, so the Laundry no longer waits for them */
   if(wantD.length){ box.innerHTML='<p class="dnote rzwait"></p>'; needDecks().then(()=>render(box)); return; }
-  const mode=modeNow(), kept=render.fresh?null:get('rand:cur',null), q=(kept&&kept.mode===mode&&kept.a3&&avail(mode))?kept:tidyQ(build(mode)), right=get('rand:right',0), MD=MODES.find(M=>M.id===mode);
+  const ON=kindsOn(), kept=render.fresh?null:get('rand:cur',null); let mode, q; /* toggle21 */
+  if(kept&&kept.a3&&ON.includes(kept.mode)){ mode=kept.mode; q=kept; }
+  else if(!ON.length&&MODES.some(M=>avail(M.id))){ mode=modeNow(); q={closed:'Every kind is switched off. Switch one on above.'}; }
+  else { const order=(ON.length?ON.slice():[modeNow()]); for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
+    for(const m of order){ const c=tidyQ(build(m)); if(!q||!c.closed){ mode=m; q=c; } if(!c.closed) break; } }
+  const right=get('rand:right',0), MD=MODES.find(M=>M.id===mode); rzCtrN.on=ON;
   render.fresh=false; put('rand:cur',q.closed?null:q); /* the question stays through a reload (Andrew 2026-11-11 07:36Z) */
   if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS,...QP].filter(P=>P.open()&&!off['rung:'+rungOf(P.step)]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
   if(q.closed&&![...SEEDS,...toggled(),...BANK].some(P=>P.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
-  const sw='<div class="rzmodes" role="group" aria-label="kind of question">'+MODES.map(M=>{ const ok=avail(M.id); return '<button type="button" class="rzmode rzm-'+M.id+'" data-m="'+M.id+'" aria-pressed="'+(M.id===mode)+'"'+(ok?'':' disabled')+'>'+esc(M.label)+(ok?'':'<small>opens at '+OPENS[M.id]+'</small>')+'</button>'; }).join('')+'</div>';
+  const sw='<div class="rzmodes" role="group" aria-label="kind of question">'+MODES.map(M=>{ const ok=avail(M.id); return '<button type="button" class="rzmode rzm-'+M.id+'" data-m="'+M.id+'" aria-pressed="'+ON.includes(M.id)+'"'+(ok?'':' disabled')+'>'+esc(M.label)+(ok?'':'<small>opens at '+OPENS[M.id]+'</small>')+'</button>'; }).join('')+'</div>';
   const wire=()=>{ wireGear(box,()=>{ render.fresh=true; render(box); }); wireTree(box,()=>{ render.fresh=true; render(box); });
-    box.querySelectorAll('.rzmode').forEach(b=>b.onclick=()=>{ put('rand:mode',{m:b.dataset.m}); render.fresh=true; render(box); }); };
+    box.querySelectorAll('.rzmode').forEach(b=>b.onclick=()=>{ const k={}, m=b.dataset.m; kindsOn().forEach(x=>{ k[x]=1; }); if(k[m]) delete k[m]; else k[m]=1; put('rand:kinds',k); render(box); }); }; /* toggle21: a tap switches one kind on or off; the question in hand stays while its kind is on */
   if(q.closed){ box.innerHTML=sw+'<p class="dnote">'+esc(q.closed)+'</p>'+gearBox(q); wire(); return; }
   const addr=q.a3.join(' . ');
   box.innerHTML=sw+rzCtrHtml(mode,MD)
