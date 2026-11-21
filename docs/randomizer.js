@@ -4501,9 +4501,10 @@ base.forEach(k=>{ if(k.id.indexOf('turn·')===0||NOTWIN.includes(k.id)) return; 
 
 /* Laundry counters (Andrew 2026-11-14 16:00Z, 16:07Z): "correct" in this kind's button colour; today's score (when competing) in the Standing button's dark blue */
 const rzToday=()=>{ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
-function rzCtrHtml(mode,MD){ const k=(get('rand:rightk',{})[mode]||0), td=Math.ceil((get('rand:days',{})[rzToday()]||0)-1e-9);
-  return '<div class="rzctr rzm-'+mode+'"><div class="rzc"><b class="rzck">'+k+'</b><span>correct in '+esc(MD.label)+'</span></div>'+(competing()?'<div class="rzc rzcs"><b class="rzct">'+td+'</b><span>today’s score</span></div>':'')+'</div>'; }
-function rzCtr(box,mode){ const a=box.querySelector('.rzck'), b=box.querySelector('.rzct'); if(a) a.textContent=(get('rand:rightk',{})[mode]||0); if(b) b.textContent=Math.ceil((get('rand:days',{})[rzToday()]||0)-1e-9); }
+function rzCtrN(mode){ const rk=get('rand:rightk',{}), on=(rzCtrN.on&&rzCtrN.on.length)?rzCtrN.on:[mode]; return on.reduce((t,m)=>t+(rk[m]||0),0); } /* toggle21 */
+function rzCtrHtml(mode,MD){ const k=rzCtrN(mode), td=Math.ceil((get('rand:days',{})[rzToday()]||0)-1e-9);
+  return '<div class="rzctr rzm-'+mode+'"><div class="rzc"><b class="rzck">'+k+'</b><span>correct</span></div>'+(competing()?'<div class="rzc rzcs"><b class="rzct">'+td+'</b><span>today’s score</span></div>':'')+'</div>'; }
+function rzCtr(box,mode){ const a=box.querySelector('.rzck'), b=box.querySelector('.rzct'); if(a) a.textContent=rzCtrN(mode); if(b) b.textContent=Math.ceil((get('rand:days',{})[rzToday()]||0)-1e-9); }
 /* Laundry top and bottom (Andrew 2026-11-14 15:53Z): kind buttons in the Answering Questions colours; Report, Settings, Another question */
 function rzUi(box){
   if(!document.getElementById('rzui')){ const s=document.createElement('style'); s.id='rzui';
@@ -27201,7 +27202,7 @@ function render(box){
   else if(!ON.length&&MODES.some(M=>avail(M.id))){ mode=modeNow(); q={closed:'Every kind is switched off. Switch one on above.'}; }
   else { const order=(ON.length?ON.slice():[modeNow()]); for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
     for(const m of order){ const c=tidyQ(build(m)); if(!q||!c.closed){ mode=m; q=c; } if(!c.closed) break; } }
-  const right=get('rand:right',0), MD=MODES.find(M=>M.id===mode);
+  const right=get('rand:right',0), MD=MODES.find(M=>M.id===mode); rzCtrN.on=ON;
   render.fresh=false; put('rand:cur',q.closed?null:q); /* the question stays through a reload (Andrew 2026-11-11 07:36Z) */
   if(window.MathKeys){ const off=get('rand:off',{}), K=new Set(); [...SEEDS,...LINKS,...QP].filter(P=>P.open()&&!off['rung:'+rungOf(P.step)]).forEach(P=>(P.keys||[]).forEach(k=>K.add(k))); MathKeys.limit(K,'the laundry’s chosen pools'); }
   if(q.closed&&![...SEEDS,...toggled(),...BANK].some(P=>P.open())){ box.innerHTML='<p class="dnote">'+esc(q.closed)+'</p>'; return; }
