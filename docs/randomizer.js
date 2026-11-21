@@ -26673,6 +26673,44 @@ const old=CH.wordCard;
 CH.wordCard=function(P,used){ const pr=CH.pref||{}; if(!pr.links&&!pr.terms&&Math.random()<SHARE){ const q=statCard(P,used); if(q){ delete q.wstat; return q; } } return old.apply(this,arguments); };
 CH.wstat={T,cardOf,statCard,mk,SHARE};
 })();
+/* nodraws word steps (Andrew 2026-11-21 22:58Z-23:01Z): the old borrowed word links that no law's map had taken up are written into their
+   laws. Three (and 15·econ.forever) hang after the reading. Two open on the law itself and were starved of a close or of wrong moves.
+   Two followed a slope: "if they open on a slope they should just be written as the equation for the slope, and it should indicate in words
+   what the slope pertains to", so each opens on the slope's own equation, said in words, and the old step follows it. */
+{ const {G,Tm,Pr,X,own,MQ,pick,Q,qa,qm,qn,qi,qs}=CH.W2, WLs=CH.WL, LAW=id=>CH.LAWS.find(l=>l.id===id), old=id=>WLs.find(w=>w.id===id);
+  const addClose=(law,cs)=>{ const L=LAW(law); if(L) L.close=(L.close||[]).concat(cs); };
+  const mid=(law,id,oldId,u,out,after,then,ask,whole)=>{ const L=LAW(law), W=old(oldId); if(!L||!W) return;
+    L.mids=(L.mids||[]).concat([{from:'mid',id,steps:W.steps,after,u,make:(S)=>W.make?W.make(S):{},ask:(S,p)=>ask?ask(S,p):W.ask(S,p),
+      act:(S,p,q)=>{ const o=W.act(S,p,q); /* a step that comes to nothing is not dealt, nor one meant to come out whole that does not */ return o&&o.v&&o.v.p!==0&&!(whole&&o.v.q!==1)?{v:o.v,u:out||o.u}:null; },slips:(S,p,q)=>(W.slips(S,p,q)||[]).map(s=>({why:s.why,v:s.v,u:out||s.u})),alts:()=>[],cite:()=>W.cite(),line:(o,S,p,q)=>W.line(o,S,p,q)}]);
+    (then||[]).forEach(m=>{ const M=L.mids.find(x=>x.id===m); if(M&&!M.after.includes(id)) M.after=M.after.concat([id]); });
+    const i=WLs.indexOf(W); if(i>=0) WLs.splice(i,1); };
+  const yuOf=law=>{ try{ return LAW(law).make().yu; }catch(e){ return null; } }, rateOf=law=>{ try{ return LAW(law).make().rate; }catch(e){ return null; } };
+  /* after the reading */
+  mid('8·econ.wage','m:wage.real','8·econ.real',yuOf('8·econ.wage'),null,['read'],['m:wage.week'],null,true);
+  mid('33·bio.oxygen','m:bio.oxygen.middle','33·bio.middle',yuOf('33·bio.oxygen'),'units a litre above the middle',['read'],[]);
+  addClose('33·bio.oxygen',[
+    G(X({u:'units a litre above the middle',out:'units a litre',k:S=>S.edge-S.mid,ask:(S,p)=>'the edge of the sheet stands '+p.K+' above the middle: how far below the edge is this spot?',ln:()=>'below the edge'},own('33·bio','the uptake-curve technique'))),
+    Pr(X({u:'units a litre above the middle',out:'square millimetres',k:S=>S.c[2]>1?S.c[2]:null,ask:(S,p)=>'the oxygen rises as '+p.K+' times the distance squared: what is the distance squared?',ln:()=>'the distance squared'},own('33·bio','the uptake-curve technique')))]);
+  mid('45·eng.flood','m:eng.flood.unlearnt','45·eng.unlearnt',yuOf('45·eng.flood'),'senders',['read'],[]);
+  mid('15·econ.lease','15·econ.forever','15·econ.forever',yuOf('15·econ.lease'),'dollars',['read'],[]); /* it keeps its old name: the lease's two closes tell by it which of them follows */
+  /* openings on the law */
+  addClose('13·phys.bkmovers',[Tm(X({u:S=>S.gain,out:S=>S.rate,pos:false,k:()=>pick([2,3,4]),ask:(S,p)=>'if the speed kept gaining at that pace, how much would it gain in '+p.K+' more seconds?',ln:()=>'speed gained'},MQ))]);
+  { const W=old('15·phys.balance'); if(W){ const s0=W.slips; W.slips=S=>{ const out=s0(S)||[]; try{ const L0=Q(S.plate), o=W.act(S); out.push({why:'a third of the length is taken, as for a plate that narrows to a point',v:qm(L0,Q(1,3)),u:'metres'});
+      out.push({why:'the balance point is measured from the narrow end',v:qa(L0,qn(o.v)),u:'metres'}); }catch(e){} return out.filter(s=>s.u==='metres'); }; } }
+  /* the slope, written as its own equation and said in words */
+  const cq=S=>S.c.map(x=>Q(Math.round(x*2),2)), der=c=>c.slice(1).map((v,i)=>qm(v,Q(i+1))), at=(c,x)=>c.reduceRight((a,v)=>qa(qm(a,Q(x)),v),Q(0));
+  const pshow=(c,x)=>CH.show(CH.fromPoly(c.length?c:[Q(0)])).replace(/x/g,x);
+  const slopeOpen=(id,st,mine,words)=>WLs.push({id,steps:[st,'13d'],from:'law',px:true,
+    ask:(S,p)=>{ const d=der(cq(S)); return words+' is '+S.f+'′('+S.x+') = '+pshow(d,S.x)+(d.length>1?': read it at '+S.x+' = '+p.x:', the same at every '+S.x+': give it at '+S.x+' = '+p.x); },
+    act:(S,p)=>mine(S)&&p.x!==undefined?{v:at(der(cq(S)),p.x),u:S.rate}:null,
+    slips:(S,p)=>{ const c=cq(S), d=der(c); return [{why:'the law itself is read, not its slope',v:at(c,p.x),u:S.rate},{why:'the reading is taken at '+(p.x+1)+' instead',v:at(d,p.x+1),u:S.rate},{why:'the slope is sloped once more before it is read',v:at(der(d),p.x),u:S.rate}]; },
+    cite:()=>'substitution',line:(o,S,p)=>S.f+'′('+p.x+') = '+qs(o.v)+' '+o.u});
+  slopeOpen('14·chem.slope','14·chem',S=>!!S.bond,'how fast the energy changes with distance');
+  mid('14·chem.bond','m:bond.force','14·chem.force',rateOf('14·chem.bond'),'force units',['14·chem.slope'],[]);
+  slopeOpen('36·phys.slope','36·phys',S=>S.tag==='lamps','how fast the two lamps’ count climbs');
+  mid('36·phys.lamps','m:phys.lamps.second','36·phys.second',rateOf('36·phys.lamps'),null,['36·phys.slope'],[],S=>'the first lamp alone climbs by '+S.a+' of that: how fast does the second lamp’s count climb?'); /* the old wording ran past the 110 characters a step may take */
+  addClose('36·phys.lamps',[Tm(X({u:'rate',out:'thousand counts a second',when:(S,l)=>l==='m:phys.lamps.second',k:()=>pick([2,3,5]),ask:(S,p)=>'at that climb, how much does the second lamp’s count rise in '+p.K+' more minutes?',ln:()=>'rise in the second lamp’s count'},own('36·phys','the counts-add technique')))]);
+}
 /* chains take a share of Work, Check Proofs and Word Problems draws once any of their steps are open */
 /* the 600,000-draw check (2026-11-14): a minus on a minus, as in "−−13e⁻ˣ", is printed as its value; the same fix on every string of the card keeps the right answer among the options */
 const tidySigns=q=>{ const f=t=>typeof t!=='string'?t:t.replace(/(^|[(\s])−−(?=[\d\w(√∛π])/g,'$1').replace(/ − −(?=[\d\w(√∛π])/g,' + ').replace(/ \+ −(?=[\d\w(√∛π])/g,' − '); /* roots and π too (100,000-draw run: “= −−√(…)”) */
