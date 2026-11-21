@@ -587,7 +587,7 @@ const BANK=[
 BANK.forEach(B=>{ B.open=()=>measured(B.step); });
 const unit=(u,n)=>Math.abs(n)===1?u[0]:u[1];
 const say=(B,key,n)=>B[key].replace('{n}',n).replace('{u1}',unit(B.u1,n)).replace('{u2}',unit(B.u2,n));
-function wordQ(P,used,last){ const wq=P.qps.filter(Q=>qmode(Q)==='word'), c=()=>wq.length?poolQ(wq,used,last||[]):null, a=()=>countQ(P,used), b=()=>sayQ(P,used);
+function wordQ(P,used,last){ const wq=P.qps.filter(Q=>qmode(Q)==='word'), c=()=>wq.length?poolQ(wq,used,last||[]):null, a=()=>countQ(P,used), b=()=>stmtQ(P,used); /* senseeds */
   const order=shuffle([a,b,c].concat(wq.length>2?[c]:[])); for(const f of order){ const q=f(); if(q) return q; } return null; }
 function countQ(P,used){
   const seeds=P.seeds.filter(s=>['add','times','num'].includes(SKIND[s.id])), ops=P.ops.filter(O=>O.word), cbank=P.bank.filter(B=>!B.kind); if(!seeds.length||!ops.length||!cbank.length) return null;
@@ -4941,6 +4941,38 @@ QP.push(
         why:'If '+p+' is necessary, then not-'+p+' is not possible: every way reaches '+p+', so no way holds its denial without a clash. It is the way an every gives “no counterexample”.'}
       :{index:'q:3b.gives['+p+'1]', lines:[['¬◇¬'+p,'in hand']], ask:'Can □'+p+' be written from it, with the techs of this rung?', right:'not yet: the way back waits for rung 7', opts:['yes: each gives the other','not yet: the way back waits for rung 7','yes, by refute','no: it is totally false'],
         why:'□'+p+' gives ¬◇¬'+p+'. The way back, from “not-'+p+' is not possible” to “'+p+' is necessary”, needs the step from ¬¬ that no tech yet takes.'}; }});
+
+/* ===== senseeds (Andrew 2026-11-21 17:50Z): "quantifier specific and modal specific seeds for the statement kind of word problems".
+   1d.sayings was the only statement seed. Two more, each asking for the statement in marks: 2b.sayings (every, some, not every, no,
+   and 2c's layered sentences once 2c is reached) and 3b.sayings (necessarily and possibly). stmtQ deals one of the open ones. ===== */
+const QSAY=SENT.concat([{k:'notevery',step:'2b',say:(n,a)=>'Not every '+n[0]+' is '+a[0]+'.',f:(n,a)=>mline('∀',n[1]+' ⇒ '+a[1],true),why:'The not is put on last, in front of the every: the line says the every fails, which one counterexample is enough for.'}]);
+SEEDS.push({id:'2b.sayings',step:'2b',label:'ways English says every and some',open:()=>measured('2b'),
+  make(){ const ks=QSAY.map((S,i)=>i).filter(i=>QSAY[i].step==='2b'||measured('2c')), k=pick(ks), B=rnd(KINDS.length), [a,b]=shuffle([0,1,2]), n=rnd(3); return {kind:'sayq',k,B,n,a,b,ix:'['+QSAY[k].k+','+KINDS[B].id.slice(6)+','+n+a+b+']'}; }});
+SKIND['2b.sayings']='sayq';
+SEEDS.push({id:'3b.sayings',step:'3b',label:'ways English says necessarily and possibly',open:()=>measured('3b'),
+  make(){ const m=rnd(MODAL.length), turn=rnd(2); return {kind:'saym',m,turn,ix:'['+m+','+turn+']'}; }});
+SKIND['3b.sayings']='saym';
+function quantQ(P,used,s){
+  for(let tries=0;tries<40;tries++){ const c=s.make(), B=KINDS[c.B], n=B.nouns[c.n], a=B.adjs[c.a], b=B.adjs[c.b], S=QSAY[c.k], f=S.f(n,a,b), right=mshow(f);
+    const body=f.body, alt=o=>({o,a:body.a,b:body.b}), flip=f.q==='∀'?'∃':'∀', fam=[];
+    if(body.o==='⇒') fam.push(mline(f.q,alt('∧'),f.neg),mline(flip,alt('∧'),f.neg),mline(f.q,{o:'⇒',a:body.b,b:body.a},f.neg));
+    if(body.o==='∧') fam.push(mline(f.q,alt('⇒'),f.neg),mline(flip,alt('⇒'),f.neg),mline(f.q,alt('∨'),f.neg));
+    fam.push(mline(flip,body,f.neg),mline(f.q,body,!f.neg)); tslips(body).forEach(z=>fam.push(mline(f.q,z,f.neg)));
+    const L0=mletters([f]).length, wrong=[]; shuffle(fam).forEach(g=>{ const k=mshow(g); if(wrong.length<3&&k!==right&&!wrong.includes(k)&&mletters([g]).length===L0&&!msame(g,f)) wrong.push(k); }); if(wrong.length<3) continue;
+    const index='d:'+s.id+c.ix+'.'+DASH+'.'+B.id+'>'+right; if(used[index]) continue;
+    const all=B.nouns.concat(B.adjs), defs=tatoms(body).map(l=>{ const w=all.find(x=>x[1]===l); return 'Let '+l+'(x) be “x is '+(B.nouns.includes(w)?aOf(w[0]):w[0])+'”.'; }).join(' ');
+    return {index, a3:[s.id+c.ix,DASH,B.id], step:S.step, steps:[S.step], story:defs+' The statement: “'+S.say(n,a,b)+'”', lines:[],
+      ask:'Which line writes the statement in marks?', right, opts:shuffle([right,...wrong]), lead:'It is '+right+'. ', why:'The statement in marks is '+right+'. '+S.why}; }
+  return null; }
+function modalQ(P,used,s){ const bank=P.bank.filter(B=>B.kind==='prop'); if(!bank.length) return null;
+  for(let tries=0;tries<40;tries++){ const c=s.make(), B=pick(bank), M=MODAL[c.m], two=/\{q\}/.test(M[0]), p=c.turn?B.q:B.p, q=c.turn?B.p:B.q, right=M[1];
+    const index='d:'+s.id+c.ix+'.'+DASH+'.'+B.id+'>'+right; if(used[index]) continue;
+    return {index, a3:[s.id+c.ix,DASH,B.id], step:'3b', steps:['3b'], story:'Let P be “'+p+'”.'+(two?' Let Q be “'+q+'”.':'')+' The statement: “'+M[0].replace('{p}',p).replace('{q}',q)+'”', lines:[],
+      ask:'Which line writes the statement in marks?', right, opts:shuffle([right,...M[2]]), lead:'It is '+right+'. ', why:'The statement in marks is '+right+'. '+M[3]}; }
+  return null; }
+function stmtQ(P,used){ const mine=P.seeds.filter(s=>(SKIND[s.id]==='sayq'||SKIND[s.id]==='saym')&&(!P.use||P.use(s)));
+  const order=shuffle([()=>sayQ(P,used)].concat(mine.map(s=>()=>(SKIND[s.id]==='sayq'?quantQ:modalQ)(P,used,s)))); for(const f of order){ const q=f(); if(q) return q; } return null; }
+/* ===== end of senseeds ===== */
 
 /* ---------- 3c The Next One ---------- */
 QP.push(
@@ -19295,7 +19327,7 @@ L.push({id:'2b.swapsize',from:'sen',to:'sen',steps:()=>['2b'],rename:false,say:(
   line:(o,p,nm,nx,s)=>'with '+(s.kd===0?'some for every':'every for some')+': “'+senWords(o)+'”'});
 L.push({id:'2c.deny',from:'sen',to:'sen',steps:()=>['2c'],rename:false,say:()=>'put “It is not so that” in front of the sentence',act:s=>!s.neg&&!s.inn&&s.kd!==2?Object.assign({},s,{neg:true}):null,cite:()=>'a sign reaches as far as its brackets',
   slips:s=>{ const out=[Object.assign({},s,{why:'the sentence is left undenied'})]; if(s.kd<2) out.push(Object.assign({},s,{inn:true,why:'the not is put on the last test alone, where it does not reach the whole sentence'}));
-    if(s.kd<2) out.push(Object.assign({},s,{kd:1-s.kd,why:'every and some are swapped instead of the sentence being denied'})); else out.push(Object.assign({},s,{kd:s.kd===5?4:5,why:'another sentence is written, not the denial of this one'})); return out; },
+    if(s.kd<2) out.push(Object.assign({},s,{kd:1-s.kd,why:'every and some are swapped instead of the sentence being denied'})); else out.push(Object.assign({},s,{kd:s.kd===4?5:4,why:'another sentence is written, not the denial of this one'})); /* senseeds */ return out; },
   line:(o,p,nm,nx,s)=>'the not in front reaches the whole sentence: “'+senWords(o)+'”'});
 /* necessary and possible (pool 3b.say) */
 const MPAIR=[1,0,null,4,3,3], mwrap=m=>/^[□◇¬]+[A-Z]$|^[□◇¬]+\(.*\)$/.test(m)?m:'('+m+')';
@@ -26934,10 +26966,10 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
 { const base=CH.workCard, prev=CH.wordCard, wordy=s=>!!(CH.KIND[s.kind||'fn']||{}).words, cap1=s=>/^\p{L}[₀-₉′]*(?:\(| =|:|ₙ)/u.test(s)?s:s[0].toUpperCase()+s.slice(1)/* studycap */, ORD=['First','Then','Next','After that','Last'];
   CH.wordSeedCard=function(P,used){ const steps=new Set(CH.SEEDS.filter(s=>wordy(s)&&CH.openStep(s.step,P)).map(s=>s.step)); if(!steps.size) return null;
     const P2={use:x=>steps.has(x.step)&&(!P||P.use(x))};
-    for(let t=0;t<4;t++){ const q=base.call(this,P2,null); if(!q||!q.chain||!q.lines||q.lines.length<3) continue; const sid=String(q.a3[0]).replace(/\[.*$/,''), S0=CH.SEEDS.find(s=>s.id===sid); if(!S0||!wordy(S0)) continue;
+    for(let t=0;t<8;t++){ /* senseeds: a sentence has no size and few links, so the gear's link number and seed size are set aside for this deal */ const pl=CH.pref.links, pt=CH.pref.terms; let q=null; CH.pref.links=0; CH.pref.terms=0; try{ q=base.call(this,P2,null); } finally { CH.pref.links=pl; CH.pref.terms=pt; } if(!q||!q.chain||!q.lines||q.lines.length<3) continue; const sid=String(q.a3[0]).replace(/\[.*$/,''), S0=CH.SEEDS.find(s=>s.id===sid); if(!S0||!wordy(S0)) continue;
       const index='cws:'+q.index.slice(2); if(used&&used[index]) continue;
       const says=q.lines.slice(1).map((l,i)=>(i===q.lines.length-2&&i>0?'Last':ORD[Math.min(i,3)])+', '+l[0].replace(/^\d+\. /,'')+'.');
-      return Object.assign({},q,{index,story:cap1(q.lines[0][0])+'. '+says.join(' '),lines:[],ask:'What comes out?'}); }
+      return Object.assign({},q,{index,story:(cap1(q.lines[0][0])+'. '+says.join(' ')).replace(/\?\./g,'?'),lines:[],ask:'What comes out?'}); }
     return null; };
   const share=P=>{ const n=CH.SEEDS.filter(s=>wordy(s)&&CH.openStep(s.step,P)).length; return 0.3*Math.min(1,n/6); };
   CH.wordCard=function(P,used){ if(Math.random()<share(P)){ const q=CH.wordSeedCard(P,used); if(q) return q; } return prev.apply(this,arguments); }; }
@@ -26954,7 +26986,7 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
   const wordyK=k=>!!(CH.KIND[k||'fn']||{}).words, storySteps=new Set(); CH.SEEDS.forEach(s=>{ if(wordyK(s.kind)) storySteps.add(s.step); }); CH.L.forEach(l=>{ if(l.story){ try{ (l.steps0?l.steps0():l.steps(new Set())).forEach(s=>storySteps.add(s)); }catch(e){} } });
   const cap1=s=>/^\p{L}[₀-₉′]*(?:\(| =|:|ₙ)/u.test(s)?s:s[0].toUpperCase()+s.slice(1)/* studycap */, ORD=['First','Then','Next','After that'];
   const tell=q=>{ if(!q||!q.chain||!q.lines||q.lines.length<3||q.story) return q; const says=q.lines.slice(1).map((l,i,a)=>(i===a.length-1&&i>0?'Last':ORD[Math.min(i,3)])+', '+l[0].replace(/^\d+\. /,'')+(/[.?]$/.test(l[0])?'':'.'));
-    return Object.assign({},q,{index:'cws:'+String(q.index).replace(/^c:/,''),story:cap1(q.lines[0][0])+'. '+says.join(' '),lines:[],ask:'What comes out?'}); };
+    return Object.assign({},q,{index:'cws:'+String(q.index).replace(/^c:/,''),story:(cap1(q.lines[0][0])+'. '+says.join(' ')).replace(/\?\./g,'?'),lines:[],ask:'What comes out?'}); };
   CH.chainPool=function(step,mode){ const r=rungOf(step), P2={use:x=>rungOf(x.step)===r,anchor:step}, keep=CH.pref, g=typeof gearPref==='function'?gearPref(mode):{};
     CH.pref={links:g.links||0,terms:g.terms||0}; const dl0=CH.dl; CH.dl=Date.now()+600; CH.adl=Date.now()+200;
     try{ let any=null; for(let t=0;t<10;t++){ let q=mode==='proof'?CH.proofCard(P2,null):mode==='work'?CH.workCard(P2,null):CH.workCard(P2,null); if(!q) break; if(mode==='word') q=tell(q);
