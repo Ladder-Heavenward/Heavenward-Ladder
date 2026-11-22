@@ -694,10 +694,19 @@ function certFill(w,key,open,what,sk){
 window.LadderCert={read:certRead,fill:(el,key,open)=>{ if(!el) return; el.classList.add('certwrap'); const fm=String(key).match(/^floor(\d+)concl$/); certFill(el,key,open,'floor',fm?['floor',+fm[1]]:null); }};
 /* the last in a series folds into the larger one (Andrew, 2026-10-29 18:32): a rung's last core step carries the rung's
    certification; the last step of a floor's last rung carries none, since the floor's certification covers it */
+function certRole(){ const M=window.LADMAP; if(!M) return null;
+  for(const [fl,rungs] of M) for(let i=0;i<rungs.length;i++){ const [r,core,annex]=rungs[i];
+    if(core.length&&core[core.length-1][0]===PAGE) return i===rungs.length-1?'floor:'+fl:'rung';
+    if(core.some(x=>x[0]===PAGE)||annex.some(x=>x[0]===PAGE)) return ''; }
+  return null; }
 function certify(box,all){
   let w=box.querySelector(':scope>.certwrap');
   if(!w){ w=document.createElement('div'); w.className='certwrap'; box.appendChild(w); }
-  const m=(document.querySelector('meta[name="ladder-cert"]')||{}).content||'';
+  /* stalerec (2026-11-22): which stick a step carries comes from ladmap.js, as on the ladder's rows; the page's ladder-cert meta
+     was written before steps were added (rung 0 split: 0c kept the rung's stick while the ladder gave it to 0d) and is only a fallback */
+  let m=certRole();
+  if(m==null){ m=(document.querySelector('meta[name="ladder-cert"]')||{}).content||'';
+    if(!window.LADMAP&&!certify.asked){ certify.asked=true; const sc=document.createElement('script'); sc.src='ladmap.js'; sc.onload=()=>{ if(certRole()!=null) certify(box,all); }; document.head.appendChild(sc); } }
   if(/^floor:/.test(m)){ const n=m.split(':')[1]; w.hidden=!all;
     w.innerHTML=all?'<p class="certnote">This is the floor’s last step, so its measuring stick is the floor’s: <a href="floor'+n+'concl.html#cert">beside the floor conclusion</a>.</p>':''; return; }
   const rm=PAGE.match(/^r0*(\d+)/);
@@ -730,6 +739,7 @@ async function gateLadder(localOnly){
     li.classList.toggle('starred',!!(pages[stem]&&pages[stem].v&&pages[stem].o!==false));
     li.classList.toggle('starcleared',!!(pages[stem]&&pages[stem].h&&pages[stem].o));
   });
+  staleRecs(pages);
   /* integer rungs are opened by the button at the foot of the rung's own page ("open:<stem>");
      a rung ticked on the ladder under the old way still counts until its page says otherwise */
   const L=window.__ladderMarks;
@@ -740,6 +750,25 @@ async function gateLadder(localOnly){
     li.classList.toggle('passed', r ? !!r.v : !!(L&&L.st['L:'+lab.trim()]));
   });
   placeHere();
+}
+/* stalerec (rung 0 award bug, 2026-11-22): a step's page report (pages:done) is written while its page is open, so it can
+   predate footings added to the page since (the rung 0 split's new 0b3, newfeet, mvFeet2-5). The ladder then counted the step done
+   (crown, fold, rung star) while its footing star showed questions still open. On the ladder, a step reported done whose understand
+   questions are not all ticked under its present title is read from its page and reported afresh, as the page itself would report it.
+   Only when this browser holds some of the step's ticks, so a device that has not synced a page's ticks never undoes another's report. */
+const staleSeen=new Set();
+function staleRecs(pages,tries){
+  const U=window.LADDER_UND, W=window.LadderUnwrap;
+  if(!U||!W||!W.report||!W.load){ tries=(tries||0)+1; if(tries<40) setTimeout(()=>staleRecs(pages,tries),250); return; }
+  const todo=[];
+  document.querySelectorAll('li.autorow').forEach(li=>{ const a=li.querySelector('.t a'); if(!a) return; const stem=hstem(a.getAttribute('href'));
+    const p=pages[stem], u=U[stem]; if(!p||!p.v||!u||!u[1]||!u[1].length||staleSeen.has(stem)) return;
+    let st=null; try{ st=JSON.parse(LS.getItem(titledKey('marks:',u[0]))||'null'); }catch(e){}
+    if(!st||!Object.keys(st).some(k=>k.startsWith('q:')&&st[k])) return;
+    if(u[1].every(([f,q])=>st['q:'+q])) return;
+    staleSeen.add(stem); todo.push(stem); });
+  if(!todo.length) return;
+  Promise.all(todo.map(s=>W.load(s).then(info=>W.report(s,info)).catch(()=>{}))).then(()=>gateLadder(true));
 }
 function theoryHint(li){
   let h=li.querySelector('.lockhint'); if(h) return;
@@ -4330,7 +4359,7 @@ function bind(pane){
       live().forEach(o=>window.__aqUnwObs.observe(o,{attributes:true,attributeFilter:['class']})); } } }
 /* a tick made on the step page reaches every open copy of the step at once (the observer above); on a return to the pane after
    another page, the pane is drawn again from the saved marks */
-window.LadderUnwrap={bind,load,tick,paint};
+window.LadderUnwrap={bind,load,tick,paint,report}; /* stalerec: report too */
 })();
 /* qslide */ /* 2026-11-14 (Andrew 17:40Z): on the question's screen the address and its kind sit on a line of their own above the centred question */
 (function(){ const mark=()=>{ document.querySelectorAll('.sayback ol>li>.ph').forEach(ph=>{ if(ph.closest('#desk,#stick')) return; const n=ph.nextSibling; if(n&&n.nodeType===1&&n.classList.contains('qbr')) return; const b=document.createElement('i'); b.className='qbr'; b.setAttribute('aria-hidden','true'); ph.after(b); }); };
