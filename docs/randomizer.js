@@ -466,9 +466,13 @@ function mutations(t,c){ const out=[];
 function proofQ(P,used,last){ const pq=P.qps.filter(Q=>qmode(Q)==='proof'), pool=()=>pq.length?poolQ(pq,used,last||[]):null;
   if(pq.length&&Math.random()<Math.min(0.5,0.15*pq.length)){ const q=pool(); if(q) return q; }
   return (P.seeds.length?proofQ0(P,used):null)||pool(); }
-function proofQ0(P,used){
+const SK1={}; /* stragglers: each old seed makes one kind; a seed is offered for a proof only where two links that take its kind are open */
+function proofSeedOk(P,s){ const k=SK1[s.id]||(SK1[s.id]=(c=>[c.kind,!!c.t])(s.make())); if(/^say/.test(k[0])) return false;
+  if(TERMK.includes(k[0])) return k[1]?chainLinks(P,k[0]).length>=2:['1d.chainif','1d.freeif','1d.notasif'].filter(id=>P.links.some(L=>L.id===id)).length>=2;
+  return P.links.filter(L=>L.kinds.includes(k[0])).length>=2; }
+function proofQ0(P,used){ const okS=P.seeds.filter(s=>proofSeedOk(P,s)); if(!okS.length) return null;
   for(let tries=0;tries<120;tries++){
-    const s=pick(P.seeds), c=s.make(), W=world(c);
+    const s=pick(okS), c=s.make(), W=world(c);
     if(c.kind==='say') continue;
     if(TERMK.includes(c.kind)){ const q=chainProofQ(P,used,s,c); if(q) return q; continue; }
     if(c.kind==='names'&&[c.l,c.r,c.m].includes(c.n)) continue;
@@ -538,7 +542,7 @@ function workQ(P,used,last){
   const seeds=P.seeds.filter(s=>['add','times','num','int'].includes(SKIND[s.id])), wq=P.qps.filter(Q=>qmode(Q)==='work');
   const canChain=seeds.length&&P.ops.length;
   const tseeds=P.seeds.filter(s=>TERMK.includes(SKIND[s.id])&&chainLinks(P,SKIND[s.id]).length);
-  if(tseeds.length&&(Math.random()<0.4||!(canChain||wq.length))) for(let tries=0;tries<30;tries++){ const s=pick(tseeds), q=chainWorkQ(P,used,s,s.make()); if(q) return q; }
+  if(tseeds.length&&(Math.random()<0.4||!(canChain||wq.length))) for(const s of shuffle(tseeds.slice())){ const q=chainWorkQ(P,used,s,s.make()); if(q) return q; } /* stragglers: each seed is asked once */
   if(wq.length&&(!canChain||Math.random()<0.35)){ const q=poolQ(wq,used,last); if(q) return q; }
   if(canChain) for(let tries=0;tries<120;tries++){
     const s=pick(seeds), c=s.make(), neg=measured('5b'), deep=Math.min(3,1+P.ops.length);
@@ -680,8 +684,13 @@ function svg(S){
 
 /* ---------- helpers for curves ---------- */
 /* a broken line through whole-number corners, one corner per whole x from a to b, rising and falling by small steps */
-function zig(a,b,lo,hi){ for(let t=0;t<60;t++){ let y=ri(lo+1,hi-1); const pts=[[a,y]]; for(let x=a+1;x<=b;x++){ y=Math.max(lo,Math.min(hi,y+pk([-2,-1,1,2,0,1,-1]))); pts.push([x,y]); }
-    if(new Set(pts.map(p=>p[1])).size>=4) return pts; } return null; }
+function zig(a,b,lo,hi){ let y=ri(lo+1,hi-1); const pts=[[a,y]]; for(let x=a+1;x<=b;x++){ y=Math.max(lo,Math.min(hi,y+pk([-2,-1,1,2,0,1,-1]))); pts.push([x,y]); }
+  /* stragglers: a line with fewer than four heights has a corner moved to a new height, within two of its neighbours, until it has four */
+  const cnt=()=>new Set(pts.map(p=>p[1])).size; for(let g=0;g<4&&cnt()<4;g++){ const c0=cnt(), mv=[]; pts.forEach((p,i)=>{ for(let h=lo;h<=hi;h++) if((!i||Math.abs(h-pts[i-1][1])<=2)&&(i===pts.length-1||Math.abs(h-pts[i+1][1])<=2)) mv.push([i,h]); });
+    for(const [i,h] of sh(mv)){ const old=pts[i][1]; pts[i][1]=h; if(cnt()>c0) break; pts[i][1]=old; } }
+  if(cnt()<4){ /* a line pressed against the top or bottom: three corners in a row step away from it */ const j=ri(0,pts.length-4), y0=pts[j][1], ds=[1,-1].filter(d=>y0+3*d<=hi&&y0+3*d>=lo), d=pk(ds.length?ds:[y0<=(lo+hi)/2?1:-1]); for(let k=1;k<=3;k++) pts[j+k][1]=y0+d*k;
+    for(let k=j+4;k<pts.length;k++){ const df=pts[k][1]-pts[k-1][1]; if(Math.abs(df)>2) pts[k][1]=pts[k-1][1]+2*Math.sign(df); else break; } }
+  return cnt()>=4?pts:null; }
 const at=(pts,x)=>{ for(let i=0;i+1<pts.length;i++){ const [a,ya]=pts[i],[b,yb]=pts[i+1]; if(x>=a&&x<=b) return ya+(yb-ya)*(x-a)/(b-a); } return null; };
 
 const KINDS=[];
@@ -738,7 +747,7 @@ K({id:'swap',step:'9e',steps:['9d','9e'],title:'a pair of the inverse',make(){
 
 /* 9e: the step of a line from two points read off the grid */
 K({id:'step',step:'9e',title:'the step of a line',make(){
-  for(let t=0;t<40;t++){ const x1=ri(-4,0), x2=ri(1,4), y1=ri(-4,4), y2=ri(-4,4); if(y1===y2) continue; const dx=x2-x1, dy=y2-y1;
+  for(let t=0;t<40;t++){ const x1=ri(-4,0), x2=ri(1,4), y1=ri(-4,4), y2=pk([-4,-3,-2,-1,0,1,2,3,4].filter(v=>v!==y1)); if(y1===y2) continue; const dx=x2-x1, dy=y2-y1;
     const m=dy/dx, b=y1-m*x1, right=frac(dy,dx);
     const ws=uniq(right,[frac(dx,dy),frac(-dy,dx),sg(dy),frac(dy,dx+1)]).slice(0,3); if(ws.length<3) continue;
     return card(this,{ix:[x1,y1,x2,y2].join(','), fig:svg({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts:[{t:'fn',f:x=>m*x+b,from:-4.5,to:4.5},{t:'dots',pts:[[x1,y1],[x2,y2]]}],alt:'a line through two marked points'}),
@@ -774,7 +783,7 @@ K({id:'median',step:'9·stat',title:'the median off the running total',make(){
 /* 9·phys: average velocity off a position graph */
 K({id:'velocity',step:'9·phys',title:'average velocity off a position graph',make(){
   for(let t=0;t<40;t++){ const xs=[0]; for(let i=1;i<=6;i++) xs.push(Math.max(-2,Math.min(10,xs[i-1]+pk([-2,0,2,2,3,4,1])))); const pts=xs.map((x,i)=>[i,x]);
-    const a=ri(0,3), b=ri(a+2,6), d=xs[b]-xs[a]; if(d===0) continue; let trav=0; for(let i=a;i<b;i++) trav+=Math.abs(xs[i+1]-xs[i]);
+    const ab=[]; for(let i=0;i<=3;i++) for(let j=i+2;j<=6;j++) if(xs[j]!==xs[i]) ab.push([i,j]); if(!ab.length){ xs[6]+=xs[6]<10?1:-1; ab.push([ri(0,3),6]); } /* stragglers: the two times are picked from those between which the cart has moved */ const [a,b]=pk(ab), d=xs[b]-xs[a]; if(d===0) continue; let trav=0; for(let i=a;i<b;i++) trav+=Math.abs(xs[i+1]-xs[i]);
     const right=frac(d,b-a)+' m/s', ws=uniq(right,[frac(xs[b],b)+' m/s',frac(b-a,d)+' m/s',frac(trav,b-a)+' m/s',frac(-d,b-a)+' m/s',sg(d)+' m/s']).slice(0,3); if(ws.length<3) continue;
     return card(this,{ix:xs.join('.')+';'+a+','+b, fig:svg({x:[0,6.3],y:[-2.5,10.5],sx:1,sy:1,ly:2,xl:'t, seconds',yl:'x, metres',parts:[{t:'line',pts}],alt:'position against time'}),
       ask:'A cart’s position x is drawn against time t. What is its average velocity from t = '+a+' to t = '+b+'?', right, opts:sh([right,...ws]),
@@ -794,7 +803,7 @@ K({id:'tangent',step:'13a',steps:['13a','13k'],title:'a slope off the tangent li
 /* 14a: where the slope is 0, at a top or a bottom */
 K({id:'flat',step:'14a',steps:['14a','14f'],title:'where the slope is 0',make(){
   /* f = (x − p)(x − q)-shaped slope: f(x) = k(x³/3 − (p+q)x²/2 + pq x) + c, with tops and bottoms at p and q */
-  for(let t=0;t<40;t++){ const p=ri(-3,0), q=ri(1,3); if(q-p<2) continue; const k=pk([0.5,-0.5]);
+  for(let t=0;t<40;t++){ const [p,q]=pk([[-3,1],[-3,2],[-3,3],[-2,1],[-2,2],[-2,3],[-1,1],[-1,2],[-1,3],[0,2],[0,3]]); const k=pk([0.5,-0.5]);
     const F=x=>k*(x*x*x/3-(p+q)*x*x/2+p*q*x), lo=Math.min(F(p),F(q),F(-4),F(4)), hi=Math.max(F(p),F(q),F(-4),F(4)); const sc=4/Math.max(Math.abs(F(p)),Math.abs(F(q)),1);
     const f=x=>F(x)*sc-(F(p)+F(q))*sc/2; let z=[]; for(let x=-40;x<40;x++){ const a=f(x/10),b=f((x+1)/10); if(a*b<0) z.push(Math.round((x+0.5)/10)); }
     const L=a=>a.map(sg).join(' and '), right=L([p,q]), infl=(p+q)/2;
@@ -921,6 +930,13 @@ K({id:'keepdrop',step:'2g',title:'a leaf of the keep-or-drop tree',make(){
 /* turned-around twins (rgraphZ) take about one deal in five, not one in two */
 function deal(open,used){ const ks=KINDS.filter(k=>open(k)), kp=ks.filter(k=>!k.turned), kt=ks.filter(k=>k.turned); for(let t=0;t<40&&ks.length;t++){ const k=kt.length&&(!kp.length||R()<0.2)?LHALF(kt):LHALF(kp); let c=null; try{ c=k.make(); }catch(e){ c=null; } if(c&&!(used&&used[c.index])&&c.opts.length===4&&new Set(c.opts).size===4&&c.opts.filter(o=>o===c.right).length===1) return c; } return null; }
 (typeof window!=='undefined'?window:globalThis).LadderReadGraph={KINDS,deal,svg,ttsvg,tp,tv,col,ROWS,card,frac,dec,sg,uniq,K,vennsvg,vt,vkey,treesvg};
+/* stragglers: a kind whose numbers or small world must fit lists every choice once (k.mk(p) makes the card for choice p, or nothing), keeps those that
+   make a card, each with the chance the roll gave it, and picks from them. No made card is thrown away */
+Object.assign((typeof window!=='undefined'?window:globalThis).LadderReadGraph,{
+  fitted(k,all,wt){ if(!k._fit){ const V=all().filter(p=>{ try{ return !!k.mk(p); }catch(e){ return false; } }), W=[]; let s=0; V.forEach(p=>{ s+=wt?wt(p):1; W.push(s); }); k._fit={V,W,s}; }
+    const F=k._fit; if(!F.V.length) return null; const r=R()*F.s; let lo=0, hi=F.V.length-1; while(lo<hi){ const m=(lo+hi)>>1; if(F.W[m]>r) hi=m; else lo=m+1; } return k.mk(F.V[lo]); },
+  worlds(n){ const cells=[]; for(let i=0;i<n;i++) for(let j=0;j<n;j++) cells.push([i,j]); const o=[]; for(let m=0;m<(1<<cells.length);m++) o.push(cells.filter((c,x)=>m>>x&1)); return o; },
+  wtP(n,p,loop){ return S=>{ let w=1; for(let i=0;i<n;i++) for(let j=0;j<n;j++){ const q=i===j?loop:p; w*=S.some(e=>e[0]===i&&e[1]===j)?q:1-q; } return w; }; }});
 })();
 
 /* ===== Read Graph, seed.link (Andrew 2026-11-14 12:35Z: "The geometry, trig, and calculus particularly take to the seed.link formula well";
@@ -962,12 +978,13 @@ function formula(S,T){ const u=inner(T), body=S.t(u), c=T.c, d=T.d;
   const dd=d>0?' + '+hv(d):d<0?' − '+hv(-d):''; return 'y = '+pre+(/[0-9½]$/.test(pre)&&/^[0-9½]/.test(body)?'·':'')+body+dd; }
 const keyAt=(S,T)=>[T.a*S.key[0]+T.b,T.c*S.key[1]+T.d];
 const P=(p)=>'('+dec(p[0])+', '+dec(p[1])+')';
-function chain(n){ const names=Object.keys(LK), out=[]; let T=ID; for(let i=0;i<n;i++){ const nm=i===0?'slide':pk(names); const L=LK[nm].make(); L.kind=nm; out.push(L); T=L.act(T); } return {L:out,T}; }
 const view=(S,T)=>{ const [kx,ky]=keyAt(S,T); return Math.abs(kx)<=4&&Math.abs(ky)<=4; };
+/* stragglers: given the seed, each link is picked from those that keep the marked point in the window, so no finished chain is thrown away */
+function chain(n,S){ const names=Object.keys(LK), out=[]; let T=ID; for(let i=0;i<n;i++){ const cs=[]; (i===0?['slide']:names).forEach(nm=>{ for(let k=0;k<(S?4:1);k++){ const L=LK[nm].make(); L.kind=nm; if(!S||view(S,L.act(T))) cs.push(L); } }); if(!cs.length) break; const L=pk(cs); out.push(L); T=L.act(T); } return {L:out,T}; }
 
 /* the formula of a moved curve: seed drawn solid, the moved curve dashed */
 G.K({id:'moved',step:'20i',title:'the equation of a moved curve',make(){
-  for(let t=0;t<40;t++){ const S=pk(SEEDF), n=ri(1,3), C=chain(n); if(!view(S,C.T)) continue; const T=C.T, g=gOf(S,T), right=formula(S,T);
+  for(let t=0;t<40;t++){ const S=pk(SEEDF), n=ri(1,3), C=chain(n,S); if(!C.L.length||!view(S,C.T)) continue; const T=C.T, g=gOf(S,T), right=formula(S,T);
     const wrongT=[{a:T.a,b:-T.b,c:T.c,d:T.d},{a:T.a,b:T.b,c:T.c,d:-T.d},{a:1/T.a,b:T.b,c:T.c,d:T.d},{a:T.a,b:T.b,c:1/T.c,d:T.d},{a:-T.a,b:-T.b,c:-T.c,d:T.d},{a:T.a,b:T.d,c:T.c,d:T.b}];
     const ws=[]; sh(wrongT).forEach(W=>{ if(ws.length>=3) return; const gw=gOf(S,W); if(same(g,gw,-4.5,4.5)||ws.some(x=>same(gOf(S,x),gw,-4.5,4.5))) return; ws.push(W); });
     if(ws.length<3) continue; const opts=[right,...ws.map(W=>formula(S,W))]; if(new Set(opts).size<4) continue;
@@ -979,7 +996,7 @@ G.K({id:'moved',step:'20i',title:'the equation of a moved curve',make(){
 
 /* where the key point lands: the seed drawn, the links told in words */
 G.K({id:'landing',step:'20i',title:'where a point lands after the moves',make(){
-  for(let t=0;t<40;t++){ const S=pk(SEEDF), C=chain(ri(2,3)); if(!view(S,C.T)) continue; const k1=keyAt(S,C.T), right=P(k1);
+  for(let t=0;t<40;t++){ const S=pk(SEEDF), C=chain(ri(2,3),S); if(!C.L.length||!view(S,C.T)) continue; const k1=keyAt(S,C.T), right=P(k1);
     let Tr=ID; C.L.slice().reverse().forEach(L=>{ Tr=L.act(Tr); }); const rev=P(keyAt(S,Tr));
     const ws=uniq(right,[rev,P([k1[1],k1[0]]),P([-k1[0],k1[1]]),P([k1[0],-k1[1]]),P([k1[0]+1,k1[1]])]).slice(0,3); if(ws.length<3) continue;
     return card(this,{seed:S.id,ix:S.id,links:C.L.map(l=>l.id), fig:svg({x:[-5.5,5.5],y:[-5.5,5.5],xl:'x',yl:'y',parts:[{t:'fn',f:S.f,from:-5.5,to:5.5,n:160},{t:'dots',pts:[S.key]}],alt:'a curve with one marked point'}),
@@ -1003,7 +1020,10 @@ G.K({id:'slopepic',step:'13d',steps:['13a','13d'],title:'which picture is the sl
 
 /* ---------- the first test read off a slope graph (14f) ---------- */
 G.K({id:'toptest',step:'14f',steps:['14a','14f'],title:'a top read off the slope graph',make(){
-  for(let t=0;t<40;t++){ const zs=sh([-3,-2,-1,0,1,2,3]).slice(0,ri(2,3)).sort((a,b)=>a-b); const s=pk([1,-1]), k=s*(zs.length===3?0.25:0.5);
+  for(let t=0;t<1;t++){ /* stragglers: every slope curve with one top that fits the window is listed once, with the chance the roll gave it, and one is picked */
+    const LIB=G._onetop||(G._onetop=(()=>{ const V=[], W=[]; let w=0; const zz=[-3,-2,-1,0,1,2,3]; for(let m=0;m<128;m++){ const zs=zz.filter((z,i)=>m>>i&1); if(zs.length<2||zs.length>3) continue; [1,-1].forEach(s=>{ const k=s*(zs.length===3?0.25:0.5), fp=x=>k*zs.reduce((p,z)=>p*(x-z),1);
+      if(zs.filter(z=>fp(z-0.1)>0&&fp(z+0.1)<0).length!==1) return; let mx=-9; for(let x=-4;x<=4;x+=0.5) mx=Math.max(mx,fp(x)); if(mx>4.5) return; w+=zs.length===2?1/21:1/35; V.push([zs,s]); W.push(w); }); } return {V,W,w}; })());
+    const r0=R()*LIB.w, pick0=LIB.V[Math.max(0,LIB.W.findIndex(x=>x>r0))], zs=pick0[0], s=pick0[1], k=s*(zs.length===3?0.25:0.5);
     const fp=x=>k*zs.reduce((p,z)=>p*(x-z),1); const tops=zs.filter(z=>fp(z-0.1)>0&&fp(z+0.1)<0), bots=zs.filter(z=>fp(z-0.1)<0&&fp(z+0.1)>0); if(tops.length!==1) continue;
     let mx=-9,mxx=0; for(let x=-4;x<=4;x+=0.5){ if(fp(x)>mx){ mx=fp(x); mxx=x; } } if(mx>4.5) continue;
     const right='x = '+sg(tops[0]), ws=uniq(right,[...bots.map(z=>'x = '+sg(z)),'x = '+dec(mxx),'x = '+sg(tops[0]+1),'x = '+sg(-tops[0])]).slice(0,3); if(ws.length<3) continue;
@@ -1015,7 +1035,9 @@ G.K({id:'toptest',step:'14f',steps:['14a','14f'],title:'a top read off the slope
 /* ---------- the area function (16a, 16b), with area below the axis counted as less ---------- */
 G.K({id:'areafn',step:'16a',steps:['16a','16b'],title:'the area function',make(){
   for(let t=0;t<40;t++){ let y=ri(-2,3); const pts=[[0,y]]; for(let x=1;x<=6;x++){ y=Math.max(-3,Math.min(3,y+pk([-2,-1,0,1,2]))); pts.push([x,y]); }
-    if(!pts.some(p=>p[1]<0)||!pts.some(p=>p[1]>0)) continue; const c=ri(3,6);
+    { /* stragglers: a line all on one side of the axis is slid across it (a level line is given a step first), so it has area of both signs */ const ys=pts.map(p=>p[1]); let mn=Math.min(...ys), mx=Math.max(...ys);
+      while(mx-mn<2&&(mn>=0||mx<=0)){ pk(pts.filter(p=>p[1]===mx))[1]++; mx++; } if(mn>=0||mx<=0){ const d=ri(Math.max(-3-mn,1-mx),Math.min(3-mx,-1-mn)); pts.forEach(p=>{ p[1]+=d; }); } }
+    const c=ri(3,6);
     let A=0,U=0; for(let i=0;i<c;i++){ const a=pts[i][1], b=pts[i+1][1]; A+=(a+b)/2; U+=(a*b>=0)?Math.abs(a+b)/2:(a*a+b*b)/(2*Math.abs(a-b)); }
     const right=dec(A), ws=uniq(right,[dec(U),sg(pts[c][1]),dec(-A),dec(A+pts[c][1])]).slice(0,3); if(ws.length<3) continue;
     return card(this,{seed:'zig',ix:pts.map(p=>p[1]).join(','),links:['16a.area'], fig:svg({x:[0,6.4],y:[-3.5,3.5],xl:'x',yl:'y',parts:[{t:'line',pts}],alt:'a broken line, the graph of f'}),
@@ -1057,7 +1079,7 @@ G.K({id:'wave4',step:'21g',steps:['20i','21g'],title:'the numbers of a moved wav
 
 /* ---------- a triangle on the grid (18g triangle-area) ---------- */
 G.K({id:'triarea',step:'18g',title:'the area of a triangle on the grid',make(){
-  for(let t=0;t<40;t++){ const A=[ri(-4,0),ri(-4,0)], B=[ri(1,4),ri(-4,1)], C=[ri(-3,3),ri(1,4)];
+  for(let t=0;t<40;t++){ const A=[ri(-4,0),ri(-4,0)], B=[ri(1,4),ri(-4,1)], Cs=[]; for(let x=-3;x<=3;x++) for(let y=1;y<=4;y++) if(Math.abs((B[0]-A[0])*(y-A[1])-(B[1]-A[1])*(x-A[0]))>=4) Cs.push([x,y]); if(!Cs.length) continue; const C=pk(Cs); /* stragglers: the third corner is picked from those that give the triangle room */
     const u=[B[0]-A[0],B[1]-A[1]], v=[C[0]-A[0],C[1]-A[1]], cr=u[0]*v[1]-u[1]*v[0]; if(Math.abs(cr)<4) continue;
     const right=dec(Math.abs(cr)/2), bx=Math.max(A[0],B[0],C[0])-Math.min(A[0],B[0],C[0]), by=Math.max(A[1],B[1],C[1])-Math.min(A[1],B[1],C[1]);
     const ws=uniq(right,[String(Math.abs(cr)),dec(bx*by/2),String(bx*by),dec(Math.abs(u[0]*v[1]+u[1]*v[0])/2)]).slice(0,3); if(ws.length<3) continue;
@@ -1069,7 +1091,7 @@ G.K({id:'triarea',step:'18g',title:'the area of a triangle on the grid',make(){
 
 /* ---------- the equation of a line through two grid points (9e two-points-one-line, 18c) ---------- */
 G.K({id:'lineeq',step:'9e',title:'the equation of a line',make(){
-  for(let t=0;t<40;t++){ const x1=ri(-4,-1), x2=ri(1,4), y1=ri(-3,3), y2=ri(-3,3); if(y1===y2) continue; const dx=x2-x1, dy=y2-y1, m=dy/dx, b=y1-m*x1;
+  for(let t=0;t<40;t++){ const x1=ri(-4,-1), x2=ri(1,4), y1=ri(-3,3), y2=pk([-3,-2,-1,0,1,2,3].filter(v=>v!==y1)); if(y1===y2) continue; const dx=x2-x1, dy=y2-y1, m=dy/dx, b=y1-m*x1;
     const bq=y1*dx-dy*x1, F=(p,q)=>{ const ms=frac(p,q); return ms; };
     const eq=(p,q,bn,bd)=>{ const ms=F(p,q), bs=frac(bn,bd); return 'y = '+(ms==='1'?'':ms===M+'1'?M:ms)+'x'+(bs==='0'?'':bs[0]===M?' − '+bs.slice(1):' + '+bs); };
     const right=eq(dy,dx,bq,dx), ws=uniq(right,[eq(dx,dy,bq,dx),eq(dy,dx,-bq,dx),eq(-dy,dx,bq,dx),eq(dy,dx,y1,1)]).slice(0,3); if(ws.length<3) continue;
@@ -1138,7 +1160,7 @@ G.K({id:'disprove',step:'1e',title:'one row to disprove',make(){
     why:'In row '+(bad+1)+', '+L.map(v=>v+' is '+(rows[bad][v]?'T':'F')).join(', ')+', and '+s+' gives 0. One row is enough to disprove an every-row claim; every other row gives 1. Hunt for the bad row: an ⇒ fails only where its left is T and its right is F, an ∨ only where both are F.'}); }});
 const OPS=['∧','∨','⇒','⇔'], OPN={'∧':'and','∨':'or','⇒':'if','⇔':'exactly when'};
 G.K({id:'whichop',step:'1e',title:'which joining word makes the column',make(){
-  for(let t=0;t<30;t++){ const l=pk(['P','¬P']), r=pk(['Q','¬Q']), op=pk(OPS), L=['P','Q'], c=col(tp(l+' '+op+' '+r),L);
+  for(let t=0;t<1;t++){ /* stragglers: picked from the tables whose column only one joining word gives */ const L=['P','Q'], cs=[]; ['P','¬P'].forEach(l=>['Q','¬Q'].forEach(r=>OPS.forEach(op=>{ const k=col(tp(l+' '+op+' '+r),L).join(''); if(!OPS.some(o=>o!==op&&col(tp(l+' '+o+' '+r),L).join('')===k)) cs.push([l,r,op]); }))); const [l,r,op]=pk(cs), c=col(tp(l+' '+op+' '+r),L);
     const others=OPS.filter(o=>o!==op&&col(tp(l+' '+o+' '+r),L).join('')===c.join('')); if(others.length) continue;
     const cells=ROWS(L).map((e,i)=>[e.P?'T':'F',e.Q?'T':'F',String(c[i])]);
     return card(this,{seed:'tt',ix:l+op+r,links:['1e.op'], fig:ttsvg(L,l+' □ '+r,cells), ask:'Which joining word in the box makes the column come out as shown?', right:op, opts:sh(OPS.slice()),
@@ -1161,8 +1183,11 @@ const setS=a=>a.length?'{'+a.slice().sort().join(', ')+'}':'∅';
 /* ---------- a network on named dots ---------- */
 const NAMES=['a','b','c','d','e','f','g'];
 const POS={5:[[160,25],[275,85],[230,180],[90,180],[45,85]],6:[[60,50],[160,30],[260,50],[260,150],[160,170],[60,150]],7:[[50,50],[150,25],[250,50],[275,120],[200,180],[100,180],[25,120]]};
-function net(n,m,oneP){ for(let t=0;t<200;t++){ const E=[]; const all=[]; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) all.push([i,j]); sh(all).slice(0,m).forEach(e=>E.push(e));
-    const pieces=comps(n,E); if(oneP===true&&pieces.length!==1) continue; if(oneP===false&&pieces.length<2) continue; return E; } return null; }
+function net(n,m,oneP){ /* stragglers: built to fit. One piece: a tree over all the dots first, then the other links. Two or more: the dots are split in two groups and links are drawn only inside a group */
+  const all=[]; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) all.push([i,j]); const key=e=>e[0]+','+e[1];
+  if(oneP===true){ if(m<n-1) return null; const o=sh([...Array(n).keys()]), E=[]; for(let i=1;i<n;i++){ const a=o[i], b=o[rn(i)]; E.push(a<b?[a,b]:[b,a]); } const has=new Set(E.map(key)); sh(all.filter(e=>!has.has(key(e)))).slice(0,m-E.length).forEach(e=>E.push(e)); return sh(E); }
+  if(oneP===false){ const sp=[]; for(let k=1;k<=n/2;k++) if(k*(k-1)/2+(n-k)*(n-k-1)/2>=m) sp.push(k); if(!sp.length) return null; const g=new Set(sh([...Array(n).keys()]).slice(0,pk(sp))); return sh(all.filter(e=>g.has(e[0])===g.has(e[1]))).slice(0,m); }
+  return sh(all).slice(0,m); }
 function comps(n,E){ const par=[...Array(n).keys()], f=x=>par[x]===x?x:(par[x]=f(par[x])); E.forEach(([a,b])=>{ par[f(a)]=f(b); }); const g={}; for(let i=0;i<n;i++) (g[f(i)]=g[f(i)]||[]).push(i); return Object.values(g); }
 function netsvg(n,E,opt){ opt=opt||{}; const P=POS[n], o=['<svg class="rgfig" viewBox="0 0 320 200" role="img" aria-label="dots joined by links" xmlns="http://www.w3.org/2000/svg">'];
   E.forEach(([a,b],i)=>{ o.push('<line class="'+(opt.hi&&opt.hi.includes(i)?'rg-cv rg-b':'rg-cv')+'" x1="'+P[a][0]+'" y1="'+P[a][1]+'" x2="'+P[b][0]+'" y2="'+P[b][1]+'"/>');
@@ -1227,8 +1252,11 @@ function arrsvg(n,A){ const P=[[60,60],[260,60],[260,160],[60,160]].slice(0,n), 
   for(let i=0;i<n;i++) o.push('<circle class="rg-node" cx="'+P[i][0]+'" cy="'+P[i][1]+'" r="12"/><text class="rg-tag" x="'+P[i][0]+'" y="'+(P[i][1]+4.5)+'" text-anchor="middle">'+'xyzw'[i]+'</text>');
   o.push('</svg>'); return o.join(''); }
 G.K({id:'compose',step:'47a',steps:['6b','47a'],title:'the arrow a category must hold',make(){
-  for(let t=0;t<60;t++){ const n=pk([3,4]), all=[]; for(let i=0;i<n;i++) for(let j=0;j<n;j++) if(i!==j) all.push([i,j]);
-    const A=sh(all).slice(0,ri(2,4)); const has=(a,b)=>A.some(e=>e[0]===a&&e[1]===b);
+  for(let t=0;t<1;t++){ /* stragglers: every set of two to four arrows that lacks exactly one arrow is listed once, with the chance the roll gave it, and one is picked */
+    const LIB=G._arrows||(G._arrows=(()=>{ const V=[], W=[]; let w=0; [3,4].forEach(n=>{ const all=[]; for(let i=0;i<n;i++) for(let j=0;j<n;j++) if(i!==j) all.push([i,j]); const N=all.length, C=k=>{ let r=1; for(let i=0;i<k;i++) r=r*(N-i)/(i+1); return r; };
+      for(let m=0;m<(1<<N);m++){ const A=all.filter((e,x)=>m>>x&1); if(A.length<2||A.length>4) continue; const has=(a,b)=>A.some(e=>e[0]===a&&e[1]===b), need=[]; A.forEach(([a,b])=>A.forEach(([c,d])=>{ if(b===c&&a!==d&&!has(a,d)&&!need.some(e=>e[0]===a&&e[1]===d)) need.push([a,d]); })); if(need.length!==1) continue; w+=1/C(A.length); V.push([n,A]); W.push(w); } }); return {V,W,w}; })());
+    const r0=R()*LIB.w, pick0=LIB.V[Math.max(0,LIB.W.findIndex(x=>x>r0))], n=pick0[0], all=[]; for(let i=0;i<n;i++) for(let j=0;j<n;j++) if(i!==j) all.push([i,j]);
+    const A=sh(pick0[1]); const has=(a,b)=>A.some(e=>e[0]===a&&e[1]===b);
     const need=[]; A.forEach(([a,b])=>A.forEach(([c,d])=>{ if(b===c&&a!==d&&!has(a,d)&&!need.some(e=>e[0]===a&&e[1]===d)) need.push([a,d]); })); if(need.length!==1) continue;
     const nm=i=>'xyzw'[i], ar=([a,b])=>nm(a)+' → '+nm(b), right=ar(need[0]);
     const ws=uniq(right,[ar([need[0][1],need[0][0]]),...sh(all.filter(e=>!has(e[0],e[1])&&!(e[0]===need[0][0]&&e[1]===need[0][1]))).map(ar),...A.map(([a,b])=>ar([b,a]))]).slice(0,3); if(ws.length<3) continue;
@@ -1358,9 +1386,28 @@ function say(t){ if(t.v) return t.v; if(t.o==='¬') return '¬'+(t.a.v||t.a.o===
 const ops=t=>t.v?[]:[t.o,...ops(t.a),...(t.b?ops(t.b):[])];
 const lets=t=>t.v?[t.v]:[...lets(t.a),...(t.b?lets(t.b):[])];
 /* a statement over L that uses every letter, has a column that is not all one mark, and fits the table's head */
-function stmt(L,o){ o=o||{}; for(let i=0;i<80;i++){ const t=grow(L,o.d||(L.length===3?pk([2,2,3]):pk([1,2,2,3]))), s=say(t);
-    if(s.length>(o.max||26)||!L.every(v=>lets(t).includes(v))) continue; const c=col(tp(s),L); if(!o.flat&&(c.every(x=>x)||c.every(x=>!x))) continue;
-    if(o.ok&&!o.ok(c)) continue; if(/¬¬/.test(s)||deadpart(t,L)) continue; return {s,t,c,links:ops(t).map(x=>'1e.'+LN[x])}; } return null; }
+/* stragglers: a statement is built to fit, not rolled until it fits (it took six rolls for each one kept). It is grown as before, then mended:
+   a doubled not is dropped; a part that is dead weight (its column all one mark, or a statement joined with itself) is joined another way, or takes a
+   letter for one side, or gives way to one of its two sides; a letter left out is joined on at the top, where it can make no dead weight; a statement too long has one smallest part give way to a letter. If mending
+   cannot settle it, each letter is used once, which always fits. */
+const fitTree=(L,t,max,OPS,bad)=>{ const leaf=v=>({v}), lt=t=>t.v?[t.v]:[...lt(t.a),...(t.b?lt(t.b):[])];
+  const nn=t=>t.v?t:t.b?{o:t.o,a:nn(t.a),b:nn(t.b)}:(t.a.o==='¬'?nn(t.a.a):{o:'¬',a:nn(t.a)});
+  const lf=t=>t.v||(!t.b&&t.a.v), small=t=>!t.v&&t.b&&lf(t.a)&&lf(t.b);
+  const und=t=>{ if(t.v) return t; if(!t.b) return {o:'¬',a:und(t.a)}; const a=und(t.a), b=und(t.b), live=u=>say(u.a)!==say(u.b)&&!(small(u)&&lt(u.a)[0]===lt(u.b)[0])&&!bad(u); /* a letter joined with itself or its own not (P ⇒ ¬P) is dead weight too */ let u={o:t.o,a,b}; if(live(u)) return u;
+    /* dead weight: first another join of the same two sides, then a letter in place of one side, and only then one side alone */
+    for(const o of sh([...new Set(OPS)])){ u={o,a,b}; if(live(u)) return u; }
+    for(const v of sh(L.slice())) for(const o of sh([...new Set(OPS)])){ u=R()<0.5?{o,a,b:leaf(v)}:{o,a:leaf(v),b}; if(live(u)) return u; }
+    return R()<0.5?a:b; };
+  const join=(t,v)=>{ const o=pk(OPS), x=leaf(v); return R()<0.5?{o,a:t,b:x}:{o,a:x,b:t}; };
+  /* too long: one smallest part (two letters joined) gives way to one of its letters, so the statement keeps its shape */
+  const smalls=t=>t.v?0:!t.b?smalls(t.a):small(t)?1:smalls(t.a)+smalls(t.b);
+  const cut=t=>{ let k=rn(Math.max(1,smalls(t))); const go=t=>t.v?t:!t.b?{o:'¬',a:go(t.a)}:small(t)?(k--===0?(R()<0.5?t.a:t.b):t):{o:t.o,a:go(t.a),b:go(t.b)}; return go(t); };
+  const ok=t=>say(t).length<=max&&L.every(v=>lt(t).includes(v))&&!/¬¬/.test(say(t))&&say(und(t))===say(t)&&!bad(t);
+  for(let i=0;i<8&&!ok(t);i++){ t=nn(und(nn(t))); L.forEach(v=>{ if(!lt(t).includes(v)) t=join(t,v); }); for(let j=0;j<8&&say(t).length>max;j++) t=nn(cut(t)); }
+  if(ok(t)) return t; const ls=sh(L); let u=leaf(ls[0]); for(const v of ls.slice(1)) u=join(u,v); return u; };
+function stmt(L,o){ o=o||{}; const flat=t=>{ const c=col(tp(say(t)),L); return c.every(x=>x)||c.every(x=>!x); };
+  const t=fitTree(L,grow(L,o.d||(L.length===3?pk([2,2,3]):pk([1,2,2,3]))),o.max||26,['∧','∧','∨','∨','⇒','⇒','⇔'],flat), s=say(t), c=col(tp(s),L);
+  if(o.ok&&!o.ok(c)) return null; return {s,t,c,links:ops(t).map(x=>'1e.'+LN[x])}; }
 /* a part whose column is all one mark (P ∧ ¬P), or a join of a statement with itself, is dead weight: grow again */
 const deadpart=(t,L)=>{ if(t.v) return false; if(t.b){ const c=col(tp(say(t)),L); if(c.every(x=>x)||c.every(x=>!x)||say(t.a)===say(t.b)) return true; } return deadpart(t.a,L)||(t.b?deadpart(t.b,L):false); };
 const L2=['P','Q'], L3=['P','Q','R'], pickL=p=>R()<p?L3:L2;
@@ -1416,7 +1463,7 @@ redo('whichop',function(){ for(let t=0;t<40;t++){ const L=pickL(0.3), a=grow(L,r
 function sgrow(L,d){ if(d<=0||R()<0.25) return {v:pk(L)}; return {o:pk(['∪','∩','∩','∖']),a:sgrow(L,d-1),b:sgrow(L,d-1)}; }
 const SN={'∪':'union','∩':'meet','∖':'less'};
 redo('venn',function(){ const three=R()<0.6, n=three?3:2, L=three?['A','B','C']:['A','B'], all=(1<<n);
-  const mk=()=>{ for(let i=0;i<60;i++){ const t=sgrow(L,pk([1,2,2,3])), s=say(t), k=vkey(s,n); if(s.length>22||!L.every(v=>lets(t).includes(v))) continue; if(!/1/.test(k)||!/0/.test(k)) continue; return {s,k,t}; } return null; };
+  const mk=()=>{ /* stragglers: built to fit, as the statements are: an empty part gives way to one of its sides, a letter left out is joined on */ const t=fitTree(L,sgrow(L,pk([1,2,2,3])),22,['∪','∩','∩','∖'],u=>!/1/.test(vkey(say(u),n))), s=say(t), k=vkey(s,n); return /1/.test(k)&&/0/.test(k)?{s,k,t}:null; };
   const V=v=>({v}), O=(o,a,b)=>({o,a,b}), VT2=L=>L.length===3?[V('A'),V('B'),V('C'),O('∪','A','B'),O('∩','A','B'),O('∖','A','B'),O('∖','B','A'),O('∪','B','C'),O('∩','B','C'),O('∖','C','A'),O('∩','A','C')].map(t=>t.v?t:O(t.o,V(t.a),V(t.b))):[V('A'),V('B'),O('∪',V('A'),V('B')),O('∩',V('A'),V('B')),O('∖',V('A'),V('B')),O('∖',V('B'),V('A'))];
   /* when 60 drawn sets all fail, a set built from every letter: (A ∪ B) ∩ C and its like, or A ∖ B with two */
   const S=mk()||(t=>({t,s:say(t),k:vkey(say(t),n)}))(pk(three?[O('∩',O('∪',V('A'),V('B')),V('C')),O('∪',O('∩',V('A'),V('B')),V('C')),O('∪',O('∖',V('A'),V('B')),V('C')),O('∩',V('A'),O('∪',V('B'),V('C')))]:[O('∪',V('A'),V('B')),O('∩',V('A'),V('B')),O('∖',V('A'),V('B')),O('∖',V('B'),V('A'))])); const pool=[]; for(let i=0;i<40;i++){ const o=mk(); if(o) pool.push(o); }
@@ -1458,7 +1505,7 @@ const pval=(c,x)=>c.reduce((s,a,i)=>s+a*Math.pow(x,i),0), pint=c=>[0,...c.map((a
 function fromFlat(zs,sgn,lift){ let d=[sgn]; zs.forEach(z=>{ d=pmul(d,[-z,1]); }); let F=pint(d); const fv=zs.map(z=>pval(F,z)), mid=(Math.max(...fv)+Math.min(...fv))/2;
   F[0]-=mid; let m=0; for(let x=-3.5;x<=3.5;x+=0.25) m=Math.max(m,Math.abs(pval(F,x))*(Math.abs(x)<=Math.max(...zs.map(Math.abs))+0.6?1:0.6),Math.abs(pval(d,x))*0.9);
   const s=3.6/(m||1); F=F.map(a=>a*s); d=d.map(a=>a*s); F[0]+=lift||0; return {f:x=>pval(F,x),fp:x=>pval(d,x),F,d}; }
-const zsets=n=>{ for(let i=0;i<40;i++){ const z=sh([-3,-2,-1,0,1,2,3]).slice(0,n).sort((a,b)=>a-b); if(z.every((v,j)=>!j||v-z[j-1]>=2)||n===1) return z; } return null; };
+const zsets=n=>{ /* stragglers: n flat places at least 2 apart, picked straight from the ways there are */ const m=8-n; if(m<n) return null; return sh([...Array(m).keys()]).slice(0,n).sort((a,b)=>a-b).map((w,j)=>w+j-3); };
 
 redo('slopepic',function(){ const n=pk([1,2,2,3]), zs=zsets(n); if(!zs) return null; const sgn=pk([1,-1]), lift=pk([-1.5,-1,-0.5,0,0,0.5,1,1.5]), P=fromFlat(zs,sgn,lift);
   const w=[['the slope f′',P.fp],['f itself',P.f],['the slope turned over, −f′',x=>-P.fp(x)],['the slope slid, f′(x − 1)',x=>P.fp(x-1)],['the slope slid, f′(x + 1)',x=>P.fp(x+1)]];
@@ -1478,7 +1525,7 @@ redo('flat',function(){ const n=pk([1,2,2,3]), zs=zsets(n); if(!zs) return null;
 
 redo('toptest',function(){ for(let t=0;t<40;t++){ const n=pk([2,3,3,4]), zs=zsets(n)||sh([-3,-2,-1,0,1,2,3]).slice(0,n).sort((a,b)=>a-b), s=pk([1,-1]);
     let d=[s]; zs.forEach(z=>{ d=pmul(d,[-z,1]); }); let m=0; for(let x=-4;x<=4;x+=0.25) m=Math.max(m,Math.abs(pval(d,x))); const k=3.8/m, fp=x=>k*pval(d,x);
-    const tops=zs.filter(z=>fp(z-0.1)>0&&fp(z+0.1)<0), bots=zs.filter(z=>fp(z-0.1)<0&&fp(z+0.1)>0), what=pk(['top','bottom']), A=what==='top'?tops:bots, B=what==='top'?bots:tops;
+    const tops=zs.filter(z=>fp(z-0.1)>0&&fp(z+0.1)<0), bots=zs.filter(z=>fp(z-0.1)<0&&fp(z+0.1)>0), what=pk(['top','bottom'].filter(w=>(w==='top'?tops:bots).length).concat(tops.length||bots.length?[]:['top'])) /* stragglers: asked only of what the curve has */, A=what==='top'?tops:bots, B=what==='top'?bots:tops;
     if(!A.length) continue; let mx=-9,mxx=0; for(let x=-4;x<=4;x+=0.5){ const v=what==='top'?fp(x):-fp(x); if(v>mx){ mx=v; mxx=x; } }
     const Ls=a=>a.map(z=>'x = '+sg(z)).join(' and '), right=Ls(A);
     const ws=uniq(right,[B.length?Ls(B):Ls([0===A[0]?1:0]),Ls(zs),'x = '+dec(mxx),Ls(A.map(z=>z+1)),Ls(A.map(z=>-z))]).slice(0,3); if(ws.length<3) continue;
@@ -1554,7 +1601,7 @@ const wpic=(w,n,L,dots)=>{ const g=x=>Math.sin(2*Math.PI*(x-w.s)/w.p), parts=[{t
   if(L) ROWS(L).forEach((e,i)=>parts.push({t:'text',at:[i+0.5,-1.45],s:nm(e,L),dx:-(L.length*4)}));
   return svg({x:[0,n],y:[-1.6,1.4],sx:0.5,sy:1,lx:1,ly:1,xl:'x',parts,alt:'a wave over the rows of a table'}); };
 G.K({id:'ttwave',step:'1e',steps:['1e','21b'],title:'a truth table read as a wave',make(){
-  const L=pickL(0.45), n=1<<L.length, W=WAVES(n), LIB=LVC('g.ttwave'+L.length,()=>{ const pats=new Set(W.map(x=>x.pat)), lib={}; for(let i=0;i<300;i++){ const S=stmt(L,{max:24,ok:c=>pats.has(c.join(''))}); if(S){ const k=S.c.join(''), a=lib[k]=lib[k]||[]; if(!a.some(x=>x.s===S.s)) a.push(S); } } return lib; }), ks__=Object.keys(LIB); if(!ks__.length) return null; const pat=pk(ks__), w=W.find(x=>x.pat===pat), S=pk(LIB[pat]); const rows=ROWS(L);
+  const L=pickL(0.45), n=1<<L.length, W=WAVES(n), LIB=LVC('g.ttwave'+L.length,()=>{ const pats=new Set(W.map(x=>x.pat)), lib={}; for(let i=0;i<1500;i++){ /* stragglers: a survey made once; each statement is now built once, so more are asked */ const S=stmt(L,{max:24,ok:c=>pats.has(c.join(''))}); if(S){ const k=S.c.join(''), a=lib[k]=lib[k]||[]; if(!a.some(x=>x.s===S.s)) a.push(S); } } return lib; }), ks__=Object.keys(LIB); if(!ks__.length) return null; const pat=pk(ks__), w=W.find(x=>x.pat===pat), S=pk(LIB[pat]); const rows=ROWS(L);
   const others=sh(W.filter(x=>x.pat!==w.pat)); if(others.length<3) return null;
   if(R()<0.5){ /* from the table to the wave */
     const html={}; [w,...others.slice(0,3)].forEach(x=>{ html[wname(x)]=wpic(x,n,null,true); });
@@ -1571,7 +1618,8 @@ G.K({id:'ttwave',step:'1e',steps:['1e','21b'],title:'a truth table read as a wav
 /* ---------- Andrew 13:18Z: the slope turns into the chord slope once 13a is passed ---------- */
 G.K({id:'chord',step:'13a',steps:['13a'],title:'a chord slope off the curve',make(){ const n=pk([1,2,2]), zs=zsets(n); if(!zs) return null; const P=fromFlat(zs,pk([1,-1]),0);
   /* re-fit to whole-number points: draw a polynomial through four whole-number points instead, so the readings are exact */
-  for(let t=0;t<40;t++){ const a=ri(-3,1), h=pk([1,2,3]), b=a+h; if(b>3) continue; const ya=Math.round(P.f(a)), yb=Math.round(P.f(b)); if(Math.abs(ya)>4||Math.abs(yb)>4||ya===yb&&R()<0.7) continue;
+  for(let t=0;t<1;t++){ /* stragglers: the two points are picked from those that fit the window; a level chord is one third as likely */ const cs=[]; for(let a0=-3;a0<=1;a0++) [1,2,3].forEach(h0=>{ if(a0+h0>3) return; const u=Math.round(P.f(a0)), v=Math.round(P.f(a0+h0)); if(Math.abs(u)>4||Math.abs(v)>4) return; cs.push([a0,h0]); if(u!==v) cs.push([a0,h0],[a0,h0]); }); if(!cs.length) return null;
+    const [a,h]=pk(cs), b=a+h, ya=Math.round(P.f(a)), yb=Math.round(P.f(b));
     /* the curve through (a, ya) and (b, yb): the drawn f bent by a line so it meets those whole points */
     const ea=ya-P.f(a), eb=yb-P.f(b), g=x=>P.f(x)+ea+(eb-ea)*(x-a)/h, fr=(p,q)=>G.frac(p,q);
     const right=fr(yb-ya,h), ws=uniq(right,[fr(yb-ya,1),fr(h,yb-ya||1),fr(ya-yb,h),fr(yb+ya,h),fr(yb,b||1)]).slice(0,3); if(ws.length<3) continue;
@@ -1852,7 +1900,10 @@ K({id:'rooms',step:'7·logi',title:'how many rooms the meetings need',make(){ co
     why:'Slide a line across the hours and count the bars it cuts: at most '+best+' at once, so '+best+' rooms are needed, and giving each meeting the first free room never needs more (first-free-room). One room per meeting ('+n+') wastes rooms.'}); }});
 
 /* 7·econ: the stuck pair in a payoff table */
-K({id:'payoff',step:'7·econ',title:'the stuck pair in a payoff table',make(){ for(let t=0;t<60;t++){ const P=[[ri(0,9),ri(0,9)],[ri(0,9),ri(0,9)],[ri(0,9),ri(0,9)],[ri(0,9),ri(0,9)]]; /* cells: [A row][B col] = P[2r+c] = [A's, B's] */
+K({id:'payoff',step:'7·econ',title:'the stuck pair in a payoff table',make(){ for(let t=0;t<1;t++){ const P=[[ri(0,9),ri(0,9)],[ri(0,9),ri(0,9)],[ri(0,9),ri(0,9)],[ri(0,9),ri(0,9)]]; /* cells: [A row][B col] = P[2r+c] = [A's, B's] */
+    { /* stragglers: the stuck pair is chosen first and the numbers are set round it: each player does strictly worse by moving off it, and the cell across is not stuck too */ const r=rn(2), c=rn(2), N=P[2*r+c], U=P[2*(1-r)+c], V=P[2*r+1-c], D=P[2*(1-r)+1-c];
+      const up=(X,Y,k)=>{ if(X[k]<Y[k]){ const t=X[k]; X[k]=Y[k]; Y[k]=t; } if(X[k]===Y[k]){ if(X[k]<9) X[k]+=ri(1,Math.min(3,9-X[k])); else Y[k]-=ri(1,3); } }; up(N,U,0); up(N,V,1);
+      if(D[0]>V[0]&&D[1]>U[1]){ if(R()<0.5){ const t=D[0]; D[0]=V[0]; V[0]=t; } else { const t=D[1]; D[1]=U[1]; U[1]=t; } } }
     const nash=[]; for(let r=0;r<2;r++) for(let c=0;c<2;c++){ const a=P[2*r+c][0], b=P[2*r+c][1]; if(a>=P[2*(1-r)+c][0]&&b>=P[2*r+1-c][1]&&a!==P[2*(1-r)+c][0]&&b!==P[2*r+1-c][1]) nash.push([r,c]); }
     if(nash.length!==1) continue; const mv=['keep quiet','tell'], name=([r,c])=>'Zoe '+(r?'tells':'keeps quiet')+', Mike '+(c?'tells':'keeps quiet');
     let bd=Re(90,30,220,100,'rg-uni')+Ln(200,30,200,130,'rg-grid')+Ln(90,80,310,80,'rg-grid')+T(145,22,'Mike: '+mv[0],'rg-lab','middle')+T(255,22,'Mike: '+mv[1],'rg-lab','middle')+T(84,60,'Zoe: '+mv[0],'rg-lab','end')+T(84,110,'Zoe: '+mv[1],'rg-lab','end');
@@ -2219,10 +2270,11 @@ function meetMake(seedName){ return function(){ const S=seedName==='abs'?SEEDS.a
     const xs=sh([-4,-3,-2,-1,0,1,2,3,4]).filter(x=>{ const y=S.f(x); return isFinite(y)&&inWin(x,y)&&isNice(y); }); if(xs.length<2) return null;
     const ask=R()<0.3?'count':'where';
     let L, pts;
-    if(seedName==='line'){ const x0=xs[0], y0=S.f(x0), m2=pk([-3,-2,-1,-0.5,0.5,1,2,3].filter(v=>v!==S.m)), b2=y0-m2*x0; if(!isNice(b2)||Math.abs(b2)>6) continue; L={m:m2,b:b2}; pts=[[x0,y0]]; }
-    else { const [x1,x2]=xs.slice(0,2).sort((a,b)=>a-b), y1=S.f(x1), y2=S.f(x2), m2=(y2-y1)/(x2-x1), b2=y1-m2*x1; if(!isNice(m2)||!isNice(b2)||Math.abs(m2)>4) continue; L={m:m2,b:b2};
+    if(seedName==='line'){ /* stragglers: the second line is picked from those that fit */ const cs=[]; xs.forEach(x=>[-3,-2,-1,-0.5,0.5,1,2,3].forEach(v=>{ const b=S.f(x)-v*x; if(v!==S.m&&isNice(b)&&Math.abs(b)<=6) cs.push([x,v]); })); if(!cs.length) return null; const [x0,m2]=pk(cs), y0=S.f(x0), b2=y0-m2*x0; L={m:m2,b:b2}; pts=[[x0,y0]]; }
+    else { /* stragglers: each pair of readable points is tried once, in a shuffled order, and the first whose line fits is drawn */ const prs=[]; xs.forEach((p,i)=>xs.forEach((q,j)=>{ if(i<j) prs.push(p<q?[p,q]:[q,p]); })); let hit=null;
+      for(const [x1,x2] of prs){ const y1=S.f(x1), y2=S.f(x2), m2=(y2-y1)/(x2-x1), b2=y1-m2*x1; if(!isNice(m2)||!isNice(b2)||Math.abs(m2)>4) continue; L={m:m2,b:b2};
       pts=[]; for(let x=-4.5;x<=4.5;x+=0.5){ const y=S.f(x); if(isFinite(y)&&near(y,L.m*x+L.b)&&!pts.some(p=>near(p[0],x))) pts.push([x,y]); } /* every meeting point on the half-grid */
-      let cross=0; for(let x=-4.5;x<4.5;x+=0.01){ const a=S.f(x)-(L.m*x+L.b), b=S.f(x+0.01)-(L.m*(x+0.01)+L.b); if(isFinite(a)&&isFinite(b)&&a*b<0&&Math.abs(a-b)<1) cross++; } if(seedName==='root'?cross>pts.length:(cross!==pts.length&&seedName!=='abs')) continue; }
+      let cross=0; for(let x=-4.5;x<4.5;x+=0.01){ const a=S.f(x)-(L.m*x+L.b), b=S.f(x+0.01)-(L.m*(x+0.01)+L.b); if(isFinite(a)&&isFinite(b)&&a*b<0&&Math.abs(a-b)<1) cross++; } if(seedName==='root'?cross>pts.length:(cross!==pts.length&&seedName!=='abs')) continue; hit=1; break; } if(!hit) return null; }
     const g=x=>L.m*x+L.b, fig=draw(S,[{t:'fn',f:g,from:-4.5,to:4.5,k:'b',dash:1}]), links=S.links.concat(['9e.meet('+lineS(L.m,L.b).slice(4)+')']);
     if(ask==='count'){ const right=String(pts.length), o=four(right,['0','1','2','3','4']); if(!o) continue;
       return card(this,{ix:S.ix+';'+L.m+','+L.b+';n',links:links.concat(['9e.count']), fig, ask:'The curve '+S.s+' and the dashed line '+lineS(L.m,L.b)+' are drawn. How many times do they meet?', right, opts:o,
@@ -3379,7 +3431,8 @@ const K=G.K;
 
 /* ---------- 9stat5: pie charts. Shares in steps of 5%, each at least 10%; the wedge technique ---------- */
 const FRUIT=['apples','pears','plums','figs','grapes'], SPORT=['running','swimming','cycling','rowing','climbing'], BUS=['walk','bus','bike','car','train'];
-function shares(k){ for(let t=0;t<50;t++){ const cut=sh([...Array(17)].map((_,i)=>i+2)).slice(0,k-1).sort((a,b)=>a-b), s=[]; let p=0; cut.concat(20).forEach(c=>{ s.push((c-p)*5); p=c; }); if(s.every(v=>v>=10)&&new Set(s).size>=k-1) return s; } return null; }
+function shares(k){ /* stragglers: every way to cut 100 into k shares of at least 10, in fives, with at most two alike, is listed once; one is picked */
+  const L=shares['_'+k]||(shares['_'+k]=(()=>{ const out=[], go=(left,parts)=>{ if(parts.length===k-1){ if(left>=2){ const s=parts.concat([left]); if(new Set(s).size>=k-1) out.push(s.map(v=>v*5)); } return; } for(let v=2;v<=left-2*(k-1-parts.length);v++) go(left-v,parts.concat([v])); }; go(20,[]); return out; })()); return L.length?pk(L).slice():null; }
 function pieFig(names,s,hide){ const C=160, cy=122, r=84, W=320, H=258; let bd='', a0=-Math.PI/2;
   s.forEach((v,i)=>{ const a1=a0+v/100*2*Math.PI, big=v>50?1:0, x0=C+r*Math.cos(a0), y0=cy+r*Math.sin(a0), x1=C+r*Math.cos(a1), y1=cy+r*Math.sin(a1), m=(a0+a1)/2, cx=Math.cos(m), sy=Math.sin(m), lr=r+12;
     bd+='<path class="rg-bar" style="fill-opacity:'+[0.45,1.5,0.85,2.1,1.15][i]+'" d="M'+C+','+cy+' L'+f1(x0)+','+f1(y0)+' A'+r+','+r+' 0 '+big+' 1 '+f1(x1)+','+f1(y1)+' Z"/>';
@@ -3651,7 +3704,8 @@ const colOf=(s,L)=>ROWS(L).map(e=>tv(tp(s),e)?1:0).join('');
 
 /* 1f: several columns side by side; which two agree on every row */
 K({id:'agree',step:'1f',steps:['1e','1f'],title:'which two columns agree',make(){
-  for(let t=0;t<60;t++){ const fs=sh(TT2).slice(0,4), cs=fs.map(f=>colOf(f,['P','Q'])); const pairs=[]; for(let i=0;i<4;i++) for(let j=i+1;j<4;j++) if(cs[i]===cs[j]) pairs.push([i,j]); if(pairs.length!==1) continue;
+  for(let t=0;t<1;t++){ /* stragglers: two statements with the same column are taken first, then two whose columns differ from it and from each other */ const by={}; TT2.forEach(f=>{ const c=colOf(f,['P','Q']); (by[c]=by[c]||[]).push(f); }); const c0=pk(Object.keys(by).filter(c=>by[c].length>1)), rest=sh(Object.keys(by).filter(c=>c!==c0)).slice(0,2);
+    const fs=sh(sh(by[c0]).slice(0,2).concat(rest.map(c=>pk(by[c])))), cs=fs.map(f=>colOf(f,['P','Q'])); const pairs=[]; for(let i=0;i<4;i++) for(let j=i+1;j<4;j++) if(cs[i]===cs[j]) pairs.push([i,j]); if(pairs.length!==1) continue;
     const [a,b]=pairs[0], nm=(i,j)=>fs[i]+'  /  '+fs[j], right=nm(a,b), others=[]; for(let i=0;i<4;i++) for(let j=i+1;j<4;j++) if(!(i===a&&j===b)) others.push(nm(i,j));
     const o=four(right,sh(others)); if(!o) continue;
     const rows=ROWS(['P','Q']).map((e,r)=>[e.P?'T':'F',e.Q?'T':'F',...cs.map(c=>c[r])]);
@@ -4066,20 +4120,31 @@ const KNPICK=(no,only)=>{ const ids=Object.keys(KNC.LIB).filter(i=>!(no||[]).inc
    Each crossing is placed on purpose, so the drawing is round and even; z carries over and under for KNC.analyse */
 const TAIT=(()=>{ const TAU=2*Math.PI, ss=u=>u*u*(3-2*u);
   /* a braid word: n strands, L letters [i,s], every gap used, no letter next to its own undoing; alt makes the gaps take turns over and under */
-  const word=(R,n,L,alt)=>{ for(let t=0;t<40;t++){ const g=R()<0.5?1:-1, w=[]; for(let k=0;k<L;k++){ const i=1+Math.floor(R()*(n-1)), s=alt?(i%2?g:-g):(R()<0.5?1:-1); w.push([i,s]); }
-      let ok=true; for(let i=1;i<n;i++) if(!w.some(x=>x[0]===i)) ok=false; for(let k=0;k<L&&ok;k++){ const a=w[k], b=w[(k+1)%L]; if(a[0]===b[0]&&a[1]!==b[1]) ok=false; } if(ok) return w; } return null; };
+  /* stragglers: the word is built to fit, not rolled until it fits. Each gap is given a place first and the other places are filled; a letter beside
+     the same gap takes the same sign, so none sits next to its own undoing. `ends` fixes the first and last gap (a plat's); `one` asks for a single
+     rope: places are changed one at a time until the strands close into one, where the length allows that */
+  const ropes=(n,g,plat)=>{ const at=[...Array(n).keys()]; g.forEach(i=>{ const a=at[i-1]; at[i-1]=at[i]; at[i]=a; }); const perm=[]; at.forEach((st,l)=>perm[st]=l); const seen=new Set(); let c=0;
+    for(let j=0;j<n;j++){ if(seen.has(j)) continue; c++; let st=j, guard=0; do{ seen.add(st); if(plat){ const back=at[perm[st]^1]; seen.add(back); st=back^1; } else st=perm[st]; } while(st!==j&&guard++<9); } return c; };
+  const word=(R,n,L,alt,ends,one)=>{ const free=[]; for(let k=0;k<L;k++) if(!(ends&&(k===0||k===L-1))) free.push(k); const need=[]; for(let i=1;i<n;i++) if(i!==ends) need.push(i); if(free.length<need.length) return null;
+    const g=[]; if(ends){ g[0]=ends; g[L-1]=ends; } const fr=free.slice(); for(let i=fr.length-1;i>0;i--){ const j=Math.floor(R()*(i+1)), t=fr[i]; fr[i]=fr[j]; fr[j]=t; }
+    fr.forEach((k,x)=>{ g[k]=x<need.length?need[x]:1+Math.floor(R()*(n-1)); });
+    const all=h=>{ for(let i=1;i<n;i++) if(!h.includes(i)) return false; return true; };
+    if(one&&ropes(n,g,!!ends)!==1){ let done=false; for(const k of fr){ for(let d=1;d<n-1&&!done;d++){ const h=g.slice(); h[k]=1+(g[k]-1+d)%(n-1); if(all(h)&&ropes(n,h,!!ends)===1){ g[k]=h[k]; done=true; } } if(done) break; } }
+    const g0=R()<0.5?1:-1, w=g.map(i=>[i,alt?(i%2?g0:-g0):(R()<0.5?1:-1)]);
+    if(!alt){ for(let k=1;k<L;k++) if(w[k][0]===w[k-1][0]) w[k][1]=w[k-1][1]; if(L>1&&w[L-1][0]===w[0][0]) for(let k=L-1;k>=0&&w[k][0]===w[0][0];k--) w[k][1]=w[0][1]; }
+    return w; };
   /* lv[j](u) and z[j](u) for each slot: the levels of the strands as the word is read */
   const lanes=(n,w,M)=>{ const paths=[...Array(n)].map(()=>[]); let at=[...Array(n).keys()]; /* at[level]=strand */
     w.forEach(([i,s])=>{ for(let m=0;m<M;m++){ const u=(m+0.37)/M, e=ss(u); for(let l=0;l<n;l++){ const st=at[l]; let y=l, z=0; if(l===i-1){ y=l+e; z=s*Math.sin(Math.PI*u); } else if(l===i){ y=l-e; z=-s*Math.sin(Math.PI*u); } paths[st].push([y,z]); } }
       const a=at[i-1]; at[i-1]=at[i]; at[i]=a; });
     return {paths,at}; };
-  function braid(R,n,L,alt,w0,r0,dr0){ const w=w0||word(R,n,L,alt); if(!w) return null; const M=Math.max(24,Math.round(720/L/n)), {paths,at}=lanes(n,w,M);
+  function braid(R,n,L,alt,w0,r0,dr0,one){ const w=w0||word(R,n,L,alt,0,one); if(!w) return null; const M=Math.max(24,Math.round(720/L/n)), {paths,at}=lanes(n,w,M);
     const perm=[]; at.forEach((st,l)=>perm[st]=l); /* strand st ends at level perm[st]; strand that starts at level l is strand l */
     const R0=r0||1+0.15*n, dr=dr0||0.5, ex=1+R()*0.25, wb=R()<0.5?0:0.04+R()*0.05, lob=2+Math.floor(R()*3), ph=R()*TAU, comps=[], seen=new Set();
     for(let j=0;j<n;j++){ if(seen.has(j)) continue; const pts=[]; let st=j, turn=0; do { seen.add(st); const P=paths[st], N=P.length; P.forEach(([y,z],m)=>{ const th=TAU*m/N, r=(R0+dr*y)*(1+wb*Math.cos(lob*th+ph)); pts.push([ex*r*Math.cos(th),r*Math.sin(th),z]); }); st=perm[st]; turn++; } while(st!==j&&turn<9); comps.push(pts); }
     return {comps,kind:'braid',n,w}; }
   /* a plat: four strands read left to right, closed by caps joining levels 0-1 and 2-3 at both ends */
-  function plat(R,L,alt){ const n=4; let w=null; for(let t=0;t<40&&!w;t++){ const v=word(R,n,L,alt); if(v&&v[0][0]===2&&v[L-1][0]===2&&v.filter(x=>x[0]!==2).length>0) w=v; } if(!w) return null; return platW(R,w); }
+  function plat(R,L,alt,one){ const w=word(R,4,L,alt,2,one); if(!w) return null; return platW(R,w); }
   /* Conway's twist form of a rational knot: twists a1, a2, ... taken in turn between the middle strands and the top pair, over and under alternating */
   function conway(v,R){ R=R||Math.random; const ev=v.length%2===0, g=R()<0.5?1:-1, w=[]; v.forEach((a,j)=>{ const i=j%2?(R()<0.5?1:3):2; for(let t=0;t<a;t++) w.push([i,i===2?g:-g]); }); return platW(R,w,ev); }
   function platW(R,w,ev){ const n=4, L=w.length;
@@ -4097,11 +4162,10 @@ const TAIT=(()=>{ const TAU=2*Math.PI, ss=u=>u*u*(3-2*u);
   /* resample each component to even spacing so halos and arrows sit well */
   const even=(c,N)=>{ const d=[0]; for(let i=1;i<=c.length;i++){ const a=c[i-1], b=c[i%c.length]; d.push(d[i-1]+Math.hypot(b[0]-a[0],b[1]-a[1])); } const T=d[c.length], out=[]; let j=0;
     for(let k=0;k<N;k++){ const t=T*k/N; while(d[j+1]<t) j++; const a=c[j], b=c[(j+1)%c.length], f=(t-d[j])/((d[j+1]-d[j])||1); out.push([a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f,a[2]+(b[2]-a[2])*f]); } return out; };
-  function make(R,lo,hi,alt){ R=R||Math.random; const L=lo+Math.floor(R()*(hi-lo+1)), one=R()<0.75; let k=null;
-    for(let t=0;t<8;t++){ const c=make1(R,L,alt); if(c) k=c; if(c&&(!one||c.comps.length===1)) break; }
+  function make(R,lo,hi,alt){ R=R||Math.random; const L=lo+Math.floor(R()*(hi-lo+1)), one=R()<0.75; const k=make1(R,L,alt,one);
     if(!k) return null; const tot=k.comps.reduce((s,c)=>s+c.length,0); k.comps=k.comps.map(c=>even(c,Math.max(100,Math.round(800*c.length/tot)))); return k; }
-  function make1(R,L,alt){ let k;
-    if(R()<0.55){ const n=L<5?2+Math.floor(R()*2):2+Math.floor(R()*3); k=braid(R,Math.min(n,L),L,alt); } else k=plat(R,Math.max(3,L),alt);
+  function make1(R,L,alt,one){ let k; /* stragglers: a single rope needs strands and letters of unlike parity; a plat needs four letters */
+    if(R()<0.55||L<4){ let ns=L<5?[2,3]:[2,3,4]; ns=ns.filter(n=>n<=Math.max(2,L)); const fit=ns.filter(n=>(L-n)%2!==0); if(one&&fit.length) ns=fit; const n=ns[Math.floor(R()*ns.length)]; k=braid(R,Math.min(n,L),L,alt,null,0,0,one); } else k=plat(R,L,alt,one);
     return k; }
   return {make,braid,plat,conway,even}; })();
 const TKPICK=(lo,hi,alt)=>{ const k=TAIT.make(R,lo,hi,alt); if(!k) return null; const mir=R()<0.5, rot=k.kind==='plat'?(R()<0.5?0:Math.PI)+(R()-0.5)*0.3:R()*2*Math.PI, comps=KNC.place(k.comps,rot,mir), info=KNC.analyse(comps); if(!info.n) return null; return {id:'tait',name:null,mir,comps,info,many:comps.length>1,kind:k.kind}; };
@@ -4201,8 +4265,8 @@ const K=G.K;
 /* ---------- 27·comp: which grid sends the dashed unit square to the solid shape; the one-grid technique (27d1 columns) ---------- */
 const lab=(e,s)=>({t:'text',at:e,s,dx:e[0]>0?5:e[0]<0?-72:-30,dy:e[1]<0?14:-6});   /* label away from the origin */
 const Mx=(a,b,c,d)=>('['+sg(a)+' '+sg(b)+'; '+sg(c)+' '+sg(d)+']');
-K({id:'whichgrid',step:'27·comp',steps:['27d','27·comp'],title:'the grid that drew the picture',make(){
-  const a=ri(-2,2), b=ri(-2,2), c=ri(-2,2), d=ri(-2,2), det=a*d-b*c; if(!det) return null;
+K({id:'whichgrid',step:'27·comp',steps:['27d','27·comp'],title:'the grid that drew the picture',make(){ return G.fitted(this,()=>{ const r=[-2,-1,0,1,2], o=[]; r.forEach(a=>r.forEach(b=>r.forEach(c=>r.forEach(d=>o.push([a,b,c,d]))))); return o; }); },
+  mk([a,b,c,d]){ const det=a*d-b*c; if(!det) return null;
   if((a===0&&c===0)||(b===0&&d===0)) return null;
   if(Math.hypot(a-b,c-d)<2) return null;   /* the two labelled corners stay apart */
   const e1=[a,c], e2=[b,d], sq=[[0,0],e1,[a+b,c+d],e2,[0,0]];
@@ -4220,9 +4284,9 @@ K({id:'whichgrid',step:'27·comp',steps:['27d','27·comp'],title:'the grid that 
 function hillPts(a,top,b){ const pts=[]; for(let i=0;i<=100;i++){ const x=i/100; let y;
   if(x<0.2) y=a; else if(x>0.8) y=b; else { const u=(x-0.2)/0.6, base=a+(b-a)*(u*u*(3-2*u)), need=top-(a+(b-a)*0.5); y=base+need*Math.pow(Math.sin(Math.PI*u),2); }
   pts.push([x,y]); } return pts; }
-K({id:'hill',step:'28·chem',steps:['24·then','28·chem'],title:'heat and barrier off the energy hill',make(){
-  const E=ri(3,9)*10, dH=pk([-1,1])*ri(4,16)*10; if(dH>0&&dH>=E) return null;   /* the finish sits below the top */
-  const top=E, b=dH, lo=Math.min(0,b), what=pk(['dH','dH','E','back']);
+K({id:'hill',step:'28·chem',steps:['24·then','28·chem'],title:'heat and barrier off the energy hill',make(){ return G.fitted(this,()=>{ const o=[]; for(let e=3;e<=9;e++) for(let h=4;h<=16;h++) [-1,1].forEach(s=>['dH','dH','E','back'].forEach(w=>o.push([e*10,s*h*10,w]))); return o; }); },
+  mk([E,dH,what]){ if(dH>0&&dH>=E) return null;   /* the finish sits below the top */
+  const top=E, b=dH, lo=Math.min(0,b);
   const tk=Math.max(20,Math.ceil((top-lo)/120)*20);
   const fig=svg({x:[0,1],y:[lo-30,top+30],sx:0.25,sy:tk,lx:2,ly:tk*2,xl:'progress of the change',yl:'energy, kJ',alt:'energy against the progress of a change',parts:[
     {t:'line',pts:hillPts(0,top,b)},{t:'line',pts:[[0,0],[1,0]],dash:1,k:'b'},
@@ -4242,14 +4306,14 @@ K({id:'hill',step:'28·chem',steps:['24·then','28·chem'],title:'heat and barri
   return card(this,{ix:[E,dH,what].join(','),links,fig,ask,right,opts:o,why}); }});
 
 /* ---------- 28·chem: the turning temperature off the ΔG line; the goes-alone and turning-temperature techniques ---------- */
-K({id:'gline',step:'28·chem',steps:['18c','28·chem'],title:'the turning temperature off the ΔG line',make(){
-  const s=pk([1,-1]), Tc=ri(3,15)*100, dS=s*pk([50,100,150,200]), dH=dS*Tc/1000; /* kJ, with ΔS in J/K */
+K({id:'gline',step:'28·chem',steps:['18c','28·chem'],title:'the turning temperature off the ΔG line',make(){ return G.fitted(this,()=>{ const o=[]; [1,-1].forEach(s=>{ for(let t=3;t<=15;t++) [50,100,150,200].forEach(d=>['side','side','where'].forEach(w=>o.push([s,t*100,d,w]))); }); return o; }); },
+  mk([s,Tc,d0,what]){ const dS=s*d0, dH=dS*Tc/1000; /* kJ, with ΔS in J/K */
   if(Math.abs(dH)<40||Math.abs(dH)>300) return null;
   const X=Math.min(2000,Math.max(1000,Math.ceil((Tc*1.6)/500)*500)), g=T=>dH-T*dS/1000, yA=g(0), yB=g(X);
   const lo=Math.min(0,yA,yB), hi=Math.max(0,yA,yB), st=hi-lo>300?100:50;
   const fig=svg({x:[0,X],y:[Math.floor(lo/st)*st-st/2,Math.ceil(hi/st)*st+st/2],sx:X/10,sy:st,lx:X/5,ly:st*2,xl:'T, K',yl:'ΔG, kJ',alt:'ΔG of a change against temperature',parts:[
     {t:'line',pts:[[0,yA],[X,yB]]},{t:'dots',pts:[[Tc,0]]}]});
-  const what=pk(['side','side','where']), above=dH>0; /* ΔH above 0 and ΔS above 0: goes alone above Tc */
+  const above=dH>0; /* ΔH above 0 and ΔS above 0: goes alone above Tc */
   let ask, right, ws, why, links=['28·chem.goes-alone'];
   if(what==='side'){ ask='ΔG for a change, at a fixed pressure, is drawn against temperature. At which temperatures does the change go by itself?';
     right=(above?'above ':'below ')+Tc+' K';
@@ -4316,8 +4380,8 @@ const verdict=(l,n,h)=>{ const v=l.f(n,h); return l.t+' is '+(v?'so':'not so')+'
 
 /* ---------- 2b19: the extension of a two-gap statement, read off the arrows ---------- */
 const pairs=S=>S.slice().sort((p,q)=>p[0]-q[0]||p[1]-q[1]).map(([a,b])=>'('+nm(a)+', '+nm(b)+')').join(', ');
-K({id:'pairsoff',step:'2b',title:'the pairs an arrow chart holds',make(){
-  const n=3, S=mkWorld(n,0.4), has=hasIn(S); if(S.length<3||S.length>5) return null;
+K({id:'pairsoff',step:'2b',title:'the pairs an arrow chart holds',make(){ return G.fitted(this,()=>G.worlds(3),G.wtP(3,0.4,0.32)); },
+  mk(S){ const n=3, has=hasIn(S); if(S.length<3||S.length>5) return null;
   const off=S.filter(([a,b])=>a!==b); if(off.length<2||off.every(([a,b])=>has(b,a))) return null;   /* turning the pairs round must change the list */
   const right=pairs(S), turned=pairs(S.map(([a,b])=>[b,a]));
   const one=(()=>{ const e=pk(off.filter(([a,b])=>!has(b,a))); return pairs(S.map(p=>p===e?[e[1],e[0]]:p)); })();
@@ -4331,8 +4395,8 @@ K({id:'pairsoff',step:'2b',title:'the pairs an arrow chart holds',make(){
     why:'Each arrow from x to y puts the pair (x, y) in the extension, in that order'+(loops.length?', and a loop puts in a thing paired with itself':'')+': '+right+'. A pair turned round is a different pair: it reads the arrow backwards.'}); }});
 
 /* ---------- 2b19: the same reading the other way: the pairs given, pick the chart ---------- */
-K({id:'chartfor',step:'2b',title:'the arrow chart for a list of pairs',make(){
-  const n=3, S=mkWorld(n,0.4), has=hasIn(S), LET=['picture A','picture B','picture C','picture D']; if(S.length<3||S.length>5) return null;
+K({id:'chartfor',step:'2b',title:'the arrow chart for a list of pairs',make(){ return G.fitted(this,()=>G.worlds(3),G.wtP(3,0.4,0.32)); },
+  mk(S){ const n=3, has=hasIn(S), LET=['picture A','picture B','picture C','picture D']; if(S.length<3||S.length>5) return null;
   const off=S.filter(([a,b])=>a!==b), oneway=off.filter(([a,b])=>!has(b,a)); if(off.length<2||!oneway.length) return null;
   const key=T=>pairs(T), c=[S.map(([a,b])=>[b,a])];   /* every arrow turned round */
   { const e=pk(oneway); c.push(S.map(p=>p===e?[e[1],e[0]]:p)); }   /* one arrow turned round */
@@ -4349,8 +4413,8 @@ K({id:'chartfor',step:'2b',title:'the arrow chart for a list of pairs',make(){
 /* ---------- 2b19: which line is so in this world ---------- */
 /* a wrong line that differs from the right one only in the order or the kind of its signs is dealt first */
 const NEAR={AE:['EAi','EA','AEi'],EA:['AE','EAi','Al'],EAi:['AE','AEi','EA'],AEi:['EAi','AE','EA'],Al:['El','An','EA'],El:['Al','An'],An:['El','Al'],Eni:['Eno','AEi','An'],Eno:['Eni','AE','An'],Sy:['Al','AE','AEi']};
-K({id:'lineso',step:'2b',title:'the line that is so in the world',make(){
-  const n=3, S=mkWorld(n,0.38), h=hasIn(S); if(S.length<2||S.length>6) return null;
+K({id:'lineso',step:'2b',title:'the line that is so in the world',make(){ return G.fitted(this,()=>G.worlds(3),G.wtP(3,0.38,0.304)); },
+  mk(S){ const n=3, h=hasIn(S); if(S.length<2||S.length>6) return null;
   const so=LINES.filter(l=>l.f(n,h)), no=LINES.filter(l=>!l.f(n,h)); if(!so.length||no.length<3) return null;
   const r=pk(so), near=(NEAR[r.id]||[]).map(LN).filter(l=>no.includes(l));
   const ws=near.concat(sh(no.filter(l=>!near.includes(l)))).slice(0,3), o=four(r.t,ws.map(l=>l.t)); if(!o) return null;
@@ -4367,9 +4431,17 @@ const WIT=[
  {id:'Al', say:'∀x R(x, x) is not so in this world. Which thing does it fail on?', f:(n,h,x)=>!h(x,x), why:x=>nm(x)+' has no loop'},
  {id:'Eni',say:'∃x ∀y ¬R(y, x) is so in this world. Which thing is the x that makes it so?', f:(n,h,x)=>I(n).every(y=>!h(y,x)), why:x=>'no thing on the list has an arrow to '+nm(x)}];
 K({id:'witness',step:'2b',title:'the thing that makes the line so, or that it fails on',make(){
-  const n=4, w=pk(WIT), S=mkWorld(n,w.id==='Al'?0.55:w.id==='EA'||w.id==='EAi'?0.5:0.3), h=hasIn(S); if(S.length<4||S.length>10) return null;
-  if(w.id==='Al'){ I(n).forEach(i=>{ if(!h(i,i)&&R()<0.6) S.push([i,i]); }); }
-  const h2=hasIn(S), yes=I(n).filter(x=>w.f(n,h2,x)); if(yes.length!==1) return null;
+  const n=4, w=pk(WIT), x=rn(n), p0=w.id==='Al'?0.55:w.id==='EA'||w.id==='EAi'?0.5:0.3, M=I(n).map(i=>I(n).map(j=>R()<(i===j?0.8*p0:p0)));
+  /* stragglers: the world is built round its one thing. The thing is chosen, the world is set so that it does what the line asks, and any other thing that
+     does it too is changed by one arrow; then arrows are taken off or put on, where that changes nothing, until there are four to ten */
+  const fill=(v,row)=>I(n).forEach(j=>{ if(row) M[x][j]=v; else M[j][x]=v; });
+  const mend=(row,full)=>I(n).forEach(i=>{ if(i===x) return; if(I(n).every(j=>(row?M[i][j]:M[j][i])===full)){ const j=rn(n); if(row) M[i][j]=!full; else M[j][i]=!full; } });
+  if(w.id==='EA'){ fill(true,true); mend(true,true); } if(w.id==='EAi'){ fill(true,false); mend(false,true); } if(w.id==='AE'){ fill(false,true); mend(true,false); }
+  if(w.id==='AEi'||w.id==='Eni'){ fill(false,false); mend(false,false); } if(w.id==='Al') I(n).forEach(i=>{ M[i][i]=i!==x; });
+  const fits=()=>{ const ys=I(n).filter(y=>w.f(n,(a,b)=>M[a][b],y)); return ys.length===1&&ys[0]===x; }, cells=[]; I(n).forEach(i=>I(n).forEach(j=>cells.push([i,j]))); let cnt=cells.filter(([i,j])=>M[i][j]).length;
+  for(const [i,j] of sh(cells)){ if(cnt<=10) break; if(M[i][j]){ M[i][j]=false; if(fits()) cnt--; else M[i][j]=true; } }
+  for(const [i,j] of sh(cells)){ if(cnt>=4) break; if(!M[i][j]){ M[i][j]=true; if(fits()) cnt++; else M[i][j]=false; } }
+  const S=cells.filter(([i,j])=>M[i][j]), yes=[x]; if(!fits()||S.length<4||S.length>10) return null;
   const right=nm(yes[0]), o=sh(I(n).map(nm));
   return card(this,{ix:ixOf(n,S)+';'+w.id,links:['2b.world','2b.every-some'],fig:chart(n,S),
     ask:'The things are '+things(n)+', and nothing else. '+RULE+' '+w.say,right,opts:o,
@@ -4421,8 +4493,8 @@ const WHO='The holders are a, b and c, on the left. The things kept are k, m and
 
 /* ---------- the pairs the chart holds ---------- */
 const pairs=S=>S.slice().sort((p,q)=>p[0]-q[0]||p[1]-q[1]).map(([i,j])=>'('+H[i]+', '+T[j]+')').join(', ');
-K({id:'openpairs',step:STEP,steps:STEPS,title:'the pairs a rule book holds',make(){
-  const S=book(0.42), may=mayIn(S); if(S.length<3||S.length>5) return null;
+K({id:'openpairs',step:STEP,steps:STEPS,title:'the pairs a rule book holds',make(){ return G.fitted(this,()=>G.worlds(3),G.wtP(3,0.42,0.42)); },
+  mk(S){ const may=mayIn(S); if(S.length<3||S.length>5) return null;
   const right=pairs(S), turned=S.slice().sort((p,q)=>p[1]-q[1]||p[0]-q[0]).map(([i,j])=>'('+T[j]+', '+H[i]+')').join(', ');
   const free=[]; I3.forEach(i=>I3.forEach(j=>{ if(!may(i,j)) free.push([i,j]); }));
   const d=pk(S), a=pk(free), m=pk(S), to=pk(free.filter(f=>f[0]===m[0]||f[1]===m[1]).concat(free));
@@ -4442,8 +4514,8 @@ const LINES=[
    why:(m,v)=>v?'every holder has an arrow going out':'no arrow goes out from '+H[I3.find(i=>!I3.some(j=>m(i,j)))]},
  {t:'Some thing kept can be opened by every holder.', f:m=>I3.some(j=>I3.every(i=>m(i,j))),
    why:(m,v)=>v?'all three holders have an arrow to '+T[I3.find(j=>I3.every(i=>m(i,j)))]:'no thing kept has an arrow from all three holders'}];
-K({id:'openline',step:STEP,steps:STEPS,title:'the line that is so in the rule book',make(){
-  const S=book(pk([0.3,0.45,0.6])), may=mayIn(S); if(S.length<2||S.length>7) return null;
+K({id:'openline',step:STEP,steps:STEPS,title:'the line that is so in the rule book',make(){ return G.fitted(this,()=>G.worlds(3),S=>[0.3,0.45,0.6].reduce((t,p)=>t+G.wtP(3,p,p)(S),0)); },
+  mk(S){ const may=mayIn(S); if(S.length<2||S.length>7) return null;
   const v=LINES.map(l=>l.f(may)), so=v.filter(Boolean).length; if(so!==1&&so!==3) return null;   /* one line stands alone, so or not so */
   const want=so===1, r=LINES[v.indexOf(want)], o=sh(LINES.map(l=>l.t));
   const say=l=>'“'+l.t.slice(0,-1)+'” is '+(l.f(may)?'so':'not so')+': '+l.why(may,l.f(may));
@@ -4452,8 +4524,8 @@ K({id:'openline',step:STEP,steps:STEPS,title:'the line that is so in the rule bo
     why:say(r)+'. '+LINES.filter(l=>l!==r).map(say).join('. ')+'.'}); }});
 
 /* ---------- what the outsider can reach: a pass-for arrow, then a may-open arrow ---------- */
-K({id:'passreach',step:STEP,steps:STEPS,title:'what an outsider can reach by two arrows',make(){
-  const S=book(0.4), may=mayIn(S); if(S.length<3||S.length>6) return null;
+K({id:'passreach',step:STEP,steps:STEPS,title:'what an outsider can reach by two arrows',make(){ return G.fitted(this,()=>G.worlds(3),G.wtP(3,0.4,0.4)); },
+  mk(S){ const may=mayIn(S); if(S.length<3||S.length>6) return null;
   const P=R()<0.6?[rn(3)]:sh(I3).slice(0,2).sort(), opens=i=>I3.filter(j=>may(i,j));
   const got=I3.filter(j=>P.some(i=>may(i,j))), name=a=>list(a.map(j=>T[j]));
   const right=name(got), others=I3.filter(i=>!P.includes(i));
@@ -4640,15 +4712,19 @@ const MOVES=[{id:'1a.upward',step:'1a',label:'reasons point upward'}];
 MOVES.forEach(M=>{ M.open=()=>measured(M.step); });
 
 const TERMK=['prop','set'], shortName=n=>n.replace(/^the /,'');
-function chainBuild(c,links,n,spoilAt){ const kind=c.kind, lines=[{t:c.t}], seenT={}; seenT[tshow(c.t)]=1; let spoiled=null;
-  for(let k=1;k<=n;k++){ const cur=lines[lines.length-1].t, cand=[];
+function chainBuild(c,links,n,spoilAt,fit){ /* stragglers: a search, not a roll. A line that leads nowhere is taken back and the next tried; `fit` is the card's own test, asked at the last line */
+  const kind=c.kind, lines=[{t:c.t}], seenT={}; seenT[tshow(c.t)]=1; let spoiled=null, B=160;
+  const go=k=>{ if(k>n) return !fit||!!fit(lines,spoiled); if(B--<=0) return false; const cur=lines[lines.length-1].t; let cand=[];
     links.forEach(L=>trew(cur,L.rule).forEach(r=>{ const key=tshow(r.t); if(!seenT[key]&&tidy(cur,r.t,L)) cand.push({L,r}); }));
-    if(!cand.length) break;
-    const prevL=lines[lines.length-1].L, fresh=cand.filter(x=>x.L!==prevL); if(fresh.length){ cand.length=0; fresh.forEach(x=>cand.push(x)); } /* the same technique twice running only when nothing else fits */
-    const L=pick([...new Set(cand.map(x=>x.L))]), x=pick(cand.filter(y=>y.L===L)); let t=x.r.t;
-    if(k===spoilAt){ const slip=tslips(t).find(z=>trows([z,cur]).rows.some(env=>tval(cur,env)&&!tval(z,env))&& /* the slip must fail on a row where the line above holds, so nothing above can license it */ !seenT[tshow(z)]&&tshow(z).length<=33); if(!slip) return null; spoiled={orig:t,L,apart:tapart(slip,t,kind)}; t=slip; }
-    seenT[tshow(t)]=1; lines.push({t,L,dir:x.r.dir}); }
-  if(lines.length-1<n) return null; return {lines,spoiled}; }
+    const prevL=lines[lines.length-1].L, fresh=cand.filter(x=>x.L!==prevL); if(fresh.length) cand=fresh; /* the same technique twice running only when nothing else fits */
+    const order=[]; shuffle([...new Set(cand.map(x=>x.L))]).forEach(L=>shuffle(cand.filter(y=>y.L===L)).forEach(x=>order.push(x)));
+    for(const x of order){ let t=x.r.t, sp=null;
+      if(k===spoilAt){ const slip=tslips(t).find(z=>trows([z,cur]).rows.some(env=>tval(cur,env)&&!tval(z,env))&& /* the slip must fail on a row where the line above holds, so nothing above can license it */ !seenT[tshow(z)]&&tshow(z).length<=33); if(!slip) continue; sp={orig:t,L:x.L,apart:tapart(slip,t,kind)}; t=slip; }
+      const key=tshow(t); seenT[key]=1; lines.push({t,L:x.L,dir:x.r.dir}); if(sp) spoiled=sp;
+      if(go(k+1)) return true;
+      lines.pop(); delete seenT[key]; if(sp) spoiled=null; }
+    return false; };
+  return go(1)?{lines,spoiled}:null; }
 const chainLinks=(P,kind)=>P.links.filter(L=>L.rule&&L.kinds.includes(kind));
 /* a seed of bare letters: a short column of givens and lines drawn from them by 1d's techniques, one line spoiled.
    The spoiled line is checked against every row: it must fail on some row where all the other lines hold. */
@@ -4674,33 +4750,38 @@ function lettersProofQ(P,used,s,c){ const have=id=>P.links.find(L=>L.id===id), C
       why:'Line '+(j+1)+' cites '+lines[j].L.name+'. That technique licenses “'+lines[j].t+'”, and the line as written does not follow.'}; }
   return null; }
 function chainProofQ(P,used,s,c){ if(!c.t) return lettersProofQ(P,used,s,c); const links=chainLinks(P,c.kind); if(links.length<2) return null; const eq=c.kind==='set'?'= ':'';
-  for(let tries=0;tries<40;tries++){ const n=2+rnd(3), upward=P.moves.some(M=>M.id==='1a.upward')&&n>=3&&Math.random()<0.22;
-    const j=upward?2+rnd(n-1):2+rnd(n), B=chainBuild(c,links,n,upward?0:j-1); if(!B) continue;
-    const ids=B.lines.slice(1).map(x=>x.L.id); let cite=B.lines.map((x,i)=>i); /* line i+1 cites line i */
+  /* stragglers: the length and the bad line are chosen, then the chain is searched for; a seed too short for the length gives the longest chain it has */
+  const up=P.moves.some(M=>M.id==='1a.upward'); let out=null;
+  const card=(n,j,upward)=>(L,spoiled)=>{ const B={lines:L,spoiled};
+    const ids=B.lines.slice(1).map(x=>x.L.id);
     const reason=(x,i,to)=>shortName(x.L.name)+', on line '+to;
     let lines, why, lead='The bad line is line '+j+'. ';
     if(upward){ const below=j+1+rnd(n+1-j); lines=B.lines.map((x,i)=>[(i?eq:'')+tshow(x.t),i?reason(x,i,i+1===j?below:i):'given']);
       why='Line '+j+' cites line '+below+', which is below it. A reason may cite only lines above it.'; }
     else{ lines=B.lines.map((x,i)=>[(i?eq:'')+tshow(x.t),i?reason(x,i,i):'given']);
       why='Line '+j+' cites '+B.spoiled.L.name+'. That takes line '+(j-1)+' to “'+tshow(B.spoiled.orig)+'”. The line as written says something else: '+B.spoiled.apart+'.'; }
-    const index='p:'+s.id+c.ix+'.'+ids.join('+')+(upward?'^':'#')+j+':'+lines[j-1][0]; if(used[index]) continue;
-    return {index, a3:[s.id+c.ix, ids.join('+')+(upward?'+1a.upward':''), DASH], step:B.lines[j-1].L.step, steps:[...new Set(B.lines.slice(1).map(x=>x.L.step).concat(upward?['1a']:[]))], stack:true,
-      lines, ask:'One line does not follow from what it cites. Which line is the bad line?', right:'line '+j, opts:B.lines.slice(1).map((x,i)=>'line '+(i+2)), lead, why}; }
-  return null; }
+    const index='p:'+s.id+c.ix+'.'+ids.join('+')+(upward?'^':'#')+j+':'+lines[j-1][0]; if(used[index]) return false;
+    out={index, a3:[s.id+c.ix, ids.join('+')+(upward?'+1a.upward':''), DASH], step:B.lines[j-1].L.step, steps:[...new Set(B.lines.slice(1).map(x=>x.L.step).concat(upward?['1a']:[]))], stack:true,
+      lines, ask:'One line does not follow from what it cites. Which line is the bad line?', right:'line '+j, opts:B.lines.slice(1).map((x,i)=>'line '+(i+2)), lead, why}; return true; };
+  for(let n=2+rnd(3);n>=2&&!out;n--){ const upward=up&&n>=3&&Math.random()<0.22, js=upward?[2+rnd(n-1)]:shuffle([...Array(n)].map((_,i)=>i+2));
+    for(const j of js){ if(chainBuild(c,links,n,upward?0:j-1,card(n,j,upward))) break; } }
+  return out; }
 /* Work: the chain is given with its last line left as a box; the learner works it to completion */
-function chainWorkQ(P,used,s,c){ const links=chainLinks(P,c.kind); if(!links.length||!c.t) return null; const eq=c.kind==='set'?'= ':'';
-  for(let tries=0;tries<40;tries++){ const n=1+rnd(Math.min(3,links.length)), B=chainBuild(c,links,n,0); if(!B) continue;
+function chainWorkQ(P,used,s,c){ const links=chainLinks(P,c.kind); if(!links.length||!c.t) return null; const eq=c.kind==='set'?'= ':''; let out=null;
+  /* stragglers: the last line must have three wrong answers beside it; that is the search's own test */
+  const card=n=>(L)=>{ const B={lines:L};
     const last=B.lines[n], prev=B.lines[n-1].t, valid=trew(prev,last.L.rule).map(r=>tshow(r.t)), right=tshow(last.t);
     const wrong=[]; tslips(last.t).forEach(z=>{ const k=tshow(z); if(wrong.length<2&&!tequiv(z,prev)&&!valid.includes(k)&&k.length<=33&&!wrong.includes(k)) wrong.push(k); });
     shuffle(links.filter(L=>L!==last.L)).forEach(L=>trew(prev,L.rule).forEach(r=>{ const k=tshow(r.t); if(wrong.length<3&&!valid.includes(k)&&!wrong.includes(k)&&k.length<=33) wrong.push(k); }));
     tslips(prev).forEach(z=>{ const k=tshow(z); if(wrong.length<3&&!valid.includes(k)&&!wrong.includes(k)&&k!==tshow(prev)) wrong.push(k); });
-    if(wrong.length<3) continue;
-    const ids=B.lines.slice(1).map(x=>x.L.id), index='w:'+s.id+c.ix+'.'+ids.join('+')+'>'+right; if(used[index]) continue;
-    return {index, a3:[s.id+c.ix,ids.join('+'),DASH], step:last.L.step, steps:[...new Set(B.lines.slice(1).map(x=>x.L.step))], stack:true,
+    if(wrong.length<3) return false;
+    const ids=B.lines.slice(1).map(x=>x.L.id), index='w:'+s.id+c.ix+'.'+ids.join('+')+'>'+right; if(used[index]) return false;
+    out={index, a3:[s.id+c.ix,ids.join('+'),DASH], step:last.L.step, steps:[...new Set(B.lines.slice(1).map(x=>x.L.step))], stack:true,
       lines:B.lines.map((x,i)=>[i===n?eq+'▢':(i?eq:'')+tshow(x.t),i?shortName(x.L.name)+', on line '+i:'given']),
       ask:'What fills the box ▢?', right:eq+right, opts:shuffle([right,...wrong]).map(o=>eq+o), lead:'The box holds '+right+'. ',
-      why:'Line '+(n+1)+' is line '+n+' with one piece rewritten by '+last.L.name+', read '+(last.dir==='→'?'forward':'backward')+'.'}; }
-  return null; }
+      why:'Line '+(n+1)+' is line '+n+' with one piece rewritten by '+last.L.name+', read '+(last.dir==='→'?'forward':'backward')+'.'}; return true; };
+  for(let n=1+rnd(Math.min(3,links.length));n>=1&&!out;n--) chainBuild(c,links,n,0,card(n));
+  return out; }
 
 /* --- Rung 1 bank: weather statements, and the ways English says a rule (1f10's table) --- */
 const SAYINGS=[['If {X}, then {Y}.','X ⇒ Y'],['{Y} if {X}.','X ⇒ Y'],['{Y} whenever {X}.','X ⇒ Y'],['{X} only if {Y}.','X ⇒ Y'],['{X} unless {Y}.','¬Y ⇒ X'],['{X} exactly when {Y}.','X ⇔ Y'],
@@ -12173,7 +12254,7 @@ const KIND={
 const norm=x=>!x?x:x.k?x:x.t?Object.assign({},x,{k:'fn'}):x.v?Object.assign({},x,{k:'num'}):x;
 const vshow=v=>KIND[v.k].show(v), veq=(a,b)=>a.k===b.k&&vshow(a)===vshow(b);
 const SEEDS=FSEEDS.map(s=>Object.assign(s,{kind:'fn'}));
-const _fm={}; SEEDS.forEach(s=>{ const mk=s.make; s.make=function(){ const r=mk.apply(this,arguments); if(!r) return r; if(!r.val) r.val={k:'fn',t:r.t}; return r; }; }); /* a roll given to make passes through */
+SEEDS.forEach(s=>{ const mk=s.make; s.make=function(){ const r=mk.apply(this,arguments); if(!r) return r; if(!r.val) r.val={k:'fn',t:r.t}; return r; }; }); /* a roll given to make passes through */
 Object.assign(CH,{L,SEEDS,KIND,Q,qa,qm,qn,qi,qz,qe,qint,qpow,qs,big,gcd,isq,qsqrt,ri,nz,show,simp,slope,toPoly,fromPoly,ratRoots,N,X,A,M,P,Fn,lin,sub,ev,ptrim,padd,pmul});
 /* --- the dealer --- */
 const openStep=(st,P)=>measured(st)&&(!P||P.use({open:()=>true,step:st}));
@@ -12188,10 +12269,9 @@ CH.pref={}; const sizeOf=v=>{ const K=v&&KIND[v.k]; return K&&K.size?K.size(v):n
    preferring, for the last link of a chain still on one rung, links from another rung, and by weighting links from new rungs three to one. */
 const SZB={}; function sizeRolls(S){ if(!SZB[S.id]){ const b={}; for(const [t,w] of S.tuples()){ let r=null; try{ r=S.make(t); }catch(e){ if(e&&e.over) throw e; } if(r&&r.val){ const z=sizeOf(r.val); if(z===null) continue; const B=b[z]||(b[z]={t:[],c:[],s:0}); B.s+=w; B.t.push(t); B.c.push(B.s); } } SZB[S.id]=b; } return SZB[S.id]; }
 function sizedMake(S,z){ if(S.sized) return S.sizes.includes(z)?S.sized(z):null; const B=sizeRolls(S)[z]; if(!B) return null; const u=Math.random()*B.s; let lo=0,hi=B.c.length-1; while(lo<hi){ const m=(lo+hi)>>1; if(B.c[m]>u) hi=m; else lo=m+1; } return S.make(B.t[lo]); }
-const SZV={}; 
 const SZC={}; function sizesOf(S){ if(S.sized) return new Set(S.sizes); if(S.tuples) return new Set(Object.keys(sizeRolls(S)).map(Number)); if(!SZC[S.id]){ const s=new Set(); for(let i=0;i<12;i++){ let r=null; try{ r=S.make(); }catch(e){} if(r&&r.val){ const z=sizeOf(r.val); if(z!==null) s.add(z); } } SZC[S.id]=s; } return SZC[S.id]; }
-const FZ={};
-const AFAIL={}, ISA={}, WOPEN={};
+const FZ={}, SWAPS=CH.swaps={n:0,stored:0,by:{}};
+const AFAIL={}, ISA={}, WOPEN={}; let FIT=null; /* stragglers: what the card being made needs of a chain */
 function deal(P,want,terms){ if(!(P&&P.anchor)||(CH.adl&&Date.now()>CH.adl)) return deal0(P&&P.anchor?Object.assign({},P,{anchor:null}):P,want,terms); /* after a fifth of a second the pool stops insisting on its own step, so a draw is never held up */ const w0=want||CH.pref.links||0, rA=rungOfS(P.anchor), now=Date.now(), tm=terms||CH.pref.terms||0;
   /* a way of dealing the step that has failed three times running is left alone for a minute, so a step that cannot be dealt one way does not cost the search each draw */
   const tryP=(tag,PP,w)=>{ const k=P.anchor+'|'+tag+'|'+w+'|'+tm, a=AFAIL[k]; if(a&&a.n>=3&&now<a.t) return null; if(CH.dl&&Date.now()>CH.dl) throw {over:1}; const D=deal0(PP,w,terms); if(D) delete AFAIL[k]; else { const b=AFAIL[k]||(AFAIL[k]={n:0,t:0}); b.n++; b.t=now+60000; } return D; };
@@ -12213,7 +12293,7 @@ function deal0(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.
   if(anchor){ const rk=new Set(open.filter(isA).map(l=>l.from)); for(let d=0;d<4;d++) open.forEach(m=>{ if(rk.has(m.to)) rk.add(m.from); }); seeds=seeds.filter(s=>s.step===anchor||rk.has(kindOf(s)));
     if(lendA){ const fk=new Set(open.filter(isA).map(l=>l.from)), rA=rungOfS(anchor); if(lendA===2){ const f2=new Set(); open.forEach(l=>{ if(fk.has(l.to)) f2.add(l.from); }); fk.clear(); f2.forEach(k=>fk.add(k)); }
       seeds=SEEDS.filter(s=>fk.has(kindOf(s))&&s.step!==anchor&&rungOfS(s.step)<=rA&&openStep(s.step,null)); if(lendA===2) seeds=seeds.sort((a,b)=>rungOfS(b.step)-rungOfS(a.step)).slice(0,12); } }
-  seeds=seeds.filter(s=>want?can(kindOf(s),want):lens(kindOf(s)).some(m=>m<=4)); if(!seeds.length) return null;
+  if(FIT&&FIT.seed) seeds=seeds.filter(FIT.seed); seeds=seeds.filter(s=>want?can(kindOf(s),want):lens(kindOf(s)).some(m=>m<=4)); if(!seeds.length) return null;
   if(terms){ /* nodraws: the Terms number sets the size of a seed that has one; it does not shut out the kinds with no size. A sized seed or a sizeless one is dealt as often as each stands among the seeds open here */ const hasSz=s=>!!(KIND[kindOf(s)]&&KIND[kindOf(s)].size), sz=seeds.filter(s=>hasSz(s)&&sizesOf(s).has(terms)), un=seeds.filter(s=>!hasSz(s)), nS=seeds.length-un.length, nW=un.filter(s=>/\.wholes$/.test(s.id)).length, nU=un.length-(nW>1?nW-1:0) /* the same whole-numbers seed stands once on each rung: its copies are one head in this tally (Andrew 2026-11-21 21:02Z) */; if(sz.length&&(!un.length||Math.random()<nS/(nS+nU))) seeds=sz; else if(un.length){ seeds=un; terms=0; } else terms=0; }
   const sizeOk=sd=>!terms||sizeOf(sd.val)===null||sizeOf(sd.val)===terms;
   /* the links that take the value in hand and can still end the chain in `left` more links */
@@ -12229,14 +12309,13 @@ function deal0(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.
   const order=(ok,usedR)=>ok.map(c=>({c,k:Math.pow(Math.random(),1/(usedR.has(rungL(c))?1:3))})).sort((a,b)=>b.k-a.k).map(x=>x.c);
   /* depth-first: the chain of exactly n links from the seed value sd, or null if none exists within the search budget */
   const grow=(sd,n,budget,r0)=>{ const B={n:budget};
-    const go=(cur,i,prev,usedR,chain)=>{ const sat=!anchor||S0A||chain.some(c=>isA(c.L)); if(i===n) return sat?chain:null; if(B.n--<=0) return null; needA=!sat&&(i===n-1||(lendA&&i===lendA-1)); let ok=cands(cur,sd,prev,n-i-1); needA=false;
+    const go=(cur,i,prev,usedR,chain)=>{ const sat=!anchor||S0A||chain.some(c=>isA(c.L)); if(i===n){ if(!sat) return null; if(FIT&&!FIT(S0F,sd,chain)){ B.n-=2; return null; } return chain; } if(B.n--<=0) return null; needA=!sat&&(i===n-1||(lendA&&i===lendA-1)); let ok=cands(cur,sd,prev,n-i-1); needA=false;
       if(i===n-1&&usedR.size<2){ const fresh=ok.filter(c=>!usedR.has(rungL(c))); if(fresh.length) ok=fresh; }
       for(const C of (sat?order(ok,usedR):order(ok.filter(c=>isA(c.L)),usedR).concat(order(ok.filter(c=>!isA(c.L)),usedR)))){ const u=new Set(usedR); u.add(rungL(C)); const r=go(C.o,i+1,C.L,u,chain.concat([{L:C.L,p:C.p,o:C.o,in:cur}])); if(r) return r; if(B.n<=0) return null; }
       return null; };
     return go(sd.val,0,null,new Set([r0]),[]); };
-  const build=(S0,sd,budget)=>{ S0A=!!anchor&&S0.step===anchor; const ns=want?[want]:shuffle(lens(sd.val.k).filter(m=>m<=4)); for(const n of ns){ const ch=grow(sd,n,anchor&&!lendA?budget*2:budget,rungOfS(S0.step)); if(ch) return ch; } return null; };
-  const key=open.map(l=>l.id).join(',')+'|'+want+'|'+terms+'|'+(anchor||'')+(lendA?'+'+lendA:''), Z=FZ[key]||(FZ[key]={});
-  /* the values of a seed known to carry a chain here: found once, from up to 24 of its own values */
+  let S0F=null; const build=(S0,sd,budget)=>{ S0F=S0; S0A=!!anchor&&S0.step===anchor; const ns=want?[want]:shuffle(lens(sd.val.k).filter(m=>m<=4)); for(const n of ns){ const ch=grow(sd,n,anchor&&!lendA?budget*2:budget,rungOfS(S0.step)); if(ch) return ch; } return null; };
+  const key=open.map(l=>l.id).join(',')+'|'+want+'|'+terms+'|'+(anchor||'')+(lendA?'+'+lendA:'')+(FIT?'~'+FIT.tag:''), Z=FZ[key]||(FZ[key]={});
   /* a value of the seed: under Terms, one of its listed values of that size; otherwise a fresh make */
   const fresh=S0=>{ if(terms&&(S0.sized||S0.tuples)) return sizedMake(S0,terms); /* built at the asked size */ let sd=null; try{ sd=S0.make(); }catch(e){ if(e&&e.over) throw e; } return sd; };
   /* the values of a seed known to carry a chain under these switches and settings (as round 2: up to 4 found from up to 24 of its values). Fresh values are
@@ -12246,13 +12325,13 @@ function deal0(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.
   const pool=seeds.slice();
   while(pool.length){ const S0=LHALF(pool); let vals=Z[S0.id];
     if(!vals){ /* drawlag2 */ const sd0=fresh(S0), ch0=sd0&&sd0.val&&sizeOk(sd0)?build(S0,sd0,40):null;
-      if(ch0){ const v0=[sd0]; v0.n=1; v0.bad=0; v0.tries=0; Z[S0.id]=v0; const st0=new Set([S0.step]); ch0.forEach(c=>{ (c.L.steps(c.o.U||new Set())).forEach(s=>st0.add(s)); }); return {S0,sd:sd0,chain:ch0,out:ch0[ch0.length-1].o,steps:[...st0]}; }
+      if(ch0){ const v0=[sd0]; v0.n=1; v0.bad=0; v0.tries=0; Z[S0.id]=v0; const st0=new Set([S0.step]); ch0.forEach(c=>{ (c.L.steps(c.o.U||new Set())).forEach(s=>st0.add(s)); }); SWAPS.n++; return {S0,sd:sd0,chain:ch0,out:ch0[ch0.length-1].o,steps:[...st0]}; }
       vals=known(S0); }
     if(!vals.length){ pool.splice(pool.indexOf(S0),1); continue; }
-    if(vals.cat){ for(let k=0;k<2&&vals.length<40&&vals.tries<300;k++){ vals.tries++; const s2=fresh(S0); if(s2&&s2.val&&sizeOk(s2)&&build(S0,s2,40)) vals.push(s2); } }
-    let sd=vals.cat?pick(vals):fresh(S0); let chain=sd&&sd.val&&sizeOk(sd)?build(S0,sd,vals.cat?400:40):null; if(!vals.cat) vals.n++;
-    if(chain&&!vals.cat){ if(vals.length<12) vals.push(sd); else vals[rnd(vals.length)]=sd; }
-    else if(!chain&&!vals.cat){ vals.bad++; if(vals.bad>0.05*vals.n) vals.cat=true; sd=pick(vals); chain=build(S0,sd,400); }
+    /* stragglers: a fresh value is always tried first (twice for a seed whose values often cannot carry); a stored value is dealt only when the fresh ones cannot. CH.swaps counts them */
+    let sd=null, chain=null; for(let k=0;k<(vals.cat?2:1)&&!chain;k++){ sd=fresh(S0); chain=sd&&sd.val&&sizeOk(sd)?build(S0,sd,40):null; vals.n++; if(!chain) vals.bad++; }
+    SWAPS.n++; if(chain){ if(vals.length<40) vals.push(sd); else vals[rnd(vals.length)]=sd; }
+    else { if(vals.bad>0.05*vals.n) vals.cat=true; sd=pick(vals); chain=build(S0,sd,400); SWAPS.stored++; SWAPS.by[S0.id]=(SWAPS.by[S0.id]||0)+1; }
     if(!chain){ pool.splice(pool.indexOf(S0),1); continue; }
     const steps=new Set([S0.step]); chain.forEach(c=>{ (c.L.steps(c.o.U||new Set())).forEach(s=>steps.add(s)); });
     return {S0,sd,chain,out:chain[chain.length-1].o,steps:[...steps]}; }
@@ -12285,30 +12364,58 @@ function callIt(D,NM){ const says=D.chain.map((c,i)=>c.L.say(c.p,NM[i][0],c.in))
   /* the number in hand written before a letter or a bracket is multiplied by it */
   for(let i=0;i<says.length;i++) says[i]=String(says[i]).replace(/the number in hand(?=[\p{L}(])/gu,'the number in hand · ');
   return says; }
-function workCard(P,used){ for(let t=0;t<20;t++){ const D=deal(P); if(!D) return null; if(KIND[D.out.k].answer===false) continue; const W=wrongs(D); const vals=[]; W.forEach(w=>{ if(!vals.some(v=>veq(v.v,w.v))) vals.push(w); });
-    /* workcover: a verdict has few other answers, so a chain that ends in a word is dealt with the choices that exist */
-    if(vals.length<(D.out.k==='word'?1:3)) continue; const pickW=shuffle(vals).slice(0,3), right=vshow(D.out), [sd,lk]=foot(D), index='c:'+sd+'.'+lk; if(used&&used[index]) continue;
-    const NM=names(D), says=callIt(D,NM), lines=[[seedLine(D),'the seed: '+D.S0.label]].concat(D.chain.map((c,i)=>[(i+1)+'. '+says[i], c.L.cite(c.o,c.p)]));
-    const W1=pickW.map(w=>vshow(w.v)); if(new Set([right,...W1]).size<1+pickW.length) continue;
-    return {index,a3:[sd,lk,DASH],step:D.steps.slice().sort((a,b)=>rungOfS(b)-rungOfS(a))[0],steps:D.steps,chain:true,lines,ask:'Carry the seed through the links in order. What comes out?',right,opts:shuffle([right,...W1]),lead:'It is '+right+'. ',
-      why:D.chain.map((c,i)=>c.L.line(c.o,c.p,NM[i][0],NM[i][1],c.in)).join('; ')+'. '+pickW.map(w=>vshow(w.v)+' comes from link '+(w.at+1)+', where '+w.why+'.').join(' ')}; }
-  return null; }
-function proofCard(P,used){ for(let t=0;t<20;t++){ const D=deal(P,CH.pref.links?Math.max(3,CH.pref.links):3+rnd(2)); if(!D) return null;
-    const at=rnd(D.chain.length), sl=norm(pick((D.chain[at].L.slips(D.chain[at].in,D.chain[at].p)||[]).filter(Boolean))); if(!sl||!sl.k) continue;
-    let cur=D.chain[0].in; const NM=names(D), rows=[[seedLine(D),'given']]; let ok=true;
-    for(let i=0;i<D.chain.length;i++){ const c=D.chain[i]; let o;
-      if(i===at) o=Object.assign({},c.o,sl); else { o=norm(c.L.act(cur,c.p)); if(!o){ ok=false; break; } }
-      rows.push([c.L.line(o,c.p,NM[i][0],NM[i][1],cur),c.L.cite(c.o,c.p)]); cur=o; }
-    if(!ok) continue; const bad=at+2, [sd,lk]=foot(D), index='cp:'+sd+'.'+lk+'#'+bad; if(used&&used[index]) continue;
-    if(rows[bad-1][0]===D.chain[at].L.line(D.chain[at].o,D.chain[at].p,NM[at][0],NM[at][1],D.chain[at].in)) continue;
-    /* studypfnames: a line whose result a later line reads by a new letter says what it is called */
-    D.chain.forEach((c,i)=>{ const nx=NM[i][1]; if(!nx||nx===NM[i][0]||!c.o||c.o.k==='num'||c.o.k==='word'||!rows[i+1]) return; const rx=new RegExp('(^|[^\\p{L}′″∂])'+esc(nx)+'(?![\\p{L}′″₀-₉])','u');
-      if(!rx.test(rows[i+1][0])&&rows.slice(i+2).some(r=>rx.test(r[0]))) rows[i+1][0]+='; call it '+nx; });
-    const nums=shuffle(rows.map((_,i)=>i+1).filter(i=>i!==bad&&i!==1)).slice(0,3); if(nums.length<3) nums.push(1);
-    return {index,a3:[sd,lk,DASH],step:D.steps.slice().sort((a,b)=>rungOfS(b)-rungOfS(a))[0],steps:D.steps,stack:true,chain:true,lines:rows,ask:'One line does not follow from what it cites. Which line is the bad line?',
-      right:'line '+bad,opts:shuffle(['line '+bad,...nums.slice(0,3).map(i=>'line '+i)]),lead:'The bad line is line '+bad+'. ',
-      why:'Line '+bad+' cites '+D.chain[at].L.cite(D.chain[at].o,D.chain[at].p)+', but there '+sl.why+'. The right line is “'+D.chain[at].L.line(D.chain[at].o,D.chain[at].p,NM[at][0],NM[at][1],D.chain[at].in)+'”. '+(bad<rows.length?'The lines after it follow from line '+bad+' as written, so they are not the bad line.':'')}; }
-  return null; }
+/* stragglers (Andrew 2026-11-21 23:58Z: "i thought we had narrowed it down to 0 percent throw aways?"): a Work or Check Proofs card no longer
+   deals a chain and throws it away. The dealer's own search is told what the card needs (FIT), so a chain that cannot make the card is a dead
+   end that turns back to the last fork, like any other. A Work chain short of three wrong answers from its links' own slips takes them from
+   the mistakes any chain allows: a link left out, a link carried out twice, a slip in each of two links. */
+/* a number over five digits is never printed: the same test the Laundry makes on a finished card, asked while the chain is still being grown */
+CH.d5=s=>{ s=round5(String(s==null?'':s)); return (s.match(/\d[\d,.]*\d|\d/g)||[]).some(x=>x.replace(/[,.]+$/,'').replace(/\D/g,'').length>5); };
+const cardBig=q=>{ try{ return tooBig(tidyDigits(q)); }catch(e){ if(e&&e.over) throw e; return false; } };
+function wrongsF(D,need,bits){ const out=[], seen=[D.out], long=v=>!bits&&CH.d5(vshow(v));
+  const add=(v,at,full)=>{ v=norm(v); if(!v||v.k!==D.out.k||!KIND[v.k]) return; let ok=false; try{ ok=KIND[v.k].ok(v); }catch(e){ if(e&&e.over) throw e; } if(!ok||long(v)||seen.some(x=>veq(x,v))) return; seen.push(v); out.push({v,at,full}); };
+  wrongs(D).forEach(w=>{ if(!long(w.v)&&!seen.some(x=>veq(x,w.v))){ seen.push(w.v); out.push(w); } }); if(out.length>=need) return out;
+  const run=(from,cur)=>{ cur=norm(cur); for(let i=from;i<D.chain.length;i++){ const c=D.chain[i]; if(!cur||cur.k!==c.in.k) return null; let o=null; try{ o=norm(c.L.act(cur,c.p)); }catch(e){ if(e&&e.over) throw e; } if(!o||!KIND[o.k]) return null; cur=o; } return cur; };
+  const slipsOf=(c,cur)=>{ try{ return (c.L.slips(cur,c.p)||[]).map(norm).filter(s=>s&&s.k); }catch(e){ if(e&&e.over) throw e; return []; } };
+  D.chain.forEach((c,i)=>add(run(i+1,c.in),i,'comes from leaving out link '+(i+1)+'.')); if(out.length>=need) return out;
+  D.chain.forEach((c,i)=>{ let o=null; try{ o=norm(c.L.act(c.o,c.p)); }catch(e){ if(e&&e.over) throw e; } if(o) add(run(i+1,o),i,'comes from carrying out link '+(i+1)+' twice.'); }); if(out.length>=need) return out;
+  for(let a=0;a<D.chain.length&&out.length<need;a++) for(const s of slipsOf(D.chain[a],D.chain[a].in)){ let cur=s;
+    for(let b=a+1;b<D.chain.length&&cur;b++){ const c=D.chain[b]; if(cur.k!==c.in.k) break; slipsOf(c,cur).forEach(x=>add(run(b+1,x),b,'comes from two slips: in link '+(a+1)+', where '+s.why+', and in link '+(b+1)+', where '+x.why+'.'));
+      try{ cur=norm(c.L.act(cur,c.p)); }catch(e){ if(e&&e.over) throw e; cur=null; } } }
+  return out; }
+const needW=D=>D.out.k==='word'?1:3;
+function workOf(D,used){ const [sd,lk]=foot(D), index='c:'+sd+'.'+lk; if(KIND[D.out.k].answer===false||(used&&used[index])) return null;
+  const vals=wrongsF(D,needW(D),BITS.test(index)); if(vals.length<needW(D)) return null; const pickW=shuffle(vals).slice(0,3), right=vshow(D.out);
+  const NM=names(D), says=callIt(D,NM), lines=[[seedLine(D),'the seed: '+D.S0.label]].concat(D.chain.map((c,i)=>[(i+1)+'. '+says[i], c.L.cite(c.o,c.p)]));
+  const W1=pickW.map(w=>vshow(w.v));
+  const q={index,a3:[sd,lk,DASH],step:D.steps.slice().sort((a,b)=>rungOfS(b)-rungOfS(a))[0],steps:D.steps,chain:true,lines,ask:'Carry the seed through the links in order. What comes out?',right,opts:shuffle([right,...W1]),lead:'It is '+right+'. ',
+    why:D.chain.map((c,i)=>c.L.line(c.o,c.p,NM[i][0],NM[i][1],c.in)).join('; ')+'. '+pickW.map(w=>vshow(w.v)+' '+(w.full||'comes from link '+(w.at+1)+', where '+w.why+'.')).join(' ')};
+  return cardBig(q)?null:q; }
+const stepsOf=(S0,chain)=>{ const st=new Set([S0.step]); chain.forEach(c=>{ (c.L.steps(c.o.U||new Set())).forEach(s=>st.add(s)); }); return [...st]; };
+/* the card is made at the end of the search: a chain that cannot make one (too few wrong answers, a card already seen, a number too long to print) is a dead end */
+function workCard(P,used){ const f0=FIT, nd=CH.need||null; let D=null; /* a caller's own need of the chain (a seed told in words) joins the card's */
+  FIT=(S0,sd,chain)=>{ if(nd&&!nd(S0,sd,chain)) return false; let q=null; try{ q=workOf({S0,sd,chain,out:chain[chain.length-1].o,steps:stepsOf(S0,chain)},used); }catch(e){ if(e&&e.over) throw e; } chain.card=q; return !!q; }; FIT.tag='w'+(nd?nd.tag:''); FIT.seed=nd&&nd.seed;
+  try{ D=deal(P); } finally{ FIT=f0; } return D?D.chain.card:null; }
+/* every way one slip can be planted in the chain so that the bad line reads differently from the true one and the lines after it can be carried on */
+function proofPlans(D,used){ const NM=names(D), [sd,lk]=foot(D), out=[], sl0=seedLine(D);
+  D.chain.forEach((c0,at)=>{ const bad=at+2, index='cp:'+sd+'.'+lk+'#'+bad; if(used&&used[index]) return; let sls=[], tru=null;
+    try{ sls=(c0.L.slips(c0.in,c0.p)||[]).filter(Boolean).map(norm).filter(s=>s&&s.k); tru=c0.L.line(c0.o,c0.p,NM[at][0],NM[at][1],c0.in); }catch(e){ if(e&&e.over) throw e; return; }
+    sls.forEach(sl=>{ try{ let cur=D.chain[0].in; const rows=[[sl0,'given']];
+        for(let i=0;i<D.chain.length;i++){ const c=D.chain[i]; let o; if(i===at) o=Object.assign({},c.o,sl); else { o=norm(c.L.act(cur,c.p)); if(!o) return; } rows.push([c.L.line(o,c.p,NM[i][0],NM[i][1],cur),c.L.cite(c.o,c.p)]); cur=o; }
+        if(rows[bad-1][0]===tru) return; out.push({at,sl,rows,index,NM,sd,lk,tru}); }catch(e){ if(e&&e.over) throw e; } }); });
+  return out; }
+function proofOf(D,used){ const plans=proofPlans(D,used); if(!plans.length) return null; const at=pick([...new Set(plans.map(p=>p.at))]), {sl,rows,index,NM,sd,lk,tru}=pick(plans.filter(p=>p.at===at)), bad=at+2;
+  /* studypfnames: a line whose result a later line reads by a new letter says what it is called */
+  D.chain.forEach((c,i)=>{ const nx=NM[i][1]; if(!nx||nx===NM[i][0]||!c.o||c.o.k==='num'||c.o.k==='word'||!rows[i+1]) return; const rx=new RegExp('(^|[^\\p{L}′″∂])'+esc(nx)+'(?![\\p{L}′″₀-₉])','u');
+    if(!rx.test(rows[i+1][0])&&rows.slice(i+2).some(r=>rx.test(r[0]))) rows[i+1][0]+='; call it '+nx; });
+  const nums=shuffle(rows.map((_,i)=>i+1).filter(i=>i!==bad&&i!==1)).slice(0,3); if(nums.length<3) nums.push(1);
+  const q={index,a3:[sd,lk,DASH],step:D.steps.slice().sort((a,b)=>rungOfS(b)-rungOfS(a))[0],steps:D.steps,stack:true,chain:true,lines:rows,ask:'One line does not follow from what it cites. Which line is the bad line?',
+    right:'line '+bad,opts:shuffle(['line '+bad,...nums.slice(0,3).map(i=>'line '+i)]),lead:'The bad line is line '+bad+'. ',
+    why:'Line '+bad+' cites '+D.chain[at].L.cite(D.chain[at].o,D.chain[at].p)+', but there '+sl.why+'. The right line is “'+tru+'”. '+(bad<rows.length?'The lines after it follow from line '+bad+' as written, so they are not the bad line.':'')};
+  return cardBig(q)?null:q; }
+function proofCard(P,used){ const f0=FIT; let D=null;
+  FIT=(S0,sd,chain)=>{ let q=null; try{ q=proofOf({S0,sd,chain,out:chain[chain.length-1].o,steps:stepsOf(S0,chain)},used); }catch(e){ if(e&&e.over) throw e; } chain.card=q; return !!q; }; FIT.tag='p';
+  try{ D=deal(P,CH.pref.links?Math.max(3,CH.pref.links):3+rnd(2)); } finally{ FIT=f0; } return D?D.chain.card:null; }
+CH.foot=foot;
 Object.assign(CH,{deal,workCard,proofCard,wrongs,names,openStep,fit});
 })();
 /* ===== Chains, part 2: numbers across the ladder, grids, pairs and points, shuffles, complex numbers, words ===== */
@@ -12465,26 +12572,7 @@ const WL=[
 ];
 const say=q=>qs(q.v)+' '+q.u;
 const PAD=['4g.times','5j.share'];
-function wdeal(P){
-  for(let t=0;t<60;t++){ const laws=LAWS.filter(l=>openStep(l.step,P)); if(!laws.length) return null; const L0=LHALF(laws), TW=(CH.pref||{}).terms, nt=S=>S&&S.c?S.c.filter(x=>x&&(x.p!==undefined?x.p!==0:+x!==0)).length:null; let S=L0.make(); if(TW&&t<45){ for(let j=0;j<12&&nt(S)!==TW;j++) S=L0.make(); if(nt(S)!==TW) continue; }
-    const first=pick(WL.filter(w=>w.from==='law'&&w.steps.every(s=>openStep(s,P))&&(!w.area||S.area))); if(!first) continue;
-    const p0={}; if(first.id==='9a.read'||first.id==='13d.rate') p0.x=pick(S.pts); if(first.area){ const e=S.ends?pick(S.ends):(()=>{ const a=pick([0,0,1]); return [a,a+ri(1,3)]; })(); p0.a=e[0]; p0.b=e[1]; }
-    let q=first.act(S,p0); if(!q||big(q.v)) continue; const chain=[{W:first,p:p0,o:q,in:null}];
-    const LW=(CH.pref||{}).links, more=LW?Math.max(0,LW-2):rnd(3); for(let i=0;i<more+1;i++){ const nx=WL.filter(w=>w.from==='qty'&&w.when(S,chain[chain.length-1].W.id)&&w.steps.every(s=>openStep(s,P))&&!chain.some(c=>c.W.id===w.id)&&!(PAD.includes(w.id)&&chain.some(c=>PAD.includes(c.W.id)))); if(!nx.length) break; /* one bare share or copy at most: they pad, and a half then a double undoes itself */
-      const W=S.sqrt&&nx.some(w=>w.id==='8f.root')&&!chain.some(c=>c.W.id==='8f.root')?nx.find(w=>w.id==='8f.root'):S.power&&nx.some(w=>w.id==='13·eng.power')?nx.find(w=>w.id==='13·eng.power'):pick(nx);
-      const p=W.make?W.make():{}; const o=W.act(S,p,q); if(!o||big(o.v)) break; chain.push({W,p,o,in:q}); q=o; }
-    if(S.sqrt&&(!chain.some(c=>c.W.id==='8f.root')||chain[0].W.id!=='9a.read')) continue; /* the root is of a reading (square millimetres), never of a rate */ if(S.power&&chain.some(c=>c.W.id==='13d.rate')&&!chain.some(c=>c.W.id==='13·eng.power')) continue;
-    if(chain.length<2||(LW&&t<45&&chain.length!==LW)) continue;
-    return {L0,S,chain,out:q}; }
-  return null; }
-function wrongsW(D){ const out=[]; D.chain.forEach((c,i)=>{ (c.W.slips(D.S,c.p,c.in)||[]).forEach(sl=>{ if(!sl||!sl.v) return; let q={v:sl.v,u:sl.u}; for(let j=i+1;j<D.chain.length;j++){ const o=D.chain[j].W.act(D.S,D.chain[j].p,q); if(!o){ q=null; break; } q=o; } if(q&&!big(q.v)&&say(q)!==say(D.out)) out.push({q,at:i,why:sl.why}); }); }); return out; }
-function wordCard(P,used){ for(let t=0;t<20;t++){ const D=wdeal(P); if(!D) return null; const W=wrongsW(D), vals=[]; W.forEach(w=>{ if(!vals.some(v=>say(v.q)===say(w.q))) vals.push(w); }); if(vals.length<3) continue;
-    const pk=shuffle(vals).slice(0,3), right=say(D.out), sd=D.L0.id+'['+D.S.ix+']', lk=D.chain.map(c=>c.W.id+(c.p.x!==undefined?'['+c.p.x+']':c.p.a!==undefined?'['+c.p.a+','+c.p.b+']':c.p.k!==undefined?'['+c.p.k+']':'')).join('+'), index='cw:'+sd+'.'+lk; if(used&&used[index]) continue;
-    return {index,a3:[sd,lk,DASH],step:D.L0.step,steps:[D.L0.step,...D.chain.flatMap(c=>c.W.steps)],chain:true,story:D.S.story,lines:D.chain.map((c,i)=>[(i+1)+'. '+c.W.ask(D.S,c.p),c.W.cite()]),
-      ask:'Work the steps in order. What comes out, with its unit?',right,opts:shuffle([right,...pk.map(w=>say(w.q))]),lead:'It is '+right+'. ',
-      why:D.chain.map(c=>c.W.line(c.o,D.S,c.p,c.in)).join('; ')+'. '+pk.map(w=>say(w.q)+' comes from step '+(w.at+1)+', where '+w.why+'.').join(' ')}; }
-  return null; }
-CH.wordCard=wordCard; CH.LAWS=LAWS; CH.WL=WL;
+CH.LAWS=LAWS; CH.WL=WL; /* stragglers: the first word dealer (wdeal, wordCard), replaced by the tailored one, is cleared */
 })();
 /* ===== Chains, part bk1 (Andrew 2026-11-13 22:34Z: "break the single-question pools into seeds and links"):
    the single-question pools of the slopes, curves, totals, statements, orders, bars, counts, domains, grids, roots of fields
@@ -14568,7 +14656,7 @@ const WHO=['Zoe','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'];
 const LW=o=>LAWS.push(o);
 const poly=c=>fromPoly(c.map(x=>typeof x==='number'?Q(x):x));
 const sp=(c,v)=>show(poly(c)).replace(/x/g,v||'x');
-LW({id:'8·stat.misses',step:'8·stat',label:'squared misses from a guess',make(){ let s; for(let t=0;t<30;t++){ s=[ri(1,12),ri(1,12),ri(1,12)].sort((a,b)=>a-b); if((s[0]+s[1]+s[2])%3===0&&s[0]!==s[2]) break; } const S1=s[0]+s[1]+s[2], S2=s.reduce((r,x)=>r+x*x,0), w=pick(WHO);
+LW({id:'8·stat.misses',step:'8·stat',label:'squared misses from a guess',make(){ const s=(()=>{ const a=ri(1,12), b=ri(1,12), cs=[1,2,3,4,5,6,7,8,9,10,11,12].filter(c=>(a+b+c)%3===0&&!(a===b&&b===c)); return [a,b,pick(cs)].sort((x,y)=>x-y); })(); /* stragglers: the third score is chosen so the three have a whole average */ const S1=s[0]+s[1]+s[2], S2=s.reduce((r,x)=>r+x*x,0), w=pick(WHO);
   return {c:[S2,-2*S1,3],ix:s.join(','),misses:s,story:w+'’s three quiz scores in Astoria are '+s.join(', ').replace(/, (\d+)$/,' and $1')+'. For a guess m at a typical score, the squared misses add up to S(m) = '+sp([S2,-2*S1,3],'m')+' square points.',f:'S',x:'m',xu:'points',yu:'square points',rate:'square points per point',area:null,pts:[1,2,3,4,5,6]}; }});
 LW({id:'8·econ.wage',step:'8·econ',label:'a wage that rises each year',make(){ const a=ri(12,18), b=ri(1,2), w=pick(WHO); return {c:[a,b],ix:a+','+b,wage:pick([Q(5,4),Q(3,2),Q(6,5)]),
   story:w+' works at a cannery in Monterey. '+(['Randy','Jean','Terry','Mike'].includes(w)?'His':'Her')+' wage y years after starting is W(y) = '+sp([a,b],'y')+' dollars an hour.',f:'W',x:'y',xu:'years',yu:'dollars an hour',rate:'dollars an hour, per year',area:null,pts:[1,2,3,4,5]}; }});
@@ -19468,7 +19556,7 @@ NL1('1·comp.spare','num',()=>YOU+' things are told apart by the fewest switches
 NL1('27·comp.area','num',p=>'a shape of area '+YOU+' is moved by the grid ['+p.a+' '+p.b+'; '+p.c+' '+p.d+']. Write the area of the moved shape',(s,p)=>numv(iv(s)*Math.abs(p.a*p.d-p.b*p.c)),'the area-factor technique',
   (s,p)=>{ const n=iv(s), det=p.a*p.d-p.b*p.c; return [nw('the two products are added, not taken apart',n*Math.abs(p.a*p.d+p.b*p.c)),nw('only the product of the corner entries is used',n*Math.abs(p.a*p.d)),nw('the grid is taken to keep area',n),nw('the determinant’s size is added to the area',n+Math.abs(det)),nw('the determinant’s sign is kept on the area',n*det)].filter(w=>w.v.p>0); },
   (o,p,nm,nx,s)=>'the determinant is '+p.a+' · '+p.d+' − '+p.b+' · '+p.c+' = '+String(p.a*p.d-p.b*p.c).replace('-','−')+', and every area is multiplied by its size: '+qs(o.v),
-  s=>{ const n=nIn(s,1,400); if(n===null) return null; for(let t=0;t<20;t++){ const a=ri(1,4),b=ri(0,3),c=ri(0,3),d=ri(1,4), det=a*d-b*c; if(det!==0&&Math.abs(det)!==1&&b*c!==0) return {a,b,c,d}; } return null; });
+  s=>{ const n=nIn(s,1,400); if(n===null) return null; const G=CH._g27||(CH._g27=(()=>{ const o=[]; for(let a=1;a<=4;a++) for(let b=1;b<=3;b++) for(let c=1;c<=3;c++) for(let d=1;d<=4;d++){ const det=a*d-b*c; if(det!==0&&Math.abs(det)!==1) o.push({a,b,c,d}); } return o; })()); /* stragglers: every grid that fits, listed once */ return Object.assign({},G[Math.floor(Math.random()*G.length)]); });
 NL1('27·comp.mults','num',()=>'a shape has '+YOU+' corners, and one grid of four numbers moves every corner. Count the multiplications',s=>{ const n=nIn(s,3,5000); return n===null?null:numv(4*n); },'the one-grid technique',
   s=>{ const n=iv(s); return [nw('one multiplication is counted for each number of a corner',2*n),nw('the additions are counted in',6*n),nw('one multiplication is counted for each corner',n),nw('the grid’s four numbers are counted once, for the whole shape',n+4)]; },
   (o,p,nm,nx,s)=>'each corner takes four multiplications, two for each row of the grid: 4 · '+qs(s.v)+' = '+qs(o.v));
@@ -21043,63 +21131,37 @@ OWN.forEach(o=>{ const st=o.lawId.split('.')[0]; WL.push({id:st+'.own',steps:[st
   slips:(S,p)=>[{why:'the count is made for '+(p.x+1)+' instead',v:ev(poly(S.c),Q(p.x+1)),u:S.yu},{why:'the starting amount is left out',v:ev(poly([0,...S.c.slice(1)]),Q(p.x)),u:S.yu}],cite:()=>o.cite,line:(r,S,p)=>o.ln(r,S,p)}); });
 
 /* ---------- copies and splits that a story marks (the generic pads, now only where the story names them) ---------- */
-const PADC={id:'4g.times',steps:['4g'],from:'qty',ask:S=>S.copies.ask,act:(S,p,q)=>({v:qm(q.v,Q(S.copies.k)),u:q.u}),slips:(S,p,q)=>[{why:'the '+S.copies.k+' alike are added on instead of multiplied',v:qa(q.v,Q(S.copies.k)),u:q.u}],
-  cite:()=>'the products-are-numbers technique',line:(o,S,p,q)=>S.copies.ln+': '+S.copies.k+' · '+par(q.v)+' = '+qs(o.v)+' '+o.u};
-const PADS={id:'5j.share',steps:['5j','5c'],from:'qty',ask:S=>S.split.ask,act:(S,p,q)=>({v:qm(q.v,Q(1,S.split.k)),u:q.u}),slips:(S,p,q)=>[{why:'the share is taken by subtracting '+S.split.k,v:qa(q.v,Q(-S.split.k)),u:q.u}],
-  cite:()=>'the scaling technique',line:(o,S,p,q)=>S.split.ln+': '+par(q.v)+'/'+S.split.k+' = '+qs(o.v)+' '+o.u};
 /* stories that name copies or a split, and after which reading they make sense */
 const mark=(id,fn)=>{ const L=LAWS.find(l=>l.id===id); if(!L) return; const mk=L.make; L.make=function(){ const S=mk.apply(this,arguments); if(S) fn(S); return S; }; };
 mark('8·econ.wage',S=>{ const k=pick([2,3]); S.copies={k:k+1,after:['9a.read'],ask:k+' others at the cannery earn the same: give what the '+(k+1)+' of them earn an hour together',ln:'for the '+(k+1)+' together'}; });
-mark('17·phys.glow',S=>{ const k=pick([2,3,4]); S.copies={k,after:['9a.read'],ask:'the stove has '+k+' such plates, all as hot: multiply by '+k+' for all the plates',ln:'for the '+k+' plates'}; });
-mark('6·logi.assign',S=>{ const k=pick([2,3]); S.copies={k,after:['5g.put','9a.read'],ask:'there are '+k+' depots run the same way: multiply by '+k+' for all their assignments',ln:'for the '+k+' depots'}; });
-mark('22·stat.misprints',S=>{ const k=pick([2,3,5]); S.copies={k,after:['9a.read'],ask:'the run is '+k+' copies of that book: multiply the misprints by '+k,ln:'for '+k+' copies'}; });
-mark('45·now.messages',S=>{ const k=pick([2,3]); S.copies={k,after:['9a.read'],ask:'agreement takes '+k+' such rounds: multiply by '+k+' for all the messages',ln:'for '+k+' rounds'}; });
-mark('10·logi.slow',S=>{ const k=pick([2,3]); S.copies={k,after:['9a.read'],ask:'the plant runs '+k+' such lines side by side: multiply by '+k+' for all the boxes',ln:'for '+k+' lines'}; });
 
 const cp=(id,after,mk)=>mark(id,S=>{ const k=pick([2,3,4]); S.copies={k,after,ask:mk(k)[0],ln:mk(k)[1]}; });
 const spl=(id,after,mk)=>mark(id,S=>{ const k=pick([2,4,5]); S.split={k,after,ask:mk(k)[0],ln:mk(k)[1]}; });
 const RD=['9a.read'], RD5=['5g.put','9a.read'];
 cp('16·phys.spring',RD,k=>[k+' such springs push side by side on the latch: multiply by '+k+' for their push together','push of '+k+' springs']);
-cp('19·eng.loop',RD,k=>['the engine has '+k+' cylinders alike: multiply by '+k+' for the work of one turn of all of them','work of '+k+' cylinders']);
 cp('45·econ.reward',RD,k=>['Mike runs '+k+' such miners: multiply by '+k+' for the gain of them all','gain of '+k+' miners']);
 cp('5·chem.burn',RD5.concat(['9a.read']),k=>['the plant runs '+k+' such burners: multiply by '+k+' for the hydrogen of them all','hydrogen of '+k+' burners']);
 cp('5·chem.propane',RD5,k=>['the house has '+k+' such heaters: multiply by '+k+' for the oxygen of them all','oxygen of '+k+' heaters']);
 cp('6·chem.plate',RD5,k=>['the shop runs '+k+' such cells on separate supplies: multiply by '+k+' for all the electrons','electrons of '+k+' cells']);
 cp('8·phys.beats',RD,k=>[k+' people in the room have hearts that beat alike: multiply by '+k+' for all their beats','beats of '+k+' hearts']);
-cp('9·chem.jar',RD,k=>['there are '+k+' such jars: multiply by '+k+' for all the moles','moles in '+k+' jars']);
-cp('17·comp.sort',RD,k=>[k+' lists of that length are sorted: multiply by '+k+' for all the comparisons','comparisons for '+k+' lists']);
-cp('21·then.slant',RD,k=>['the roof holds '+k+' such panels: multiply by '+k+' for all of them','output of '+k+' panels']);
-cp('21·eng.stroke',RD,k=>['the pump has '+k+' cylinders alike: multiply by '+k+' for the stroke of them all','strokes of '+k+' cylinders']);
 cp('28·now.mistakes',RD,k=>[k+' such units learn side by side: multiply by '+k+' for all their mistakes','mistakes of '+k+' units']);
 cp('30·comp.line',RD,k=>['there are '+k+' such messages: multiply by '+k+' for all their bits','bits of '+k+' messages']);
 cp('31·now.picture',RD,k=>['the album holds '+k+' such pictures: multiply by '+k+' for all their readings','readings of '+k+' pictures']);
 cp('36·comp.bytes',RD,k=>['the desk has '+k+' such screens: multiply by '+k+' for all their bytes','bytes of '+k+' screens']);
 cp('42·econ.proposals',RD,k=>[k+' regions run the same pairing: multiply by '+k+' for all their proposals','proposals in '+k+' regions']);
 cp('16·then.inflow',RD,k=>[k+' streams alike feed the lake: multiply by '+k+' for their flow together','flow of '+k+' streams']);
-spl('25·eng.deck',RD,k=>['the pull is shared equally by '+k+' cables: give the pull on one cable','pull on one of '+k+' cables']);
 spl('40·now.lines',RD,k=>['the reading is shared equally by '+k+' machines: give one machine’s lines','lines for one of '+k+' machines']);
-spl('22·now.digits',RD,k=>['the work is shared equally by '+k+' machines: give one machine’s remainders','remainders for one of '+k+' machines']);
 spl('9·stat.weir',RD,k=>['the fish are tagged by '+k+' crews in equal shares: give one crew’s fish','fish for one of '+k+' crews']);
 spl('18·econ.revenue',['9a.read','14a.best'],k=>['the takings are shared by '+k+' stalls of a cooperative, equally: give one stall’s share','one of '+k+' shares']);
 
 cp('18·nav.chart',RD,k=>['the trip has '+k+' legs that long: multiply by '+k+' for the whole trip','the whole trip']);
-cp('20·crypt.bombe',RD,k=>[k+' checkers alike run at once: multiply by '+k+' for the settings they clear','settings of '+k+' checkers']);
 cp('45·comp.addresses',RD,k=>[k+' offices alike draw from the same block: multiply by '+k+' for all their addresses','addresses of '+k+' offices']);
 cp('2·comp.cond',RD5,k=>[k+' such conditions are checked one after another: multiply by '+k+' for all the steps','steps for '+k+' conditions']);
-cp('4·comp.ripple',['4·comp.own','5g.put','9a.read'],k=>[k+' such sums are done one after another: multiply by '+k+' for all the gate delays','delays for '+k+' sums']);
-cp('8·comp.gaps',RD,k=>[k+' such runs are made one after another: multiply by '+k+' for the error of them all','error of '+k+' runs']);
 cp('8·econ.rent',RD,k=>['Randy rents '+k+' flats alike: multiply by '+k+' for all the rent','rent of '+k+' flats']);
 cp('10·logi.trucks',RD,k=>[k+' depots alike share the trucks: multiply by '+k+' for all their trips','trips of '+k+' depots']);
-cp('10·econ.save',RD,k=>['Jean’s '+k+' cousins save alike: multiply by '+k+' for all their savings','savings of '+k+' cousins']);
-cp('22·econ.respend',RD,k=>[k+' such mills open in town: multiply by '+k+' for their spending together','spending of '+k+' mills']);
-cp('22·logi.tours',RD,k=>[k+' machines alike work at once: multiply by '+k+' for all their tours','tours of '+k+' machines']);
-cp('25·cb7.cells',RD,k=>[k+' such batteries are joined in a row: multiply by '+k+' for their volts together','volts of '+k+' batteries']);
-cp('27·econ.round',RD,k=>[k+' towns alike buy the same: multiply by '+k+' for their demand together','demand of '+k+' towns']);
 cp('44·chem.fill',RD,k=>['a flask holds '+k+' such molecules: multiply by '+k+' for all their electrons','electrons of '+k+' molecules']);
 cp('30·now.found',RD,k=>[k+' labs alike test the same way: multiply by '+k+' for all their true ideas','true ideas of '+k+' labs']);
 cp('39·phys.band',RD,k=>['the crystal has '+k+' such rows: multiply by '+k+' for all their electrons','electrons of '+k+' rows']);
-spl('38·now.kernel',RD,k=>['the lines are shared equally by '+k+' reviewers: give one reviewer’s lines','lines for one of '+k+' reviewers']);
-spl('17·comp.sort',RD,k=>['the comparisons are shared equally by '+k+' machines: give one machine’s comparisons','comparisons for one of '+k+' machines']);
 
 cp('43·phys.ring',RD,k=>['the wire holds '+k+' such rings apart: multiply by '+k+' for all their levels','levels of '+k+' rings']);
 
@@ -21135,46 +21197,7 @@ law('12·phys.run','a cart’s run fitted to the clock',()=>{ const T=wantT(), c
 const GMF=new Set(['w2.more','w2.sum','w2.raise','w2.again','w2.per','w2.mean']);
 const EXT=/^(dollars|cents|steps|moles|litres|millilitres|joules|kilojoules|millijoules|microjoules|picojoules|grams|kilograms|people|seeds|comparisons|bytes|bits|messages|tours|meetings|sightings|beats|readings|points|true ideas|trucks|boxes|crates|copies|mistakes|lines|addresses|proposals|seats|coins|fish|settings|assignments|calls|orders|microcoulombs|units of light|tallies|passes|jobs|words|names|cards|tickets|bales|eggs|birds|cells)\b|^moles of /;
 const ext=S=>EXT.test(S.yu||'')&&!/ (a|an|per) /.test(S.yu||''), TIMEX=/^(hours|days|weeks|minutes|seconds|years|months)$/;
-const GM=[
- {id:'w2.mean',steps:['5j'],from:'gm',fits:(S,ch)=>ch.length===1&&read1(ch[0].W.id)&&ch[0].p.x!==undefined&&S.pts&&S.pts.length>1,
-  make:(S,ch)=>{ const x=ch[0].p.x, xs=shuffle(S.pts.filter(t=>num(qq(t))!==num(qq(x)))); for(const x2 of xs){ const f2=tryf(()=>ev(poly(S.c),qq(x2))); if(f2&&isQ(f2)) return {x,x2,f2,K:'m'+qs(qq(x2))}; } return null; },
-  ask:(S,p)=>'a second reading is taken at '+S.x+' = '+qs(qq(p.x2))+': what is the average of the two readings?',
-  act:(S,p,q)=>({v:qm(qa(q.v,p.f2),Q(1,2)),u:q.u}),
-  slips:(S,p,q)=>{ const o=[]; const g=tryf(()=>ev(poly(S.c),qa(qq(p.x2),Q(1)))); if(g&&isQ(g)) o.push({why:'the second reading is taken at '+qs(qa(qq(p.x2),Q(1)))+' instead',v:qm(qa(q.v,g),Q(1,2)),u:q.u});
-    o.push({why:'the two readings are added but not halved',v:qa(q.v,p.f2),u:q.u}); o.push({why:'only the second reading is halved',v:qa(q.v,qm(p.f2,Q(1,2))),u:q.u}); return o; },
-  cite:()=>'multiplying and dividing quantities',line:(o,S,p,q)=>'average of the readings: ('+S.f+'('+qs(qq(p.x))+') + '+S.f+'('+qs(qq(p.x2))+'))/2 = ('+qs(q.v)+' + '+par(p.f2)+')/2 = '+qs(o.v)+' '+o.u},
- {id:'w2.per',steps:['5j'],from:'gm',fits:(S,ch,u)=>ch.length===2&&ch[1].W.id==='w2.again'&&!!S.rate&&!!S.xu,
-  make:(S,ch)=>{ const a=ch[1].p, d=qa(qq(a.x2),qn(qq(a.x))), g=d.p<0?qn(d):d; return qz(g)?null:{g,x:a.x,x2:a.x2,K:qs(g)}; },
-  ask:(S,p)=>'that change came over '+qs(p.g)+' '+S.xu+': how much is it per one, on average?',
-  act:(S,p,q)=>({v:qm(q.v,qi(p.g)),u:S.rate}),
-  slips:(S,p,q)=>{ const o=[{why:'the change is multiplied by the '+qs(p.g)+' instead of divided',v:qm(q.v,p.g),u:S.rate}]; const b=qq(p.x2); if(!qz(b)&&num(b)!==num(p.g)) o.push({why:'the change is divided by '+qs(b)+', the second input, not by the gap',v:qm(q.v,qi(b)),u:S.rate}); return o; },
-  cite:()=>'multiplying and dividing quantities',line:(o,S,p,q)=>'average per one: '+par(q.v)+'/'+par(p.g)+' = '+qs(o.v)+' '+o.u},
- {id:'w2.again',steps:['4h'],from:'gm',fits:(S,ch)=>ch.length===1&&read1(ch[0].W.id)&&ch[0].p.x!==undefined&&S.pts&&S.pts.length>1,
-  make:(S,ch)=>{ const x=ch[0].p.x, xs=shuffle(S.pts.filter(t=>num(qq(t))!==num(qq(x)))); for(const x2 of xs){ const f2=ev(poly(S.c),qq(x2)), f1=ev(poly(S.c),qq(x)); if(!f2||!f1) continue; const up=num(f2)>num(f1); if(num(f2)===num(f1)) continue; return {x,x2,up,f2,K:'x'+qs(qq(x2))}; } return null; },
-  ask:(S,p)=>'read '+S.f+' again at '+S.x+' = '+qs(qq(p.x2))+': by how much does it '+(p.up?'rise':'fall')+' from '+S.x+' = '+qs(qq(p.x))+' to there?',
-  act:(S,p,q)=>({v:p.up?qa(p.f2,qn(q.v)):qa(q.v,qn(p.f2)),u:q.u}),
-  slips:(S,p,q)=>{ const o=[]; const g=tryf(()=>ev(poly(S.c),qa(qq(p.x2),Q(1)))); if(g&&isQ(g)) o.push({why:'the second reading is taken at '+qs(qa(qq(p.x2),Q(1)))+' instead',v:p.up?qa(g,qn(q.v)):qa(q.v,qn(g)),u:q.u});
-    o.push({why:'the difference is taken the wrong way round',v:p.up?qa(q.v,qn(p.f2)):qa(p.f2,qn(q.v)),u:q.u}); o.push({why:'the two readings are added instead of compared',v:qa(q.v,p.f2),u:q.u}); return o; },
-  cite:()=>'the less-is-adding technique',line:(o,S,p,q)=>(p.up?'more':'less')+' than before: '+(p.up?S.f+'('+qs(qq(p.x2))+') − '+S.f+'('+qs(qq(p.x))+') = '+qs(p.f2)+' − '+par(q.v):S.f+'('+qs(qq(p.x))+') − '+S.f+'('+qs(qq(p.x2))+') = '+qs(q.v)+' − '+par(p.f2))+' = '+qs(o.v)+' '+o.u},
- {id:'w2.sum',steps:['4f'],from:'gm',fits:(S,ch)=>ext(S)&&TIMEX.test(S.xu||'')&&ch.length===1&&read1(ch[0].W.id)&&ch[0].p.x!==undefined&&S.pts&&S.pts.length>1,
-  make:(S,ch)=>{ const x=ch[0].p.x, xs=shuffle(S.pts.filter(t=>num(qq(t))!==num(qq(x)))); for(const x2 of xs){ const f2=tryf(()=>ev(poly(S.c),qq(x2))); if(f2&&isQ(f2)) return {x,x2,f2,K:'+'+qs(qq(x2))}; } return null; },
-  ask:(S,p)=>'a second time, at '+S.x+' = '+qs(qq(p.x2))+', gives another reading: what do the two come to together?',
-  act:(S,p,q)=>({v:qa(q.v,p.f2),u:q.u}),
-  slips:(S,p,q)=>{ const o=[]; const g=tryf(()=>ev(poly(S.c),qa(qq(p.x2),Q(1)))); if(g&&isQ(g)) o.push({why:'the second reading is taken at '+qs(qa(qq(p.x2),Q(1)))+' instead',v:qa(q.v,g),u:q.u});
-    o.push({why:'the first reading is counted twice',v:qm(q.v,Q(2)),u:q.u}); o.push({why:'one reading is taken from the other instead of added',v:qa(p.f2,qn(q.v)),u:q.u}); return o; },
-  cite:()=>'the sums-are-numbers technique',line:(o,S,p,q)=>'both readings: '+S.f+'('+qs(qq(p.x))+') + '+S.f+'('+qs(qq(p.x2))+') = '+par(q.v)+' + '+par(p.f2)+' = '+qs(o.v)+' '+o.u},
- {id:'w2.raise',steps:['5c'],from:'gm',fits:(S,ch,u)=>u===S.yu,
-  make:(S,ch,q)=>{ const fs=shuffle([Q(1,10),Q(1,5),Q(1,4)]).filter(f=>!(ext(S)&&q.v.q===1)||qm(q.v,qa(Q(1),f)).q===1); if(!fs.length) return null; const f=fs[0]; return {f,K:qs(f)}; },
-  ask:(S,p,q)=>'a check finds the true amount is '+p.K+' more than that: what is the true amount?',
-  act:(S,p,q)=>({v:qm(q.v,qa(Q(1),p.f)),u:q.u}),
-  slips:(S,p,q)=>[{why:'only the increase is kept, not the whole',v:qm(q.v,p.f),u:q.u},{why:'the '+p.K+' is taken off instead of added on',v:qm(q.v,qa(Q(1),qn(p.f))),u:q.u},{why:'the '+p.K+' is added as a plain number',v:qa(q.v,p.f),u:q.u}],
-  cite:()=>'the scaling technique',line:(o,S,p,q)=>'the true amount, '+p.K+' more: '+par(q.v)+' · '+par(qa(Q(1),p.f))+' = '+qs(o.v)+' '+o.u},
- {id:'w2.more',steps:['4k'],from:'gm',fits:(S,ch,u)=>u===S.yu&&ext(S),
-  make:(S,ch,q)=>{ const m=q&&isQ(q.v)?Math.max(1,mag(q.v)):1; return {k:Q(m*ri(1,3)),K:String(m)}; },
-  ask:(S,p,q)=>'another '+qs(p.k)+' '+S.yu+' come from a second source: what is the total?',
-  act:(S,p,q)=>({v:qa(q.v,p.k),u:q.u}),
-  slips:(S,p,q)=>[{why:'the '+qs(p.k)+' is taken away instead of added',v:qa(q.v,qn(p.k)),u:q.u},{why:'the '+qs(p.k)+' is multiplied in instead of added',v:qm(q.v,p.k),u:q.u}],
-  cite:()=>'the sum-one-more technique',line:(o,S,p,q)=>'with the second source: '+par(q.v)+' + '+qs(p.k)+' = '+qs(o.v)+' '+o.u}];
+const GM=[]; /* stragglers: the six generic middles (mean, sum, more, raise, again, per) are cleared: every middle step comes from the law's own map */
 /* the 'raise' and 'more' asks need the quantity's unit only through S.yu, which they check; their make sees the incoming quantity */
 const effLast=ch=>{ for(let i=ch.length-1;i>=0;i--) if(!GMF.has(ch[i].W.id)) return ch[i].W.id; return ch[0].W.id; };
 /* why text: a fraction that is divided, or that divides, is bracketed (16/(6/5), not 16/6/5) */
@@ -21229,15 +21252,6 @@ midsOf('24·eng.wall',[
      line:(o,S,p,q)=>'kilowatt hours a week: '+par(q.v)+' · 168/1000 = '+qs(o.v)+' '+o.u})]);
 { const L=LAWS.find(l=>l.id==='24·eng.wall'); if(L) L.close=L.close.concat([Tm(X({u:'kilowatt hours',out:'dollars',k:Q(1,5),ask:()=>'power costs 1/5 dollar a kilowatt hour: what does that leak cost a week?',ln:()=>'cost a week',w:['the kilowatt hours are divided by 1/5','1/5 is added']},MQ))]); }
 
-/* the generic middles' own slips, written as instructions (for the missing-step shape) */
-{ const g=id=>GM.find(W=>W.id===id);
-  g('w2.raise').alts=(S,p,q)=>[{ask:'a check finds the true amount is '+p.K+' less than that: what is the true amount?',v:qm(q.v,qa(Q(1),qn(p.f)))},{ask:'a check finds the true amount is only '+p.K+' of that: what is the true amount?',v:qm(q.v,p.f)}];
-  g('w2.more').alts=(S,p,q)=>[{ask:qs(p.k)+' '+S.yu+' of it go to a second use: what is left?',v:qa(q.v,qn(p.k))},{ask:'it is shared equally among '+qs(p.k)+': what is one share?',v:qm(q.v,qi(p.k))}];
-  g('w2.sum').alts=(S,p,q)=>[{ask:'a second time, at '+S.x+' = '+qs(qq(p.x2))+', gives another reading: by how much do the two differ?',v:num(p.f2)>num(q.v)?qa(p.f2,qn(q.v)):qa(q.v,qn(p.f2))},{ask:'a second reading is taken at '+S.x+' = '+qs(qq(p.x2))+': what is the average of the two readings?',v:qm(qa(q.v,p.f2),Q(1,2))}];
-  g('w2.mean').alts=(S,p,q)=>[{ask:'a second reading is taken at '+S.x+' = '+qs(qq(p.x2))+': what do the two come to together?',v:qa(q.v,p.f2)},{ask:'a second reading is taken at '+S.x+' = '+qs(qq(p.x2))+': use it in place of the first',v:p.f2}];
-  g('w2.again').alts=(S,p,q)=>[{ask:'read '+S.f+' again at '+S.x+' = '+qs(qq(p.x2))+' and add the two readings',v:qa(q.v,p.f2)}];
-  g('w2.per').alts=(S,p,q)=>[{ask:'that change came over '+qs(p.g)+' '+S.xu+': multiply it by '+qs(p.g),v:qm(q.v,p.g),u:S.rate}];
-}
 { const m=(lid,id)=>{ const L=LAWS.find(l=>l.id===lid); return L&&(L.mids||[]).find(W=>W.id===id); }; const set=(lid,id,f)=>{ const W=m(lid,id); if(W) W.alts=f; };
   set('36·phys.ladder','m:ladder.energy',(S,p,q)=>[{ask:'with hc = 620 electronvolt nanometres, what energy does each photon of the spike carry?',v:qm(Q(620),qi(q.v))},{ask:'what energy does each photon carry, taking E = λ/hc with hc = 1240?',v:qm(q.v,Q(1,1240))}]);
   set('36·phys.ladder','m:ladder.rungs',(S,p,q)=>[{ask:'the rungs are '+S.w+' electronvolts apart: take one rung’s gap off the energy',v:qa(q.v,qn(S.wq))},{ask:'the rungs are '+S.w+' electronvolts apart: multiply the energy by the gap',v:qm(q.v,S.wq)}]);
@@ -21327,25 +21341,14 @@ law('32·bio.relief','relieving inhalers and bad-air weeks',()=>({c:[0,400],stor
 /* TAILOR (Andrew 2026-11-14 05:07Z: "the word problems need a tailored middle too... Which gas, how many teeth on the gear, etc etc, that's mutable.
    How you get from start to finish is a map"): no generic middle links (w2.mean, w2.sum, w2.more, w2.raise, w2.again, w2.per) and no borrowed
    quantity links; every middle step comes from the law's own map (L.mids, added with midsOf in chains_word2m_*.js). */
-const TAILOR=true;
 const FIRSTX=new Set(['9a.read','13d.rate','5g.put']);
 const fin=q=>q&&isQ(q.v)&&!big(q.v);
 const tryf=(f,...a)=>{ try{ return f(...a); }catch(e){ if(e&&e.over) throw e; return null; } };
-const PADOLD=new Set(['4g.times','5j.share']);
 function firstsFor(S,P){ const out=[];
   for(const W of WL){ if(W.from!=='law'||!W.steps.every(s=>openStep(s,P))) continue; if(W.area&&!S.area) continue;
     const p={}; if(FIRSTX.has(W.id)||W.px) p.x=pick(S.pts); if(W.area){ const e=S.ends?pick(S.ends):(()=>{ const a=pick([0,0,1]); return [a,a+ri(1,3)]; })(); p.a=e[0]; p.b=e[1]; }
     if(W.id==='9a.read'&&S.early&&Math.random()<0.5) continue;
     const q=tryf(W.act,S,p); if(fin(q)) out.push({W,p,o:q,in:null}); }
-  return out; }
-function midsFor(S,chain,P){ const last=effLast(chain), out=[];
-  for(const W of WL){ if(W.from!=='qty'||PADOLD.has(W.id)||chain.some(c=>c.W.id===W.id)) continue; if(!W.steps.every(s=>openStep(s,P))) continue;
-    let ok=false; try{ ok=W.when(S,last); }catch(e){ ok=false; } if(!ok) continue;
-    if(W.id==='8f.root'&&!(read1(last)&&chain.length===1)) continue;
-    out.push(W); }
-  const pads=chain.some(c=>PADOLD.has(c.W.id)), still=chain.length>1&&read1(chain[0].W.id)&&chain[chain.length-1].o.u===S.yu; /* a later link that keeps the reading's unit keeps the story's copies and splits meaningful */
-  if(!pads&&S.copies&&((S.copies.after||['9a.read']).includes(last)||still)&&PADC.steps.every(s=>openStep(s,P))) out.push(PADC);
-  if(!pads&&S.split&&((S.split.after||['9a.read']).includes(last)||still)&&PADS.steps.every(s=>openStep(s,P))) out.push(PADS);
   return out; }
 function closeFor(L0,S,chain,P){ const q=chain[chain.length-1].o, last=effLast(chain), gm=chain.some(c=>GMF.has(c.W.id)), ctx=gm?{first:chain[0].W.id,chain}:{x:chain[0].p.x,first:chain[0].W.id,chain};
   const cs=shuffle((L0.close||[]).filter(c=>tryf(()=>c.fits(S,q,last,ctx,P))));
@@ -21353,16 +21356,21 @@ function closeFor(L0,S,chain,P){ const q=chain[chain.length-1].o, last=effLast(c
     if(say(o)===say(q)) continue;
     return {W:{id:'!'+L0.id.split('.')[1]+'.'+c.id,steps:[L0.step,...c.steps],ask:(S2,p2)=>c.ask(S2,p2),act:(S2,p2,q2)=>c.act(S2,p2,q2),slips:(S2,p2,q2)=>c.slips(S2,p2,q2),cite:()=>c.cite(),line:(o2,S2,p2,q2)=>c.line(o2,S2,p2,q2),close:true},p,o,in:q}; }
   return null; }
+/* stragglers: what a Word Problems card needs of its chain (three wrong answers, not yet seen, every step short enough to print) is asked
+   inside the search, at the close; a chain that cannot make the card is a dead end that turns back, and no finished chain is thrown away */
+let WFIT=null;
+const wvals=D=>{ const vals=[]; wrongs2(D).forEach(w=>{ if(D.out.v.p>0&&w.q.v.p<0) return; /* no negative count beside a positive answer */ if(!CH.d5(say(w.q))&&!vals.some(v=>say(v.q)===say(w.q))) vals.push(w); }); return vals; };
+const wtag=D=>[D.L0.id+'['+D.S.ix+']',D.chain.map(c=>c.W.id+pk(c)).join('+')];
+const wlines=D=>D.chain.map((c,i)=>[(i+1)+'. '+c.W.ask(D.S,c.p),c.W.cite()]);
+const wfitOf=used=>(L0,S,full)=>{ const D={L0,S,chain:full,out:full[full.length-1].o}; try{ if(wvals(D).length<3||(used&&used['cw:'+wtag(D).join('.')])) return false; if(wlines(D).some(l=>!l[0]||l[0].length>110||!l[1])) return false; return ![say(D.out),D.S.story,...D.chain.map(c=>c.W.ask(D.S,c.p)),...D.chain.map(c=>c.W.line(c.o,D.S,c.p,c.in))].some(CH.d5); /* no number too long to print */ }catch(e){ if(e&&e.over) throw e; return false; } };
 /* grow a chain of exactly `lines` lines (first link, middles, close) by a bounded random search */
 function grow(L0,S,P,lines,st){
   const ext=(chain,oldUsed)=>{ if(--st.b<0) return null;
     const lastId=chain[chain.length-1].W.id; if(lastId==='w2.again'&&chain.length===lines-1) return null; /* a change between two readings goes on only to its average rate */
-    if(chain.length===lines-1) { const C=closeFor(L0,S,chain,P); return C?chain.concat([C]):null; }
+    if(chain.length===lines-1) { const C=closeFor(L0,S,chain,P); if(!C) return null; const full=chain.concat([C]); if(WFIT&&!WFIT(L0,S,full)){ st.b-=2; return null; } return full; }
     const q=chain[chain.length-1].o;
     const lm=shuffle((L0.mids||[]).filter(W=>!chain.some(c=>c.W.id===W.id)&&W.after.includes(read1(effLast(chain))&&!chain.slice(1).some(c=>c.W.from==='mid')?'read':effLast(chain))&&q.u===W.u&&W.steps.every(s=>openStep(s,P))));
-    const gms=TAILOR||oldUsed||L0.noGM?[]:shuffle(GM.filter(W=>!chain.some(c=>c.W.id===W.id)&&!(W.id==='w2.sum'&&chain.some(c=>c.W.id==='w2.again'))&&!(W.id==='w2.again'&&chain.some(c=>c.W.id==='w2.sum'))&&W.steps.every(s=>openStep(s,P))&&tryf(()=>W.fits(S,chain,q.u))));
-    const olds=TAILOR?[]:chain.filter(c=>!GMF.has(c.W.id)).length>=3||(chain.some(c=>GMF.has(c.W.id))&&q.u!==S.yu)?[]:shuffle(midsFor(S,chain,P));
-    const two=['w2.again','w2.sum','w2.mean'], cand=lastId==='w2.again'?gms.filter(W=>W.id==='w2.per'):lm.concat(Math.random()<0.5?olds.concat(gms):gms.concat(olds)).filter(W=>!(two.includes(W.id)&&chain.some(c=>two.includes(c.W.id))));
+    const cand=lm; /* stragglers: every middle comes from the law's own map */
     for(const W of cand){ const p=GMF.has(W.id)||W.from==='mid'?tryf(W.make,S,chain,q):(W.make?tryf(W.make,S):{}); if(!p) continue; const o=tryf(W.act,S,p,q); if(!fin(o)) continue; if(GMF.has(W.id)&&o.v.p<=0) continue;
       const r=ext(chain.concat([{W,p,o,in:q}]),oldUsed||!GMF.has(W.id)); if(r) return r; if(st.b<0) return null; }
     return null; };
@@ -21374,39 +21382,34 @@ const ntSet=L=>{ if(L.sized) return new Set([1,2,3,4,5]); if(!NTC[L.id]){ const 
 function lawsForTerms(laws,TW){ const ex=laws.filter(l=>ntSet(l).has(TW)); if(ex.length>=8) return {laws:ex,t:TW};
   const below=laws.map(l=>l.sized?0:Math.max(...[...ntSet(l)].filter(n=>n<TW),0)), mb=Math.max(...below,0);
   const more=laws.filter((l,i)=>below[i]===mb&&mb>0&&!ex.includes(l)); return {laws:ex.concat(more),t:TW,alt:mb}; }
-const LINEW=[[2,0.30],[3,0.26],[4,0.22],[5,0.22]];
-const drawLines=()=>{ let r=Math.random(); for(const [n,w] of LINEW){ if((r-=w)<0) return n; } return 2; };
-const REC=[];
 const FWC={}; /* the opening readings a law's stories can take, found once over ten of its stories */
 const lawFirsts=L=>FWC[L.id]||(FWC[L.id]=(()=>{ const ids=new Set(); for(let i=0;i<10;i++){ const S=tryf(()=>L.make()); if(!S||!S.c) continue; WL.forEach(W=>{ if(W.from!=='law'||ids.has(W.id)||(W.area&&!S.area)) return; const p={}; if(FIRSTX.has(W.id)||W.px) p.x=pick(S.pts); if(W.area){ const e=S.ends?pick(S.ends):[0,1]; p.a=e[0]; p.b=e[1]; } if(fin(tryf(W.act,S,p))) ids.add(W.id); }); } return WL.filter(W=>ids.has(W.id)); })());
 /* blankdraws round 2: a law's story is grown for the asked number of lines on the switched-on rungs; each law keeps a few of its own
    stories known to work under the current switches and settings, found once, and a law with none is not dealt there. When a fresh
    story cannot reach the asked length (or has the wrong number of terms for the Terms setting) one of the known ones is dealt instead. */
-const WZ={};
+const WZ={}, WSW=CH.wswaps={n:0,stored:0,by:{}};
 function wdeal2(P){ const op=W=>W.steps.every(s=>openStep(s,P));
   let laws=LAWS.filter(l=>l.close&&l.close.length&&openStep(l.step,P)&&l.close.some(op)&&lawFirsts(l).some(op)); if(!laws.length) return null;
   const pref=CH.pref||{}, TW=pref.terms, LW=pref.links>=2&&pref.links<=5?pref.links:0; let TL=null;
   if(TW){ TL=lawsForTerms(laws,TW); if(TL.laws.length) laws=TL.laws; }
   let LWc=LW; if(LW){ const cap=new Map(laws.map(l=>[l,lawCap(l,P)])), ok=laws.filter(l=>cap.get(l)>=LW); if(ok.length) laws=ok; else LWc=Math.max(2,...cap.values()); }
   const goalOf=L0=>TW&&!L0.sized?(ntSet(L0).has(TW)?TW:TL&&TL.alt):0, fits=(L0,S)=>{ const g=goalOf(L0); return !!(S&&S.c)&&!(g&&nterms(S)!==g); };
-  const sig=[LWc,TW,WL.filter(op).map(W=>W.id).join(','),GM.filter(op).map(W=>W.id).join(','),laws.map(l=>l.id+':'+(l.mids||[]).filter(op).length+':'+l.close.filter(op).length).join(',')].join('|'), Z=WZ[sig]||(WZ[sig]={});
+  const sig=[LWc,TW,WL.filter(op).map(W=>W.id).join(','),GM.filter(op).map(W=>W.id).join(','),laws.map(l=>l.id+':'+(l.mids||[]).filter(op).length+':'+l.close.filter(op).length).join(','),WFIT?'f':''].join('|'), Z=WZ[sig]||(WZ[sig]={});
   /* the asked length first; ungeared, the nearest other lengths after it */
   const tryGrow=(L0,S,want,b)=>{ const ns=LWc?[LWc]:[want,want-1,want-2,want-3,want+1,want+2,want+3].filter(n=>n>=2&&n<=5); for(const n of ns){ const full=grow(L0,S,P,n,{b}); if(full) return full; } return null; };
   const known=L0=>{ if(Z[L0.id]) return Z[L0.id]; const v=[]; for(let i=0;i<24&&v.length<3;i++){ const S=tryf(()=>L0.make()); if(fits(L0,S)&&tryGrow(L0,S,LWc||3,160)) v.push(S); } return Z[L0.id]=v; };
   const pool=laws.slice();
   while(pool.length){ const L0=pick(pool), vals=known(L0); if(!vals.length){ pool.splice(pool.indexOf(L0),1); continue; }
-    let want=LWc||drawLines(); if(!LWc&&want>=4&&REC.includes(L0.id)) want=3; /* ungeared: a law that just gave a long chain gives a shorter one, so long chains come from many laws */
-    if(vals.cat){ for(let k=0;k<2&&vals.length<30&&(vals.tries||0)<200;k++){ vals.tries=(vals.tries||0)+1; const S2=tryf(()=>L0.make()); if(fits(L0,S2)&&tryGrow(L0,S2,LWc||3,160)) vals.push(S2); } }
-    let S=vals.cat?pick(vals):tryf(()=>L0.make()), full=fits(L0,S)?tryGrow(L0,S,want,vals.cat?400:LWc?160:120):null; if(!vals.cat) vals.n=(vals.n||0)+1;
-    if(full&&!vals.cat){ if(vals.length<8) vals.push(S); else vals[rnd(vals.length)]=S; }
-    else if(!full&&!vals.cat){ vals.bad=(vals.bad||0)+1; if(vals.bad>0.05*vals.n) vals.cat=true; S=pick(vals); full=tryGrow(L0,S,want,400); }
+    const want=LWc||3; /* the gear always gives the number of lines */
+    /* stragglers: a fresh story is always tried first (twice for a law whose stories often cannot carry); a stored one is dealt only when the fresh ones cannot */
+    let S=null, full=null; for(let k=0;k<(vals.cat?2:1)&&!full;k++){ S=tryf(()=>L0.make()); full=fits(L0,S)?tryGrow(L0,S,want,LWc?160:120):null; vals.n=(vals.n||0)+1; if(!full) vals.bad=(vals.bad||0)+1; }
+    WSW.n++; if(full){ if(vals.length<30) vals.push(S); else vals[rnd(vals.length)]=S; }
+    else { if(vals.bad>0.05*vals.n) vals.cat=true; S=pick(vals); full=tryGrow(L0,S,want,400); WSW.stored++; WSW.by[L0.id]=(WSW.by[L0.id]||0)+1; }
     if(!full){ pool.splice(pool.indexOf(L0),1); continue; }
-    if(!LWc&&full.length>=4){ REC.push(L0.id); if(REC.length>120) REC.shift(); }
     return {L0,S,chain:full,out:full[full.length-1].o}; }
   return null; }
 const lawCap=(L0,P)=>{ const op=W=>W.steps.every(s=>openStep(s,P)), F=lawFirsts(L0).filter(op).map(W=>W.id); if(!F.length) return 0;
-  const extra=GM.filter(op).length+WL.filter(W=>W.from==='qty'&&!PADOLD.has(W.id)&&op(W)).length+(op(PADC)?1:0)+(op(PADS)?1:0), M=(L0.mids||[]).filter(op);
-  if(extra>0||2+M.length<=2) return 2+M.length+extra; let best=0;
+  const M=(L0.mids||[]).filter(op); if(!M.length) return 2; let best=0; /* stragglers: the cap no longer counts middles that are never dealt */
   const dfs=(last,used,n,first)=>{ if(n>best) best=n; if(best>=3) return; for(const W of M){ if(used.has(W.id)) continue; if(!((W.after||[]).includes(last)||(first&&read1(last)&&(W.after||[]).includes('read')))) continue; used.add(W.id); dfs(W.id,used,n+1,false); used.delete(W.id); } };
   F.forEach(f=>dfs(f,new Set(),0,true)); return 2+best; };
 function wrongs2(D){ const out=[]; D.chain.forEach((c,i)=>{ (tryf(c.W.slips,D.S,c.p,c.in)||[]).forEach(sl=>{ if(!sl||!isQ(sl.v)) return; let q={v:sl.v,u:sl.u};
@@ -21422,11 +21425,9 @@ const instr=t=>String(t||'').replace(/^\d+\.\s*/,'');
 function missingCard(D,P,used,base){ const n=D.chain.length; if(n<3) return null; const right=say(D.out);
   for(const i of shuffle([...Array(n-2).keys()].map(k=>k+1))){ const c=D.chain[i], S=D.S, q=c.in, tru=instr(c.W.ask(S,c.p)); if(!tru||tru.length>OPTMAX) continue;
     const opts=[], seen=new Set([tru]); D.chain.forEach(x=>{ const a=tryf(()=>instr(x.W.ask(S,x.p))); if(a) seen.add(a); }); /* no instruction that already stands elsewhere in the chain */
-    const keep=(text,o)=>{ text=instr(text); if(!text||text.length>OPTMAX||seen.has(text)) return; const r=o&&isQ(o.v)&&o.u===c.o.u?runFrom(D,i,o):null; if(r&&!big(r.v)&&say(r)===right) return; seen.add(text); opts.push({text,r}); };
+    const keep=(text,o)=>{ text=instr(text); if(!text||text.length>OPTMAX||seen.has(text)) return; const r=o&&isQ(o.v)&&o.u===c.o.u?runFrom(D,i,o):null; if(r&&!big(r.v)&&say(r)===right) return; if(CH.d5(text)||(r&&CH.d5(say(r)))) return; /* stragglers: no option with a number too long to print */ seen.add(text); opts.push({text,r}); };
     (tryf(()=>c.W.alts?c.W.alts(S,c.p,q):[])||[]).forEach(a=>keep(a.ask,{v:a.v,u:a.u||c.o.u}));
     const pre=D.chain.slice(0,i), subs=[];
-    if(!TAILOR&&!D.L0.noGM) GM.forEach(W=>{ if(W.id!==c.W.id&&!pre.some(x=>x.W.id===W.id)&&W.steps.every(s=>openStep(s,P))&&tryf(()=>W.fits(S,pre,q.u))) subs.push(W); });
-    if(!TAILOR) (tryf(()=>midsFor(S,pre,P))||[]).forEach(W=>{ if(W.id!==c.W.id&&!D.chain.some(x=>x.W.id===W.id)) subs.push(W); });
     (D.L0.mids||[]).forEach(W=>{ if(W.id!==c.W.id&&q.u===W.u) subs.push(W); });
     for(const W of shuffle(subs)){ const p=GMF.has(W.id)||W.from==='mid'?tryf(W.make,S,pre,q):(W.make?tryf(W.make,S):{}); if(!p) continue; const o=tryf(W.act,S,p,q); if(!o||!isQ(o.v)) continue; const a=tryf(()=>W.ask(S,p)); if(a) keep(a,o); }
     if(opts.length<3) continue;
@@ -21437,12 +21438,11 @@ function missingCard(D,P,used,base){ const n=D.chain.length; if(n<3) return null
       why:'Step '+(i+1)+' is: '+tru.replace(/[?.]$/,'')+'. Worked through: '+base.why.split('. ')[0]+'. '+pick3.map(x=>'“'+x.text+'” '+(x.r?'leads to '+say(x.r)+' instead':'cannot be carried on to the close')+'.').join(' '),missing:i+1}); }
   return null; }
 
-function wordCard2(P,used){ for(let t=0;t<16;t++){ const D=wdeal2(P); if(!D) return null; const W=wrongs2(D), vals=[]; W.forEach(w=>{ if(D.out.v.p>0&&w.q.v.p<0) return; /* no negative count beside a positive answer */ if(!vals.some(v=>say(v.q)===say(w.q))) vals.push(w); }); if(vals.length<3) continue;
+function wordCard2(P,used){ { const f0=WFIT; let D=null; WFIT=wfitOf(used); try{ D=wdeal2(P); } finally{ WFIT=f0; } if(!D) return null; const vals=wvals(D);
     /* plain wrong options first (Andrew's rule: wrong moves; a negative count or a fraction of a whole-number answer is a real slip but reads oddly, so it is used only when the card is short of others) */
     const ov=D.out.v, odd=w=>(ov.p>0&&w.q.v.p<0)||(ov.q===1&&w.q.v.q!==1);
-    const pk3=shuffle(vals.filter(w=>!odd(w))).concat(shuffle(vals.filter(odd))).slice(0,3), right=say(D.out), sd=D.L0.id+'['+D.S.ix+']', lk=D.chain.map(c=>c.W.id+pk(c)).join('+'), index='cw:'+sd+'.'+lk; if(used&&used[index]) continue;
+    const pk3=shuffle(vals.filter(w=>!odd(w))).concat(shuffle(vals.filter(odd))).slice(0,3), right=say(D.out), sd=D.L0.id+'['+D.S.ix+']', lk=D.chain.map(c=>c.W.id+pk(c)).join('+'), index='cw:'+sd+'.'+lk;
     const lines=D.chain.map((c,i)=>[(i+1)+'. '+c.W.ask(D.S,c.p),c.W.cite()]);
-    if(lines.some(l=>!l[0]||l[0].length>110||!l[1])) continue;
     const base={index,a3:[sd,lk,DASH],step:D.L0.step,steps:[D.L0.step,...D.chain.flatMap(c=>c.W.steps)],chain:true,story:D.S.story,lines,
       ask:'Work the steps in order; the last one is the story’s question. What is the answer, with its unit?',right,opts:shuffle([right,...pk3.map(w=>say(w.q))]),lead:'It is '+right+'. ',
       why:D.chain.map(c=>bracketDiv(c.W.line(c.o,D.S,c.p,c.in),c.in&&c.in.v)).join('; ')+'. '+pk3.map(w=>say(w.q)+' comes from step '+(w.at+1)+', where '+w.why+'.').join(' ')};
@@ -21451,7 +21451,6 @@ function wordCard2(P,used){ for(let t=0;t<16;t++){ const D=wdeal2(P); if(!D) ret
   return null; }
 const MISSP=0.48;
 CH.W2={cl,G,O,Tm,Pr,In,Ct,Cc,Fr,Pl,Md,X,own,LESS,MQ,DR,CU,SC,RA,MID,midsOf,par,num,isQ,qq,at,who,water,beast,say,one,pick,ri,HE,WHO,Q,qa,qm,qn,qi,qz,qs,big,LAWS};
-CH.w2depth=(L0,tries)=>{ let best=0, routes=new Set(); for(let k=0;k<(tries||30);k++){ const S=tryf(()=>L0.make()); if(!S||!S.c) continue; for(const n of [5,4,3]){ if(n<=best&&routes.size>3) break; const ch=tryf(()=>grow(L0,S,null,n,{b:400})); if(ch){ best=Math.max(best,ch.length); routes.add(ch.map(c=>c.W.id).join('>')); break; } } } return {best,routes:[...routes]}; };
 /* "an 80 kg load", "an 8-dollar", "an 11" (a/an before a number read aloud) */
 const anN=s=>typeof s==='string'?s.replace(/\b([Aa]) (?=(8[\d,]*|11|18)(\b|[- ]))/g,'$1n '):s;
 const tidyA=q=>{ if(!q) return q; ['story','ask','why','lead','right'].forEach(k=>{ if(q[k]) q[k]=anN(q[k]); }); if(q.opts) q.opts=q.opts.map(anN); if(q.lines) q.lines=q.lines.map(l=>[anN(l[0]),l[1]]); return q; };
@@ -26157,7 +26156,11 @@ add({id:'2stat.orq',fl:1,st:['2·stat'],make(){
 
 add({id:'4stat.mode',fl:1,st:['4·stat'],make(){
   const place=at(), bird=pick(['herons','wrens','gulls','owls','finches','terns']), v=pick(['mode','stops']);
-  for(let t=0;t<60;t++){ const n=ri(9,11), x=Array.from({length:n},()=>ri(0,9)); const tl={}; x.forEach(a=>tl[a]=(tl[a]||0)+1); const vals=Object.keys(tl).map(Number), top=Math.max(...vals.map(a=>tl[a])), md=vals.filter(a=>tl[a]===top);
+  for(let t=0;t<60;t++){ const n=v==='mode'?pick([9,11]):ri(9,11), x=Array.from({length:n},()=>ri(0,9));
+    { /* stragglers: a list with no single mode, or whose answers collide, has one stop's count changed until it fits */ const okX=x=>{ const tl={}; x.forEach(a=>tl[a]=(tl[a]||0)+1); const vals=Object.keys(tl).map(Number), top=Math.max(...vals.map(a=>tl[a])), md=vals.filter(a=>tl[a]===top); if(md.length!==1||top<3) return false; const s=srt(x);
+        return v==='mode'?new Set([md[0],s[(n-1)>>1],s[n-1],top]).size===4:new Set([n,vals.length,sum(x),top]).size===4; };
+      if(!okX(x)){ const alt=[]; x.forEach((a,i)=>{ for(let b=0;b<=9;b++){ if(b===a) continue; const y=x.slice(); y[i]=b; if(okX(y)) alt.push(y); } }); if(alt.length) pick(alt).forEach((b,i)=>{ x[i]=b; }); } }
+    const tl={}; x.forEach(a=>tl[a]=(tl[a]||0)+1); const vals=Object.keys(tl).map(Number), top=Math.max(...vals.map(a=>tl[a])), md=vals.filter(a=>tl[a]===top);
     if(md.length!==1||top<3) continue; const m=md[0], s=srt(x), mid=s[(n-1)>>1], mx=s[n-1];
     const story='At '+n+' stops along the '+place+' shore, '+who()+' counts '+bird+': '+x.join(', ')+'.';
     if(v==='mode'){ if(n%2===0||new Set([m,mid,mx,top]).size<4) continue;
@@ -26172,7 +26175,7 @@ add({id:'4stat.mode',fl:1,st:['4·stat'],make(){
   return null; }});
 
 add({id:'4stat.ways',fl:1,st:['4·stat'],make(){
-  if(Math.random()<0.6){ const k=ri(2,5), j=ri(1,k-1), C=chooseN(k,j), N=2**k, w=who();
+  if(Math.random()<0.6){ const k=ri(3,5) /* stragglers: two coins leave only two wrong answers */, j=ri(1,k-1), C=chooseN(k,j), N=2**k, w=who();
     const ws=[W('1 of '+(k+1),'the '+(k+1)+' counts of heads are taken as equally likely, which they are not',1/(k+1)),W('1 of '+N,'only one order of the heads is counted',1/N),W(C+' of '+(2*k),'the ways are added coin by coin, 2 + 2 + …, not multiplied',C/(2*k)),W('1 of 2','one coin’s chance is taken for the whole toss',1/2)];
     return {ix:'c'+k+','+j,story:w+' tosses '+k+' coins, told apart by colour, and counts the heads. Each way the coins can fall, heads or tails on each, is taken as equally likely.',lines:[['count the ways the '+k+' coins can fall','the stages-multiply technique'],['count the ways that show exactly '+nm(j,'head','heads'),'the count-of-successes technique']],
       ask:'What is the chance of exactly '+nm(j,'head','heads')+'?',R:{s:C+' of '+N,v:C/N},W:ws,re:chooseN(k,j)/2**k,why:'The '+k+' coins fall in 2 · … · 2 = '+N+' ways, and ('+k+' choose '+j+') = '+C+' of them show '+j+' heads.'}; }
@@ -26295,7 +26298,11 @@ add({id:'8stat.far',fl:2,st:['8·stat'],make(){
 
 add({id:'9stat.bins',fl:2,st:['9·stat'],make(){
   const what=pick([['waits at the ferry','minutes'],['lengths of trout','centimetres'],['ages of oaks','years']]);
-  for(let t=0;t<200;t++){ const ws=Array.from({length:4},()=>pick([5,10,20])), cs=ws.map(()=>ri(2,30)), e=[0]; ws.forEach(w=>e.push(e[e.length-1]+w)); const n=sum(cs);
+  for(let t=0;t<200;t++){ /* stragglers: the three parts (densest bin, fullest bin, median bin) are dealt to the first three bins; the widths and the two leading counts are set to suit, and the other two counts are picked from the pairs that fit */
+    const [iD0,iC0,iM0]=shuffle([0,1,2]), ws=Array.from({length:4},()=>pick([5,10,20])); ws[iD0]=pick([5,10]); ws[iC0]=pick([10,20].filter(w=>w>ws[iD0]));
+    const cs=[0,0,0,0]; cs[iC0]=ri(8,30); const lo0=Math.floor(cs[iC0]*ws[iD0]/ws[iC0])+1; if(lo0>cs[iC0]-1) continue; cs[iD0]=ri(lo0,cs[iC0]-1);
+    { const dD=cs[iD0]/ws[iD0], prs=[]; for(let x=2;x<cs[iC0];x++) for(let y=2;y<cs[iC0];y++){ if(x/ws[iM0]>=dD||y/ws[3]>=dD) continue; const c=cs.slice(); c[iM0]=x; c[3]=y; const n0=c[0]+c[1]+c[2]+c[3]; let run=0; for(let i=0;i<iM0;i++) run+=c[i]; if(run*2<n0&&(run+x)*2>n0) prs.push([x,y]); } if(!prs.length) continue; const pr=pick(prs); cs[iM0]=pr[0]; cs[3]=pr[1]; }
+    const e=[0]; ws.forEach(w=>e.push(e[e.length-1]+w)); const n=sum(cs);
     const den=cs.map((c,i)=>c/ws[i]), iD=den.indexOf(Math.max(...den)), iC=cs.indexOf(Math.max(...cs)); if(den.filter(x=>x===den[iD]).length>1||cs.filter(x=>x===cs[iC]).length>1) continue;
     let run=0, iM=-1; for(let i=0;i<4;i++){ run+=cs[i]; if(run*2>n){ iM=i; break; } if(run*2===n){ iM=-2; break; } } if(iM<0) continue; const iL=3; if(new Set([iD,iC,iM,iL]).size<4) continue;
     const bn=i=>'the '+e[i]+' to '+e[i+1]+' '+what[1]+' bin';
@@ -26318,6 +26325,8 @@ add({id:'9stat.freq',fl:2,st:['9·stat'],make(){
 add({id:'9stat.skew',fl:2,st:['9·stat'],make(){
   const what=pick([['days of rain in a month','days'],['hours a week spent fishing','hours'],['crates picked a morning','crates']]);
   for(let t=0;t<200;t++){ const pk=ri(1,3), vs=[1,2,3,4,5,6,7,8,9]; const fs=vs.map(v=>v<pk?ri(0,2):v===pk?ri(9,14):Math.max(0,ri(9,13)-2*(v-pk)+rnd(2))); fs[8]=Math.max(fs[8],1);
+    { /* stragglers: tallies whose mean does not come out are changed by one or two at one value until it does */ const okF=f=>{ const n=sum(f), all=[]; vs.forEach((v,i)=>{ for(let j=0;j<f[i];j++) all.push(v); }); const s=srt(all), med=n%2?Q(s[(n-1)/2]):Q(s[n/2-1]+s[n/2],2), mean=Q(sum(all),n), top=Math.max(...f); if(f.filter(x=>x===top).length>1) return false; return fl(mean)>fl(med)&&fl(med)>vs[f.indexOf(top)]&&ends(mean)&&mean.q<=8; };
+      if(!okF(fs)){ const alt=[]; fs.forEach((x,i)=>[-2,-1,1,2].forEach(d=>{ const f=fs.slice(); f[i]=x+d; if(f[i]<(i===8?1:0)) return; if(okF(f)) alt.push(f); })); if(alt.length) pick(alt).forEach((x,i)=>{ fs[i]=x; }); } }
     const n=sum(fs); const all=[]; vs.forEach((v,i)=>{ for(let j=0;j<fs[i];j++) all.push(v); }); const s=srt(all); const med=n%2?Q(s[(n-1)/2]):Q(s[n/2-1]+s[n/2],2), mean=Q(sum(all),n);
     const top=Math.max(...fs); if(fs.filter(f=>f===top).length>1) continue; const mode=vs[fs.indexOf(top)]; if(!(fl(mean)>fl(med)&&fl(med)>mode)) continue; if(!ends(mean)||mean.q>8) continue;
     return {ix:fs.join(','),story:'At '+at()+', '+who()+' tallies '+what[0]+' (value: tally): '+vs.map((v,i)=>v+': '+fs[i]).filter((x,i)=>fs[i]).join(', ')+'. The histogram has one bump, at '+mode+', and trails off to the right.',
@@ -26341,7 +26350,7 @@ add({id:'13stat.line',fl:3,st:['13·stat'],make(){
 
 add({id:'13stat.beyond',fl:3,st:['13·stat'],make(){
   const what=pick([['saplings','years','height','centimetres'],['lambs','weeks','weight','kilograms'],['puppies','months','weight','kilograms']]);
-  const k=ri(2,20), b=ri(2,12), x0=pick([2,3,4]), far=pick([20,30,40]), R2=pick(['0.94','0.96','0.97','0.98']), place=at();
+  const k=ri(2,20), b=ri(2,12), x0=pick([2,4]) /* stragglers: at 3, the mean age, the line through (0, 0) gives the right answer too */, far=pick([20,30,40]), R2=pick(['0.94','0.96','0.97','0.98']), place=at();
   const y0=k+b*x0, yf=k+b*far, wo=Q((k+3*b)*x0,3); if(new Set([y0,yf,qs(wo)].map(String)).size<3) return null;
   const u=what[3];
   return {ix:[k,b,x0,far].join(','),story:'At '+place+', '+what[0]+' aged 1 to 5 '+what[1]+' were measured. The best line for '+what[2]+' is ŷ = '+k+' + '+b+'x '+u+', x the age in '+what[1]+', with R² = '+R2+'.',
@@ -26419,12 +26428,12 @@ add({id:'17stat.made',fl:4,st:['17·stat'],make(){
 /* ---------------- floor 5: 22·stat and rung 30 ---------------- */
 add({id:'22stat.rare',fl:5,st:['22·stat'],make(){
   const place=at();
-  if(Math.random()<0.55){ for(let t=0;t<40;t++){ const N=pick([1000,2000,3000,4000,5000]), m=pick([2000,4000,5000,8000,10000]); const lam=Q(N,m); if(fl(lam)>=1) continue;
+  if(Math.random()<0.55){ for(let t=0;t<1;t++){ const prs=[]; [1000,2000,3000,4000,5000].forEach(N=>[2000,4000,5000,8000,10000].forEach(m=>{ if(N<m) prs.push([N,m]); })); const [N,m]=pick(prs); const lam=Q(N,m); if(fl(lam)>=1) continue;
     return {ix:'a,'+N+','+m,story:'The printer at '+place+' sets about '+N+' letters on a page, and each slips with chance 1/'+m+', apart from the others.',lines:[['find λ, the expected count of slips on a page','the rare-count technique'],['find the most likely count on a page','the count-total technique']],
       ask:'What do the slips on a page look like?',R:{s:'λ = '+dec(lam)+' a page; the most likely count on a page is 0',v:fl(lam)},
       W:[W('λ = '+dec(lam)+' a page, so most pages hold 1 slip','the most likely count is 0 whenever λ is below 1',null),W('λ = '+dec(lam)+', with variance '+dec(qm(lam,lam)),'the variance of a rare count is its mean, not its square',fl(lam)**2),W('λ = '+dec(Q(m,N))+' a page; the most likely count is 0','N and the chance are divided the wrong way round',m/N)],
       re:N/m,why:'λ = N p = '+N+'/'+m+' = '+dec(lam)+'. The chance of k slips is e^(−λ)λᵏ/k!, which falls from k = 0 on when λ < 1; the variance equals the mean.'}; } return null; }
-  const a=pick([Q(1,2),Q(3,10),Q(2,5),Q(3,5),Q(1,5),Q(7,10)]), b=pick([Q(1,2),Q(3,10),Q(2,5),Q(4,5),Q(1,10),Q(9,10)]); const R=qa(a,b); if(qe(a,b)) return null; const w1=qm(a,b), w2=qm(R,Q(1,2));
+  const a=pick([Q(1,2),Q(3,10),Q(2,5),Q(3,5),Q(1,5),Q(7,10)]), b=pick([Q(1,2),Q(3,10),Q(2,5),Q(4,5),Q(1,10),Q(9,10)].filter(x=>!qe(x,a))); const R=qa(a,b); if(qe(a,b)) return null; const w1=qm(a,b), w2=qm(R,Q(1,2));
   return {ix:'b,'+qs(a)+','+qs(b),story:'Calls to the '+place+' ferry desk come apart from one another: on average '+dec(a)+' calls a minute about tickets and '+dec(b)+' a minute about lost things.',lines:[['find the expected count of all calls in a minute','the pages-add technique'],['find the variance of that count','the mean-and-spread technique']],
     ask:'What is the count of all calls in a minute?',R:{s:'a rare count with mean and variance '+dec(R),v:fl(R)},
     W:[W('a rare count with mean '+dec(w1),'the expected counts are multiplied; rare counts that run apart add',fl(w1)),W('a rare count with mean '+dec(w2),'the two expected counts are averaged instead of added',fl(w2)),W('mean '+dec(R)+', with variance '+dec(qm(R,R)),'the variance is taken as the square of the mean; for a rare count it is the mean',null)],
@@ -26461,7 +26470,9 @@ add({id:'30l.run',fl:5,st:['30l'],make(){
 
 add({id:'30q.cover',fl:5,st:['30q'],make(){
   const what=pick([['jars of jam','grams'],['bags of flour','grams'],['bottles of cider','millilitres'],['coils of rope','centimetres']]);
-  for(let t=0;t<60;t++){ const n=pick([16,25,36,49,64,100]), sg=pick([4,5,6,7,8,10,12,14,15,20]), m=ri(20,90)*10, rt=isq(n); const h=Q(49*sg,25*rt), hw=Q(sg,n); if(!ends(h)||dec(h).length>6||!ends(hw)) continue;
+  for(let t=0;t<1;t++){ const CV=add._cover||(add._cover=(()=>{ const o=[]; [16,25,36,49,64,100].forEach(n=>[4,5,6,7,8,10,12,14,15,20].forEach(sg=>{ const h=Q(49*sg,25*isq(n)), hw=Q(sg,n); if(!ends(h)||dec(h).length>6||!ends(hw)) return;
+      for(let m=200;m<=900;m+=10){ const a=qa(Q(m),qn(h)), b=qa(Q(m),h), a2=qa(Q(m),qn(qm(Q(49,25),hw))), b2=qa(Q(m),qm(Q(49,25),hw)); if(ends(a2)&&![a,b,a2,b2,h].some(z=>dec(z).replace(/\D/g,'').length>5)) o.push([n,sg,m]); } })); return o; })());
+    const [n,sg,m]=pick(CV), rt=isq(n); const h=Q(49*sg,25*rt), hw=Q(sg,n); if(!ends(h)||dec(h).length>6||!ends(hw)) continue;
     const a=qa(Q(m),qn(h)), b=qa(Q(m),h), a2=qa(Q(m),qn(qm(Q(49,25),hw))), b2=qa(Q(m),qm(Q(49,25),hw)); if(!ends(a2)||[a,b,a2,b2,h].some(z=>dec(z).replace(/\D/g,'').length>5)) continue; const u=what[1], iv=dec(a)+' to '+dec(b)+' '+u;
     return {ix:[n,sg,m].join(','),story:'At '+at()+', '+n+' '+what[0]+' are weighed by a fair draw. Their mean is '+m+' '+u+', and the readings have a known spread width σ = '+sg+' '+u+'.',
       lines:[['find the half-width 1.96 σ/√n','the sample-average technique'],['find the interval and say what its 95% belongs to','the bell-cover technique']],ask:'What does the interval say?',
@@ -26505,7 +26516,10 @@ add({id:'30econ.drift',fl:5,st:['30·econ'],make(){
   return null; }});
 
 /* Simpson: two groups, two kinds of case; group 1 higher in each, lower overall */
-const simp=()=>{ for(let t=0;t<200;t++){ const rA1=ri(7,9), rA2=ri(5,rA1-1), rB1=ri(3,rA2), rB2=ri(1,rB1-1); const nA1=pick([10,20,30]), nB1=pick([60,70,80,90]), nA2=pick([60,70,80,90]), nB2=pick([10,20,30]);
+let SIMPL=null; const simp=test=>{ if(!SIMPL){ SIMPL=[]; for(let rA1=7;rA1<=9;rA1++) for(let rA2=5;rA2<rA1;rA2++) for(let rB1=3;rB1<=rA2;rB1++) for(let rB2=1;rB2<rB1;rB2++){ const w=1/((rA1-5)*(rA2-2)*(rB1-1));
+      [10,20,30].forEach(nA1=>[60,70,80,90].forEach(nB1=>[60,70,80,90].forEach(nA2=>[10,20,30].forEach(nB2=>{ const d=simp1(rA1,rA2,rB1,rB2,nA1,nB1,nA2,nB2); if(d){ d.w=w; SIMPL.push(d); } })))); } }
+    const L=test?SIMPL.filter(test):SIMPL; let s=0; L.forEach(d=>{ s+=d.w; }); let r=Math.random()*s; for(const d of L){ r-=d.w; if(r<0) return d; } return L.length?L[L.length-1]:null; };
+const simp1=(rA1,rA2,rB1,rB2,nA1,nB1,nA2,nB2)=>{ for(let t=0;t<1;t++){
     const sA1=rA1*nA1/10, sB1=rB1*nB1/10, sA2=rA2*nA2/10, sB2=rB2*nB2/10; const o1=Q(sA1+sB1,nA1+nB1), o2=Q(sA2+sB2,nA2+nB2); if(fl(o1)>=fl(o2)) continue;
     const sw=Q(rA2*nA1+rB2*nB1,10*(nA1+nB1)), al=Q(sA1+sB1,nA1+nB1+nA2+nB2); if(![o1,o2,sw,al].every(x=>ends(qm(x,Q(100)))&&dec(qm(x,Q(100))).length<=4)) continue;
     return {rA1,rA2,rB1,rB2,nA1,nB1,nA2,nB2,sA1,sB1,sA2,sB2,o1,o2}; } return null; };
@@ -26513,9 +26527,9 @@ const SIMP=[['ferry','on time','calm days','stormy days','runs'],['clinic','well
 add({id:'30v.mixed',fl:5,st:['30v'],make(){
   const d=simp(); if(!d) return null; const [g,ok,A,B,u]=pick(SIMP), place=at(); const m1=Q(d.rA1+d.rB1,20);
   const story='At '+place+', '+g+' 1: '+A+' '+d.sA1+' of '+d.nA1+' '+u+' '+ok+', '+B+' '+d.sB1+' of '+d.nB1+'. '+g[0].toUpperCase()+g.slice(1)+' 2: '+A+' '+d.sA2+' of '+d.nA2+', '+B+' '+d.sB2+' of '+d.nB2+'.';
-  if(Math.random()<0.5||qe(m1,d.o1)){
+  if(Math.random()<0.5||qe(m1,d.o1)||new Set([pct(d.o1),pct(m1),pct(d.o2),pct(Q(d.sA1+d.sB1,d.nA2+d.nB2+d.nA1+d.nB1))]).size<4){ /* stragglers: the rate card is asked only where its three wrong rates differ */
     return {ix:'a,'+[d.sA1,d.nA1,d.sB1,d.nB1,d.sA2,d.nA2,d.sB2,d.nB2].join(','),story,lines:[['find each '+g+'’s rate on '+A+' and on '+B,'the given-chance technique'],['find each '+g+'’s rate overall','the whole-chance technique'],['say which comparison the shares decide','the mixed-rate technique']],
-      ask:'Which reading is right?',R:{s:g[0].toUpperCase()+g.slice(1)+' 1 does better on each kind; it trails overall as more of its '+u+' fell on '+B},
+      ask:'Which reading is right?',R:{s:'Better on each kind, '+g+' 1 trails overall: more of its '+u+' fell on '+B} /* stragglers: shortened to fit an option (88 characters) */,
       W:[W(g[0].toUpperCase()+g.slice(1)+' 2 does better: '+pct(d.o2)+' against '+pct(d.o1)+' overall','the overall rates are compared without the shares that mix them'),W(g[0].toUpperCase()+g.slice(1)+' 1’s rate is '+pct(m1)+', the mean of its two rates','the rates are averaged without weighting each by its share of the '+u),W('The counts must be wrong: the parts and the whole disagree','a whole that compares the other way from every part is taken as impossible; the shares make it happen')],
       cond:d.rA1>d.rA2&&d.rB1>d.rB2&&fl(d.o1)<fl(d.o2),why:g[0].toUpperCase()+g.slice(1)+' 1: '+(d.rA1*10)+'% and '+(d.rB1*10)+'%; '+g+' 2: '+(d.rA2*10)+'% and '+(d.rB2*10)+'%. Overall '+pct(d.o1)+' against '+pct(d.o2)+', since '+d.nB1+' of '+g+' 1’s '+(d.nA1+d.nB1)+' were '+B+'.'}; }
   return {ix:'m,'+[d.sA1,d.nA1,d.sB1,d.nB1].join(','),story,lines:[['find '+g+' 1’s rate on each kind','the given-chance technique'],['weigh each rate by its share of the '+u,'the mixed-rate technique']],ask:'What is '+g+' 1’s rate overall?',
@@ -26523,7 +26537,7 @@ add({id:'30v.mixed',fl:5,st:['30v'],make(){
     re:(d.sA1+d.sB1)/(d.nA1+d.nB1),why:'Overall rate = '+(d.rA1*10)+'% · '+d.nA1+'/'+(d.nA1+d.nB1)+' + '+(d.rB1*10)+'% · '+d.nB1+'/'+(d.nA1+d.nB1)+' = '+pct(d.o1)+': each rate weighed by its share, not a plain mean of ratios.'}; }});
 
 add({id:'30v.swap',fl:5,st:['30v'],make(){
-  const d=simp(); if(!d) return null; const [g,ok,A,B,u]=pick(SIMP); const s1A=Q(d.nA1,d.nA1+d.nB1), s1B=Q(d.nB1,d.nA1+d.nB1); const R=qa(qm(Q(d.rA2,10),s1A),qm(Q(d.rB2,10),s1B)), m2=Q(d.rA2+d.rB2,20);
+  const d=simp(d=>new Set([qa(qm(Q(d.rA2,10),Q(d.nA1,d.nA1+d.nB1)),qm(Q(d.rB2,10),Q(d.nB1,d.nA1+d.nB1))),Q(d.rA2+d.rB2,20),d.o2,d.o1].map(qs)).size===4); if(!d) return null; const [g,ok,A,B,u]=pick(SIMP); const s1A=Q(d.nA1,d.nA1+d.nB1), s1B=Q(d.nB1,d.nA1+d.nB1); const R=qa(qm(Q(d.rA2,10),s1A),qm(Q(d.rB2,10),s1B)), m2=Q(d.rA2+d.rB2,20);
   if(new Set([R,m2,d.o2,d.o1].map(qs)).size<4) return null;
   return {ix:[d.sA1,d.nA1,d.sB1,d.nB1,d.sA2,d.nA2,d.sB2,d.nB2].join(','),story:'At '+at()+', '+g+' 1: '+A+' '+d.sA1+' of '+d.nA1+' '+u+' '+ok+', '+B+' '+d.sB1+' of '+d.nB1+'. '+g[0].toUpperCase()+g.slice(1)+' 2: '+A+' '+d.sA2+' of '+d.nA2+', '+B+' '+d.sB2+' of '+d.nB2+'.',
     lines:[['find '+g+' 2’s rate on each kind','the given-chance technique'],['weigh them by '+g+' 1’s shares of '+A+' and '+B,'the mixed-rate technique']],ask:'What would '+g+' 2’s overall rate be at '+g+' 1’s shares?',
@@ -26670,9 +26684,56 @@ function statCard(P,used){ const open=T.filter(t=>t.st.every(s=>openStep(s,P)));
   for(let k=0;k<14;k++){ const f=pick(fls), t=pick(open.filter(x=>x.fl===f)); const b=mk(t); const q=cardOf(t,b,used); if(q) return q; }
   return null; }
 const old=CH.wordCard;
-CH.wordCard=function(P,used){ const pr=CH.pref||{}; if(!pr.links&&!pr.terms&&Math.random()<SHARE){ const q=statCard(P,used); if(q){ delete q.wstat; return q; } } return old.apply(this,arguments); };
+CH.wordCard=function(P,used){ /* stragglers: a statistics story has no links and no size, so the gear is set aside for it, as for a sentence seed; it is dealt as often as the open stories stand among the open laws */ const nT=T.filter(t=>t.st.every(s=>openStep(s,P))).length; if(nT){ const nL=(CH.LAWS||[]).filter(l=>openStep(l.step,P)).length; if(Math.random()<nT/(nT+nL)){ const q=statCard(P,used); if(q){ delete q.wstat; return q; } } } return old.apply(this,arguments); };
 CH.wstat={T,cardOf,statCard,mk,SHARE};
 })();
+/* stragglers law steps (Andrew 2026-11-22 00:34Z: "go ahead and write them into 'the laws maps'"): the copies and shares steps that were written
+   for single laws and switched off with the generic middles on 14 November. Nineteen laws already had the same step in their own map. These
+   twenty-five had none, so each is written into its law's map here, after the reading, asked as a question like the map's other steps.
+   Two are left out as unsound: a stove's plates do not add their watts a square metre, and cylinders do not add their strokes. */
+{ const {Q,qa,qm,qs,par,Tm,O,Cc,X,MQ,pick}=CH.W2, LAW=id=>CH.LAWS.find(l=>l.id===id);
+  const T={
+    '16·phys.spring':['copies',k=>k+' such springs push side by side on the latch: what is their push together?'],
+    '8·econ.wage':['copies',k=>(k-1)+' others at the cannery earn the same: what do the '+k+' of them earn an hour together?'],
+    '16·then.inflow':['copies',k=>k+' streams alike feed the lake: what is their flow together?'],
+    '18·nav.chart':['copies',k=>'the trip has '+k+' legs that long: how far is the whole trip?'],
+    '45·econ.reward':['copies',k=>'Mike runs '+k+' such miners: what is the gain of them all?'],
+    '45·comp.addresses':['copies',k=>k+' offices alike draw from the same block: how many thousand addresses for them all?'],
+    '5·chem.burn':['copies',k=>'the plant runs '+k+' such burners: how many moles of hydrogen do they burn in all?'],
+    '5·chem.propane':['copies',k=>'the house has '+k+' such heaters: how many moles of oxygen do they take in all?'],
+    '6·chem.plate':['copies',k=>'the shop runs '+k+' such cells on separate supplies: how many moles of electrons pass in all?'],
+    '8·phys.beats':['copies',k=>k+' people in the room have hearts that beat alike: how many beats in all?'],
+    '8·econ.rent':['copies',k=>'Randy rents '+k+' flats alike: what is the rent of them all?'],
+    '10·logi.trucks':['copies',k=>k+' depots alike share the trucks: how many trips a day in all?'],
+    '28·now.mistakes':['copies',k=>k+' such units learn side by side: at most how many mistakes in all?'],
+    '30·comp.line':['copies',k=>'there are '+k+' such messages: how many bits in all?'],
+    '31·now.picture':['copies',k=>'the album holds '+k+' such pictures: how many readings in all?'],
+    '36·comp.bytes':['copies',k=>'the desk has '+k+' such screens: how many bytes in all?'],
+    '42·econ.proposals':['copies',k=>k+' regions run the same pairing: at most how many proposals in all?'],
+    '44·chem.fill':['copies',k=>'a flask holds '+k+' such molecules: how many of these electrons in all?'],
+    '2·comp.cond':['copies',k=>k+' such conditions are checked one after another: how many steps in all?'],
+    '30·now.found':['copies',k=>k+' labs alike test the same way: how many true ideas in all?'],
+    '39·phys.band':['copies',k=>'the crystal has '+k+' such rows: how many electrons in all?'],
+    '43·phys.ring':['copies',k=>'the wire holds '+k+' such rings apart: how many levels in all?'],
+    '9·stat.weir':['split',k=>'the fish are tagged by '+k+' crews in equal shares: how many fish does one crew tag?','fish for one crew'],
+    '18·econ.revenue':['split',k=>'the takings are shared equally by '+k+' stalls of a cooperative: what is one stall’s share?','dollars for one stall'],
+    '40·now.lines':['split',k=>'the reading is shared equally by '+k+' machines: how many lines does one machine read?']};
+  Object.keys(T).forEach(lid=>{ const L=LAW(lid), [kind,ask,out]=T[lid]; if(!L) return; let S0=null; for(let i=0;i<40&&!(S0&&S0[kind]);i++){ try{ S0=L.make(); }catch(e){} } if(!S0||!S0[kind]) return;
+    const cop=kind==='copies', id='m:'+lid.split('.')[1]+(cop?'.alike':'.shared'); if((L.mids||[]).some(m=>m.id===id)) return;
+    const after=[...new Set((S0[kind].after||['9a.read']).map(a=>a==='9a.read'||a==='5g.put'||/\.own$/.test(a)?'read':a))];
+    L.mids=(L.mids||[]).concat([{from:'mid',id,steps:cop?['4g']:['5j','5c'],after,u:S0.yu,make:S=>S[kind]?{k:S[kind].k}:null,ask:(S,p)=>ask(p.k),
+      /* a share is dealt only where it comes out whole */
+      act:(S,p,q)=>{ const v=cop?qm(q.v,Q(p.k)):qm(q.v,Q(1,p.k)); return !cop&&v.q!==1?null:{v,u:out||q.u}; },
+      slips:(S,p,q)=>cop?[{why:'the '+p.k+' alike are added on instead of multiplied',v:qa(q.v,Q(p.k)),u:q.u},{why:'the amount is divided among the '+p.k+' instead of multiplied',v:qm(q.v,Q(1,p.k)),u:q.u}]
+        :[{why:'the share is taken by subtracting '+p.k,v:qa(q.v,Q(-p.k)),u:out||q.u},{why:'the amount is multiplied by the '+p.k+' instead of shared',v:qm(q.v,Q(p.k)),u:out||q.u}],
+      alts:()=>[],cite:()=>cop?'the products-are-numbers technique':'the scaling technique',
+      line:(o,S,p,q)=>S[kind].ln+': '+(cop?p.k+' · '+par(q.v):par(q.v)+'/'+p.k)+' = '+qs(o.v)+' '+o.u}]); });
+  /* a share of the fish or of the takings is one crew's or one stall's, so the law's closes about the whole do not follow it; each gets closes of its own */
+  const addClose=(law,cs)=>{ const L=LAW(law); if(L&&(L.mids||[]).some(m=>/\.shared$/.test(m.id))) L.close=(L.close||[]).concat(cs); };
+  addClose('9·stat.weir',[Tm(X({id:'crewtime',u:'fish for one crew',out:'minutes',k:()=>pick([2,3,5]),ask:(S,p)=>'tagging a fish takes '+p.K+' minutes: how many minutes does that crew spend tagging?',ln:()=>'minutes of tagging'},MQ)),
+    Cc(X({id:'crewboxes',u:'fish for one crew',out:'boxes',k:()=>pick([20,50]),ask:(S,p)=>'tags come '+p.K+' to a box: how many boxes does that crew need?',ln:()=>'boxes for the crew'},MQ))]);
+  addClose('18·econ.revenue',[O(X({id:'stallkeeps',u:'dollars for one stall',out:'dollars',k:()=>pick([1,2,3]),ask:(S,p)=>'each stall pays '+p.K+' dollar'+(p.K==='1'?'':'s')+' for its pitch: what does the stall keep?',ln:()=>'kept by the stall'},MQ)),
+    Tm(X({id:'stalldays',u:'dollars for one stall',out:'dollars',k:()=>pick([3,4,5]),ask:(S,p)=>'the market runs '+p.K+' days alike: what does one stall take over them?',ln:()=>'over the days'},MQ))]); }
 /* nodraws word steps (Andrew 2026-11-21 22:58Z-23:01Z): the old borrowed word links that no law's map had taken up are written into their
    laws. Three (and 15·econ.forever) hang after the reading. Two open on the law itself and were starved of a close or of wrong moves.
    Two followed a slope: "if they open on a slope they should just be written as the equation for the slope, and it should indicate in words
@@ -27004,8 +27065,8 @@ S('15·chem.gate','15·chem','newtons','a push on a plate',()=>{ const n=pk([50,
 
 /* --- the dealer: walk the web from a source for exactly n links, never coming back to a unit already passed --- */
 const open=(st,P)=>openStep(st,P);
-function walk(q0,n,P,budget){ const B={n:budget||200}; const sts=ST.filter(s=>open(s.step,P));
-  const go=(q,seenU,usedId,chain,par)=>{ if(chain.length===n) return chain; if(B.n--<=0) return null;
+function walk(q0,n,P,budget,fit){ const B={n:budget||200}; const sts=ST.filter(s=>open(s.step,P));
+  const go=(q,seenU,usedId,chain,par)=>{ if(chain.length===n){ if(fit&&!fit(chain)){ B.n-=2; return null; } return chain; } if(B.n--<=0) return null;
     const prev=chain[chain.length-1]||null, cnt=u=>seenU.filter(x=>x===u).length;
     for(const s of shuffle(sts.filter(s=>s.in===q.u&&!usedId.has(s.id)&&cnt(s.out)<(s.in===s.out?3:2)&&!(prev&&prev.s.in===s.out&&prev.s.out===s.in&&prev.s.in!==prev.s.out&&!s.back)))){ let p=null, v=null; try{ p=s.mk(q,{prev,has:u=>seenU.includes(u)||par.includes(u),chain}); if(!p) continue; v=s.f(p,q.v); }catch(e){ continue; } if(!nice(v)) continue;
       const o={v,u:s.out}, r=go(o,seenU.concat([s.out]),new Set([...usedId,s.id]),chain.concat([{s,p,in:q,o}]),par.concat(s.par||[])); if(r) return r; if(B.n<=0) return null; }
@@ -27013,11 +27074,14 @@ function walk(q0,n,P,budget){ const B={n:budget||200}; const sts=ST.filter(s=>op
   return go(q0,[q0.u],new Set(),[],[]); }
 /* the longest walk each source can make under the open steps, found once per set of open stations */
 const CAP={}; function capOf(src,P){ const key=ST.filter(s=>open(s.step,P)).map(s=>s.id).join(',')+'|'+src.id; if(key in CAP) return CAP[key]; let best=0; for(let n=5;n>=1&&!best;n--) for(let k=0;k<6&&!best;k++){ const m=src.mk(); if(walk({v:m.v,u:src.u},n,P,300)) best=n; } return CAP[key]=best; }
-function trainDeal(P){ const want=(CH.pref&&CH.pref.links>=2&&CH.pref.links<=5)?CH.pref.links:0; let srcs=SRC.filter(s=>open(s.step,P)&&capOf(s,P)>=2); if(!srcs.length) return null;
+function trainDeal(P,fit0,min){ const anc=(P&&P.anchor)||null; if(anc&&!SRC.some(s=>s.step===anc)&&!ST.some(s=>s.step===anc)) return null; /* a step pool's train passes through the pool's own step */
+  const fit=anc?D=>(D.src.step===anc||D.chain.some(c=>c.s.step===anc))&&(!fit0||fit0(D)):fit0, lo=min||2, want=(CH.pref&&CH.pref.links>=2&&CH.pref.links<=5)?CH.pref.links:0; let srcs=SRC.filter(s=>open(s.step,P)&&capOf(s,P)>=lo); if(!srcs.length) return null;
   if(want){ const ok=srcs.filter(s=>capOf(s,P)>=want); if(ok.length) srcs=ok; }
-  const pool=srcs.slice(); while(pool.length){ const src=typeof LHALF==='function'?LHALF(pool):pk(pool), cap=capOf(src,P), n=want?Math.min(want,cap):Math.min(cap,pk([2,3,3,4,4,5]));
-    /* whole answers first: the first tries keep only a walk that ends on a whole number; the asked length is kept before a shorter one is taken */
-    for(const len of (want?[n]:[n,n-1,n-2]).filter(x=>x>=2)) for(let k=0;k<14;k++){ const m=src.mk(), q0={v:m.v,u:src.u}, ch=walk(q0,len,P,300); if(!ch) continue; const o=ch[ch.length-1].o; if(o.v.q===1||(k>=9&&o.v.q<=4)) return {src,m,q0,chain:ch,out:o}; }
+  const pool=srcs.slice(); while(pool.length){ const src=typeof LHALF==='function'?LHALF(pool):pk(pool), cap=capOf(src,P), n=want?Math.max(lo,Math.min(want,cap)):Math.max(lo,Math.min(cap,pk([2,3,3,4,4,5])));
+    /* stragglers: the walk itself is told what the card needs (a whole answer, three wrong answers, a wrong move that can be planted), so a walk that
+       cannot make the card is a dead end that turns back to the last fork; no finished walk is thrown away. Whole answers first, then quarters and thirds. */
+    for(const len of (want?[n]:[n,n-1,n-2]).filter(x=>x>=lo)) for(const [den,vals] of [[1,4],[4,2]]) for(let k=0;k<vals;k++){ const m=src.mk(), q0={v:m.v,u:src.u}, mkD=ch=>({src,m,q0,chain:ch,out:ch[ch.length-1].o});
+      const ch=walk(q0,len,P,300,c=>c[c.length-1].o.v.q<=den&&(!fit||fit(mkD(c)))); if(ch) return mkD(ch); }
     pool.splice(pool.indexOf(src),1); }
   return null; }
 function trainWrongs(D){ const out=[]; D.chain.forEach((c,i)=>{ let ws=[]; try{ ws=c.s.w(c.p,c.in.v)||[]; }catch(e){ ws=[]; }
@@ -27031,9 +27095,9 @@ function ends(D){ const c0=D.chain[0], c=D.chain[D.chain.length-1], s=c.s.say(c.
   const start=c0.s.brings?c0.s.brings(c0.p):'the '+say(D.q0), noun=c.s.inv?'the '+c.s.out:(ENDN[c.s.id]||(m&&!/^how /.test(m[1])?m[1].replace(/ in [a-z ]+$/,''):'what the last step gives'));
   return {start,end:c.s.inv?noun:noun.replace(/^its /,'the ')+', in '+c.o.u}; }
 function endAsk(D){ const c=D.chain[D.chain.length-1]; if(ENDS[c.s.id]) return 'In the end, '+ENDS[c.s.id]; const s=c.s.say(c.p,c.in), m=/: (?:find|write) ([^:]*)$/.exec(s); if(!m) return 'What does the last step come to?'; const x=m[1]; return /^how /.test(x)?'In the end, '+x+'?':'In the end, what is '+x+'?'; }
-function trainCard(P,used){ for(let t=0;t<12;t++){ const D=trainDeal(P); if(!D) return null; const W=trainWrongs(D); if(W.length<3) continue;
+function trainCard(P,used){ { const D=trainDeal(P,D=>trainWrongs(D).length>=3&&!(used&&used['ct:'+tag(D).join('.')])); if(!D) return null; const W=trainWrongs(D);
     const plain=w=>!(isInt(D.out.v)&&!isInt(w.q.v)), pk3=shuffle(W.filter(plain)).concat(shuffle(W.filter(w=>!plain(w)))).slice(0,3), right=say(D.out);
-    const sd=D.src.id+'['+qs(D.m.v)+']', lk=D.chain.map(c=>c.s.id+'['+Object.values(c.p).map(x=>x&&x.p!==undefined?qs(x):x).join(',')+']').join('+'), index='ct:'+sd+'.'+lk; if(used&&used[index]) continue;
+    const sd=D.src.id+'['+qs(D.m.v)+']', lk=D.chain.map(c=>c.s.id+'['+Object.values(c.p).map(x=>x&&x.p!==undefined?qs(x):x).join(',')+']').join('+'), index='ct:'+sd+'.'+lk;
     const cap1=s=>s.charAt(0).toUpperCase()+s.slice(1), lines=D.chain.map((c,i)=>[(i+1)+'. '+cap1(c.s.say(c.p,c.in))+'.',c.s.cite]);
     return {index,a3:[sd,lk,DASH],step:D.src.step,steps:[...new Set([D.src.step,...D.chain.map(c=>c.s.step)])],chain:true,train:true,story:D.m.story+' Start from '+ends(D).start+'; end at '+ends(D).end+'.',lines,
       ask:'Work the steps in order, each on the amount the one before it hands on. '+endAsk(D),right,opts:shuffle([right,...pk3.map(w=>say(w.q))]),lead:'It is '+right+'. ',
@@ -27042,24 +27106,24 @@ function trainCard(P,used){ for(let t=0;t<12;t++){ const D=trainDeal(P); if(!D) 
 const reach=P=>{ const o=ST.filter(s=>open(s.step,P)).length; return Math.min(1,o/8); };
 /* the same walk as Work (no story: the seed is the first amount) and as Check Proofs (the walk written out line by line, one line carrying a station's wrong move) */
 const tag=D=>{ const sd=D.src.id+'['+qs(D.m.v)+']', lk=D.chain.map(c=>c.s.id+'['+Object.values(c.p).map(x=>x&&x.p!==undefined?qs(x):x).join(',')+']').join('+'); return [sd,lk]; };
-function trainWork(P,used){ for(let t=0;t<12;t++){ const D=trainDeal(P); if(!D) return null; const W=trainWrongs(D); if(W.length<3) continue;
-    const plain=w=>!(isInt(D.out.v)&&!isInt(w.q.v)), pk3=shuffle(W.filter(plain)).concat(shuffle(W.filter(w=>!plain(w)))).slice(0,3), right=say(D.out), [sd,lk]=tag(D), index='ctw:'+sd+'.'+lk; if(used&&used[index]) continue;
+function trainWork(P,used){ { const D=trainDeal(P,D=>trainWrongs(D).length>=3&&!(used&&used['ctw:'+tag(D).join('.')])); if(!D) return null; const W=trainWrongs(D);
+    const plain=w=>!(isInt(D.out.v)&&!isInt(w.q.v)), pk3=shuffle(W.filter(plain)).concat(shuffle(W.filter(w=>!plain(w)))).slice(0,3), right=say(D.out), [sd,lk]=tag(D), index='ctw:'+sd+'.'+lk;
     return {index,a3:[sd,lk,DASH],step:D.src.step,steps:[...new Set([D.src.step,...D.chain.map(c=>c.s.step)])],chain:true,train:true,
       lines:[[say(D.q0),'the seed: '+D.src.label]].concat(D.chain.map((c,i)=>[(i+1)+'. '+c.s.say(c.p,c.in),c.s.cite])),ask:'Carry the seed through the links in order. What comes out?',right,opts:shuffle([right,...pk3.map(w=>say(w.q))]),lead:'It is '+right+'. ',
       why:D.chain.map((c,i)=>say(c.in)+' gives '+say(c.o)).join('; ')+'. '+pk3.map(w=>say(w.q)+' comes from link '+(w.at+1)+', where '+w.why+'.').join(' ')}; }
   return null; }
+/* every wrong move that can be planted in the walk and carried down the rest of it */
+function trainPlans(D,used){ const n=D.chain.length, cand=[], [sd,lk]=tag(D);
+  D.chain.forEach((c,i)=>{ if(used&&used['ctp:'+sd+'.'+lk+'#'+(i+2)]) return; let ws=[]; try{ ws=c.s.w(c.p,c.in.v)||[]; }catch(e){} ws.forEach(([v,why])=>{ if(!v||!(v.p>0)||wide(qs(v))||v.q>12) return; const vals=[v]; for(let j=i+1;j<n;j++){ const d=D.chain[j]; let o=null; try{ o=d.s.f(d.p,vals[vals.length-1]); }catch(e){} if(!o||!(o.p>0)||wide(qs(o))||o.q>60) return; vals.push(o); }
+      if(say({v,u:c.o.u})!==say(c.o)) cand.push({i,why,vals}); }); }); return cand; }
 function trainProof(P,used){ const keep=CH.pref; if(!(keep&&keep.links>=3)) CH.pref=Object.assign({},keep||{},{links:pk([3,3,4,5])});
-  try{ for(let t=0;t<12;t++){ const D=trainDeal(P); if(!D||D.chain.length<3) continue; const n=D.chain.length;
-      /* plant one wrong move and carry it down the rest of the walk */
-      const cand=[]; D.chain.forEach((c,i)=>{ let ws=[]; try{ ws=c.s.w(c.p,c.in.v)||[]; }catch(e){} ws.forEach(([v,why])=>{ if(!v||!(v.p>0)||wide(qs(v))||v.q>12) return; const vals=[v]; for(let j=i+1;j<n;j++){ const d=D.chain[j]; let o=null; try{ o=d.s.f(d.p,vals[vals.length-1]); }catch(e){} if(!o||!(o.p>0)||wide(qs(o))||o.q>60) return; vals.push(o); }
-          if(say({v,u:c.o.u})!==say(c.o)) cand.push({i,why,vals}); }); }); if(!cand.length) continue;
-      const whole=cand.filter(c=>c.vals.every(v=>v.q===1)), B=pk(whole.length?whole:cand), val=j=>j<B.i?D.chain[j].o.v:B.vals[j-B.i], [sd,lk]=tag(D), index='ctp:'+sd+'.'+lk+'#'+(B.i+2); if(used&&used[index]) continue;
+  try{ const D=trainDeal(P,D=>D.chain.length>=3&&trainPlans(D,used).length>0,3); if(!D) return null; const n=D.chain.length, cand=trainPlans(D,used);
+      const whole=cand.filter(c=>c.vals.every(v=>v.q===1)), B=pk(whole.length?whole:cand), val=j=>j<B.i?D.chain[j].o.v:B.vals[j-B.i], [sd,lk]=tag(D), index='ctp:'+sd+'.'+lk+'#'+(B.i+2);
       const lines=[[cap1(D.m.story.replace(/\.$/,'')),'given']].concat(D.chain.map((c,j)=>[cap1(stem(c.s.say(c.p,c.in)))+': '+say({v:val(j),u:c.o.u}),c.s.cite]));
       const all=lines.map((_,j)=>'line '+(j+1)), right='line '+(B.i+2), opts=shuffle([right,...shuffle(all.filter(x=>x!==right)).slice(0,3)]).sort((a,b)=>parseInt(a.slice(5))-parseInt(b.slice(5)));
       return {index,a3:[sd,lk,DASH],step:D.src.step,steps:[...new Set([D.src.step,...D.chain.map(c=>c.s.step)])],stack:true,chain:true,train:true,lines,
         ask:'One line does not follow from what it cites. Which line is the bad line?',right,opts,lead:'The bad line is '+right+'. ',
         why:'Line '+(B.i+2)+' cites '+D.chain[B.i].s.cite+', but there '+B.why+'. The right amount is '+say(D.chain[B.i].o)+'.'+(B.i<n-1?' The lines after it follow from line '+(B.i+2)+' as written, so they are not the bad line.':'')}; }
-    return null; }
   finally{ CH.pref=keep; } }
 /* nodraws: a walk back may not follow its own forward link, so a walk back whose unit nothing else gives had nowhere to start; each such unit gets a source */
 /* three walks back are taken out: the string law is not a multiplying link; a time in minutes and a mass of glucose lead nowhere on, and nothing but their own forward link reaches them in whole numbers */
@@ -27075,7 +27139,7 @@ S('7·phys.heater','7·phys','amps','a current',()=>{ const n=pk([2,3,4,5,6,8,10
 S('11·chem.burner','11·chem','kilojoules of heat','heat from burning',()=>{ const n=pk([572,888,1144,1332,1400,2220,2800,4440]), w=pk(WHO); return {v:Q(n),story:w+'’s burner at '+AT()+' frees '+n+' kilojoules of heat.'}; });
 CH.train={ST,SRC,walk,trainDeal,trainCard,trainWork,trainProof,capOf,say,SHARE:0.35};
 { const ow=CH.workCard, op=CH.proofCard;
-  CH.workCard=function(P,used){ if(Math.random()<CH.train.SHARE*0.5*reach(P)){ const q=trainWork(P,used); if(q) return q; } return ow.apply(this,arguments); };
+  CH.workCard=function(P,used){ if(!CH.need&&Math.random()<CH.train.SHARE*0.5*reach(P)){ const q=trainWork(P,used); if(q) return q; } return ow.apply(this,arguments); };
   CH.proofCard=function(P,used){ if(Math.random()<CH.train.SHARE*0.5*reach(P)){ const q=trainProof(P,used); if(q) return q; } return op.apply(this,arguments); }; }
 const old=CH.wordCard;
 /* the web takes a share of the Word Problems that grows with how much of it is open: a floor with two stations open is not dealt the same walk over and over */
@@ -27085,8 +27149,11 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
 { const base=CH.workCard, prev=CH.wordCard, wordy=s=>!!(CH.KIND[s.kind||'fn']||{}).words, cap1=s=>/^\p{L}[₀-₉′]*(?:\(| =|:|ₙ)/u.test(s)?s:s[0].toUpperCase()+s.slice(1)/* studycap */, ORD=['First','Then','Next','After that','Last'];
   CH.wordSeedCard=function(P,used){ const steps=new Set(CH.SEEDS.filter(s=>wordy(s)&&CH.openStep(s.step,P)).map(s=>s.step)); if(!steps.size) return null;
     const P2={use:x=>steps.has(x.step)&&(!P||P.use(x))};
-    for(let t=0;t<8;t++){ /* senseeds: a sentence has no size and few links, so the gear's link number and seed size are set aside for this deal */ const pl=CH.pref.links, pt=CH.pref.terms; let q=null; CH.pref.links=0; CH.pref.terms=0; try{ q=base.call(this,P2,null); } finally { CH.pref.links=pl; CH.pref.terms=pt; } if(!q||!q.chain||!q.lines||q.lines.length<3) continue; const sid=String(q.a3[0]).replace(/\[.*$/,''), S0=CH.SEEDS.find(s=>s.id===sid); if(!S0||!wordy(S0)) continue;
-      const index='cws:'+q.index.slice(2); if(used&&used[index]) continue;
+    { /* senseeds: a sentence has no size and few links, so the gear's link number and seed size are set aside for this deal */ const pl=CH.pref.links, pt=CH.pref.terms, n0=CH.need; let q=null; CH.pref.links=0; CH.pref.terms=0;
+      /* stragglers: the dealer is told the seed must be one given in words and the card not yet seen, so the one deal is the card */
+      CH.need=(S0,sd,chain)=>wordy(S0)&&chain.length>=2&&!(used&&used['cws:'+CH.foot({S0,sd,chain}).join('.')]); CH.need.tag='s'; CH.need.seed=wordy;
+      try{ q=base.call(this,P2,null); } finally { CH.pref.links=pl; CH.pref.terms=pt; CH.need=n0; } if(!q||!q.chain||!q.lines||q.lines.length<3) return null;
+      const index='cws:'+q.index.slice(2);
       const says=q.lines.slice(1).map((l,i)=>(i===q.lines.length-2&&i>0?'Last':ORD[Math.min(i,3)])+', '+l[0].replace(/^\d+\. /,'')+'.');
       return Object.assign({},q,{index,story:(cap1(q.lines[0][0])+'. '+says.join(' ')).replace(/\?\./g,'?'),lines:[],ask:'What comes out?'}); }
     return null; };
@@ -27108,8 +27175,7 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
     return Object.assign({},q,{index:'cws:'+String(q.index).replace(/^c:/,''),story:(cap1(q.lines[0][0])+'. '+says.join(' ')).replace(/\?\./g,'?'),lines:[],ask:'What comes out?'}); };
   CH.chainPool=function(step,mode){ const r=rungOf(step), P2={use:x=>rungOf(x.step)===r,anchor:step}, keep=CH.pref, g=typeof gearPref==='function'?gearPref(mode):{};
     CH.pref={links:g.links||0,terms:g.terms||0}; const dl0=CH.dl; CH.dl=Date.now()+600; CH.adl=Date.now()+200;
-    try{ let any=null; for(let t=0;t<10;t++){ let q=mode==='proof'?CH.proofCard(P2,null):mode==='work'?CH.workCard(P2,null):CH.workCard(P2,null); if(!q) break; if(mode==='word') q=tell(q);
-        if(mode==='word'&&!q.story) continue; if((q.steps||[]).includes(step)||q.step===step) return q; any=any||q; } return any; }
+    try{ /* stragglers: one deal; the dealer and the trains keep to the pool's own step themselves */ let q=mode==='proof'?CH.proofCard(P2,null):CH.workCard(P2,null); if(!q) return null; if(mode==='word'){ q=tell(q); if(!q.story) return null; } return q; }
     catch(e){ if(e&&e.over) return null; throw e; }
     finally{ CH.pref=keep; CH.dl=dl0; CH.adl=0; } };
   /* the steps that had a pool of each kind (w work, p proof, d word): a plain table, in place of the retired list */
@@ -27383,7 +27449,6 @@ function render(box){
     const u=get('rand:seen',{}); u[q.index]=Date.now(); put('rand:seen',u);
     if(q.index.startsWith('link:')||q.index.startsWith('q:')) put('rand:last',[q.right].concat(get('rand:last',[])).slice(0,2));
     if(q.stray){ const lg=get('rand:straylog',[]); lg.push({index:q.index}); put('rand:straylog',lg.slice(-200)); }
-    gearServed(q);
     let won=''; if(ok){ put('rand:right',get('rand:right',0)+1); const base=PTS[mode]||1, nl=nLinks(q), m=mult(), pts=Math.ceil((base+nl)*m-1e-9); put('rand:score',Math.ceil(get('rand:score',0)-1e-9)+pts); { const rk=get('rand:rightk',{}); rk[mode]=(rk[mode]||0)+1; put('rand:rightk',rk); } /* standbots */ try{ const d=new Date(), dk=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'), days=get('rand:days',{}); days[dk]=Math.ceil((days[dk]||0)-1e-9)+pts; const ks=Object.keys(days).sort(); while(ks.length>400) delete days[ks.shift()]; put('rand:days',days); }catch(e){}
       const sc=box.querySelector('.rzscore'); if(sc) sc.textContent=get('rand:score',0); rzCtr(box,mode); const cl=box.querySelector('.rzcounts'); if(cl) cl.innerHTML=countsLine(); won=competing()?' Scored '+base+(nl?' + '+nl+' for '+(nl===1?'its link':'its links'):'')+(', times '+fmt2(m)+' for the pools switched on')+', rounded up: '+pts+'.':''; }
     const ax=!ok&&AX.includes(b.dataset.v)?' An axiom stands under every technique above it; the question asks for the technique built over it.':'';
@@ -27471,7 +27536,6 @@ function gearPref(mode){ if(STKG) return {links:STKG.links,terms:STKG.terms,sl:0
   const one=(lev,meds,[lo,hi],rate,flag,key)=>{ const m=meds[Math.max(0,Math.min(4,lev|0))], v=gearBell(m,lo,hi);
     if(Math.random()<rate){ const near=Math.max(lo,Math.min(hi,Math.round(m))), o=[]; for(let x=lo;x<=hi;x++) if(x!==near) o.push(x); out[flag]=1; return pick(o); } return v; };
   out.links=one(g.links,M.links,M.lr,g.ll,'sl'); out.terms=one(g.terms,M.terms,M.tr,g.lt,'st'); return out; }
-function gearServed(q){ } /* strays are a chance per question: nothing to count */
 const GEARL=[[0,'very low'],[1,'low'],[2,'medium'],[3,'high'],[4,'very high']], GEARP=[[0,'none'],[0.0125,'1 in 80'],[0.025,'1 in 40'],[0.05,'1 in 20'],[0.1,'1 in 10']];
 const GEARC={links:['Links in each question',GEARL,'Most questions sit at your level; some go a step or two either side, on a bell curve. Check Proofs take at least 3. Questions from the older pools keep their own.'],
   terms:['Terms and rows in the seed',GEARL,'Terms in its expression, rows in its table or grid; most at your level, some either side.'],
