@@ -12210,11 +12210,11 @@ const FSEEDS=[
     const inner=sq?simp(A(P(X,2),N(b))):lin(a,b); return {t:P(inner,k),ix:[sq?'sq':'lin',a,b,k].join(','),pts:[0,1,-1,2,-2,3]}; }},
   {id:'13e.roots',step:'13e',label:'roots of an inside',name:'the slope-of-√ technique',make(){ /* nodraws fn: the root of a line too, wherever at least two whole x give a whole root */ if(Math.random()<0.5){ const [a,b,ps]=pick(LVC('13e.roots.lin',()=>{ const o=[]; for(const a of [1,2,3,4,-1,-2]) for(let b=-6;b<=9;b++){ const ps=[]; for(let x=-3;x<=6;x++) if(a*x+b>0&&isq(a*x+b)!==null) ps.push(x); if(ps.length>=2) o.push([a,b,ps]); } return o; })); return {t:P(lin(a,b),Q(1,2)),ix:'l,'+a+','+b,pts:ps}; } const pts=[], c=pick(LVC('13e.roots',()=>{ const o=[]; for(let c=-3;c<=5;c++){ for(let x=-3;x<=4;x++) if(isq(x*x+c)!==null&&x*x+c>0){ o.push(c); break; } } return o; })); for(let x=-3;x<=4;x++) if(isq(x*x+c)!==null&&x*x+c>0) pts.push(x); if(!pts.length) return null;
     return {t:P(simp(A(P(X,2),N(c))),Q(1,2)),ix:String(c),pts}; }},
-  {id:'17f.exps',step:'17f',label:'exponentials of a line',name:'the slope-of-exp technique',make(){ const a=nz(-3,3), w=ri(-2,2), m=pick([null,null,1,2]);
-    let t=Fn('exp',lin(a,-a*w)); if(m) t=M(m===1?X:P(X,2),t); /* nodraws fn: at times a second term beside it, a number or a multiple of x */ const e2=Math.random()<0.35?pick([[0,nz(-4,4)],[nz(-3,3),0]]):null; t=simp(t); if(e2) t=A(t,lin(e2[0],e2[1])); return {t,ix:[a,w,m||0].concat(e2||[]).join(','),pts:[w]}; }},
+  {id:'17f.exps',step:'17f',label:'exponentials of a line',name:'the slope-of-exp technique',make(F__){ const a=F__?F__[0]:nz(-3,3), w=F__?F__[1]:ri(-2,2), m=F__?F__[2]:pick([null,null,1,2]);
+    let t=Fn('exp',lin(a,-a*w)); if(m) t=M(m===1?X:P(X,2),t); /* nodraws fn: at times a second term beside it, a number or a multiple of x */ const e2=F__?(F__[3]||F__[4]?[F__[3],F__[4]]:null):Math.random()<0.35?pick([[0,nz(-4,4)],[nz(-3,3),0]]):null; t=simp(t); if(e2) t=A(t,lin(e2[0],e2[1])); return {t,ix:[a,w,m||0].concat(e2||[]).join(','),pts:[w]}; }},
   {id:'17b.logs',step:'17b',label:'logs of a line, or of a square plus a constant',name:'the slope-of-log technique',make(){ /* nodraws fn: the log of a line too, read where the line is 1 */ if(Math.random()<0.5){ const a=nz(-3,3), w0=ri(-3,3); return {t:Fn('log',lin(a,1-a*w0)),ix:'l,'+a+','+w0,pts:[w0]}; } const w=pick([1,2,3,4,-1,-2,-3,-4]), c=1-w*w; return {t:Fn('log',simp(A(P(X,2),N(c)))),ix:String(c),pts:[w,-w]}; }},
-  {id:'21g.waves',step:'21g',label:'sines and cosines of a line',name:'the slope-of-sin technique',make(){ const a=nz(-3,3), w=ri(-2,2), f=pick(['sin','cos']), m=Math.random()<0.4;
-    let t=Fn(f,lin(a,-a*w)); if(m) t=M(X,t); /* nodraws fn: at times a second term beside it */ const e2=Math.random()<0.35?pick([[0,nz(-4,4)],[nz(-3,3),0]]):null; t=simp(t); if(e2) t=A(t,lin(e2[0],e2[1])); return {t,ix:[f,a,w,m?1:0].concat(e2||[]).join(','),pts:[w]}; }}
+  {id:'21g.waves',step:'21g',label:'sines and cosines of a line',name:'the slope-of-sin technique',make(F__){ const a=F__?F__[1]:nz(-3,3), w=F__?F__[2]:ri(-2,2), f=F__?F__[0]:pick(['sin','cos']), m=F__?!!F__[3]:Math.random()<0.4;
+    let t=Fn(f,lin(a,-a*w)); if(m) t=M(X,t); /* nodraws fn: at times a second term beside it */ const e2=F__?(F__[4]||F__[5]?[F__[4],F__[5]]:null):Math.random()<0.35?pick([[0,nz(-4,4)],[nz(-3,3),0]]):null; t=simp(t); if(e2) t=A(t,lin(e2[0],e2[1])); return {t,ix:[f,a,w,m?1:0].concat(e2||[]).join(','),pts:[w]}; }}
 ];
 /* --- links: fn→fn, fn→num, num→num; each knows its step, its technique, how to act, and its wrong moves --- */
 const okNum=v=>v&&!big(v);
@@ -12306,10 +12306,25 @@ CH.pref={}; const sizeOf=v=>{ const K=v&&KIND[v.k]; return K&&K.size?K.size(v):n
    chain there. Each seed keeps a few of its own values that are known to work under the current switches and settings; when a fresh value
    cannot carry the chain (or is the wrong size for the Terms setting) one of those is dealt instead. The design's mix of rungs is kept by
    preferring, for the last link of a chain still on one rung, links from another rung, and by weighting links from new rungs three to one. */
-const SZB={}; function sizeRolls(S){ if(!SZB[S.id]){ const b={}; for(const [t,w] of S.tuples()){ let r=null; try{ r=S.make(t); }catch(e){ if(e&&e.over) throw e; } if(r&&r.val){ const z=sizeOf(r.val); if(z===null) continue; const B=b[z]||(b[z]={t:[],c:[],s:0}); B.s+=w; B.t.push(t); B.c.push(B.s); } } SZB[S.id]=b; } return SZB[S.id]; }
-function sizedMake(S,z){ if(S.sized) return S.sizes.includes(z)?S.sized(z):null; const B=sizeRolls(S)[z]; if(!B) return null; const u=Math.random()*B.s; let lo=0,hi=B.c.length-1; while(lo<hi){ const m=(lo+hi)>>1; if(B.c[m]>u) hi=m; else lo=m+1; } return S.make(B.t[lo]); }
-const SZC={}; function sizesOf(S){ if(S.sized) return new Set(S.sizes); if(S.tuples) return new Set(Object.keys(sizeRolls(S)).map(Number)); if(!SZC[S.id]){ const s=new Set(); for(let i=0;i<12;i++){ let r=null; try{ r=S.make(); }catch(e){} if(r&&r.val){ const z=sizeOf(r.val); if(z!==null) s.add(z); } } SZC[S.id]=s; } return SZC[S.id]; }
-const FZ={}, SWAPS=CH.swaps={n:0,stored:0,by:{}};
+const FSL={}, FSD={}, SMP={}, VKP={}, SCN={t:0,u:0};
+/* stragglers4: a listed value is made once in a sitting and kept: trying it in another setting, or striking it off there, makes nothing and drops nothing. Two seeds whose listing fixes only the shape of the value (17i.bkmix, 32a.mixed) are made fresh each time */
+function valOf(S,t){ if(S.id==='17i.bkmix'||S.id==='32a.mixed') return S.make(t); const M=VKP[S.id]||(VKP[S.id]=new Map()), k=JSON.stringify(t); if(!M.has(k)){ M.set(k,S.make(t)); SWAPS.made=(SWAPS.made||0)+1; } return M.get(k); }
+function keepVal(S,sd){ /* a fresh value of a seed with no list that cannot carry here is kept with the seed's samples, for the places where it can */ const o=samples(S); if(sd&&sd.val&&o.length<40&&!o.some(x=>JSON.stringify(x.val)===JSON.stringify(sd.val))) o.push(sd); }
+function samples(S){ if(!SMP[S.id]){ const o=[]; for(let i=0;i<8;i++){ let sd=null; try{ if(S.tuples&&!S.sized&&!(S.taped&&!SZA[S.id])){ /* a seed that walks its own rolls is not walked for its samples: it is walked when it is first dealt */ const B=allRolls(S); let u=Math.random()*B.s, lo=0, hi=B.c.length-1; while(lo<hi){ const m=(lo+hi)>>1; if(B.c[m]>u) hi=m; else lo=m+1; } sd=valOf(S,B.t[lo]); } else sd=S.make(); }catch(e){ if(e&&e.over) throw e; } if(sd&&sd.val) o.push(sd); } SMP[S.id]=o; SWAPS.sampled=(SWAPS.sampled||0)+8; } return SMP[S.id]; }
+function samplesZ(S,z){ const k=S.id+'|z'+z; if(!SMP[k]){ const o=[]; for(let i=0;i<8;i++){ let sd=null; try{ sd=sizedMake(S,z); }catch(e){ if(e&&e.over) throw e; } if(sd&&sd.val) o.push(sd); } SMP[k]=o; SWAPS.sampled=(SWAPS.sampled||0)+8; } return SMP[k]; }
+const FZT={}, SZA={}; function allRolls(S){ if(!SZA[S.id]){ const B={t:[],c:[],s:0}; for(const [t,w] of S.tuples()){ B.s+=w; B.t.push(t); B.c.push(B.s); } SZA[S.id]=B; } return SZA[S.id]; }
+const SZB={}; function sizeRolls(S){ if(!SZB[S.id]){ const b={}; for(const [t,w] of S.tuples()){ let r=null; try{ r=valOf(S,t); }catch(e){ if(e&&e.over) throw e; } if(r&&r.val){ const z=sizeOf(r.val); if(z===null) continue; const B=b[z]||(b[z]={t:[],c:[],s:0}); B.s+=w; B.t.push(t); B.c.push(B.s); } } SZB[S.id]=b; } return SZB[S.id]; }
+function sizedMake(S,z){ if(S.sized) return S.sizes.includes(z)?S.sized(z):null; const B=sizeRolls(S)[z]; if(!B) return null; const u=Math.random()*B.s; let lo=0,hi=B.c.length-1; while(lo<hi){ const m=(lo+hi)>>1; if(B.c[m]>u) hi=m; else lo=m+1; } return valOf(S,B.t[lo]); }
+const SZC={}; function sizesOf(S){ if(S.sized) return new Set(S.sizes); if(S.taped&&!SZA[S.id]){ /* not walked yet: its sizes are read off its kept samples */ const s=new Set(); samples(S).forEach(r=>{ const z=sizeOf(r.val); if(z!==null) s.add(z); }); return s; } if(S.tuples) return new Set(Object.keys(sizeRolls(S)).map(Number)); if(!SZC[S.id]){ const s=new Set(); for(let i=0;i<12;i++){ let r=null; try{ r=S.make(); }catch(e){} if(r&&r.val){ const z=sizeOf(r.val); if(z!==null) s.add(z); } } SZC[S.id]=s; } return SZC[S.id]; }
+const SWAPS=CH.swaps={n:0,stored:0,by:{}};
+/* stragglers4: a seed whose make takes few rolls has them walked once, the first time it is dealt (the roll tape of blank-draws round five): every roll that makes
+   a value is kept with its chance, rolls that make the same value are joined, and the seed then lists its values like the seeds that were listed by hand. It is
+   dealt by search over that list, so no value of it is made twice and none is stored. Only seeds checked to roll through rnd and Math.random alone are named here. */
+const TAPED=new Set(["13e.roots", "4f.counts", "5c.fracs", "43a.hours", "19a.shuffles", "13e.bkchains", "9b.bkrecips", "1e.bkstatements", "1e.bkpairs", "1e.bkargs", "1e.bklists", "1d.bkclaims", "7f.bkclaims", "4k.bkrows", "8h.bkbars", "27b.bkneighbours", "27j.bkrows", "44·cb27.bkjordan", "27d.bkmaps", "27d.bknil", "14i.bkratios", "44·cb27.bkownpolys", "10c.gaps", "10c.rootgaps", "23a.series", "25c.eighths", "8c.sets", "0a.forms", "1a.line", "2a.rows", "1b.nots", "1c.andor", "1d.ifs", "1e.tables", "1f.rewrites", "0b.named", "0d.seen", "4b.numbers", "4i.written", "13h.fracpows", "17k.splits", "8·phys.sizes", "22a.ratseqs", "22f.pseqs", "30l.dice", "31j.shares", "36c.colours", "42a.graphs", "45e.stamps", "21g.bkwaves", "13d.bkpow", "9d.bkfracs", "13f.bkhalves", "21d.bkpairs", "18i.bkends", "10f.bkroots", "21j.bkdeg", "17f.bkratios", "32b.bkfuncs", "41a.bktables", "21g.bkwobbles", "27f.bkflats", "2b.sentence", "2c.sentence", "3b.sentence", "2j.given", "5a.conforms", "38c.pairs"]);
+CH.tapeAttach=()=>{ CH.sizeAttach(); SEEDS.forEach(S=>{ if(S.tuples||S.sized||!TAPED.has(S.id)) return; const mk=S.make; let LT=null; S.taped=true;
+  S.tuples=()=>{ if(!LT){ const out=new Map(); let t=[], n=0; for(;;){ const [r,u]=TAPE.run(()=>mk.call(S),t); if(++n>12000) break; if(r&&r.val){ let w=1; u.forEach(x=>{ w/=x[1]; }); const k=JSON.stringify(r.val), e=out.get(k); if(e) e[1]+=w; else out.set(k,[u.map(x=>x[0]),w]); }
+      let i=u.length-1; while(i>=0&&u[i][0]===u[i][1]-1) i--; if(i<0) break; t=u.slice(0,i+1).map(x=>x.slice()); t[i][0]++; } LT=[...out.values()]; SWAPS.walked=(SWAPS.walked||0)+n; } return LT; };
+  S.make=function(F){ return Array.isArray(F)&&!TAPE.on?TAPE.run(()=>mk.call(S),F.map(v=>[v,0]))[0]:mk.call(S); }; }); };
 const AFAIL={}, ISA={}, WOPEN={}; let FIT=null; /* stragglers: what the card being made needs of a chain */
 function deal(P,want,terms){ if(!(P&&P.anchor)||(CH.adl&&Date.now()>CH.adl)) return deal0(P&&P.anchor?Object.assign({},P,{anchor:null}):P,want,terms); /* after a fifth of a second the pool stops insisting on its own step, so a draw is never held up */ const w0=want||CH.pref.links||0, rA=rungOfS(P.anchor), now=Date.now(), tm=terms||CH.pref.terms||0;
   /* a way of dealing the step that has failed three times running is left alone for a minute, so a step that cannot be dealt one way does not cost the search each draw */
@@ -12354,24 +12369,29 @@ function deal0(P,want,terms){ want=want||CH.pref.links||0; terms=terms||CH.pref.
       return null; };
     return go(sd.val,0,null,new Set([r0]),[]); };
   let S0F=null; const build=(S0,sd,budget)=>{ S0F=S0; S0A=!!anchor&&S0.step===anchor; const ns=want?[want]:shuffle(lens(sd.val.k).filter(m=>m<=4)); for(const n of ns){ const ch=grow(sd,n,anchor&&!lendA?budget*2:budget,rungOfS(S0.step)); if(ch) return ch; } return null; };
-  const key=open.map(l=>l.id).join(',')+'|'+want+'|'+terms+'|'+(anchor||'')+(lendA?'+'+lendA:'')+(FIT?'~'+FIT.tag:''), Z=FZ[key]||(FZ[key]={});
+  const key=open.map(l=>l.id).join(',')+'|'+want+'|'+terms+'|'+(anchor||'')+(lendA?'+'+lendA:'')+(FIT?'~'+FIT.tag:'');
   /* a value of the seed: under Terms, one of its listed values of that size; otherwise a fresh make */
   const fresh=S0=>{ if(terms&&(S0.sized||S0.tuples)) return sizedMake(S0,terms); /* built at the asked size */ let sd=null; try{ sd=S0.make(); }catch(e){ if(e&&e.over) throw e; } return sd; };
-  /* the values of a seed known to carry a chain under these switches and settings (as round 2: up to 4 found from up to 24 of its values). Fresh values are
-     dealt while they carry; the first time more than one in ten of a seed's fresh values cannot, it is dealt from its list of values that carry instead,
-     and the list grows (to 40) by trying two more of its own values each time it is dealt. */
-  const known=S0=>{ if(Z[S0.id]) return Z[S0.id]; const vals=[]; for(let i=0;i<24&&vals.length<4;i++){ const sd=fresh(S0); if(sd&&sd.val&&sizeOk(sd)&&build(S0,sd,40)) vals.push(sd); } vals.n=0; vals.bad=0; vals.tries=0; return Z[S0.id]=vals; };
-  const pool=seeds.slice();
-  while(pool.length){ const S0=LHALF(pool); let vals=Z[S0.id];
-    if(!vals){ /* drawlag2 */ const sd0=fresh(S0), ch0=sd0&&sd0.val&&sizeOk(sd0)?build(S0,sd0,40):null;
-      if(ch0){ const v0=[sd0]; v0.n=1; v0.bad=0; v0.tries=0; Z[S0.id]=v0; const st0=new Set([S0.step]); ch0.forEach(c=>{ (c.L.steps(c.o.U||new Set())).forEach(s=>st0.add(s)); }); SWAPS.n++; return {S0,sd:sd0,chain:ch0,out:ch0[ch0.length-1].o,steps:[...st0]}; }
-      vals=known(S0); }
-    if(!vals.length){ pool.splice(pool.indexOf(S0),1); continue; }
-    /* stragglers: a fresh value is always tried first (twice for a seed whose values often cannot carry); a stored value is dealt only when the fresh ones cannot. CH.swaps counts them */
-    let sd=null, chain=null; for(let k=0;k<(vals.cat?2:1)&&!chain;k++){ sd=fresh(S0); chain=sd&&sd.val&&sizeOk(sd)?build(S0,sd,40):null; vals.n++; if(!chain) vals.bad++; }
-    SWAPS.n++; if(chain){ if(vals.length<40) vals.push(sd); else vals[rnd(vals.length)]=sd; }
-    else { if(vals.bad>0.05*vals.n) vals.cat=true; sd=pick(vals); chain=build(S0,sd,400); SWAPS.stored++; SWAPS.by[S0.id]=(SWAPS.by[S0.id]||0)+1; }
-    if(!chain){ pool.splice(pool.indexOf(S0),1); continue; }
+  const pool=seeds.slice(), ZT=FZT[key.replace(/~[^~]*$/,'')]||(FZT[key.replace(/~[^~]*$/,'')]={});
+  /* stragglers4: whether a seed can grow a chain here at all (to the pool's own step, at a length the deal may use) is learnt from its sample values, which are made once and kept, and remembered for these links and this pool whatever the card or the size asked. It took 24 fresh values, made and dropped, to learn it before */
+  const SK=open.map(l=>l.id).join(',')+'|'+(anchor||'')+(lendA?'+'+lendA:''), SLm=FSL[SK]||(FSL[SK]={});
+  const alive=S0=>{ const ns=want?[want]:lens(kindOf(S0)).filter(m=>m<=4), zs=terms&&(S0.sized||S0.tuples)&&KIND[kindOf(S0)]&&KIND[kindOf(S0)].size?terms:0 /* under Terms a seed that lists its values is tried on kept samples of that size */, rec=SLm[S0.id+(zs?'|z'+zs:'')]||(SLm[S0.id+(zs?'|z'+zs:'')]={}); let any=false; for(const n of ns){ if(rec[n]===undefined){ const F0=FIT; FIT=null; S0F=S0; S0A=!!anchor&&S0.step===anchor; let ok=false; try{ for(const sd of (zs?samplesZ(S0,zs):samples(S0))){ if(grow(sd,n,anchor&&!lendA?240:120,rungOfS(S0.step))){ ok=true; break; } } } finally{ FIT=F0; } rec[n]=ok; SWAPS.probe=(SWAPS.probe||0)+1; } if(rec[n]) any=true; } return any; };
+  while(pool.length){ const S0=LHALF(pool), small=!!(S0.tuples&&!S0.sized)&&allRolls(S0).t.length<=400; /* a seed with a short list is not judged by its samples for good: its whole list is tried here once (below), and the samples only say whether to deal it before that is finished */ const al=alive(S0); if(!small&&!al){ pool.splice(pool.indexOf(S0),1); continue; }
+    if(S0.tuples&&!S0.sized){ /* stragglers4: a seed that lists its values is dealt by search over the list. A value from which no chain can be grown here, whatever the card, is struck off for this setting and the next is taken; a seed that has grown no chain here in 24 values is left out of this setting */
+      const DSm=FSD[SK+'|'+want]||(FSD[SK+'|'+want]={}), DS=DSm[S0.id]||(DSm[S0.id]=new Set()); let Lb=ZT[S0.id]; if(!Lb){ const B=terms&&KIND[kindOf(S0)]&&KIND[kindOf(S0)].size?sizeRolls(S0)[terms]:allRolls(S0); Lb=ZT[S0.id]={t:[],w:[],s:0,ok:0,bad:0}; if(B) B.t.forEach((t,i)=>{ if(DS.has(JSON.stringify(t))) return; /* struck already under these links at this length, whatever the size asked */ const w=B.c[i]-(i?B.c[i-1]:0); Lb.t.push(t); Lb.w.push(w); Lb.s+=w; }); Lb.dead=new Set(); Lb.c={}; Lb.sc=small?0:-1; }
+      /* a short list is listed for this setting once: each value is tried with the card's own test left off, and those from which no chain grows are taken out. It is done a few thousandths of a second at a time, so a draw is never held up; until it is finished the values not yet tried are dealt by search as below */
+      if(Lb.sc>=0&&Lb.sc<Lb.t.length){ const F0=FIT, t0=Date.now(); if(t0-SCN.t>40){ SCN.t=t0; SCN.u=0; } /* six thousandths of a second in any one draw, over all the seeds it tries */ const room=6-SCN.u; FIT=null; try{ while(room>0&&Lb.sc<Lb.t.length){ if(Date.now()-t0>room) break; const tp=Lb.t[Lb.sc]; let sd=null; try{ sd=valOf(S0,tp); }catch(e){ if(e&&e.over) throw e; } if(sd&&sd.val&&sizeOk(sd)&&build(S0,sd,120)){ Lb.sc++; Lb.ok++; } else { Lb.dead.add(tp); DS.add(JSON.stringify(tp)); Lb.s-=Lb.w[Lb.sc]; Lb.t.splice(Lb.sc,1); Lb.w.splice(Lb.sc,1); SWAPS.listed=(SWAPS.listed||0)+1; } } } finally{ FIT=F0; SCN.u+=Date.now()-t0; } }
+      if(!al&&!Lb.ok){ pool.splice(pool.indexOf(S0),1); continue; }
+      /* a value that grows a chain here but makes no new card of this kind is struck off for this kind of card only, once: each kind of card keeps its own copy of the list */
+      const Lz=FIT?(Lb.c[FIT.tag]||(Lb.c[FIT.tag]={t:Lb.t.slice(),w:Lb.w.slice(),s:Lb.s})):Lb, cut=(Lq,i)=>{ Lq.s-=Lq.w[i]; Lq.t.splice(i,1); Lq.w.splice(i,1); };
+      let got=null, card=0, off=0; SWAPS.n++; while(Lz.t.length&&!got&&card<2&&off<6){ /* at most six values are struck off in one deal, so a draw is never held up: the deal goes on to the next seed */ let u=Math.random()*Lz.s, i=0; while(i<Lz.t.length-1&&u>=Lz.w[i]){ u-=Lz.w[i]; i++; } const tp=Lz.t[i]; if(Lz!==Lb&&Lb.dead.has(tp)){ cut(Lz,i); continue; } let sd=null; try{ sd=valOf(S0,tp); }catch(e){ if(e&&e.over) throw e; }
+        let ch=null, st=false; if(sd&&sd.val&&sizeOk(sd)){ ch=build(S0,sd,40)||build(S0,sd,160); if(!ch){ /* no card: is there a chain at all? asked with the card's test left off */ const F0=FIT; if(F0){ FIT=null; try{ st=!!build(S0,sd,120); } finally{ FIT=F0; } } } }
+        if(ch){ got={sd,ch}; Lb.ok++; } else if(st){ card++; Lb.ok++; SWAPS.card=(SWAPS.card||0)+1; if(Lz!==Lb) cut(Lz,i); } else { Lb.dead.add(tp); DS.add(JSON.stringify(tp)); const j=Lb.t.indexOf(tp); if(j>=0){ if(j<Lb.sc) Lb.sc--; cut(Lb,j); } if(Lz!==Lb) cut(Lz,i); Lb.bad++; off++; SWAPS.struck=(SWAPS.struck||0)+1; if(Lb.sc<0&&!Lb.ok&&Lb.bad>=24){ Lb.t.forEach(t=>Lb.dead.add(t)); Lb.t=[]; Lb.w=[]; Lb.s=0; Lz.t=[]; Lz.w=[]; Lz.s=0; } } }
+      if(!got){ pool.splice(pool.indexOf(S0),1); continue; }
+      const st1=new Set([S0.step]); got.ch.forEach(c=>{ (c.L.steps(c.o.U||new Set())).forEach(s=>st1.add(s)); }); return {S0,sd:got.sd,chain:got.ch,out:got.ch[got.ch.length-1].o,steps:[...st1]}; }
+    /* stragglers4: a seed with no list makes one fresh value. If no chain grows from it here it is kept with the seed's samples and the deal goes on to the next seed: no stored value is dealt in its place (the lists of stored values, FZ and known(), are gone) */
+    const sd=fresh(S0), chain=sd&&sd.val&&sizeOk(sd)?(build(S0,sd,40)||build(S0,sd,400)):null; SWAPS.n++;
+    if(!chain){ keepVal(S0,sd); SWAPS.set=(SWAPS.set||0)+1; pool.splice(pool.indexOf(S0),1); continue; }
     const steps=new Set([S0.step]); chain.forEach(c=>{ (c.L.steps(c.o.U||new Set())).forEach(s=>steps.add(s)); });
     return {S0,sd,chain,out:chain[chain.length-1].o,steps:[...steps]}; }
   return null; }
@@ -12482,13 +12502,13 @@ const qi2=a=>a.map(r=>r.map(x=>Q(x)));
 SEEDS.push(
   {id:'4f.counts',step:'4f',label:'counting numbers',kind:'num',make(){ const n=ri(2,20); return {val:num(n),ix:String(n)}; }},
   {id:'5c.fracs',step:'5c',label:'fractions',kind:'num',make(){ const q=ri(2,9), p=pick([...Array(25).keys()].map(i=>i-12).filter(x=>x&&x%q!==0)); const v=Q(p,q); /* never a whole number */ return {val:num(v),ix:qs(v)}; }},
-  {id:'5b.ints',step:'5b',label:'integers',kind:'num',make(){ const n=nz(-15,15); return {val:num(n),ix:String(n)}; }},
+  {id:'5b.ints',step:'5b',label:'integers',kind:'num',tuples:()=>{ const o=[]; for(let n=-15;n<=15;n++) if(n) o.push([[n],1]); return o; },make(F__){ const n=F__?F__[0]:nz(-15,15); return {val:num(n),ix:String(n)}; }},
   {id:'43a.hours',step:'43a',label:'whole numbers for a clock',kind:'num',make(){ const n=ri(-40,99); return {val:num(n),ix:String(n)}; }},
   {id:'27d.grids',step:'27d',label:'2 × 2 grids',kind:'mat',make(){ let m=[[ri(-3,3),ri(-3,3)],[ri(-3,3),ri(-3,3)]]; if(m[0][0]*m[1][1]-m[0][1]*m[1][0]===0&&Math.random()<0.7) m=(L=>L[Math.floor(Math.random()*L.length)])(LVC('27d.undo',()=>LX(LRG(-3,3),LRG(-3,3),LRG(-3,3),LRG(-3,3)).filter(([a,b,c,d])=>a*d-b*c!==0))).reduce((g,v,i)=>{ g[i>>1].push(v); return g; },[[],[]]); /* most grids that come up flat are drawn again from the ones that undo, as before */ return {val:mat(qi2(m)),ix:m.flat().join(',')}; }},
   {id:'27f.stretchers',step:'27f',label:'grids with whole stretches',kind:'mat',make(){ const a=nz(-3,3), b=pick([-3,-2,-1,1,2,3].filter(v=>v!==a)); const s=pick([[1,1,0,1],[1,2,1,1],[2,1,1,1],[1,0,1,1],[1,1,1,2]]);
     /* S diag(a,b) S⁻¹ with det S = ±1 keeps whole entries */ const [p,q,r,t]=s, dt=p*t-q*r; if(Math.abs(dt)!==1) return null;
     const m=[[ (p*a*t-q*b*r)/dt, (-p*a*q+q*b*p)/dt ],[ (r*a*t-t*b*r)/dt, (-r*a*q+t*b*p)/dt ]]; return {val:mat(qi2(m)),ix:[a,b,s.join('')].join(',')}; }},
-  {id:'18a.points',step:'18a',label:'points of the plane',kind:'vec',make(){ const u=[nz(-6,6),ri(-6,6)]; return {val:vec(u.map(x=>Q(x))),ix:u.join(',')}; }},
+  {id:'18a.points',step:'18a',label:'points of the plane',kind:'vec',tuples:()=>{ const o=[]; for(let a=-6;a<=6;a++) if(a) for(let b=-6;b<=6;b++) o.push([[a,b],1]); return o; },make(F__){ const u=F__?F__.slice():[nz(-6,6),ri(-6,6)]; return {val:vec(u.map(x=>Q(x))),ix:u.join(',')}; }},
   {id:'19a.shuffles',step:'19a',label:'shuffles of 1, 2, 3, 4',kind:'perm',make(){ const p=(L=>L[rnd(L.length)])(LVC('19a.perms',()=>LX([1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]).filter(q=>new Set(q).size===4&&!q.every((x,i)=>x===i+1)))).slice(); /* the 23 shuffles that move something */ return {val:perm(p),ix:p.join('')}; }},
   {id:'20j.pairs',step:'20j',label:'turn-pairs (a, b)',kind:'cx',make(){ const a=nz(-4,4), b=nz(-4,4); return {val:cx(Q(a),Q(b)),ix:a+','+b}; }}
 );
@@ -13062,7 +13082,7 @@ const unimod=n=>{ let m=gI(n).map(r=>r.map(x=>x.p)); for(let t=0;t<n+2;t++){ con
 const mix=(u,v,a,b)=>u.map((x,i)=>a*x+b*v[i]);
 SEEDS.push(
   {id:'27k.bkgrids3',step:'27k',kind:'grid',label:'3 by 3 grids',make(){ const m=sq3free(40), d=gdet(gq(m)); return qz(d)||Math.abs(d.p)>40?null:{val:grid(m),ix:m.flat().join(',')}; }},
-  {id:'27k.bkpowers',step:'27k',kind:'grid',label:'the rows 1, t, t² for three numbers t',make(){ const z=shuffle([-3,-2,-1,0,1,2,3,4]).slice(0,3); return {val:grid(z.map(t=>[1,t,t*t])),ix:z.join(',')}; }},
+  {id:'27k.bkpowers',step:'27k',kind:'grid',label:'the rows 1, t, t² for three numbers t',tuples:()=>{ const X=[-3,-2,-1,0,1,2,3,4], o=[]; X.forEach(a=>X.forEach(b=>X.forEach(c=>{ if(a!==b&&a!==c&&b!==c) o.push([[a,b,c],1]); }))); return o; },make(F__){ const z=F__?F__.slice():shuffle([-3,-2,-1,0,1,2,3,4]).slice(0,3); return {val:grid(z.map(t=>[1,t,t*t])),ix:z.join(',')}; }},
   {id:'27k.bkopposite',step:'27k',kind:'grid',label:'3 by 3 grids that are the negative of their side-turn',make(){ const [a,b,c]=[nz(-3,3),nz(-3,3),nz(-3,3)]; return {val:grid([[0,a,b],[-a,0,c],[-b,-c,0]]),ix:[a,b,c].join(',')}; }},
   {id:'27b.bklists3',step:'27b',kind:'grid',label:'three lists of three numbers, as rows: free, or one a mix of the others',make(){ const u=[nz(-3,3),ri(-3,3),ri(-3,3)], v=pick1(V3BD().filter(v=>v[1]&&crBD(u,v).some(z=>z))), free=Math.random()<0.5, n=crBD(u,v); /* v off u's line; a free w off their plane; a mix that stays within 9 */
     const w=free?pick1(V3BD().filter(w=>w[2]&&w[0]*n[0]+w[1]*n[1]+w[2]*n[2]!==0)):(([a,b])=>mix(u,v,a,b))(pick1(LX([-2,-1,1,2],[-2,-1,1,2,3]).filter(([a,b])=>mix(u,v,a,b).every(x=>Math.abs(x)<=9)))); const m=[u,v,w]; if(w.some(x=>Math.abs(x)>9)||grank(gq([u,v]))<2||(free&&qz(gdet(gq(m))))) return null; return {val:grid(m),ix:m.flat().join(',')}; }},
@@ -13086,10 +13106,10 @@ SEEDS.push(
   {id:'27f.bkstairs',step:'27f',kind:'grid',label:'3 by 3 staircases',make(){ const d=shuffle([-3,-2,-1,1,2,3,4,5]).slice(0,3), u=[nz(-3,3),nz(-3,3),nz(-3,3)]; return {val:grid([[d[0],u[0],u[1]],[0,d[1],u[2]],[0,0,d[2]]]),ix:d.concat(u).join(',')}; }},
   {id:'27f.bkdiag',step:'27f',kind:'grid',label:'middle-only grids, some middle entries repeated',make(){ const ms=pick1([[1,1,1],[2,1],[3],[2,2],[2,1,1],[3,1]]), vals=shuffle([-2,-1,1,2,3,4]).slice(0,ms.length), d=[]; ms.forEach((m,i)=>{ for(let j=0;j<m;j++) d.push(vals[i]); }); d.sort(()=>Math.random()-0.5);
     return {val:grid(d.map((x,i)=>d.map((_,j)=>i===j?x:0))),ix:d.join(',')}; }},
-  {id:'27g.bkleast',step:'27g',kind:'grid',label:'3 by 3 grids with a repeated stretch',make(){ const [a,b]=shuffle([-3,-2,-1,1,2,3,4]).slice(0,2), c=pick1([5,6]), k=rnd(6);
+  {id:'27g.bkleast',step:'27g',kind:'grid',label:'3 by 3 grids with a repeated stretch',tuples:()=>{ const X=[-3,-2,-1,1,2,3,4], o=[]; X.forEach(a=>X.forEach(b=>{ if(a!==b) [5,6].forEach(c=>{ for(let k=0;k<6;k++) o.push([[a,b,c,k],1]); }); })); return o; },make(F__){ const [a,b]=F__?F__:shuffle([-3,-2,-1,1,2,3,4]).slice(0,2), c=F__?F__[2]:pick1([5,6]), k=F__?F__[3]:rnd(6);
     const m=[[[a,0,0],[0,a,0],[0,0,b]],[[a,1,0],[0,a,0],[0,0,b]],[[a,1,0],[0,a,0],[0,0,a]],[[a,0,0],[0,a,0],[0,0,a]],[[a,1,0],[0,a,1],[0,0,a]],[[a,0,0],[0,b,0],[0,0,c]]][k]; return {val:grid(m),ix:k+':'+a+','+b}; }},
   {id:'44·cb27.bkjordan',step:'44·cb27',kind:'grid',label:'grids with one stretch, in blocks',make(){ const B=pick1([[2,1],[1,1,1],[3],[2,2],[3,1],[2,1,1],[4]]), c=pick1([-2,-1,0,1,2,3]), n=B.reduce((s,x)=>s+x,0); const m=gI(n).map(r=>r.map(x=>x.p*c)); let at=0; B.forEach(b=>{ for(let i=0;i<b-1;i++) m[at+i][at+i+1]=1; at+=b; }); return {val:grid(m),ix:B.join(',')+';'+c}; }},
-  {id:'44c.bkpoints',step:'44c',kind:'grid',label:'three points (x, y), as rows, with different x',make(){ const c=[ri(-3,3),ri(-3,3),nz(-2,2)], xs=pick1([[-1,0,1],[-1,0,2],[0,1,2],[-2,0,1],[-1,1,2]]); const m=xs.map(x=>[x,c[0]+c[1]*x+c[2]*x*x]); return m.some(r=>Math.abs(r[1])>20)?null:{val:grid(m),ix:m.flat().join(',')}; }},
+  {id:'44c.bkpoints',step:'44c',kind:'grid',label:'three points (x, y), as rows, with different x',tuples:()=>{ const XS=[[-1,0,1],[-1,0,2],[0,1,2],[-2,0,1],[-1,1,2]], o=[]; for(let a=-3;a<=3;a++) for(let b=-3;b<=3;b++) [-2,-1,1,2].forEach(q=>XS.forEach((xs,i)=>{ if(!xs.some(x=>Math.abs(a+b*x+q*x*x)>20)) o.push([[a,b,q,i],1]); })); return o; },make(F__){ const XS=[[-1,0,1],[-1,0,2],[0,1,2],[-2,0,1],[-1,1,2]], c=F__?F__.slice(0,3):[ri(-3,3),ri(-3,3),nz(-2,2)], xs=F__?XS[F__[3]]:pick1(XS); const m=xs.map(x=>[x,c[0]+c[1]*x+c[2]*x*x]); return m.some(r=>Math.abs(r[1])>20)?null:{val:grid(m),ix:m.flat().join(',')}; }},
   {id:'31e.bksym3',step:'31e',kind:'grid',label:'3 by 3 symmetric grids',make(){ let m; if(Math.random()<0.5){ const B=Array.from({length:3},()=>Array.from({length:3},()=>ri(-2,2))); /* a singular roll keeps its upper corner and a nonzero diagonal, so it can be inverted */ if(qz(gdet(gq(B)))) B.forEach((r,i)=>{ r[i]=r[i]||1; r.forEach((x,j)=>{ if(j<i) r[j]=0; }); }); m=gmul(gT(gq(B)),gq(B)).map(r=>r.map(x=>x.p)); } else { const [a,b,c,d,e,f]=[ri(-3,4),ri(-3,3),ri(-3,3),ri(-3,4),ri(-3,3),ri(-3,4)]; m=[[a,b,c],[b,d,e],[c,e,f]]; }
     return m.flat().some(x=>Math.abs(x)>20)?null:{val:grid(m),ix:m.flat().join(',')}; }}
 );
@@ -13211,8 +13231,8 @@ SEEDS.push(
   {id:'27d.bknil',step:'27d',kind:'mat',label:'a column times a row that meets it at 0',make(){ const [u0,u1,s]=pick1(LVC('27d.nil',()=>LX([-3,-2,-1,1,2,3],[-3,-2,-1,1,2,3],[1,-1,2]).filter(([a,b,s])=>[a*b*s,a*a*s,b*b*s].every(x=>Math.abs(x)<=9)))), u=[u0,u1], v=[u[1]*s,-u[0]*s], /* entries within 9 */ m=[[u[0]*v[0],u[0]*v[1]],[u[1]*v[0],u[1]*v[1]]]; return m.flat().some(x=>Math.abs(x)>9)?null:{val:mat(mm(m)),ix:u.concat(v).join(',')}; }},
   {id:'27b.bkbases',step:'27b',kind:'mat',label:'grids whose columns are a basis of whole lists',make(){ /* row moves that keep every entry within 6; never the plain identity */ let m=[[1,0],[0,1]]; for(let t=0;t<4;t++){ const i=rnd(2), j=1-i, ks=[-2,-1,1,2].filter(k=>m[i].every((a,c)=>Math.abs(a+k*m[j][c])<=6)); if(ks.length){ const k=pick1(ks); m[i]=m[i].map((a,c)=>a+k*m[j][c]); } }
     if(m[0][0]===1&&m[1][1]===1&&m[0][1]===0&&m[1][0]===0) m[0]=[1,pick1([-2,-1,1,2])]; if(Math.random()<0.5) m=[m[1],m[0]]; return {val:mat(mm(m)),ix:m.flat().join(',')}; }},
-  {id:'31d.bkkeepers',step:'31d',kind:'mat',label:'grids of fractions, some of which keep the dot',make(){ const k=rnd(KEEP.length); return {val:mat(KEEP[k]),ix:String(k)}; }},
-  {id:'44·cb27.bkone',step:'44·cb27',kind:'mat',label:'staircases with one stretch or two',make(){ const a=nz(-3,3), same=Math.random()<0.6, b=same?a:nz(-3,3), u=nz(-3,3); const sq=Math.random()<0.4; return {val:mat(mm(sq?[[a*a,u],[0,a*a]]:[[a,u],[0,b]])),ix:[a,b,u,sq?1:0].join(',')}; }}
+  {id:'31d.bkkeepers',step:'31d',kind:'mat',label:'grids of fractions, some of which keep the dot',tuples:()=>KEEP.map((_,k)=>[[k],1]),make(F__){ const k=F__?F__[0]:rnd(KEEP.length); return {val:mat(KEEP[k]),ix:String(k)}; }},
+  {id:'44·cb27.bkone',step:'44·cb27',kind:'mat',label:'staircases with one stretch or two',tuples:()=>{ const X=[-3,-2,-1,1,2,3], o=[]; X.forEach(a=>X.forEach(b=>X.forEach(u=>{ [0,1].forEach(q=>o.push([[a,b,u,q],(a===b?0.6+0.4/6:0.4/6)*(q?0.4:0.6)])); }))); return o; },make(F__){ const a=F__?F__[0]:nz(-3,3), same=F__?false:Math.random()<0.6, b=F__?F__[1]:same?a:nz(-3,3), u=F__?F__[2]:nz(-3,3); const sq=F__?!!F__[3]:Math.random()<0.4; return {val:mat(mm(sq?[[a*a,u],[0,a*a]]:[[a,u],[0,b]])),ix:[a,b,u,sq?1:0].join(',')}; }}
 );
 const ML=o=>L.push(Object.assign({from:'mat'},o));
 const fm=(m,c)=>{ const m2=[[qa(qm(m[0][0],m[0][0]),qm(m[0][1],m[1][0])),qa(qm(m[0][0],m[0][1]),qm(m[0][1],m[1][1]))],[qa(qm(m[1][0],m[0][0]),qm(m[1][1],m[1][0])),qa(qm(m[1][0],m[0][1]),qm(m[1][1],m[1][1]))]]; return m2.map((r,i)=>r.map((x,j)=>qa(qa(x,qm(Q(c.p),m[i][j])),i===j?Q(c.q):Q(0)))); };
@@ -13345,7 +13365,7 @@ L.push({id:'43b.undoword',from:'num',to:'word',steps:()=>['43b'],make:()=>({n:pi
   slips:(s,p)=>{ const h=iv(s); if(h===null||h<=0) return []; const r=h%p.n, R=undoW(r,p.n), isP=k=>k>1&&[...Array(k).keys()].slice(2).every(d=>k%d); return [{why:'only a prime hour is taken to have an undo',k:'word',s:isP(r)?'it has an undo':'it has no undo: it is not prime'},{why:'an odd hour is taken to have an undo',k:'word',s:r%2?'it has an undo':'it has no undo: it is even'}].filter(w=>w.s!==R); },
   line:(o,p,nm,nx,s)=>qs(s.v)+' on the clock of '+p.n+': '+o.s});
 /* square roots of a turning number */
-SEEDS.push({id:'25d.bksquares',step:'25d',kind:'cx',label:'turning numbers that are squares of whole pairs',make(){ const a=nz(1,4), b=pick1([-3,-2,-1,1,2,3].filter(x=>x*x!==a*a)); return {val:cx(Q(a*a-b*b),Q(2*a*b)),ix:a+','+b}; }});
+SEEDS.push({id:'25d.bksquares',step:'25d',kind:'cx',label:'turning numbers that are squares of whole pairs',tuples:()=>{ const o=[]; [1,2,3,4].forEach(a=>{ const bs=[-3,-2,-1,1,2,3].filter(x=>x*x!==a*a); bs.forEach(b=>o.push([[a,b],1/bs.length])); }); return o; },make(F__){ const a=F__?F__[0]:nz(1,4), b=F__?F__[1]:pick1([-3,-2,-1,1,2,3].filter(x=>x*x!==a*a)); return {val:cx(Q(a*a-b*b),Q(2*a*b)),ix:a+','+b}; }});
 const cxs2=(a,b)=>{ if(qz(b)) return qs(a); const bs=qe(qabs(b),Q(1))?'':qs(qabs(b)); return qz(a)?(b.p<0?'−':'')+bs+'i':qs(a)+(b.p<0?' − ':' + ')+bs+'i'; };
 const rootsW=(a,b)=>{ if(a.p<0||(qz(a)&&b.p<0)){ a=qn(a); b=qn(b); } return cxs2(a,b)+' and '+cxs2(qn(a),qn(b)); };
 const cxroot=v=>{ const u=v.re, w=v.im, m=qsqrt(qa(qm(u,u),qm(w,w))); if(!m) return null; const a=qsqrt(qm(qa(m,u),Q(1,2))), b0=qsqrt(qm(qsub(m,u),Q(1,2))); if(!a||!b0) return null; const b=w.p<0?qn(b0):b0; return [a,b]; };
@@ -13356,7 +13376,7 @@ L.push({id:'25d.cxroots',from:'cx',to:'word',steps:()=>['25d'],say:(p,nm)=>'find
 KIND.rt={show:v=>rts(v), seed:v=>'the number '+rts(v), ok:v=>!big(v.a)&&!big(v.b)&&Math.abs(v.a.p)<=999&&Math.abs(v.b.p)<=999&&v.a.q<=200&&v.b.q<=200&&rts(v).length<=24};
 function rts(v){ const s='√'+v.d; if(qz(v.b)) return qs(v.a); const bb=qe(qabs(v.b),Q(1))?'':qs(qabs(v.b)); const tail=bb.indexOf('/')>=0?'('+bb+')'+s:bb+s; return qz(v.a)?(v.b.p<0?'−':'')+tail:qs(v.a)+(v.b.p<0?' − ':' + ')+tail; }
 const rt=(a,b,d)=>({k:'rt',a,b,d});
-SEEDS.push({id:'44f.bkroots',step:'44f',kind:'rt',label:'numbers p + q√d with whole p and q',make(){ const d=pick1([2,3,5,7]), a=nz(-4,4), b=nz(-3,3); return a*a===d*b*b?null:{val:rt(Q(a),Q(b),d),ix:[a,b,d].join(',')}; }});
+SEEDS.push({id:'44f.bkroots',step:'44f',kind:'rt',label:'numbers p + q√d with whole p and q',tuples:()=>{ const o=[]; [2,3,5,7].forEach(d=>{ for(let a=-4;a<=4;a++) if(a) for(let b=-3;b<=3;b++) if(b&&a*a!==d*b*b) o.push([[d,a,b],1]); }); return o; },make(F__){ const d=F__?F__[0]:pick1([2,3,5,7]), a=F__?F__[1]:nz(-4,4), b=F__?F__[2]:nz(-3,3); return a*a===d*b*b?null:{val:rt(Q(a),Q(b),d),ix:[a,b,d].join(',')}; }});
 const nrm=v=>qsub(qm(v.a,v.a),qm(Q(v.d),qm(v.b,v.b)));
 L.push({id:'44f.recip',from:'rt',to:'rt',steps:()=>['44f'],say:()=>'write the reciprocal of the number as p + q√d',act:s=>{ const n=nrm(s); return qz(n)?null:rt(qd(s.a,n),qd(qn(s.b),n),s.d); },cite:()=>'the root-field technique',
   slips:s=>{ const n=nrm(s); if(qz(n)) return []; const out=[{why:'the bottom is taken as p² + dq², with the sign not turned',k:'rt',a:qd(s.a,qa(qm(s.a,s.a),qm(Q(s.d),qm(s.b,s.b)))),b:qd(qn(s.b),qa(qm(s.a,s.a),qm(Q(s.d),qm(s.b,s.b)))),d:s.d},{why:'the top is multiplied by the turned sign but the bottom is left as it was',k:'rt',a:s.a,b:qn(s.b),d:s.d}];
@@ -13608,7 +13628,7 @@ const PSF=[v=>'Σ '+xh(v.h)+'ⁿ/'+v.c+'ⁿ',v=>'Σ n'+(v.e>1?SUPd[v.e]:'')+' '+
 const reach=v=>[Q(v.c),Q(v.c),null,Q(0),Q(1,v.c)][v.f];
 KIND.psum={show:v=>PSF[v.f](v),seed:v=>PSF[v.f](v)+',  n = 0, 1, 2, …',ok:v=>PSF[v.f](v).length<=36};
 const psum=o=>Object.assign({k:'psum',h:0,c:2,e:1},o);
-SEEDS.push({id:'23c.sums',step:'23c',label:'power sums about a centre',kind:'psum',make(){ const f=pick([0,0,1,2,3,4]); const v=psum({f,h:ri(-3,3),c:ri(2,5),e:ri(1,2)}); return {val:v,ix:f+':'+PSF[f](v)}; }});
+SEEDS.push({id:'23c.sums',step:'23c',label:'power sums about a centre',kind:'psum',tuples:()=>{ const o=[]; [0,1,2,3,4].forEach(f=>[-3,-2,-1,0,1,2,3].forEach(h=>[2,3,4,5].forEach(c=>[1,2].forEach(e=>o.push([[f,h,c,e],f?1:2]))))); return o; },make(F__){ const f=F__?F__[0]:pick([0,0,1,2,3,4]); const v=psum(F__?{f,h:F__[1],c:F__[2],e:F__[3]}:{f,h:ri(-3,3),c:ri(2,5),e:ri(1,2)}); return {val:v,ix:f+':'+PSF[f](v)}; }});
 const setW=(h,R,closed)=>R===null?'every x':qz(R)?'only x = '+qs(Q(h)):'the x with '+qs(qsub(Q(h),R))+(closed?' ≤ x ≤ ':' < x < ')+qs(qa(Q(h),R));
 LINK({id:'23c.settle',from:'psum',to:'word',steps:()=>['23c','22e'],say:()=>'find the x for which the power sum settles',act:v=>word(setW(v.h,reach(v))),cite:()=>'the reach-by-ratio technique',
   slips:v=>{ const R=reach(v), out=[]; if(v.h!==0) out.push({why:'the centre '+v.h+' is taken as 0',k:'word',s:setW(0,R)}); if(R&&!qz(R)){ out.push({why:'the two ends are taken in, though the terms do not shrink there',k:'word',s:setW(v.h,R,true)}); if(!qe(R,Q(1))) out.push({why:'the '+v.c+' is dropped from the ratio of neighbouring terms',k:'word',s:setW(v.h,Q(1))}); }
@@ -14014,6 +14034,10 @@ SEEDS.push(
    thrown away and no value is left out. sized(z) builds a value of size z directly where the rolls are too many to list. */
 (function(){ const N=(a,b)=>LRG(a,b).filter(v=>v), N3=N(-3,3), R7=LRG(-3,3);
 const T={
+  '17f.exps':()=>{ const o=[]; LX(N3,LRG(-2,2),[[null,2],[1,1],[2,1]]).forEach(([a,w,mm])=>{ const m=mm[0], q=mm[1]/4/30; o.push([[a,w,m,0,0],q*0.65]); N(-4,4).forEach(k=>o.push([[a,w,m,0,k],q*0.175/8])); N3.forEach(k=>o.push([[a,w,m,k,0],q*0.175/6])); }); return o; },
+  '21g.waves':()=>{ const o=[]; LX(['sin','cos'],N3,LRG(-2,2),[[0,0.6],[1,0.4]]).forEach(([f,a,w,mm])=>{ const m=mm[0], q=mm[1]/60; o.push([[f,a,w,m,0,0],q*0.65]); N(-4,4).forEach(k=>o.push([[f,a,w,m,0,k],q*0.175/8])); N3.forEach(k=>o.push([[f,a,w,m,k,0],q*0.175/6])); }); return o; },
+  '13h.bkdouble':()=>{ const o=[]; N3.forEach(a=>LRG(-4,4).filter(v=>v!==a&&v!==-a).forEach(b=>o.push([[a,b],1]))); return o; },
+  '14d.bkcubics':()=>LX(LRG(-4,2),[1,2,3]).map(t=>[t,1]),
   '5i.factored':()=>LX(R7,R7,[null,-2,-1,0,1,2],[1,2,-1]).map(t=>[t,(t[2]===null?0.6:0.08)*(t[3]===1?0.5:0.25)]),
   '13d.bkpolys':()=>{ const o=[], A=N(-4,4), B=N(-6,6); LRG(5,13).forEach(e=>o.push([[1,1,1,0,e],1/9])); LX(A,B).forEach(([a,b])=>{ o.push([[a,b,1,1],1/96]); o.push([[a,b,1,5],1/96]); });
     LX(A,B,N3).forEach(([a,b,c])=>{ o.push([[a,b,c,2],1/576]); o.push([[a,b,c,6],1/576]); }); A.forEach(a=>o.push([[a,1,1,3],1/8])); N3.forEach(c=>o.push([[1,1,c,4],1/6])); LX(A,[2,3,4],[2,3,4]).forEach(([a,d,p])=>o.push([[a,1,1,7,0,d,p],1/72])); return o; },
@@ -14041,7 +14065,7 @@ const Z={
   '2d.listed':{sizes:[3,4,5,6],sized(z){ return this.make(shuffle(LRG(1,12)).slice(0,z)); }},
   '2k.each':{sizes:[1,2,3,4,5],sized(z){ return this.make(shuffle(LRG(1,8)).slice(0,z)); }},
   '3e.below':{sizes:[2,3,4,5,6,7,8],sized(z){ return this.make(z); }} };
-SEEDS.forEach(S=>{ if(T[S.id]) S.tuples=T[S.id]; if(Z[S.id]) Object.assign(S,Z[S.id]); }); })();
+const att=()=>SEEDS.forEach(S=>{ if(T[S.id]&&!S.tuples) S.tuples=T[S.id]; if(Z[S.id]&&!S.sized) Object.assign(S,Z[S.id]); }); att(); CH.sizeAttach=att; /* stragglers4: seeds pushed later get theirs at the end of chains */ })();
 
 const tset=()=>uset(Array.from({length:ri(2,4)},()=>ri(1,12)));
 const SL=(id,to,steps,say,act,cite,slips,line,make)=>L.push({id,from:'set',to,steps:()=>steps,say,act,cite:()=>cite,slips,line,make});
@@ -14917,8 +14941,8 @@ gl('18c.foot','line','vec',{mk:()=>({w:[ri(-4,4),ri(-4,4)]}),say:p=>'find the po
     return [['the step along the normal is added instead of taken away',[qa(Q(p.w[0]),qm(t,l.a)),qa(Q(p.w[1]),qm(t,l.b))]],['the step is not divided by |n|²',[qsub(Q(p.w[0]),qm(s,l.a)),qsub(Q(p.w[1]),qm(s,l.b))]]]; },
   cite:'the nearest-point technique',ln:(l,p,r,nm,nx)=>nx+', the point of ℓ nearest '+pv(p.w)+': '+r});
 /* circles */
-SEEDS.push({id:'18d.circles',step:'18d',label:'circles with a marked point',kind:'circ',make(){ const h=ri(-4,4), k=ri(-4,4), o=pyOff(); const r2=o[0]*o[0]+o[1]*o[1]; if(!r2) return null;
-  const ex=Math.random()<0.5; return {val:circ(h,k,r2,[Q(h+o[0]),Q(k+o[1])],ex),ix:[h,k,r2,ex?'x':'c'].join(',')}; }});
+SEEDS.push({id:'18d.circles',step:'18d',label:'circles with a marked point',kind:'circ',tuples:()=>{ const o=[]; for(let h=-4;h<=4;h++) for(let k=-4;k<=4;k++) PY.forEach((q,i)=>{ (q[0]?[1,-1]:[1]).forEach(a=>{ (q[1]?[1,-1]:[1]).forEach(b=>{ [0,1].forEach(e=>o.push([[h,k,i,a,b,e],(q[0]?1:2)*(q[1]?1:2)])); }); }); }); return o; },make(F__){ const h=F__?F__[0]:ri(-4,4), k=F__?F__[1]:ri(-4,4), o=F__?[PY[F__[2]][0]*F__[3],PY[F__[2]][1]*F__[4]]:pyOff(); const r2=o[0]*o[0]+o[1]*o[1]; if(!r2) return null;
+  const ex=F__?!!F__[5]:Math.random()<0.5; return {val:circ(h,k,r2,[Q(h+o[0]),Q(k+o[1])],ex),ix:[h,k,r2,ex?'x':'c'].join(',')}; }});
 gl('18d.centre','circ','vec',{say:()=>'find the centre of the circle C',f:c=>[c.h,c.kk],w:c=>[['the signs inside the squares are not turned',[qn(c.h),qn(c.kk)]],c.ex?['the numbers in front of x and y are not halved',[qm(Q(2),c.h),qm(Q(2),c.kk)]]:null],
   cite:'the circle-equation technique',ln:(c,p,r,nm,nx)=>nx+', the centre of C: '+r});
 gl('18d.r2','circ','num',{say:()=>'find r², the square of the radius of the circle C',f:c=>c.ex?c.r2:null,cite:'the circle-equation technique',
@@ -15064,7 +15088,7 @@ const tw=t=>{ const m=qm(t,Q(12)); return m.q===1?((m.p%24)+24)%24:null; };
 const COS={0:1,4:Q(1,2),6:0,8:Q(-1,2),12:-1,16:Q(-1,2),18:0,20:Q(1,2)};
 const cosA=t=>{ const m=tw(t); return m!==null&&COS[m]!==undefined?qq(COS[m]):null; }, sinA=t=>cosA(qsub(Q(1,2),t));
 const cos2A=t=>{ const c=cosA(qm(t,Q(2))); return c?qm(qa(Q(1),c),Q(1,2)):null; };
-SEEDS.push({id:'21a.arcs',step:'21a',label:'arcs that are whole sixths or quarters of π',kind:'ang',make(){ const d=pick([6,4,3,2,1]), k=nz(-2*d,2*d); const t=Q(k,d); return {val:{k:'ang',t},ix:qs(t)}; }});
+SEEDS.push({id:'21a.arcs',step:'21a',label:'arcs that are whole sixths or quarters of π',kind:'ang',tuples:()=>{ const o=[]; [6,4,3,2,1].forEach(d=>{ for(let k=-2*d;k<=2*d;k++) if(k) o.push([[d,k],1/(4*d)]); }); return o; },make(F__){ const d=F__?F__[0]:pick([6,4,3,2,1]), k=F__?F__[1]:nz(-2*d,2*d); const t=Q(k,d); return {val:{k:'ang',t},ix:qs(t)}; }});
 gl('21b.turns','ang','ang',{say:()=>'bring the arc θ into the one turn from 0 up to 2π',f:t=>!qneg(t)&&qlt(t,Q(2))?null:qsub(t,qm(Q(2),Q(Math.floor(t.p/t.q/2)))),
   w:t=>[['a half turn π is taken away in place of whole turns 2π',qsub(t,Q(Math.floor(t.p/t.q)))],['only one whole turn 2π is taken away',qneg(t)?qa(t,Q(2)):qsub(t,Q(2))]],
   cite:'the whole-turns technique',ln:(t,p,r)=>'θ = '+angs(t)+' brought into [0, 2π): '+r});
@@ -15131,7 +15155,7 @@ nl('21·bio.seed',{mk:()=>({c:rint(1,4)}),say:(p,x,nm)=>'seed number '+nm+' of a
 /* ================= rung 22: sequences and sums ================= */
 SEEDS.push(
   {id:'22a.ratseqs',step:'22a',label:'quotients of lines in n',kind:'seq',make(){ const p=ri(-3,3), q=p===0?(L=>L[Math.floor(Math.random()*L.length)])([-4,-3,-2,-1,1,2,3,4]):ri(-4,4), s=rint(1,3), u=(L=>L[Math.floor(Math.random()*L.length)])(LRG(0,4).filter(u=>p*u-q*s!==0)); /* top and bottom not in proportion */ return {val:{k:'seq',t:'rat',p,q,s,u},ix:[p,q,s,u].join(',')}; }},
-  {id:'22d.geoseqs',step:'22d',label:'geometric sequences',kind:'seq',make(){ const a=Q(nz(-5,5)), r=pick([Q(1,2),Q(-1,2),Q(1,3),Q(2,3),Q(-1,3),Q(3,4),Q(-2,3),Q(1,4),Q(2)]); return {val:{k:'seq',t:'geo',a,r},ix:qs(a)+','+qs(r)}; }},
+  {id:'22d.geoseqs',step:'22d',label:'geometric sequences',kind:'seq',tuples:()=>{ const o=[]; [-5,-4,-3,-2,-1,1,2,3,4,5].forEach(a=>{ for(let i=0;i<9;i++) o.push([[a,i],1]); }); return o; },make(F__){ const RS=[Q(1,2),Q(-1,2),Q(1,3),Q(2,3),Q(-1,3),Q(3,4),Q(-2,3),Q(1,4),Q(2)], a=Q(F__?F__[0]:nz(-5,5)), r=F__?RS[F__[1]]:pick(RS); return {val:{k:'seq',t:'geo',a,r},ix:qs(a)+','+qs(r)}; }},
   {id:'22f.pseqs',step:'22f',label:'powers of n under a number',kind:'seq',make(){ const c=rint(1,5), e=rint(1,3), d=pick([0,0,1,2]); return {val:{k:'seq',t:'pw',c,e,d},ix:[c,e,d].join(',')}; }});
 const geoS=(v,k)=>{ let s=Q(0); for(let n=1;n<=k;n++) s=qa(s,sterm(v,n)); return s; };
 /* sequences into sequences, so a sequence can pass through more than one link: scale it, drop its first piece, take its even thread */
@@ -15460,8 +15484,8 @@ gl('29·cb28.dxdy','vec','num',{mk:()=>({w:[ri(-4,4),ri(-4,4)]}),say:(p,P,nm)=>'
 
 /* ================= rung 30: measure, chance, statistics ================= */
 SEEDS.push(
-  {id:'30f.spinners',step:'30f',label:'spinners with a few values',kind:'dist',make(){ const ps=pick([[Q(1,2),Q(1,4),Q(1,4)],[Q(1,3),Q(1,3),Q(1,3)],[Q(1,6),Q(1,3),Q(1,2)],[Q(1,5),Q(2,5),Q(2,5)],[Q(1,2),Q(1,2)],[Q(1,4),Q(3,4)],[Q(1,3),Q(2,3)]]);
-    const xs=shuffle([-2,-1,0,1,2,3,4,5]).slice(0,ps.length); const D=dnorm(xs,ps); return {val:D,ix:dshow(D)}; }},
+  {id:'30f.spinners',step:'30f',label:'spinners with a few values',kind:'dist',tuples:()=>{ const X=[-2,-1,0,1,2,3,4,5], o=[]; [3,3,3,3,2,2,2].forEach((n,i)=>{ const go=p=>{ if(p.length===n){ o.push([[i].concat(p),n===3?1/336:1/56]); return; } X.forEach(x=>{ if(!p.includes(x)) go(p.concat([x])); }); }; go([]); }); return o; },make(F__){ const PS=[[Q(1,2),Q(1,4),Q(1,4)],[Q(1,3),Q(1,3),Q(1,3)],[Q(1,6),Q(1,3),Q(1,2)],[Q(1,5),Q(2,5),Q(2,5)],[Q(1,2),Q(1,2)],[Q(1,4),Q(3,4)],[Q(1,3),Q(2,3)]], ps=F__?PS[F__[0]]:pick(PS);
+    const xs=F__?F__.slice(1):shuffle([-2,-1,0,1,2,3,4,5]).slice(0,ps.length); const D=dnorm(xs,ps); return {val:D,ix:dshow(D)}; }},
   {id:'30l.dice',step:'30l',label:'fair dice and coins',kind:'dist',make(){ const n=pick([2,4,6,3]), lo=n===2?0:1; const xs=Array.from({length:n},(_,i)=>lo+i); const D=dnorm(xs,xs.map(()=>Q(1,n))); return {val:D,ix:'d'+n}; }});
 gl('30f.atleast','dist','num',{mk:()=>({}),say:(p,D)=>{ const a=qs(Q(D.xs[Math.floor(D.xs.length/2)])); return 'find P('+D.lb+' ≥ '+a+') as 1 − P('+D.lb+' < '+a+')'; },f:D=>{ const a=D.xs[Math.floor(D.xs.length/2)]; return qsub(Q(1),D.xs.reduce((s,x,i)=>x<a?qa(s,D.ps[i]):s,Q(0))); },
   w:D=>{ const a=D.xs[Math.floor(D.xs.length/2)]; return [['the value a itself is left out',D.xs.reduce((s,x,i)=>x>a?qa(s,D.ps[i]):s,Q(0))],['P(X < a) is given, without taking it from 1',D.xs.reduce((s,x,i)=>x<a?qa(s,D.ps[i]):s,Q(0))]]; },
@@ -15629,11 +15653,11 @@ const gmatch=g=>{ let best=0; const e=g.e, go=(i,used,k)=>{ if(k>best) best=k; f
 /* ===== seeds ===== */
 const qi2=a=>a.map(r=>r.map(x=>Q(x)));
 SEEDS.push(
-  {id:'31d.symmetric',step:'31d',label:'symmetric grids with whole stretches',kind:'mat',make(){ const [d,b2]=pick([[3,4],[0,2],[8,6],[6,8],[5,12],[0,4]]), b=b2/2*pick([1,-1]), c=ri(-3,3), a=c+d*pick([1,-1]); return {val:mat(qi2([[a,b],[b,c]])),ix:[a,b,c].join(',')}; }},
+  {id:'31d.symmetric',step:'31d',label:'symmetric grids with whole stretches',kind:'mat',tuples:()=>{ const o=[]; [0,1,2,3,4,5].forEach(i=>[1,-1].forEach(s=>[-3,-2,-1,0,1,2,3].forEach(c=>[1,-1].forEach(t=>o.push([[i,s,c,t],1]))))); return o; },make(F__){ const [d,b2]=(l=>F__?l[F__[0]]:pick(l))([[3,4],[0,2],[8,6],[6,8],[5,12],[0,4]]), b=b2/2*(F__?F__[1]:pick([1,-1])), c=F__?F__[2]:ri(-3,3), a=c+d*(F__?F__[3]:pick([1,-1])); return {val:mat(qi2([[a,b],[b,c]])),ix:[a,b,c].join(',')}; }},
   {id:'31j.shares',step:'31j',label:'shares between 0 and 1',kind:'num',make(){ const q=pick([2,3,4,5,6,8,10]), p=ri(1,q-1), v=Q(p,q); return {val:num(v),ix:qs(v)}; }},
-  {id:'35a.pairs',step:'35a',label:'pairs of whole numbers',kind:'vec',make(){ const u=[ri(0,5),ri(0,5)]; return {val:vec(u.map(x=>Q(x))),ix:u.join(',')}; }},
+  {id:'35a.pairs',step:'35a',label:'pairs of whole numbers',kind:'vec',tuples:()=>{ const o=[]; for(let a=0;a<6;a++) for(let b=0;b<6;b++) o.push([[a,b],1]); return o; },make(F__){ const u=F__?F__.slice():[ri(0,5),ri(0,5)]; return {val:vec(u.map(x=>Q(x))),ix:u.join(',')}; }},
   {id:'36c.colours',step:'36c',label:'colours as triples',kind:'col',make(){ const c=Math.random()<0.25?[0,1,2].map(()=>Q(rnd(2))):rcol(); return {val:col(c),ix:c.map(qs).join(' ')}; }},
-  {id:'39a.strings',step:'39a',label:'strings of 1s and 0s',kind:'bits',make(){ const s=rbits(ri(4,7)); return {val:bits(s),ix:s}; }},
+  {id:'39a.strings',step:'39a',label:'strings of 1s and 0s',kind:'bits',tuples:()=>{ const o=[]; [4,5,6,7].forEach(n=>{ for(let m=0;m<(1<<n);m++) o.push([[m.toString(2).padStart(n,'0')],1/(1<<n)]); }); return o; },make(F__){ const s=F__?F__[0]:rbits(ri(4,7)); return {val:bits(s),ix:s}; }},
   {id:'42a.graphs',step:'42a',label:'graphs in one piece',kind:'graph',make(){ const n=ri(4,5), e=[]; for(let i=2;i<=n;i++) e.push([ri(1,i-1),i]); const extra=ri(0,2);
     for(let t=0;t<extra;t++){ const a=ri(1,n-1), b=ri(a+1,n); if(!e.some(([x,y])=>x===a&&y===b)) e.push([a,b]); } e.sort((x,y)=>x[0]-y[0]||x[1]-y[1]); return {val:graph(n,e),ix:e.map(x=>x.join('')).join('.')}; }},
   {id:'42f.networks',step:'42f',label:'networks with whole lengths or room on the links',kind:'graph',make(){ const n=ri(4,5), e=[];
@@ -15641,7 +15665,7 @@ SEEDS.push(
     for(let a=1;a<n;a++) if(!e.some(x=>x[0]===a)) e.push([a,ri(a+1,n),ri(1,9)]); for(let b=2;b<=n;b++) if(!e.some(x=>x[1]===b)){ const a=ri(1,b-1); if(!e.some(x=>x[0]===a&&x[1]===b)) e.push([a,b,ri(1,9)]); }
     while(e.length>7){ const ok=e.map((_,i)=>i).filter(i=>{ const r=e.filter((_,j)=>j!==i); for(let a=1;a<n;a++) if(!r.some(x=>x[0]===a)) return false; for(let b=2;b<=n;b++) if(!r.some(x=>x[1]===b)) return false; return true; }); if(!ok.length) break; e.splice(ok[Math.floor(Math.random()*ok.length)],1); } /* links beyond 7 are dropped, keeping every dot joined */
     if(e.length>7) return null; e.sort((x,y)=>x[0]-y[0]||x[1]-y[1]); return {val:graph(n,e,true),ix:e.map(x=>x.join('')).join('.')}; }},
-  {id:'44·crypt.points',step:'44·crypt',label:'points of y² = x³ + 2x + 2 on the clock of 17',kind:'vec',make(){ const pts=[]; for(let x=0;x<17;x++) for(let y=1;y<17;y++) if(md(y*y-(x*x*x+2*x+2),17)===0) pts.push([x,y]); const p=pick(pts); return {val:vec(p.map(x=>Q(x))),ix:p.join(',')}; }},
+  {id:'44·crypt.points',step:'44·crypt',label:'points of y² = x³ + 2x + 2 on the clock of 17',kind:'vec',tuples:()=>{ const o=[]; for(let x=0;x<17;x++) for(let y=1;y<17;y++) if(md(y*y-(x*x*x+2*x+2),17)===0) o.push([[x,y],1]); return o; },make(F__){ const pts=[]; for(let x=0;x<17;x++) for(let y=1;y<17;y++) if(md(y*y-(x*x*x+2*x+2),17)===0) pts.push([x,y]); const p=F__?F__.slice():pick(pts); return {val:vec(p.map(x=>Q(x))),ix:p.join(',')}; }},
   {id:'45e.stamps',step:'45e',label:'list stamps of three machines',kind:'stamp',make(){ const u=[ri(0,5),ri(0,5),ri(0,5)]; return {val:stamp(u),ix:u.join('')}; }},
   {id:'46b.cubics',step:'46b',label:'cubics with whole roots',kind:'fn',make(F__){ const r=F__?F__.slice():[ri(-3,3),ri(-3,3),ri(-3,3)]; if(!F__&&Math.random()<0.3){ r[1]=ri(Math.max(-3,-4-r[0]),Math.min(3,4-r[0])); r[2]=-r[0]-r[1]; }
     const t=simp(M(A(X,N(-r[0])),A(X,N(-r[1])),A(X,N(-r[2])))); return {val:{k:'fn',t},ix:r.join(','),pts:[...r,0,1,-1]}; }}
@@ -18991,8 +19015,6 @@ CH.p2card=p2card;
 { const old=CH.proofCard; CH.proofCard=function(P,used){
     try{ const any=P2.SK.some(S=>p2open(P)(S,P2.SKSTEPS[S.id]||[])); if(any&&Math.random()<0.6){ const q=p2card(P,used); if(q) return q; } }catch(e){ if(e&&e.over) throw e; }
     return old(P,used); }; }
-{ const old=MAKE.proof, two=q=>!!q&&/^q:/.test(String(q.index||''))&&(q.opts||[]).length===2;
-  MAKE.proof=function(P,used,last){ let q=old(P,used,last); if(two(q)&&Math.random()<0.55){ for(let k=0;k<6;k++){ const q2=old(P,used,last); if(q2) q=q2; if(!two(q)) break; } } return q; }; }
 
 })();
 /* ===== Chains, part bk3 (Andrew 2026-11-16 16:07Z, "Recast all book pools"): the book seeds of 2026-11-16 (Spivak's Calculus ch. 5-19,
@@ -19014,7 +19036,7 @@ const NL=o=>{ const sl=o.slips, shw=v=>{ const w=v&&(v.k?v:v.t?Object.assign({k:
 
 /* ================= A. functions the slope links already carry ================= */
 SEEDS.push(
-  {id:'17i.bkmix',step:'17i',kind:'fn',label:'functions built from e and ln',make(){ const k=rnd(6), a=pk([2,3]), b=pk([2,3,5]); let t;
+  {id:'17i.bkmix',step:'17i',kind:'fn',label:'functions built from e and ln',tuples:()=>[0,1,2,3,4,5].map(k=>[[k],1]),make(F__){ const k=F__?F__[0]:rnd(6), a=pk([2,3]), b=pk([2,3,5]); let t;
     if(k===0) t=M(N(b),A(Fn('exp',M(N(a),X)),M(N(-1),Fn('exp',M(N(-a),X)))));
     else if(k===1) t=A(M(N(pk([2,3,4,5])),P(X,2)),M(N(2),Fn('log',X)));
     else if(k===2) t=Fn('log',P(X,2+rnd(4)));
@@ -19027,9 +19049,9 @@ SEEDS.push(
     else if(k===3) t=Fn('log',Fn('cos',X)); else if(k===4) t=M(Fn('exp',X),P(Fn('sin',X),2)); else t=M(Fn('sin',X),Fn('sin',M(N(2),X)));
     return {val:fnv(t),ix:k+':'+m,pts:[0]}; }},
   {id:'13d.bkpow',step:'13d',kind:'fn',label:'a power with a factor in front',make(){ const n=3+rnd(3), c=pk([-3,-2,-1,1,2,3]); const t=c===1?P(X,n):M(N(c),P(X,n)); return {val:fnv(t),ix:c+','+n,pts:[1,-1,2,-2]}; }},
-  {id:'13h.bkdouble',step:'13h',kind:'fn',label:'cubics with a double zero',make(){ const a=pk([-3,-2,-1,1,2,3]), b=pk([-4,-3,-2,-1,0,1,2,3,4].filter(v=>v!==a&&v!==-a));
+  {id:'13h.bkdouble',step:'13h',kind:'fn',label:'cubics with a double zero',make(F__){ const a=F__?F__[0]:pk([-3,-2,-1,1,2,3]), b=F__?F__[1]:pk([-4,-3,-2,-1,0,1,2,3,4].filter(v=>v!==a&&v!==-a));
     const c=pmul(pmul([Q(-a),Q(1)],[Q(-a),Q(1)]),[Q(-b),Q(1)]); return {val:fnv(fromPoly(c)),ix:a+','+b,pts:[0,1,-1]}; }},
-  {id:'14d.bkcubics',step:'14d',kind:'fn',label:'cubics with two turns',make(){ const r=rnd(7)-4, s=r+2*(1+rnd(3)), h=(r+s)/2; return {val:fnv(fromPoly([Q(0),Q(3*r*s),Q(-3*h),Q(1)])),ix:r+','+s,pts:[0,1,-1]}; }},
+  {id:'14d.bkcubics',step:'14d',kind:'fn',label:'cubics with two turns',make(F__){ const r=F__?F__[0]:rnd(7)-4, s=r+2*(F__?F__[1]:1+rnd(3)), h=(r+s)/2; return {val:fnv(fromPoly([Q(0),Q(3*r*s),Q(-3*h),Q(1)])),ix:r+','+s,pts:[0,1,-1]}; }},
   {id:'9d.bkfracs',step:'9d',kind:'fn',label:'a ratio of two straight lines',make(){ const a=pk([1,2,3]), d=pk([-3,-2,-1,4,5].filter(v=>v!==a)), c=pk([1,2,-1]), b=pk([-4,-3,-2,-1,1,2,3,4,5].filter(v=>a*d-v*c!==0));
     return {val:fnv(M(lin(a,b),P(lin(c,d),-1))),ix:[a,b,c,d].join(','),pts:[0,1,2]}; }},
   {id:'13f.bkhalves',step:'13f',kind:'fn',label:'half powers of x',make(){ const n=pk([3,5,7,9]); return {val:fnv(P(X,Q(n,2))),ix:String(n),pts:[1,4]}; }},
@@ -27281,7 +27303,7 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
    no chain when it is the only rung switched on. Each such rung from 5 up gets one plain seed of whole numbers, on its first main step that has such a link. ===== */
 { const have=new Set(CH.SEEDS.filter(s=>s.kind==='num').map(s=>rungOf(s.step))), first={};
   CH.L.forEach(l=>{ if(l.from!=='num') return; let st=[]; try{ st=l.steps0?l.steps0():l.steps(new Set()); }catch(e){ return; } st.forEach(s=>{ const r=rungOf(s); if(have.has(r)||!(r>=5)) return; /* the numbers are built on rung 4 */ const ann=x=>/·/.test(x)?1:0; if(!first[r]||ann(s)<ann(first[r])||(ann(s)===ann(first[r])&&s<first[r])) first[r]=s; }); }); /* a main step before an annex, and the earliest of those */
-  Object.keys(first).forEach(r=>{ const step=first[r]; CH.SEEDS.push({id:step+'.wholes',step,kind:'num',label:'whole numbers to work on',make(){ const n=CH.ri(2,20); return {val:{k:'num',v:CH.Q(n)},ix:String(n)}; }}); }); }
+  Object.keys(first).forEach(r=>{ const step=first[r]; CH.SEEDS.push({id:step+'.wholes',step,kind:'num',label:'whole numbers to work on',tuples:()=>Array.from({length:19},(_,i)=>[[i+2],1]),make(F__){ const n=F__?F__[0]:CH.ri(2,20); return {val:{k:'num',v:CH.Q(n)},ix:String(n)}; }}); }); }
 /* ===== chain pools (2026-11-16): the Laundry opens a rung, a kind of question and a step by the pools it can see, and it sees only the old
    lists. When a step's whole-question pools have all become seeds and links, the step must still be seen. So each step that owns a seed or
    a link, and has lost a pool to CH.RETIRED, gets one pool for that kind of question whose make() deals a chain that stays inside the step's own rung and passes through the step.
@@ -27415,6 +27437,7 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
   });
 })();
 /* ===== end of studydomain ===== */
+CH.tapeAttach(); CH.sizeAttach();
 /* ===== end of chains ===== */
 
 for(let i=QP.length-1;i>=0;i--) if(qmode(QP[i])==='read') QP.splice(i,1); /* the Understanding pools now live in the crosswalk (rgraph) */
