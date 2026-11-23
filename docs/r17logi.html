@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>17·logi · How Many Will We Sell Next Week?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17crypt.html">← 17·crypt how long would it take to guess a password?</a><a href="r17eng.html">next: 17·eng why does riding faster take so much more push? →</a></p>
+  <div class="tags"><span class="tag logi">17·logi · logistics</span></div>
+  <h1>How Many Will We Sell Next Week?</h1>
+  <p data-pid="646ba1">How many will we sell next week? Every shop that orders ahead has to guess. 14·logi set the order size and the stock kept back, given a forecast; this page makes the forecast. Last week alone jumps about too much, and the average of every week ever moves too slowly. A rule that nudges the old forecast toward each new week does both jobs, and unrolled it weighs past weeks by a falling ratio. Rung 17’s logs then say how long one week’s sales go on counting, and the last step shows what the rule does when sales keep rising.</p>
+  <p class="gesture" data-pid="3af777">Write the new forecast as the old one plus a share a of the miss. Unroll it: each past week gets a weight, the weights fall by the factor 1 − a, and they add up to 1. Take logs to find after how many weeks a weight has halved. If sales rise steadily, find the steady miss, and add a second nudged number for the rise.</p>
+</header>
+
+<section class="class step" data-step="17logi1">
+  <h2 class="sthead"><span class="stno">17logi1</span>Last Week, or Every Week?</h2>
+  <p data-pid="5859df">Claire runs a bike shop and orders tyres every Monday for the week ahead. Here are six weeks of sales.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>week</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+    <tr><th>tyres sold</th><td>38</td><td>44</td><td>40</td><td>36</td><td>50</td><td>30</td></tr>
+  </table></div>
+  <p data-pid="5ca194">Guessing last week’s number each time would have forecast 50 for week 6, and sold 30. Guessing the average of every week so far is steadier, but if the town opens a cycle path and sales jump, an average of a year of weeks takes months to notice. From here on, on this page, the <i>forecast</i> F is the number guessed before the week, the <i>sales</i> D are what happens, and the <i>miss</i> is D − F.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{last week only: jumps with every week}\\ &amp;\text{every week: slow to see a change}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·logi.1.1</span><span class="ph understand">understand</span>Why does last week’s number make a jumpy forecast, and why does the average of every week make a slow one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17logi2">
+  <h2 class="sthead"><span class="stno">17logi2</span>Nudge the Forecast</h2>
+  <p data-pid="d60eb5">Claire keeps one number, her forecast, and after each week moves it a share a of the way toward what was sold. With a = 0.2 and a forecast of 40 going into week 7:</p>
+  <pre class="lines" data-k="ember" data-label="this page: three weeks of nudges">
+F_{\text{new}} = F + a\,(D - F) @@ move a share of the miss
+D = 50:\ 40 + 0.2 \cdot 10 = 42 @@ a week above the forecast pulls it up
+D = 30:\ 42 + 0.2 \cdot (-12) = 39.6 @@ a week below pulls it down
+\htmlClass{new}{D = 45:\ 39.6 + 0.2 \cdot 5.4 = 40.68} @@ one stored number, updated each week
+  </pre>
+  <p data-pid="7a78e3">The rule rearranges as F<sub>new</sub> = aD + (1 − a)F: a mix of this week’s sales and the old forecast. With a = 1 it is last week alone; with a near 0 it barely moves.</p>
+<div class="eqline c6" data-tex="F_{\text{new}} = a D + (1 - a) F"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·logi.2.1</span><span class="ph understand">understand</span>What does the nudging rule do with each week’s miss, and what are the rule’s two extremes?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17logi3">
+  <h2 class="sthead"><span class="stno">17logi3</span>Weights That Fall by a Ratio</h2>
+  <p data-pid="4e3e70">Write the forecast after week t as F<sub>t+1</sub>, and put the rule inside itself again and again.</p>
+  <pre class="lines" data-k="ember" data-label="this page: unrolling the rule">
+F_{t+1} = aD_t + (1 - a)F_t @@ the rule
+= aD_t + a(1 - a)D_{t-1} + (1 - a)^2 F_{t-1} @@ the rule again, for F_t
+= \textstyle\sum_{i=0}^{n-1} a(1 - a)^i D_{t-i} + (1 - a)^n F_{t-n+1} @@ n times
+\textstyle\sum_{i=0}^{n-1} a(1 - a)^i = a \cdot \dfrac{1 - (1 - a)^n}{a} = 1 - (1 - a)^n @@ the finite-ratio-sum technique (15i)
+\htmlClass{new}{\text{the weights, with } (1 - a)^n \text{ on the old forecast, add to } 1} @@ a true average of the past
+  </pre>
+  <p data-pid="47165d">Smoothing technique: <b>the nudged forecast is an average of every past week, with the weight on each week falling by the factor 1 − a as it ages.</b> Since (1 − a)<sup>n</sup> heads to 0 (15i), the first forecast fades away.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·logi.3.1</span><span class="ph understand">understand</span>What weight does the nudged forecast put on a week n weeks ago, and why do all the weights add to 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17logi4">
+  <h2 class="sthead"><span class="stno">17logi4</span>How Long a Week Counts</h2>
+  <p data-pid="9934fa">A week’s weight halves after k weeks when (1 − a)<sup>k</sup> = ½. Rung 17’s logs bring the k down from the power.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the half-life of a week">
+(1 - a)^k = \tfrac12 @@ the weight has halved
+k \ln(1 - a) = -\ln 2 @@ the log-of-a-power technique (17c)
+k = \dfrac{\ln 2}{-\ln(1 - a)} @@ ln(1 − a) < 0, by log-rises (17a)
+a = 0.2:\ k = 0.693/0.223 \approx 3.1 @@ about three weeks
+\htmlClass{new}{a = 0.5:\ k = 1} @@ one week
+  </pre>
+  <p data-pid="44a5d4">Choosing a is choosing how long the past counts. <b>A large a follows a real change quickly and jumps with every odd week; a small a stays calm and is slow to see a change.</b> Shops try several and keep the one whose misses were smallest on old weeks.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·logi.4.1</span><span class="ph understand">understand</span>How do logs find after how many weeks a week’s weight has halved, and what does a large a trade for a small one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17logi5">
+  <h2 class="sthead"><span class="stno">17logi5</span>When Sales Keep Rising</h2>
+  <p data-pid="a594a9">Say sales grow by g tyres every week, and the forecast has settled so that it also grows by g each week. Then the miss settles too.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the steady miss">
+F_{t+1} - F_t = a\,(D_t - F_t) @@ the rule
+g = a\,(D_t - F_t) @@ the forecast grows by g
+D_t - F_t = g/a @@ the miss, every week
+\htmlClass{new}{g = 2,\ a = 0.2:\ \text{always } 10 \text{ short}} @@ the forecast trails a rise
+  </pre>
+  <p data-pid="3e75ea">The rule averages the past, and on a rise the past is lower. <b>On a steady rise the nudged forecast trails by g/a every week.</b> The fix keeps a second number, the rise per week, nudged toward each new week’s rise in the same way, and adds it to the forecast.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{level: nudged toward sales}\\ &amp;\text{rise: nudged toward the change in level}\\ &amp;\text{forecast} = \text{level} + \text{rise}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·logi.5.1</span><span class="ph understand">understand</span>Why does the nudged forecast fall short by g/a when sales rise by g a week, and what does a second nudged number fix?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17logi6">
+  <h2 class="sthead"><span class="stno">17logi6</span>Moves to Watch Out For</h2>
+  <p data-pid="7da287">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the weights } a, a(1 - a), \ldots \text{ add to more than } 1\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; with the old forecast’s share they add to exactly 1 (17logi3)
+\text{a large } a \text{ is always better: it follows faster}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it follows faster and jumps with every odd week (17logi4)
+k = \ln 2 / \ln(1 - a)\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; ln(1 − a) is negative: the sign belongs below (17logi4)
+\text{the miss is } g/a, \text{ so it grows each week}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it settles at g/a; it does not grow (17logi5)
+\text{nudge first, then compare with the sales}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the miss is measured against the forecast made before the week (17logi2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·logi.6.1</span><span class="ph understand">understand</span>Which move above loses the sign of ln(1 − a), and how does log-rises put it right?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">17·logi.7.1</span><span class="tagq">do</span>Start from a forecast of 40 with a = 0.3 and run the nudging rule through the six weeks of 17logi1. Then find after how many weeks a week’s weight halves.</div>
+  <div class="chq"><span class="chid">17·logi.7.2</span><span class="tagq">make</span>Make up eight weeks of sales for which a = 0.8 gives smaller misses than a = 0.2, and eight for which it gives larger.</div>
+  <div class="chq"><span class="chid">17·logi.7.3</span><span class="tagq">converse</span>The nudged forecast weighs past weeks by a falling ratio. Decide whether every average of past weeks with weights falling by a ratio is a nudged forecast, and for which a.</div>
+  <div class="chq"><span class="chid">17·logi.7.4</span><span class="tagq">edge</span>Sales are the same, 40, every week, and the first forecast was 0. Find the forecast after n weeks, and how many weeks pass before it is within 1 of 40 when a = 0.2.</div>
+  <div class="chq"><span class="chid">17·logi.7.5</span><span class="tagq">open</span>Tyre sales rise every spring and fall every autumn. Say what a third nudged number could track, and what Claire would need to keep to use it.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r17crypt.html">← 17·crypt · how long would it take to guess a password?</a><a href="r17eng.html">17·eng · why does riding faster take so much more push? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="c6dcd5">The nudging rule is <b>simple exponential smoothing</b>, a is the <b>smoothing constant</b>, and the weights falling by a ratio are why it is called exponential. The weighted <b>average age</b> of the weeks it uses is (1 − a)/a. The forecast with a level and a rise is <b>Holt’s linear method</b>; adding a seasonal number gives the <b>Holt-Winters method</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="e26c43">Robert G. Brown used the nudging rule for naval stock control in the 1950s. Charles Holt added the nudged rise in a 1957 report for the Office of Naval Research, and Peter Winters the seasons in 1960.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
