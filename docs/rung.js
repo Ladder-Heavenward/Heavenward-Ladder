@@ -4496,4 +4496,10 @@ window.LadderStepUnlocks={mark,fill,cwSync};
 
 /* under pressure (Andrew 2026-11-22): the Settings button is the way to the rung Steps Towards Symbolizing Induction into Action */
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.recpress'); if(!b) return;
-  try{ localStorage.setItem('ladder:pressure',String(Date.now())); }catch(_){} let L=null; try{ L=JSON.parse(localStorage.getItem('nook:last')||'null'); }catch(_){} location.href=(L&&/^dbt(g|m|ie|er|dt)$/.test(L.page)?L.page+'.html#'+L.id:'dbt.html'); /* the nook: its first page on the first press, then pick up where you left off */ },true);
+  try{ localStorage.setItem('ladder:pressure',String(Date.now())); }catch(_){} let L=null; try{ L=JSON.parse(localStorage.getItem('nook:last')||'null'); }catch(_){} const to=(L&&/^dbt(g|m|ie|er|dt)$/.test(L.page)?L.page+'.html#'+L.id:'dbt.html'); /* the nook: its first page on the first press, then pick up where you left off */
+  /* anti-drama (Andrew 2026-11-23): a 1.7 second jogging load screen before the nook opens */
+  e.preventDefault(); e.stopPropagation(); if(document.getElementById('antidrama')) return;
+  const o=document.createElement('div'); o.id='antidrama'; o.setAttribute('role','status'); o.setAttribute('aria-label','anti-drama');
+  o.innerHTML='<p>'+'anti-drama'.split('').map((c,i)=>'<s aria-hidden="true" style="animation-delay:'+(i*70)+'ms">'+c+'</s>').join('')+'</p>';
+  document.body.appendChild(o); setTimeout(()=>{ location.href=to; },1700);
+  window.addEventListener('pageshow',ev=>{ if(ev.persisted) o.remove(); }); /* coming back with the back button: no stuck screen */ },true);
