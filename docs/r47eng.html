@@ -153,15 +153,32 @@ D^2 = \begin{pmatrix}2 & R\\ 1/R & 1\end{pmatrix}\begin{pmatrix}2 & R\\ 1/R & 1\
     </ol>
   </section>
 </section>
+<section class="class step" data-step="47·eng.7">
+  <h2 class="sthead"><span class="stno">47·eng.7</span>Too Much Gain Rings</h2>
+  <p data-pid="2e7c03">Closing a loop with a big gain K makes the output follow the input closely, as G/(1 + GH) promised. But a part that lags, like a heater that warms slowly, makes a strong loop overshoot and swing.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a lagging part in a loop">
+\text{closed loop: } s^2 + s + K = 0 @@ two lags, gain K
+s = \tfrac{-1 \pm \sqrt{1 - 4K}}{2} @@ roots (25)
+K < \tfrac14:\ \text{two real roots, a slow settle};\ \ K > \tfrac14:\ \text{complex} @@ the square root turns
+\htmlClass{new}{\text{complex roots: a fading swing, faster and more ringing as } K \text{ grows}} @@ growing and turning (26)
+  </pre>
+  <p data-pid="c90501">Feedback technique: <b>raising a loop’s gain makes it follow more closely but moves its roots off the real line, so it rings; the designer picks the gain where the swing fades fast enough.</b> Adding a term for the error’s running total removes any steady offset, and one for its slope damps the swing: the three-term controller that runs most of industry.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47·eng.7.1</span><span class="ph understand">understand</span>Why does a loop with a lag start to ring when its gain passes a quarter?</li>
+    </ol>
+  </section>
+</section>
 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">47·eng.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="D^n"></span> <span class="gtx">n halving dividers in a row</span></span>Build Dⁿ for n halving dividers in a row with the chain-grid technique, for n = 1, 2, 3, 4. <br>The far voltages are V/2, V/5, V/13, … Find the technique that makes each top left number from the two before, and prove it from the grids.</div>
-  <div class="chq"><span class="chid">47·eng.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="1 + G(\xi)H(\xi) = 0"></span></span>Take G(ξ) = 8/(1 + 2πiξ)³ with H = 1. Find the frequency at which G is a negative real number, and the value there. <br>Does 1 + GH reach 0 there? Say what the loop-closing technique gives for 4 in place of 8, and what it stops giving at 8.</div>
-  <div class="chq"><span class="chid">47·eng.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="H(\xi) = \tfrac{1}{(2\pi i\xi)^2 + 5\cdot 2\pi i\xi + 4}"></span></span>Turn the row-of-boxes technique round: split this transfer into two of 32j3’s smoothing stages in a row. <br>Can every transfer 1/((2πiξ)² + b · 2πiξ + c) be split this way? Find a b and c for which it cannot, and say which numbers would have to appear in the stages.</div>
-  <div class="chq"><span class="chid">47·eng.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">one side: a machine is its parts and its wiring</span> <span class="gtx">the other side: a machine is what it allows at its ends</span></span>One school draws every machine as boxes with an input and an output, joined by arrows, and builds the whole from the parts as this page did. Another holds that a resistor has no input and no output, only a technique tying the voltage and current at its ends, and that a machine is the set of all behaviours its ends allow; joining parts is sharing ends, not running arrows in a row. The loading technique sits between them. Which view did the chain-grid technique take? What would a machine have to do to settle it?</div>
+  <div class="chq"><span class="chid">47·eng.8.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="D^n"></span> <span class="gtx">n halving dividers in a row</span></span>Build Dⁿ for n halving dividers in a row with the chain-grid technique, for n = 1, 2, 3, 4. <br>The far voltages are V/2, V/5, V/13, … Find the technique that makes each top left number from the two before, and prove it from the grids.</div>
+  <div class="chq"><span class="chid">47·eng.8.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="1 + G(\xi)H(\xi) = 0"></span></span>Take G(ξ) = 8/(1 + 2πiξ)³ with H = 1. Find the frequency at which G is a negative real number, and the value there. <br>Does 1 + GH reach 0 there? Say what the loop-closing technique gives for 4 in place of 8, and what it stops giving at 8.</div>
+  <div class="chq"><span class="chid">47·eng.8.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="H(\xi) = \tfrac{1}{(2\pi i\xi)^2 + 5\cdot 2\pi i\xi + 4}"></span></span>Turn the row-of-boxes technique round: split this transfer into two of 32j3’s smoothing stages in a row. <br>Can every transfer 1/((2πiξ)² + b · 2πiξ + c) be split this way? Find a b and c for which it cannot, and say which numbers would have to appear in the stages.</div>
+  <div class="chq"><span class="chid">47·eng.8.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">one side: a machine is its parts and its wiring</span> <span class="gtx">the other side: a machine is what it allows at its ends</span></span>One school draws every machine as boxes with an input and an output, joined by arrows, and builds the whole from the parts as this page did. Another holds that a resistor has no input and no output, only a technique tying the voltage and current at its ends, and that a machine is the set of all behaviours its ends allow; joining parts is sharing ends, not running arrows in a row. The loading technique sits between them. Which view did the chain-grid technique take? What would a machine have to do to settle it?</div>
 </section>
 <div class="themecert themeend"></div>
 

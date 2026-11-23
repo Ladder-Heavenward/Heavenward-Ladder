@@ -175,15 +175,32 @@ p_{\mathrm{Int}}(7, 9) = f(p_{\mathrm{Bool}}(\text{false}, \text{true})) = f(\te
     </ol>
   </section>
 </section>
+<section class="class step" data-step="47·comp.7">
+  <h2 class="sthead"><span class="stno">47·comp.7</span>Folding a List</h2>
+  <p data-pid="98fb7e">Many programs walk a list and build up an answer: its total, its length, its largest entry. Each is the same walk with a different step, so the walk can be written once, taking the step as an input.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one walk, many programs">
+\text{fold} : (A \times B \to B) \to B \to \text{List}\,A \to B @@ a step, a start, a list
+\text{fold}(f, b, [a_1, a_2, a_3]) = f(a_1, f(a_2, f(a_3, b))) @@ from the end inward
+\text{sum} = \text{fold}(+, 0),\ \ \text{length} = \text{fold}((a, n) \mapsto n + 1, 0) @@ two programs, one walk
+\htmlClass{new}{\text{map}\ g = \text{fold}((a, \ell) \mapsto g(a) :: \ell,\ [\,])} @@ even map is a fold
+  </pre>
+  <p data-pid="566579">Fold technique: <b>a program that takes the step as an input writes every walk over a list once;</b> sum, length and map are that walk with different steps. Its type says it can only combine entries with the step it is given, which is this page’s lesson that a type limits what a program can do.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47·comp.7.1</span><span class="ph understand">understand</span>How do sum, length and map all come from one fold, and what does fold’s type promise?</li>
+    </ol>
+  </section>
+</section>
 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">47·comp.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="X \to X \times X"></span> <span data-tex-inline="X \times X \times X \to X"></span></span>Build every family of each label carried along by every program, and count them. <br>Which test type and test member do you use for each, and how do the only-identity and two-picks techniques carry over?</div>
-  <div class="chq"><span class="chid">47·comp.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p_X(x) = x + 1 \text{ if } X = \mathrm{Int},\ \ p_X(x) = x \text{ otherwise}"></span></span>A language that lets a program ask which type it was given allows this family for “X to X”. Find a program f whose square fails to close for it. <br>Which line of the only-identity technique’s proof fails, and what does the edge show about the held-in-trust statement?</div>
-  <div class="chq"><span class="chid">47·comp.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r_X : \mathrm{List}\, X \to \mathrm{List}\, X"></span></span>The only-identity technique fixed a family by one member of one type. Turn it round for lists: if r is carried along by every program, prove r_X([x₁, …, xₙ]) = map f (r_Int([1, …, n])) for f(i) = xᵢ. <br>What does this make of reverse? What can r_Int([1, 2]) be, and why can it hold no entry other than 1 and 2?</div>
-  <div class="chq"><span class="chid">47·comp.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">47h.5.4: a foundation of arrows or of members</span></span>47h.5.4 set a foundation of arrows against one of members. A database read here is a map of categories into sets, and its rows may be stored in any order under any names. <br>Which facts about a database does every matching of its tables keep, and which does it lose? Is a database its rows or its arrows?</div>
+  <div class="chq"><span class="chid">47·comp.8.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="X \to X \times X"></span> <span data-tex-inline="X \times X \times X \to X"></span></span>Build every family of each label carried along by every program, and count them. <br>Which test type and test member do you use for each, and how do the only-identity and two-picks techniques carry over?</div>
+  <div class="chq"><span class="chid">47·comp.8.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="p_X(x) = x + 1 \text{ if } X = \mathrm{Int},\ \ p_X(x) = x \text{ otherwise}"></span></span>A language that lets a program ask which type it was given allows this family for “X to X”. Find a program f whose square fails to close for it. <br>Which line of the only-identity technique’s proof fails, and what does the edge show about the held-in-trust statement?</div>
+  <div class="chq"><span class="chid">47·comp.8.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="r_X : \mathrm{List}\, X \to \mathrm{List}\, X"></span></span>The only-identity technique fixed a family by one member of one type. Turn it round for lists: if r is carried along by every program, prove r_X([x₁, …, xₙ]) = map f (r_Int([1, …, n])) for f(i) = xᵢ. <br>What does this make of reverse? What can r_Int([1, 2]) be, and why can it hold no entry other than 1 and 2?</div>
+  <div class="chq"><span class="chid">47·comp.8.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">47h.5.4: a foundation of arrows or of members</span></span>47h.5.4 set a foundation of arrows against one of members. A database read here is a map of categories into sets, and its rows may be stored in any order under any names. <br>Which facts about a database does every matching of its tables keep, and which does it lose? Is a database its rows or its arrows?</div>
 </section>
 <div class="themecert themeend"></div>
 
