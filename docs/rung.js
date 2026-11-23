@@ -227,6 +227,16 @@ addEventListener('storage',e=>{ if(e.key===RK||e.key===null){ raw=null; stale=tr
     put('marks:0b · What It Means to Be the Same',b); put('marks:0c · Chains and Swaps',c); LS.removeItem(OK); } }catch(e){}
   try{ const P=JSON.parse(LS.getItem('pages:done')||'null'); if(P&&P.r00b&&P.r00b.v&&!(P.r00c&&P.r00c.v)){ P.r00c=Object.assign({},P.r00b); LS.setItem('pages:done',JSON.stringify(P)); } }catch(e){}
   LS.setItem(F,String(Date.now())); }catch(e){} })();
+/* petal footing tick move (Andrew passed 2026-11-23 17:36Z): new 2bio5 Is a Petal a Leaf? came in before Moves, so
+   2bio5 -> 2bio6 (question 2·bio.5.1 -> 2·bio.6.1, standing 2·bio.6.k -> 2·bio.7.k), once, under ladder:mvFeet6. Same rules as petal2bio/renum02bio.py. */
+(function(){ const F='ladder:mvFeet6'; try{ if(LS.getItem(F)!=null) return; const M={"2bio5":"2bio6","2·bio.5.1":"2·bio.6.1","2·bio.6.1":"2·bio.7.1","2·bio.6.2":"2·bio.7.2","2·bio.6.3":"2·bio.7.3","2·bio.6.4":"2·bio.7.4","2·bio.6.5":"2·bio.7.5"};
+  const K=Object.keys(M).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.]/g,'\\.'));
+  const RE=new RegExp('(?<![A-Za-z0-9_·.])('+K.join('|')+')(?![A-Za-z0-9_·])','g'), tg=v=>String(v).replace(RE,(x,k)=>M[k]);
+  const ks=[]; for(let i=0;i<LS.length;i++){ const k=LS.key(i); if(k) ks.push(k); }
+  const mv=[]; ks.forEach(k=>{ if(!/^(marks:|rand:|sq:|steps:|cert:|note:|mg:)/.test(k)&&!/^(pages:done|cards:seen|ladder:lastFooting|ladder:furthest)$/.test(k)) return; const v=LS.getItem(k); if(v==null) return;
+    const nk=/^(sq:|steps:|cert:|note:|mg:|marks:)/.test(k)?tg(k):k, nv=tg(v); if(nk!==k||nv!==v) mv.push([k,nk,nv]); });
+  mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
+  LS.setItem(F,String(Date.now())); }catch(e){} })();
 
 /* ---- roll (embeds) ---- */
 /* roll: the roll-out for slide decks, and one frame for decks and pictures (embeds thread, Andrew 2026-11-20 05:13Z, passed 05:45Z).
