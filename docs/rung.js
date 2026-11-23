@@ -2781,7 +2781,10 @@ function footingView0(){
        step, beside "next" where there is one; gone once every step has been supplied */
     const spot=P==='floor7concl'||P==='floor8'||!!(window.LadderSky&&LadderSky.lastPage&&LadderSky.lastPage()===P);
     up.hidden=!on||(atEnd&&!nextPage); dn.hidden=!on||(cur<=0&&!prevPage);
-    sky.hidden=!on||!atEnd||!(spot||!nextPage)||!skyOpen()||!!(window.LadderSky&&LadderSky.caughtUp&&LadderSky.caughtUp());
+    /* 2026-11-23 (Andrew 16:06Z): a page off the climb (share the ladder, about, license) has no next page either, but the blue sky is not
+       for it: the end-of-the-climb fallback counts only for a page with a place on the climb or an infinity step */
+    const onClimb=placeOf(P)!=null||/^inf\d/.test(P);
+    sky.hidden=!on||!atEnd||!(spot||(!nextPage&&onClimb))||!skyOpen()||!!(window.LadderSky&&LadderSky.caughtUp&&LadderSky.caughtUp());
     const pair=!sky.hidden&&!up.hidden; up.classList.toggle('fvpair',pair); sky.classList.toggle('fvpair',pair);
     up.setAttribute('aria-label','next: '+(atEnd?(nextPage||''):idOf(cur+1))); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):(prevPage||'')));
     pos.textContent=''; tuck(); }; /* todo16: the badge says only "one up"; the tag line already counts the footings */
