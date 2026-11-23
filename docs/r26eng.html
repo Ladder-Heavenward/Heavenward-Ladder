@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>26·eng · Why Does the Power Grid Swing Back and Forth?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26cb24.html">← 26·cb24 the damped oscillator</a><a href="r26then.html">next: 26·then how can a circuit say true or false? →</a></p>
+  <div class="tags"><span class="tag eng">26·eng · engineering</span></div>
+  <h1>Why Does the Power Grid Swing Back and Forth?</h1>
+  <p data-pid="ad40d7">Why does the power grid swing back and forth? The voltage at a wall socket is not steady: it swings from plus to minus and back fifty or sixty times a second. Coils and capacitors answer it out of step, and a motor turns because three such swings chase each other round. Rung 26’s e<sup>iθ</sup> turns all of this into arithmetic. This page writes a swinging voltage as a turning arrow, finds each part’s complex resistance, measures the power that really arrives, shows why power lines run at huge voltages, and adds three swings to get nothing.</p>
+  <p class="gesture" data-pid="bbae34">Write V₀cos(ωt) as the real part of V₀e^(iωt). A resistor, a coil and a capacitor answer with complex resistances R, iωL and 1/(iωC); in a line of parts they add, and I = V/Z. The power that arrives on average is ½V₀I₀cos φ, φ the angle between voltage and current. Loss in a line grows as the current squared, so send power at high voltage. Three swings a third of a turn apart add to 0.</p>
+</header>
+
+<section class="class step" data-step="26eng1">
+  <h2 class="sthead"><span class="stno">26eng1</span>A Swing as a Turning Arrow</h2>
+  <p data-pid="29ff99">Terry’s workshop takes power from the grid. Its voltage swings as V(t) = V₀ cos(ωt), with V₀ about 325 volts and ω = 2π · 50 a second. Rung 26 writes cos as the shadow of a turning arrow.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the arrow">
+e^{i\omega t} = \cos(\omega t) + i\sin(\omega t) @@ e to an imaginary power (26a)
+V(t) = \mathrm{Re}\,(V_0 e^{i\omega t}) @@ the real part, the arrow’s shadow
+\dfrac{d}{dt} e^{i\omega t} = i\omega\, e^{i\omega t} @@ a complex slope (26d)
+\htmlClass{new}{\text{taking the slope is multiplying by } i\omega} @@ a quarter turn, stretched by ω
+  </pre>
+  <p data-pid="f29937">From here on, on this page, a voltage or current that swings at ω is named by the complex number it multiplies e<sup>iωt</sup> by: its size is the swing’s height and its angle is how far ahead the swing runs.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng.1.1</span><span class="ph understand">understand</span>How is a swinging voltage written as a turning arrow, and what does taking its slope do to the arrow?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng2">
+  <h2 class="sthead"><span class="stno">26eng2</span>Complex Resistance</h2>
+  <p data-pid="a3ffd8">A resistor obeys V = RI. A coil pushes back against change, V = L I′. A capacitor stores charge, I = C V′. With every swing a multiple of e<sup>iωt</sup>, each becomes V = Z I for a complex number Z.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three parts">
+\text{resistor: } Z = R @@ in step
+\text{coil: } V = L\,(i\omega I) \Rightarrow Z = i\omega L @@ the voltage a quarter turn ahead
+\text{capacitor: } I = C\,(i\omega V) \Rightarrow Z = \dfrac{1}{i\omega C} @@ a quarter turn behind
+\htmlClass{new}{\text{parts in a line: } Z = Z_1 + Z_2 + \cdots,\ \ I = V/Z} @@ as resistances add
+  </pre>
+  <p data-pid="6252bf">Arrow technique: <b>for swings at one ω, every part is a complex resistance, they add in a line as resistances do, and the current is the voltage divided by their sum.</b> A machine with R = 30 ohms and a coil with ωL = 40 ohms has Z = 30 + 40i.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;|Z| = \sqrt{30^2 + 40^2} = 50,\ \ I_0 = 325/50 = 6.5 \text{ A}\\ &amp;\text{current behind by } \varphi,\ \cos\varphi = 30/50\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng.2.1</span><span class="ph understand">understand</span>What are the complex resistances of a resistor, a coil and a capacitor, and how is the current found from them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng3">
+  <h2 class="sthead"><span class="stno">26eng3</span>The Power That Really Arrives</h2>
+  <p data-pid="6abee2">Power at each instant is V(t) · I(t). With the current behind by φ, average it over one swing.</p>
+  <pre class="lines" data-k="ember" data-label="this page: average power">
+V_0 I_0 \cos(\omega t)\cos(\omega t - \varphi) @@ power at each instant
+= \tfrac12 V_0 I_0\,[\cos\varphi + \cos(2\omega t - \varphi)] @@ the sum formulas (21d)
+\text{the second part averages to } 0 \text{ over a swing} @@ a full turn of cos (21)
+\htmlClass{new}{P = \tfrac12 V_0 I_0 \cos\varphi = \tfrac12 \cdot 325 \cdot 6.5 \cdot 0.6 \approx 634 \text{ W}} @@ and ½I₀²R = 634 too
+  </pre>
+  <p data-pid="d4da57">Power technique: <b>the average power is half the voltage height times the current height times cos φ; the coil’s share swings in and out and arrives nowhere.</b> The wires must still carry the full 6.5 A, so grids charge large works for a poor cos φ, and fit capacitors to cancel the coils.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng.3.1</span><span class="ph understand">understand</span>Why is the average power ½V₀I₀cos φ, and why does the coil’s share arrive nowhere?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng4">
+  <h2 class="sthead"><span class="stno">26eng4</span>Why the Lines Run at Huge Voltages</h2>
+  <p data-pid="f5e0e6">A power line of resistance R<sub>line</sub> wastes I²R<sub>line</sub> as heat. To send a power P at voltage V takes a current about P/V.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one megawatt over 5 ohms">
+\text{loss} = I^2 R_{\text{line}} = \dfrac{P^2 R_{\text{line}}}{V^2} @@ I = P/V
+V = 10\,000:\ I = 100,\ \text{loss} = 50\,000 \text{ W} @@ a twentieth lost
+V = 100\,000:\ I = 10,\ \text{loss} = 500 \text{ W} @@ a two-thousandth
+\htmlClass{new}{\text{ten times the voltage, a hundredth the loss}} @@ the loss falls as 1/V²
+  </pre>
+  <p data-pid="3c2b28"><b>Line loss falls as the square of the voltage, so power is sent at high voltage and stepped down near its use.</b> A transformer, two coils on one iron ring, does the stepping, and it works only on swinging voltages: that is why the grid swings.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng.4.1</span><span class="ph understand">understand</span>Why does sending power at ten times the voltage cut the line loss a hundredfold, and why must the grid swing for that?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng5">
+  <h2 class="sthead"><span class="stno">26eng5</span>Three Swings That Add to Nothing</h2>
+  <p data-pid="bf6788">Large grids send three swings on three wires, each a third of a turn behind the last. Write w = e<sup>2πi/3</sup>, a root of x³ = 1 other than 1 (25).</p>
+  <pre class="lines" data-k="ember" data-label="this page: three phases">
+w^3 = 1,\ w \ne 1 @@ a third of a turn, three times
+(w - 1)(1 + w + w^2) = w^3 - 1 = 0 @@ factor (5i)
+1 + w + w^2 = 0 @@ no zero product (5e): w − 1 ≠ 0
+\htmlClass{new}{V_0 e^{i\omega t}(1 + w + w^2) = 0} @@ the three voltages add to 0 at every instant
+  </pre>
+  <p data-pid="0c5e4f">Three-phase technique: <b>three equal swings a third of a turn apart add to zero, so with balanced loads the return wire carries nothing, and the power they deliver together is steady.</b> Fed to three coils set round a ring, they make a pull that turns steadily round the ring, and a motor follows it.</p>
+<div class="eqline c6" data-tex="\cos^2\theta + \cos^2\!\left(\theta - \tfrac{2\pi}{3}\right) + \cos^2\!\left(\theta - \tfrac{4\pi}{3}\right) = \tfrac32"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng.5.1</span><span class="ph understand">understand</span>Why do three swings a third of a turn apart add to zero at every instant, and what does that save?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng6">
+  <h2 class="sthead"><span class="stno">26eng6</span>Moves to Watch Out For</h2>
+  <p data-pid="22609d">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+Z_{\text{coil}} = \omega L\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the coil’s voltage runs a quarter turn ahead: iωL (26eng2)
+P = V_0 I_0\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; on average ½V₀I₀cos φ (26eng3)
+\text{loss} = V^2 / R_{\text{line}}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the line’s loss is I²R_line, with I = P/V: it falls as 1/V² (26eng4)
+|30 + 40i| = 70\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; sizes of complex numbers do not add: √(30² + 40²) = 50 (26eng2)
+\text{find the current, then the complex resistances}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the resistances come first: I = V/Z (26eng2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng.6.1</span><span class="ph understand">understand</span>Which move above treats the line’s loss as V²/R, and why is the loss I²R_line with I = P/V instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">26·eng.7.1</span><span class="tagq">do</span>A machine has R = 40 ohms and a coil with ωL = 30 ohms, on V₀ = 325. Find |Z|, I₀, cos φ and the average power.</div>
+  <div class="chq"><span class="chid">26·eng.7.2</span><span class="tagq">make</span>Make up a capacitor that, added in line with the machine of 26eng2, brings cos φ to 1, and find the new current.</div>
+  <div class="chq"><span class="chid">26·eng.7.3</span><span class="tagq">converse</span>Three equal swings a third of a turn apart add to zero. Decide whether three equal swings that add to zero must be a third of a turn apart.</div>
+  <div class="chq"><span class="chid">26·eng.7.4</span><span class="tagq">edge</span>Let ω head to 0 in the capacitor’s 1/(iωC). Say what a capacitor does to a steady voltage, and what a coil does.</div>
+  <div class="chq"><span class="chid">26·eng.7.5</span><span class="tagq">open</span>Some new long lines carry steady voltage instead of swinging. Say what they gain, using 26eng3 and 26eng4, and what they need at each end.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r26cb24.html">← 26·cb24 · the damped oscillator</a><a href="r26then.html">26·then · how can a circuit say true or false? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="59deea">A swing written as a complex number is a <b>phasor</b>, and the complex resistance is the <b>impedance</b>, with iωL and 1/(iωC) its <b>reactance</b>. cos φ is the <b>power factor</b>, and fitting capacitors to raise it is <b>power-factor correction</b>. Swinging current is <b>alternating current</b> (AC), steady current <b>direct current</b> (DC), and 325 volts at the peak is 230 volts <b>rms</b>. Three swings a third of a turn apart are <b>three-phase power</b>, and the motor that follows them an <b>induction motor</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="c0ff93">Nikola Tesla patented the motor run by several phases in 1888. Charles Proteus Steinmetz showed in 1893 how complex numbers turn swinging circuits into arithmetic.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

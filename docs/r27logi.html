@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>27·logi · When Is It Worth Fixing a Machine That Still Works?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27econ.html">← 27·econ can an economy feed itself?</a><a href="r27nav.html">next: 27·nav how does a phone know where it is? →</a></p>
+  <div class="tags"><span class="tag logi">27·logi · logistics</span></div>
+  <h1>When Is It Worth Fixing a Machine That Still Works?</h1>
+  <p data-pid="317629">When is it worth fixing a machine that still works? A worn press still earns something, and a repair costs a week’s work. Fixing now looks like a loss; running it into the ground loses more later. Each week’s choice changes what next week can bring, by chance. This page writes a rule for every week as a system of equations of rung 27 and solves it for what the rule is worth, improves the rule by looking one week ahead until nothing changes, and shows with rung 24’s shrinking maps that working back week by week always arrives at the best.</p>
+  <p class="gesture" data-pid="7cbf3a">Name the states, the choices in each, the week’s earnings and the chances of where each choice leads. A rule picks one choice per state. Its worth V obeys V = r + γPV, a system of equations: solve it. Improve the rule by picking, in each state, the choice best for one week plus γ times the worth after; stop when nothing changes. Or repeat V ↦ max(r + γPV) from 0: the map shrinks distances by γ, so it settles at the best worth.</p>
+</header>
+
+<section class="class step" data-step="27logi1">
+  <h2 class="sthead"><span class="stno">27logi1</span>States, Choices and Chances</h2>
+  <p data-pid="b58652">Jean runs a press. Each Monday it is good or worn. A good press earns 10 that week, in hundreds of dollars, and stays good next week with chance 0.8, else wears. A worn press can be run, earning 4 and staying worn, or repaired, costing 6 that week and good next week.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>state</th><th>choice</th><th>earns</th><th>next week</th></tr>
+    <tr><th>good</th><td>run</td><td>10</td><td>good 0.8, worn 0.2</td></tr>
+    <tr><th>worn</th><td>run</td><td>4</td><td>worn</td></tr>
+    <tr><th>worn</th><td>repair</td><td>−6</td><td>good</td></tr>
+  </table></div>
+  <p data-pid="c2dd6d">From here on, on this page, a <i>rule</i> picks one choice for each state, and its <i>worth</i> V(state) is the sum of the earnings from that state on, each week counted γ = 0.9 times the week before, as in 23·econ, averaged over the chances.</p>
+<div class="eqline c6" data-tex="\text{rule: } \{\text{good} \mapsto \text{run},\ \text{worn} \mapsto ?\}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·logi.1.1</span><span class="ph understand">understand</span>What are the states, choices, earnings and chances for Jean’s press, and what is a rule’s worth?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27logi2">
+  <h2 class="sthead"><span class="stno">27logi2</span>A Rule’s Worth Is a System of Equations</h2>
+  <p data-pid="9b60a6">This week’s earnings, plus γ times the worth of wherever the press is next week: that is the worth. Under the rule “never repair”:</p>
+  <pre class="lines" data-k="ember" data-label="this page: never repair">
+V_W = 4 + 0.9\,V_W @@ worn stays worn
+V_W = 4/0.1 = 40 @@ take 0.9V_W from both sides
+V_G = 10 + 0.9\,(0.8\,V_G + 0.2\,V_W) @@ average over next week
+0.28\,V_G = 10 + 7.2 @@ elimination (27j)
+\htmlClass{new}{V_G \approx 61.4,\ V_W = 40} @@ the worth of never repairing
+  </pre>
+  <p data-pid="c478ed">Worth technique: <b>a rule’s worth solves V = r + γPV, where r lists the week’s earnings and P the chances, a system of equations with one unknown per state.</b> With γ < 1 it has exactly one solution.</p>
+<div class="eqline c6" data-tex="(I - \gamma P)\,V = r"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·logi.2.1</span><span class="ph understand">understand</span>What system of equations does a rule’s worth solve, and what is the worth of never repairing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27logi3">
+  <h2 class="sthead"><span class="stno">27logi3</span>The Rule That Repairs</h2>
+  <p data-pid="221cf8">Now repair whenever the press is worn.</p>
+  <pre class="lines" data-k="ember" data-label="this page: always repair">
+V_W = -6 + 0.9\,V_G @@ repair, good next week
+V_G = 10 + 0.72\,V_G + 0.18\,V_W @@ as before
+V_G = 10 + 0.72\,V_G + 0.18\,(-6 + 0.9\,V_G) @@ substitute (27j)
+0.118\,V_G = 8.92 @@ gather V_G
+\htmlClass{new}{V_G \approx 75.6,\ V_W \approx 62.0} @@ more in both states
+  </pre>
+  <p data-pid="d8f25e">The repair costs a week and pays for itself: a worn press is worth 62 under this rule against 40. The loss this week is outweighed by the good weeks it buys back.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·logi.3.1</span><span class="ph understand">understand</span>What is the worth of the rule that repairs, and why does a costly repair raise the worth of a worn press?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27logi4">
+  <h2 class="sthead"><span class="stno">27logi4</span>Improve by Looking One Week Ahead</h2>
+  <p data-pid="dcdd17">Is there a better rule still? In each state, compare every choice by one week’s earnings plus γ times the worth, under the current rule, of where it leads.</p>
+  <pre class="lines" data-k="ember" data-label="this page: checking the repair rule">
+\text{worn, run: } 4 + 0.9 \cdot 62.0 \approx 59.8 @@ worth under the repair rule
+\text{worn, repair: } -6 + 0.9 \cdot 75.6 \approx 62.0 @@ the rule’s own choice
+\text{good: only one choice} @@ nothing to compare
+\htmlClass{new}{\text{no state changes its choice: the rule is best}} @@ the improve check passes
+  </pre>
+  <p data-pid="bc67b5">Improve technique: <b>switch each state to the choice best for one week plus γ times the current worth after; the new rule is worth at least as much everywhere, and when no state switches, no rule is worth more.</b> Starting from “never repair”, the worn state switches at once: repair gives −6 + 0.9 · 61.4 ≈ 49.3, against 4 + 0.9 · 40 = 40 for running.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·logi.4.1</span><span class="ph understand">understand</span>How does looking one week ahead improve a rule, and how do you know when the rule is best?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27logi5">
+  <h2 class="sthead"><span class="stno">27logi5</span>Working Back Always Arrives</h2>
+  <p data-pid="2579c9">Another way, with no rule to start: begin with V = 0, and each round set every state’s worth to its best choice’s one week plus γ times last round’s worth.</p>
+  <pre class="lines" data-k="ember" data-label="this page: rounds from nothing">
+(V_G, V_W):\ (10, 4),\ (17.9, 7.6),\ (24.3, 10.8),\ (29.4, 15.8), \ldots @@ round 4: worn switches to repair
+|TV - TU| \le 0.9\,|V - U| @@ a best choice of averages moves by at most γ times
+\text{a shrinking map has one fixed point (24c)} @@ the shrinking-map technique
+\htmlClass{new}{\text{the rounds settle at } (75.6,\ 62.0)} @@ the best worth, whatever the start
+  </pre>
+  <p data-pid="13e524">Rounds technique: <b>repeating best-choice rounds is a map that shrinks distances by γ, so the rounds settle at the one best worth, and the choices that reach it make the best rule.</b> Each round is one more week of looking ahead; after k rounds the error is at most γ<sup>k</sup> times the first.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·logi.5.1</span><span class="ph understand">understand</span>Why do best-choice rounds from V = 0 always settle, and at what?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27logi6">
+  <h2 class="sthead"><span class="stno">27logi6</span>Moves to Watch Out For</h2>
+  <p data-pid="ab33fc">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{repair costs } 6, \text{ so never repair}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it buys good weeks back: 62 against 40 (27logi23)
+V_G = 10 + 0.9\,V_G\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the press may wear: average over next week (27logi22)
+\text{improve one state, keep the old worth}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; after switching, find the new rule’s worth before checking again (27logi24)
+\text{rounds settle only from a good start}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the map shrinks by γ: any start settles at the best (27logi25)
+\gamma = 1 \text{ is fine}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; with γ = 1 the sums need not settle, and the map need not shrink (27logi25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·logi.6.1</span><span class="ph understand">understand</span>Which move above leaves out the chance that a good press wears, and what should the worth average over?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">27·logi.7.1</span><span class="tagq">do</span>Make the repair cost 20 instead of 6. Find the worth of “always repair” and of “never repair”, and say which is best.</div>
+  <div class="chq"><span class="chid">27·logi.7.2</span><span class="tagq">make</span>Make up a repair cost at which both rules are worth the same in the worn state, and check it.</div>
+  <div class="chq"><span class="chid">27·logi.7.3</span><span class="tagq">converse</span>The best rule passes the look-ahead check in every state. Decide whether a rule that passes it in every state must be best.</div>
+  <div class="chq"><span class="chid">27·logi.7.4</span><span class="tagq">edge</span>Let γ head to 0. Say what the best rule becomes, and why Jean would then never repair.</div>
+  <div class="chq"><span class="chid">27·logi.7.5</span><span class="tagq">open</span>A worn press sometimes breaks outright. Add a third state, broken, with its own choices, and say how the system of equations of 27logi2 grows.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r27econ.html">← 27·econ · can an economy feed itself?</a><a href="r27nav.html">27·nav · how does a phone know where it is? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="5fcb45">States, choices, earnings and chances make a <b>Markov decision process</b>. A rule is a <b>policy</b>, its worth the <b>value function</b>, and V = r + γPV the <b>Bellman equation</b>; γ is the <b>discount factor</b>. Improving by looking one week ahead is <b>policy iteration</b>, and best-choice rounds are <b>value iteration</b>. The same ideas, with the chances learned from trying, are <b>reinforcement learning</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="c31937">Richard Bellman set out the equation and working back in <i>Dynamic Programming</i>, 1957. Ronald Howard gave policy iteration in <i>Dynamic Programming and Markov Processes</i>, 1960.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
