@@ -116,6 +116,11 @@ function practice(pane,lead){ const T=ticked(), A=awards(); let h='<p class="sk-
 const PAGE={G:'dbtg',M:'dbtm',IE:'dbtie',ER:'dbter',DT:'dbtdt','∎':'dbtdt'};
 const sOf=id=>N().series.find(x=>x.page===PAGE[(id.match(/^[A-Z]+|^∎/)||[''])[0]]);
 const stOf=id=>{ const s=sOf(id); return s&&s.steps.find(t=>t.id===id); };
+/* a footing can carry a second standing case (tree2): it is walked as its own case, with its own record under the key id#2 */
+const K=st=>st.key||st.id;
+const second=st=>st&&st.tree2?Object.assign(Object.create(st),{tree:st.tree2,key:st.id+'#2'}):null;
+const caseOf=k=>k.slice(-2)==='#2'?second(stOf(k.slice(0,-2))):stOf(k);
+const casesOf=st=>st.tree?[st].concat(st.tree2?[second(st)]:[]):[];
 const href=id=>{ const s=sOf(id); return (s&&s.page!==page?s.page+'.html':'')+'#'+stepId(id); };
 const opens=()=>{ const r=[]; N().series.forEach(s=>s.steps.forEach((st,i)=>{ if(isOpen(s,i)) r.push([s,st]); })); return r; };
 const closeOnHere=el=>el.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',shut));
@@ -137,25 +142,25 @@ function understanding(pane,lead){ const Q=get('nook:uq',{});
     const on=!!Q[k]; b.classList.toggle('on',on); b.textContent=on?'✓':''; b.setAttribute('aria-pressed',String(on)); }); }
 
 function standing(pane,lead){ const W=get('nook:sq',{});
-  bySeries(pane,lead,st=>st.tree,(s,st)=>{ const w=W[st.id]||[];
-      return '<li class="nk-sq"><button type="button" class="nk-case" data-k="'+esc(st.id)+'"><b class="nk-id">'+esc(st.id)+'</b> '+fk(st.title)+' <span class="nk-dots">'+[0,1,2,3].map(j=>'<i class="'+WAYC[j]+(w.includes(j)?' on':'')+'"></i>').join('')+'</span></button></li>'; },
-    s=>s.steps.filter(st=>(W[st.id]||[]).length).length+' of '+s.steps.filter(st=>st.tree).length+' walked');
-  pane.querySelectorAll('.nk-case').forEach(b=>b.onclick=()=>walk(pane,lead,stOf(b.dataset.k))); }
+  bySeries(pane,lead,st=>st.tree,(s,st)=>casesOf(st).map(c=>{ const w=W[K(c)]||[];
+      return '<li class="nk-sq"><button type="button" class="nk-case" data-k="'+esc(K(c))+'"><b class="nk-id">'+esc(st.id)+'</b> '+fk(st.title)+(c.key?' <span class="sk-st">second case</span>':'')+' <span class="nk-dots">'+[0,1,2,3].map(j=>'<i class="'+WAYC[j]+(w.includes(j)?' on':'')+'"></i>').join('')+'</span></button></li>'; }).join(''),
+    s=>{ const cs=s.steps.flatMap(casesOf); return cs.filter(c=>(W[K(c)]||[]).length).length+' of '+cs.length+' walked'; });
+  pane.querySelectorAll('.nk-case').forEach(b=>b.onclick=()=>walk(pane,lead,caseOf(b.dataset.k))); }
 
 /* one case: the start, the four ways, and what each way leans on. No way is wrong. */
-function walk(pane,lead,st,pick){ const T=st.tree, W=get('nook:sq',{}), w=W[st.id]||[];
+function walk(pane,lead,st,pick){ const T=st.tree, W=get('nook:sq',{}), w=W[K(st)]||[];
   let h='<p class="nk-back"><button type="button" class="nk-bk">← all cases</button> <a class="nk-id" href="'+href(st.id)+'">'+esc(st.id)+' · '+fk(st.title)+' →</a></p><p class="nk-start">'+fk(T.t)+'</p><ol class="nk-ways">';
   T.o.forEach((o,j)=>{ h+='<li><button type="button" class="nk-way '+WAYC[j]+(pick===j?' on':'')+(w.includes(j)?' tried':'')+'" data-j="'+j+'"><span class="nk-wn">'+(j+1)+' · '+esc(N().ways[j])+'</span>'+fk(o[0])+'</button></li>'; });
   h+='</ol>';
   if(pick!=null){ const o=T.o[pick];
     h+='<div class="nk-follow '+WAYC[pick]+'"><p class="nk-wn">'+(pick+1)+' · '+esc(N().ways[pick])+'</p><p>'+fk(o[3])+'</p>'
-      +((pick===3||(get('nook:sq2',{})[st.id]||{})[pick])?lean(o):'')
+      +((pick===3||(get('nook:sq2',{})[K(st)]||{})[pick])?lean(o):'')
       +'<p class="nk-ax"><span>carried by assumption '+o[2]+' (G6)</span> «'+esc(N().axioms[o[2]-1])+'»</p>'
       +'<p class="sk-n">'+(w.length>=4?'You have walked all four ways of this case.':'Each of the four ways is valid. Try another and compare what it costs and what it keeps.')+'</p></div>'+deeper(st,pick); }
   pane.innerHTML=h; closeOnHere(pane);
   pane.querySelector('.nk-bk').onclick=()=>standing(pane,lead);
   wireDeeper(pane,lead,st,pick);
-  pane.querySelectorAll('.nk-way').forEach(b=>b.onclick=()=>{ const j=+b.dataset.j, W=get('nook:sq',{}), w=W[st.id]||[]; if(!w.includes(j)) w.push(j); W[st.id]=w; put('nook:sq',W);
+  pane.querySelectorAll('.nk-way').forEach(b=>b.onclick=()=>{ const j=+b.dataset.j, W=get('nook:sq',{}), w=W[K(st)]||[]; if(!w.includes(j)) w.push(j); W[K(st)]=w; put('nook:sq',W);
     walk(pane,lead,st,j); const f=pane.querySelector('.nk-follow'); if(f) f.scrollIntoView({block:'nearest',behavior:'smooth'}); }); }
 
 /* the second level: which skills serve the way picked. Skills sorted by the job they do (G4): change the situation, change the response, accept. */
@@ -167,7 +172,7 @@ const GENERAL=new Set(['G4']);
 /* the skills an answer uses: its own skills other than the case's home footing (and the general G4, G6); the home footing when it has no other */
 const useSk=(st,o)=>{ const home=st.id.replace(/\.s$/,''), pick=st.tree.o.indexOf(o), r=o[1].filter(id=>(id!==home||JOB[home]===pick)&&!(GENERAL.has(id)&&pick===3)&&stOf(id)); return r.length?r:[home].filter(stOf); };
 const lean=o=>'<p class="nk-lean"><span>leans on</span> '+o[1].map(id=>{ const t=stOf(id); return '<a class="nk-chip" href="'+href(id)+'">'+esc(id)+(t?' · '+fk(t.title):'')+'</a>'; }).join(' ')+'</p>';
-function deeper(st,pick){ if(pick==null) return ''; const o=st.tree.o[pick], D=get('nook:sq2',{}), done=(D[st.id]||{})[pick];
+function deeper(st,pick){ if(pick==null) return ''; const o=st.tree.o[pick], D=get('nook:sq2',{}), done=(D[K(st)]||{})[pick];
   if(pick===3){ const alt=[0,1,2].map(j=>[j,useSk(st,st.tree.o[j])[0]]).filter(x=>x[1]);
     return '<div class="nk-deep"><p class="nk-ask">Using no skill is a choice too (G4). Which skill would you reach for to turn it?</p><ul class="nk-chips">'
       +alt.map(([j,id])=>{ const t=stOf(id); return '<li><button type="button" class="nk-turn '+WAYC[j]+'" data-j="'+j+'"><span class="nk-wn">'+(j+1)+' · '+esc(N().ways[j])+'</span>'+esc(id)+(t?' · '+fk(t.title):'')+'<span class="nk-act">'+fk(st.tree.o[j][0])+'</span></button></li>'; }).join('')+'</ul></div>'; }
@@ -180,23 +185,23 @@ function deeper(st,pick){ if(pick==null) return ''; const o=st.tree.o[pick], D=g
     +opts.map(id=>{ const t=stOf(id), ok=right.includes(id); return '<li><button type="button" class="nk-sk" data-ok="'+(ok?1:0)+'" data-id="'+esc(id)+'">'+esc(id)+(t?' · '+fk(t.title):'')+'</button></li>'; }).join('')
     +'</ul><p class="nk-dres sk-n">'+(done?'You have found every skill for this way before.':'')+'</p></div>'; }
 function wireDeeper(pane,lead,st,pick){ const box=pane.querySelector('.nk-deep'); if(!box) return;
-  box.querySelectorAll('.nk-turn').forEach(b=>b.onclick=()=>{ const j=+b.dataset.j, W=get('nook:sq',{}), w=W[st.id]||[]; if(!w.includes(j)) w.push(j); W[st.id]=w; put('nook:sq',W); walk(pane,lead,st,j); const f=pane.querySelector('.nk-follow'); if(f) f.scrollIntoView({block:'nearest',behavior:'smooth'}); });
+  box.querySelectorAll('.nk-turn').forEach(b=>b.onclick=()=>{ const j=+b.dataset.j, W=get('nook:sq',{}), w=W[K(st)]||[]; if(!w.includes(j)) w.push(j); W[K(st)]=w; put('nook:sq',W); walk(pane,lead,st,j); const f=pane.querySelector('.nk-follow'); if(f) f.scrollIntoView({block:'nearest',behavior:'smooth'}); });
   const res=box.querySelector('.nk-dres'), n=+box.dataset.n||0;
-  if(pick<3&&(get('nook:sq2',{})[st.id]||{})[pick]) third(box,st,pick);
+  if(pick<3&&(get('nook:sq2',{})[K(st)]||{})[pick]) third(box,st,pick);
   box.querySelectorAll('.nk-sk').forEach(b=>b.onclick=()=>{ if(b.disabled) return; b.disabled=true; const ok=b.dataset.ok==='1', id=b.dataset.id;
     b.classList.add(ok?'ok':'no');
     if(ok){ third(box,st,pick); const got=box.querySelectorAll('.nk-sk.ok').length; res.textContent=got>=n?'That is every skill this answer leans on.':'Yes. '+(n-got)+' more to find.';
-      if(got>=n){ const D=get('nook:sq2',{}); (D[st.id]=D[st.id]||{})[pick]=Date.now(); put('nook:sq2',D); box.querySelectorAll('.nk-sk:not(:disabled)').forEach(x=>x.disabled=true); res.insertAdjacentHTML('afterend',lean(st.tree.o[pick])); closeOnHere(box); third(box,st,pick); } }
+      if(got>=n){ const D=get('nook:sq2',{}); (D[K(st)]=D[K(st)]||{})[pick]=Date.now(); put('nook:sq2',D); box.querySelectorAll('.nk-sk:not(:disabled)').forEach(x=>x.disabled=true); res.insertAdjacentHTML('afterend',lean(st.tree.o[pick])); closeOnHere(box); third(box,st,pick); } }
     else { const k=JOB[id]; res.textContent=id+' does another job here'+(k!=null?': it is a skill to '+N().ways[k]+'.':'.'); } }); }
 
 /* the third level: the skill was used, and something unexpected happened. Every way on is a valid use of a skill. */
 function third(box,st,pick){ const E=st.tree.e&&st.tree.e[pick]; if(!E||box.parentNode.querySelector('.nk-third')) return;
-  const T=get('nook:sq3',{}), seen=(T[st.id]||{})[pick]||[];
+  const T=get('nook:sq3',{}), seen=(T[K(st)]||{})[pick]||[];
   const d=document.createElement('div'); d.className='nk-third';
   d.innerHTML='<p class="kd">then</p><p class="nk-start">'+fk(E[0])+'</p><p class="nk-ask">What does '+esc((st.tree.t.match(/Zoe|Evita|Sarah|Claire|Randy|Jean|Terry|Mike/)||['the student'])[0])+' do to keep going?</p><ol class="nk-ways">'
     +E[1].map((r,i)=>'<li><button type="button" class="nk-on3'+(seen.includes(i)?' tried':'')+'" data-i="'+i+'">'+fk(r[0])+'</button></li>').join('')+'</ol><div class="nk-f3"></div>';
   box.after(d);
-  d.querySelectorAll('.nk-on3').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, r=E[1][i], T=get('nook:sq3',{}), m=(T[st.id]=T[st.id]||{}), s=(m[pick]=m[pick]||[]); if(!s.includes(i)) s.push(i); put('nook:sq3',T);
+  d.querySelectorAll('.nk-on3').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, r=E[1][i], T=get('nook:sq3',{}), m=(T[K(st)]=T[K(st)]||{}), s=(m[pick]=m[pick]||[]); if(!s.includes(i)) s.push(i); put('nook:sq3',T);
     d.querySelectorAll('.nk-on3').forEach(x=>x.classList.toggle('on',x===b)); b.classList.add('tried');
     const f=d.querySelector('.nk-f3'); f.innerHTML='<p>'+fk(r[2])+'</p>'+lean([r[0],r[1]])+'<p class="sk-n">'+(s.length>=3?'You have tried all three. Each one keeps the skills going when the first try did not land.':'Each of the three keeps going with a skill. Try another.')+'</p>';
     closeOnHere(f); f.scrollIntoView({block:'nearest',behavior:'smooth'}); }); }
@@ -204,7 +209,7 @@ function third(box,st,pick){ const E=st.tree.e&&st.tree.e[pick]; if(!E||box.pare
 /* the measuring stick: multiple choice dealt from understanding, standing and practice */
 const pickN=(a,n)=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a.slice(0,n); };
 function deal(){ const O=opens(); if(!O.length) return null; const kinds=[];
-  O.forEach(([s,st])=>{ if(st.u) kinds.push(['u',s,st]); if(st.tree){ kinds.push(['w',s,st]); kinds.push(['a',s,st]); } st.practice.forEach((p,j)=>kinds.push(['p',s,st,j])); });
+  O.forEach(([s,st])=>{ if(st.u) kinds.push(['u',s,st]); casesOf(st).forEach(c=>{ kinds.push(['w',s,c]); kinds.push(['a',s,c]); }); st.practice.forEach((p,j)=>kinds.push(['p',s,st,j])); });
   const [k,s,st,j]=pickN(kinds,1)[0];
   const others=(n)=>{ const pool=s.steps.filter(t=>t.id!==st.id), all=N().series.flatMap(x=>x.steps).filter(t=>t.id!==st.id);
     return pickN(pool.length>=n?pool:all,n); };
