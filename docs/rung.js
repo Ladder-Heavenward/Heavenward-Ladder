@@ -3691,7 +3691,7 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 (function(){
 'use strict';
 if(window.LADDER_DESK) return;
-const PAGES=window.LADDER_SWIPE_PAGES||/^(r\d\d|floor\d|inf|intro$)/; /* todo16: how to read the ladder too */ /* Phase G floor 8: all rungs and the Endless floor */
+const PAGES=window.LADDER_SWIPE_PAGES||/^(r\d\d|floor\d|inf|intro$|dbt)/; /* todo16: how to read the ladder too */ /* the nook too (Andrew 2026-11-23 17:49Z) */ /* Phase G floor 8: all rungs and the Endless floor */
 const ADVANCE_ON_SWIPE_LEFT=true; /* finger moves left = the row moves on, as pages turn; flip for the other reading */
 const pg=()=>window.ladderPage?ladderPage():'';
 const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap|gname)(\s|$)/;
@@ -3807,7 +3807,9 @@ function buildChunks(els){
   screens=swDrop(fitScreens(items));
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
 function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step){ if(els.some(e=>e.matches&&e.matches('header.top'))) buildChunks(els); return; } /* Andrew 2026-11-20: a page's opening (title and summary, no step) is screens too, so it never scrolls */ if(CHUNKPAGE.test(pg())&&els.length&&els[0]&&els.some(e=>e.matches&&e.matches('header.top'))){ buildChunks(els); return; } expand(step);
-  const put=ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
+  let pend=[]; const pairs=[]; /* the nook (Andrew 2026-11-23 17:49Z): a layer's name rides with the screen after it */
+  const put=ch=>{ if(ch.matches('.dbtstep>.layer')){ pend.push(ch); return; } const n0=screens.length; put0(ch); if(pend.length&&screens.length>n0){ pairs.push([pend,screens[n0][0]]); pend=[]; } };
+  const put0=ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
     /* Andrew 2026-11-20 08:26Z: an "Anexact, yet rigorous" box is a series of slides. Its heading rides with its first part, each part is a screen,
        and the box is drawn round whichever part is showing (.sw-split hides the box on the other screens) */
     if(ch.matches('aside')&&!ch.hasAttribute('data-collapsed')&&ch.children.length>1){ let hold=[];
@@ -3825,6 +3827,7 @@ function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.ste
   /* todo16: a page's title, opened with its first footing, rides with the first screen only */
   const hdr=els.find(e=>e.matches&&e.matches('header.top')); if(hdr&&screens.length){ hdr.classList.add('sw-hdr'); [...hdr.children].filter(x=>!x.matches('p.home,.pn,script,style')).forEach(x=>screens[0].push(x)); }
   screens=swDrop(fitScreens(screens));
+  pairs.forEach(([ls,el])=>{ const sc=screens.find(x=>x.includes(el)); if(sc) sc.unshift(...ls); }); /* joined after the fit: the frame under a layer's name sizes itself to the screen */
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
 function ui(){ if(bar) return; bar=document.createElement('div'); bar.className='swbar'; bar.hidden=true;
   L=document.createElement('button'); L.type='button'; L.className='swnav swl'; L.innerHTML='<span aria-hidden="true">◀</span> previous'; L.setAttribute('aria-label','previous screen');
