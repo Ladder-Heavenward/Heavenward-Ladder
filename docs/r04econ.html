@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4·econ · Can a Threat Be Empty?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04crypt.html">← 4·crypt can a shifted alphabet keep a secret?</a><a href="r04bio.html">next: 4·bio how do four letters spell twenty things? →</a></p>
+  <div class="tags"><span class="tag econ">4·econ · economics</span></div>
+  <h1>Can a Threat Be Empty?</h1>
+  <p data-pid="8c36d0">Can a threat be empty? Sarah wants to open a coffee cart outside the station, where Mike already sells coffee. Mike tells her: open, and I will cut my price until neither of us makes anything. If she believes him, she stays away. But the threat is about a move Mike makes after hers, and once she has opened, a price war costs him too. This page writes a game in turns as a tree of moves, solves it from the last move back to the first, proves by induction that every game in turns with finitely many moves has an outcome that best play reaches, and uses that outcome to tell a threat that will be carried out from one that is only words.</p>
+  <p class="gesture" data-pid="dd1e7c">Draw the game as a tree: each fork is one player’s turn, and each end says what every player gets. Find a fork whose branches all end, give it the branch best for the player whose turn it is, and put that end in the fork’s place. Repeat until the first fork is gone. A threat about a later move counts only if the player would pick it when that fork comes.</p>
+</header>
+
+<section class="class step" data-step="4econ1">
+  <h2 class="sthead"><span class="stno">4econ1</span>A Game in Turns</h2>
+  <p data-pid="ba0910">Sarah moves first: she opens a cart, or she stays at her other job. If she opens, Mike moves: he shares the corner, or he starts a price war. Here is what each of them makes, in dollars an hour, at each way the game can end.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>how it ends</th><th>Sarah</th><th>Mike</th></tr>
+    <tr><th>Sarah stays away</th><td>3</td><td>10</td></tr>
+    <tr><th>Sarah opens, Mike shares</th><td>5</td><td>5</td></tr>
+    <tr><th>Sarah opens, Mike fights</th><td>1</td><td>2</td></tr>
+  </table></div>
+  <p data-pid="7c7fc4">From here on, on this page, a <i>fork</i> is a turn: a player and the branches that player may take. An <i>end</i> is a place where the game stops, with a pair (what Sarah gets, what Mike gets). A <i>game in turns</i> is a first fork, each of whose branches leads to an end or to another game in turns.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{end: } (s, m)\\ &amp;\text{fork: a player, and branches}\\ &amp;\text{each branch: an end, or a game}\end{aligned}"></div>
+  <p data-pid="b8296a">Each player knows the whole tree, and sees every move made before their own. The question is what each should do. Sarah cannot read her best branch off her own column, because what she gets after opening depends on a move that is not hers.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{opens: } 5 \text{ or } 1\text{, by Mike’s pick}\\ &amp;\text{stays away: } 3\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·econ.1.1</span><span class="ph understand">understand</span>What is a fork, what is an end, and why can Sarah not choose by looking at her own column alone?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4econ2">
+  <h2 class="sthead"><span class="stno">4econ2</span>The Last Move First</h2>
+  <p data-pid="ad37b1">Begin where nothing comes after. Mike’s fork has two branches, and both are ends. At that fork the game is Mike’s alone, and he takes what pays him more.</p>
+  <pre class="lines" data-k="ember" data-label="this page: Mike’s fork, then Sarah’s">
+\text{Mike: share } 5,\ \text{fight } 2 @@ the table, Mike’s column
+2 < 5 @@ the any-two-compare technique (4h)
+\text{Mike’s fork} \to (5, 5) @@ he shares: put that end in the fork’s place
+\text{Sarah: open } 5,\ \text{stay away } 3 @@ her fork now has two ends
+3 < 5 @@ any-two-compare
+\htmlClass{new}{(5, 5)} @@ she opens, and he shares
+  </pre>
+  <p data-pid="705197">Last-move-first technique: <b>at a fork whose branches all end, the player whose turn it is takes the branch that pays them most, so the fork may be replaced by that end.</b> Each use makes the tree one fork smaller. When no fork is left, one end remains, and it is where best play goes.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{all branches end} \Rightarrow\\ &amp;\quad\text{fork} \to \text{the mover’s best end}\end{aligned}"></div>
+  <p data-pid="2ef4b7">The order matters. Sarah’s fork could not be settled first: until Mike’s fork was replaced, one of her branches was not an end, and she had nothing to compare.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·econ.2.1</span><span class="ph understand">understand</span>What does the last-move-first technique say, and why can the first fork not be settled first?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4econ3">
+  <h2 class="sthead"><span class="stno">4econ3</span>Every Game in Turns Has a Best-Play End</h2>
+  <p data-pid="e5765d">Does the technique always finish? Call an end the <i>best-play end</i> of a game when it is the end reached if every player, at every fork, takes the branch that pays them most from there on. Best-play technique: <b>every game in turns with finitely many forks, in which no player is ever offered the same amount on two branches of one fork, has exactly one best-play end.</b> The proof is by strong induction (4h) on the number of forks.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the best-play technique">
+\text{suppose: every game with fewer than } n \text{ forks has one} @@ strong induction: the hypothesis for every count below n
+n = 0:\ \text{the game is an end, and that end is it} @@ no fork, no choice
+n \ne 0:\ \text{first fork } F,\ \text{branches } B_1, \ldots, B_k @@ a game with forks has a first one
+\text{each } B_i \text{ has fewer than } n \text{ forks} @@ F is not inside any branch
+\text{each } B_i \text{ has one best-play end } e_i @@ the hypothesis
+\{\text{mover’s amount at } e_1, \ldots, e_k\} \text{ has a greatest} @@ the greatest-member technique (4k): finite, with a member
+\text{only one } e_i \text{ gives it} @@ no two branches of F pay the mover the same
+\htmlClass{new}{\text{that } e_i \text{ is the game’s one best-play end}} \quad \blacksquare @@ the mover takes it, and best play below goes to e_i
+  </pre>
+  <p data-pid="bbe10c">The proof is the last-move-first technique turned around: it settles each branch first, by the hypothesis, and only then the fork on top. It says nothing about how big the tree is. A game with a million forks has a best-play end, as Sarah’s does.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{finitely many forks, no ties}\\ &amp;\quad \Rightarrow \text{exactly one best-play end}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·econ.3.1</span><span class="ph understand">understand</span>What does the best-play technique say, which two techniques of rung 4 does its proof stand on, and where is “no ties” used?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4econ4">
+  <h2 class="sthead"><span class="stno">4econ4</span>An Empty Threat, and a Real One</h2>
+  <p data-pid="409583">Mike’s threat named the branch “fight”. At his fork, fight pays him 2 and share pays 5. So when his fork comes, he shares. Empty-threat technique: <b>a threat about a later fork changes nothing when the player would not take that branch once the fork is reached.</b> Sarah need only check his fork, not his words.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{threat: fight}\\ &amp;\text{at his fork: } 2 &lt; 5\\ &amp;\text{so the threat is empty}\end{aligned}"></div>
+  <p data-pid="2ad7a3">Now Mike makes his threat real before Sarah decides. He signs a deal with the station: if anyone else sells coffee there, he sells at cost or pays the station 4 dollars an hour. Sharing now leaves him 1 an hour. The tree is the same; one end has changed.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>how it ends</th><th>Sarah</th><th>Mike</th></tr>
+    <tr><th>Sarah stays away</th><td>3</td><td>10</td></tr>
+    <tr><th>Sarah opens, Mike shares</th><td>5</td><td>1</td></tr>
+    <tr><th>Sarah opens, Mike fights</th><td>1</td><td>2</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: the same tree, after the deal">
+\text{Mike: share } 1,\ \text{fight } 2 @@ the new column
+\text{Mike’s fork} \to (1, 2) @@ last-move-first: he fights
+\text{Sarah: open } 1,\ \text{stay away } 3 @@ her fork
+\htmlClass{new}{(3, 10)} @@ she stays away, and Mike makes 10
+  </pre>
+  <p data-pid="5225da">By making one of his own ends worse, Mike went from 5 an hour to 10. <b>A player can do better by taking a good branch away from themselves, when the others can see it is gone.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·econ.4.1</span><span class="ph understand">understand</span>How can Sarah tell whether a threat is empty, and how did a worse end make Mike better off?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4econ5">
+  <h2 class="sthead"><span class="stno">4econ5</span>Taking Turns at a Growing Pot</h2>
+  <p data-pid="8395a7">Claire and Jean take turns at a pot of coins, Claire first, for 4 turns. At turn t the player whose turn it is may take: they get t + 1 coins, and the other gets one fewer than t. Or they may pass, and the pot grows. If all 4 turns pass, each gets 4.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>turn</th><th>whose turn</th><th>take: the mover gets</th><th>the other gets</th></tr>
+    <tr><th>1</th><td>Claire</td><td>2</td><td>0</td></tr>
+    <tr><th>2</th><td>Jean</td><td>3</td><td>1</td></tr>
+    <tr><th>3</th><td>Claire</td><td>4</td><td>2</td></tr>
+    <tr><th>4</th><td>Jean</td><td>5</td><td>3</td></tr>
+    <tr><th>all pass</th><td></td><td>4 each</td><td></td></tr>
+  </table></div>
+  <p data-pid="b4dcc8">Passing all the way pays both of them more than any take at turn 1, 2 or 3. Best play does not go there. The claim, for every turn counted back from the end: the player whose turn it is takes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the growing pot, from turn 4 back">
+\text{turn 4: take } 5,\ \text{pass } 4 @@ Jean takes: 4 < 5
+\text{turn 3: take } 4,\ \text{pass} \to 3 @@ pass, and Jean takes at 4, leaving Claire 3
+\text{turn 2: take } 3,\ \text{pass} \to 2 @@ Claire takes at 3, leaving Jean 2
+\text{turn 1: take } 2,\ \text{pass} \to 1 @@ Jean takes at 2, leaving Claire 1
+\htmlClass{new}{\text{Claire takes at turn 1: } (2, 0)} @@ each turn settled from the one after it
+  </pre>
+  <p data-pid="370b87">The four lines are one step done four times: if the next player takes, passing leaves you t, and taking gives you t + 1, so you take. That is an induction counted back from the last turn, and it works for a pot of any length.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{next takes} \Rightarrow \text{pass gives } t,\ \text{take gives } t + 1\\ &amp;\text{so take, at every turn}\end{aligned}"></div>
+  <p data-pid="de85a8">The page says only what best play does, when each player takes what pays them most at every fork. Whether real players do that, with real money at stake, is a question about people, and only watching them can answer it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·econ.5.1</span><span class="ph understand">understand</span>Why does best play take at turn 1, when passing all the way pays both players more?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4econ6">
+  <h2 class="sthead"><span class="stno">4econ6</span>Moves to Watch Out For</h2>
+  <p data-pid="acf064">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{Mike said fight, so Sarah stays away}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the threat is about his later fork: check what he takes there (4econ4)
+\begin{aligned}&\text{Sarah takes her biggest}\\ &\quad\text{number, 5, so she opens}\,?\end{aligned} @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the 5 depends on Mike’s pick; settle his fork first (4econ2)
+\text{all pass gives } 4 \text{ each, so best play passes}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; best for the two together is not best for the mover at each fork (4econ5)
+\text{the tree is too big to have a best-play end}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the proof works for every finite tree, whatever its size (4econ3)
+\text{a tie, so take the branch drawn first}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; with a tie there are two best plays; the technique needs no ties (4econ3)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·econ.6.1</span><span class="ph understand">understand</span>Which move above settles the first fork before the last, and why is that out of sequence?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">4·econ.7.1</span><span class="tagq">do</span>Zoe moves first: left or right. Right ends with Zoe 2 and Terry 2. After left, Terry moves: up ends with Zoe 3 and Terry 1; down gives Zoe a last move, where in ends with Zoe 4 and Terry 0, and out ends with Zoe 0 and Terry 3. Find the best-play end, fork by fork.</div>
+  <div class="chq"><span class="chid">4·econ.7.2</span><span class="tagq">make</span>Build a game in turns, with two players and at most four forks, in which the first player gets more at the best-play end after one of their own branches is taken away.</div>
+  <div class="chq"><span class="chid">4·econ.7.3</span><span class="tagq">converse</span>The best-play end is reached when each player takes what pays them most. Decide whether some other end can pay every player at least as much and one player more, and give a tree that shows it, or a proof that none can.</div>
+  <div class="chq"><span class="chid">4·econ.7.4</span><span class="tagq">edge</span>Give a game in turns where one player is offered the same amount on two branches of one fork, and the two ways of breaking the tie give another player different amounts. Say what the best-play technique can still claim.</div>
+  <div class="chq"><span class="chid">4·econ.7.5</span><span class="tagq">open</span>Chess with a rule that stops every game after a set number of moves has finitely many forks, and ends in a win, a loss or a draw. Say what the best-play technique tells you about chess, and what it does not tell you.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r04crypt.html">← 4·crypt · can a shifted alphabet keep a secret?</a><a href="r04bio.html">4·bio · how do four letters spell twenty things? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="773d60">A game in turns is a <b>game in extensive form with perfect information</b>, and its drawing is a <b>game tree</b>. Settling it from the last move back is <b>backward induction</b>. Best play at every fork is a <b>subgame perfect equilibrium</b>. An empty threat is a <b>non-credible threat</b>, and taking a branch away from yourself is <b>commitment</b>. The growing pot is the <b>centipede game</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="e845da">Ernst Zermelo used this kind of reasoning on chess in 1913. Reinhard Selten made best play at every fork the test of a sound plan, and shared the 1994 Nobel memorial prize in economics for it. Robert Rosenthal set out the growing pot in 1981, in a paper on price wars.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
