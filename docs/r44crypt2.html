@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>44·crypt2 · Can You Compute on Secrets Without Seeing Them?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r44crypt.html">← 44·crypt how do earbuds share a secret in public?</a><a href="r44chem.html">next: 44·chem where do a molecule’s electrons sit? →</a></p>
+  <div class="tags"><span class="tag crypt">44·crypt2 · cryptography</span></div>
+  <h1>Can You Compute on Secrets Without Seeing Them?</h1>
+  <p data-pid="31dfe0">Can you compute on secrets without seeing them? Three friends want their average pay without anyone learning anyone else’s. A hospital wants a cloud server to run a test on records the server must not read. In 1982 Andrew Yao asked how two millionaires could learn who is richer while telling nothing else. The answers lean on 43·crypt’s sharing and on maps that keep plus and times, rung 44’s idea. Shares can be added without being opened; some locks let locked numbers be multiplied; and since 2009, a lock lets any computation run on what it hides. This page first fixes a choice in place without showing it, then adds shares, multiplies under a lock, and says what computing on locked data costs.</p>
+  <p class="gesture" data-pid="0ffc74">Commit by publishing a fingerprint of the choice and a random pad; open later by showing both. Split each secret into random shares that add to it; each friend adds the shares it holds, and only the total is opened. A lock that keeps times, E(a)·E(b) = E(ab), lets locked numbers be multiplied; one that keeps both plus and times lets any circuit of 39’s gates run on locked bits.</p>
+</header>
+
+<section class="class step" data-step="44crypt21">
+  <h2 class="sthead"><span class="stno">44crypt21</span>Fixing a Choice Without Showing It</h2>
+  <p data-pid="9574b2">Zoe and Mike settle a bet by phone. Each must name heads or tails before seeing the other’s choice, and neither trusts the other to go first.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a commitment">
+\text{publish } H(\text{choice} \,\|\, r),\ r \text{ a long random pad} @@ 22·crypt’s fingerprint
+\text{hiding: the fingerprint says nothing of the choice} @@ r makes every choice look alike
+\text{binding: no other choice gives the same fingerprint} @@ finding one is as hard as a clash
+\htmlClass{new}{\text{open later by showing choice and } r} @@ anyone checks the fingerprint
+  </pre>
+  <p data-pid="3a1440">From here on, on this page, to <i>commit</i> is to publish something that fixes a value now and reveals it only when its maker chooses to open it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·crypt2.1.1</span><span class="ph understand">understand</span>How can Zoe fix her choice now without showing it, and why can she not change it later?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44crypt22">
+  <h2 class="sthead"><span class="stno">44crypt22</span>Adding Secrets by Adding Shares</h2>
+  <p data-pid="c726b7">Zoe, Sarah and Mike earn 50, 70 and 60 thousand. They work on a clock of 1000 hours (43a). Each splits their pay into three shares that add to it, and hands one to each friend.</p>
+  <pre class="lines" data-k="ember" data-label="this page: shares">
+\text{Zoe: } 50 = 812 + 431 + 807 \pmod{1000} @@ two shares random, the third forced
+\text{each share alone: any number, equally likely} @@ says nothing
+\text{each friend adds the three shares they hold} @@ one from each friend
+\htmlClass{new}{\text{the three sums add to } 180;\ \text{average } 60} @@ only the total is opened
+  </pre>
+  <p data-pid="47f276">Shared-sum technique: <b>split each secret into random shares that add to it; sums of shares are shares of the sum, so a total can be computed and opened while no one sees any single secret.</b> Adding is a map that keeps plus, so it passes through the sharing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·crypt2.2.1</span><span class="ph understand">understand</span>How do the friends find their total pay without anyone seeing another’s?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44crypt23">
+  <h2 class="sthead"><span class="stno">44crypt23</span>Locks That Let You Multiply</h2>
+  <p data-pid="006d27">Lock a number with 43i’s RSA: E(a) = a<sup>e</sup> mod n. Multiply two locked numbers.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a lock that keeps times">
+E(a)\,E(b) = a^e b^e = (ab)^e = E(ab) \pmod n @@ powers of a product
+\text{the server multiplies locked numbers, never seeing } a, b @@ only the key holder unlocks
+E \text{ keeps times, but } E(a) + E(b) \ne E(a+b) @@ not plus
+\htmlClass{new}{\text{a lock that keeps plus exists too (Paillier, 1999)}} @@ each keeps one operation
+  </pre>
+  <p data-pid="da3acd"><b>A lock that is a map keeping one operation lets that operation be done on locked numbers.</b> But any computation needs both: 44l’s Boolean algebra builds every table from plus and times on bits, so a lock keeping both would run any program.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·crypt2.3.1</span><span class="ph understand">understand</span>Why does multiplying two RSA-locked numbers give the locked product, and what is missing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44crypt24">
+  <h2 class="sthead"><span class="stno">44crypt24</span>Any Program on Locked Data</h2>
+  <pre class="lines" data-k="ember" data-label="this page: computing on locked bits">
+\text{AND} = a \cdot b,\ \ \text{XOR} = a + b \pmod 2 @@ 39f’s gates as times and plus
+\text{a lock keeping both} \Rightarrow \text{any circuit runs locked} @@ every table from one gate
+\text{each locked step adds a little noise} @@ the lock hides its number in noise
+\htmlClass{new}{\text{too much noise: refresh by running the unlock itself, locked}} @@ Gentry, 2009
+  </pre>
+  <p data-pid="73a0f7">Craig Gentry’s 2009 scheme ran the unlocking circuit on locked data to scrub the noise, so steps can go on without end. <b>Fully locked computing is possible, but each step still costs thousands to millions of times the plain step,</b> so it is used for small jobs on very private data.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·crypt2.4.1</span><span class="ph understand">understand</span>What does a lock keeping both plus and times allow, and what stops it running forever without a refresh?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44crypt25">
+  <h2 class="sthead"><span class="stno">44crypt25</span>Two Parties, One Circuit</h2>
+  <p data-pid="8db156">Shares handle sums; for anything else, two parties can evaluate a whole circuit together. One scrambles each gate’s table with random labels; the other walks through it learning only labels, never the bits.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the scrambled circuit">
+\text{each wire’s 0 and 1 get random labels} @@ the labels look alike
+\text{each gate’s four rows locked under its input labels} @@ only the right row opens
+\text{the walker gets its own input labels without saying which} @@ by a trade that hides its choice
+\htmlClass{new}{\text{only the output wire’s labels are revealed}} @@ who is richer, and nothing else
+  </pre>
+  <p data-pid="1438a5"><b>Any computation two parties can write as a circuit can be done so that each learns the output and nothing more.</b> Browsers use this kind of joint computing to check a password against lists of stolen ones without sending the password.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·crypt2.5.1</span><span class="ph understand">understand</span>How can two parties evaluate a circuit together while each keeps its input hidden?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="44crypt26">
+  <h2 class="sthead"><span class="stno">44crypt26</span>Moves to Watch Out For</h2>
+  <p data-pid="37b54b">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{commit by publishing } H(\text{choice}) \text{ alone}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; with two choices Mike tries both; the random pad r hides it (44crypt21)
+\text{each friend opens their share, then all add}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; add the shares first; open only the sums (44crypt22)
+E(a) + E(b) = E(a + b) \text{ for RSA}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; RSA keeps times, not plus (44crypt23)
+\text{one share reveals a third of the pay}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a share alone is any number, equally likely (44crypt22)
+\text{fully locked computing replaces plain computing}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; each step costs thousands to millions of times more (44crypt24)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">44·crypt2.6.1</span><span class="ph understand">understand</span>Which move above credits RSA with the wrong operation, and which one does it keep?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">44·crypt2.7.1</span><span class="tagq">do</span>Split Sarah’s 70 into three shares on the clock of 1000, two of them 205 and 990.</div>
+  <div class="chq"><span class="chid">44·crypt2.7.2</span><span class="tagq">make</span>Make up two numbers a, b and RSA keys n = 33, e = 3, and check that E(a)E(b) = E(ab).</div>
+  <div class="chq"><span class="chid">44·crypt2.7.3</span><span class="tagq">converse</span>A lock that keeps plus and times lets any circuit run locked. Decide whether a lock that keeps only times can run any circuit.</div>
+  <div class="chq"><span class="chid">44·crypt2.7.4</span><span class="tagq">edge</span>Let there be only one friend. Say what the shared sum reveals.</div>
+  <div class="chq"><span class="chid">44·crypt2.7.5</span><span class="tagq">open</span>Say why the commitment needs r to be long, not just random.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r44crypt.html">← 44·crypt · how do earbuds share a secret in public?</a><a href="r44chem.html">44·chem · where do a molecule’s electrons sit? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="83b5be">The commitment is a <b>commitment scheme</b> with <b>hiding</b> and <b>binding</b>; shares that add are <b>additive secret sharing</b>; computing jointly on secrets is <b>secure multiparty computation</b> (MPC). A lock keeping an operation is <b>homomorphic encryption</b>; keeping both, <b>fully homomorphic</b> (FHE); the refresh is <b>bootstrapping</b>. The scrambled circuit is a <b>garbled circuit</b> and the hiding trade <b>oblivious transfer</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="3acb7a">Rivest, Adleman and Dertouzos asked for computing on locked data in 1978. Andrew Yao posed the millionaires’ problem in 1982 and garbled circuits followed from his work; Pascal Paillier gave an additive lock in 1999, and Craig Gentry the first fully homomorphic scheme in 2009.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

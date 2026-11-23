@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>42·nav · How Does a Robot Map a Room It Is Lost In?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42phys.html">← 42·phys how do tiny magnets agree?</a><a href="r42eng.html">next: 42·eng what holds cloth and rope together? →</a></p>
+  <div class="tags"><span class="tag nav">42·nav · navigation</span></div>
+  <h1>How Does a Robot Map a Room It Is Lost In?</h1>
+  <p data-pid="cdf5a1">How does a robot map a room it is lost in? A vacuum robot, a Mars rover or a phone showing furniture through its camera must know where it is to build a map, and must have a map to know where it is. The way out is to solve for both at once. Every wheel turn and every sighting of a landmark is a measurement linking two unknowns, and the measurements form a graph. When the robot comes back to a place it has seen, the loop closes and the errors spread out round it. This page builds the graph, solves it by 31’s least squares, closes a loop by hand, and finds why the solve stays quick for millions of measurements.</p>
+  <p class="gesture" data-pid="2193c7">Unknowns: the robot’s poses and the landmarks’ places. Each measurement says one unknown minus another is about some value. Choose all unknowns to make the sum of squared misfits least. A loop closure adds one more link; least squares spreads its error over the loop. Each measurement touches two unknowns, so the grid of the solve is mostly zeros.</p>
+</header>
+
+<section class="class step" data-step="42nav1">
+  <h2 class="sthead"><span class="stno">42nav1</span>Where Am I, and Where Is Everything?</h2>
+  <p data-pid="da104f">Claire’s robot rolls along a corridor. Its wheels count how far it went, a little wrong each time, and its camera sees landmarks, a little wrong too.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two kinds of error">
+\text{wheels only: errors add up} @@ the drift of 24·nav
+\text{landmarks only: no map to look them up in} @@ the map is unknown
+\text{each needs the other} @@ a loop
+\htmlClass{new}{\text{solve for poses and landmarks together}} @@ every measurement at once
+  </pre>
+  <p data-pid="f569ea">From here on, on this page, a <i>pose</i> x<sub>k</sub> is where the robot is at the k-th moment; a <i>link</i> is a measurement of the difference of two unknowns.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·nav.1.1</span><span class="ph understand">understand</span>Why can the robot not find its place first and the map second?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42nav2">
+  <h2 class="sthead"><span class="stno">42nav2</span>Each Measurement a Link</h2>
+  <pre class="lines" data-k="ember" data-label="this page: the graph">
+\text{wheels: } x_{k+1} - x_k \approx u_k @@ a link between two poses
+\text{camera: } \ell - x_k \approx z_k @@ a link from a pose to a landmark
+\text{dots} = \text{unknowns},\ \text{links} = \text{measurements} @@ 42a’s dots and links
+\htmlClass{new}{\text{misfit of a link} = (\text{difference} - \text{measured})} @@ zero if the measurement were perfect
+  </pre>
+  <p data-pid="722f34">Map-building technique: <b>write each measurement as a link saying the difference of two unknowns is about the measured value, and choose all the unknowns at once so that the sum of squared misfits is least.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·nav.2.1</span><span class="ph understand">understand</span>How does each measurement become a link between two unknowns?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42nav3">
+  <h2 class="sthead"><span class="stno">42nav3</span>Closing the Loop</h2>
+  <p data-pid="9586c7">The robot starts at x<sub>0</sub> = 0, rolls forward and its wheels say 1.0, rolls again and they say 1.0. Then it sees the start and measures it 1.8 behind.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three links, two unknowns">
+(x_1 - 1)^2 + (x_2 - x_1 - 1)^2 + (x_2 - 1.8)^2 @@ the sum to make least
+\partial_{x_1}:\ 2x_1 - x_2 = 0;\ \ \partial_{x_2}:\ 2x_2 - x_1 = 2.8 @@ least where the slopes are zero (31k)
+x_1 = 0.933,\ x_2 = 1.867 @@ solve the pair
+\htmlClass{new}{\text{each link off by } 0.067} @@ the 0.2 of disagreement split three ways
+  </pre>
+  <p data-pid="fff6fb">The wheels alone said x<sub>2</sub> = 2.0; the sighting alone said 1.8. <b>Least squares spreads the disagreement round the loop, each link giving way a little.</b> With weights from each sensor’s spread, the more trusted links give way less, as 31·nav blended guesses.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·nav.3.1</span><span class="ph understand">understand</span>How does least squares share out the disagreement when the loop closes?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42nav4">
+  <h2 class="sthead"><span class="stno">42nav4</span>A Grid Mostly Zeros</h2>
+  <pre class="lines" data-k="ember" data-label="this page: the size of the solve">
+\text{slopes zero} \Rightarrow A^{\mathsf T}\! A\, x = A^{\mathsf T} b @@ 31k’s normal equations
+\text{each link touches two unknowns} @@ one row of A has two entries
+A^{\mathsf T}\! A:\ \text{nonzero only where two unknowns share a link} @@ the graph’s own pattern
+\htmlClass{new}{\text{a million poses: a few million nonzeros, not } 10^{12}} @@ solved in seconds
+  </pre>
+  <p data-pid="daeb56"><b>Because each measurement links only two unknowns, the grid of the solve has the shape of the graph, nearly all zeros, and stays quick to solve as the map grows.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·nav.4.1</span><span class="ph understand">understand</span>Why does the solve stay quick when there are millions of measurements?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42nav5">
+  <h2 class="sthead"><span class="stno">42nav5</span>Seeing With a Camera</h2>
+  <p data-pid="e273cd">A camera sees corners and spots on walls, not labelled landmarks. Software must decide that a corner seen now is the one seen a minute ago.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what the camera adds">
+\text{a point in a picture: a direction, not a distance} @@ rays through the lens, 21·comp
+\text{two views from two poses: the point where the rays meet} @@ its place, by 21’s angles
+\text{a wrong match: a false link} @@ one bad link can bend the whole map
+\htmlClass{new}{\text{down-weight links with large misfits}} @@ trust the many over the few
+  </pre>
+  <p data-pid="e8c3f6">Phones place furniture in a room this way, and Mars rovers check their wheel counts against the rocks they see, because wheels slip in sand. The graph and its least squares are the same.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·nav.5.1</span><span class="ph understand">understand</span>What does a camera measure, and why must wrong matches be watched for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42nav6">
+  <h2 class="sthead"><span class="stno">42nav6</span>Moves to Watch Out For</h2>
+  <p data-pid="974fc1">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{first find the poses, then build the map}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; each needs the other; solve together (42nav1)
+\text{trust the wheels, they said } 2.0\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; least squares spreads the 0.2 over the loop: 1.867 (42nav3)
+\text{put all the error on the last link}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; every link gives way a little, 0.067 each (42nav3)
+\text{a million poses make a grid of } 10^{12} \text{ entries to solve}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; nearly all are zero: each link touches two unknowns (42nav4)
+\text{a camera measures how far each point is}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; one picture gives a direction; two views give the place (42nav5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·nav.6.1</span><span class="ph understand">understand</span>Which move above trusts one measurement over the rest, and where does least squares put x₂?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">42·nav.7.1</span><span class="tagq">do</span>Redo the loop of this page with the sighting measured as 2.3. Find x₁ and x₂.</div>
+  <div class="chq"><span class="chid">42·nav.7.2</span><span class="tagq">make</span>Make up wheel and sighting measurements for a loop of four poses that agree exactly.</div>
+  <div class="chq"><span class="chid">42·nav.7.3</span><span class="tagq">converse</span>If the measurements agree exactly, every misfit is zero. Decide whether every misfit zero means every measurement was right.</div>
+  <div class="chq"><span class="chid">42·nav.7.4</span><span class="tagq">edge</span>Let the robot never come back to a place it has seen. Say what least squares does with the wheel links alone.</div>
+  <div class="chq"><span class="chid">42·nav.7.5</span><span class="tagq">open</span>Say how the weights should change if the wheels are known to be ten times less precise than the camera.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r42phys.html">← 42·phys · how do tiny magnets agree?</a><a href="r42eng.html">42·eng · what holds cloth and rope together? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="492115">Doing both at once is <b>simultaneous localization and mapping</b> (SLAM); the graph is a <b>pose graph</b> or <b>factor graph</b>, solving it <b>graph optimization</b>, coming back a <b>loop closure</b>. Wheel counts are <b>odometry</b>, from a camera <b>visual odometry</b>; a mostly-zero grid is <b>sparse</b>; down-weighting large misfits is a <b>robust</b> fit. Solving a camera’s poses and points together is <b>bundle adjustment</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="c008dd">Smith, Self and Cheeseman set out the joint estimate of robot and map in 1986, and the name SLAM arose at a robotics meeting in 1995. Lu and Milios solved the whole graph of poses by least squares in 1997.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

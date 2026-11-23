@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>41·crypt · What Does It Mean for a Cipher to Be Secure?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41now3.html">← 41·now3 can a computer tell if a knot is untied?</a><a href="r41concl.html">next: 41·∎ some questions no machine can answer →</a></p>
+  <div class="tags"><span class="tag crypt">41·crypt · cryptography</span></div>
+  <h1>What Does It Mean for a Cipher to Be Secure?</h1>
+  <p data-pid="03feb3">What does it mean for a cipher to be secure? For two thousand years ciphers were called strong until someone broke them. In 1982 Shafi Goldwasser and Silvio Micali said exactly what secure should mean: no quick attacker can learn even one bit about the message, beyond what it could guess. They put the definition as a game, and proved schemes secure by reduction, rung 41’s tool: any attacker that wins the game could be turned into a solver of a problem believed hard. This page sets the game, measures how well an attacker plays, finds the one cipher that wins perfectly and its price, shows why a cipher that always gives the same box for the same message loses, and builds the reduction.</p>
+  <p class="gesture" data-pid="2a4e50">The attacker picks two messages; the referee locks one, chosen by a coin; the attacker guesses which. Its advantage is how far its chance of winning sits above ½. Secure means every quick attacker has a tiny advantage. The one-time pad has advantage 0 but needs a key as long as the message. Locking the same message twice the same way loses the game, so locking must use fresh chance. To prove a scheme secure, turn any winner into a solver of a hard problem.</p>
+</header>
+
+<section class="class step" data-step="41crypt1">
+  <h2 class="sthead"><span class="stno">41crypt1</span>A Game for Secrecy</h2>
+  <p data-pid="a98cf0">Mike plays against a referee who holds a key Mike never sees. Mike may ask the referee to lock any messages he likes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the game">
+\text{Mike picks two messages } m_0, m_1 \text{ of the same length} @@ any two he likes
+\text{the referee flips a coin } b \text{ and locks } m_b @@ Mike sees only the locked box
+\text{Mike guesses } b @@ wins if right
+\htmlClass{new}{\text{secure: no quick Mike wins much more than half the time}} @@ he learns nothing he could use
+  </pre>
+  <p data-pid="c7e57e">From here on, on this page, a <i>quick</i> attacker is one whose running time grows no faster than a polynomial in the key’s length, as 41h counted time.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·crypt.1.1</span><span class="ph understand">understand</span>What are the moves of the secrecy game, and what does it mean to win it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41crypt2">
+  <h2 class="sthead"><span class="stno">41crypt2</span>Measuring an Attacker</h2>
+  <pre class="lines" data-k="ember" data-label="this page: advantage">
+\text{advantage} = \big|P(\text{Mike wins}) - \tfrac12\big| @@ above a coin toss
+\text{guessing blindly: } 0 @@ a coin wins half
+\text{if the box shows the first bit: pick } m_0, m_1 \text{ differing there; advantage } \tfrac12 @@ one bit is enough to lose
+\htmlClass{new}{\text{secure: advantage below } 2^{-80} \text{ for every quick Mike}} @@ tiny, say, for a key of 128 bits
+  </pre>
+  <p data-pid="2734fe">Security-game technique: <b>a scheme is secure when every quick attacker’s chance of telling which of two chosen messages was locked sits only a tiny amount above one half.</b> Because Mike chooses the messages, a scheme that leaks any one bit of every message loses.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·crypt.2.1</span><span class="ph understand">understand</span>How is an attacker’s skill measured, and why does leaking one bit lose the game?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41crypt3">
+  <h2 class="sthead"><span class="stno">41crypt3</span>The Pad Wins Perfectly</h2>
+  <pre class="lines" data-k="ember" data-label="this page: the one-time pad">
+c = m \oplus k,\ k \text{ uniform, as long as } m @@ each key bit a fair coin
+P(c \mid m_0) = P(c \mid m_1) = 2^{-n} @@ every box equally likely, whatever the message
+\text{advantage} = 0 \text{ for every Mike, however slow} @@ perfect secrecy
+\htmlClass{new}{\text{perfect secrecy needs at least as many keys as messages}} @@ Shannon, 1949
+  </pre>
+  <p data-pid="6a3731">Shannon showed perfect secrecy costs a fresh key as long as all the messages ever sent. <b>Practical ciphers settle for secrecy against quick attackers, with short keys, and that needs problems believed hard.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·crypt.3.1</span><span class="ph understand">understand</span>Why does the one-time pad win perfectly, and what does that cost?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41crypt4">
+  <h2 class="sthead"><span class="stno">41crypt4</span>Same Message, Same Box</h2>
+  <p data-pid="b1b7d4">Suppose locking is a fixed function: the same message under the same key always gives the same box. Mike may ask the referee to lock messages before he picks.</p>
+  <pre class="lines" data-k="ember" data-label="this page: Mike wins">
+\text{ask the referee to lock } m_0;\ \text{get } c_0 @@ allowed in the game
+\text{pick } m_0, m_1;\ \text{get box } c @@ the challenge
+c = c_0 \Rightarrow \text{guess } 0;\ \text{else guess } 1 @@ always right
+\htmlClass{new}{\text{advantage } \tfrac12:\ \text{fixed locking is never secure}} @@ it shows when a message repeats
+  </pre>
+  <p data-pid="eef4e3"><b>A secure cipher must lock the same message differently each time, by mixing in fresh chance.</b> That is why 20·crypt2’s chained mode starts each message with a random block.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·crypt.4.1</span><span class="ph understand">understand</span>Why does any cipher that locks the same message the same way lose the game?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41crypt5">
+  <h2 class="sthead"><span class="stno">41crypt5</span>Proof by Reduction</h2>
+  <p data-pid="67b82a">A scheme S is built on a problem H believed hard. To prove S secure, Evita shows how any Mike who wins S’s game could be used to solve H, as 41k turned one problem into another.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the reduction">
+\text{given Mike with advantage } \varepsilon \text{ against } S @@ suppose a winner
+\text{build } R:\ \text{play the referee for Mike, using a copy of } H @@ Mike cannot tell
+R \text{ solves } H \text{ with advantage } \approx \varepsilon,\ \text{in about Mike’s time} @@ his win becomes R’s solve
+\htmlClass{new}{H \text{ hard} \Rightarrow \text{no quick Mike has more than tiny } \varepsilon} @@ by contraposition
+  </pre>
+  <p data-pid="041f8a"><b>A proof of security says: any quick attacker on the scheme would give a quick solver of a hard problem.</b> It does not say H is hard; that stays a belief, the same as 41·now2’s question of whether checking is easier than finding.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·crypt.5.1</span><span class="ph understand">understand</span>How does a reduction prove a scheme secure, and what does it still take on trust?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41crypt6">
+  <h2 class="sthead"><span class="stno">41crypt6</span>Moves to Watch Out For</h2>
+  <p data-pid="39fa6d">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{secure means the key cannot be found}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a scheme can hide its key and leak a bit of every message (41crypt2)
+\text{advantage} = P(\text{Mike wins})\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; a coin wins half; advantage is the excess over ½ (41crypt2)
+\text{lock each message the same way, for speed}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; Mike locks m₀ first and wins every time (41crypt4)
+\text{a winner against } H \text{ gives a winner against } S\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the reduction runs the other way: a winner against S solves H (41crypt5)
+\text{the reduction proves } H \text{ hard}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; it assumes H hard and concludes S secure (41crypt5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·crypt.6.1</span><span class="ph understand">understand</span>Which move above runs the reduction backwards, and which way must it run?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">41·crypt.7.1</span><span class="tagq">do</span>A cipher’s box shows whether the message has more 1s than 0s. Find an attacker’s advantage in the game.</div>
+  <div class="chq"><span class="chid">41·crypt.7.2</span><span class="tagq">make</span>Make up a cipher that hides its key from every attacker yet loses the game.</div>
+  <div class="chq"><span class="chid">41·crypt.7.3</span><span class="tagq">converse</span>Perfect secrecy gives advantage 0 against every attacker. Decide whether advantage 0 against every quick attacker means perfect secrecy.</div>
+  <div class="chq"><span class="chid">41·crypt.7.4</span><span class="tagq">edge</span>Let Mike pick m₀ = m₁. Say what advantage any attacker has.</div>
+  <div class="chq"><span class="chid">41·crypt.7.5</span><span class="tagq">open</span>Say why the game lets Mike choose the two messages instead of the referee.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r41now3.html">← 41·now3 · can a computer tell if a knot is untied?</a><a href="r41concl.html">41·∎ · some questions no machine can answer →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="231c25">The game is <b>indistinguishability</b>: with locking on request, <b>IND-CPA</b> (chosen-plaintext attack). Its goal is <b>semantic security</b>; locking with fresh chance is <b>probabilistic encryption</b>. A tiny advantage is <b>negligible</b>; the proof is a <b>security reduction</b> and the believed-hard problem a <b>hardness assumption</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="49a480">Claude Shannon proved perfect secrecy needs keys as long as messages in 1949. Shafi Goldwasser and Silvio Micali defined semantic security and probabilistic encryption in 1982, published 1984, and won the Turing Award for 2012.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

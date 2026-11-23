@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>42·comp · How Does a Machine Search for a Plan?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42now2.html">← 42·now2 how big must order be?</a><a href="r42concl.html">next: 42·∎ counting alone says how things connect →</a></p>
+  <div class="tags"><span class="tag comp">42·comp · computing</span></div>
+  <h1>How Does a Machine Search for a Plan?</h1>
+  <p data-pid="2d0e7f">How does a machine search for a plan? A robot finding a way across a warehouse, a phone finding a route home, and a program solving a sliding-tile puzzle all search a graph: each state is a dot, each move a link, and a plan is a path. The graph is usually too big to draw. Blind search grows like the number of moves to the power of the plan’s length; a good guess of the distance left cuts it down, and a guess that never overstates still finds the shortest plan. Against an opponent, search alternates best and worst. This page builds search on 42k’s shortest paths and 42h’s games.</p>
+  <p class="gesture" data-pid="dd0eff">Search grows like bᵈ. A* expands the dot with the least g + h, the cost so far plus a guess of the cost left; if h never overstates, the first time the goal is taken out, its path is shortest. Against an opponent, take the best of the opponent’s worst replies, and skip any branch already shown no better than one in hand.</p>
+</header>
+
+<section class="class step" data-step="42comp1">
+  <h2 class="sthead"><span class="stno">42comp1</span>Plans as Paths</h2>
+  <p data-pid="bbde34">Jean’s puzzle has eight numbered tiles in a 3 × 3 frame and one empty square. A move slides a tile into the empty square. The goal is the tiles in order.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the puzzle as a graph">
+\text{dot} = \text{an arrangement of the tiles} @@ a state
+\text{link} = \text{one slide} @@ a move, cost 1
+\tfrac{9!}{2} = 181\,440 \text{ reachable arrangements} @@ half of all, by 19’s parity of shuffles
+\htmlClass{new}{\text{a plan} = \text{a path from start to goal}} @@ the best plan, the shortest path (42k)
+  </pre>
+  <p data-pid="72cd73">From here on, on this page, to <i>expand</i> a dot is to list the dots one move away.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.1.1</span><span class="ph understand">understand</span>How does a puzzle become a graph, and what is a plan in it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp2">
+  <h2 class="sthead"><span class="stno">42comp2</span>Blind Search Grows Fast</h2>
+  <pre class="lines" data-k="ember" data-label="this page: counting dots">
+b \text{ moves from each dot, plan of length } d @@ b the branching
+\text{dots within } d \text{ moves} \approx b^d @@ the counting principle (4·stat)
+\text{puzzle: } b \approx 2.7,\ d \approx 22:\ 2.7^{22} \approx 3 \times 10^{9} @@ the frame caps it at 181 440
+\htmlClass{new}{\text{the 15-tile puzzle: } 10^{13} \text{ arrangements}} @@ blind search cannot keep up
+  </pre>
+  <p data-pid="f4c014">Searching outward in rings from the start, as 42k does, finds the shortest plan, but the rings swell like bᵈ. Search needs a sense of direction.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.2.1</span><span class="ph understand">understand</span>Why does blind search swell as plans grow longer?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp3">
+  <h2 class="sthead"><span class="stno">42comp3</span>A Guess of the Distance Left</h2>
+  <pre class="lines" data-k="ember" data-label="this page: A*">
+g(n) = \text{moves so far to } n @@ known
+h(n) = \text{a guess of moves left} @@ cheap to work out
+\text{expand the dot with the least } g + h @@ the most promising plan
+\htmlClass{new}{h = \text{the sum of each tile’s rows and columns from home}} @@ for the puzzle
+  </pre>
+  <p data-pid="55a764">Each slide moves one tile one square, so it lowers that sum by at most 1. <b>Expanding the dot with the least cost so far plus guessed cost left heads the search toward the goal.</b> With h = 0 this is 42k’s shortest-path search again.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.3.1</span><span class="ph understand">understand</span>What does A* expand next, and what is a good guess for the puzzle?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp4">
+  <h2 class="sthead"><span class="stno">42comp4</span>A Guess That Never Overstates</h2>
+  <p data-pid="cfee06">Say h never overstates the true cost left: h(n) ≤ the shortest distance from n to the goal. Then A* finds a shortest plan.</p>
+  <pre class="lines" data-k="ember" data-label="this page: why">
+\text{suppose the goal is taken out by a path of cost } C > C^* @@ C* the shortest cost; for contradiction
+\text{some dot } n \text{ on a shortest path still waits:}\ g(n) + h(n) \le C^* @@ h never overstates
+g(n) + h(n) \le C^* < C @@ so n was more promising
+\htmlClass{new}{\text{A* would have taken out } n \text{ first: contradiction}} @@ so C = C*
+  </pre>
+  <p data-pid="26b158">A* technique: <b>if the guess of the cost left never overstates it, the first plan A* finishes is a shortest one.</b> The closer the guess to the truth, the fewer dots it expands: for the puzzle, the sum of distances expands thousands of times fewer than blind search.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.4.1</span><span class="ph understand">understand</span>Why does a guess that never overstates guarantee that A* finds a shortest plan?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp5">
+  <h2 class="sthead"><span class="stno">42comp5</span>Searching Against an Opponent</h2>
+  <p data-pid="ecfefb">In a game the other side moves too. 42h’s games are solved backward: Jean takes the best move, assuming the opponent then takes the move worst for her.</p>
+  <pre class="lines" data-k="ember" data-label="this page: best of worst">
+\text{value}(n) = \max_{\text{my moves}} \min_{\text{replies}} \text{value} @@ minimax
+\text{a branch already worse than one in hand: skip its other replies} @@ it will not be chosen
+\text{well ordered: about } b^{d/2} \text{ dots, not } b^d @@ twice the depth in the same time
+\htmlClass{new}{\text{too deep: stop and score the board by a guess}} @@ as A* guessed the distance
+  </pre>
+  <p data-pid="9545ad"><b>Against an opponent, search takes the best of the opponent’s worst replies, and a branch shown no better than one in hand need not be finished.</b> Chess programs searched this way until 2017, when programs that learn their guesses from self-play overtook them.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.5.1</span><span class="ph understand">understand</span>How does search choose a move when an opponent replies, and what does skipping branches save?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="42comp6">
+  <h2 class="sthead"><span class="stno">42comp6</span>Moves to Watch Out For</h2>
+  <p data-pid="a955a4">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{use the straight count of misplaced tiles times two}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it can overstate, and then A* may miss the shortest plan (42comp4)
+\text{expand the dot with the least } h \text{ alone}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; without g the search may follow a long path; least g + h (42comp3)
+\text{the guess must equal the true cost left}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it need only never overstate (42comp4)
+\text{take my best move, then the opponent’s best reply for me}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the opponent picks the reply worst for me: max of min (42comp5)
+\text{search all } b^d \text{ dots against an opponent}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; skip branches already worse; about b^{d/2} (42comp5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">42·comp.6.1</span><span class="ph understand">understand</span>Which move above drops the cost so far, and what does A* expand instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">42·comp.7.1</span><span class="tagq">do</span>Find h, the sum of distances from home, for a puzzle with only tiles 1 and 2 swapped.</div>
+  <div class="chq"><span class="chid">42·comp.7.2</span><span class="tagq">make</span>Make up a small graph with a guess that overstates, on which A* returns a path that is not shortest.</div>
+  <div class="chq"><span class="chid">42·comp.7.3</span><span class="tagq">converse</span>A guess that never overstates gives a shortest plan. Decide whether a guess that overstates must give a longer one.</div>
+  <div class="chq"><span class="chid">42·comp.7.4</span><span class="tagq">edge</span>Let h equal the true cost left exactly. Say which dots A* expands.</div>
+  <div class="chq"><span class="chid">42·comp.7.5</span><span class="tagq">open</span>Say why the larger of two guesses that never overstate is the better one.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r42now2.html">← 42·now2 · how big must order be?</a><a href="r42concl.html">42·∎ · counting alone says how things connect →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="f960ef">Search outward in rings is <b>breadth-first search</b>; the method of 42comp3 is <b>A* search</b>, a never-overstating guess an <b>admissible heuristic</b>, the sum of distances the <b>Manhattan distance</b>. Best of worst is <b>minimax</b>; skipping branches is <b>alpha-beta pruning</b>; the board guess an <b>evaluation function</b>. The puzzle is the <b>8-puzzle</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="19beff">Peter Hart, Nils Nilsson and Bertram Raphael published A* in 1968, for the robot Shakey at the Stanford Research Institute. Knuth and Moore analysed alpha-beta in 1975. AlphaZero, which learned chess by self-play, beat the program Stockfish in 2017.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

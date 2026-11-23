@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>40·comp2 · How Does One Chip Run a Hundred Programs?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40comp.html">← 40·comp what did a missing check cost?</a><a href="r40now.html">next: 40·now can a machine check the proof? →</a></p>
+  <div class="tags"><span class="tag comp">40·comp2 · computing</span></div>
+  <h1>How Does One Chip Run a Hundred Programs?</h1>
+  <p data-pid="bf9f87">How does one chip run a hundred programs? A phone plays music, fetches mail and draws the screen at once, though each of its cores follows one list of instructions at a time. A program called the operating system takes turns among the others so fast that each seems to run alone. It saves and restores their places, chooses who goes next, keeps them from blocking each other forever, and walls each off from the rest. This page builds the turn-taking from 40d’s stack, finds which order of turns makes the average wait least, finds the shape of a deadlock in a graph, and says where the wall stands.</p>
+  <p class="gesture" data-pid="aa38e9">Give each program a short slice of time; on a switch, save its registers and stack pointer and load the next one’s. Shortest job first gives the least average wait, by swapping neighbours. Programs that each hold what the next wants, round a cycle, wait forever; number the resources and take them in order and no cycle can form. Only the operating system may touch the hardware; programs ask it by a call.</p>
+</header>
+
+<section class="class step" data-step="40comp21">
+  <h2 class="sthead"><span class="stno">40comp21</span>Turns Too Fast to See</h2>
+  <p data-pid="af6acb">Sarah’s laptop has one core and three programs ready. The operating system lets each run for a slice of about 10 milliseconds, then a timer interrupts it and the next takes over.</p>
+  <pre class="lines" data-k="ember" data-label="this page: time slices">
+\text{slice} \approx 10 \text{ ms} @@ a hundred turns a second
+3 \text{ programs: each runs } \tfrac13 \text{ of the time} @@ each seems to run, slower
+\text{a timer interrupts, whatever the program is doing} @@ no program can keep the chip
+\htmlClass{new}{\text{programs waiting on a disk or a key press get no slice}} @@ they are not ready
+  </pre>
+  <p data-pid="13ee34">From here on, on this page, a <i>process</i> is a program while it runs: its instructions, its data, and its place.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·comp2.1.1</span><span class="ph understand">understand</span>How does one core seem to run several programs at once?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40comp22">
+  <h2 class="sthead"><span class="stno">40comp22</span>Saving a Program’s Place</h2>
+  <p data-pid="3e9302">40d found that a running program’s place is its registers, its current instruction and the top of its stack. That is all the switch must save.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a switch">
+\text{save registers, instruction pointer, stack pointer} @@ the place, by 40d
+\text{load the next process’s saved place} @@ its stack is still in memory
+\text{switch} \approx \text{a few microseconds} @@ plus cache misses (39comp)
+\htmlClass{new}{\text{the process resumes as if never stopped}} @@ it cannot tell it was paused
+  </pre>
+  <p data-pid="702f8f">Switching technique: <b>a process can be stopped and resumed anywhere by saving its registers and stack pointer, since its stack holds the rest.</b> Slices much shorter than the switch would spend the chip on switching.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·comp2.2.1</span><span class="ph understand">understand</span>What must be saved to pause a process and resume it later, and why is that enough?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40comp23">
+  <h2 class="sthead"><span class="stno">40comp23</span>Who Goes Next</h2>
+  <p data-pid="29004c">Three jobs arrive together, needing 8, 4 and 1 milliseconds. Each waits for the ones run before it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two orders">
+8, 4, 1:\ \text{waits } 0, 8, 12;\ \text{average } \tfrac{20}{3} \approx 6.7 @@ longest first
+1, 4, 8:\ \text{waits } 0, 1, 5;\ \text{average } 2 @@ shortest first
+\text{swap neighbours } a > b \text{ run } a, b:\ \text{the wait changes by } b - a < 0 @@ a swap that never hurts
+\htmlClass{new}{\text{shortest first gives the least average wait}} @@ swap until sorted
+  </pre>
+  <p data-pid="cfef0b"><b>Running the shortest job first makes the average wait least: swapping any longer job ahead of a shorter one only lowers the total.</b> But a job’s length is rarely known in advance, and a long job could wait forever, so real systems guess lengths from the past and age the waiting jobs up. 31·logi’s queues say how long the line grows.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·comp2.3.1</span><span class="ph understand">understand</span>Which order of jobs makes the average wait least, and why does swapping prove it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40comp24">
+  <h2 class="sthead"><span class="stno">40comp24</span>Waiting Forever</h2>
+  <p data-pid="b0b032">Process A holds the printer and waits for the disk; process B holds the disk and waits for the printer. Neither lets go.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the waits-for graph">
+A \to B:\ A \text{ waits for what } B \text{ holds} @@ an arrow of 42a’s dots and links
+A \to B \to A @@ a cycle
+\text{a cycle} \iff \text{every process in it waits forever} @@ each held resource has one holder
+\htmlClass{new}{\text{number the resources; take them only in rising order}} @@ then no cycle can form
+  </pre>
+  <p data-pid="4243a6">If every process takes resources in rising order, an arrow from a holder of resource i points to a holder of some j > i, so a cycle would need the numbers to rise all the way round and come back, which is impossible. <b>Taking shared resources in one fixed order rules out waiting forever.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·comp2.4.1</span><span class="ph understand">understand</span>What shape in the waits-for graph means a deadlock, and how does a fixed order prevent it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40comp25">
+  <h2 class="sthead"><span class="stno">40comp25</span>A Wall Between Programs</h2>
+  <pre class="lines" data-k="ember" data-label="this page: two modes">
+\text{kernel mode: may touch hardware and the address tables} @@ only the operating system
+\text{user mode: may not} @@ every other program
+\text{to read a file: a call into the kernel} @@ like 40d’s calls, through one guarded door
+\htmlClass{new}{\text{each process sees only its own made-up addresses}} @@ 39comp’s tables, set by the kernel
+  </pre>
+  <p data-pid="19a5ea"><b>The operating system alone runs in a mode that touches hardware; every other program asks it through a call, and sees only its own memory.</b> A crashed or hostile program then harms only itself, which is why one bad tab need not bring down the phone.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·comp2.5.1</span><span class="ph understand">understand</span>Why can only the operating system touch the hardware, and how do other programs get anything done?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40comp26">
+  <h2 class="sthead"><span class="stno">40comp26</span>Moves to Watch Out For</h2>
+  <p data-pid="007a91">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{run the longest job first to clear it out}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; shortest first gives the least average wait (40comp23)
+\text{save the whole of memory at each switch}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; registers and stack pointer suffice; the stack stays put (40comp22)
+\text{deadlock needs three processes}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; two in a cycle are enough (40comp24)
+\text{let a program keep the chip until it is done}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a timer interrupt takes it back, so none can hog it (40comp21)
+\text{take resources in any order, then let go if stuck}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; one fixed rising order rules out cycles (40comp24)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·comp2.6.1</span><span class="ph understand">understand</span>Which move above reverses the order of jobs, and what order makes the average wait least?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">40·comp2.7.1</span><span class="tagq">do</span>Jobs of 5, 2, 9 and 3 milliseconds arrive together. Find the least average wait and the order that gives it.</div>
+  <div class="chq"><span class="chid">40·comp2.7.2</span><span class="tagq">make</span>Make up three processes and three resources that deadlock round a cycle of three.</div>
+  <div class="chq"><span class="chid">40·comp2.7.3</span><span class="tagq">converse</span>Taking resources in rising order prevents deadlock. Decide whether every system free of deadlock takes them in rising order.</div>
+  <div class="chq"><span class="chid">40·comp2.7.4</span><span class="tagq">edge</span>Let all the jobs need the same time. Say which orders give the least average wait.</div>
+  <div class="chq"><span class="chid">40·comp2.7.5</span><span class="tagq">open</span>Say why a slice of a microsecond would be worse than one of ten milliseconds.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r40comp.html">← 40·comp · what did a missing check cost?</a><a href="r40now.html">40·now · can a machine check the proof? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="9458cd">Taking turns by slices is <b>preemptive scheduling</b>, in equal turns <b>round robin</b>; saving and loading a place is a <b>context switch</b>. Shortest first is <b>SJF</b>. Waiting forever is <b>deadlock</b>, drawn as a <b>wait-for graph</b>, and the rising order is <b>lock ordering</b>. The two modes are <b>kernel</b> and <b>user mode</b>, and the guarded door a <b>system call</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="d586ce">Time-sharing ran on MIT’s CTSS in 1961. Edsger Dijkstra posed the dining philosophers in 1965, and Coffman, Elphick and Shoshani set out the conditions for deadlock in 1971.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

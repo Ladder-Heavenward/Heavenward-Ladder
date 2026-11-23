@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>39·comp · Why Is Fast Memory So Small?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39eng.html">← 39·eng why did chips stop getting faster?</a><a href="r39crypt.html">next: 39·crypt can a chip leak its key through its power cord? →</a></p>
+  <div class="tags"><span class="tag comp">39·comp · computing</span></div>
+  <h1>Why Is Fast Memory So Small?</h1>
+  <p data-pid="599442">Why is fast memory so small? A chip adds two numbers in a third of a billionth of a second, but fetching a number from main memory takes a hundred billionths. A machine that waited on memory for every number would idle most of its life. Memory built from 39h’s latches is fast and costly; memory built from tiny charged cells is slow and cheap. So machines stack small fast memories in front of big slow ones and bet that what is wanted next sits near what was wanted last. This page prices the stack, finds the average wait, shows why the bet usually wins, and adds two more tricks: a line of workers, and memory that pretends to be bigger than it is.</p>
+  <p class="gesture" data-pid="5d385a">Keep copies of recently used data in a small fast memory. Average wait = hit time + miss rate × miss penalty. Programs reuse data and walk through it in order, so most looks hit. Split each instruction into stages so several run at once, and give each program its own made-up addresses, translated by a table.</p>
+</header>
+
+<section class="class step" data-step="39comp1">
+  <h2 class="sthead"><span class="stno">39comp1</span>Fast and Small, Slow and Big</h2>
+  <p data-pid="805372">Mike’s laptop keeps data in four kinds of memory. Each is about ten times slower and many times bigger than the one before.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th></th><th>wait</th><th>size</th><th>made of</th></tr>
+    <tr><th>registers</th><td>0.3 ns</td><td>hundreds of bytes</td><td>latches (39h)</td></tr>
+    <tr><th>cache</th><td>1 to 20 ns</td><td>kilobytes to megabytes</td><td>latches</td></tr>
+    <tr><th>main memory</th><td>100 ns</td><td>gigabytes</td><td>charged cells</td></tr>
+    <tr><th>drive</th><td>100 000 ns</td><td>terabytes</td><td>flash</td></tr>
+  </table></div>
+  <p data-pid="6fe2e2">From here on, on this page, the <i>cache</i> is the small fast memory between the registers and main memory. It holds copies; a look that finds its copy there is a <i>hit</i>, one that must go on to main memory a <i>miss</i>.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·comp.1.1</span><span class="ph understand">understand</span>Why does a machine have several kinds of memory instead of one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39comp2">
+  <h2 class="sthead"><span class="stno">39comp2</span>The Average Wait</h2>
+  <pre class="lines" data-k="ember" data-label="this page: one look-up">
+\text{hit: } 1 \text{ ns} @@ found in the cache
+\text{miss: } 1 + 100 \text{ ns} @@ look, then go on
+\text{average} = 1 + m \cdot 100 \text{ ns} @@ m the share of misses, averages (30g)
+m = 0.05:\ 6 \text{ ns};\ \ m = 0.01:\ 2 \text{ ns} @@ a few misses cost most of the time
+\htmlClass{new}{\text{average wait} = \text{hit time} + \text{miss rate} \times \text{miss penalty}} @@ the cache’s one law
+  </pre>
+  <p data-pid="2b9dbd">Cache technique: <b>the average wait is the hit time plus the share of misses times the cost of a miss.</b> Cutting misses from 5 in 100 to 1 in 100 triples the speed, though the cache itself is no faster.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·comp.2.1</span><span class="ph understand">understand</span>How is the average wait found, and why does cutting the miss rate matter so much?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39comp3">
+  <h2 class="sthead"><span class="stno">39comp3</span>Why the Bet Wins</h2>
+  <p data-pid="ce1865">A cache helps only if a program asks again for what it asked for lately, or for its neighbours. Most do: a loop (40b) runs the same lines over and over, and walks an array in order.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two kinds of nearness">
+\text{the same item again soon} @@ a loop’s counter, its lines
+\text{the next item soon} @@ an array walked in order
+\text{fetch a line of } 64 \text{ bytes, not one} @@ neighbours come along
+\htmlClass{new}{\text{walk by rows: } 1 \text{ miss in } 8;\ \text{by columns: every look a miss}} @@ 8-byte numbers, a big grid stored by rows
+  </pre>
+  <p data-pid="f6b518">The same sum over a big grid can run ten times slower walked by columns, because each look lands on a new line. <b>A program is fast when it uses again what it used lately and walks memory in order.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·comp.3.1</span><span class="ph understand">understand</span>Why do most looks hit, and why can the order of a loop change its speed tenfold?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39comp4">
+  <h2 class="sthead"><span class="stno">39comp4</span>A Line of Workers</h2>
+  <p data-pid="73b46c">Each instruction of 39j’s list passes through stages: fetch it, decode it, read the numbers, do the sum, write the result. Each stage is a separate circuit, so five instructions can be in five stages at once.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the pipeline">
+\text{one at a time: } 5 \text{ ticks each} @@ every stage waits
+\text{in a line: one finishes every tick} @@ once the line is full
+n \text{ instructions: } n + 4 \text{ ticks, not } 5n @@ nearly five times the work
+\htmlClass{new}{\text{a jump (40b) whose way is not yet known stalls the line}} @@ so chips guess the way
+  </pre>
+  <p data-pid="184ee1"><b>Splitting each instruction into stages lets several run at once, as long as nothing waits on a result not yet made.</b> Chips guess which way each jump goes and undo the work when they guess wrong.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·comp.4.1</span><span class="ph understand">understand</span>How does splitting an instruction into stages speed the machine, and what stalls it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39comp5">
+  <h2 class="sthead"><span class="stno">39comp5</span>Memory That Pretends</h2>
+  <p data-pid="30c86a">Each program sees memory starting at address 0, as if it had the machine to itself. A table, kept by the machine, sends each made-up address to a real one, in pages of 4096 bytes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: made-up addresses">
+\text{made-up address} = \text{page} \cdot 4096 + \text{offset} @@ division with remainder
+\text{page} \mapsto \text{real page, by the table} @@ a function (2h) the machine keeps
+\text{page not in memory} \Rightarrow \text{fetch it from the drive} @@ a miss a million times dearer
+\htmlClass{new}{\text{a small cache of the table itself}} @@ the table look-up is a look-up too
+  </pre>
+  <p data-pid="bd2e80"><b>Made-up addresses give each program its own memory, walled off from the others, and let the drive stand in for memory the machine lacks.</b> The same law of hits and misses rules each layer, from registers to drive.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·comp.5.1</span><span class="ph understand">understand</span>What does a table of made-up addresses give each program, and what does a miss cost there?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39comp6">
+  <h2 class="sthead"><span class="stno">39comp6</span>Moves to Watch Out For</h2>
+  <p data-pid="989f4f">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a faster cache is the only way to speed it}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; cutting the miss rate often helps more (39comp2)
+\text{sum a grid by columns, it is the same work}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the same sums, but each look lands on a new line (39comp3)
+\text{average} = m \cdot 1 + (1 - m) \cdot 100\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the miss share goes with the penalty: 1 + m × 100 (39comp2)
+\text{five stages make every program five times faster}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only while nothing waits; a wrong guess at a jump empties the line (39comp4)
+\text{made-up addresses waste time for nothing}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; they wall programs apart and let the drive stand in (39comp5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·comp.6.1</span><span class="ph understand">understand</span>Which move above pairs the miss share with the hit time, and what is the right average?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">39·comp.7.1</span><span class="tagq">do</span>A cache hits in 2 ns and misses 3 times in 100; memory takes 80 ns more. Find the average wait.</div>
+  <div class="chq"><span class="chid">39·comp.7.2</span><span class="tagq">make</span>Make up a loop over a list that misses the cache on every look, and change it to miss once in eight.</div>
+  <div class="chq"><span class="chid">39·comp.7.3</span><span class="tagq">converse</span>Programs that walk memory in order run fast. Decide whether every fast program walks memory in order.</div>
+  <div class="chq"><span class="chid">39·comp.7.4</span><span class="tagq">edge</span>Let the miss rate reach 1. Say what the cache is worth then.</div>
+  <div class="chq"><span class="chid">39·comp.7.5</span><span class="tagq">open</span>Say why a cache twice as big need not halve the misses.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r39eng.html">← 39·eng · why did chips stop getting faster?</a><a href="r39crypt.html">39·crypt · can a chip leak its key through its power cord? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="e594f4">The stack is the <b>memory hierarchy</b>; the two nearnesses are <b>temporal</b> and <b>spatial locality</b>; the law of 39comp2 is the <b>average memory access time</b>. Main memory is <b>DRAM</b>, cache is <b>SRAM</b>. The line of workers is a <b>pipeline</b>, guessing jumps is <b>branch prediction</b>, made-up addresses are <b>virtual memory</b> and the small cache of the table is the <b>TLB</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="0e2bd2">Maurice Wilkes described a small fast “slave memory” in front of a big one in 1965, and IBM’s System/360 Model 85 shipped the first cache in 1968. Virtual memory first ran on the Atlas computer at Manchester in 1962.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
