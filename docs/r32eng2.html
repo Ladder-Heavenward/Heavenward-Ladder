@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>32·eng2 · How Does a Filter Know Which Sounds to Let Through?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32eng.html">← 32·eng how can headphones cancel noise?</a><a href="r32nav.html">next: 32·nav how can tides be predicted years ahead? →</a></p>
+  <div class="tags"><span class="tag eng">32·eng2 · engineering</span></div>
+  <h1>How Does a Filter Know Which Sounds to Let Through?</h1>
+  <p data-pid="0ee35d">How does a filter know which sounds to let through? A recording has a low hum from the mains and a high hiss from the tape, and the voice between them. A box of two parts, a resistor and a capacitor, can quiet the hiss and keep the voice. The box does not know anything; it is a system that is straight and steady in time, and every such system treats each turning on its own. This page shows that one click tells everything about such a system, that turnings go through it changed only in size and timing, works out the resistor and capacitor with rung 24’s rate statements, chains filters by multiplying, and builds the same filter from numbers.</p>
+  <p class="gesture" data-pid="d1842b">A system that is straight (doubles and sums pass through) and steady (a delay in gives the same delay out) is fixed by its response h to a click: the output is the convolution of the input with h. A turning e^(2πift) comes out as H(f) e^(2πift), with H the transform of h. For the resistor and capacitor, τy′ + y = x gives H = 1/(1 + 2πifτ): turnings below 1/(2πτ) pass, those above fade. Chained filters multiply their H.</p>
+</header>
+
+<section class="class step" data-step="32eng21">
+  <h2 class="sthead"><span class="stno">32eng21</span>One Click Tells All</h2>
+  <p data-pid="dae8cc">From here on, on this page, a <i>system</i> turns an input signal x(t) into an output y(t). It is <i>straight</i> if sums and multiples pass through, and <i>steady</i> if delaying the input only delays the output. Its <i>click response</i> h is its output when the input is a single very short click at time 0.</p>
+  <pre class="lines" data-k="ember" data-label="this page: output from clicks">
+x \approx \textstyle\sum x(s)\,\Delta s \cdot \text{click at } s @@ the input as many small clicks
+\text{each gives } x(s)\,\Delta s \cdot h(t - s) @@ steady: the same response, delayed
+y(t) \approx \textstyle\sum x(s)\, h(t - s)\,\Delta s @@ straight: the responses add
+\htmlClass{new}{y = x * h = \textstyle\int x(s)\,h(t - s)\,ds} @@ the convolution (32d)
+  </pre>
+  <p data-pid="5d1cbb">Click technique: <b>a straight, steady system is fixed by its click response: every output is the input convolved with it.</b> Clap in a hall and record the echo, and you can hear any music as that hall would play it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·eng2.1.1</span><span class="ph understand">understand</span>Why does a straight, steady system’s response to one click fix its response to every input?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32eng22">
+  <h2 class="sthead"><span class="stno">32eng22</span>Turnings Pass Through</h2>
+  <p data-pid="b19327">Feed in a single turning, x(t) = e<sup>2πift</sup>.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a turning through the system">
+y(t) = \textstyle\int e^{2\pi i f s}\, h(t - s)\,ds @@ the convolution
+= e^{2\pi i f t} \textstyle\int h(u)\, e^{-2\pi i f u}\,du @@ put u = t − s (16d)
+H(f) = \textstyle\int h(u)\, e^{-2\pi i f u}\,du @@ the transform of h (32e)
+\htmlClass{new}{y = H(f)\, e^{2\pi i f t}} @@ the same turning, scaled and shifted
+  </pre>
+  <p data-pid="5d1027">Turning technique: <b>a turning goes through a straight, steady system unchanged in frequency, multiplied by the complex number H(f): |H| scales it and the angle of H delays it.</b> Break any signal into turnings, multiply each by H, and add them back: that is what the system does.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·eng2.2.1</span><span class="ph understand">understand</span>What happens to a single turning in a straight, steady system, and what is H(f)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32eng23">
+  <h2 class="sthead"><span class="stno">32eng23</span>A Resistor and a Capacitor</h2>
+  <p data-pid="0530c1">Evita builds a filter: the signal drives current through a resistor R onto a capacitor C, and the output is the capacitor’s voltage. The current is (x − y)/R, and it fills the capacitor: C y′ = (x − y)/R.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the filter">
+\tau y\prime + y = x,\ \ \tau = RC @@ a straight rate statement (24g)
+y = H e^{2\pi i f t}:\ \tau(2\pi i f)H + H = 1 @@ a turning in
+H(f) = \dfrac{1}{1 + 2\pi i f \tau},\ \ |H| = \dfrac{1}{\sqrt{1 + (2\pi f \tau)^2}} @@ divide; size of a complex number (25c)
+\tau = 1 \text{ ms}:\ 50 \text{ Hz} \to 0.95,\ \ 5000 \text{ Hz} \to 0.03 @@ hum kept, hiss cut
+\htmlClass{new}{\text{the corner } f_c = 1/(2\pi\tau) \approx 160 \text{ Hz}: |H| = 1/\sqrt2} @@ below passes, above fades
+  </pre>
+  <p data-pid="b08541">Low-pass technique: <b>a resistor feeding a capacitor passes turnings below 1/(2πRC) and weakens those above in proportion to their frequency.</b> Swap the parts and it passes the highs instead. Here, to keep a voice and cut the hiss, Evita would choose τ smaller, putting the corner near 3000 Hz.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·eng2.3.1</span><span class="ph understand">understand</span>How does the rate statement of a resistor and capacitor give its H(f), and which frequencies does it pass?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32eng24">
+  <h2 class="sthead"><span class="stno">32eng24</span>Chains Multiply, in Decibels They Add</h2>
+  <p data-pid="e4613a">Feed one filter into another: each turning is multiplied by H₁ and then by H₂. Engineers measure |H| in logs.</p>
+  <pre class="lines" data-k="ember" data-label="this page: chains">
+H_{\text{chain}}(f) = H_1(f)\, H_2(f) @@ one turning, two multiplications
+\text{decibels: } 20\log_{10}|H| @@ logs turn products into sums (17c)
+5000 \text{ Hz through one filter: } 20\log_{10} 0.032 \approx -30 \text{ dB} @@ 32eng23’s 0.03
+\htmlClass{new}{\text{two in a chain: } -60 \text{ dB}} @@ the decibels add
+  </pre>
+  <p data-pid="593630"><b>Filters in a chain multiply their H, so their decibels add.</b> Far above its corner, each resistor-capacitor stage loses 20 dB for every tenfold rise in frequency; stacking stages makes the cut as steep as wanted.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·eng2.4.1</span><span class="ph understand">understand</span>What is H for two filters in a chain, and why do engineers add decibels?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32eng25">
+  <h2 class="sthead"><span class="stno">32eng25</span>The Same Filter From Numbers</h2>
+  <p data-pid="c23e04">A phone filters sound as numbers, samples taken f<sub>s</sub> times a second (32g). Replace the slope by a step: y<sub>n</sub> = a y<sub>n−1</sub> + (1 − a) x<sub>n</sub>, which is 17·logi’s smoothing.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the number filter">
+y_n = a\,y_{n-1} + (1 - a)\,x_n @@ nudge toward each new sample
+x_n = e^{2\pi i f n / f_s}:\ H = \dfrac{1 - a}{1 - a\,e^{-2\pi i f / f_s}} @@ a turning in
+f \text{ small}: H \approx 1;\ \ f = f_s/2: H = \dfrac{1 - a}{1 + a} @@ slowest and fastest
+\htmlClass{new}{a = 0.9:\ \text{the fastest turnings are cut to } 0.1/1.9 \approx 0.05} @@ a low-pass filter in one line of code
+  </pre>
+  <p data-pid="3d5c67"><b>A filter is a rule, not a box: the same straight, steady rule in numbers does what the resistor and capacitor do.</b> Every sound a phone plays has passed through hundreds of such lines.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·eng2.5.1</span><span class="ph understand">understand</span>How does a one-line rule on samples behave like the resistor-capacitor filter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32eng26">
+  <h2 class="sthead"><span class="stno">32eng26</span>Moves to Watch Out For</h2>
+  <p data-pid="df82e3">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a filter changes the frequencies it passes}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a straight, steady system keeps each frequency; it changes size and timing (32eng22)
+|H| = 1/(1 + 2\pi f \tau)\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the size of 1 + 2πifτ is √(1 + (2πfτ)²) (32eng23)
+\text{two filters: add their } H\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; they multiply; the decibels add (32eng24)
+\text{test with music to learn the system}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; one click tells everything (32eng21)
+\text{multiply by } H, \text{ then break into turnings}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; break into turnings first, multiply each, add back (32eng22)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·eng2.6.1</span><span class="ph understand">understand</span>Which move above takes the size of 1 + 2πifτ as if it were real, and what is its size?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">32·eng2.7.1</span><span class="tagq">do</span>Choose R and C so the corner is at 3000 Hz, and find |H| at 300 Hz and at 30 000 Hz.</div>
+  <div class="chq"><span class="chid">32·eng2.7.2</span><span class="tagq">make</span>Make up a click response h for which H(f) = 1 at every frequency, and say what the system does.</div>
+  <div class="chq"><span class="chid">32·eng2.7.3</span><span class="tagq">converse</span>A straight, steady system passes every turning with only a change of size and timing. Decide whether a system that does that to every turning must be straight and steady.</div>
+  <div class="chq"><span class="chid">32·eng2.7.4</span><span class="tagq">edge</span>In 32eng25, let a = 0, and then let a head to 1. Say what the number filter does in each case.</div>
+  <div class="chq"><span class="chid">32·eng2.7.5</span><span class="tagq">open</span>A guitar amplifier is pushed so hard it clips the peaks. Say which property of 32eng21 fails, and what new frequencies come out.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r32eng.html">← 32·eng · how can headphones cancel noise?</a><a href="r32nav.html">32·nav · how can tides be predicted years ahead? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="3ab12f">A straight, steady system is a <b>linear time-invariant</b> (LTI) system. The click response is the <b>impulse response</b>, and H(f) the <b>frequency response</b> or <b>transfer function</b>. The resistor-capacitor filter is an <b>RC low-pass filter</b>, and its corner the <b>cutoff frequency</b>. 20 dB per tenfold is <b>20 dB per decade</b>, drawn on a <b>Bode plot</b>. The number filter is a <b>digital filter</b>, here a first-order <b>IIR filter</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="f632b1">Hendrik Bode drew the decibel charts of filters at Bell Labs in the 1930s and 1940s. Oliver Heaviside had treated circuits by their response to sudden inputs in the 1880s and 1890s.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

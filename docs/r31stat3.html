@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>31·stat3 · Why Would You Hold a Fit Back on Purpose?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31stat2.html">← 31·stat2 how sure can you be with only the sample you have?</a><a href="r31then.html">next: 31·then how do you fit a curve to noisy data? →</a></p>
+  <div class="tags"><span class="tag stat">31·stat3 · statistics</span></div>
+  <h1>Why Would You Hold a Fit Back on Purpose?</h1>
+  <p data-pid="fe1d18">Why would you hold a fit back on purpose? 31·stat found that a fit with many columns flatters itself on the data in hand. Worse happens when two columns say almost the same thing: the best fit gives them huge weights of opposite signs, and a tiny change in one number flips them. This page finds that wobble in a fit by rung 31’s closest point, tames it by charging for large weights, sees with rung 31’s axes exactly what the charge does, and picks the charge with data held back.</p>
+  <p class="gesture" data-pid="1513df">Least squares finds b making |y − Xb|² smallest. Add a charge λ|b|²: the best b solves (XᵀX + λI)b = Xᵀy. Along each axis of XᵀX, with stretch d², the plain fit is multiplied by d²/(d² + λ): weak axes, where columns nearly repeat, are shrunk almost to 0, and strong ones barely touched. Choose λ by the misses on data held back.</p>
+</header>
+
+<section class="class step" data-step="31stat31">
+  <h2 class="sthead"><span class="stno">31stat31</span>Two Columns That Nearly Repeat</h2>
+  <p data-pid="0a9809">Sarah predicts a crop y from two measurements of rainfall, x₁ and x₂, taken by two gauges a field apart. They nearly agree.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>x₁</th><th>x₂</th><th>y</th></tr>
+    <tr><td>1</td><td>1</td><td>2.1</td></tr>
+    <tr><td>2</td><td>2</td><td>3.9</td></tr>
+    <tr><td>3</td><td>3.1</td><td>6.2</td></tr>
+    <tr><td>4</td><td>4</td><td>7.8</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: the closest fit">
+\text{least squares: } X^{\mathsf T} X\, b = X^{\mathsf T} y @@ the closest point (31b)
+b = (-1.33,\ 3.29) @@ one gauge counts against the crop
+\text{change } y_3 \text{ from } 6.2 \text{ to } 6.3 @@ a tenth of a unit
+\htmlClass{new}{b = (-2.33,\ 4.29)} @@ each weight moves by a whole unit
+  </pre>
+  <p data-pid="67f1fe">Rain cannot hurt the crop through one gauge and help it through the other. The two columns nearly repeat, so the fit can trade weight between them almost freely, and noise decides the trade.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.1.1</span><span class="ph understand">understand</span>Why does the closest fit give the two gauges large weights of opposite signs, and what does a small change in y do to them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat32">
+  <h2 class="sthead"><span class="stno">31stat32</span>Charge for Large Weights</h2>
+  <p data-pid="1c2a18">From here on, on this page, the <i>charged fit</i> makes |y − Xb|² + λ|b|² smallest, for a chosen λ > 0: misses cost, and so does size.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the charged fit">
+\text{slope 0 in every } b_j:\ X^{\mathsf T}(Xb - y) + \lambda b = 0 @@ partial slopes (28a)
+(X^{\mathsf T} X + \lambda I)\, b = X^{\mathsf T} y @@ always undoable for λ > 0
+\lambda = 1:\ b = (0.96,\ 0.99) @@ both gauges count, about equally
+\htmlClass{new}{y_3 \to 6.3:\ b = (0.96,\ 1.00)} @@ the change barely shows
+  </pre>
+  <p data-pid="c2ea5c">Charge technique: <b>adding λ|b|² to the misses gives the fit (XᵀX + λI)b = Xᵀy, which always has one answer and moves little when the data move a little.</b> The price is that it no longer makes the misses on the data in hand as small as possible.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.2.1</span><span class="ph understand">understand</span>What equation does the charged fit solve, and why is its answer steady when the plain fit’s is not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat33">
+  <h2 class="sthead"><span class="stno">31stat33</span>What the Charge Does, Axis by Axis</h2>
+  <p data-pid="72f367">XᵀX is symmetric, so it has square axes (31d): unit arrows u₁, u₂ at right angles that it only stretches, by d₁² and d₂².</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shrink on each axis">
+X^{\mathsf T} X:\ d_1^2 \approx 60.6,\ \ d_2^2 \approx 0.0035 @@ the gauges together, and their difference
+\text{plain fit along } u_i:\ c_i / d_i^2 @@ dividing by a tiny d² blows noise up
+\text{charged fit along } u_i:\ c_i / (d_i^2 + \lambda) @@ the same with λ added
+\htmlClass{new}{\text{ratio } \dfrac{d_i^2}{d_i^2 + \lambda}:\ 0.98 \text{ and } 0.003} @@ the weak axis is all but removed
+  </pre>
+  <p data-pid="b8667e">Axis technique: <b>the charge multiplies the plain fit along each square axis of XᵀX by d²/(d² + λ), keeping strong directions and silencing weak ones.</b> The weak axis is the difference between the gauges, which the data barely measured; the charge stops the fit from guessing about it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.3.1</span><span class="ph understand">understand</span>How does the charge act along each square axis of XᵀX, and which direction does it silence here?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat34">
+  <h2 class="sthead"><span class="stno">31stat34</span>Choosing the Charge</h2>
+  <p data-pid="1643e0">λ = 0 is the plain fit; λ very large gives b near 0. Somewhere between, the fit predicts new data best. 31·stat’s held-back data find it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: held back, five ways">
+\text{split the data into 5 parts} @@ at random
+\text{for each } \lambda:\ \text{fit on 4 parts, measure misses on the fifth} @@ held-back data (31stat3)
+\text{each part held back once; add the misses} @@ every value tested once
+\htmlClass{new}{\text{choose the } \lambda \text{ with least held-back miss}} @@ refit on all the data with it
+  </pre>
+  <p data-pid="f8c1c0"><b>The charge trades a little bias for a lot less wobble, and held-back data say how much to trade.</b> The fit on the data in hand always prefers λ = 0; only fresh data can show the gain.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.4.1</span><span class="ph understand">understand</span>How is λ chosen, and why can the misses on the data in hand not choose it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat35">
+  <h2 class="sthead"><span class="stno">31stat35</span>A Different Charge Picks Columns</h2>
+  <p data-pid="52a862">Charge the sum of the weights’ sizes, |b₁| + |b₂| + ⋯, instead of their squares. The corners of the region |b₁| + |b₂| ≤ t lie on the axes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two charges compared">
+\text{squares: the region is round} @@ the best point is rarely on an axis
+\text{sizes: the region is a diamond} @@ the best point is often at a corner
+\text{at a corner, some weights are exactly } 0 @@ those columns drop out
+\htmlClass{new}{\text{charging sizes chooses columns as it fits}} @@ with a hundred columns, keeps a few
+  </pre>
+  <p data-pid="d60e70"><b>Charging the squares shrinks every weight; charging the sizes sets some exactly to zero, choosing which columns matter.</b> Both are ways of telling a fit that a simple answer is more likely than a wild one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.5.1</span><span class="ph understand">understand</span>How does charging the sizes of the weights differ from charging their squares, and why does it drop columns?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat36">
+  <h2 class="sthead"><span class="stno">31stat36</span>Moves to Watch Out For</h2>
+  <p data-pid="c5784b">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{one gauge hurts the crop: } b_1 < 0\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the columns nearly repeat; noise decides the trade (31stat31)
+\text{choose } \lambda \text{ by the misses on the data in hand}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; those always prefer λ = 0: hold data back (31stat34)
+\text{the charge shrinks every direction alike}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; by d²/(d² + λ): strong kept, weak silenced (31stat33)
+\text{charge the weights, then measure the columns’ scales}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; put the columns on one scale first, or the charge favours the large ones (31stat32)
+\lambda \text{ huge, to be safe}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; every weight heads to 0, and the fit says nothing (31stat34)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.6.1</span><span class="ph understand">understand</span>Which move above chooses the charge on the data in hand, and what do those misses always prefer?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">31·stat3.7.1</span><span class="tagq">do</span>With one column, find the charged fit b = Σxy/(Σx² + λ) for x = (1, 2, 3), y = (2, 4, 7) and λ = 0, 1 and 10.</div>
+  <div class="chq"><span class="chid">31·stat3.7.2</span><span class="tagq">make</span>Make up three columns, two of which nearly repeat, and say which square axis of XᵀX will be weak.</div>
+  <div class="chq"><span class="chid">31·stat3.7.3</span><span class="tagq">converse</span>For λ > 0, XᵀX + λI is undoable. Decide whether XᵀX itself must be undoable when its columns are all different.</div>
+  <div class="chq"><span class="chid">31·stat3.7.4</span><span class="tagq">edge</span>Let λ grow without bound. Find what the charged fit heads to, and what d²/(d² + λ) does on every axis.</div>
+  <div class="chq"><span class="chid">31·stat3.7.5</span><span class="tagq">open</span>A model has more columns than rows of data. Say why the plain fit has no single answer, and what the two charges of this page do there.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r31stat2.html">← 31·stat2 · how sure can you be with only the sample you have?</a><a href="r31then.html">31·then · how do you fit a curve to noisy data? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="21b2c3">Columns that nearly repeat are <b>collinear</b>. The charged fit with squares is <b>ridge regression</b> or <b>Tikhonov regularisation</b>; λ is the <b>regularisation parameter</b>; the trade is the <b>bias-variance trade-off</b>. Choosing λ with five held-back parts is <b>5-fold cross-validation</b>. Charging the sizes is the <b>lasso</b>, and fitting by charging is <b>regularisation</b> in general.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="df0e23">Andrey Tikhonov used the charge for unsteady problems in 1943 and 1963; Arthur Hoerl and Robert Kennard named ridge regression in 1970. Robert Tibshirani introduced the lasso in 1996.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>32·stat2 · What Changes When Today Remembers Yesterday?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32stat.html">← 32·stat why does the bell curve keep turning up?</a><a href="r32then.html">next: 32·then what can a spectrum tell us? →</a></p>
+  <div class="tags"><span class="tag stat">32·stat2 · statistics</span></div>
+  <h1>What Changes When Today Remembers Yesterday?</h1>
+  <p data-pid="8e2fb0">What changes when today remembers yesterday? Rung 30’s samples were drawn independently. Readings in time are not: a warm day tends to follow a warm day, a busy week a busy week. This page writes the simplest memory, today as a share of yesterday plus something new, finds its spread with 22’s geometric sums, forecasts with it, finds why remembered data look like more evidence than they are, and, with rung 32’s turnings, sees why such data rumble with slow swings.</p>
+  <p class="gesture" data-pid="abaf22">Model today as φ times yesterday plus a fresh, independent shock of spread σ. Unroll it: today is a geometric sum of past shocks, so its spread² is σ²/(1 − φ²) and its correlation k days apart is φᵏ. Forecast k days ahead by φᵏ times today. n remembered readings carry about n(1 − φ)/(1 + φ) readings’ worth of evidence about the mean. As a filter of shocks, the model strengthens slow turnings by up to ((1 + φ)/(1 − φ))².</p>
+</header>
+
+<section class="class step" data-step="32stat21">
+  <h2 class="sthead"><span class="stno">32stat21</span>Today Like Yesterday</h2>
+  <p data-pid="ab9e38">Jean records how far each day’s temperature is from the season’s usual, in degrees. From here on, on this page, x<sub>t</sub> is day t’s departure, and the <i>memory model</i> says x<sub>t</sub> = φ x<sub>t−1</sub> + e<sub>t</sub>, where each e<sub>t</sub> is a fresh shock, independent of all before, with average 0 and spread σ, and 0 < φ < 1.</p>
+  <pre class="lines" data-k="ember" data-label="this page: unrolling">
+x_t = e_t + \varphi x_{t-1} @@ the model
+= e_t + \varphi e_{t-1} + \varphi^2 x_{t-2} @@ put it in again
+\htmlClass{new}{= e_t + \varphi e_{t-1} + \varphi^2 e_{t-2} + \cdots} @@ a geometric weighting of past shocks
+\varphi = 0.6:\ \text{a shock is } 0.6^5 \approx 0.08 \text{ of itself after 5 days} @@ memory fades by the ratio
+  </pre>
+  <p data-pid="3aa8d7">Today is all of the past shocks, each faded by φ for every day since. This is 17·logi’s smoothing seen from the other side: there a forecast averaged the past; here the weather itself does.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.1.1</span><span class="ph understand">understand</span>What does the memory model say about today, and how does it look when unrolled into past shocks?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat22">
+  <h2 class="sthead"><span class="stno">32stat22</span>Spread and Memory</h2>
+  <p data-pid="7c37bc">The shocks are independent, so the spreads squared of the faded shocks add.</p>
+  <pre class="lines" data-k="ember" data-label="this page: spread and correlation">
+\text{spread}^2 = \sigma^2 (1 + \varphi^2 + \varphi^4 + \cdots) @@ spreads² of independent parts add
+= \dfrac{\sigma^2}{1 - \varphi^2} @@ the endless-ratio-sum technique (15i), ratio φ²
+\text{correlation of } x_t \text{ and } x_{t-k} = \varphi^k @@ they share the shocks before t − k
+\htmlClass{new}{\varphi = 0.6,\ \sigma = 2:\ \text{spread} = 2/\sqrt{0.64} = 2.5} @@ one day apart 0.6, two days 0.36
+  </pre>
+  <p data-pid="dbb5cd">Memory technique: <b>in the memory model, the spread² is σ²/(1 − φ²), and readings k days apart have correlation φᵏ.</b> Measuring the correlation one day apart estimates φ, and the rest follows.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.2.1</span><span class="ph understand">understand</span>What are the spread and the correlation k days apart in the memory model, and why?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat23">
+  <h2 class="sthead"><span class="stno">32stat23</span>Forecasting Ahead</h2>
+  <p data-pid="19020d">Today’s departure is +5 degrees. The future shocks average 0, so the forecast drops them.</p>
+  <pre class="lines" data-k="ember" data-label="this page: forecasts">
+\text{forecast } k \text{ days ahead} = \varphi^k x_t @@ future shocks average 0
+\varphi = 0.6:\ 5,\ 3,\ 1.8,\ 1.08,\ \ldots @@ back toward the usual
+\text{forecast spread}^2 = \sigma^2(1 + \varphi^2 + \cdots + \varphi^{2(k-1)}) @@ the shocks still to come
+\htmlClass{new}{= \sigma^2 \dfrac{1 - \varphi^{2k}}{1 - \varphi^2} \to \dfrac{\sigma^2}{1 - \varphi^2}} @@ the finite-ratio-sum technique (15i)
+  </pre>
+  <p data-pid="75ca9a"><b>Forecasts fade toward the average by the factor φ each day, and their spread grows toward the spread of the data itself.</b> Far enough ahead, the forecast is just the usual, and today tells you nothing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.3.1</span><span class="ph understand">understand</span>How do forecasts from the memory model behave as they look further ahead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat24">
+  <h2 class="sthead"><span class="stno">32stat24</span>Remembered Data Count for Less</h2>
+  <p data-pid="e68b72">Average n readings to estimate the season’s usual. With independent readings, rung 30 gives the spread of the average as spread/√n. Remembered readings repeat each other’s shocks.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the worth of n readings">
+\text{spread}^2 \text{ of the average} \approx \dfrac{\text{spread}^2}{n} \cdot \dfrac{1 + \varphi}{1 - \varphi} @@ adding all the correlations φᵏ
+\text{as if } n\,\dfrac{1 - \varphi}{1 + \varphi} \text{ independent readings} @@ the worth of the data
+\varphi = 0.6:\ n \cdot \tfrac{0.4}{1.6} = n/4 @@ a quarter
+\htmlClass{new}{100 \text{ days are worth about } 25} @@ a test that ignores this is four times too sure
+  </pre>
+  <p data-pid="78b424">Worth technique: <b>n readings with memory φ carry about n(1 − φ)/(1 + φ) readings’ worth of evidence about their average.</b> Two series that both drift slowly will often seem to move together by chance; tests built for independent samples call that real far too often.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.4.1</span><span class="ph understand">understand</span>Why are 100 remembered readings worth only about 25 independent ones when φ = 0.6?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat25">
+  <h2 class="sthead"><span class="stno">32stat25</span>Slow Swings Rumble Loudest</h2>
+  <p data-pid="6123ac">Rung 32 breaks a signal into turnings. The memory model is a filter: shocks of every frequency go in equally, and come out shaped.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shaped spectrum">
+e_t = e^{2\pi i f t} \text{ in, out } \dfrac{e^{2\pi i f t}}{1 - \varphi e^{-2\pi i f}} @@ try a turning (32j)
+\text{power} = \dfrac{\sigma^2}{|1 - \varphi e^{-2\pi i f}|^2} = \dfrac{\sigma^2}{1 - 2\varphi\cos 2\pi f + \varphi^2} @@ size squared
+f = 0:\ \dfrac{\sigma^2}{(1 - \varphi)^2};\ \ f = \tfrac12:\ \dfrac{\sigma^2}{(1 + \varphi)^2} @@ slowest and fastest
+\htmlClass{new}{\varphi = 0.6:\ \left(\tfrac{1.6}{0.4}\right)^2 = 16 \text{ times stronger at the slow end}} @@ the ratio of the two
+  </pre>
+  <p data-pid="07088d"><b>Memory piles the power into slow swings, so remembered data seem to show long cycles that are only the fading of shocks.</b> Before calling a slow swing in a record a cycle with a cause, compare it with what the memory model alone would make.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.5.1</span><span class="ph understand">understand</span>How does the memory model shape the spectrum, and why can it make cycles appear that have no cause?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat26">
+  <h2 class="sthead"><span class="stno">32stat26</span>Moves to Watch Out For</h2>
+  <p data-pid="a5b854">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{100 daily readings: spread} / 10\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; with memory 0.6, more like spread/5 (32stat24)
+\text{forecast tomorrow} = \text{today}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; φ times today: forecasts fade to the usual (32stat23)
+\text{spread}^2 = \sigma^2/(1 - \varphi)\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the ratio is φ²: σ²/(1 − φ²) (32stat22)
+\text{a slow swing in the record, so a cycle}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; memory alone piles power into slow swings (32stat25)
+\text{test first, then check whether the data remember}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; measure φ first: it decides what the data are worth (32stat24)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.6.1</span><span class="ph understand">understand</span>Which move above sums the wrong geometric series for the spread, and what ratio do the spreads squared fall by?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">32·stat2.7.1</span><span class="tagq">do</span>With φ = 0.8 and σ = 1, find the spread, the correlation three days apart, and the forecast two days after a departure of +4.</div>
+  <div class="chq"><span class="chid">32·stat2.7.2</span><span class="tagq">make</span>Make up φ for which 100 readings are worth 50 independent ones.</div>
+  <div class="chq"><span class="chid">32·stat2.7.3</span><span class="tagq">converse</span>In the memory model, correlation k apart is φᵏ. Decide whether data whose correlations fall as φᵏ must follow the memory model.</div>
+  <div class="chq"><span class="chid">32·stat2.7.4</span><span class="tagq">edge</span>Let φ head to 1. Say what happens to the spread, to the forecasts, and to the worth of n readings.</div>
+  <div class="chq"><span class="chid">32·stat2.7.5</span><span class="tagq">open</span>Two cities’ yearly rainfall both drift slowly and seem to move together. Say how differences from year to year might test whether the link is real.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r32stat.html">← 32·stat · why does the bell curve keep turning up?</a><a href="r32then.html">32·then · what can a spectrum tell us? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="ea75d0">Readings in time form a <b>time series</b>; the memory model is an <b>autoregressive model of order 1</b>, AR(1); correlation with the past is <b>autocorrelation</b>; a series whose spread and correlations do not change is <b>stationary</b>. The worth of the data is the <b>effective sample size</b>, and series that drift together by chance give <b>spurious regression</b>. Power piled at slow frequencies is <b>red noise</b>, and the power by frequency is the <b>spectrum</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="1ead67">George Udny Yule fitted a memory model to sunspot numbers in 1927, and warned of chance links between drifting series in 1926. George Box and Gwilym Jenkins made such models a standard tool in 1970.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
