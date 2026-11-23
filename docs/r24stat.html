@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>24·stat · How Long Will It Last, When Some Leave Before the End?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24l.html">← 24l solutions as power series</a><a href="r24then.html">next: 24·then how fast does a hot drink cool? →</a></p>
+  <div class="tags"><span class="tag stat">24·stat · statistics</span></div>
+  <h1>How Long Will It Last, When Some Leave Before the End?</h1>
+  <p data-pid="607fbe">How long will it last, when some leave before the end? A clinic tries a new treatment and follows its patients for a year. Some die during the year, most do not, and some move away halfway, still alive. A machine shop tests bearings until they wear out, and stops the test before the last ones fail. Both want the share still going at each time. This page writes that share as the solution of a rate statement of rung 24, finds the time by which half have failed, lets the rate change with age, counts correctly the ones who left early, and compares two groups by a single ratio.</p>
+  <p class="gesture" data-pid="e57ea5">Let S(t) be the share still going at time t, and the hazard h the rate of failing among those still going: S′ = −hS. For a steady hazard, S = e^(−ht) and half are gone by ln 2/h; for a changing one, S = e^(−∫h). For those who leave early, multiply, at each failure, by the share of those still watched who come through it. Two groups with hazards in a fixed ratio r have S₁ = S₀ʳ.</p>
+</header>
+
+<section class="class step" data-step="24stat1">
+  <h2 class="sthead"><span class="stno">24stat1</span>The Share Still Going</h2>
+  <p data-pid="fc79ec">From here on, on this page, the <i>survival curve</i> S(t) is the share of a group still going at time t, with S(0) = 1. The <i>hazard</i> h(t) is the rate at which those still going fail, per one still going: out of S(t), about h(t)·S(t)·Δt fail in the next short time Δt.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the hazard as a rate statement">
+S(t + \Delta t) - S(t) \approx -h(t)\,S(t)\,\Delta t @@ the failures in Δt
+\htmlClass{new}{S\prime = -h\,S,\ \ S(0) = 1} @@ divide by Δt and let it shrink (13)
+h = -S\prime/S @@ read the other way: the hazard from the curve
+  </pre>
+  <p data-pid="e8cbe7">The hazard is not the chance of failing by time t. It is the rate among the ones still going: a bearing that has lasted 5 years may be more likely to fail this month than a new one, or less.</p>
+<div class="eqline c6" data-tex="h(t) = -\dfrac{S\prime(t)}{S(t)}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·stat.1.1</span><span class="ph understand">understand</span>What are the survival curve and the hazard, and what rate statement ties them together?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24stat2">
+  <h2 class="sthead"><span class="stno">24stat2</span>A Steady Hazard</h2>
+  <p data-pid="efc149">Say the bearings fail at a steady hazard h, 0.1 a year, whatever their age.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the steady hazard">
+S\prime = -hS,\ S(0) = 1 @@ the rate statement
+S(t) = e^{-ht} @@ the own-rate technique (24a): exactly one solution
+S(T) = \tfrac12 \iff T = \ln 2 / h @@ the log undoes exp (17e)
+h = 0.1:\ T = 0.693/0.1 \approx 6.9 \text{ years} @@ half are gone
+\htmlClass{new}{\text{average life} = \textstyle\int_0^\infty e^{-ht}\,dt = 1/h = 10} @@ the area under S, out to forever (16i)
+  </pre>
+  <p data-pid="27c980">Steady-hazard technique: <b>with a steady hazard h, the share still going is e<sup>−ht</sup>, half are gone by ln 2/h, and the average life is 1/h.</b> A part with a steady hazard does not age: having lasted 5 years, it faces the same next 5 as a new one, since S(t + 5)/S(t) = e<sup>−5h</sup>.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·stat.2.1</span><span class="ph understand">understand</span>With a steady hazard, what is the share still going, by when are half gone, and why does such a part not age?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24stat3">
+  <h2 class="sthead"><span class="stno">24stat3</span>A Hazard That Grows</h2>
+  <p data-pid="8bb85e">Bearings wear: their hazard grows with age. Say h(t) = 2ct, rising in a straight line. Separate the variables as in 24f.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a growing hazard">
+S\prime / S = -h(t) @@ the side-by-side technique (24f)
+\ln S(t) = -\textstyle\int_0^t h @@ area is a change (16c), ln S(0) = 0
+S(t) = e^{-\int_0^t h} @@ any hazard
+\htmlClass{new}{h = 2ct:\ S(t) = e^{-ct^2}} @@ a curve that falls slowly, then fast
+  </pre>
+  <p data-pid="77fc11">Any-hazard technique: <b>the share still going is e to the minus the area under the hazard so far.</b> A falling hazard fits things that fail early if they fail at all; a rising one fits things that wear out. Many machines show both, early faults and late wear, with a flat stretch between.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·stat.3.1</span><span class="ph understand">understand</span>How does separating the variables give the survival curve for any hazard, and what curve does a rising hazard give?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24stat4">
+  <h2 class="sthead"><span class="stno">24stat4</span>Those Who Leave Early</h2>
+  <p data-pid="b177c6">The clinic followed 8 patients. Some died, at the months shown; some left, still alive, at the months marked +. Leaving says only that the patient lived at least that long.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>months</th><th>2</th><th>3+</th><th>4</th><th>5</th><th>5+</th><th>7</th><th>9+</th><th>10</th></tr>
+    <tr><th>left in view before</th><td>8</td><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: the product, death by death">
+2:\ 1 \text{ of } 8 \text{ dies}:\ S = \tfrac78 = 0.875 @@ the share who came through
+4:\ 1 \text{ of } 6:\ S = 0.875 \cdot \tfrac56 \approx 0.729 @@ the one who left at 3 is no longer counted
+5:\ 1 \text{ of } 5:\ S \approx 0.729 \cdot \tfrac45 \approx 0.583 @@ a death before a leaving at the same month
+7:\ 1 \text{ of } 3:\ S \approx 0.583 \cdot \tfrac23 \approx 0.389 @@ two have left since
+\htmlClass{new}{S(6) \approx 0.583} @@ not 2/5, which drops those who left
+  </pre>
+  <p data-pid="55167e">Dropping the three who left leaves 5 with known ends, 3 dead by month 6: a share of 2/5. That throws away months of life the leavers were seen to have. Product technique: <b>at each death, multiply by the share of those still in view who come through it; each leaver counts while in view and then drops out of the count.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·stat.4.1</span><span class="ph understand">understand</span>How is the share still alive found when some patients leave early, and why is dropping the leavers wrong?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24stat5">
+  <h2 class="sthead"><span class="stno">24stat5</span>Two Groups, One Ratio</h2>
+  <p data-pid="64ab28">The treatment is compared with the old care. Often the hazard of one group is a fixed multiple r of the other’s at every time, whatever the shape of the hazard.</p>
+  <pre class="lines" data-k="ember" data-label="this page: hazards in a fixed ratio">
+h_1(t) = r\,h_0(t) @@ the same shape, scaled
+S_1(t) = e^{-r\int_0^t h_0} @@ the any-hazard technique
+\htmlClass{new}{S_1 = S_0^{\,r}} @@ exp(rx) = (exp x)ʳ (17e)
+r = \tfrac12,\ S_0(t) = 0.36:\ S_1(t) = 0.6 @@ half the hazard, not half the deaths
+  </pre>
+  <p data-pid="a6062d"><b>When two hazards keep a fixed ratio r, the curves obey S₁ = S₀<sup>r</sup>, and one number r sums up the difference at every time.</b> So a trial can report r without knowing the shape of either hazard. Whether the ratio really is fixed must be checked from the curves.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·stat.5.1</span><span class="ph understand">understand</span>If one group’s hazard is always r times the other’s, how are their survival curves related?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24stat6">
+  <h2 class="sthead"><span class="stno">24stat6</span>Moves to Watch Out For</h2>
+  <p data-pid="6ae4b4">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+h(t) = \text{the chance of failing by } t\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the hazard is the rate among those still going (24stat1)
+\text{half gone by } 1/h\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; 1/h is the average life; half are gone by ln 2/h (24stat2)
+\text{drop those who left, and count the rest}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; they lived at least to their leaving: count them while in view (24stat4)
+r = \tfrac12 \Rightarrow \text{half as many deaths}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; S₁ = S₀^½: half the hazard, not half the deaths (24stat5)
+\text{fit } S = e^{-ht} \text{ before looking at the hazard}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; check whether the hazard is steady first: wearing parts are not (24stat3)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·stat.6.1</span><span class="ph understand">understand</span>Which move above treats the hazard as the chance of failing by time t, and what is it instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">24·stat.7.1</span><span class="tagq">do</span>A part has a steady hazard of 0.25 a year. Find the share still working after 2 years, the time by which half have failed, and the average life.</div>
+  <div class="chq"><span class="chid">24·stat.7.2</span><span class="tagq">make</span>Make up the times of 6 patients, two of whom leave early, for which dropping the leavers gives a share at 6 months below the product, and find both.</div>
+  <div class="chq"><span class="chid">24·stat.7.3</span><span class="tagq">converse</span>A steady hazard gives S = e^(−ht). Decide whether a curve S = e^(−ht) must come from a steady hazard.</div>
+  <div class="chq"><span class="chid">24·stat.7.4</span><span class="tagq">edge</span>In 24stat4 the last patient leaves at 10+ instead of dying. Say what the product gives after month 7, and what it cannot say about later months.</div>
+  <div class="chq"><span class="chid">24·stat.7.5</span><span class="tagq">open</span>A survey of how long marriages last counts only couples married when it starts. Say which marriages it is likely to miss, and how that would bend the curve.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r24l.html">← 24l · solutions as power series</a><a href="r24then.html">24·then · how fast does a hot drink cool? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="0ac693">The share still going is the <b>survival function</b>, and the rate among those still going the <b>hazard function</b> or <b>failure rate</b>. A steady hazard gives the <b>exponential distribution</b>, which is <b>memoryless</b>; h = 2ct gives a case of the <b>Weibull distribution</b>, and early faults with late wear make the <b>bathtub curve</b>. Leaving early is <b>right censoring</b>, and the product is the <b>Kaplan-Meier estimator</b>. Hazards in a fixed ratio are <b>proportional hazards</b>, r is the <b>hazard ratio</b>, and fitting it is <b>Cox regression</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="0038d6">Edward Kaplan and Paul Meier published the product in the Journal of the American Statistical Association, 1958. David Cox set out proportional hazards in the Journal of the Royal Statistical Society, 1972.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

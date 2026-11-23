@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>21·comp · How Does a Screen Draw a World That Turns?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21nav.html">← 21·nav how far north am I?</a><a href="r21nav2.html">next: 21·nav2 what is the cheapest way to mars? →</a></p>
+  <div class="tags"><span class="tag comp">21·comp · computing</span></div>
+  <h1>How Does a Screen Draw a World That Turns?</h1>
+  <p data-pid="317c41">How does a screen draw a world that turns? A game or a film made by computer holds its world as lists of points, and sixty times a second it turns them, shrinks the far ones, hides the ones behind, and lights the rest. Every one of those jobs is a few lines of rungs 18 to 21. This page turns a model with cos and sin, watches rounding make a spinning model shrink, draws the far smaller by similar triangles, keeps the nearest point for each dot of the screen, and lights a surface by the cosine of its angle to the lamp.</p>
+  <p class="gesture" data-pid="e771b9">Turn each point by the pair (cos θ, sin θ); turns compose by adding angles, so compute each frame from the angle, not from the last frame. Draw a point at depth z at d·x/z across the screen. For each dot, keep the point with the least depth. Light a surface by the dot product of its unit facing with the unit direction to the lamp, and by nothing when that is negative.</p>
+</header>
+
+<section class="class step" data-step="21comp1">
+  <h2 class="sthead"><span class="stno">21comp1</span>Turning a Model</h2>
+  <p data-pid="f4c044">Zoe is making a game. Her windmill is a list of points, each a pair (x, y) about its hub. To turn it by an angle θ, every point is turned by the pair (cos θ, sin θ), as in 20j and 21d.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one point, turned">
+(x, y) \mapsto (x\cos\theta - y\sin\theta,\ x\sin\theta + y\cos\theta) @@ the pair-product technique (20j)
+\theta = 30°:\ \cos\theta = \tfrac{\sqrt3}{2},\ \sin\theta = \tfrac12 @@ the thirds-of-the-half technique (21b)
+(2, 0) \mapsto (\sqrt3,\ 1) @@ a blade tip
+\htmlClass{new}{|(\sqrt3, 1)| = \sqrt{3 + 1} = 2} @@ a turn keeps every distance (18f)
+  </pre>
+  <p data-pid="dc46cb">A model of ten thousand points takes ten thousand turns a frame, four multiplications each, all with the same two numbers.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·comp.1.1</span><span class="ph understand">understand</span>How is each point of a model turned by an angle θ, and what does the turn keep?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21comp2">
+  <h2 class="sthead"><span class="stno">21comp2</span>Why a Spinning Model Shrinks</h2>
+  <p data-pid="465dbf">To spin the windmill a degree each frame, it is tempting to turn last frame’s points by 1° again. But a computer keeps cos 1° and sin 1° rounded. Say to four places: 0.9998 and 0.0175.</p>
+  <pre class="lines" data-k="ember" data-label="this page: rounding, turned 360 times">
+0.9998^2 + 0.0175^2 = 0.99990629 @@ not 1, against the circle technique (21c)
+\text{each turn stretches by } \sqrt{0.99990629} \approx 0.99995 @@ a turn and a stretch (20j)
+0.99995^{360} \approx 0.983 @@ one full spin
+\htmlClass{new}{\text{after one spin the windmill is } 1.7\% \text{ smaller}} @@ and it keeps shrinking
+  </pre>
+  <p data-pid="cdb250">Fresh-turn technique: <b>keep the angle and turn the original points by it each frame; turning the last frame’s points piles up the rounding.</b> Turns compose by adding angles (21d), and adding angles costs nothing.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{frame } t:\ \text{turn the original by } t^\circ\\ &amp;\text{not: turn frame } t - 1 \text{ by } 1^\circ\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·comp.2.1</span><span class="ph understand">understand</span>Why does turning last frame’s points again make a spinning model shrink, and what fixes it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21comp3">
+  <h2 class="sthead"><span class="stno">21comp3</span>Far Things Drawn Smaller</h2>
+  <p data-pid="7d39fc">Seen from the side, the eye sits at the origin looking along the z axis, and the screen is a line at distance d in front of it. A point at height x and depth z is drawn where the line from the eye to it crosses the screen.</p>
+  <pre class="lines" data-k="ember" data-label="this page: where a point lands">
+\triangle(\text{eye, screen point}) \sim \triangle(\text{eye, point}) @@ the similar-triangles technique (18f)
+\dfrac{x\prime}{d} = \dfrac{x}{z} @@ matching sides in proportion
+\htmlClass{new}{x\prime = d\,x / z} @@ divide by the depth
+  </pre>
+  <p data-pid="5d865a">Depth technique: <b>a point at depth z is drawn at d·x/z, so a thing twice as far is drawn half as large.</b> Two rails at heights 1 and −1 run off to great z, and both d/z and −d/z head to 0: parallel lines meet on the screen at one point.</p>
+<div class="eqline c6" data-tex="z \to \infty:\ \ \pm d/z \to 0"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·comp.3.1</span><span class="ph understand">understand</span>Where on the screen is a point at depth z drawn, and why do parallel rails meet?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21comp4">
+  <h2 class="sthead"><span class="stno">21comp4</span>The Nearest Point Wins</h2>
+  <p data-pid="fa23f4">Many points can land on the same dot of the screen: the near side of a house and the far side behind it. Only the nearest should show. Painting from the farthest thing to the nearest fails when three things each overlap the next in a ring.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one depth per dot">
+\text{for each dot: keep a depth, at first } \infty @@ nothing drawn yet
+\text{a point lands with depth } z:\ z < \text{kept?} @@ compare
+\text{yes: draw it and keep } z;\ \text{no: skip it} @@ one test per point
+\htmlClass{new}{\text{each dot ends with its nearest point}} @@ in any order of drawing
+  </pre>
+  <p data-pid="a5aa47"><b>Keeping the least depth at each dot shows the nearest point there, whatever order the points come in.</b> It costs one number per dot of the screen, and no sorting at all.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·comp.4.1</span><span class="ph understand">understand</span>How does keeping one depth per dot decide what shows, and why does the order of drawing not matter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21comp5">
+  <h2 class="sthead"><span class="stno">21comp5</span>Light by the Cosine</h2>
+  <p data-pid="3db171">A surface facing a lamp catches its light squarely; tilted, the same light spreads over more surface and looks dimmer. Let n be the unit arrow the surface faces, and ℓ the unit arrow toward the lamp.</p>
+  <pre class="lines" data-k="ember" data-label="this page: how bright">
+n \cdot \ell = \cos(\text{angle between}) @@ the opening is the cosine (21b), for unit arrows (18a)
+n = (0, 1),\ \ell = (\tfrac12, \tfrac{\sqrt3}{2}):\ n \cdot \ell = \tfrac{\sqrt3}{2} @@ lamp 30° from overhead
+n \cdot \ell < 0:\ \text{the lamp is behind} @@ no light at all
+\htmlClass{new}{\text{brightness} = \max(0,\ n \cdot \ell)} @@ one dot product per point
+  </pre>
+  <p data-pid="1f00dc">Cosine technique: <b>a dull surface is lit in proportion to the cosine of the angle between its facing and the lamp, which is a dot product of unit arrows, and not at all when the lamp is behind it.</b> Shine and colour are added on top of this, by more lines of the same kind.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·comp.5.1</span><span class="ph understand">understand</span>How bright is a dull surface for a given lamp, and why is that a dot product?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21comp6">
+  <h2 class="sthead"><span class="stno">21comp6</span>Moves to Watch Out For</h2>
+  <p data-pid="4816cd">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{turn last frame by } 1° \text{ each frame}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; rounding piles up and the model shrinks (21comp2)
+x\prime = d\,z / x\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; divide by the depth: d·x/z (21comp3)
+\text{draw far to near, so near covers far}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; three things overlapping in a ring defeat it; keep a depth per dot (21comp4)
+\text{brightness} = n \cdot \ell\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; when the lamp is behind, n · ℓ is negative: clip at 0 (21comp5)
+\text{a turn then a slide} = \text{a slide then a turn}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; a turn and a slide do not swap (20nav4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·comp.6.1</span><span class="ph understand">understand</span>Which move above lets the brightness go below 0, and what should the lamp behind a surface give?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">21·comp.7.1</span><span class="tagq">do</span>Turn the square with corners (1, 1), (−1, 1), (−1, −1), (1, −1) by 45°, and draw where its corners land.</div>
+  <div class="chq"><span class="chid">21·comp.7.2</span><span class="tagq">make</span>Make three flat panels, seen from above, each partly in front of the next in a ring, so that no order of painting far to near draws them correctly.</div>
+  <div class="chq"><span class="chid">21·comp.7.3</span><span class="tagq">converse</span>A turn keeps every distance. Decide whether a map of the plane that keeps every distance and the hub fixed must be a turn.</div>
+  <div class="chq"><span class="chid">21·comp.7.4</span><span class="tagq">edge</span>A point lies at depth z = 0, level with the eye. Say what d·x/z does there, and what a drawing program must do with such points.</div>
+  <div class="chq"><span class="chid">21·comp.7.5</span><span class="tagq">open</span>A screen dot takes a colour from the one nearest point. Say what happens along the edge of a thin wire drawn on dots too large for it, and what averaging several points per dot would change.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r21nav.html">← 21·nav · how far north am I?</a><a href="r21nav2.html">21·nav2 · what is the cheapest way to mars? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="484ee9">Turning, moving and scaling a model are <b>transformations</b>, usually written as <b>matrices</b>. Drawing by d·x/z is <b>perspective projection</b>, and the meeting point of parallel lines a <b>vanishing point</b>. Keeping the least depth per dot is the <b>z-buffer</b> or <b>depth buffer</b>; painting far to near is the <b>painter’s algorithm</b>. Light by the cosine is <b>Lambert’s cosine law</b>, and the facing arrow is the surface <b>normal</b>. The jagged edge is <b>aliasing</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="d0b601">Johann Heinrich Lambert stated the cosine law in <i>Photometria</i>, 1760. Edwin Catmull described the depth buffer in his 1974 thesis at the University of Utah.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
