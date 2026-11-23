@@ -4493,4 +4493,4 @@ window.LadderStepUnlocks={mark,fill,cwSync};
 
 /* under pressure (Andrew 2026-11-22): the Settings button is the way to the rung Steps Towards Symbolizing Induction into Action */
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.recpress'); if(!b) return;
-  try{ localStorage.setItem('ladder:pressure',String(Date.now())); }catch(_){} let L=null; try{ L=JSON.parse(localStorage.getItem('nook:last')||'null'); }catch(_){} location.href=(L&&/^dbt(g|m|ie|er|dt)$/.test(L.page)?L.page+'.html#'+L.id:'dbtg.html'); /* the nook: pick up where you left off */ },true);
+  try{ localStorage.setItem('ladder:pressure',String(Date.now())); }catch(_){} let L=null; try{ L=JSON.parse(localStorage.getItem('nook:last')||'null'); }catch(_){} location.href=(L&&/^dbt(g|m|ie|er|dt)$/.test(L.page)?L.page+'.html#'+L.id:'dbt.html'); /* the nook: its first page on the first press, then pick up where you left off */ },true);

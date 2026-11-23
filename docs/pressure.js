@@ -6,7 +6,8 @@
 (function(){
 const SER={dbtg:'G',dbtm:'M',dbtie:'IE',dbter:'ER',dbtdt:'DT'};
 const page=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
-if(!SER[page]||window.LADDER_DESK) return;
+const FRONT=page==='dbt';   /* the nook's first page: no series of its own */
+if(!(SER[page]||FRONT)||window.LADDER_DESK) return;
 const N=()=>window.LADDER_NOOK, BOLD={G:'𝐆',M:'𝐌',IE:'𝐈𝐄',ER:'𝐄𝐑',DT:'𝐃𝐓'};
 const get=(k,d)=>{ try{ const v=JSON.parse(localStorage.getItem(k)); return v==null?d:v; }catch(e){ return d; } };
 const put=(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} };
@@ -36,7 +37,7 @@ function check(quiet){ if(!N()) return; const A=awards(); let got=null;
 function last(){ const L=get('nook:last',null); return L&&L.page&&SER[L.page]?L:null; }
 function here(){ const ss=[...document.querySelectorAll('section.step')].filter(s=>!s.hidden&&s.offsetHeight>0); let at=null; const y=innerHeight*.35; /* footing view hides all but the footing on screen */
   ss.forEach(s=>{ if(s.getBoundingClientRect().top<y) at=s; }); return at; }
-function mark(){ const s=here(); if(s) put('nook:last',{page,id:s.id,t:Date.now()}); }
+function mark(){ if(FRONT) return; const s=here(); if(s) put('nook:last',{page,id:s.id,t:Date.now()}); }
 addEventListener('scroll',()=>{ clearTimeout(mark.t); mark.t=setTimeout(mark,600); },{passive:true});
 document.addEventListener('click',e=>{ if(e.target.closest&&e.target.closest('.stnextb')) setTimeout(()=>{ mark(); check(); },120); },true);
 
@@ -66,7 +67,7 @@ function index(){ closeDesk(); const body=frame('under pressure','Index'); if(!N
       h+='<li class="'+(on?'nk-on':'nk-shut')+'">'+(on?'<a href="'+go(s,stepId(st.id))+'">':'<span>')+'<b class="nk-id">'+esc(st.id)+'</b> '+fk(st.title)+(on?'</a>':'</span>')+'</li>'; });
     if(s.id==='DT') h+='<li class="'+(opened(s)>=s.footings?'nk-on':'nk-shut')+'">'+(opened(s)>=s.footings?'<a href="dbtdt.html#dbtconcl">':'<span>')+'<b class="nk-id">∴</b> conclusion'+(opened(s)>=s.footings?'</a>':'</span>')+'</li>';
     h+='</ul></details>'; });
-  h+='<p class="nk-out"><a href="index.html">Leave Under pressure for the ladder →</a></p>';
+  h+='<p class="nk-resume"><a href="dbt.html">What Under pressure is: the first page →</a></p><p class="nk-out"><a href="index.html">Leave Under pressure for the ladder →</a></p>';
   body.innerHTML=h; body.querySelectorAll('a[href*="#"]').forEach(a=>a.addEventListener('click',()=>{ if(a.getAttribute('href').startsWith(page+'.html')) shut(); })); }
 
 /* a mark's card: the mark, what it means here or the ladder step that teaches it, and where the rung first uses it */
@@ -75,6 +76,7 @@ const card=(m,s,st)=>'<div class="dmv nk-mk"><b class="nk-m">'+fk(m[0])+'</b> <s
   +'<a class="mwhere" href="'+(s.page===page?'':s.page+'.html')+'#'+stepId(st.id)+'">where it is first used'+(s.page===page?', on this page':'')+' →</a>'
   +(m[2]?'<a class="mwhere nk-lad" href="'+esc(m[2])+'">taught at '+esc(m[3])+' →</a>':'')+'</div>';
 function moves(){ const host=document.getElementById('nkmoves'); if(!host||!N()) return; const s=N().series.find(x=>x.page===page);
+  if(!s){ host.innerHTML='<p class="dnote">Open a series and the marks its footings first use are listed here.</p>'; return; }
   let h='', shut_=0;
   s.steps.forEach((st,i)=>{ if(!st.marks.length) return; if(!isOpen(s,i)){ shut_+=st.marks.length; return; }
     h+='<details class="dfold nk-step"'+(i===Math.min(opened(s),s.steps.length)-1?' open':'')+'><summary><span>'+esc(st.id)+' · '+fk(st.title)+'</span><b>'+st.marks.length+'</b></summary>'+st.marks.map(m=>card(m,s,st)).join('')+'</details>'; });
@@ -233,7 +235,7 @@ function stick(pane,lead){ const c=deal(), S=get('nook:ms',{r:0,n:0});
 function refit(){ const d=document.getElementById('desk'); if(!d||d.dataset.nook) return !!d; d.dataset.nook='1';
   d.querySelectorAll('.dtabs [data-p="rand"], .dtabs .dstick, .dtabs .dannex, .dtabs .dcross').forEach(b=>b.classList.add('nk-off'));
   const ix=d.querySelector('.dheights'); if(ix) ix.textContent='Index';
-  const mv=document.getElementById('dp-moves'); if(mv&&!document.getElementById('nkmoves')){ const p=document.createElement('p'); p.className='dnote nk-note'; p.textContent='The marks this page first uses, footing by footing: what each means here, or the ladder step that teaches it.'; const h=document.createElement('div'); h.id='nkmoves'; mv.append(p,h); }
+  const mv=document.getElementById('dp-moves'); if(mv&&!document.getElementById('nkmoves')){ const p=document.createElement('p'); p.className='dnote nk-note'; p.textContent='The marks this page first uses, footing by footing: what each means here, in one sentence, and where the ladder teaches it if it does.'; const h=document.createElement('div'); h.id='nkmoves'; mv.append(p,h); }
   const dk=document.getElementById('dp-deck'); if(dk&&!document.getElementById('nkdeck')){ const t=document.createElement('div'); t.className='dk-tools nk-dkt'; t.innerHTML='<input type="search" id="nkdkq" placeholder="find a mark by sign or word" aria-label="find a mark"><span class="dk-count" id="nkdkcount"></span>';
     const p=document.createElement('p'); p.className='dnote nk-note'; p.textContent='Every mark of the five series, from the footings you have opened.'; const h=document.createElement('div'); h.id='nkdeck'; dk.append(p,t,h); t.querySelector('input').addEventListener('input',e=>deck(e.target.value)); }
   const rec=document.getElementById('dp-rec'); if(rec&&!rec.querySelector('.nk-set')){ const p=document.createElement('p'); p.className='nk-set'; p.innerHTML='<span class="dnote">You are in Under pressure. Its progress and awards are kept apart from the ladder’s.</span> <a class="dlink" href="index.html">back to the ladder →</a>'; rec.prepend(p); }
