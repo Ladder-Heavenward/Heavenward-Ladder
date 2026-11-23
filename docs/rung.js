@@ -227,6 +227,16 @@ addEventListener('storage',e=>{ if(e.key===RK||e.key===null){ raw=null; stale=tr
     put('marks:0b · What It Means to Be the Same',b); put('marks:0c · Chains and Swaps',c); LS.removeItem(OK); } }catch(e){}
   try{ const P=JSON.parse(LS.getItem('pages:done')||'null'); if(P&&P.r00b&&P.r00b.v&&!(P.r00c&&P.r00c.v)){ P.r00c=Object.assign({},P.r00b); LS.setItem('pages:done',JSON.stringify(P)); } }catch(e){}
   LS.setItem(F,String(Date.now())); }catch(e){} })();
+/* petal footing tick move (Andrew passed 2026-11-23 17:36Z): new 2bio5 Is a Petal a Leaf? came in before Moves, so
+   2bio5 -> 2bio6 (question 2·bio.5.1 -> 2·bio.6.1, standing 2·bio.6.k -> 2·bio.7.k), once, under ladder:mvFeet6. Same rules as petal2bio/renum02bio.py. */
+(function(){ const F='ladder:mvFeet6'; try{ if(LS.getItem(F)!=null) return; const M={"2bio5":"2bio6","2·bio.5.1":"2·bio.6.1","2·bio.6.1":"2·bio.7.1","2·bio.6.2":"2·bio.7.2","2·bio.6.3":"2·bio.7.3","2·bio.6.4":"2·bio.7.4","2·bio.6.5":"2·bio.7.5"};
+  const K=Object.keys(M).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.]/g,'\\.'));
+  const RE=new RegExp('(?<![A-Za-z0-9_·.])('+K.join('|')+')(?![A-Za-z0-9_·])','g'), tg=v=>String(v).replace(RE,(x,k)=>M[k]);
+  const ks=[]; for(let i=0;i<LS.length;i++){ const k=LS.key(i); if(k) ks.push(k); }
+  const mv=[]; ks.forEach(k=>{ if(!/^(marks:|rand:|sq:|steps:|cert:|note:|mg:)/.test(k)&&!/^(pages:done|cards:seen|ladder:lastFooting|ladder:furthest)$/.test(k)) return; const v=LS.getItem(k); if(v==null) return;
+    const nk=/^(sq:|steps:|cert:|note:|mg:|marks:)/.test(k)?tg(k):k, nv=tg(v); if(nk!==k||nv!==v) mv.push([k,nk,nv]); });
+  mv.forEach(x=>{ if(x[1]!==x[0]) LS.removeItem(x[0]); }); mv.forEach(x=>{ LS.setItem(x[1],x[2]); });
+  LS.setItem(F,String(Date.now())); }catch(e){} })();
 
 /* ---- roll (embeds) ---- */
 /* roll: the roll-out for slide decks, and one frame for decks and pictures (embeds thread, Andrew 2026-11-20 05:13Z, passed 05:45Z).
@@ -1002,7 +1012,7 @@ function deskHTML(){
     +'<div class="dpane" id="dp-moves">'+/* techhead */'<p class="dtrio" role="group" aria-label="tech screens"><button type="button" data-go="moves">Techs Read</button><button type="button" data-go="graph">Graph View</button><button type="button" data-go="deck">Tech Deck</button></p><p class="dnote" id="dmnote">The techs this step builds: what each is called, what it does in words, and the line in symbols.</p><div id="dmoves"></div></div>'
     +'<div class="dpane" id="dp-deck"><p class="dtrio" role="group" aria-label="tech screens"><button type="button" data-go="moves">Techs Read</button><button type="button" data-go="graph">Graph View</button><button type="button" data-go="deck">Tech Deck</button></p><p class="dnote">Each card is one tech you have earned. A tech lands here when you finish its step’s questions.</p><div class="dk-tools"><input type="search" id="dkq" placeholder="find a tech by name or word" aria-label="find a tech"><span class="dk-count" id="dkcount"></span></div><div id="dklist"></div><p class="dnote" id="dkahead"></p></div>'
     +'<div class="dpane" id="dp-rand">'+/* hangdry */'<p class="jogtxt" role="status" aria-label="the laundry is loading">'+'Hang Drying'.split('').map((c,i)=>c===' '?'<s>&nbsp;</s>':'<s aria-hidden="true" style="animation-delay:'+(i*70)+'ms">'+c+'</s>').join('')+'</p></div>'
-    +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="dtheme"><span class="dnote">Display:</span> <button type="button" data-th="light">Light</button> <button type="button" data-th="dark">Dark</button></p><p class="dcomp"><label><input type="checkbox" class="reccomp"> Opt into competition</label><span class="dnote dcomp-n">Gives you a climber name and opens the Standing.</span></p><p class="dcomp dai"><label><input type="checkbox" class="recai"> An AI assistant is connected</label><span class="dnote dcomp-n">Adds “prompt from” to paragraph and question menus, which copies the words to paste to your assistant.</span></p><p class="dnote dpress">The rung Steps Towards Symbolizing Induction into Action: the skills for acting on what you have learned, written in marks.</p><p><button type="button" class="dlink recpress">Under pressure</button></p><h4 class="drech">Record</h4><p class="recname"><span class="dnote">Your climber name:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> </p><p class="recrolls"><button type="button" class="dlink recroll">New Name</button> <button type="button" class="dlink recroll-a">New Animal</button> <button type="button" class="dlink recroll-p">New Place</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><button type="button" class="dlink recopen">open my record as a file</button><input type="file" accept=".json,application/json" class="reci" hidden></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
+    +(hb?'<div class="dpane" id="dp-base"><div id="dbase"></div></div>':'')+'<div class="dpane" id="dp-rec"><p class="dtheme"><span class="dnote">Display:</span> <button type="button" data-th="light">Light</button> <button type="button" data-th="dark">Dark</button></p><p class="dcomp"><label><input type="checkbox" class="reccomp"> Opt into competition</label><span class="dnote dcomp-n">Gives you a climber name and opens the Standing.</span></p><p class="dcomp dai"><label><input type="checkbox" class="recai"> An AI assistant is connected</label><span class="dnote dcomp-n">Adds “prompt from” to paragraph and question menus, which copies the words to paste to your assistant.</span></p><p><button type="button" class="dlink recpress">Under pressure</button></p><h4 class="drech">Record</h4><p class="recname"><span class="dnote">Your climber name:</span> <b class="dname-n">'+(window.LadderAccount?LadderAccount.name:'')+'</b> </p><p class="recrolls"><button type="button" class="dlink recroll">New Name</button> <button type="button" class="dlink recroll-a">New Animal</button> <button type="button" class="dlink recroll-p">New Place</button></p><p class="dnote">Everything the ladder remembers about your climb is one record, kept on this device. Save it as a file to keep a copy or to carry it to another device, and open that file there.</p><p><button type="button" class="dlink recx">save my record as a file</button></p><p><button type="button" class="dlink recopen">open my record as a file</button><input type="file" accept=".json,application/json" class="reci" hidden></p><p><button type="button" class="dlink recdel">delete my progress</button></p><p class="dnote" id="recnote"></p></div>';
   { const w=document.createElement('div'); w.className='dtool'; w.appendChild(d.querySelector('.dtop')); d.querySelectorAll(':scope>.dpane:not(#dp-keys)').forEach(x=>w.appendChild(x)); d.appendChild(w); } /* sidepanels: the tool's half of the toolbox */
   document.body.append(b,d);
 }
@@ -2781,7 +2791,10 @@ function footingView0(){
        step, beside "next" where there is one; gone once every step has been supplied */
     const spot=P==='floor7concl'||P==='floor8'||!!(window.LadderSky&&LadderSky.lastPage&&LadderSky.lastPage()===P);
     up.hidden=!on||(atEnd&&!nextPage); dn.hidden=!on||(cur<=0&&!prevPage);
-    sky.hidden=!on||!atEnd||!(spot||!nextPage)||!skyOpen()||!!(window.LadderSky&&LadderSky.caughtUp&&LadderSky.caughtUp());
+    /* 2026-11-23 (Andrew 16:06Z): a page off the climb (share the ladder, about, license) has no next page either, but the blue sky is not
+       for it: the end-of-the-climb fallback counts only for a page with a place on the climb or an infinity step */
+    const onClimb=placeOf(P)!=null||/^inf\d/.test(P);
+    sky.hidden=!on||!atEnd||!(spot||(!nextPage&&onClimb))||!skyOpen()||!!(window.LadderSky&&LadderSky.caughtUp&&LadderSky.caughtUp());
     const pair=!sky.hidden&&!up.hidden; up.classList.toggle('fvpair',pair); sky.classList.toggle('fvpair',pair);
     up.setAttribute('aria-label','next: '+(atEnd?(nextPage||''):idOf(cur+1))); dn.setAttribute('aria-label','previous: '+(cur>0?idOf(cur-1):(prevPage||'')));
     pos.textContent=''; tuck(); }; /* todo16: the badge says only "one up"; the tag line already counts the footings */
@@ -3688,7 +3701,7 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 (function(){
 'use strict';
 if(window.LADDER_DESK) return;
-const PAGES=window.LADDER_SWIPE_PAGES||/^(r\d\d|floor\d|inf|intro$)/; /* todo16: how to read the ladder too */ /* Phase G floor 8: all rungs and the Endless floor */
+const PAGES=window.LADDER_SWIPE_PAGES||/^(r\d\d|floor\d|inf|intro$|dbt)/; /* todo16: how to read the ladder too */ /* the nook too (Andrew 2026-11-23 17:49Z) */ /* Phase G floor 8: all rungs and the Endless floor */
 const ADVANCE_ON_SWIPE_LEFT=true; /* finger moves left = the row moves on, as pages turn; flip for the other reading */
 const pg=()=>window.ladderPage?ladderPage():'';
 const ATTACH=/(^|\s)(eqline|eqline-words|brkkey|eyebrow|lbl|cap|lp|lv|first|dividend|tablewrap-cap|gname)(\s|$)/;
@@ -3804,7 +3817,9 @@ function buildChunks(els){
   screens=swDrop(fitScreens(items));
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
 function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.step')); if(!step){ if(els.some(e=>e.matches&&e.matches('header.top'))) buildChunks(els); return; } /* Andrew 2026-11-20: a page's opening (title and summary, no step) is screens too, so it never scrolls */ if(CHUNKPAGE.test(pg())&&els.length&&els[0]&&els.some(e=>e.matches&&e.matches('header.top'))){ buildChunks(els); return; } expand(step);
-  const put=ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
+  let pend=[]; const pairs=[]; /* the nook (Andrew 2026-11-23 17:49Z): a layer's name rides with the screen after it */
+  const put=ch=>{ if(ch.matches('.dbtstep>.layer')){ pend.push(ch); return; } const n0=screens.length; put0(ch); if(pend.length&&screens.length>n0){ pairs.push([pend,screens[n0][0]]); pend=[]; } };
+  const put0=ch=>{ if(ch.matches('h2,.sthead,.stnext,script,style,template')||ch.hidden) return; if(ch.matches('p[data-pid]')&&folded(ch)) return;
     /* Andrew 2026-11-20 08:26Z: an "Anexact, yet rigorous" box is a series of slides. Its heading rides with its first part, each part is a screen,
        and the box is drawn round whichever part is showing (.sw-split hides the box on the other screens) */
     if(ch.matches('aside')&&!ch.hasAttribute('data-collapsed')&&ch.children.length>1){ let hold=[];
@@ -3822,6 +3837,7 @@ function build(els){ clear(); step=els.find(e=>e.matches&&e.matches('section.ste
   /* todo16: a page's title, opened with its first footing, rides with the first screen only */
   const hdr=els.find(e=>e.matches&&e.matches('header.top')); if(hdr&&screens.length){ hdr.classList.add('sw-hdr'); [...hdr.children].filter(x=>!x.matches('p.home,.pn,script,style')).forEach(x=>screens[0].push(x)); }
   screens=swDrop(fitScreens(screens));
+  pairs.forEach(([ls,el])=>{ const sc=screens.find(x=>x.includes(el)); if(sc) sc.unshift(...ls); }); /* joined after the fit: the frame under a layer's name sizes itself to the screen */
   screens.forEach((s,i)=>s.forEach(x=>{ x.setAttribute('data-sw',i); if(folded(x)){ x.classList.add('sw-stub'); if(!x.dataset.addr) x.dataset.addr=x.matches('.slides')?'slides':x.matches('.pic')?'picture':x.matches('pre')?'lines':x.matches('.sayback')?'question':'·'; } })); }
 function ui(){ if(bar) return; bar=document.createElement('div'); bar.className='swbar'; bar.hidden=true;
   L=document.createElement('button'); L.type='button'; L.className='swnav swl'; L.innerHTML='<span aria-hidden="true">◀</span> previous'; L.setAttribute('aria-label','previous screen');
@@ -4493,4 +4509,10 @@ window.LadderStepUnlocks={mark,fill,cwSync};
 
 /* under pressure (Andrew 2026-11-22): the Settings button is the way to the rung Steps Towards Symbolizing Induction into Action */
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.recpress'); if(!b) return;
-  try{ localStorage.setItem('ladder:pressure',String(Date.now())); }catch(_){} let L=null; try{ L=JSON.parse(localStorage.getItem('nook:last')||'null'); }catch(_){} location.href=(L&&/^dbt(g|m|ie|er|dt)$/.test(L.page)?L.page+'.html#'+L.id:'dbtg.html'); /* the nook: pick up where you left off */ },true);
+  try{ localStorage.setItem('ladder:pressure',String(Date.now())); }catch(_){} let L=null; try{ L=JSON.parse(localStorage.getItem('nook:last')||'null'); }catch(_){} const to=(L&&/^dbt(g|m|ie|er|dt)$/.test(L.page)?L.page+'.html#'+L.id:'dbt.html'); /* the nook: its first page on the first press, then pick up where you left off */
+  /* anti-drama (Andrew 2026-11-23): a 1.7 second jogging load screen before the nook opens */
+  e.preventDefault(); e.stopPropagation(); if(document.getElementById('antidrama')) return;
+  const o=document.createElement('div'); o.id='antidrama'; o.setAttribute('role','status'); o.setAttribute('aria-label','anti-drama');
+  o.innerHTML='<p>'+'anti-drama'.split('').map((c,i)=>'<s aria-hidden="true" style="animation-delay:'+(i*70)+'ms">'+c+'</s>').join('')+'</p>';
+  document.body.appendChild(o); setTimeout(()=>{ location.href=to; },1700);
+  window.addEventListener('pageshow',ev=>{ if(ev.persisted) o.remove(); }); /* coming back with the back button: no stuck screen */ },true);
