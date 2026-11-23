@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>17·phys2 · Why Is a Rocket Mostly Fuel?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17phys.html">← 17·phys is light a dot or a flow?</a><a href="r17comp.html">next: 17·comp what is the quickest way to sort a list? →</a></p>
+  <div class="tags"><span class="tag phys">17·phys2 · physics</span></div>
+  <h1>Why Is a Rocket Mostly Fuel?</h1>
+  <p data-pid="95c8a6">Why is a rocket mostly fuel? A rocket standing on the pad is nine-tenths propellant or more; what reaches orbit is a sliver. The reason is that a rocket must carry, and speed up, the fuel it will burn later. In 1903 Konstantin Tsiolkovsky, a schoolteacher in a Russian provincial town, found the law. Each moment the rocket throws a little mass backward and gains a little speed, by 14·phys’s momentum; adding up those gains is exactly rung 17’s area under one over x, the logarithm. This page derives the rocket equation, prices a trip to orbit, finds why rockets drop their empty tanks, and why faster exhaust is worth so much.</p>
+  <p class="gesture" data-pid="4decda">A rocket of mass m throws a sliver dm backward at speed u and gains dv = u·dm/m. Add the slivers: Δv = u ln(m₀/m₁), the area under 1/m from the empty mass to the full. The needed mass ratio is e to the power Δv/u, exponential in the speed asked for. Dropping empty tanks splits one huge ratio into a product of modest ones, since logs of a product add.</p>
+</header>
+
+<section class="class step" data-step="17phys21">
+  <h2 class="sthead"><span class="stno">17phys21</span>Throwing Mass Backward</h2>
+  <p data-pid="548663">Jean’s rocket, mass m, moving at v, throws a small mass of exhaust backward at speed u relative to itself. Nothing outside pushes; momentum is kept (14·phys).</p>
+  <pre class="lines" data-k="ember" data-label="this page: one sliver">
+\text{mass } \delta \text{ thrown back at } u @@ relative to the rocket
+(m - \delta)\,\delta v \approx \delta \cdot u @@ momentum before = after, in the rocket’s frame
+\delta v \approx u \cdot \dfrac{\delta}{m} @@ small δ
+\htmlClass{new}{\text{each sliver adds speed } u \text{ times the share of the mass it is}} @@ later slivers count more: m is smaller
+  </pre>
+  <p data-pid="5291be">From here on, on this page, the <i>mass ratio</i> is the full mass m₀ over the empty mass m₁, and Δv the speed the burn adds.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·phys2.1.1</span><span class="ph understand">understand</span>How much speed does throwing one small mass backward give the rocket?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17phys22">
+  <h2 class="sthead"><span class="stno">17phys22</span>Adding Up the Slivers</h2>
+  <pre class="lines" data-k="ember" data-label="this page: the rocket equation">
+\Delta v = \sum u \dfrac{\delta}{m} \to u \int_{m_1}^{m_0} \dfrac{dm}{m} @@ strips under 1/m (15c)
+\int_{m_1}^{m_0} \dfrac{dm}{m} = \ln m_0 - \ln m_1 @@ the log as an area (17a)
+\Delta v = u \ln \dfrac{m_0}{m_1} @@ ln x − ln y = ln(x/y) (17c)
+\htmlClass{new}{\dfrac{m_0}{m_1} = e^{\Delta v / u}} @@ undo the log (17e)
+  </pre>
+  <p data-pid="6e05b3">Rocket technique: <b>the speed a burn adds is the exhaust speed times the log of the mass ratio, so the mass ratio needed grows exponentially with the speed asked for.</b> Nothing about how fast the fuel burns enters, only how fast the exhaust leaves.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·phys2.2.1</span><span class="ph understand">understand</span>How do the slivers add up to the rocket equation, and why does a log appear?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17phys23">
+  <h2 class="sthead"><span class="stno">17phys23</span>The Price of Orbit</h2>
+  <pre class="lines" data-k="ember" data-label="this page: kerosene and oxygen">
+\Delta v \approx 9.4 \text{ km/s to low orbit} @@ orbit speed plus losses to air and gravity
+u \approx 3.0 \text{ km/s} @@ kerosene burnt in oxygen
+\dfrac{m_0}{m_1} = e^{9.4/3.0} = e^{3.13} \approx 23 @@ from the rocket equation
+\htmlClass{new}{\text{empty mass } \tfrac{1}{23} \approx 4\% \text{ of the full}} @@ tanks, engines and payload together
+  </pre>
+  <p data-pid="1af05d"><b>To reach orbit on kerosene, 96 parts in 100 of the rocket at lift-off must be propellant.</b> The tanks, engines and payload must fit in the other four, and tanks alone tend to weigh more than that.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·phys2.3.1</span><span class="ph understand">understand</span>What mass ratio does reaching orbit on kerosene need, and why is that hard?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17phys24">
+  <h2 class="sthead"><span class="stno">17phys24</span>Dropping Empty Tanks</h2>
+  <p data-pid="1822ca">Once a tank is empty, it is dead weight that later burns must still speed up. So drop it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two stages">
+\Delta v = u \ln R_1 + u \ln R_2 = u \ln (R_1 R_2) @@ each stage its own ratio; logs add (17c)
+R_1 R_2 = 23:\ R_1 = R_2 = \sqrt{23} \approx 4.8 @@ two modest ratios
+\text{a ratio of } 4.8 \text{ leaves } 21\% \text{ for tanks and the stage above} @@ buildable
+\htmlClass{new}{\text{stages turn one impossible ratio into a product of possible ones}} @@ nearly every orbital rocket stages
+  </pre>
+  <p data-pid="8a24f6"><b>Because the logs of the stages’ ratios add, a ratio no single tank could reach is the product of ratios each stage can.</b> Tsiolkovsky called the stages a rocket train.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·phys2.4.1</span><span class="ph understand">understand</span>Why does dropping empty tanks make orbit reachable?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17phys25">
+  <h2 class="sthead"><span class="stno">17phys25</span>Faster Exhaust</h2>
+  <pre class="lines" data-k="ember" data-label="this page: what u buys">
+\text{hydrogen and oxygen: } u \approx 4.4 \text{ km/s} @@ lighter exhaust, faster
+e^{9.4/4.4} = e^{2.14} \approx 8.5 @@ against 23 for kerosene
+\text{ion engine: } u \approx 30 \text{ km/s, but a push of a fraction of a newton} @@ months to build speed
+\htmlClass{new}{\text{the ratio falls exponentially as } u \text{ rises}} @@ u sits under the exponent
+  </pre>
+  <p data-pid="efe3d4"><b>Since the mass ratio is e to the Δv over u, a faster exhaust saves far more than a lighter rocket.</b> Hydrogen is bulky and must be kept at 20 degrees above absolute zero, so engineers trade u against tank size; ion engines carry probes across the solar system on a few hundred kilograms of gas.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·phys2.5.1</span><span class="ph understand">understand</span>Why is a faster exhaust worth so much, and what does it cost?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17phys26">
+  <h2 class="sthead"><span class="stno">17phys26</span>Moves to Watch Out For</h2>
+  <p data-pid="d3a348">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{double the fuel, double the speed}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; speed grows as the log of the mass ratio (17phys22)
+\Delta v = u \cdot \dfrac{m_0 - m_1}{m_0}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; later slivers push a lighter rocket: the slivers add to u ln(m₀/m₁) (17phys22)
+\text{burn the fuel faster for more speed}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; only the exhaust speed and the mass ratio enter (17phys22)
+\text{keep empty tanks: dropping them wastes metal}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; dead weight must still be sped up; stages multiply ratios (17phys24)
+\text{find the mass ratio, then the exhaust speed it needs}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; u is set by the propellant first; it fixes the ratio e^{Δv/u} (17phys25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·phys2.6.1</span><span class="ph understand">understand</span>Which move above treats speed as growing in step with fuel, and how does it really grow?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">17·phys2.7.1</span><span class="tagq">do</span>A stage with exhaust speed 3.5 km/s has full mass 120 tonnes and empty mass 30. Find the speed it adds.</div>
+  <div class="chq"><span class="chid">17·phys2.7.2</span><span class="tagq">make</span>Make up a three-stage rocket whose ratios multiply to 23.</div>
+  <div class="chq"><span class="chid">17·phys2.7.3</span><span class="tagq">converse</span>A larger mass ratio gives a larger Δv. Decide whether a larger Δv must come from a larger mass ratio.</div>
+  <div class="chq"><span class="chid">17·phys2.7.4</span><span class="tagq">edge</span>Let the empty mass equal the full mass. Say what speed the burn adds.</div>
+  <div class="chq"><span class="chid">17·phys2.7.5</span><span class="tagq">open</span>Say why the same rocket gains less speed climbing straight up through air than the rocket equation gives.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r17phys.html">← 17·phys · is light a dot or a flow?</a><a href="r17comp.html">17·comp · what is the quickest way to sort a list? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="6f0351">Δv = u ln(m₀/m₁) is the <b>Tsiolkovsky rocket equation</b>; u is the <b>effective exhaust velocity</b>, often given as <b>specific impulse</b> (u divided by g, in seconds). The speed budget is the <b>delta-v</b>; dropping tanks is <b>staging</b>; the ion engine is <b>electric propulsion</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="e6cbdf">Konstantin Tsiolkovsky published the equation in 1903, in “Exploration of Outer Space by Means of Reaction Devices”, and the rocket train with stages in 1929. William Moore had derived it for military rockets in Britain in 1813.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
