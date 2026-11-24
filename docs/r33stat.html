@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>33·stat · How Many of Ten Thousand Findings Can You Trust?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r33l.html">← 33l potentials by hand</a><a href="r33then.html">next: 33·then how does heat creep into the ground? →</a></p>
+  <div class="tags"><span class="tag stat">33·stat · statistics</span></div>
+  <h1>How Many of Ten Thousand Findings Can You Trust?</h1>
+  <p data-pid="3dfbab">How many of ten thousand findings can you trust? A lab tests ten thousand genes at once for a link with a disease. At the usual one-in-twenty bar, five hundred genes with no link at all will pass by chance. 30·now showed how passed findings mislead; this page gives the tools that keep a list of findings honest. It finds the chance of at least one false alarm, the old cure that divides the bar, a newer one that controls the share of false findings instead, why that share is kept, and how the costs of each mistake should set a bar in the first place.</p>
+  <p class="gesture" data-pid="f31b57">With m tests at bar α, false alarms average about α times the number of untrue ideas. Dividing the bar by m keeps the chance of even one false alarm below α, at a heavy price. To keep the share of false claims near q instead, sort the chances p₍₁₎ ≤ ⋯ ≤ p₍ₘ₎, find the largest k with p₍ₖ₎ ≤ kq/m, and claim the k smallest. When acting has a gain and a loss, act when the chance of being right passes loss/(gain + loss).</p>
+</header>
+
+<section class="class step" data-step="33stat1">
+  <h2 class="sthead"><span class="stno">33stat1</span>Twenty Tests, Twenty Chances</h2>
+  <p data-pid="2b382f">From here on, on this page, a test’s <i>chance</i> p is the chance of a result at least so strong if there is nothing there, as on rung 30, and a test <i>passes</i> when p is below the bar α = 0.05. A <i>false alarm</i> is a pass where there is nothing.</p>
+  <pre class="lines" data-k="ember" data-label="this page: many tests of nothing">
+\text{one test of nothing: false alarm with chance } 0.05 @@ the bar
+20 \text{ independent tests of nothing: none pass with chance } 0.95^{20} @@ chances multiply (30f)
+1 - 0.95^{20} \approx 0.64 @@ at least one passes
+\htmlClass{new}{10\,000 \text{ genes of nothing: about } 500 \text{ pass}} @@ averages add (30g)
+  </pre>
+  <p data-pid="9ecfa1"><b>Run enough tests and false alarms are certain; the bar for one test says nothing about a list.</b> A lab that reports its passes without saying how many it ran has reported almost nothing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·stat.1.1</span><span class="ph understand">understand</span>Why are false alarms almost certain when many tests are run at the usual bar?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33stat2">
+  <h2 class="sthead"><span class="stno">33stat2</span>Divide the Bar</h2>
+  <p data-pid="b4ec55">The oldest cure: with m tests, pass only those with p below α/m.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the divided bar">
+P(\text{some false alarm}) \le \textstyle\sum P(\text{false alarm}_i) @@ chance of a union is at most the sum (30f)
+\le m \cdot \alpha/m = \alpha @@ whatever the links between tests
+m = 10\,000:\ \text{bar } 0.000005 @@ five in a million
+\htmlClass{new}{\text{a real but modest link is almost never found}} @@ safe, and nearly blind
+  </pre>
+  <p data-pid="56f316">Divided-bar technique: <b>passing only p below α/m keeps the chance of even one false alarm in the whole list below α.</b> For a handful of tests that matter one by one, it is right. For screening thousands to choose a few for a closer look, it throws away nearly everything.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·stat.2.1</span><span class="ph understand">understand</span>How does dividing the bar control the chance of any false alarm, and what does it cost when there are thousands of tests?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33stat3">
+  <h2 class="sthead"><span class="stno">33stat3</span>Control the Share Instead</h2>
+  <p data-pid="f09aa3">For screening, a few false findings on a long list are tolerable, if their share is kept small. Ten tests, with these chances, and a share q = 0.05 to be kept:</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>k</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+    <tr><th>p₍ₖ₎</th><td>.001</td><td>.008</td><td>.012</td><td>.030</td><td>.041</td><td>.09</td><td>.2</td><td>.4</td><td>.6</td><td>.9</td></tr>
+    <tr><th>kq/m</th><td>.005</td><td>.010</td><td>.015</td><td>.020</td><td>.025</td><td>.030</td><td>.035</td><td>.040</td><td>.045</td><td>.050</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: the step-up rule">
+\text{sort the chances: } p_{(1)} \le p_{(2)} \le \cdots \le p_{(m)} @@ smallest first
+\text{largest } k \text{ with } p_{(k)} \le kq/m:\ k = 3 @@ .012 ≤ .015; .030 > .020, and none later pass
+\text{claim the 3 smallest} @@ against 1 with the divided bar, 5 with no care
+\htmlClass{new}{\text{on average, at most } q \text{ of claims are false}} @@ for independent tests
+  </pre>
+  <p data-pid="f57da3">Step-up technique: <b>sort the chances, find the largest k with p₍ₖ₎ ≤ kq/m, and claim the k smallest; the share of false claims then averages at most q.</b> The bar rises the further down the sorted list it reaches, so a crowd of small chances lifts each other.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·stat.3.1</span><span class="ph understand">understand</span>How does the step-up rule decide which findings to claim, and what does it keep small?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33stat4">
+  <h2 class="sthead"><span class="stno">33stat4</span>Why the Share Is Kept</h2>
+  <p data-pid="a8588d">Say m₀ of the m ideas are untrue. A chance from an untrue idea is equally likely to fall anywhere from 0 to 1 (30i), so it falls below a bar t with chance t.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a rough count">
+\text{claim the } k \text{ with } p \le kq/m @@ the rule’s bar t = kq/m
+\text{false claims average } m_0 \cdot kq/m @@ each untrue idea passes with chance t
+\text{share} \approx \dfrac{m_0 kq/m}{k} = \dfrac{m_0}{m}\, q @@ false claims over all claims
+\htmlClass{new}{\le q} @@ since m₀ ≤ m
+  </pre>
+  <p data-pid="201e25"><b>The step-up bar is chosen so that the false claims expected at that bar are about q of the claims made.</b> The careful proof handles the fact that k itself depends on the data; the answer stays m₀q/m for independent tests.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·stat.4.1</span><span class="ph understand">understand</span>Why does the step-up rule keep the share of false claims near q, in a rough count?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33stat5">
+  <h2 class="sthead"><span class="stno">33stat5</span>Let the Costs Set the Bar</h2>
+  <p data-pid="2575ac">A bar of 0.05 is a habit, not a law. When a choice follows, such as treating a patient, the costs of the two mistakes should set it. Say acting when right gains G, and acting when wrong loses L.</p>
+  <pre class="lines" data-k="ember" data-label="this page: when to act">
+\text{act: average } \pi G - (1 - \pi) L @@ π the chance of being right, given the data (30u)
+\text{do nothing: } 0 @@ no gain, no loss
+\pi G - (1 - \pi) L > 0 \iff \pi > \dfrac{L}{G + L} @@ take from both sides (5g)
+\htmlClass{new}{G = 9,\ L = 1:\ \text{act when } \pi > 0.1} @@ a cheap test for a grave illness
+  </pre>
+  <p data-pid="d8c9c5">Cost technique: <b>act when the chance of being right, given the data, passes the loss over the gain plus the loss.</b> A cheap, safe follow-up deserves a low bar; a costly, risky one a high bar. The step-up rule is the right tool when the list is for looking closer, not for acting at once.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·stat.5.1</span><span class="ph understand">understand</span>How should the gain and loss of a choice set the bar for acting on a finding?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33stat6">
+  <h2 class="sthead"><span class="stno">33stat6</span>Moves to Watch Out For</h2>
+  <p data-pid="b51913">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{each passed at } 0.05, \text{ so each is } 95\% \text{ sure}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; with 10 000 tests, about 500 pass with nothing there (33stat1)
+\text{divide the bar by } m \text{ when screening}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; safe, and blind to modest real links (33stat2)
+\text{claim every } p_{(k)} \le kq/m, \text{ stopping at the first failure}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; find the largest k that passes, then claim all below it (33stat3)
+\text{the step-up rule makes every claim true}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it keeps the share of false claims near q (33stat4)
+\text{always use } 0.05\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; act when the chance of being right passes L/(G + L) (33stat5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·stat.6.1</span><span class="ph understand">understand</span>Which move above stops the step-up rule at the first failure, and what does the rule look for instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">33·stat.7.1</span><span class="tagq">do</span>Apply the step-up rule with q = 0.1 to the ten chances of 33stat3, and compare with q = 0.05.</div>
+  <div class="chq"><span class="chid">33·stat.7.2</span><span class="tagq">make</span>Make up five chances for which the step-up rule claims all five but the divided bar claims none.</div>
+  <div class="chq"><span class="chid">33·stat.7.3</span><span class="tagq">converse</span>The divided bar keeps the chance of any false alarm below α. Decide whether it also keeps the share of false claims below α.</div>
+  <div class="chq"><span class="chid">33·stat.7.4</span><span class="tagq">edge</span>Every idea tested is untrue, m₀ = m. Say what the step-up rule controls then, and how it compares with the divided bar.</div>
+  <div class="chq"><span class="chid">33·stat.7.5</span><span class="tagq">open</span>A journal publishes only studies that passed. Say how this makes the share of false findings in the journal different from the share in the labs, using 30·now.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r33l.html">← 33l · potentials by hand</a><a href="r33then.html">33·then · how does heat creep into the ground? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="e192c8">The chance p is the <b>p-value</b>; many tests at once raise the <b>multiple comparisons problem</b>. The chance of any false alarm is the <b>family-wise error rate</b>, and dividing the bar is the <b>Bonferroni correction</b>. The share of false claims is the <b>false discovery rate</b>, and the step-up rule the <b>Benjamini-Hochberg procedure</b>. Setting the bar by gains and losses is <b>decision theory</b>, with L/(G + L) a <b>Bayes decision threshold</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="7a5c87">Carlo Emilio Bonferroni gave the inequality behind the divided bar in 1936. Yoav Benjamini and Yosef Hochberg introduced the false discovery rate and the step-up rule in 1995. Abraham Wald built statistics as a theory of decisions in 1950.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

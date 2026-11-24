@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>20·crypt2 · How Can a Scramble Be Undone With the Key?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20crypt.html">← 20·crypt can a guessed word break the machine?</a><a href="r20chem.html">next: 20·chem can a molecule be left-handed? →</a></p>
+  <div class="tags"><span class="tag crypt">20·crypt2 · cryptography</span></div>
+  <h1>How Can a Scramble Be Undone With the Key?</h1>
+  <p data-pid="ae4098">How can a scramble be undone with the key? Every card payment and every locked phone runs its messages through a cipher that cuts them into blocks and scrambles each block, many times over. Each scramble must be undone by whoever holds the key, and look like noise to everyone else. Seen with rung 19’s eyes, a key picks a shuffle of all the blocks. This page builds a round that can be undone even when the scrambling inside it cannot, stacks rounds and undoes them in reverse, and shows why sending the same block twice the same way gives the game away.</p>
+  <p class="gesture" data-pid="374496">A block of n bits is one of 2ⁿ blocks, and a cipher with a key is a shuffle of them. Split the block in halves; a round swaps the halves and adds a scramble of one half into the other. Adding the same thing twice gives back what you had, so the round undoes itself in reverse for any scramble. Compose rounds for spread, undo them in reverse order, and chain each block to the last so equal blocks look different.</p>
+</header>
+
+<section class="class step" data-step="20crypt21">
+  <h2 class="sthead"><span class="stno">20crypt21</span>A Key Picks a Shuffle</h2>
+  <p data-pid="0755ed">Evita and Randy share a key. A message is cut into <i>blocks</i> of n bits each, and each block is sent scrambled. Scrambling must be undoable, so two blocks never scramble to the same one: for each key, the scramble is a shuffle of the 2<sup>n</sup> blocks, in 19a’s sense.</p>
+  <pre class="lines" data-k="ember" data-label="this page: how many shuffles">
+n = 4:\ 2^4 = 16 \text{ blocks} @@ a toy block
+16! \approx 2.1 \times 10^{13} \text{ shuffles} @@ every order of the 16 (4k)
+n = 128:\ (2^{128})! \text{ shuffles} @@ a real block
+\htmlClass{new}{\text{a } 128\text{-bit key picks only } 2^{128} \text{ of them}} @@ a tiny share, which must look like any
+  </pre>
+  <p data-pid="6e45e8">A key cannot list its shuffle: the list for 128-bit blocks would be longer than the world could store. The cipher must build the shuffle from small steps that the key steers.</p>
+<div class="eqline c6" data-tex="\text{key} \mapsto \text{a shuffle of } \{0, 1\}^n"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt2.1.1</span><span class="ph understand">understand</span>Why must each key give a shuffle of all the blocks, and why must the cipher build that shuffle rather than list it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20crypt22">
+  <h2 class="sthead"><span class="stno">20crypt22</span>Adding Bits, and a Round That Undoes Itself</h2>
+  <p data-pid="ab7fd8">From here on, on this page, to <i>add</i> two strings of bits is to add each place on its own, with 1 + 1 = 0 and no carry, written ⊕. So 01 ⊕ 11 = 10. Adding the same string twice gives back the first: u ⊕ s ⊕ s = u.</p>
+  <p data-pid="0ef355">Split a block into a left half L and a right half R. A <i>round</i> with a scramble f does this: (L, R) ↦ (R, L ⊕ f(R)). The scramble f need not be undoable at all.</p>
+  <pre class="lines" data-k="ember" data-label="this page: undoing a round">
+(L\prime, R\prime) = (R,\ L \oplus f(R)) @@ the round
+R = L\prime @@ the right half is carried across
+R\prime \oplus f(L\prime) = L \oplus f(R) \oplus f(R) = L @@ adding twice gives back
+\htmlClass{new}{(L, R) = (R\prime \oplus f(L\prime),\ L\prime)} @@ the round, undone, for any f
+  </pre>
+  <p data-pid="a3c8dc">Half-swap technique: <b>a round that swaps the halves and adds a scramble of one into the other can be undone for any scramble, by running f forward again.</b> The scramble can lose information freely; the round never does.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th></th><th>L, R</th><th>f(R)</th><th>after the round</th></tr>
+    <tr><th>toy, with f(r) = r² + 2, last two bits</th><td>01, 11</td><td>11</td><td>11, 10</td></tr>
+    <tr><th>undo</th><td>11, 10</td><td>f(11) = 11</td><td>01, 11</td></tr>
+  </table></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt2.2.1</span><span class="ph understand">understand</span>Why can the half-swap round be undone even when its scramble f cannot?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20crypt23">
+  <h2 class="sthead"><span class="stno">20crypt23</span>Rounds Stacked, and Undone in Reverse</h2>
+  <p data-pid="6522a1">One round leaves the right half in plain view on the left. So the cipher runs many rounds, each with a scramble steered by its own piece of the key, k<sub>1</sub>, k<sub>2</sub>, …, k<sub>r</sub>.</p>
+  <pre class="lines" data-k="ember" data-label="this page: r rounds">
+E = \rho_r \cdots \rho_2 \rho_1 @@ a shuffle after a shuffle is a shuffle (19a)
+E^{-1} = \rho_1^{-1} \rho_2^{-1} \cdots \rho_r^{-1} @@ the undress-in-reverse technique (19c)
+\rho_i^{-1} \text{ uses the same } f_{k_i} @@ by the half-swap technique
+\htmlClass{new}{\text{undo: the same rounds, keys in reverse order}} @@ one machine does both jobs
+  </pre>
+  <p data-pid="06d61f">Stack technique: <b>the rounds compose to a shuffle, and it is undone by the same kind of rounds with the key pieces taken in reverse order.</b> The cipher of 1977 that guarded banks for twenty years ran 16 such rounds on 64-bit blocks.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt2.3.1</span><span class="ph understand">understand</span>Why does undoing r stacked rounds take the same rounds with the key pieces in reverse order?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20crypt24">
+  <h2 class="sthead"><span class="stno">20crypt24</span>Every Bit Must Reach Every Bit</h2>
+  <p data-pid="fe778e">After one round the left half of the output is the old right half, untouched. Follow which input halves each output half depends on.</p>
+  <pre class="lines" data-k="ember" data-label="this page: how far a change spreads">
+\text{round 1: } (R,\ L \oplus f(R)) @@ the left output knows only R
+\text{round 2: } (L \oplus f(R),\ R \oplus f(\ldots)) @@ each half now knows both
+\text{change one bit of } L @@ it reaches every bit only through f
+\htmlClass{new}{\text{a good } f \text{ turns one bit into about half the bits}} @@ and more rounds give f more turns
+  </pre>
+  <p data-pid="637b70"><b>Rounds are stacked until changing any one bit of the input or the key changes about half the output bits, by no pattern a stranger could follow.</b> Short cuts in a cipher are found by tracking a change through too few rounds; designers add rounds well past the best such track known.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt2.4.1</span><span class="ph understand">understand</span>Why does one round not spread a change, and how many output bits should one changed input bit change?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20crypt25">
+  <h2 class="sthead"><span class="stno">20crypt25</span>The Same Block Twice</h2>
+  <p data-pid="47e45c">A shuffle sends a block to the same block every time. A picture whose plain blocks repeat, a white sky, comes out with the same scrambled block wherever the sky was, and the outline shows through. Chaining fixes it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: chaining blocks">
+c_1 = E(p_1 \oplus v) @@ v a fresh random block, sent openly
+c_i = E(p_i \oplus c_{i-1}) @@ add the last scrambled block first
+p_i = E^{-1}(c_i) \oplus c_{i-1} @@ adding twice gives back
+\htmlClass{new}{p_i = p_j \not\Rightarrow c_i = c_j} @@ equal blocks no longer look equal
+  </pre>
+  <p data-pid="9cb619"><b>A good shuffle is not yet a good cipher: how the blocks are fed to it decides what leaks.</b> With a fresh v each time, even the same message sent twice looks different.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt2.5.1</span><span class="ph understand">understand</span>Why does scrambling each block the same way leak the picture, and how does chaining stop it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20crypt26">
+  <h2 class="sthead"><span class="stno">20crypt26</span>Moves to Watch Out For</h2>
+  <p data-pid="58bc15">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+f \text{ must be undoable, or the round cannot be}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the round undoes itself for any f (20crypt22)
+E^{-1} = \rho_r^{-1} \cdots \rho_1^{-1}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; undo in reverse: the last round first (20crypt23)
+\text{one round with a strong } f \text{ is enough}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; half the input passes through one round untouched (20crypt24)
+\text{the key lists its shuffle}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; a list for 128-bit blocks could not be stored; rounds build it (20crypt21)
+\text{same key, same block, same output: fine}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; equal outputs show where plain blocks repeat (20crypt25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·crypt2.6.1</span><span class="ph understand">understand</span>Which move above says the round’s scramble must be undoable, and why does adding twice make that unnecessary?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">20·crypt2.7.1</span><span class="tagq">do</span>With halves of two bits and f(r) = r ⊕ 01, run two rounds on (10, 01), then undo them, and check that you return to (10, 01).</div>
+  <div class="chq"><span class="chid">20·crypt2.7.2</span><span class="tagq">make</span>Make a scramble f of two-bit halves that sends two different halves to the same output, and show that the round built from it is still a shuffle of the 16 blocks.</div>
+  <div class="chq"><span class="chid">20·crypt2.7.3</span><span class="tagq">converse</span>Every half-swap round is a shuffle of the blocks. Decide whether every shuffle of the 16 four-bit blocks is a half-swap round for some f.</div>
+  <div class="chq"><span class="chid">20·crypt2.7.4</span><span class="tagq">edge</span>Take f to send every half to 00. Say what one round and two rounds then do to a block, and why such a cipher is useless.</div>
+  <div class="chq"><span class="chid">20·crypt2.7.5</span><span class="tagq">open</span>In 20crypt25 a fresh v is sent openly. Say what goes wrong if Evita uses the same v for every message.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r20crypt.html">← 20·crypt · can a guessed word break the machine?</a><a href="r20chem.html">20·chem · can a molecule be left-handed? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="f7470e">A cipher on blocks is a <b>block cipher</b>, and its shuffle for one key a <b>keyed permutation</b>. The half-swap round is a <b>Feistel round</b>, adding without carry is <b>XOR</b>, and the key pieces are <b>round keys</b> from a <b>key schedule</b>. One bit changing about half the output is the <b>avalanche effect</b>; tracking changes through rounds is <b>differential cryptanalysis</b>. Scrambling each block alone is <b>ECB mode</b>, and chaining is <b>CBC mode</b>, with v the <b>initialisation vector</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="854061">Horst Feistel’s team at IBM built the half-swap rounds in the early 1970s; their design became the Data Encryption Standard in 1977, 16 rounds on 64-bit blocks. Its successor, chosen in 2000 and standardised in 2001, works on 128-bit blocks by a different kind of round.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

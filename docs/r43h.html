@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Clock Arithmetic by Hand</title>
+<title>43h · How Thin the Primes Are</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,107 +37,79 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43g.html">← 43g primes are endless and thin</a><a href="r43i.html">next: 43i clock powers and secret keys →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43g.html">← 43g primes are endless and thin</a><a href="r43i.html">next: 43i primes in every hour of a clock →</a></p>
   <div class="tags"><span class="tag tech">43h · technique</span></div>
-  <h1>Clock Arithmetic by Hand</h1>
-  <p data-pid="f81f5e">The proof steps of this rung said what is true on a clock. This step is about how long it takes to find out. A power with an exponent of three hundred digits cannot be reached by multiplying one more time, and one more, since the count of products would be a number of three hundred digits too, and no machine there will ever be could finish. Yet a pocket calculator can do it in a blink. The trick is to square: square once and the exponent doubles, square ten times and it has gone up a thousandfold. Write the exponent in twos, square for each place, and multiply in the places that hold a one. The count of products is about twice the number of places, so a power with a three hundred digit exponent takes about two thousand products. The gcd algorithm is fast for the same kind of reason: its remainders halve at least every two rounds. And a power on a big clock can be split onto small clocks, cut down there, and put back.</p>
-  <p class="gesture" data-pid="2c1bb7">Write the exponent in twos; square once per place and multiply where a place holds one. That takes at most about twice the log base two of the exponent in products. The gcd algorithm halves its remainder every two rounds. Splitting a clock into prime power clocks lets each exponent be cut before the work starts.</p>
+  <h1>How Thin the Primes Are</h1>
+  <p data-pid="67620e">The primes are endless, and the count π(x) is at least about x/ln x up to a fixed factor (43g). The same middle count bounds it from above. So near x, about one number in ln x is prime. Gauss guessed this at fifteen from tables, and it took a century and the complex slopes of rung 26 to prove it: ζ, carried over the whole plane (26j), has no zeros on the line where its real part is 1. Where its other zeros lie is the most famous open question in mathematics. This step bounds π(x) on both sides, states the prime count, and says what the zeros of ζ control.</p>
+  <p class="gesture" data-pid="531812">Every prime between n and 2n divides the middle count C(2n, n) < 4ⁿ, so their product is below 4ⁿ; with 43g, π(x) lies between two fixed multiples of x/ln x. The prime count: π(x) ln x / x → 1. Riemann’s guess, all other zeros of ζ on the line with real part ½, would make the error about √x ln x.</p>
 </header>
 
 <section class="class step" data-step="43h1">
-  <h2 class="sthead"><span class="stno">43h1</span>Square, Then Multiply</h2>
-  <p data-pid="345911">4i wrote every number in twos: 218 = 128 + 64 + 16 + 8 + 2, written 11011010. 4g’s powers-add-their-counts technique turns that sum into a product of powers whose exponents are powers of 2, and each of those is the square of the one before.</p>
-  <p data-pid="a287c6">Square-and-multiply technique: <b>to find aᵏ on the clock of n, square a again and again to get a, a², a⁴, a⁸, …, each on the clock, and multiply together those whose places in k written in twos hold a 1.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: 3²¹⁸ on the clock of 1000">
-3,\ 9,\ 81,\ 6561 \equiv 561,\ 561^2 \equiv 721,\ 721^2 \equiv 841,\ 841^2 \equiv 281,\ 281^2 \equiv 961 @@ 3 to the powers 1, 2, 4, …, 128, each the square of the last, kept below 1000
-218 = 2 + 8 + 16 + 64 + 128 @@ the places of 11011010 that hold a 1
-9 \cdot 561 = 5049 \equiv 49,\ \ 49 \cdot 721 \equiv 329 @@ the places 2, 8, 16
-329 \cdot 281 \equiv 449,\ \ 449 \cdot 961 \equiv 489 @@ the places 64 and 128
-\htmlClass{new}{3^{218} \equiv 489 \pmod{1000}} \quad \blacksquare @@ seven squarings and four products
+  <h2 class="sthead"><span class="stno">43h1</span>A Bound From Above</h2>
+  <pre class="lines" data-k="ember" data-label="this step: primes between n and 2n">
+n < p \le 2n \Rightarrow p \mid \tbinom{2n}{n} = \dfrac{(2n)!}{n!\,n!} @@ p is in the top, not in the bottom
+\textstyle\prod_{n < p \le 2n} p \le \tbinom{2n}{n} < 4^n @@ the counts add to 4ⁿ (4k)
+\textstyle\sum_{n < p \le 2n} \ln p < n\ln 4 @@ take logarithms
+\htmlClass{new}{\pi(x) \le 6\,\dfrac{x}{\ln x} \text{ for every } x \ge 2} @@ add over x, x/2, x/4, …
   </pre>
-  <p data-pid="fb1792">No number above 961 · 961, under a million, was ever needed. The power 3²¹⁸ has 105 digits; its last three are 489.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · square and multiply · ← → keys work</div></section>
+  <p data-pid="02ed28">Two-sided technique: <b>there are fixed numbers A and B above 0 with A·x/ln x ≤ π(x) ≤ B·x/ln x for every x ≥ 2;</b> the lower bound is 43g’s middle count, the upper bound this one.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43h1.1</span><span class="ph understand">understand</span>What does the square-and-multiply technique say? <br>Which powers of 3 are multiplied to give 3²¹⁸, and why those?</li>
+      <li><span class="qid">43h1.1</span><span class="ph understand">understand</span>Why does every prime between n and 2n divide the middle count, and what bound follows?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43h2">
-  <h2 class="sthead"><span class="stno">43h2</span>How Many Products</h2>
-  <p data-pid="9df6f8">Power-cost technique: <b>the square-and-multiply technique finds aᵏ on a clock with at most 2⌊log₂ k⌋ products of hours.</b> k written in twos has ⌊log₂ k⌋ + 1 places. There is one squaring for each place after the first, and at most one product for each place after the first that holds a 1.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the cost, counted">
-k \lt 10^{300} \Rightarrow \log_2 k \lt 300 \log_2 10 \approx 997 @@ log of a power (17c); log₂ 10 ≈ 3.32
-\text{square-and-multiply: at most about } 1994 \text{ products} @@ the power-cost technique
-\text{one product at a time: } k - 1 \text{ products, about } 10^{300} @@ the plain road
-\htmlClass{new}{\text{a growth family of } \log k \text{ against one of } k} \quad \blacksquare @@ 39k’s families: the log is far below the power
+  <h2 class="sthead"><span class="stno">43h2</span>The Prime Count</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the size of π(x)">
+\pi(10^6) = 78\,498,\ \ 10^6/\ln 10^6 \approx 72\,382 @@ ratio 1.08
+\pi(10^{12}) = 37\,607\,912\,018,\ \ \text{ratio } 1.04 @@ creeping toward 1
+\zeta(s) \ne 0 \text{ on the line } s = 1 + it @@ the key fact, with 26j’s carried ζ
+\htmlClass{new}{\dfrac{\pi(x)\,\ln x}{x} \to 1} @@ the prime count
   </pre>
-  <p data-pid="62ffd8">Each product is of two hours below n, which for n with 600 digits takes some thousands of digit products by 4i’s technique. So the whole power is millions of digit steps, a small fraction of a second for a chip. That is what makes the next three steps possible.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · the cost · ← → keys work</div></section>
+  <p data-pid="309870">Prime-count technique: <b>π(x) ln x / x heads to 1: near x, about one number in ln x is prime.</b> The proof, from the prime-product technique (43g) and the complex slopes of 26, shows that ζ has no zeros where its real part is 1; it is taken as given here.</p>
+  <!--gfig 43h2--><div class="gfigs" data-gfig="43h2" data-story="[[&quot;Across is x, up to 1000. The staircase is π(x), the count of primes up to x: it climbs one step at each prime.&quot;, [&quot;polyline+ink&quot;, &quot;~π(1000)&quot;]], [&quot;The dashed curve is x/ln x. At 1000 it gives about 145, against π(1000) = 168.&quot;, [&quot;ember&quot;, &quot;~x/ln x&quot;]], [&quot;The curve stays below, but the ratio of the two creeps down toward 1 as x grows, 1.16 at 1000.&quot;, [&quot;polyline&quot;]]]"><svg class="gfig" viewBox="0 0 400 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="the staircase of the prime count up to one thousand, reaching 168, above the smooth dashed curve x over ln x, reaching about 145"><defs><clipPath id="gc772c8833"><rect x="42" y="12" width="334" height="174"/></clipPath></defs><line x1="44" x2="374" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="44.0" x2="44.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="44.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="126.5" x2="126.5" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="126.5" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">250</text><line x1="209.0" x2="209.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="209.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">500</text><line x1="291.5" x2="291.5" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="291.5" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">750</text><line x1="374.0" x2="374.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="374.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1000</text><line x1="44" x2="374" y1="136.8" y2="136.8" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="140.8" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">50</text><line x1="44" x2="374" y1="89.6" y2="89.6" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="93.6" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">100</text><line x1="44" x2="374" y1="42.3" y2="42.3" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="46.3" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">150</text><polyline points="44.7,184.0 44.7,183.1 45.0,183.1 45.0,182.1 45.6,182.1 45.6,181.2 46.3,181.2 46.3,180.2 47.6,180.2 47.6,179.3 48.3,179.3 48.3,178.3 49.6,178.3 49.6,177.4 50.3,177.4 50.3,176.4 51.6,176.4 51.6,175.5 53.6,175.5 53.6,174.6 54.2,174.6 54.2,173.6 56.2,173.6 56.2,172.7 57.5,172.7 57.5,171.7 58.2,171.7 58.2,170.8 59.5,170.8 59.5,169.8 61.5,169.8 61.5,168.9 63.5,168.9 63.5,167.9 64.1,167.9 64.1,167.0 66.1,167.0 66.1,166.1 67.4,166.1 67.4,165.1 68.1,165.1 68.1,164.2 70.1,164.2 70.1,163.2 71.4,163.2 71.4,162.3 73.4,162.3 73.4,161.3 76.0,161.3 76.0,160.4 77.3,160.4 77.3,159.4 78.0,159.4 78.0,158.5 79.3,158.5 79.3,157.6 80.0,157.6 80.0,156.6 81.3,156.6 81.3,155.7 85.9,155.7 85.9,154.7 87.2,154.7 87.2,153.8 89.2,153.8 89.2,152.8 89.9,152.8 89.9,151.9 93.2,151.9 93.2,150.9 93.8,150.9 93.8,150.0 95.8,150.0 95.8,149.1 97.8,149.1 97.8,148.1 99.1,148.1 99.1,147.2 101.1,147.2 101.1,146.2 103.1,146.2 103.1,145.3 103.7,145.3 103.7,144.3 107.0,144.3 107.0,143.4 107.7,143.4 107.7,142.4 109.0,142.4 109.0,141.5 109.7,141.5 109.7,140.6 113.6,140.6 113.6,139.6 117.6,139.6 117.6,138.7 118.9,138.7 118.9,137.7 119.6,137.7 119.6,136.8 120.9,136.8 120.9,135.8 122.9,135.8 122.9,134.9 123.5,134.9 123.5,133.9 126.8,133.9 126.8,133.0 128.8,133.0 128.8,132.1 130.8,132.1 130.8,131.1 132.8,131.1 132.8,130.2 133.4,130.2 133.4,129.2 135.4,129.2 135.4,128.3 136.7,128.3 136.7,127.3 137.4,127.3 137.4,126.4 140.7,126.4 140.7,125.4 145.3,125.4 145.3,124.5 146.6,124.5 146.6,123.6 147.3,123.6 147.3,122.6 148.6,122.6 148.6,121.7 153.2,121.7 153.2,120.7 155.2,120.7 155.2,119.8 158.5,119.8 158.5,118.8 159.2,118.8 159.2,117.9 160.5,117.9 160.5,116.9 162.5,116.9 162.5,116.0 165.1,116.0 165.1,115.1 167.1,115.1 167.1,114.1 169.1,114.1 169.1,113.2 170.4,113.2 170.4,112.2 172.4,112.2 172.4,111.3 175.0,111.3 175.0,110.3 176.3,110.3 176.3,109.4 179.0,109.4 179.0,108.4 182.3,108.4 182.3,107.5 182.9,107.5 182.9,106.6 186.2,106.6 186.2,105.6 186.9,105.6 186.9,104.7 188.9,104.7 188.9,103.7 190.2,103.7 190.2,102.8 192.2,102.8 192.2,101.8 194.8,101.8 194.8,100.9 196.1,100.9 196.1,99.9 196.8,99.9 196.8,99.0 198.1,99.0 198.1,98.1 202.1,98.1 202.1,97.1 204.7,97.1 204.7,96.2 206.0,96.2 206.0,95.2 208.7,95.2 208.7,94.3 210.0,94.3 210.0,93.3 212.0,93.3 212.0,92.4 215.9,92.4 215.9,91.4 216.6,91.4 216.6,90.5 222.5,90.5 222.5,89.6 224.5,89.6 224.5,88.6 227.8,88.6 227.8,87.7 229.8,87.7 229.8,86.7 231.8,86.7 231.8,85.8 232.4,85.8 232.4,84.8 234.4,84.8 234.4,83.9 237.7,83.9 237.7,82.9 239.7,82.9 239.7,82.0 241.7,82.0 241.7,81.1 242.3,81.1 242.3,80.1 244.3,80.1 244.3,79.2 246.3,79.2 246.3,78.2 247.6,78.2 247.6,77.3 248.3,77.3 248.3,76.3 252.2,76.3 252.2,75.4 255.5,75.4 255.5,74.4 256.2,74.4 256.2,73.5 257.5,73.5 257.5,72.6 259.5,72.6 259.5,71.6 261.5,71.6 261.5,70.7 262.1,70.7 262.1,69.7 266.1,69.7 266.1,68.8 267.4,68.8 267.4,67.8 269.4,67.8 269.4,66.9 272.0,66.9 272.0,65.9 275.3,65.9 275.3,65.0 278.0,65.0 278.0,64.1 281.3,64.1 281.3,63.1 283.9,63.1 283.9,62.2 285.9,62.2 285.9,61.2 287.9,61.2 287.9,60.3 289.2,60.3 289.2,59.3 291.8,59.3 291.8,58.4 293.8,58.4 293.8,57.4 295.1,57.4 295.1,56.5 297.8,56.5 297.8,55.6 299.1,55.6 299.1,54.6 303.7,54.6 303.7,53.7 307.0,53.7 307.0,52.7 311.0,52.7 311.0,51.8 311.6,51.8 311.6,50.8 314.9,50.8 314.9,49.9 315.6,49.9 315.6,48.9 316.9,48.9 316.9,48.0 317.6,48.0 317.6,47.1 320.9,47.1 320.9,46.1 325.5,46.1 325.5,45.2 326.8,45.2 326.8,44.2 327.5,44.2 327.5,43.3 328.8,43.3 328.8,42.3 333.4,42.3 333.4,41.4 334.7,41.4 334.7,40.4 335.4,40.4 335.4,39.5 336.7,39.5 336.7,38.6 343.3,38.6 343.3,37.6 344.6,37.6 344.6,36.7 347.3,36.7 347.3,35.7 350.6,35.7 350.6,34.8 353.2,34.8 353.2,33.8 354.5,33.8 354.5,32.9 356.5,32.9 356.5,31.9 358.5,31.9 358.5,31.0 363.1,31.0 363.1,30.1 364.4,30.1 364.4,29.1 366.4,29.1 366.4,28.2 368.4,28.2 368.4,27.2 371.0,27.2 371.0,26.3 373.0,26.3 373.0,25.3 374.0,25.3" style="fill:none;stroke:var(--ink);stroke-width:1.6"/><polyline clip-path="url(#gc772c8833)" points="44.7,184.0 46.0,180.8 47.4,179.8 48.8,178.9 50.1,178.0 51.5,177.1 52.9,176.3 54.3,175.5 55.6,174.7 57.0,173.9 58.4,173.1 59.8,172.3 61.1,171.6 62.5,170.9 63.9,170.1 65.2,169.4 66.6,168.7 68.0,168.0 69.4,167.3 70.7,166.6 72.1,165.9 73.5,165.2 74.8,164.5 76.2,163.9 77.6,163.2 79.0,162.5 80.3,161.9 81.7,161.2 83.1,160.6 84.5,159.9 85.8,159.3 87.2,158.6 88.6,158.0 89.9,157.4 91.3,156.7 92.7,156.1 94.1,155.5 95.4,154.8 96.8,154.2 98.2,153.6 99.5,153.0 100.9,152.4 102.3,151.8 103.7,151.1 105.0,150.5 106.4,149.9 107.8,149.3 109.2,148.7 110.5,148.1 111.9,147.5 113.3,146.9 114.6,146.3 116.0,145.7 117.4,145.1 118.8,144.5 120.1,144.0 121.5,143.4 122.9,142.8 124.3,142.2 125.6,141.6 127.0,141.0 128.4,140.4 129.7,139.9 131.1,139.3 132.5,138.7 133.9,138.1 135.2,137.6 136.6,137.0 138.0,136.4 139.3,135.8 140.7,135.3 142.1,134.7 143.5,134.1 144.8,133.6 146.2,133.0 147.6,132.4 149.0,131.9 150.3,131.3 151.7,130.7 153.1,130.2 154.4,129.6 155.8,129.1 157.2,128.5 158.6,128.0 159.9,127.4 161.3,126.8 162.7,126.3 164.0,125.7 165.4,125.2 166.8,124.6 168.2,124.1 169.5,123.5 170.9,123.0 172.3,122.4 173.7,121.9 175.0,121.3 176.4,120.8 177.8,120.2 179.1,119.7 180.5,119.2 181.9,118.6 183.3,118.1 184.6,117.5 186.0,117.0 187.4,116.4 188.7,115.9 190.1,115.4 191.5,114.8 192.9,114.3 194.2,113.8 195.6,113.2 197.0,112.7 198.4,112.1 199.7,111.6 201.1,111.1 202.5,110.5 203.8,110.0 205.2,109.5 206.6,108.9 208.0,108.4 209.3,107.9 210.7,107.4 212.1,106.8 213.4,106.3 214.8,105.8 216.2,105.2 217.6,104.7 218.9,104.2 220.3,103.7 221.7,103.1 223.1,102.6 224.4,102.1 225.8,101.6 227.2,101.0 228.5,100.5 229.9,100.0 231.3,99.5 232.7,99.0 234.0,98.4 235.4,97.9 236.8,97.4 238.1,96.9 239.5,96.4 240.9,95.8 242.3,95.3 243.6,94.8 245.0,94.3 246.4,93.8 247.8,93.2 249.1,92.7 250.5,92.2 251.9,91.7 253.2,91.2 254.6,90.7 256.0,90.2 257.4,89.6 258.7,89.1 260.1,88.6 261.5,88.1 262.8,87.6 264.2,87.1 265.6,86.6 267.0,86.1 268.3,85.6 269.7,85.0 271.1,84.5 272.5,84.0 273.8,83.5 275.2,83.0 276.6,82.5 277.9,82.0 279.3,81.5 280.7,81.0 282.1,80.5 283.4,80.0 284.8,79.5 286.2,79.0 287.5,78.5 288.9,77.9 290.3,77.4 291.7,76.9 293.0,76.4 294.4,75.9 295.8,75.4 297.2,74.9 298.5,74.4 299.9,73.9 301.3,73.4 302.6,72.9 304.0,72.4 305.4,71.9 306.8,71.4 308.1,70.9 309.5,70.4 310.9,69.9 312.2,69.4 313.6,68.9 315.0,68.4 316.4,67.9 317.7,67.4 319.1,66.9 320.5,66.4 321.9,65.9 323.2,65.4 324.6,65.0 326.0,64.5 327.3,64.0 328.7,63.5 330.1,63.0 331.5,62.5 332.8,62.0 334.2,61.5 335.6,61.0 336.9,60.5 338.3,60.0 339.7,59.5 341.1,59.0 342.4,58.5 343.8,58.0 345.2,57.5 346.6,57.1 347.9,56.6 349.3,56.1 350.7,55.6 352.0,55.1 353.4,54.6 354.8,54.1 356.2,53.6 357.5,53.1 358.9,52.6 360.3,52.2 361.6,51.7 363.0,51.2 364.4,50.7 365.8,50.2 367.1,49.7 368.5,49.2 369.9,48.7 371.3,48.3 372.6,47.8 374.0,47.3" style="fill:none;stroke:var(--ember);stroke-width:1.8;stroke-dasharray:5 3"/><text x="370.7" y="17.8" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">π(1000) = 168</text><text x="370.7" y="85.3" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">x/ln x ≈ 145</text><text x="200.0" y="222" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">π(x) climbs one step at each prime; x/ln x stays below</text></svg></div><!--/gfig 43h2-->
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43h2.1</span><span class="ph understand">understand</span>What does the power-cost technique say, and where do the squarings and the products come from? <br>About how many products does an exponent of 300 digits need, and how many on the plain road?</li>
+      <li><span class="qid">43h2.1</span><span class="ph understand">understand</span>What does the prime count say, and which fact about ζ does its proof rest on?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43h3">
-  <h2 class="sthead"><span class="stno">43h3</span>The gcd Is Fast Too</h2>
-  <p data-pid="400eb8">43b found undoes by the gcd algorithm. That would be useless on clocks of hundreds of digits if the algorithm took as many rounds as the numbers are large.</p>
-  <p data-pid="0ba1f2">Halving-remainders technique: <b>in the gcd algorithm, each remainder is less than half of the one two rounds before, so the algorithm on a and b, with b ≤ a, ends within about 2 log₂ b rounds.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the halving-remainders technique">
-r_{i-1} = r_i q + r_{i+1},\ \ r_{i+1} \lt r_i @@ one round (4j7)
-\text{if } r_i \le r_{i-1}/2:\ \ r_{i+1} \lt r_i \le r_{i-1}/2 @@ the remainder falls below
-\text{if } r_i \gt r_{i-1}/2:\ \ q = 1,\ \ r_{i+1} = r_{i-1} - r_i \lt r_{i-1}/2 @@ r_i fits only once
-\htmlClass{new}{r_{i+1} \lt r_{i-1}/2} @@ reason by cases
-\text{after } 2j \text{ rounds the remainder is below } b/2^j @@ induction on j
-\htmlClass{new}{\text{at most } 2\log_2 b + 1 \text{ rounds}} \quad \blacksquare @@ a remainder below 1 is 0
+  <h2 class="sthead"><span class="stno">43h3</span>Where the Zeros Lie</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the zeros of ζ">
+\zeta(-2) = \zeta(-4) = \cdots = 0 @@ zeros on the negative line
+\text{every other zero has real part between } 0 \text{ and } 1 @@ proved
+\text{the first ten trillion of them have real part exactly } \tfrac12 @@ computed
+\htmlClass{new}{\text{all of them? } \pi(x) = \textstyle\int_2^x \frac{dt}{\ln t} + \text{at most a multiple of } \sqrt x \ln x} @@ Riemann’s guess, open since 1859
   </pre>
-<div class="eqline c6 lsyn" data-was="304291" data-tex="\begin{aligned}&amp;1071 \text{ and } 462:\ 3 \text{ rounds};\ \text{the bound about } 18\\ &amp;\text{worst pairs}:\ \text{neighbours in}\\ &amp;\qquad 1, 1, 2, 3, 5, 8, 13, \ldots\\ &amp;\qquad\text{every quotient } 1\\ &amp;\text{even there the rounds grow like the log}\end{aligned}"></div>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the gcd, fast · ← → keys work</div></section>
+  <p data-pid="6ee82b"><b>The zeros of ζ control how far π(x) strays from its smooth guess; that every one off the negative line has real part ½ is believed and unproved.</b> A prize of a million dollars has been offered for it since 2000.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43h3.1</span><span class="ph understand">understand</span>What does the halving-remainders technique say? <br>In which case of its proof is the quotient 1, and why does the remainder still fall below half?</li>
+      <li><span class="qid">43h3.1</span><span class="ph understand">understand</span>How do the zeros of ζ control the error in the prime count, and what is still open?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43h4">
-  <h2 class="sthead"><span class="stno">43h4</span>Split the Clock First</h2>
-  <p data-pid="b850bf">On the clock of 1000 = 8 · 125 the exponent-clock technique cuts the exponent on the clock of 400, and 218 is already below 400. On the two small clocks it cuts further, each on the clock of its own count of units.</p>
-  <pre class="lines" data-k="ember" data-label="this step: 3²¹⁸ again, clock by clock">
-c(8) = 4,\ 218 \equiv 2:\ \ 3^{218} \equiv 3^2 = 9 \equiv 1 \pmod 8 @@ the exponent-clock technique (43d3)
-c(125) = 100,\ 218 \equiv 18:\ \ 3^{218} \equiv 3^{18} \equiv 114 \pmod{125} @@ the same; 3¹⁸ by square-and-multiply
-x \equiv 1 \pmod 8,\ \ x \equiv 114 \pmod{125} @@ put back (43c2)
-114 + 125t \equiv 1 \pmod 8:\ \ 2 + 5t \equiv 1,\ \ t \equiv 3 @@ 114 ≡ 2 and 125 ≡ 5 on the clock of 8; [5]⁻¹ = [5]
-\htmlClass{new}{x = 114 + 375 = 489} \quad \blacksquare @@ the same last three digits as 43h1
-  </pre>
-  <p data-pid="f53098">Two roads, one answer, and the answer is checked. Splitting pays when the clock is a product of clocks whose sizes are known and the exponent is far larger than their counts of units. On a clock whose factors nobody knows, the split is not available, and 43i builds a lock on exactly that.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · split first · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">43h4.1</span><span class="ph understand">understand</span>How is 3²¹⁸ found on the clocks of 8 and 125, and why may the exponent be cut there? <br>How are the two readings put back together into 489?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="43h5">
-  <h2 class="sthead"><span class="stno">43h5</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-3^{218} = (3^{200})(3^{18}) \text{, and } 3^{200} \text{ by } 199 \text{ products}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; allowed, and far slower: squaring reaches 3²⁵⁶ in eight products
-2^{402} \equiv 2^{2} \pmod{1000} \text{ since } c(1000) = 400\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 2 is no unit of the clock of 1000, so the exponent-clock technique does not apply: 2⁴⁰² ≡ 504, not 4
-\text{square first, and reduce at the end}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; 3¹²⁸ has 62 digits; reduce after every product, so no number passes n²
-\text{the gcd algorithm takes about } b \text{ rounds}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; at most about 2 log₂ b: the remainder halves every two rounds
+  <h2 class="sthead"><span class="stno">43h4</span>Moves to Watch Out For</h2>
+  <p data-pid="932de6">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+p \mid \tbinom{2n}{n} \text{ for every } p \le 2n\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; only for n < p ≤ 2n; smaller primes may cancel (43h1)
+\pi(x) \approx \ln x\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; one number in ln x is prime: π(x) ≈ x/ln x (43h2)
+\pi(x) = x/\ln x \text{ exactly}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; the ratio heads to 1; the difference grows (43h2)
+\text{Riemann’s guess is proved}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; checked for ten trillion zeros, unproved (43h3)
+\text{the prime count needs no complex slopes}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the usual proof uses ζ on the line 1 + it (43h2)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43h5.1</span><span class="ph understand">understand</span>Why may 402 not be cut to 2 in 2⁴⁰² on the clock of 1000? <br>Why reduce on the clock after every product, and not once at the end?</li>
+      <li><span class="qid">43h4.1</span><span class="ph understand">understand</span>Which move above confuses the share of primes with their count, and what is π(x) near?</li>
     </ol>
   </section>
 </section>
@@ -156,57 +117,25 @@ x \equiv 1 \pmod 8,\ \ x \equiv 114 \pmod{125} @@ put back (43c2)
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43h.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="219^{96} \pmod{383}"></span></span>Build the square root that 43f.7.1 asked for: find 219⁹⁶ on the clock of 383 by the square-and-multiply technique, writing every squaring. <br>Check that its square is 219, and find the other square root.</div>
-  <div class="chq"><span class="chid">43h.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\gcd(89, 55)"></span></span>Run the gcd algorithm on these and count the rounds. Prove that neighbours in the list 1, 1, 2, 3, 5, 8, … always give quotients of 1 until the end. <br>Is 2 log₂ b near the truth for them, or is the true count nearer a smaller multiple of log₂ b? Find the multiple.</div>
-  <div class="chq"><span class="chid">43h.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="a^{15}"></span></span>Square-and-multiply takes 6 products for a¹⁵. Find a road with 5: a, a², a³, a⁶, … <br>Is square-and-multiply ever the fewest? Find a k below 100 where it is beaten by two products or more, or prove none exists.</div>
-  <div class="chq"><span class="chid">43h.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">7·then: 3↑↑4 = 3^{7\,625\,597\,484\,987}</span></span>Rung 7 found the last digit of a tower of threes by hand. Find the last three digits of 3↑↑4 two ways: square-and-multiply on the clock of 1000 with the full exponent, counting the products, and by cutting the exponent on the clock of 400 first. <br>Which road would still work for 3↑↑5? 43·cb7 takes this further.</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">43h.5.1</span><span class="tagq">do</span>Estimate how many primes have exactly 10 digits.</div>
+  <div class="chq"><span class="chid">43h.5.2</span><span class="tagq">make</span>Make up a range of numbers and compare its prime count with its length over ln x.</div>
+  <div class="chq"><span class="chid">43h.5.3</span><span class="tagq">converse</span>π(x) ln x / x heads to 1. Decide whether the n-th prime must then be near n ln n.</div>
+  <div class="chq"><span class="chid">43h.5.4</span><span class="tagq">edge</span>Let x = 2. Check the two-sided bound.</div>
+  <div class="chq"><span class="chid">43h.5.5</span><span class="tagq">open</span>Say why the zeros of ζ, a function of a complex number, should know where the primes are.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r43g.html">← 43g · primes are endless and thin</a><a href="r43i.html">43i · primes in every hour of a clock →</a></nav>
 
-<nav class="nextrung"><a href="r43g.html">← 43g · primes are endless and thin</a><a href="r43i.html">43i · clock powers and secret keys →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>Square-and-multiply is binary exponentiation, or exponentiation by squaring; the power-cost technique says modular exponentiation takes O(log k) multiplications. The halving-remainders technique is a form of Lamé’s theorem (1844): the number of steps of Euclid’s algorithm is at most five times the number of decimal digits of the smaller number, the worst case being consecutive Fibonacci numbers. A shortest road to aᵏ is a shortest addition chain; finding one in general is believed to be hard.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="3d3f5f">The prime count is the <b>prime number theorem</b>; the two-sided bound is <b>Chebyshev’s</b>; Riemann’s guess is the <b>Riemann hypothesis</b>, one of the Clay Institute’s <b>Millennium Prize Problems</b>. ∫ dt/ln t is the <b>logarithmic integral</b> Li(x).</p>
   <h3>Who said it first</h3>
-  <p>Squaring to reach a high power is in the Chandaḥśāstra of Piṅgala (before 200 BCE), in a rule for counting metres. Gabriel Lamé proved the step bound in 1844, one of the first results counting the steps of an algorithm. Splitting the clock to cut exponents is how RSA is computed in practice (43i).</p>
-  <h3>A proof that is not allowed</h3>
-  <p>“3²¹⁸ on the clock of 1000: 218 = 2 · 109, so 3²¹⁸ = 9¹⁰⁹, and 109 is prime, so the little technique gives 9¹⁰⁸ ≡ 1, and 3²¹⁸ ≡ 9.” Not allowed: the little technique is about a prime clock, and here the prime is the exponent, not the clock. The answer is 489.</p>
+  <p data-pid="f50d08">Carl Friedrich Gauss guessed the count about 1792; Pafnuty Chebyshev proved the two-sided bound in 1852; Bernhard Riemann linked the primes to the zeros of ζ in 1859; Jacques Hadamard and Charles de la Vallée Poussin proved the count in 1896.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'twos',t:R`218 = 11011010_{\text{twos}}`,n:`4i.`},
-  {k:'ember',kl:'squares',t:R`3^{2^i} \bmod 1000`,n:`Each the square of the last.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{3^{218} \equiv 489 \pmod{1000}}`,n:`Eleven products.`}
-],{title:'The slides · square and multiply · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'places',t:R`\lfloor \log_2 k \rfloor + 1`,n:`k in twos.`},
-  {k:'ember',kl:'products',t:R`\le 2\lfloor \log_2 k \rfloor`,n:`Squares and ones.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\approx 2000 \text{ against } 10^{300}}`,n:`Logs, not powers.`}
-],{title:'The slides · the cost · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'two cases',t:R`r_i \le r_{i-1}/2 \text{ or } q = 1`,n:`Either way.`},
-  {k:'ember',kl:'halving',t:R`r_{i+1} \lt r_{i-1}/2`,n:`Two rounds.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le 2\log_2 b + 1 \text{ rounds}}`,n:`Logs again.`}
-],{title:'The slides · the gcd, fast · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'small clocks',t:R`3^{218} \equiv 1 \pmod 8,\ \equiv 114 \pmod{125}`,n:`Exponents cut.`},
-  {k:'ember',kl:'put back',t:R`114 + 125t,\ t \equiv 3`,n:`43c.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{489 \text{ again}}`,n:`Checked.`}
-],{title:'The slides · split first · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

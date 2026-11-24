@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Clock Powers and Secret Keys</title>
+<title>43i · Primes in Every Hour of a Clock</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,107 +37,78 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r43h.html">← 43h clock arithmetic by hand</a><a href="r43j.html">next: 43j is it prime? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43h.html">← 43h how thin the primes are</a><a href="r43j.html">next: 43j which primes are two squares →</a></p>
   <div class="tags"><span class="tag tech">43i · technique</span></div>
-  <h1>Clock Powers and Secret Keys</h1>
-  <p data-pid="812968">Every cipher on the ladder so far had one key, and whoever could lock a message could unlock it. To send a secret, the two sides first had to share the key in secret, which is the problem again. In 1977 a lock was published with two keys. One locks and can be printed in a newspaper. The other unlocks and is kept at home. The lock is a power on a clock whose size is a product of two large primes. The unlocking key is another power, the undo of the first on the clock of the count of units. Anyone can compute the count from the two primes, and nobody is known to be able to compute it from their product alone, because nobody knows a fast way to find the two primes again. The same pair of keys, turned round, signs a message: only the holder of the home key could have made the signature, and anyone can check it with the printed one.</p>
-  <p class="gesture" data-pid="dd3eeb">Take two primes and multiply. Pick a locking power that shares nothing with the count of units, and take its undo on the clock of that count as the unlocking power. Then locking and unlocking undo each other on the big clock. The count gives the primes, so finding it is as hard as factoring. Turned round, the pair signs.</p>
+  <h1>Primes in Every Hour of a Clock</h1>
+  <p data-pid="4a14e9">On the clock of 4, the hours [1] and [3] each hold endlessly many primes, by two separate tricks (43g). For the clock of 10 or 101 no trick of that kind is known for every hour. Dirichlet found one method for all clocks: give each hour a sign, build a ζ with signs, and show it is not 0 at s = 1. Then every hour that shares no factor with the clock holds endlessly many primes, and they share the primes equally. This step does it on the clock of 4, where the signed ζ at 1 is π/4.</p>
+  <p class="gesture" data-pid="19c52f">χ(n) = 0, 1, 0, −1 as n ≡ 0, 1, 2, 3 (mod 4) keeps products: χ(mn) = χ(m)χ(n). Then L(s) = Σ χ(n)/nˢ = Π 1/(1 − χ(p)p^(−s)), and L(1) = 1 − ⅓ + ⅕ − ⋯ = π/4 ≠ 0. So Σ χ(p)/p stays bounded while Σ 1/p does not, and each hour gets half of the divergence.</p>
 </header>
 
 <section class="class step" data-step="43i1">
-  <h2 class="sthead"><span class="stno">43i1</span>A Lock With Two Keys</h2>
-  <p data-pid="9cb6c6">Take different primes p and q, and n = pq. By 43d2 the clock of n has c = (p − 1)(q − 1) units. Pick e with gcd(e, c) = 1, and let d be its undo on the clock of c, so ed = 1 + tc for some t ≥ 0. The printed key is (n, e); the home key is d. Here e means the locking power, not 17e's number e.</p>
-  <p data-pid="188ce6">Two-key technique: <b>with n, e and d as above, (m^e)^d ≡ m (mod n) for every integer m.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the two-key technique">
-p \nmid m:\ \ m^{ed} = m \cdot (m^{p-1})^{t(q-1)} @@ ed = 1 + t(p − 1)(q − 1); powers add their counts (4g)
-\phantom{p \nmid m:\ \ m^{ed}} \equiv m \cdot 1 = m \pmod p @@ the little technique (43d1)
-p \mid m:\ \ m^{ed} \equiv 0 \equiv m \pmod p @@ both sides are multiples of p
-m^{ed} \equiv m \pmod q @@ the same lines on the clock of q
-\htmlClass{new}{m^{ed} \equiv m \pmod{pq}} \quad \blacksquare @@ the remainder technique’s one-to-one line (43c1): p and q share nothing
+  <h2 class="sthead"><span class="stno">43i1</span>Signs That Keep Products</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the clock of 4">
+\chi(n) = \begin{cases} 1 & n \equiv 1 \\ -1 & n \equiv 3 \\ 0 & n \text{ even} \end{cases} @@ an odd number’s hour, as a sign
+\chi(mn) = \chi(m)\chi(n) @@ 3 · 3 ≡ 1, 1 · 3 ≡ 3
+L(s) = \textstyle\sum_n \dfrac{\chi(n)}{n^s} = \prod_p \dfrac{1}{1 - \chi(p)\,p^{-s}} @@ the prime-product technique, with signs (43g)
+\htmlClass{new}{L(1) = 1 - \tfrac13 + \tfrac15 - \tfrac17 + \cdots = \tfrac{\pi}{4}} @@ the arctangent series at 1
   </pre>
-  <p data-pid="a94a8c">So a message, written as an hour m of the clock of n, is locked as mᵉ and unlocked by raising to d. The technique holds for every m, even one that shares a prime with n; the second line is why both cases were split.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · two keys · ← → keys work</div></section>
+  <p data-pid="11f2a6">Signed-product technique: <b>if a sign χ on the hours keeps products, Σ χ(n)/nˢ is the product over primes of 1/(1 − χ(p)p^(−s)), for s > 1.</b></p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43i1.1</span><span class="ph understand">understand</span>What does the two-key technique say, and how are n, e and d chosen? <br>Which line spends the little technique, and why is the case p ∣ m split off?</li>
+      <li><span class="qid">43i1.1</span><span class="ph understand">understand</span>Why does a sign that keeps products give a product over the primes?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43i2">
-  <h2 class="sthead"><span class="stno">43i2</span>A Lock Built by Hand</h2>
-  <pre class="lines" data-k="ember" data-label="this step: the primes 61 and 53">
-n = 61 \cdot 53 = 3233,\ \ c = 60 \cdot 52 = 3120 @@ the clock, and its count of units
-e = 17:\ \ 3120 = 17 \cdot 183 + 9,\ \ 17 = 9 + 8,\ \ 9 = 8 + 1 @@ gcd(17, 3120) = 1 (4j12)
-1 = 2 \cdot 9 - 17 = 2 \cdot 3120 - 367 \cdot 17 @@ read back (43b2)
-d \equiv -367 \equiv 2753 \pmod{3120} @@ the home key
-m = 65:\ \ 65^{17} \equiv 2790 \pmod{3233} @@ locked, by square-and-multiply (43h1): 17 = 10001 in twos
-\htmlClass{new}{2790^{2753} \equiv 65 \pmod{3233}} \quad \blacksquare @@ unlocked: the two-key technique
+  <h2 class="sthead"><span class="stno">43i2</span>Not Zero at One</h2>
+  <pre class="lines" data-k="ember" data-label="this step: take logarithms, s heading to 1">
+\ln L(s) = \textstyle\sum_p \chi(p)\,p^{-s} + \text{a bounded part} @@ the higher powers of primes add up to little
+L(1) = \pi/4 \ne 0 \Rightarrow \textstyle\sum_p \chi(p)\,p^{-s} \text{ stays bounded} @@ ln L stays finite
+\textstyle\sum_p p^{-s} \to \infty @@ thin but endless (43g1)
+\htmlClass{new}{\textstyle\sum_{p \equiv 1} p^{-s} = \tfrac12\big(\sum p^{-s} + \sum \chi(p)\,p^{-s}\big) + \ldots \to \infty} @@ and the same for p ≡ 3 with a minus
   </pre>
-  <p data-pid="5a7ebe">Locking took five products: four squarings and one more. Unlocking takes fifteen: 2753 is 101011000001 in twos, so eleven squarings and four products. Real locks use primes of about three hundred digits each, and the printed power is very often 65 537 = 2¹⁶ + 1, which locks in seventeen products.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · by hand · ← → keys work</div></section>
+  <p data-pid="4f7144">Not-zero technique: <b>because the signed sum is not 0 at s = 1, the sums of 1/p over each hour both grow without bound;</b> so each hour holds endlessly many primes, and they split the growth in half.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43i2.1</span><span class="ph understand">understand</span>How is the home key 2753 found from e = 17 and c = 3120? <br>Why does locking with e = 17 take only five products?</li>
+      <li><span class="qid">43i2.1</span><span class="ph understand">understand</span>Why does L(1) ≠ 0 force both hours to hold endlessly many primes?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43i3">
-  <h2 class="sthead"><span class="stno">43i3</span>What the Lock Rests On</h2>
-  <p data-pid="6faa65">Anyone with (n, e) can lock. To unlock, the obvious road is d, which needs c. And c needs p and q: or does it? It does, in this sense: c and n together give p and q.</p>
-  <p data-pid="428c13">Count-gives-factors technique: <b>if n = pq for different primes p and q and c = (p − 1)(q − 1), then p and q are the two roots of x² − (n − c + 1)x + n = 0.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the count-gives-factors technique">
-c = pq - p - q + 1 = n - (p + q) + 1 @@ spread for times
-p + q = n - c + 1,\ \ pq = n @@ the sum and the product of the roots
-(x - p)(x - q) = x^2 - (n - c + 1)x + n @@ spread for times (5i)
-3233,\ 3120:\ \ x^2 - 114x + 3233 = 0 @@ the lock of 43i2
-\htmlClass{new}{x = 57 \pm \sqrt{57^2 - 3233} = 57 \pm 4 = 61,\ 53} \quad \blacksquare @@ the quadratic formula (8i)
+  <h2 class="sthead"><span class="stno">43i3</span>Every Clock</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the clock of m">
+c(m) \text{ hours share no factor with } m @@ the units (43e)
+c(m) \text{ signs keep products; together they pick out each hour} @@ as 1 and χ picked [1] and [3]
+\text{each signed sum, other than all-ones, is not } 0 \text{ at } 1 @@ the hard part, Dirichlet’s
+\htmlClass{new}{\text{each such hour holds endlessly many primes, a share } 1/c(m)} @@ e.g. 1, 3, 7, 9 on the clock of 10, a quarter each
   </pre>
-  <p data-pid="95383d">So finding c from n is as hard as factoring n. Trying every divisor up to √n takes about 10³⁰⁰ tries for a number of six hundred digits. Cleverer methods exist and are much faster than that, and still far slower than any power of the number of digits. In 2020 a number of 250 digits built this way was factored, with about 2700 years of computer time spread over many machines. Nobody has a proof that factoring is slow. 41h’s classes ask that kind of question, and this one is open. The lock rests on a guess from cases: every attempt since 1977 to factor fast has failed.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · what it rests on · ← → keys work</div></section>
+  <p data-pid="c10ecf"><b>On every clock, each hour sharing no factor with the clock holds endlessly many primes, and the primes share themselves equally among those hours.</b> Primes up to a million on the clock of 10 end in 1, 3, 7, 9 nearly a quarter each, with a slight lead for 3 and 7.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43i3.1</span><span class="ph understand">understand</span>What does the count-gives-factors technique say? <br>Why does it make finding c from n as hard as factoring n?</li>
+      <li><span class="qid">43i3.1</span><span class="ph understand">understand</span>What does Dirichlet’s method give on every clock, and how are the primes shared?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="43i4">
-  <h2 class="sthead"><span class="stno">43i4</span>Turning the Keys Round</h2>
-<div class="eqline c6 lsyn" data-was="f1ba2d" data-tex="\begin{aligned}&amp;\text{two-key: either power may come first}\\ &amp;(m^d)^e = m^{de} = m^{ed}\\ &amp;\text{the home key can lock},\\ &amp;\qquad\text{the printed key unlock}\end{aligned}"></div>
-  <p data-pid="aa4637">Turned-key technique: <b>a signature on m is s = m^d on the clock of n, and anyone holding (n, e) accepts it exactly when s^e ≡ m.</b> Only the holder of d is known to be able to make an s that passes, since making one is unlocking a lock that was never locked.</p>
-  <pre class="lines" data-k="ember" data-label="this step: a signature by hand">
-m = 123:\ \ s = 123^{2753} \equiv 2746 \pmod{3233} @@ signed with the home key
-2746^{17} \equiv 123 \pmod{3233} @@ checked with the printed key: the two-key technique, keys turned
-\text{a forger with } m' = 124 \text{ needs } 124^{d} @@ d is unknown to her
-\htmlClass{new}{\text{the check passes for 123 and the signature 2746}} \quad \blacksquare @@ and for no other m with this s
-  </pre>
-  <p data-pid="713d88">A message is not an hour of a small clock, and signing a long file this way would take one power per hour. 43·comp signs a short fingerprint of the file in its place, and shows why the fingerprint must be one nobody can match on purpose.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · signing · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">43i4.1</span><span class="ph understand">understand</span>What does the turned-key technique say? <br>Why does the check s^e ≡ m pass for a true signature, and why can a forger not make one?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="43i5">
-  <h2 class="sthead"><span class="stno">43i5</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-d \text{ is the undo of } e \text{ on the clock of } n\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; on the clock of c, the count of units; on the clock of n the powers would not cancel
-\text{the same message locks to a fresh hour each time}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; mᵉ is one hour: a spy who guesses “yes” or “no” locks both and compares; real systems pad m with chance first
-e = 3,\ m^3 \lt n \Rightarrow m^3 \text{ is safe}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; then the lock never went round the clock, and an ordinary cube root unlocks it
-p, q \text{ close together is fine}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; then √n is near both, and trying near √n finds them at once
+  <h2 class="sthead"><span class="stno">43i4</span>Moves to Watch Out For</h2>
+  <p data-pid="e240af">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\chi(n) = 1 \text{ for every odd } n\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; χ is −1 on the hour [3] (43i1)
+L(1) = 0\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; L(1) = π/4; that it is not 0 is the whole point (43i1)
+\text{the hour } [2] \text{ of the clock of 10 holds endlessly many primes}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it shares the factor 2 with 10; only 2 is there (43i3)
+\textstyle\sum_p \chi(p)/p \text{ grows without bound}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; it stays bounded; Σ 1/p is what grows (43i2)
+\text{the hours get unequal shares}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; equal shares, 1/c(m), in the long run (43i3)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">43i5.1</span><span class="ph understand">understand</span>Why must d be the undo of e on the clock of c, not of n? <br>Why does a small message locked with e = 3 give itself away?</li>
+      <li><span class="qid">43i4.1</span><span class="ph understand">understand</span>Which move above makes L(1) zero, and what is it?</li>
     </ol>
   </section>
 </section>
@@ -156,57 +116,25 @@ p, q \text{ close together is fine}\,? @@ &lt;span class="vd vd-p"&gt;outside th
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43i.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p = 11,\ \ q = 17,\ \ e = 7"></span></span>Build the lock: find n, c and d. Lock the message 42 and unlock it, writing every squaring. <br>Then sign 10 and check the signature.</div>
-  <div class="chq"><span class="chid">43i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="m = 122,\ \ n = 3233"></span></span>The two-key technique works for m sharing a prime with n. Find gcd(122, 3233). <br>What does a message that shares a prime with n give away to anyone who sees it, and how likely is it that a message chosen at random does so, when p and q have three hundred digits?</div>
-  <div class="chq"><span class="chid">43i.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="m^{ed} \equiv m \pmod n \text{ for every } m"></span></span>Must ed ≡ 1 (mod c) for that? Prove that ed ≡ 1 on the clock of the least common multiple of p − 1 and q − 1 is enough. <br>For 61 and 53, find the smallest home key that works for e = 17, and compare it with 2753.</div>
-  <div class="chq"><span class="chid">43i.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1973, a lock with two keys, kept secret; 1977, the same lock, published</span></span>A mathematician working for a government found this lock in 1973, and it was kept secret for twenty four years. Others found it in 1977 and published it, and it went round the world. <br>Who found it? Is a discovery that nobody may read a discovery, and does the answer change for a technique, which is true whether or not it is read, against an invention, which is only of use when it is?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">43i.5.1</span><span class="tagq">do</span>List the primes below 100 in each hour of the clock of 4 and compare the counts.</div>
+  <div class="chq"><span class="chid">43i.5.2</span><span class="tagq">make</span>Make up a sign on the units of the clock of 3 that keeps products.</div>
+  <div class="chq"><span class="chid">43i.5.3</span><span class="tagq">converse</span>Each hour sharing no factor with m holds endlessly many primes. Decide whether an hour sharing a factor can hold more than one.</div>
+  <div class="chq"><span class="chid">43i.5.4</span><span class="tagq">edge</span>Let m = 2. Say what the theorem gives.</div>
+  <div class="chq"><span class="chid">43i.5.5</span><span class="tagq">open</span>Say why the primes ending in 3 lead those ending in 1 for most x.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r43h.html">← 43h · how thin the primes are</a><a href="r43j.html">43j · which primes are two squares →</a></nav>
 
-<nav class="nextrung"><a href="r43h.html">← 43h · clock arithmetic by hand</a><a href="r43j.html">43j · is it prime? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>The two-key lock is RSA public-key encryption; (n, e) is the public key, d the private key, e the public exponent and d the private exponent. The count c is φ(n), and the least common multiple of 43i.6.3 is Carmichael’s λ(n). The turned-key technique is the RSA signature. Padding with chance is OAEP (for locking) and PSS (for signing). The cube-root attack is the small public exponent attack, and the attack on close primes is Fermat’s factorisation method. The cleverer factoring methods are the quadratic sieve and the general number field sieve.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="ac0395">The signs are <b>Dirichlet characters</b>, the signed sums <b>Dirichlet L-functions</b>; the theorem is <b>Dirichlet’s theorem on primes in arithmetic progressions</b>, with equal shares from the <b>prime number theorem for progressions</b>. The lead of 3 over 1 is <b>Chebyshev’s bias</b>.</p>
   <h3>Who said it first</h3>
-  <p>Ron Rivest, Adi Shamir and Leonard Adleman published the lock in 1977 (in Scientific American’s column by Martin Gardner) and in a paper of 1978. Clifford Cocks, at the British government’s GCHQ, found the same lock in 1973, after James Ellis’s idea of a cipher with no shared key (1970); it was declassified in 1997. RSA-250 was factored in February 2020 by Fabrice Boudot, Pierrick Gaudry, Aurore Guillevic, Nadia Heninger, Emmanuel Thomé and Paul Zimmermann. Peter Shor’s method of 1994 (41·phys) would factor fast on a large quantum computer.</p>
-  <h3>A proof that is not allowed</h3>
-  <p>“m^(ed) = m^(1 + tc) = m · (m^c)^t, and m^c ≡ 1 by the exponent-clock technique, so m^(ed) ≡ m.” Not allowed for every m: the exponent-clock technique needs gcd(m, n) = 1. The page’s proof splits the clocks of p and q to cover the m that share a prime with n.</p>
+  <p data-pid="3267f8">Peter Gustav Lejeune Dirichlet proved it in 1837; Chebyshev noticed the bias in 1853.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'clock',t:R`n = pq,\ \ c = (p-1)(q-1)`,n:`The count of units.`},
-  {k:'ember',kl:'keys',t:R`ed \equiv 1 \pmod c`,n:`Undo on the clock of c.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{(m^e)^d \equiv m \pmod n}`,n:`Every m.`}
-],{title:'The slides · two keys · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'clock',t:R`n = 3233,\ c = 3120`,n:`61 and 53.`},
-  {k:'ember',kl:'keys',t:R`e = 17,\ d = 2753`,n:`An undo.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{65 \to 2790 \to 65}`,n:`Locked, unlocked.`}
-],{title:'The slides · by hand · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'sum',t:R`p + q = n - c + 1`,n:`From c.`},
-  {k:'ember',kl:'roots',t:R`x^2 - 114x + 3233`,n:`Factors back.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{61,\ 53}`,n:`c is as hard as p and q.`}
-],{title:'The slides · what it rests on · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'sign',t:R`s = m^d`,n:`Home key.`},
-  {k:'ember',kl:'check',t:R`s^e \equiv m`,n:`Printed key.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{2746^{17} \equiv 123 \pmod{3233}}`,n:`Accepted.`}
-],{title:'The slides · signing · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

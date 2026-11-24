@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Why 1/(1 + x²) Has Radius 1</title>
+<title>26j · One Function, Carried Further</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,109 +37,79 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r26i.html">← 26i e to the iθ by hand</a><a href="r26k.html">next: 26k real integrals by residues →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26i.html">← 26i maps that keep angles</a><a href="r26k.html">next: 26k e^(iθ) by hand →</a></p>
   <div class="tags"><span class="tag tech">26j · technique</span></div>
-  <h1>Why 1/(1 + x²) Has Radius 1</h1>
-  <p data-pid="9d8105">Rung twenty three found that the endless sum for one over one plus x squared, one minus x squared plus x to the fourth and so on, settles only between minus one and one. That is strange. The function itself is smooth on the whole line. It never climbs, never breaks, never even comes close to trouble. So why does its sum stop at one? The line cannot answer, because the trouble is not on the line. In the plane, one plus z squared is zero at i and at minus i, and both sit at distance one from the centre. A power sum settles on discs, not on stretches of the line, and its disc can grow only until it meets a point where the function fails. This step proves that, and turns it into a way to read off how far a sum reaches without writing a single piece of it.</p>
-  <p class="gesture" data-pid="850130">A power sum about a point settles on a disc in the plane. Where the function has a complex slope, the disc reaches at least that far. Where the function has a pole, the disc must stop. So the reach is the distance to the nearest trouble in the plane, even when the line shows none.</p>
+  <h1>One Function, Carried Further</h1>
+  <p data-pid="b095d6">The series 1 + z + z² + ⋯ stops making sense at the unit circle, yet 1/(1 − z) goes on happily everywhere but z = 1. Is 1/(1 − z) the series “carried further”, or just a different function that happens to agree inside? This step proves that a function with a complex slope is fixed everywhere on a connected region by its values on any small piece, so there is only one way to carry it further. Then it finds the catch: carried round a hole, as the logarithm is, a function can come back changed.</p>
+  <p class="gesture" data-pid="bd95be">A nonzero function with a complex slope has only isolated zeros: near a zero its series starts with some cₖzᵏ, and that term wins. So two such functions agreeing on a small disc agree on the whole connected region. Carrying a function along a path is then unique, but carrying it round a hole, as log z, can add 2πi.</p>
 </header>
 
 <section class="class step" data-step="26j1">
-  <h2 class="sthead"><span class="stno">26j1</span>The Plane’s Sum Is the Line’s Sum</h2>
-  <p data-pid="93a5d9">23c measured how far a power sum reaches along the line: its reach R, with the sum settling in size where |x − w| &lt; R and wandering where |x − w| &gt; R. 26a1 noted that the same holds in the plane: a power sum settles in size on a disc |z − w| &lt; R and wanders outside it. The reach on the line and the radius of the disc are one number, since the sizes |uₖ||z − w|ᵏ depend only on |z − w|.</p>
-  <p data-pid="4c646e">Plane-reach technique: <b>let w be real, and let f have a complex slope at every z with |z − w| &lt; R, with f real on the floor; then rung 23’s power sum of f about w reaches at least R, and equals f on that whole disc.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the plane-reach technique">
-f(z) = \textstyle\sum u_k (z - w)^k \text{ for } |z - w| < R @@ the rebuilt-in-the-plane technique (26g2)
-f(x) = \textstyle\sum u_k (x - w)^k \text{ for real } x,\ |x - w| < R @@ the part of the disc that lies on the floor
-u_k = \tfrac{f^{(k)}(w)}{k!},\ \text{slopes taken along the floor} @@ the smooth-sum technique (23e3) for the sum on the floor
-\text{so } \textstyle\sum u_k(x - w)^k \text{ is rung 23's sum of } f \text{ about } w @@ the same pieces, one by one
-\htmlClass{new}{\text{its reach is at least } R} \quad \blacksquare @@ it settles at every z of the disc (26g2), so at every real x with |x − w| &lt; R
+  <h2 class="sthead"><span class="stno">26j1</span>Zeros Stand Alone</h2>
+  <p data-pid="2d9287">Lone-zero technique: <b>if f has a complex slope on a disc round z₀, f(z₀) = 0, and f is not 0 everywhere near z₀, then f has no other zero in some smaller disc round z₀.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the lone-zero technique">
+f(z) = \sum_{n \ge k} c_n (z - z_0)^n,\ c_k \ne 0 @@ its series (26g), first nonzero term k
+f(z) = (z - z_0)^k\,g(z),\ \ g(z_0) = c_k \ne 0 @@ pull out the power
+g \text{ is continuous, so } g \ne 0 \text{ near } z_0 @@ a nonzero value stays nonzero nearby
+\htmlClass{new}{f(z) \ne 0 \text{ for } 0 < |z - z_0| < \delta} \quad \blacksquare @@ a product of two nonzero numbers
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: 1/(1 + x²) about 0">
-1 + z^2 = 0 \iff z = i \text{ or } z = -i @@ (z − i)(z + i) = z² + 1; a product is 0 only if a factor is
-\tfrac{1}{1+z^2} \text{ has a complex slope at every } z \ne \pm i @@ the plane-slope technique (26d1): a quotient
-|z| < 1 \Rightarrow z \ne \pm i @@ |±i| = 1
-\htmlClass{new}{\text{the sum } 1 - x^2 + x^4 - \cdots \text{ reaches at least } 1} \quad \blacksquare @@ the plane-reach technique with w = 0, R = 1
-  </pre>
-  <p data-pid="c7bce1">Nothing on the floor stops the disc. The disc is stopped by i and −i, which the floor never sees.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · plane reach · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26j1.1</span><span class="ph understand">understand</span>What does the plane-reach technique say? <br>Why does the sum of 1/(1 + x²) about 0 reach at least 1?</li>
+      <li><span class="qid">26j1.1</span><span class="ph understand">understand</span>Why can a zero of a function with a complex slope not have other zeros crowding round it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="26j2">
-  <h2 class="sthead"><span class="stno">26j2</span>A Pole Stops the Sum</h2>
-  <p data-pid="c7b58a">The plane-reach technique gives a floor for the reach. A pole gives a ceiling.</p>
-  <p data-pid="06fd67">Pole-wall technique: <b>if the power sum S(z) = Σ uₖ(z − w)ᵏ equals f at every z with |z − w| &lt; d, and f has a pole at a point p with |p − w| = d, then the reach of S is at most d.</b> No power sum can be continued past a pole.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the pole-wall technique">
-\text{suppose the reach } R' > d @@ for contradiction
-S \text{ has a complex slope, so is continuous, on } |z - w| < R' @@ term by term (23e3, in the plane); the slope-means-no-gap technique (13b)
-z_n = w + (1 - \tfrac1n)(p - w):\ |z_n - w| < d,\ z_n \to p @@ points on the segment from w to p, inside the smaller disc
-S(z_n) = f(z_n) \to S(p) @@ S equals f there; S is continuous at p, since |p − w| = d &lt; R′
-f(z) = \tfrac{g(z)}{(z - p)^m},\ g(p) \ne 0 \Rightarrow |f(z_n)| \text{ passes every ceiling} @@ a pole of order m (26h1): |g(zₙ)| heads to |g(p)| &gt; 0, and |zₙ − p|ᵐ to 0
-\htmlClass{new}{\text{the reach of } S \text{ is at most } d} \quad \blacksquare @@ a list that heads to S(p) cannot pass every ceiling
+  <h2 class="sthead"><span class="stno">26j2</span>Agreeing on a Piece Means Agreeing Everywhere</h2>
+  <p data-pid="abeeb8">One-way technique: <b>if f and g have complex slopes on a connected open region and agree on a small disc inside it, they agree on the whole region.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-way technique">
+h = f - g;\ A = \{z: h \text{ is } 0 \text{ near } z\} @@ where h vanishes on a whole disc
+A \text{ is open, and not empty} @@ the small disc
+\text{a limit point of } A \text{ is a crowded zero, so it is in } A @@ the lone-zero technique, turned round
+\htmlClass{new}{A \text{ is open and closed in a connected region: } A \text{ is all of it}} \quad \blacksquare @@ connected: no split into two open parts
   </pre>
-  <p data-pid="a88383">So when f has a complex slope on the disc of radius d and a pole on its rim, the reach is exactly d: the plane-reach technique gives at least d, the pole-wall technique at most d.</p>
-  <pre class="lines" data-k="ember" data-label="this step: tan about 0">
-\cos z = 0 \iff z = \tfrac{\pi}{2} + \pi k @@ e^(2iz) = −1 (26i3) and the whole-turn technique (26b3)
-\tan z = \tfrac{\sin z}{\cos z} \text{ has a complex slope on } |z| < \tfrac{\pi}{2} @@ the plane-slope technique (26d1)
-\sin\tfrac{\pi}{2} = 1 \ne 0,\ \cos' \tfrac{\pi}{2} = -1 \ne 0 @@ a pole of order 1 at π/2 (26h1): (z − π/2) tan z heads to −1
-\htmlClass{new}{\text{the sum of } \tan \text{ about } 0 \text{ reaches exactly } \tfrac{\pi}{2}} \quad \blacksquare @@ plane-reach and pole-wall
-  </pre>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · pole wall · ← → keys work</div></section>
+  <p data-pid="e2e453">So 1/(1 − z) is the only function with a complex slope off z = 1 that matches 1 + z + z² + ⋯ inside the disc. <b>Carrying a function further, along any path, can be done in at most one way.</b> 26n’s factorial past the count is such a carrying-further.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26j2.1</span><span class="ph understand">understand</span>What does the pole-wall technique say, and what clash does its proof reach?</li>
+      <li><span class="qid">26j2.1</span><span class="ph understand">understand</span>Why do two functions that agree on a small disc agree on the whole connected region?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="26j3">
-  <h2 class="sthead"><span class="stno">26j3</span>The Nearest Trouble</h2>
-  <p data-pid="7982ad">For a quotient of polynomials the two techniques meet, and the reach can be read off from the roots of the bottom.</p>
-  <p data-pid="e4c95c">Nearest-trouble technique: <b>let f = p/q with p and q real polynomials sharing no root in ℂ, and w real with q(w) ≠ 0; then the power sum of f about w reaches exactly to the nearest root of q in the plane.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the nearest-trouble technique">
-q \text{ has finitely many roots in } \mathbb{C};\ d = \text{the least } |r - w| @@ the root technique (25d4); q(w) ≠ 0, so d &gt; 0
-f \text{ has a complex slope at every } z \text{ with } |z - w| < d @@ the plane-slope technique (26d1): q(z) ≠ 0 there
-\text{reach} \ge d @@ the plane-reach technique (26j1)
-q = (z - r)^m q_1,\ q_1(r) \ne 0,\ p(r) \ne 0 @@ r a nearest root, repeated m times (25d4); p and q share no root
-f = \tfrac{p/q_1}{(z - r)^m}:\ \text{a pole of order } m \text{ at } r @@ p/q₁ has a slope at r and is not 0 there (26h1)
-\htmlClass{new}{\text{reach} = d} \quad \blacksquare @@ the pole-wall technique (26j2), with S equal to f on |z − w| &lt; d (26j1)
+  <h2 class="sthead"><span class="stno">26j3</span>Carried Round a Hole</h2>
+  <pre class="lines" data-k="ember" data-label="this step: log z round 0">
+\log z = \ln r + i\theta \text{ near } z = 1,\ \theta \text{ near } 0 @@ 26c
+\text{carry along } z = e^{it},\ t \text{ from } 0 \text{ to } 2\pi @@ continuously, one way at each step
+\theta \text{ rises from } 0 \text{ to } 2\pi @@ the value moves with it
+\htmlClass{new}{\text{back at } z = 1:\ \log 1 = 2\pi i} @@ not where it started
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: 1/(1 + x²) and its cousins">
-\tfrac{1}{1+x^2} \text{ about } 1:\ |1 - i| = |1 + i| = \sqrt2 @@ roots ±i
-\tfrac{1}{1 - x^2} \text{ about } 0:\ |1| = |-1| = 1 @@ roots ±1, on the floor
-\tfrac{1}{1 - x + x^2} \text{ about } 0:\ \big|\tfrac{1 \pm i\sqrt3}{2}\big| = 1 @@ the quadratic formula in ℂ; no root on the floor
-\htmlClass{new}{\text{reaches: } \sqrt2,\ 1,\ 1} \quad \blacksquare @@ the nearest-trouble technique
-  </pre>
-  <p data-pid="3a7059">1/(1 + x²) and 1/(1 − x²) both have sums reaching 1 about 0. On the line the second blows up at ±1 and the first is calm everywhere. In the plane they look alike: each has two troubles at distance 1. The line sees only the troubles that happen to sit on it. A sum, which lives on discs, sees them all.</p>
-  <p data-pid="8f0baf">Moving the centre moves the disc. About w = 3, the sum of 1/(1 + x²) reaches √10, because √(3² + 1²) is the distance from 3 to ±i. No centre on the floor ever gets a reach less than 1.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · nearest trouble · ← → keys work</div></section>
+  <p data-pid="7ba128"><b>Along a path the carrying is unique, but round a hole it can return changed:</b> log z gains 2πi each time round 0, √z changes sign. The path’s way round the hole decides the value, which is why 26e’s loop integrals of 1/z give 2πi.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26j3.1</span><span class="ph understand">understand</span>What does the nearest-trouble technique say? <br>Why do 1/(1 + x²) and 1/(1 − x²) have sums of the same reach about 0?</li>
+      <li><span class="qid">26j3.1</span><span class="ph understand">understand</span>What happens to log z when it is carried once round 0, and why does uniqueness not forbid it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="26j4">
   <h2 class="sthead"><span class="stno">26j4</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\tfrac{1}{1+x^2} \text{ is smooth on the whole line, so its sum about } 0 \text{ reaches everywhere}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the reach is set by the nearest trouble in the plane: ±i, at distance 1
-\text{the reach is the distance to the nearest root of the bottom on the floor}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; in the plane: x² − 2x + 5 has no root on the floor, yet its roots 1 ± 2i stop the sum
-\text{smooth on } (-1, 1) \Rightarrow \text{a sum about } 0 \text{ reaching } 1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; e^(−1/x²) (23f) is smooth and not its sum at all: it has no complex slope near 0, so the plane-reach technique does not apply
-1 \ne \pm i, \text{ so } 1 - x^2 + x^4 - \cdots \text{ settles at } x = 1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; at the reach itself anything can happen (23c); here the pieces are ±1 and do not head to 0 (22d)
+  <p data-pid="6c7f37">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+1/(1-z) \text{ and } \textstyle\sum z^n \text{ are different functions}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; they agree on the disc, so 1/(1 − z) is the only carrying-further (26j2)
+\text{zeros of } \sin z \text{ crowd near } 0\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; zeros stand alone: sin has zeros only at multiples of π (26j1)
+\text{unique carrying means log } z \text{ has one value}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; unique along a path; round 0 it gains 2πi (26j3)
+\text{agree at infinitely many points means agree everywhere}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the points must crowd to a limit inside the region; sin z and 0 share infinitely many (26j2)
+\text{carry the function first, then check it agrees}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; agreement on the piece fixes the carrying (26j2)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26j4.1</span><span class="ph understand">understand</span>Why is “1/(1 + x²) is smooth on the whole line, so its sum about 0 reaches everywhere” a move to watch out for?</li>
+      <li><span class="qid">26j4.1</span><span class="ph understand">understand</span>Which move above says infinitely many shared values force agreement, and what more is needed?</li>
     </ol>
   </section>
 </section>
@@ -158,53 +117,25 @@ f = \tfrac{p/q_1}{(z - r)^m}:\ \text{a pole of order } m \text{ at } r @@ p/q₁
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">26j.4.1</span><span class="tagq">build</span>Build a quotient of real polynomials whose bottom has no root on the floor and whose sum about 0 reaches exactly ½. <br>Prove the reach, and find the reach of the same sum about 1.</div>
-  <div class="chq"><span class="chid">26j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\ln(1 + x)"></span></span>Its sum about 0 reaches 1, yet it has no pole. What goes wrong at −1 in the plane, and why can the pole-wall technique not be used there? <br>Prove the reach is exactly 1 another way.</div>
-  <div class="chq"><span class="chid">26j.4.3</span><span class="tagq">converse</span>If rung 23’s sum of f about a real w reaches R, is there a function with a complex slope on the disc |z − w| < R that equals f on the floor? Prove it or refute it.</div>
-  <div class="chq"><span class="chid">26j.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\dfrac{1}{1 + x^2} = \dfrac{1}{2i}\Big(\dfrac{1}{x - i} - \dfrac{1}{x + i}\Big)"></span></span>Reroute the reach of the sum of 1/(1 + x²) about 1: expand each piece as a geometric sum in h = x − 1, and find the reach by the reach-by-ratio technique (23c).</div>
-  <div class="chq"><span class="chid">26j.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\dfrac{x}{e^x - 1}"></span></span>The pieces of this sum were first studied in 1713, to add up the powers of the counting numbers: a question about whole numbers, asked long before anyone drew numbers in a plane. Its sum reaches exactly 2π, because of a point 2π up the upright. <br>Is the plane a tool brought in from outside, or is it where this function has always lived?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">26j.5.1</span><span class="tagq">do</span>Carry √z once round 0 from √1 = 1, and say where it returns.</div>
+  <div class="chq"><span class="chid">26j.5.2</span><span class="tagq">make</span>Make up two different functions with complex slopes that agree at every whole number.</div>
+  <div class="chq"><span class="chid">26j.5.3</span><span class="tagq">converse</span>Agreement on a disc forces agreement on a connected region. Decide whether agreement on a region forces agreement on a disc inside it.</div>
+  <div class="chq"><span class="chid">26j.5.4</span><span class="tagq">edge</span>Let the region be two separate discs. Say what agreeing on one tells you about the other.</div>
+  <div class="chq"><span class="chid">26j.5.5</span><span class="tagq">open</span>Say what surface log z would live on if it were to have one value everywhere.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r26i.html">← 26i · maps that keep angles</a><a href="r26k.html">26k · e^(iθ) by hand →</a></nav>
 
-<nav class="nextrung"><a href="r26i.html">← 26i · e to the iθ by hand</a><a href="r26k.html">26k · real integrals by residues →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>The reach is the radius of convergence. The plane-reach and pole-wall techniques together say that the radius of convergence of the Taylor series of a function holomorphic near w is the distance from w to the nearest singularity, when the function cannot be continued past it. The nearest-trouble technique is that statement for rational functions. The pieces of the sum of x/(eˣ − 1) are Bₖ/k!, where the Bₖ are the Bernoulli numbers.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="1c0c7d">The one-way technique is the <b>identity theorem</b>; carrying further is <b>analytic continuation</b>; a value that changes round a hole makes a <b>multivalued function</b> with a <b>branch point</b>, and the surface it lives on is a <b>Riemann surface</b>.</p>
   <h3>Who said it first</h3>
-  <p>Augustin-Louis Cauchy found in 1831 that a power series converges in the largest disc in which its function stays holomorphic. Jacob Bernoulli’s Ars conjectandi, printed in 1713, introduced the Bernoulli numbers for the sums of powers 1ᵏ + 2ᵏ + ⋯ + nᵏ.</p>
+  <p data-pid="815a20">Karl Weierstrass built functions by carrying power series from disc to disc in the 1840s and after; Riemann’s 1851 thesis gave the surfaces on which such functions take one value.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'rebuilt',t:R`f(z) = \textstyle\sum u_k(z - w)^k,\ |z - w| < R`,n:`A complex slope on the disc.`},
-  {k:'ember',kl:'on the floor',t:R`u_k = f^{(k)}(w)/k!`,n:`The same pieces as rung 23’s sum.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reach} \ge R}`,n:`The disc carries the line.`}
-],{title:'The slides · plane reach · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'suppose more',t:R`R' > d`,n:`For contradiction.`},
-  {k:'ember',kl:'walk to the pole',t:R`S(z_n) = f(z_n) \to S(p)`,n:`S is continuous there.`},
-  {k:'ember',kl:'but',t:R`|f(z_n)| \to \text{every ceiling}`,n:`A pole.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reach} \le d}`,n:`The disc stops at the pole.`}
-],{title:'The slides · pole wall · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'roots of the bottom',t:R`q(r) = 0,\ d = \min|r - w|`,n:`In the plane, not just on the floor.`},
-  {k:'ember',kl:'at least',t:R`\text{plane-reach: reach} \ge d`,n:`A slope on the disc.`},
-  {k:'ember',kl:'at most',t:R`\text{pole-wall: reach} \le d`,n:`A pole on the rim.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reach} = d}`,n:`For 1/(1 + x²) about 0: 1.`}
-],{title:'The slides · nearest trouble · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

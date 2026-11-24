@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Logistic Equation Solved</title>
+<title>24j · Back From s to t</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-.kn{font-size:.88rem}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,117 +37,96 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r24i.html">← 24i slope fields and stepping forward</a><a href="r24k.html">next: 24k fixed points, stability and the start of chaos →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24i.html">← 24i rate statements turned into algebra</a><a href="r24k.html">next: 24k slope fields and stepping forward →</a></p>
   <div class="tags"><span class="tag tech">24j · technique</span></div>
-  <h1>The Logistic Equation Solved</h1>
-  <p data-pid="512ace">The seventeenth rung met a population that grows at a rate set by its size, slowed by the share of room already taken. It found the S-shaped curve, and the moment of fastest growth at half the ceiling. But it worked under a quiet assumption: that the population stays between nothing and the ceiling, so that its logarithms make sense. It never showed that the curve is the only one the statement allows, and it waved at starts above the ceiling. This step closes all of that. The statement is tame, so the curve is the one solution, and it can never touch the ceiling. Every start is solved, including the ones that fall and the ones that run off. Turned upside down, the statement becomes the cooling statement, and that gives a way to read the ceiling from three counts. And walked forward a year at a time, the same statement can refuse to settle at all.</p>
-  <p class="gesture" data-pid="5cc025">The logistic statement is tame, so its S-shaped curve is the only solution from its start, and it never touches the ceiling. Every start has a formula. Turned upside down, the population cools toward one over the ceiling, and three counts at equal times fix the whole curve. Taken a year at a time, the statement settles only if the yearly growth is not too strong.</p>
+  <h1>Back From s to t</h1>
+  <p data-pid="c1295b">24i turned a rate statement into an equation for F. To finish, F must be read back as a function of t. When F is a ratio of polynomials, 17k’s partial fractions break it into pieces the table already holds. This step reads back a second-order statement with its two starts, a statement with a switched-on push, proves that two functions with the same transform cannot differ in the way that matters here, and reads the far future straight off F without reading back at all.</p>
+  <p class="gesture" data-pid="25345f">Split F into partial fractions and read each piece from the table. Y = (s + 3)/((s + 1)(s + 2)) gives y = 2e^(−t) − e^(−2t). Continuous functions with the same transform are equal. If y settles, its resting value is the limit of sY(s) as s goes to 0.</p>
 </header>
 
 <section class="class step" data-step="24j1">
-  <h2 class="sthead"><span class="stno">24j1</span>One Solution, and It Never Touches the Ceiling</h2>
-  <p data-pid="6f2008">17·bio solved P′ = rP(1 − P/K) “while 0 &lt; P &lt; K”. It used ln P and ln(K − P), which need both to be positive. So it found one solution that stays between, and left open whether a solution could reach K, or whether another curve could share the start. Both are closed here.</p>
-  <p data-pid="dda875">Stays-between technique: <b>for P′ = rP(1 − P/K) with r, K &gt; 0 and 0 &lt; P₀ &lt; K, exactly one solution passes through (0, P₀). It is P = K/(1 + Ce^(−rt)) with C = (K − P₀)/P₀, it exists for every real t, and it never touches 0 or K.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the stays-between technique">
-F(P) = rP\big(1 - \tfrac{P}{K}\big),\ \ F'(P) = r\big(1 - \tfrac{2P}{K}\big),\ \ |F'(P)| \le r\big(1 + \tfrac{2B}{K}\big) \text{ for } |P| \le B @@ a slope ceiling on every bounded strip: tame (24d1)
-P = 0 \text{ and } P = K \text{ are resting lines} @@ F(0) = F(K) = 0
-0 < P(t) < K \text{ wherever a solution from } (0, P_0) \text{ exists} @@ the resting-line technique (24f3): a solution that starts off a resting line never touches it
-P = \tfrac{K}{1 + Ce^{-rt}},\ \ C = \tfrac{K - P_0}{P_0} > 0 @@ now 17·bio's steps are licensed: the logistic-solution technique
-\tfrac{K}{1 + Ce^{-rt}} \text{ has a slope for every } t \text{ and obeys the statement, from } P_0 @@ the bottom is above 1; the put-back technique (24f2)
-\htmlClass{new}{\text{that curve, for every } t, \text{ is the only solution, and stays between } 0 \text{ and } K} \quad \blacksquare @@ any solution agrees with it while both exist (the drift technique, 24d3)
+  <h2 class="sthead"><span class="stno">24j1</span>Reading Back by Pieces</h2>
+  <pre class="lines" data-k="ember" data-label="this step: y″ + 3y′ + 2y = 0, y(0) = 1, y′(0) = 0">
+(s^2Y - s) + 3(sY - 1) + 2Y = 0 @@ transform, with both starts (24i3)
+Y(s^2 + 3s + 2) = s + 3 @@ algebra
+Y = \dfrac{s+3}{(s+1)(s+2)} = \dfrac{2}{s+1} - \dfrac{1}{s+2} @@ partial fractions (17k)
+\htmlClass{new}{y = 2e^{-t} - e^{-2t}} @@ check: y(0) = 1, y′(0) = −2 + 2 = 0
   </pre>
-  <p data-pid="957afa">The ceiling is approached and never reached, as 17·bio's moves to watch out for said. Now there is a reason that does not lean on the formula: the ceiling is itself a solution, and two solutions of a tame statement never meet.</p>
+  <p data-pid="4ee5ee">Read-back technique: <b>when Y is a ratio of polynomials with the top of lower degree, split it into partial fractions and read each piece from the table.</b> The roots of the bottom, −1 and −2, are the growth rates 24h3 tried; the transform finds them and fits the starts in one pass.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">24j1.1</span><span class="ph understand">understand</span>What does the stays-between technique say? <br>Why can the solution never touch K, without the formula?</li>
+      <li><span class="qid">24j1.1</span><span class="ph understand">understand</span>How is Y split and read back, and where do 24h’s growth rates appear?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="24j2">
-  <h2 class="sthead"><span class="stno">24j2</span>Every Start</h2>
-  <p data-pid="15c7eb">Every-start technique: <b>for every start P₀ ≠ 0, the one solution of P′ = rP(1 − P/K) through (0, P₀) is P = K/(1 + Ce^(−rt)), C = (K − P₀)/P₀, wherever 1 + Ce^(−rt) &gt; 0. A start above K falls to K; a start below 0 runs off to minus infinity at t = ln(−C)/r.</b> A start at 0 stays at 0.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the every-start technique">
-P = \tfrac{K}{1 + Ce^{-rt}} \Rightarrow P' = \tfrac{rKCe^{-rt}}{(1 + Ce^{-rt})^2} @@ the chain technique (13e)
-rP\big(1 - \tfrac{P}{K}\big) = r\,\tfrac{K}{1 + Ce^{-rt}}\cdot\tfrac{Ce^{-rt}}{1 + Ce^{-rt}} = P' @@ 1 − P/K = Ce^{−rt}/(1 + Ce^{−rt})
-P(0) = \tfrac{K}{1 + C} = P_0 \iff C = \tfrac{K - P_0}{P_0} @@ the start
-P_0 > K:\ -1 < C < 0,\ \ 1 + Ce^{-rt} > 0 \text{ for } t \ge 0,\ \ P \to K \text{ from above} @@ e^{−rt} ≤ 1 and heads to 0
-P_0 < 0:\ C < -1,\ \ 1 + Ce^{-rt} = 0 \text{ at } t^* = \tfrac{\ln(-C)}{r} > 0 @@ the bottom reaches 0 going forward
-\htmlClass{new}{P_0 < 0:\ P \to -\infty \text{ as } t \to t^*,\ \text{a run-off as in 24e2}} \quad \blacksquare @@ the formula is the one solution while it lasts (24d3)
+  <h2 class="sthead"><span class="stno">24j2</span>A Push Switched On</h2>
+  <p data-pid="55d6fd">A tank empties through a pipe at a rate in proportion to its level, y′ = −y, and at t = 0 a tap is opened that adds 1 litre a minute. It starts empty.</p>
+  <pre class="lines" data-k="ember" data-label="this step: y′ + y = 1, y(0) = 0">
+sY + Y = \dfrac1s @@ 𝓛1 = 1/s
+Y = \dfrac{1}{s(s+1)} = \dfrac1s - \dfrac{1}{s+1} @@ partial fractions
+y = 1 - e^{-t} @@ read back
+\htmlClass{new}{\text{the level rises to } 1 \text{ litre and rests}} @@ in, 1 a minute; out, the level a minute
   </pre>
-  <p data-pid="4370c3">A start above K also runs off, backward in time, at t = ln(−C)/r &lt; 0. A herd of 8000 elk on range that holds 5000, with r = 0.3 a year, has C = −0.375. It falls to 5457 in five years. Run the statement backward and it would have been infinite 3.27 years before the count, which says only that the statement cannot have held back then. A negative population has no meaning; it is here because the statement does not know that, and its run-off is the same as y′ = y²'s.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · every start · ← → keys work</div></section>
+  <p data-pid="6716a8">A push that starts at t = 0 costs nothing extra: its transform is one more term on the right. That is why engineers reach for the transform whenever a switch is thrown.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">24j2.1</span><span class="ph understand">understand</span>What does the every-start technique say about a start above K, a start below 0 and a start at 0?</li>
+      <li><span class="qid">24j2.1</span><span class="ph understand">understand</span>How does the transform handle a push switched on at the start?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="24j3">
-  <h2 class="sthead"><span class="stno">24j3</span>Turned Over, the Population Cools</h2>
-  <p data-pid="7f816b">Reciprocal-cooling technique: <b>if P solves P′ = rP(1 − P/K) and is never 0, then u = 1/P solves u′ = −r(u − 1/K): u closes on 1/K as a drink cools toward its room, and the gap u − 1/K shrinks by the factor e^(−rT) in every stretch of time T.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the reciprocal-cooling technique, and three counts">
-u = \tfrac1P,\ \ u' = -\tfrac{P'}{P^2} = -\tfrac{r}{P} + \tfrac{r}{K} = -r\big(u - \tfrac1K\big) @@ the chain technique (13e); put in the statement
-u - \tfrac1K = \big(u_0 - \tfrac1K\big)e^{-rt} @@ the own-rate technique (24a3) on the gap
-u_2 - c = q\,(u_1 - c),\ \ u_3 - c = q\,(u_2 - c),\ \ c = \tfrac1K,\ q = e^{-rT} @@ three counts, T apart
-q = \tfrac{u_3 - u_2}{u_2 - u_1} @@ subtract the two lines
-(u_2 - c)^2 = (u_1 - c)(u_3 - c) @@ both sides equal q²(u₁ − c)²
-\htmlClass{new}{\tfrac1K = \tfrac{u_1u_3 - u_2^2}{u_1 + u_3 - 2u_2},\ \ r = -\tfrac{\ln q}{T}} \quad \blacksquare @@ multiply out; the u² terms on both sides cancel
+  <h2 class="sthead"><span class="stno">24j3</span>One Transform, One Function</h2>
+  <p data-pid="a8b018">Same-transform technique: <b>if f and g are continuous on t ≥ 0, grow no faster than some e^(ct), and have the same transform for all s > c, then f = g.</b> Its full proof is held in trust for a later rung. What this rung uses is the case it can check: every function it reads back is a sum of terms Ae^(at), and those are fixed by their transforms.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the same-transform technique">
+\sum A_i e^{a_i t} \text{ has transform } \sum \dfrac{A_i}{s - a_i} @@ 24i2, the aᵢ distinct
+\text{if two such sums have the same transform, their difference has transform } 0 @@ subtract
+\sum \dfrac{B_i}{s - a_i} = 0 \text{ for all large } s \Rightarrow \text{every } B_i = 0 @@ multiply by s − aⱼ and let s → aⱼ: Bⱼ = 0
+\htmlClass{new}{\text{the two sums are equal}} \quad \blacksquare @@ so reading back gives the one answer
   </pre>
-  <p data-pid="449ce9">So three counts at equal times fix K and r, and with them the whole curve. Try it on the United States census, sixty years apart: 3.929 million in 1790, 23.192 million in 1850, 92.228 million in 1910. The technique gives K ≈ 199 million and r ≈ 0.0313 a year. The curve through those three counts gives 149.5 million for 1950; the census found 151.3 million. It gives 191.9 million for 2020; the census found 331.4 million.</p>
-  <p data-pid="a90982">Nothing in the mathematics failed. Three counts always fix a logistic curve exactly, whatever the population is doing. The fit to 1950 is a fact about the curve. The claim that the curve is a law of growth is a separate claim, and the counts after 1950 refuted it. The seam standing question returns to this.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · turned over · ← → keys work</div></section>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · the United States census against the logistic curve through three of its counts</div>
-    <div id="pl"></div>
-    <div class="kn"><span class="m">up to</span><input type="range" id="kn" min="1790" max="2020" step="10" value="1950"><output id="okn"></output></div>
-    <div class="cap">Ink: the curve through the counts of 1790, 1850 and 1910 (teal dashes at its ceiling, about 199 million). Ember dots: each census, in millions, up to the year on the knob.</div>
-    <div class="verdict" id="vd"></div>
-  </section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">24j3.1</span><span class="ph understand">understand</span>What does the reciprocal-cooling technique say? <br>What do three counts at equal times fix?</li>
+      <li><span class="qid">24j3.1</span><span class="ph understand">understand</span>Why can a sum of growths be read back from its transform in only one way, and what is held in trust?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="24j4">
-  <h2 class="sthead"><span class="stno">24j4</span>Walking the Statement a Year at a Time</h2>
-  <p data-pid="a7b556">Many animals and plants breed once a year, so a census is a list, one count a year, and the statement becomes a forward walk with h = 1: Pₙ₊₁ = Pₙ + rPₙ(1 − Pₙ/K). The smooth statement always settles at K from any start between. The walk need not.</p>
-  <p data-pid="d3d4b3">Logistic-walk technique: <b>forward steps of size h on P′ = rP(1 − P/K) pull starts near K in when 0 &lt; hr &lt; 2, and push them away when hr &gt; 2. Written in x = hrP/((1 + hr)K), the walk is xₙ₊₁ = μ·xₙ(1 − xₙ), with μ = 1 + hr.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the logistic-walk technique">
-g(P) = P + hrP\big(1 - \tfrac{P}{K}\big),\ \ g(K) = K @@ one forward step (24i1); K is left alone
-g'(P) = 1 + hr - \tfrac{2hrP}{K},\ \ g'(K) = 1 - hr @@ the slope of a polynomial (13)
-|1 - hr| < 1 \iff 0 < hr < 2 @@ 22h4: below 1 in size pulls in, above 1 pushes away
-P = cx,\ c = \tfrac{(1 + hr)K}{hr}:\ \ x_{n+1} = (1 + hr)x_n - \tfrac{hr\,c}{K}x_n^2 = (1 + hr)\,x_n(1 - x_n) @@ divide one step by c
-\htmlClass{new}{x_{n+1} = \mu\,x_n(1 - x_n),\ \ \mu = 1 + hr} \quad \blacksquare @@ the lines above
+  <h2 class="sthead"><span class="stno">24j4</span>The Far Future, Read Off F</h2>
+  <pre class="lines" data-k="ember" data-label="this step: settling without reading back">
+\mathcal{L}y^{\prime} = sY - y(0) @@ 24i3
+s \to 0:\ \int_0^\infty y^{\prime}\,dt = \lim_{t\to\infty} y - y(0) @@ the fade becomes 1
+\lim_{t\to\infty} y(t) = \lim_{s \to 0} sY(s) @@ when y settles
+\htmlClass{new}{\text{tank: } sY = \tfrac{1}{s+1} \to 1} @@ the resting litre, with no reading back
   </pre>
-  <p data-pid="7b6979">With hr = 2.2 the walk is 22h4's function sₙ₊₁ = 3.2sₙ(1 − sₙ), whose run splits into two threads. A population that breeds once a year and grows fast can swing between a high year and a low year forever, with nothing outside it changing. The smooth statement cannot do that: by 24j1 it climbs to K and stays below. 24k follows the yearly function further.</p>
-  <!--gfig 24j4--><div class="gfigs" data-gfig="24j4" data-story="[[&quot;Each picture steps the yearly walk on its graph: up to the curve for next year’s count, across to the diagonal to make it this year’s.&quot;, []], [&quot;Left, hr = 1.5: the steps close in on K.&quot;, [&quot;#0-8&quot;]], [&quot;Right, hr = 2.5: near K each step overshoots by more than the last, and the walk bounces away.&quot;, [&quot;#9-17&quot;]]]"><svg class="gfig" viewBox="0 0 460 246" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="cobweb diagrams of the yearly logistic walk, spiralling in and bouncing out"><defs><clipPath id="gc38480c17"><rect x="28" y="28" width="184" height="174"/></clipPath></defs><line x1="30" x2="210" y1="200.0" y2="200.0" style="stroke:var(--ink);stroke-width:1"/><line x1="30.0" x2="30.0" y1="200.0" y2="204.0" style="stroke:var(--ink);stroke-width:1"/><text x="30.0" y="215.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="135.9" x2="135.9" y1="200.0" y2="204.0" style="stroke:var(--ink);stroke-width:1"/><text x="135.9" y="215.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">K</text><polyline clip-path="url(#gc38480c17)" points="30.0,200.0 30.8,199.3 31.5,198.6 32.2,197.9 33.0,197.2 33.8,196.5 34.5,195.8 35.2,195.0 36.0,194.3 36.8,193.6 37.5,192.9 38.2,192.2 39.0,191.5 39.8,190.8 40.5,190.1 41.2,189.4 42.0,188.7 42.8,188.0 43.5,187.2 44.2,186.5 45.0,185.8 45.8,185.1 46.5,184.4 47.2,183.7 48.0,183.0 48.8,182.3 49.5,181.6 50.2,180.9 51.0,180.2 51.8,179.5 52.5,178.8 53.2,178.0 54.0,177.3 54.8,176.6 55.5,175.9 56.2,175.2 57.0,174.5 57.8,173.8 58.5,173.1 59.2,172.4 60.0,171.7 60.8,171.0 61.5,170.2 62.2,169.5 63.0,168.8 63.8,168.1 64.5,167.4 65.2,166.7 66.0,166.0 66.8,165.3 67.5,164.6 68.2,163.9 69.0,163.2 69.8,162.5 70.5,161.8 71.2,161.0 72.0,160.3 72.8,159.6 73.5,158.9 74.2,158.2 75.0,157.5 75.8,156.8 76.5,156.1 77.2,155.4 78.0,154.7 78.8,154.0 79.5,153.2 80.2,152.5 81.0,151.8 81.8,151.1 82.5,150.4 83.2,149.7 84.0,149.0 84.8,148.3 85.5,147.6 86.2,146.9 87.0,146.2 87.8,145.5 88.5,144.8 89.2,144.0 90.0,143.3 90.8,142.6 91.5,141.9 92.2,141.2 93.0,140.5 93.8,139.8 94.5,139.1 95.3,138.4 96.0,137.7 96.7,137.0 97.5,136.2 98.2,135.5 99.0,134.8 99.7,134.1 100.5,133.4 101.2,132.7 102.0,132.0 102.8,131.3 103.5,130.6 104.2,129.9 105.0,129.2 105.7,128.5 106.5,127.7 107.2,127.0 108.0,126.3 108.8,125.6 109.5,124.9 110.2,124.2 111.0,123.5 111.7,122.8 112.5,122.1 113.2,121.4 114.0,120.7 114.8,120.0 115.5,119.3 116.2,118.5 117.0,117.8 117.8,117.1 118.5,116.4 119.2,115.7 120.0,115.0 120.8,114.3 121.5,113.6 122.2,112.9 123.0,112.2 123.8,111.5 124.5,110.8 125.2,110.0 126.0,109.3 126.8,108.6 127.5,107.9 128.2,107.2 129.0,106.5 129.8,105.8 130.5,105.1 131.2,104.4 132.0,103.7 132.8,103.0 133.5,102.3 134.2,101.5 135.0,100.8 135.8,100.1 136.5,99.4 137.2,98.7 138.0,98.0 138.8,97.3 139.5,96.6 140.2,95.9 141.0,95.2 141.8,94.5 142.5,93.8 143.2,93.0 144.0,92.3 144.7,91.6 145.5,90.9 146.2,90.2 147.0,89.5 147.8,88.8 148.5,88.1 149.2,87.4 150.0,86.7 150.8,86.0 151.5,85.2 152.2,84.5 153.0,83.8 153.8,83.1 154.5,82.4 155.2,81.7 156.0,81.0 156.8,80.3 157.5,79.6 158.2,78.9 159.0,78.2 159.8,77.5 160.5,76.7 161.2,76.0 162.0,75.3 162.8,74.6 163.5,73.9 164.3,73.2 165.0,72.5 165.8,71.8 166.5,71.1 167.2,70.4 168.0,69.7 168.8,69.0 169.5,68.3 170.2,67.5 171.0,66.8 171.8,66.1 172.5,65.4 173.2,64.7 174.0,64.0 174.7,63.3 175.5,62.6 176.3,61.9 177.0,61.2 177.8,60.5 178.5,59.8 179.2,59.0 180.0,58.3 180.7,57.6 181.5,56.9 182.2,56.2 183.0,55.5 183.8,54.8 184.5,54.1 185.2,53.4 186.0,52.7 186.8,52.0 187.5,51.2 188.3,50.5 189.0,49.8 189.8,49.1 190.5,48.4 191.2,47.7 192.0,47.0 192.7,46.3 193.5,45.6 194.3,44.9 195.0,44.2 195.8,43.5 196.5,42.8 197.2,42.0 198.0,41.3 198.8,40.6 199.5,39.9 200.2,39.2 201.0,38.5 201.8,37.8 202.5,37.1 203.2,36.4 204.0,35.7 204.7,35.0 205.5,34.2 206.2,33.5 207.0,32.8 207.8,32.1 208.5,31.4 209.2,30.7 210.0,30.0" style="fill:none;stroke:var(--grid);stroke-width:1"/><polyline clip-path="url(#gc38480c17)" points="30.0,200.0 30.8,198.2 31.5,196.5 32.2,194.8 33.0,193.0 33.8,191.3 34.5,189.6 35.2,188.0 36.0,186.3 36.8,184.7 37.5,183.0 38.2,181.4 39.0,179.8 39.8,178.3 40.5,176.7 41.2,175.1 42.0,173.6 42.8,172.1 43.5,170.6 44.2,169.1 45.0,167.6 45.8,166.1 46.5,164.7 47.2,163.3 48.0,161.8 48.8,160.4 49.5,159.0 50.2,157.7 51.0,156.3 51.8,155.0 52.5,153.6 53.2,152.3 54.0,151.0 54.8,149.8 55.5,148.5 56.2,147.2 57.0,146.0 57.8,144.8 58.5,143.6 59.2,142.4 60.0,141.2 60.8,140.0 61.5,138.9 62.2,137.8 63.0,136.7 63.8,135.6 64.5,134.5 65.2,133.4 66.0,132.3 66.8,131.3 67.5,130.3 68.2,129.3 69.0,128.3 69.8,127.3 70.5,126.3 71.2,125.4 72.0,124.4 72.8,123.5 73.5,122.6 74.2,121.7 75.0,120.8 75.8,120.0 76.5,119.1 77.2,118.3 78.0,117.5 78.8,116.7 79.5,115.9 80.2,115.1 81.0,114.4 81.8,113.6 82.5,112.9 83.2,112.2 84.0,111.5 84.8,110.8 85.5,110.2 86.2,109.5 87.0,108.9 87.8,108.3 88.5,107.7 89.2,107.1 90.0,106.5 90.8,105.9 91.5,105.4 92.2,104.9 93.0,104.4 93.8,103.9 94.5,103.4 95.3,102.9 96.0,102.4 96.7,102.0 97.5,101.6 98.2,101.2 99.0,100.8 99.7,100.4 100.5,100.0 101.2,99.7 102.0,99.4 102.8,99.0 103.5,98.7 104.2,98.5 105.0,98.2 105.7,97.9 106.5,97.7 107.2,97.4 108.0,97.2 108.8,97.0 109.5,96.9 110.2,96.7 111.0,96.5 111.7,96.4 112.5,96.3 113.2,96.2 114.0,96.1 114.8,96.0 115.5,95.9 116.2,95.9 117.0,95.9 117.8,95.8 118.5,95.8 119.2,95.8 120.0,95.9 120.8,95.9 121.5,96.0 122.2,96.0 123.0,96.1 123.8,96.2 124.5,96.4 125.2,96.5 126.0,96.6 126.8,96.8 127.5,97.0 128.2,97.2 129.0,97.4 129.8,97.6 130.5,97.8 131.2,98.1 132.0,98.4 132.8,98.7 133.5,99.0 134.2,99.3 135.0,99.6 135.8,99.9 136.5,100.3 137.2,100.7 138.0,101.1 138.8,101.5 139.5,101.9 140.2,102.3 141.0,102.8 141.8,103.2 142.5,103.7 143.2,104.2 144.0,104.7 144.7,105.2 145.5,105.8 146.2,106.3 147.0,106.9 147.8,107.5 148.5,108.1 149.2,108.7 150.0,109.3 150.8,110.0 151.5,110.6 152.2,111.3 153.0,112.0 153.8,112.7 154.5,113.4 155.2,114.2 156.0,114.9 156.8,115.7 157.5,116.5 158.2,117.3 159.0,118.1 159.8,118.9 160.5,119.7 161.2,120.6 162.0,121.5 162.8,122.3 163.5,123.2 164.3,124.2 165.0,125.1 165.8,126.0 166.5,127.0 167.2,128.0 168.0,129.0 168.8,130.0 169.5,131.0 170.2,132.0 171.0,133.1 171.8,134.2 172.5,135.2 173.2,136.3 174.0,137.4 174.7,138.6 175.5,139.7 176.3,140.9 177.0,142.0 177.8,143.2 178.5,144.4 179.2,145.6 180.0,146.9 180.7,148.1 181.5,149.4 182.2,150.7 183.0,152.0 183.8,153.3 184.5,154.6 185.2,155.9 186.0,157.3 186.8,158.6 187.5,160.0 188.3,161.4 189.0,162.8 189.8,164.3 190.5,165.7 191.2,167.2 192.0,168.6 192.7,170.1 193.5,171.6 194.3,173.1 195.0,174.7 195.8,176.2 196.5,177.8 197.2,179.4 198.0,181.0 198.8,182.6 199.5,184.2 200.2,185.8 201.0,187.5 201.8,189.2 202.5,190.8 203.2,192.5 204.0,194.2 204.7,196.0 205.5,197.7 206.2,199.5 207.0,201.3 207.8,203.0 208.5,204.8 209.2,206.7 210.0,208.5" style="fill:none;stroke:var(--ink);stroke-width:1.8"/><polyline clip-path="url(#gc38480c17)" points="51.2,200.0 51.2,156.0 76.6,156.0 76.6,119.0 115.7,119.0 115.7,95.9 140.2,95.9 140.2,102.3 133.5,102.3 133.5,98.9 137.0,98.9 137.0,100.6 135.3,100.6 135.3,99.7 136.2,99.7 136.2,100.1 135.7,100.1 135.7,99.9 136.0,99.9 136.0,100.0 135.8,100.0 135.8,100.0 135.9,100.0 135.9,100.0 135.9,100.0 135.9,100.0 135.9,100.0 135.9,100.0 135.9,100.0" style="fill:none;stroke:var(--teal);stroke-width:1.4"/><text x="120" y="20" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">hr = 1.5: in to K</text><defs><clipPath id="gcd7df6d9e"><rect x="254" y="28" width="184" height="174"/></clipPath></defs><line x1="256" x2="436" y1="200.0" y2="200.0" style="stroke:var(--ink);stroke-width:1"/><line x1="256.0" x2="256.0" y1="200.0" y2="204.0" style="stroke:var(--ink);stroke-width:1"/><text x="256.0" y="215.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="361.9" x2="361.9" y1="200.0" y2="204.0" style="stroke:var(--ink);stroke-width:1"/><text x="361.9" y="215.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">K</text><polyline clip-path="url(#gcd7df6d9e)" points="256.0,200.0 256.8,199.3 257.5,198.6 258.2,197.9 259.0,197.2 259.8,196.5 260.5,195.8 261.2,195.0 262.0,194.3 262.8,193.6 263.5,192.9 264.2,192.2 265.0,191.5 265.8,190.8 266.5,190.1 267.2,189.4 268.0,188.7 268.8,188.0 269.5,187.2 270.2,186.5 271.0,185.8 271.8,185.1 272.5,184.4 273.2,183.7 274.0,183.0 274.8,182.3 275.5,181.6 276.2,180.9 277.0,180.2 277.8,179.5 278.5,178.8 279.2,178.0 280.0,177.3 280.8,176.6 281.5,175.9 282.2,175.2 283.0,174.5 283.8,173.8 284.5,173.1 285.2,172.4 286.0,171.7 286.8,171.0 287.5,170.2 288.2,169.5 289.0,168.8 289.8,168.1 290.5,167.4 291.2,166.7 292.0,166.0 292.8,165.3 293.5,164.6 294.2,163.9 295.0,163.2 295.8,162.5 296.5,161.8 297.2,161.0 298.0,160.3 298.8,159.6 299.5,158.9 300.2,158.2 301.0,157.5 301.8,156.8 302.5,156.1 303.2,155.4 304.0,154.7 304.8,154.0 305.5,153.2 306.2,152.5 307.0,151.8 307.8,151.1 308.5,150.4 309.2,149.7 310.0,149.0 310.8,148.3 311.5,147.6 312.2,146.9 313.0,146.2 313.8,145.5 314.5,144.8 315.2,144.0 316.0,143.3 316.8,142.6 317.5,141.9 318.2,141.2 319.0,140.5 319.8,139.8 320.5,139.1 321.2,138.4 322.0,137.7 322.8,137.0 323.5,136.2 324.2,135.5 325.0,134.8 325.8,134.1 326.5,133.4 327.2,132.7 328.0,132.0 328.8,131.3 329.5,130.6 330.2,129.9 331.0,129.2 331.8,128.5 332.5,127.7 333.2,127.0 334.0,126.3 334.8,125.6 335.5,124.9 336.2,124.2 337.0,123.5 337.8,122.8 338.5,122.1 339.2,121.4 340.0,120.7 340.8,120.0 341.5,119.3 342.2,118.5 343.0,117.8 343.8,117.1 344.5,116.4 345.2,115.7 346.0,115.0 346.8,114.3 347.5,113.6 348.2,112.9 349.0,112.2 349.8,111.5 350.5,110.8 351.2,110.0 352.0,109.3 352.8,108.6 353.5,107.9 354.2,107.2 355.0,106.5 355.8,105.8 356.5,105.1 357.2,104.4 358.0,103.7 358.8,103.0 359.5,102.3 360.2,101.5 361.0,100.8 361.8,100.1 362.5,99.4 363.2,98.7 364.0,98.0 364.8,97.3 365.5,96.6 366.2,95.9 367.0,95.2 367.8,94.5 368.5,93.8 369.2,93.0 370.0,92.3 370.8,91.6 371.5,90.9 372.2,90.2 373.0,89.5 373.8,88.8 374.5,88.1 375.2,87.4 376.0,86.7 376.8,86.0 377.5,85.2 378.2,84.5 379.0,83.8 379.8,83.1 380.5,82.4 381.2,81.7 382.0,81.0 382.8,80.3 383.5,79.6 384.2,78.9 385.0,78.2 385.8,77.5 386.5,76.7 387.2,76.0 388.0,75.3 388.8,74.6 389.5,73.9 390.2,73.2 391.0,72.5 391.8,71.8 392.5,71.1 393.2,70.4 394.0,69.7 394.8,69.0 395.5,68.3 396.2,67.5 397.0,66.8 397.8,66.1 398.5,65.4 399.2,64.7 400.0,64.0 400.8,63.3 401.5,62.6 402.2,61.9 403.0,61.2 403.8,60.5 404.5,59.8 405.2,59.0 406.0,58.3 406.8,57.6 407.5,56.9 408.2,56.2 409.0,55.5 409.8,54.8 410.5,54.1 411.2,53.4 412.0,52.7 412.8,52.0 413.5,51.2 414.2,50.5 415.0,49.8 415.8,49.1 416.5,48.4 417.2,47.7 418.0,47.0 418.8,46.3 419.5,45.6 420.2,44.9 421.0,44.2 421.8,43.5 422.5,42.8 423.2,42.0 424.0,41.3 424.8,40.6 425.5,39.9 426.2,39.2 427.0,38.5 427.8,37.8 428.5,37.1 429.2,36.4 430.0,35.7 430.8,35.0 431.5,34.2 432.2,33.5 433.0,32.8 433.8,32.1 434.5,31.4 435.2,30.7 436.0,30.0" style="fill:none;stroke:var(--grid);stroke-width:1"/><polyline clip-path="url(#gcd7df6d9e)" points="256.0,200.0 256.8,197.5 257.5,195.1 258.2,192.7 259.0,190.3 259.8,187.9 260.5,185.6 261.2,183.3 262.0,181.0 262.8,178.7 263.5,176.5 264.2,174.2 265.0,172.1 265.8,169.9 266.5,167.8 267.2,165.6 268.0,163.5 268.8,161.5 269.5,159.4 270.2,157.4 271.0,155.4 271.8,153.5 272.5,151.5 273.2,149.6 274.0,147.7 274.8,145.9 275.5,144.0 276.2,142.2 277.0,140.4 277.8,138.7 278.5,136.9 279.2,135.2 280.0,133.5 280.8,131.8 281.5,130.2 282.2,128.6 283.0,127.0 283.8,125.4 284.5,123.9 285.2,122.4 286.0,120.9 286.8,119.4 287.5,118.0 288.2,116.6 289.0,115.2 289.8,113.8 290.5,112.5 291.2,111.2 292.0,109.9 292.8,108.6 293.5,107.4 294.2,106.2 295.0,105.0 295.8,103.8 296.5,102.7 297.2,101.6 298.0,100.5 298.8,99.4 299.5,98.4 300.2,97.4 301.0,96.4 301.8,95.4 302.5,94.5 303.2,93.6 304.0,92.7 304.8,91.9 305.5,91.0 306.2,90.2 307.0,89.4 307.8,88.7 308.5,87.9 309.2,87.2 310.0,86.5 310.8,85.9 311.5,85.2 312.2,84.6 313.0,84.0 313.8,83.5 314.5,82.9 315.2,82.4 316.0,81.9 316.8,81.5 317.5,81.1 318.2,80.6 319.0,80.3 319.8,79.9 320.5,79.6 321.2,79.3 322.0,79.0 322.8,78.7 323.5,78.5 324.2,78.3 325.0,78.1 325.8,77.9 326.5,77.8 327.2,77.7 328.0,77.6 328.8,77.5 329.5,77.5 330.2,77.5 331.0,77.5 331.8,77.6 332.5,77.6 333.2,77.7 334.0,77.8 334.8,78.0 335.5,78.1 336.2,78.3 337.0,78.6 337.8,78.8 338.5,79.1 339.2,79.4 340.0,79.7 340.8,80.0 341.5,80.4 342.2,80.8 343.0,81.2 343.8,81.6 344.5,82.1 345.2,82.6 346.0,83.1 346.8,83.7 347.5,84.2 348.2,84.8 349.0,85.5 349.8,86.1 350.5,86.8 351.2,87.5 352.0,88.2 352.8,88.9 353.5,89.7 354.2,90.5 355.0,91.3 355.8,92.2 356.5,93.0 357.2,93.9 358.0,94.8 358.8,95.8 359.5,96.8 360.2,97.7 361.0,98.8 361.8,99.8 362.5,100.9 363.2,102.0 364.0,103.1 364.8,104.2 365.5,105.4 366.2,106.6 367.0,107.8 367.8,109.1 368.5,110.4 369.2,111.6 370.0,113.0 370.8,114.3 371.5,115.7 372.2,117.1 373.0,118.5 373.8,120.0 374.5,121.4 375.2,122.9 376.0,124.4 376.8,126.0 377.5,127.6 378.2,129.2 379.0,130.8 379.8,132.4 380.5,134.1 381.2,135.8 382.0,137.5 382.8,139.3 383.5,141.0 384.2,142.8 385.0,144.7 385.8,146.5 386.5,148.4 387.2,150.3 388.0,152.2 388.8,154.2 389.5,156.1 390.2,158.1 391.0,160.2 391.8,162.2 392.5,164.3 393.2,166.4 394.0,168.5 394.8,170.7 395.5,172.8 396.2,175.0 397.0,177.3 397.8,179.5 398.5,181.8 399.2,184.1 400.0,186.4 400.8,188.8 401.5,191.1 402.2,193.5 403.0,196.0 403.8,198.4 404.5,200.9 405.2,203.4 406.0,205.9 406.8,208.5 407.5,211.0 408.2,213.6 409.0,216.3 409.8,218.9 410.5,221.6 411.2,224.3 412.0,227.0 412.8,229.8 413.5,232.5 414.2,235.3 415.0,238.2 415.8,241.0 416.5,243.9 417.2,246.8 418.0,249.7 418.8,252.7 419.5,255.7 420.2,258.7 421.0,261.7 421.8,264.7 422.5,267.8 423.2,270.9 424.0,274.0 424.8,277.2 425.5,280.4 426.2,283.6 427.0,286.8 427.8,290.1 428.5,293.3 429.2,296.6 430.0,300.0 430.8,303.3 431.5,306.7 432.2,310.1 433.0,313.5 433.8,317.0 434.5,320.5 435.2,324.0 436.0,327.5" style="fill:none;stroke:var(--ink);stroke-width:1.8"/><polyline clip-path="url(#gcd7df6d9e)" points="277.2,200.0 277.2,140.0 319.5,140.0 319.5,80.0 383.1,80.0 383.1,140.0 319.5,140.0 319.5,80.0 383.1,80.0 383.1,140.0 319.5,140.0 319.5,80.0 383.1,80.0 383.1,140.0 319.5,140.0 319.5,80.0 383.1,80.0 383.1,140.0 319.5,140.0 319.5,80.0 383.1,80.0 383.1,140.0 319.5,140.0 319.5,80.0 383.1,80.0 383.1,140.0 319.5,140.0 319.5,80.0 383.1,80.0" style="fill:none;stroke:var(--ember);stroke-width:1.4"/><text x="346" y="20" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">hr = 2.5: bounces away</text><text x="230.0" y="240" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">Pₙ₊₁ = Pₙ + hrPₙ(1 − Pₙ/K), stepped on its graph against the diagonal</text></svg></div><!--/gfig 24j4-->
+  <p data-pid="541f94">Resting-value technique: <b>if y settles to a limit (22’s settling) and y′ has a transform near s = 0, the resting value is the limit of sY(s) as s goes to 0.</b> The condition matters: Y = 1/(s − 1) gives sY → 0, yet eᵗ never rests. Check the roots of the bottom first: all of them below zero, and y settles.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">24j4.1</span><span class="ph understand">understand</span>What does the logistic-walk technique say? <br>What can the yearly walk do that the smooth statement cannot?</li>
+      <li><span class="qid">24j4.1</span><span class="ph understand">understand</span>How is the resting value read straight off sY(s), and when does that reading lie?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="24j5">
   <h2 class="sthead"><span class="stno">24j5</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-P = \tfrac{K}{1 + Ce^{-rt}} \text{ solves the statement, so no other solution starts at } P_0\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; checking one solution says nothing about others; tameness and the drift technique do (24j1, 24f2)
-P \text{ climbs toward } K, \text{ so it reaches } K \text{ and rests there}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it would touch the resting line P = K, and a tame statement forbids it (24f3)
-\tfrac1P \text{ closes on } \tfrac1K \text{ by a fixed factor, so } P \text{ closes on } K \text{ by the same factor}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the factor is for the gap in 1/P; the gap in P shrinks by a factor that changes
-\text{the smooth statement settles at } K, \text{ so the yearly walk does too}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only when hr &lt; 2; past it the walk swings (24j4)
+  <p data-pid="443b49">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\dfrac{s+3}{(s+1)(s+2)} \to e^{-t} + 3e^{-2t}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; split first: 2/(s + 1) − 1/(s + 2) (24j1)
+\lim_{s\to 0} sY \text{ is always the resting value}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only if y settles; 1/(s − 1) gives 0 for eᵗ (24j4)
+\lim_{s\to\infty} sY \text{ is the resting value}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; s → 0 gives the far future; s → ∞ gives the start (24j4)
+\text{fit the starts after reading back}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; they are already in Y (24j1)
+\text{two functions with one transform may differ anywhere}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; continuous ones cannot; sums of growths checked here (24j3)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">24j5.1</span><span class="ph understand">understand</span>Why is “P = K/(1 + Ce^(−rt)) solves the statement, so no other solution starts at P₀” a move to watch out for?</li>
+      <li><span class="qid">24j5.1</span><span class="ph understand">understand</span>Which move above reads the resting value at the wrong end of s, and which end gives it?</li>
     </ol>
   </section>
 </section>
@@ -166,71 +134,25 @@ P \text{ climbs toward } K, \text{ so it reaches } K \text{ and rests there}\,? 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">24j.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="P&#x27; = rP\ln\tfrac{K}{P}"></span></span>Build the solution from P(0) = P₀ with 0 &lt; P₀ &lt; K, using u = ln(P/K). <br>Find the size at which this statement grows fastest, and compare it with the logistic's K/2.</div>
-  <div class="chq"><span class="chid">24j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="P&#x27; = P\big(1 - \tfrac{P}{10^6}\big)"></span></span>Find the time to reach half the ceiling from P₀ = 1, and from P₀ = 0.001. <br>Find how that time grows as P₀ heads to 0, and what the statement does from P₀ = 0.</div>
-  <div class="chq"><span class="chid">24j.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="P(t) = K\big(\tfrac12 + \tfrac1\pi\arctan t\big)"></span></span>It rises from 0 to K and grows fastest at P = K/2: must such a curve be logistic? <br>Find P′ as a function of P alone, and whether it is rP(1 − P/K) for any r.</div>
-  <div class="chq"><span class="chid">24j.4.4</span><span class="tagq">reroute</span>Solve the logistic statement for u = 1/P with the integrating factor of 24g, and again by separating the variables (24f), with 17·bio’s split of K/(P(K − P)).</div>
-  <div class="chq"><span class="chid">24j.4.5</span><span class="tagq">seam</span>In 1920 two biologists fitted the logistic curve to the United States censuses from 1790 to 1910, found it fit closely, and called it a law of population growth. In 1940 a mathematician showed that curves from quite different statements fit the same records, and many records of other populations, just as closely. <br>This step showed that any three counts fix a logistic curve exactly. Was the close fit evidence for the law, or only for the curve? What would a law of growth have to do that a close fit to past counts cannot?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">24j.6.1</span><span class="tagq">do</span>Solve y″ − y = 0 with y(0) = 0, y′(0) = 2 by the transform.</div>
+  <div class="chq"><span class="chid">24j.6.2</span><span class="tagq">make</span>Make up a Y(s) whose reading back is 3 − e^(−2t), and check its resting value by the s → 0 rule.</div>
+  <div class="chq"><span class="chid">24j.6.3</span><span class="tagq">converse</span>If every root of Y’s bottom is below zero, y settles. Decide whether y settling means every root is below zero.</div>
+  <div class="chq"><span class="chid">24j.6.4</span><span class="tagq">edge</span>Let Y = 1/s². Say what y is and whether the resting-value rule applies.</div>
+  <div class="chq"><span class="chid">24j.6.5</span><span class="tagq">open</span>Say how the transform would handle a tap that is opened at t = 0 and closed at t = 5.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r24i.html">← 24i · rate statements turned into algebra</a><a href="r24k.html">24k · slope fields and stepping forward →</a></nav>
 
-<nav class="nextrung"><a href="r24i.html">← 24i · slope fields and stepping forward</a><a href="r24k.html">24k · fixed points, stability and the start of chaos →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>The logistic statement is the logistic (Verhulst) equation; K is the carrying capacity and r the intrinsic rate of increase. The solutions P = 0 and P = K are its equilibria. The substitution u = 1/P is the standard way to solve a Bernoulli equation. The three-counts formula is a method of fitting from three equally spaced points. The yearly walk, in x, is the logistic map, and the function P′ = rP ln(K/P) of the build standing question is the Gompertz equation.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="d8f409">Reading back is the <b>inverse Laplace transform</b>; the same-transform technique is <b>Lerch’s theorem</b>; the resting-value technique is the <b>final value theorem</b>, and s → ∞ gives the <b>initial value theorem</b>. The switched-on push is the <b>Heaviside step function</b>, and the roots of Y’s bottom are its <b>poles</b>.</p>
   <h3>Who said it first</h3>
-  <p>Pierre-François Verhulst proposed the statement in 1838 and named its curve the logistic in 1845. Raymond Pearl and Lowell Reed found it again in 1920, fitted it to the census and called it a law. William Feller showed in 1940 that other S-shaped curves fit the same data as well. Benjamin Gompertz proposed his statement in 1825, for human mortality. Robert May showed in 1976 how wild the yearly version can be.</p>
+  <p data-pid="197a71">Mathias Lerch proved that a transform fixes its function in 1903. The final value theorem became a tool of control engineers from the 1930s.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
-const V=c=>'var('+c+')';
-function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
-  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
-  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
-  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
-  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
-  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
-  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
-    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
-    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
-  return s+'</svg>'; }
-
-let yr=1950; const e=$('kn'); e.addEventListener('input',()=>{ yr=+e.value; draw(); });
-const cen=[[1790,3.929],[1800,5.308],[1810,7.240],[1820,9.638],[1830,12.866],[1840,17.069],[1850,23.192],[1860,31.443],[1870,38.558],[1880,50.189],[1890,62.980],[1900,76.212],[1910,92.228],[1920,106.022],[1930,123.203],[1940,132.165],[1950,151.326],[1960,179.323],[1970,203.212],[1980,226.546],[1990,248.710],[2000,281.422],[2010,308.746],[2020,331.449]];
-const u1=1/3.929214,u2=1/23.191876,u3=1/92.228496, iK=(u1*u3-u2*u2)/(u1+u3-2*u2), q=(u3-u2)/(u2-u1);
-const Pm=t=>1/(iK+(u1-iK)*Math.pow(q,(t-1790)/60));
-function draw(){ const pts=[]; for(let i=0;i<=115;i++){ const t=1790+2*i; pts.push([t,Pm(t)]); }
-  const dots=cen.filter(c=>c[0]<=yr);
-  $('pl').innerHTML=plot({xlo:1790,xhi:2020,ylo:0,yhi:350,ticks:[0,100,200,300],h:[{y:1/iK,c:'--teal',t:'K ≈ 199'}],series:[{pts,c:'--ink',open:true,dots:false,w:2.2},{pts:dots,c:'--ember',r:2.6}]});
-  $('okn').textContent=yr; const c=cen.find(c=>c[0]===yr); const v=$('vd');
-  const gap=c[1]-Pm(yr); v.className='verdict'+(Math.abs(gap)<0.05*c[1]?' win':' lose');
-  v.textContent=yr+': census '+c[1].toFixed(1)+' million, curve '+Pm(yr).toFixed(1)+' million, off by '+(100*Math.abs(gap)/c[1]).toFixed(1)+'%.'; }
-draw();
-window.__pic={set:j=>{ yr=j; draw(); return $('vd').textContent; }};
-
-stepper('#sl1',[
-  {k:'ember',kl:'the formula',t:R`P = \tfrac{K}{1 + Ce^{-rt}},\ \ C = \tfrac{K - P_0}{P_0}`,n:`Checked in the statement.`},
-  {k:'ember',kl:'above K',t:R`-1 < C < 0:\ P \downarrow K`,n:`Falls to the ceiling.`},
-  {k:'ember',kl:'below 0',t:R`\htmlClass{new}{C < -1:\ \text{run-off at } t = \tfrac{\ln(-C)}{r}}`,n:`Like y′ = y².`}
-],{title:'The slides · every start · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'u = 1/P',t:R`u' = -r\big(u - \tfrac1K\big)`,n:`The cooling statement of 17j.`},
-  {k:'ember',kl:'three counts',t:R`\htmlClass{new}{\tfrac1K = \tfrac{u_1u_3 - u_2^2}{u_1 + u_3 - 2u_2}}`,n:`Equal times apart.`},
-  {k:'ember',kl:'the census',t:R`K \approx 199 \text{ million (1790, 1850, 1910)}`,n:`A curve, not yet a law.`}
-],{title:'The slides · turned over · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

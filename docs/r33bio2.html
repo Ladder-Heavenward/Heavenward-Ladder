@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>33·bio2 · How Does a Cell Get Things Where They Need to Go?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r33bio.html">← 33·bio how does a leopard get its spots?</a><a href="r33eng.html">next: 33·eng why do corners crack? →</a></p>
+  <div class="tags"><span class="tag bio">33·bio2 · biology</span></div>
+  <h1>How Does a Cell Get Things Where They Need to Go?</h1>
+  <p data-pid="f44abe">How does a cell get things where they need to go? Inside a cell there are no pipes and no pumps for most things: molecules simply jostle, and by jostling they spread. Over a bacterium that is fast enough. Over a nerve cell a metre long it would take centuries. This page finds how far jostling carries a molecule in a given time, by rung 30’s random walks and rung 33’s heat equation, works out times across cells of different sizes, finds the motors that carry cargo where jostling cannot, sees why cells are small, and finds the surprising answer to how much of its surface a cell must cover to catch what it needs.</p>
+  <p class="gesture" data-pid="fe169e">A jostling molecule spreads a typical distance √(2Dt) in time t, so crossing a length L takes about L²/(2D): ten times the distance, a hundred times the time. Short trips use jostling; long ones need motors walking along tracks at a steady speed. A ball of radius a absorbing from far away catches molecules at 4πDac, growing with a, not with its area.</p>
+</header>
+
+<section class="class step" data-step="33bio21">
+  <h2 class="sthead"><span class="stno">33bio21</span>Spreading by Jostling</h2>
+  <p data-pid="727fc0">A protein in a cell is knocked about by water molecules, each knock a random step. From here on, on this page, its <i>spreading constant</i> D measures how fast it spreads; for a typical protein inside a cell, D is about 10 square micrometres a second.</p>
+  <pre class="lines" data-k="ember" data-label="this page: how far in time t">
+\text{a walk of } n \text{ random steps of size } s:\ \text{spread}^2 = n s^2 @@ spreads² add (30n)
+n \propto t \Rightarrow \text{spread}^2 = 2Dt @@ along one line
+\text{spread} = \sqrt{2Dt} @@ the heat equation’s spreading, √t (33b)
+\htmlClass{new}{t \approx L^2 / (2D)} @@ the time to cross a length L
+  </pre>
+  <p data-pid="a5610e">Jostling technique: <b>a molecule spreads a typical distance √(2Dt) in time t, so crossing a length L takes about L²/(2D).</b> Twice the distance takes four times as long.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·bio2.1.1</span><span class="ph understand">understand</span>How far does jostling carry a molecule in time t, and how long does it take to cross a length L?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33bio22">
+  <h2 class="sthead"><span class="stno">33bio22</span>Times Across Cells</h2>
+  <p data-pid="025db3">Put in sizes, with D = 10 μm²/s for a protein.</p>
+  <pre class="lines" data-k="ember" data-label="this page: crossing times">
+\text{a bacterium, } 1\ \mu\text{m}:\ 1/20 = 0.05 \text{ s} @@ fast
+\text{a human cell, } 20\ \mu\text{m}:\ 400/20 = 20 \text{ s} @@ slow but workable
+\text{a nerve fibre, } 1 \text{ m} = 10^6\ \mu\text{m}:\ 10^{12}/20 = 5 \times 10^{10} \text{ s} @@ a million micrometres
+\htmlClass{new}{\approx 1600 \text{ years}} @@ from the spinal cord to the foot
+  </pre>
+  <p data-pid="a93074"><b>Jostling is quick over a micrometre and hopeless over a metre, because its time grows as the square of the distance.</b> A nerve cell makes its proteins near its centre and must deliver them to the far tip of a fibre that can be a metre long.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·bio2.2.1</span><span class="ph understand">understand</span>How long does jostling take across a bacterium, a human cell and a nerve fibre, and why do the times differ so much?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33bio23">
+  <h2 class="sthead"><span class="stno">33bio23</span>Motors on Tracks</h2>
+  <p data-pid="adf49b">Cells lay down long protein tracks, and small motor proteins walk along them, two-footed, carrying cargo, each step paid for with one molecule of fuel.</p>
+  <pre class="lines" data-k="ember" data-label="this page: walking instead of jostling">
+\text{walking: time} = L / v @@ grows only as the distance
+\text{fast transport in nerves: up to about } 400 \text{ mm a day} @@ measured
+1 \text{ m}:\ 1000/400 = 2.5 \text{ days} @@ against 1600 years
+\htmlClass{new}{L/v < L^2/(2D) \iff L > 2D/v} @@ past that length, walking wins
+  </pre>
+  <p data-pid="1728ac">Motor technique: <b>past a length of about 2D/v, walking at speed v beats jostling, and the advantage grows with the distance.</b> For a motor at about 1 μm/s and a protein with D = 10, that length is about 20 μm: the size of a cell. Small cells jostle; large ones need roads.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·bio2.3.1</span><span class="ph understand">understand</span>Why do long trips in a cell need motors, and past what length does walking beat jostling?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33bio24">
+  <h2 class="sthead"><span class="stno">33bio24</span>Why Cells Are Small</h2>
+  <p data-pid="e82899">A round cell of radius r burns food and oxygen through its whole volume, but takes them in through its surface.</p>
+  <pre class="lines" data-k="ember" data-label="this page: supply against need">
+\text{need} \propto \tfrac43 \pi r^3 @@ every part uses
+\text{supply through the surface} \propto 4\pi r^2 @@ what can cross the skin
+\text{supply / need} \propto 3/r @@ falls as the cell grows
+\htmlClass{new}{\text{past some radius, the surface cannot feed the inside}} @@ and jostling is too slow to fill it
+  </pre>
+  <p data-pid="e99489"><b>Need grows as the cube of a cell’s size and supply as the square, and jostling slows as the square of the distance: so cells stay small, or build roads and folds.</b> Large creatures are made of many small cells, not a few large ones.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·bio2.4.1</span><span class="ph understand">understand</span>Why does a cell’s supply fall behind its need as it grows?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33bio25">
+  <h2 class="sthead"><span class="stno">33bio25</span>How Much Surface Must Catch?</h2>
+  <p data-pid="b55070">A cell catches a nutrient with catchers on its surface. How much does the catch depend on covering the surface? First, a ball of radius a that catches every molecule touching it, in a fluid of concentration c far away. Steady jostling makes the concentration an average of its neighbours, as in 33f, so in space it goes as 1/r.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the catch of a ball">
+c(r) = c\,(1 - a/r) @@ 0 at the ball, c far off: steady (33f)
+\text{flow in} = 4\pi r^2 \cdot D\,c\prime(r) = 4\pi r^2 \cdot D c a / r^2 @@ flux through any sphere (28l)
+\htmlClass{new}{\text{catch} = 4\pi D a c} @@ grows as the radius, not the area
+\text{a few thousand small catchers: nearly the whole catch} @@ each catcher is a small ball of its own
+  </pre>
+  <p data-pid="c625a0">Catch technique: <b>a ball catches from its surroundings at 4πDac, in proportion to its radius; so a few thousand small catchers spread over a cell catch nearly as much as a fully covered surface, leaving room for everything else.</b> Jostling is wasteful over distance but generous to small targets.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·bio2.5.1</span><span class="ph understand">understand</span>Why does a ball’s catch grow as its radius, and why do a few thousand small catchers nearly match a fully covered cell?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33bio26">
+  <h2 class="sthead"><span class="stno">33bio26</span>Moves to Watch Out For</h2>
+  <p data-pid="525cb4">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{twice the distance, twice the time}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; jostling time grows as L²: four times (33bio21)
+\text{a nerve fibre can rely on jostling}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; about 1600 years for a metre (33bio22)
+\text{the catch grows as the area covered}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a ball’s catch grows as its radius, 4πDac (33bio25)
+\text{bigger cells are fed better}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; supply grows as r², need as r³ (33bio24)
+\text{walking always beats jostling}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; only past about 2D/v; below that, jostling is quicker (33bio23)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·bio2.6.1</span><span class="ph understand">understand</span>Which move above makes jostling time grow in step with distance, and how does it really grow?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">33·bio2.7.1</span><span class="tagq">do</span>A sugar molecule has D = 600 μm²/s in water. Find how long it takes to jostle across a 20 μm cell and across 1 cm.</div>
+  <div class="chq"><span class="chid">33·bio2.7.2</span><span class="tagq">make</span>Make up a motor speed v and a spreading constant D for which walking beats jostling only past 1 mm.</div>
+  <div class="chq"><span class="chid">33·bio2.7.3</span><span class="tagq">converse</span>Jostling across L takes about L²/(2D). Decide whether a molecule that crosses L in time L²/(2D) must be jostling.</div>
+  <div class="chq"><span class="chid">33·bio2.7.4</span><span class="tagq">edge</span>Let the catching ball of 33bio25 shrink to radius 0. Say what its catch heads to, and what that means for very small targets.</div>
+  <div class="chq"><span class="chid">33·bio2.7.5</span><span class="tagq">open</span>Plant cells can be large, with a big watery store in the middle. Say how a large store that uses nothing changes the supply-against-need count of 33bio24.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r33bio.html">← 33·bio · how does a leopard get its spots?</a><a href="r33eng.html">33·eng · why do corners crack? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="d02f0c">Spreading by jostling is <b>diffusion</b>, the jostling itself <b>Brownian motion</b> (30·then), and D the <b>diffusion coefficient</b>. The tracks are <b>microtubules</b> and the motors <b>kinesin</b> and <b>dynein</b>; carriage along a nerve fibre is <b>axonal transport</b>. Supply against need is the <b>surface-to-volume ratio</b>, and 4πDac the <b>diffusion-limited rate</b>, or <b>Smoluchowski rate</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="384659">Albert Einstein linked jostling to spreading, √(2Dt), in 1905. Marian Smoluchowski found the catch of a ball in 1917. Howard Berg and Edward Purcell showed in 1977 that a few thousand small catchers nearly match a covered cell. Kinesin was found in 1985.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>31·comp · How Does a Machine Guess the Next Word?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31now.html">← 31·now how can a picture be stored small?</a><a href="r31concl.html">next: 31·∎ one product gives functions lengths, angles and closest points →</a></p>
+  <div class="tags"><span class="tag comp">31·comp · computing</span></div>
+  <h1>How Does a Machine Guess the Next Word?</h1>
+  <p data-pid="6df1d9">How does a machine guess the next word? The programs that write and answer in plain language do one thing over and over: given the words so far, give each possible next word a chance, and pick one. Everything else is how those chances are made. This page builds chances by counting pairs of words, scores a model by logs of its chances, finds why counting cannot go far, turns words into arrows whose angles say how alike they are, as rung 31 gives functions angles, and lets each word weigh the earlier ones by a dot product.</p>
+  <p class="gesture" data-pid="c9b082">Give the next word a chance from what came before. Counting pairs gives P(next | last); a sentence’s chance is the product, and its log a sum; score a model by the average log chance it gives to text it has not seen. Make each word an arrow, so alike words point alike and the cosine of their angle measures it. To use the whole past, weigh each earlier word by e to its dot product with a question arrow, divided by the total, and average.</p>
+</header>
+
+<section class="class step" data-step="31comp1">
+  <h2 class="sthead"><span class="stno">31comp1</span>Chances From Counting Pairs</h2>
+  <p data-pid="5aaf1b">Zoe gives a program three sentences to learn from: “the cat sat”, “the cat ran”, “the dog sat”. From here on, on this page, a <i>model</i> gives every word a chance of coming next, given the words so far.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a model of pairs">
+\text{after “the”: cat } 2,\ \text{dog } 1 @@ count the pairs
+P(\text{cat} \mid \text{the}) = \tfrac23,\ \ P(\text{dog} \mid \text{the}) = \tfrac13 @@ each count over the total
+P(\text{sat} \mid \text{cat}) = \tfrac12,\ \ P(\text{ran} \mid \text{cat}) = \tfrac12 @@ after “cat”: sat 1, ran 1
+\htmlClass{new}{P(\text{the cat sat}) = \tfrac23 \cdot \tfrac12 = \tfrac13} @@ each word given the one before
+  </pre>
+  <p data-pid="5cd050">To write, the program starts with “the”, picks the next word by these chances, then the next, and so on. This tiny model can never write “the dog ran”: it never saw “dog ran”, and pairs it has not seen get chance 0.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·comp.1.1</span><span class="ph understand">understand</span>How does counting pairs give the chance of the next word, and of a whole sentence?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31comp2">
+  <h2 class="sthead"><span class="stno">31comp2</span>Scoring a Model With Logs</h2>
+  <p data-pid="5c9103">A good model gives high chances to real text it has not seen. A sentence’s chance is a product of many small chances, too small to compare easily, so take logs (17c): the product becomes a sum.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the score">
+\ln P(\text{sentence}) = \textstyle\sum \ln P(\text{word} \mid \text{before}) @@ the log-of-a-product technique (17c)
+\text{score} = -\tfrac{1}{n} \textstyle\sum \ln P @@ the average surprise per word
+\text{“the cat sat”: } -\tfrac12 (\ln \tfrac23 + \ln \tfrac12) \approx 0.55 @@ two words after “the”
+\htmlClass{new}{e^{0.55} \approx 1.7} @@ as if choosing among 1.7 equal words each time
+  </pre>
+  <p data-pid="443875">Score technique: <b>score a model by the average of −ln P over words of fresh text; e to that score is the number of equal choices it is, in effect, still guessing among.</b> A word it gave chance 0 makes the score endless, so every model must leave some chance for the unseen.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·comp.2.1</span><span class="ph understand">understand</span>How is a model scored with logs, and what does e to the score mean?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31comp3">
+  <h2 class="sthead"><span class="stno">31comp3</span>Words as Arrows</h2>
+  <p data-pid="74750c">Counting cannot know that “dog” is like “cat”, so “the dog ran” stays impossible. Instead give each word an arrow of numbers, chosen so that words used in alike places point alike. Rung 31’s product measures how alike.</p>
+  <pre class="lines" data-k="ember" data-label="this page: angles between words">
+\text{cat} = (1,\ 0.9,\ 0),\ \text{dog} = (0.9,\ 1,\ 0.1),\ \text{stone} = (0,\ 0.1,\ 1) @@ toy arrows
+\cos(\text{cat}, \text{dog}) = \dfrac{\text{cat} \cdot \text{dog}}{|\text{cat}|\,|\text{dog}|} \approx 0.99 @@ angle from one product (31a)
+\cos(\text{cat}, \text{stone}) \approx 0.07 @@ nearly at right angles
+\htmlClass{new}{\text{what follows cat can follow dog}} @@ the model shares what it learns
+  </pre>
+  <p data-pid="918307">Arrow technique: <b>give each word an arrow so that words used alike have a small angle between them; the model then treats alike words alike, and can give “the dog ran” a sensible chance without ever seeing it.</b> Real models use arrows of thousands of numbers, learned from the text itself.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·comp.3.1</span><span class="ph understand">understand</span>Why do arrows for words let a model handle a pair it never saw, and how is likeness measured?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31comp4">
+  <h2 class="sthead"><span class="stno">31comp4</span>Weighing the Earlier Words</h2>
+  <p data-pid="87a947">The next word can depend on a word far back: “the keys that I lost yesterday are…”. So each position makes a <i>question arrow</i> q, and each earlier word offers a <i>key arrow</i> k and a <i>value arrow</i> v. The dot product q · k says how much that word matters now.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one weighing">
+q \cdot k_1 = 2,\ q \cdot k_2 = 0,\ q \cdot k_3 = 1 @@ how much each earlier word matters
+w_i = e^{q \cdot k_i} \big/ \textstyle\sum_j e^{q \cdot k_j} @@ positive, adding to 1
+w \approx (0.67,\ 0.09,\ 0.24) @@ the first word counts most
+\htmlClass{new}{\text{blend} = w_1 v_1 + w_2 v_2 + w_3 v_3} @@ a weighted average of the past
+  </pre>
+  <p data-pid="8c441a">Weighing technique: <b>each position weighs every earlier word by e to the dot product of its question with that word’s key, divided by the total, and averages their values.</b> Stacked many times over, these blends are where the model keeps track of who did what, many words back.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·comp.4.1</span><span class="ph understand">understand</span>How does a position decide how much each earlier word matters, and what does it do with those weights?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31comp5">
+  <h2 class="sthead"><span class="stno">31comp5</span>Learning the Numbers, and What They Are</h2>
+  <p data-pid="e0be3d">Every arrow and every grid in such a model is a number to be chosen, billions of them. They are chosen to make the score of 31comp2 small on a vast amount of text, by 28q’s gradient descent: nudge each number a little downhill, again and again.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what training does">
+\text{goal: make } -\tfrac1n \textstyle\sum \ln P \text{ small on real text} @@ the score
+\text{nudge every number against the slope} @@ gradient descent (28q)
+\text{repeat over trillions of words} @@ the scale of real training
+\htmlClass{new}{\text{the result gives likely continuations, not looked-up facts}} @@ fluent is not the same as true
+  </pre>
+  <p data-pid="4d37fe"><b>A language model is a machine for likely next words, trained to make real text unsurprising.</b> It knows a fact only as far as that fact made text likely, so it can write something fluent, confident and false. Checking what it writes stays the reader’s job.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·comp.5.1</span><span class="ph understand">understand</span>How are a language model’s numbers chosen, and why can its fluent answers still be false?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31comp6">
+  <h2 class="sthead"><span class="stno">31comp6</span>Moves to Watch Out For</h2>
+  <p data-pid="c049ea">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+P(\text{the dog ran}) > 0 \text{ in the pair model}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it never saw “dog ran”: chance 0 (31comp1)
+\text{score by the chance of the training text}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; score on fresh text, or memorising looks best (31comp2)
+\text{alike words: alike spellings}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; alike use, measured by the angle between arrows (31comp3)
+\text{weights } w_i = q \cdot k_i\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; take e of each and divide by the total, so they are positive and add to 1 (31comp4)
+\text{fluent, so true}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; trained for likely words, not for facts (31comp5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·comp.6.1</span><span class="ph understand">understand</span>Which move above uses the dot products as weights directly, and what turns them into weights that add to 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">31·comp.7.1</span><span class="tagq">do</span>Add the sentence “the dog ran” to Zoe’s three. Recount the pairs and find P(the dog ran).</div>
+  <div class="chq"><span class="chid">31·comp.7.2</span><span class="tagq">make</span>Make up arrows for “hot”, “warm” and “cold” in two numbers each, so that hot and warm have cosine above 0.9 and hot and cold below 0.</div>
+  <div class="chq"><span class="chid">31·comp.7.3</span><span class="tagq">converse</span>Alike words have a small angle. Decide whether two words with a small angle must mean alike things, and give an example where they might not.</div>
+  <div class="chq"><span class="chid">31·comp.7.4</span><span class="tagq">edge</span>In 31comp4, every q · kᵢ is the same. Say what the weights become, and what the blend is.</div>
+  <div class="chq"><span class="chid">31·comp.7.5</span><span class="tagq">open</span>A model gives a wrong date with high chance. Using 31comp5, say where that chance came from, and what could be done when answering to check it.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r31now.html">← 31·now · how can a picture be stored small?</a><a href="r31concl.html">31·∎ · one product gives functions lengths, angles and closest points →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="8ee448">A model of chances for the next word is a <b>language model</b>; one from pairs is a <b>bigram model</b>, and from longer runs an <b>n-gram model</b>. e to the average surprise is <b>perplexity</b>, and the average surprise is <b>cross-entropy</b>. Word arrows are <b>word embeddings</b> and their likeness <b>cosine similarity</b>. Weighing earlier words is <b>attention</b>, e over the total the <b>softmax</b>, and models built of stacked attention <b>transformers</b>. A fluent false answer is often called a <b>hallucination</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="17a9ce">Claude Shannon estimated chances of the next letter and word in English in 1948 and 1951. Tomas Mikolov and others learned word arrows from text in 2013, and Ashish Vaswani and others built models from stacked attention in 2017.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

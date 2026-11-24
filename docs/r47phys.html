@@ -1,11 +1,26 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Why Is Stress a Tensor?</title>
+<title>What Are Particles Built From?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
-<style></style>
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
    then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
@@ -33,103 +48,171 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r47comp.html">← 47·comp can a program’s type say what it does?</a><a href="r47eng.html">next: 47·eng can a machine be built by plugging parts together? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r47cb27.html">← 47·cb27 groups as matrices</a><a href="r47chem.html">next: 47·chem why are rubies red and sapphires blue? →</a></p>
   <div class="tags"><span class="tag phys">47·phys · physics</span></div>
-  <h1>Why Is Stress a Tensor?</h1>
-  <p data-pid="d22802">Why is stress a tensor? <a href="r33eng.html#33eng5">33·eng</a> wrote the push on a cut through a sheet as a grid of numbers, and <a href="r27phys.html#27phys4">27·phys</a> wrote the spin of a turning body the same way. Both grids were written on axes someone chose. Turn the axes and every number in the grid changes, yet the sheet and the body have not moved. This page finds what the numbers must do when the axes turn, and why they cannot do anything else: the technique is 47h’s tensor product carrying maps along. A quantity that obeys it belongs to the thing measured. A quantity that breaks it belongs to whoever drew the axes.</p>
-  <p class="gesture" data-pid="9cee01">Stress and inertia are readings of two vectors, so each is one reading of the tensor product of space with itself. When the axes turn to the columns of a length-keeper Q, a vector’s list becomes Qᵀx and the grid of such a reading becomes QᵀGQ. That technique is forced: sending each space V to V ⊗ V and each map f to f ⊗ f is a map of categories. Because of it, the stretches of the grid and its rank are the same on every axes: the principal stresses and the principal inertias belong to the sheet and the body.</p>
+  <h1>What Are Particles Built From?</h1>
+  <p data-pid="218a2d">What are particles built from? A smoke detector in a hallway in Seattle holds a speck of americium that has been throwing off pieces of its nuclei for decades, and will go on for centuries. Every nucleus is made of protons and neutrons, and in the 1950s accelerators turned up dozens of other heavy particles, so many that a physicist joked that finding one should earn a fine rather than a prize. The way out was symmetry. The proton and the neutron have almost the same mass and feel the nuclear pull alike, as if they were two settings of one particle. Widen that symmetry from two settings to three, and the heavy particles fall into families of eight and ten, exactly the sizes of the pieces of rung 48’s representations. One family had a gap, the mass of the missing member was predicted from the spacing, and it was found in 1964. The pieces are explained if every heavy particle is made of smaller ones, quarks, with charges in thirds. This page starts from the deeper technique that a symmetry of the laws keeps an amount, counts the families, builds particles from quarks, weighs nuclei, and checks which decays the kept amounts allow.</p>
+  <p class="gesture" data-pid="9bce14">Each symmetry of the laws keeps an amount: a shift in time keeps energy, a slide keeps momentum, a turn of the phase of a wave keeps charge. A symmetry that turns the proton into the neutron sorts particles into pieces of its representations, of two, then of eight and ten when strangeness is added. Quarks with charges in thirds build them. A nucleus weighs less than its parts by its binding energy, and a decay must keep charge and the count of heavy particles.</p>
 </header>
 
-<section class="class step" data-step="47·phys.1">
-  <h2 class="sthead"><span class="stno">47·phys.1</span>Two Grids, Read Two Ways</h2>
-  <p data-pid="bcea2c"><a href="r33eng.html#33eng5">33·eng5</a> wrote the push per area on a cut whose vector out of the cut is n, of length 1, as σn, and found σ symmetric. <a href="r27phys.html#27phys4">27·phys4</a> wrote the spin of a body turning at ω as Θω, with Θ = Σ mᵢ(|rᵢ|²I − rᵢrᵢᵀ), also symmetric. A grid that turns a vector into a vector can also be read on two vectors: read the vector it makes along a second vector.</p>
-  <p data-pid="53b701">Face-and-axis technique: <b>the stress grid read on two vectors of length 1, mᵀσn, is the push along m on the cut facing n; the inertia grid read twice on one vector u of length 1, uᵀΘu, is the rotational inertia about the axis along u. So each grid is a reading straight in each of two slots, and one reading of ℝ³ ⊗ ℝ³.</b> Proof: mᵀσn = m · (σn) is the part of the push σn along m (27i). For Θ, uᵀΘu = Σ mᵢ(|rᵢ|² − (rᵢ · u)²), and by the right-triangle technique (18a) |rᵢ|² − (rᵢ · u)² is ρᵢ², the square of the distance of the piece from the axis, so the sum is 27·phys3’s I = Σ mρ². Each reading is straight in each slot, so by the two-slot technique (<a href="r27h.html#27h2">27h2</a>) it is xᵀGy, and by 47h1 with U = k it runs through ℝ³ ⊗ ℝ³ as one reading.</p>
-  <pre class="lines" data-k="ember" data-label="this page: 27·phys4’s wheel, about its axle">
-\Theta = \begin{pmatrix}0.02 & -0.02 & 0\\ -0.02 & 0.02 & 0\\ 0 & 0 & 0.04\end{pmatrix},\ \ u = (1, 0, 0) @@ two 1 kg lumps at ±(0.1, 0.1, 0) m
-u^{\mathsf T}\Theta u = 0.02 \text{ kg m}^2 @@ the face-and-axis technique
-\htmlClass{new}{\textstyle\sum m\rho^2 = 2 \cdot 1 \cdot (0.1)^2 = 0.02} \quad \blacksquare @@ each lump 0.1 m from the axle, as 27·phys3 counts it
+<section class="class step" data-step="46phys1">
+  <h2 class="sthead"><span class="stno">46phys1</span>A Symmetry Keeps an Amount</h2>
+  <p data-pid="7b8a1e">29·then’s symmetry-keeps technique got momentum from the slide of a path and energy from a shift in time, and the planet’s equal areas from a turn. A third symmetry lives in the waves of 35·phys. The wave law iħ ∂ψ/∂t = −(ħ²/2m) ∂²ψ/∂x² + Vψ is unchanged when ψ is turned by a fixed phase, ψ ↦ e^(iθ)ψ: both sides are multiplied by the same e^(iθ). The amount that this symmetry keeps is the total of |ψ|², the chance of finding the particle somewhere, and for a charged particle its charge q times that.</p>
+  <p data-pid="4ad08d">Phase-keeps technique: <b>if ψ obeys the wave law and dies away at both ends, the total of |ψ|² does not change in time, because its rate is a flow out of the ends.</b></p>
+  <pre class="lines" data-k="ember" data-label="this page: the phase-keeps technique">
+\partial_t |\psi|^2 = \bar\psi\,\partial_t\psi + \psi\,\partial_t\bar\psi @@ |ψ|² = ψ̄ψ, the product technique
+= \tfrac{i\hbar}{2m}\big(\bar\psi\,\psi'' - \psi\,\bar\psi''\big) @@ the wave law and its flip; the Vψ terms cancel because V is real
+= -\partial_x j,\ \ j = \tfrac{\hbar}{2mi}\big(\bar\psi\,\psi' - \psi\,\bar\psi'\big) @@ the derivative of j gives back the line above; the ψ̄′ψ′ terms cancel
+\htmlClass{new}{\tfrac{d}{dt}\textstyle\int |\psi|^2\,dx = -\big[j\big]_{-\infty}^{\infty} = 0} \quad \blacksquare @@ 16’s undoing, with ψ dying away at the ends
   </pre>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · two readings · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this page: one flow, in numbers">
+\psi = A e^{ikx}:\ \ j = \tfrac{\hbar k}{m}|A|^2 = v|A|^2 @@ the chance flows at the particle’s speed
+\text{an electron of } 1 \text{ eV}:\ v = \sqrt{2E/m} = \sqrt{2 \cdot 1.602 \times 10^{-19} / 9.109 \times 10^{-31}} @@ ½mv² = E
+\htmlClass{new}{v \approx 5.93 \times 10^5 \text{ m/s}} \quad \blacksquare @@ times the charge −1.602 × 10⁻¹⁹ C and |A|² per metre, it is a current in amperes
+  </pre>
+  <p data-pid="e92beb">So three symmetries, three kept amounts: shift in time, energy; slide in place, momentum; turn of phase, charge. Each is a law, measured never to fail; the symmetry says why it holds, and a failure of the symmetry would show as a failure of the law.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · kept amounts · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">47·phys.1.1</span><span class="ph understand">understand</span>What does the face-and-axis technique say each grid reads? <br>For the wheel above, what is the rotational inertia about the axis along (0, 0, 1)?</li>
+      <li><span class="qid">47·phys.1.1</span><span class="ph understand">understand</span>Which amount does each of the three symmetries keep: a shift in time, a slide, a turn of the phase? <br>What does the phase-keeps technique say, and why do the V terms cancel?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="47·phys.2">
-  <h2 class="sthead"><span class="stno">47·phys.2</span>Turning the Axes</h2>
-  <p data-pid="fa3ad7">Choose new axes: a right-angled basis of vectors of length 1, written as the columns of a grid Q. By the length-keeper technique (<a href="r27m.html#27m1">27m1</a>) QᵀQ = I, so Q is undone by Qᵀ. A vector whose list on the old axes is x has the list x′ on the new axes with x = Qx′, so x′ = Qᵀx.</p>
-  <p data-pid="19a50d">New-axes technique: <b>when the axes turn to the columns of a length-keeper Q, a vector’s list becomes Qᵀx, and the grid of a reading of two vectors becomes QᵀGQ; the number the reading gives does not change.</b> Proof: B(x, y) = xᵀGy = (Qx′)ᵀG(Qy′) = x′ᵀ(QᵀGQ)y′, since the turn of a row of two grids is the row of their turns the other way round.</p>
-  <pre class="lines" data-k="ember" data-label="this page: pure shear, on axes turned by 45°">
-\sigma = \begin{pmatrix}0 & \tau\\ \tau & 0\end{pmatrix},\ \ Q = \tfrac{1}{\sqrt2}\begin{pmatrix}1 & -1\\ 1 & 1\end{pmatrix} @@ 33·eng.4’s sliding sheet; Q turns the axes by 45°
-\sigma Q = \tfrac{\tau}{\sqrt2}\begin{pmatrix}1 & 1\\ 1 & -1\end{pmatrix} @@ row by column
-Q^{\mathsf T}\sigma Q = \tfrac{\tau}{2}\begin{pmatrix}2 & 0\\ 0 & -2\end{pmatrix} @@ the new-axes technique
-\htmlClass{new}{Q^{\mathsf T}\sigma Q = \begin{pmatrix}\tau & 0\\ 0 & -\tau\end{pmatrix}} \quad \blacksquare @@ a pull τ and a push τ, no shear: 33·eng5’s stress-axes technique, read as a turning of the axes
+<section class="class step" data-step="46phys2">
+  <h2 class="sthead"><span class="stno">46phys2</span>Two Settings of One Particle</h2>
+  <p data-pid="c6be19">The proton weighs 938.272 MeV (in energy units, mc²) and the neutron 939.565 MeV, a difference of 0.14%. Nuclei with protons and neutrons swapped, like tritium (one proton, two neutrons) and helium-3 (two protons, one neutron), are bound by 8.482 and 7.718 MeV. Treat the proton and neutron as the up and down vectors of a two-direction space, like 38·phys’s spin, and suppose the nuclear pull is unchanged by every grid of ℂ² that keeps lengths and has determinant 1, written SU(2). That is <i>isospin</i>. Its pieces have 1, 2, 3, 4, … members, one of each size; a piece of 2I + 1 members has isospin I. 47·cb27 proved that every representation of a finite group is a sum of whole pieces, and SU(2) is not finite, so the splitting and the list of pieces are held in trust here, not proved on the Ladder.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what breaks the symmetry, in numbers">
+8.482 - 7.718 = 0.764 \text{ MeV} @@ helium-3 is less bound: its two protons push each other
+\tfrac{e^2}{4\pi\varepsilon_0 r} = \tfrac{1.44 \text{ MeV fm}}{r} @@ the electric energy of two protons r apart (7·phys), with 1 fm = 10⁻¹⁵ m
+r \approx 1.9 \text{ fm}:\ \ \tfrac{1.44}{1.9} \approx 0.76 \text{ MeV} @@ the size of helium-3
+\htmlClass{new}{\text{the whole difference is the electric push: the nuclear pull is the same}} \quad \blacksquare @@ isospin is a symmetry of the nuclear pull, broken by charge
   </pre>
-  <p data-pid="9960b8">Nothing in the sheet changed. On the first axes the push on every cut slides along the cut; on the turned axes it pulls straight across one cut and pushes straight across the other. One stress, two lists of four numbers.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · new axes · ← → keys work</div></section>
+  <p data-pid="7089c4">The three pions, π⁺ at 139.570, π⁰ at 134.977 and π⁻ at 139.570 MeV, are a piece of 3: isospin 1. The proton and neutron are a piece of 2: isospin ½. Isospin is kept by the nuclear pull and not by the electric push, so it is an amount that keeps nearly, to the size of the push.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · isospin · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">47·phys.2.1</span><span class="ph understand">understand</span>Why does a vector’s list become Qᵀx and not Qx when the axes turn to the columns of Q? <br>A stress has the grid with rows (3, 0) and (0, 1). What is its grid on axes turned by 45°?</li>
+      <li><span class="qid">47·phys.2.1</span><span class="ph understand">understand</span>What is isospin? <br>How does the difference 0.764 MeV between tritium and helium-3 show that the nuclear pull treats protons and neutrons alike?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="47·phys.3">
-  <h2 class="sthead"><span class="stno">47·phys.3</span>The Technique Is a Map of Categories</h2>
-  <p data-pid="ae176a">Why must a stress obey the new-axes technique? Because the technique is not about grids at all. Let f : V → V′ be a straight map. The map (v, w) ↦ f(v) ⊗ f(w) from V × V to V′ ⊗ V′ is straight in each slot, so by 47h1 it runs through V ⊗ V as exactly one straight map, written f ⊗ f, with (f ⊗ f)(v ⊗ w) = f(v) ⊗ f(w).</p>
-  <p data-pid="b25884">Square-the-space technique: <b>sending each space of vectors V to V ⊗ V, and each straight map f to f ⊗ f, is a map of categories (47b): (g ∘ f) ⊗ (g ∘ f) = (g ⊗ g) ∘ (f ⊗ f), and the do-nothing map goes to the do-nothing map. A reading B of V ⊗ V is carried to the new axes as B ∘ (Q ⊗ Q), and in grids that is QᵀGQ.</b> Proof: both sides of the first line send v ⊗ w to g(f(v)) ⊗ g(f(w)); the v ⊗ w reach every member of V ⊗ V as sums (the grid-space technique, 47h1), and two straight maps that agree on the eᵢ ⊗ eⱼ agree everywhere. For the last line, B ∘ (Q ⊗ Q) sends x′ ⊗ y′ to B(Qx′ ⊗ Qy′) = (Qx′)ᵀG(Qy′), which is the new-axes technique; readings run the map first, turned round, as 47b3’s turned-round technique says.</p>
-  <pre class="lines" data-k="ember" data-label="this page: two turnings in a row">
-\text{turn by } Q_1 \text{, then by } Q_2:\ \ x'' = Q_2^{\mathsf T}Q_1^{\mathsf T}x @@ the new-axes technique twice
-G'' = Q_2^{\mathsf T}(Q_1^{\mathsf T}GQ_1)Q_2 = (Q_1Q_2)^{\mathsf T}G\,(Q_1Q_2) @@ the turn of a row, the other way round
-\htmlClass{new}{\text{one turn by } Q_1Q_2 \text{ gives the same grid}} \quad \blacksquare @@ the square-the-space technique: the technique respects running in a row
+<section class="class step" data-step="46phys3">
+  <h2 class="sthead"><span class="stno">46phys3</span>Families of Eight and Ten</h2>
+  <p data-pid="39c07f">In the 1950s a new kept amount turned up, <i>strangeness</i>, kept by the nuclear pull and not by the weak one that makes slow decays. Particles with strangeness, like the Λ at 1115.7 MeV, are made fast and decay slowly. Widen SU(2) to SU(3), the length-keeping grids of ℂ³ with determinant 1, with the third direction strange. Its smallest pieces have 1, 3, 8 and 10 members, and the light heavy particles fit them exactly: the proton and neutron sit in a piece of 8 with six others; the Δ’s, Σ*’s, Ξ*’s and one more sit in a piece of 10. Here Δ, Σ and Ξ (capital delta, sigma and xi) are names of families of particles, not 13a's change or 4k's adding mark.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the gap in the ten">
+\Delta:\ 1232,\ \ \Sigma^*:\ 1384.6,\ \ \Xi^*:\ 1531.8 \text{ MeV} @@ strangeness 0, −1, −2: rows of 4, 3, 2
+1384.6 - 1232 = 152.6,\ \ 1531.8 - 1384.6 = 147.2 @@ nearly even steps, one strange quark’s extra mass each
+\text{the row of 1 at strangeness } {-3}:\ 1531.8 + 150 \approx 1682 \text{ MeV} @@ the next step
+\htmlClass{new}{\text{found in 1964 at } 1672.45 \text{ MeV, within 0.6\%}} \quad \blacksquare @@ the Ω⁻, with charge −1 and strangeness −3
   </pre>
-  <p data-pid="1e48eb">So a grid that claims to describe the sheet cannot pick its own technique for new axes. Suppose a technique said “on any axes, the stress has 1 in the top left corner and 0 elsewhere.” Turn the axes a quarter turn: the new-axes technique sends that grid to the one with 1 in the bottom right. The two claims disagree, so the technique describes no sheet. Physics calls a grid of measurements a tensor exactly when its numbers change by the new-axes technique, and the square-the-space technique says that is the same as being one member, or one reading, of a tensor product.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · carried along · ← → keys work</div></section>
+  <p data-pid="de7fc4">The rows of 4, 3, 2, 1 make a triangle of 10: that shape is the piece, and no other shape of SU(3)’s pieces has 10 members in those rows. The prediction was from the representation alone, before anyone knew what the particles were made of.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · eightfold · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">47·phys.3.1</span><span class="ph understand">understand</span>What does the square-the-space technique say, and why must the technique for two turnings in a row agree with the technique for the single turn Q₁Q₂? <br>Why does “1 in the top left corner on any axes” describe no stress?</li>
+      <li><span class="qid">47·phys.3.1</span><span class="ph understand">understand</span>What is strangeness, and why widen SU(2) to SU(3)? <br>How was the mass of the Ω⁻ predicted, and how close was it?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="47·phys.4">
-  <h2 class="sthead"><span class="stno">47·phys.4</span>What Every Axes Agree On</h2>
-  <p data-pid="f0dcab">Some things about a grid survive every turning of the axes. Those belong to the sheet or the body itself.</p>
-  <p data-pid="92b6f8">Same-on-every-axes technique: <b>QᵀGQ has the same stretches as G and the same rank. So the principal stresses of a sheet, the principal inertias of a body, and the rank of any reading of two vectors are the same on every axes.</b> Proof: QᵀGQ v′ = λv′ exactly when G(Qv′) = λ(Qv′), multiplying by Q or by Qᵀ, since each undoes the other; so the stretches agree, and the stretched vectors are the same vectors written on the new axes. Q and Qᵀ can be undone, so QᵀGQ reaches the vectors Qᵀ sends from what G reaches, a space of the same dimension (27c).</p>
-  <p data-pid="8b19b5">By the spectral technique (<a href="r31d.html#31d3">31d3</a>) a symmetric σ is λ₁ u₁ ⊗ u₁ + λ₂ u₂ ⊗ u₂ along its square axes, writing u ⊗ u for the grid u uᵀ. A rope in tension carries a stress of rank 1: one pull along one line. The fewest-terms technique (<a href="r47h.html#47h2">47h2</a>) then says how many single pulls a stress needs.</p>
-  <pre class="lines" data-k="ember" data-label="this page: pure shear is no single pull">
-\sigma = \tau\,u_1 \otimes u_1 - \tau\,u_2 \otimes u_2,\ \ u_{1,2} = \tfrac{1}{\sqrt2}(1, \pm 1) @@ the stretches ±τ of 47·phys.2
-\text{rank } \sigma = 2 @@ two stretches that are not 0
-\htmlClass{new}{\text{no } \lambda\, n \otimes n \text{ is a pure shear, on any axes}} \quad \blacksquare @@ the fewest-terms technique and the same-on-every-axes technique
+<section class="class step" data-step="46phys4">
+  <h2 class="sthead"><span class="stno">46phys4</span>Quarks, and a Third Label</h2>
+  <p data-pid="7ca898">The piece of 3 of SU(3) is not seen as particles. Suppose it is what they are made of: three <i>quarks</i>, up u, down d and strange s, with charges +2/3, −1/3 and −1/3. A heavy particle like the proton is three quarks; a pion is a quark with an antiquark, of opposite charge. The pieces of three of 3s split as 27 = 10 + 8 + 8 + 1, and a quark with an antiquark as 9 = 8 + 1, by 47·cb27’s splitting technique.</p>
+  <pre class="lines" data-k="ember" data-label="this page: charges from quarks">
+p = uud:\ \ \tfrac23 + \tfrac23 - \tfrac13 = 1 @@ the proton
+n = udd:\ \ \tfrac23 - \tfrac13 - \tfrac13 = 0 @@ the neutron
+\Omega^- = sss:\ \ -1;\ \ \Delta^{++} = uuu:\ \ +2 @@ the ends of the piece of 10
+\htmlClass{new}{\pi^+ = u\bar d:\ \ \tfrac23 + \tfrac13 = 1} \quad \blacksquare @@ the antiquark d̄ has charge +1/3
   </pre>
-  <p data-pid="2a73f6">It is the arithmetic of 47h2’s pair of particles. A pure shear needs a pull and a push, as that joint state needs two terms; neither can be written as one product, and turning the axes, or the lab, does not change that.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · kept · ← → keys work</div></section>
+  <p data-pid="7f0410">The Δ⁺⁺ is three up quarks with their spins all up, in the same orbital: three identical particles in one state. 38·phys’s swap sign says that state is zero. Unless each quark carries a third label with three values, so that the three can differ in it, the Δ⁺⁺ cannot exist, and it does. The label is called <i>colour</i>, a name with nothing to do with rung 36, and its symmetry is another SU(3), exact this time. Quarks are never seen alone.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · quarks · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">47·phys.4.1</span><span class="ph understand">understand</span>What does the same-on-every-axes technique say is kept when the axes turn? <br>A sheet has σ with rows (2, 1) and (1, 2). What are its principal stresses, and is it a single pull?</li>
+      <li><span class="qid">47·phys.4.1</span><span class="ph understand">understand</span>What are the charges of the up, down and strange quarks, and how do they give the charges of p and n? <br>Why does the Δ⁺⁺ need each quark to carry a third label?</li>
     </ol>
   </section>
 </section>
 
-<section class="class step" data-step="47·phys.5">
-  <h2 class="sthead"><span class="stno">47·phys.5</span>Moves to Watch Out For</h2>
+<section class="class step" data-step="46phys5">
+  <h2 class="sthead"><span class="stno">46phys5</span>What Holds a Nucleus Together</h2>
+  <p data-pid="116839">A nucleus weighs less than its protons and neutrons apart. The missing mass, times c², is the <i>binding energy</i> B, the energy needed to pull it apart. Here c is the speed of light (29·phys1).</p>
+  <pre class="lines" data-k="ember" data-label="this page: two binding energies">
+\text{deuteron: } 938.272 + 939.565 - 1875.613 = 2.224 \text{ MeV} @@ one proton, one neutron
+\text{helium-4: } 2(938.272) + 2(939.565) - 3727.379 = 28.295 \text{ MeV} @@ 7.07 MeV for each of its 4 pieces
+\htmlClass{new}{B(A, Z) \approx 15.8A - 18.3A^{2/3} - 0.714\tfrac{Z^2}{A^{1/3}} - 23.2\tfrac{(A - 2Z)^2}{A} \text{ MeV}} \quad \blacksquare @@ a drop of nuclear matter: the bulk, less the surface, less the push of Z protons, less the cost of unequal numbers
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: iron and uranium">
+\text{iron-56}, A = 56, Z = 26:\ \ 884.8 - 267.9 - 126.2 - 6.6 = 484.2 \text{ MeV} @@ 56^(2/3) ≈ 14.64, 56^(1/3) ≈ 3.826
+484.2/56 \approx 8.65 \text{ MeV each;\ measured } 492.3,\ 8.79 @@ within 2%
+\text{uranium-238}, A = 238, Z = 92:\ \ B \approx 1798 \text{ MeV},\ 7.56 \text{ each} @@ the push of 92 protons
+\htmlClass{new}{\text{split into two of } A \approx 119:\ \text{about } (8.5 - 7.6) \times 238 \approx 200 \text{ MeV released}} \quad \blacksquare @@ fission; joining light nuclei toward iron releases energy too
+  </pre>
+  <section class="slides" id="sl5"><div class="eyebrow">The slides · binding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47·phys.5.1</span><span class="ph understand">understand</span>What is the binding energy of a nucleus? <br>What do the four terms of the mass law stand for, and why does splitting uranium release energy?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46phys6">
+  <h2 class="sthead"><span class="stno">46phys6</span>Which Decays Are Allowed</h2>
+  <p data-pid="f965c9">A decay must keep energy, momentum and charge, by the symmetries of footing 1. Two counts are also kept in every reaction ever measured: the <i>heavy count</i>, the number of three-quark particles less the number of their antiparticles, and the <i>light count</i>, of electrons and their neutrinos less their antiparticles. These are laws, from guessing under the small case, with no known exception.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the free neutron">
+n \to p + e^- + \bar\nu @@ one d quark becomes a u
+\text{charge } 0 = 1 - 1 + 0;\ \text{heavy } 1 = 1;\ \text{light } 0 = 1 - 1 @@ all kept
+939.565 - 938.272 - 0.511 = 0.782 \text{ MeV} @@ the energy shared by the electron and the antineutrino
+\htmlClass{new}{\tau \approx 879 \text{ s}:\ \ e^{-3600/879} \approx 0.017 \text{ left after an hour}} \quad \blacksquare @@ 17’s decay; half-life τ ln 2 ≈ 609 s
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this page: a decay that is not seen">
+p \to e^+ + \pi^0 @@ charge 1 = 1 + 0, energy allowed
+\text{heavy count } 1 \to 0 @@ broken
+\htmlClass{new}{\text{not seen: the proton lives longer than } 10^{34} \text{ years}} \quad \blacksquare @@ tanks of 50 000 tonnes of water, watched for decades
+  </pre>
+  <p data-pid="bc86ba">Americium-241 in the smoke detector throws off helium-4 nuclei with a half-life of 432 years, and in 50 years e^(−50 ln 2/432) ≈ 92% of it is left. What made a symmetry from the heavy count, if anything, is open.</p>
+  <section class="slides" id="sl6"><div class="eyebrow">The slides · decays · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47·phys.6.1</span><span class="ph understand">understand</span>Which amounts must every decay keep, and which of them come from a symmetry of footing 1? <br>Why is p → e⁺ + π⁰ forbidden though it keeps charge and energy?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="46phys7">
+  <h2 class="sthead"><span class="stno">46phys7</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
-\text{A tensor is a grid of numbers}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a grid is a tensor written on one choice of axes; the new-axes technique says how the writing changes
-\text{Every grid of measured numbers is a tensor}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only one whose numbers change by the new-axes technique; “1 in the corner on any axes” is none
-\text{The principal stresses depend on the axes}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the same-on-every-axes technique: they are the stretches, kept by every turning
-\text{A pure shear is a pull along the 45}^\circ \text{ line}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it is a pull τ along one 45° line and a push τ along the other: rank 2
-\text{The rank of a grid changes when the axes turn}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; Q can be undone, so the rank is kept
+\text{isospin is exact, so } m_p = m_n\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it is broken by the electric push and the quark masses: 1.293 MeV apart
+\text{a nucleus weighs the sum of its parts}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; less by B/c²: 2.224 MeV for the deuteron
+\text{the Ω}^- \text{ was found, then fitted into the ten}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the other way: the gap in the ten predicted it
+\text{quark colour is the colour of rung 36}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it is a third label with three values; only the name is borrowed
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">47·phys.5.1</span><span class="ph understand">understand</span>Someone says “a tensor is just a matrix.” Using the new-axes technique and the square-the-space technique, say what is missing from that line.</li>
+      <li><span class="qid">47·phys.7.1</span><span class="ph understand">understand</span>Why are the proton and neutron masses not equal if isospin is a symmetry? <br>Why does a nucleus weigh less than its parts?</li>
+    </ol>
+  </section>
+</section>
+<section class="class step" data-step="46phys8">
+  <h2 class="sthead"><span class="stno">46phys8</span>Three Groups, Twelve Carriers</h2>
+  <p data-pid="81f544">Today’s theory of particles builds each force from a symmetry group, and each independent direction in the group brings a carrier particle.</p>
+  <pre class="lines" data-k="ember" data-label="this page: counting carriers">
+\text{SU}(n):\ n \times n \text{ grids, unitary, determinant } 1:\ n^2 - 1 \text{ directions} @@ count the free directions
+\text{SU}(3) \text{ on the three colours of quark: } 8 \text{ gluons} @@ the strong force
+\text{SU}(2) \times \text{U}(1):\ 3 + 1 = 4 @@ W⁺, W⁻, Z and the photon
+\htmlClass{new}{8 + 3 + 1 = 12 \text{ carriers, all found}} @@ the Higgs, found in 2012, gives W and Z their mass
+  </pre>
+  <p data-pid="0c43f5">Carrier technique: <b>a force built on the group SU(n) has n² − 1 carriers, one for each independent direction of the group.</b> Quarks and electrons come in three copies that differ only in mass, for no reason anyone knows; the groups say what forces exist, not why the masses are what they are.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">47·phys.8.1</span><span class="ph understand">understand</span>How does the size of each group fix the number of carrier particles, and what does the theory leave unexplained?</li>
     </ol>
   </section>
 </section>
@@ -138,22 +221,22 @@ G'' = Q_2^{\mathsf T}(Q_1^{\mathsf T}GQ_1)Q_2 = (Q_1Q_2)^{\mathsf T}G\,(Q_1Q_2) 
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">47·phys.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\pm(0.1, 0, 0),\ \pm(0, 0.2, 0)"></span> <span class="gtx">four 1 kg lumps</span></span>Build the inertia grid Θ of four 1 kg lumps at ±(0.1, 0, 0) m and ±(0, 0.2, 0) m from 27·phys4’s formula. <br>Turn the axes by 30° about (0, 0, 1) and find the new grid with the new-axes technique. Check, with the face-and-axis technique, that both grids give the same rotational inertia about the vector (cos 30°, sin 30°, 0).</div>
-  <div class="chq"><span class="chid">47·phys.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\sigma = p\,I"></span></span>In still water the push on every cut is the same straight push p. Find QᵀσQ for every length-keeper Q. <br>Which cuts carry shear, and what are the principal stresses? What goes wrong with the stress-axes technique’s claim that the two square cuts are fixed?</div>
-  <div class="chq"><span class="chid">47·phys.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="Q^{\mathsf T}GQ = G \text{ for every turn } Q"></span></span>Turn the same-on-every-axes technique round. Find every 2 by 2 grid G with QᵀGQ = G for every turn Q of the plane. <br>Which of them are symmetric, and which stress is the only one that looks the same on every axes?</div>
-  <div class="chq"><span class="chid">47·phys.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">one side: a tensor is whatever changes by the technique</span> <span class="gtx">the other side: a tensor is a member of a tensor product</span></span>Physics books long said a tensor is a list of numbers, one for each choice of axes, that changes by the new-axes technique. Algebra books say a tensor is a member of V ⊗ V, defined by 47h1’s readings, with no axes at all. The square-the-space technique says the two match. Which is the thing and which is its shadow? Does the answer change for an engineer who must measure σ on a gauge glued to a wall?</div>
+  <div class="chq"><span class="chid">47·phys.9.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\Lambda \to p + \pi^-,\ \ m_\Lambda = 1115.683,\ m_{\pi^-} = 139.570 \text{ MeV}"></span></span>Build the check of charge, heavy count and energy for this decay. Which quark changes, and why is the decay slow? <br>Find the energy released.</div>
+  <div class="chq"><span class="chid">47·phys.9.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{carbon-12},\ A = 12,\ Z = 6,\ \ B_{\text{measured}} = 92.16 \text{ MeV}"></span></span>Find B from the mass law and compare it with the measured value. <br>Why is the law worse for small nuclei than for iron?</div>
+  <div class="chq"><span class="chid">47·phys.9.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{a kept amount} \Rightarrow \text{a symmetry}\,?"></span></span>Footing 1 went from a symmetry to a kept amount. Turn it round for the heavy count: if it is kept, what symmetry of the laws would keep it, in the style of the turn of the phase? <br>If the proton were found to decay, what would that say about the symmetry?</div>
+  <div class="chq"><span class="chid">47·phys.9.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">47a: a formula exactly when the group comes apart</span></span>Rung 47 sorted equations by their groups, and this page sorted particles by theirs. <br>In each, what plays the part of the roots, and what plays the part of the symmetries? Where does the analogy break: is a symmetry of nature exact as a symmetry of a field is?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r47comp.html">← 47·comp · can a program’s type say what it does?</a><a href="r47eng.html">47·eng · can a machine be built by plugging parts together? →</a></nav>
+<nav class="nextrung"><a href="r47cb27.html">← 47·cb27 · groups as matrices</a><a href="r47chem.html">47·chem · why are rubies red and sapphires blue? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>σ is the Cauchy stress tensor and Θ the inertia tensor; both are tensors of order two, also called second-rank tensors, a use of the word rank different from the rank of a grid on this page. The new-axes technique is the tensor transformation law. A list that changes by Qᵀ is a vector; readings change the other way, and the two kinds are called contravariant and covariant, a difference that vanishes for length-keepers because Q⁻¹ = Qᵀ. The square-the-space technique says the tensor square is a functor. Quantities kept by every turning are invariants; the principal stresses are its eigenvalues. A stress p I is hydrostatic, and σ minus its hydrostatic part is the deviatoric stress. The rank of a joint state is its Schmidt rank.</p>
+  <p>That every continuous symmetry of the action keeps an amount is Noether’s theorem; the kept amount of the phase is the conserved current of a U(1) symmetry, and j is the probability current. Isospin is isotopic spin; the families of 8 and 10 are the baryon octet and decuplet, and the scheme is the eightfold way. The heavy and light counts are baryon number and lepton number. The mass law is the semi-empirical mass formula of Weizsäcker and Bethe; colour and its SU(3) are quantum chromodynamics. The weak pull is the weak interaction.</p>
   <h3>Who said it first</h3>
-  <p>Augustin-Louis Cauchy described the push on every face of a small tetrahedron by a symmetric grid in 1822, published in 1823 and 1827. The word tensor, used earlier by William Rowan Hamilton for a length, took its present sense in Woldemar Voigt’s crystal physics of 1898. Gregorio Ricci-Curbastro and Tullio Levi-Civita set out the calculus of quantities that change by the rule in 1900, and Albert Einstein wrote gravity in it in 1915. Hassler Whitney defined the tensor product of groups by its readings in 1938, and Nicolas Bourbaki made the universal property the standard definition in 1948.</p>
+  <p>Emmy Noether proved the link between symmetries and kept amounts in 1918. Werner Heisenberg treated the proton and neutron as two states of one particle in 1932, and Eugene Wigner named isospin in 1937. Murray Gell-Mann and Yuval Ne’eman proposed the eightfold way in 1961, and Gell-Mann predicted the Ω⁻ in 1962; it was found at Brookhaven in 1964. Gell-Mann and George Zweig proposed quarks in 1964, and Oscar Greenberg colour the same year. Carl Friedrich von Weizsäcker gave the mass law in 1935. Enrico Fermi’s theory of beta decay dates from 1933–34. The proton limits are from the Super-Kamiokande detector in Japan.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“The principal stresses are the largest and smallest pushes, and turning the axes does not change the sheet, so they cannot change.” <span class="wrong">Not allowed</span> as a proof: the conclusion is right, but the line uses what it should show. That the grid on new axes describes the same sheet is exactly the new-axes technique, and that its stretches are the extreme pushes is 33·eng5; the same-on-every-axes technique is what ties the two.</p>
+  <p>“The wave law is unchanged by ψ ↦ e^(iθ)ψ, so ψ itself does not change in time.” Not allowed: the symmetry keeps the total of |ψ|², not ψ. The wave moves and spreads; only how much of it there is stays fixed.</p>
 </section>
 
 </div>
@@ -168,25 +251,35 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'stress',t:R`m^{\mathsf T}\sigma n`,n:`Push along m on the cut facing n.`},
-  {k:'ember',kl:'inertia',t:R`u^{\mathsf T}\Theta u`,n:`Rotational inertia about u.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{readings of } \mathbb{R}^3 \otimes \mathbb{R}^3}`,n:`Straight in each slot.`}
-],{title:'The slides · two readings · ← → keys work'});
+  {k:'ember',kl:'time, place',t:R`E,\ p`,n:`29·then.`},
+  {k:'ember',kl:'phase',t:R`\psi \mapsto e^{i\theta}\psi`,n:`The wave law is unchanged.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{d}{dt}\textstyle\int|\psi|^2 = 0}`,n:`Charge is kept.`}
+],{title:'The slides · kept amounts · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'arrow',t:R`x' = Q^{\mathsf T}x`,n:`The list on the new axes.`},
-  {k:'ember',kl:'reading',t:R`G' = Q^{\mathsf T}GQ`,n:`The grid on the new axes.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{x'^{\mathsf T}G'y' = x^{\mathsf T}Gy}`,n:`The number stays.`}
-],{title:'The slides · new axes · ← → keys work'});
+  {k:'ember',kl:'masses',t:R`938.272,\ 939.565 \text{ MeV}`,n:`0.14% apart.`},
+  {k:'ember',kl:'push',t:R`1.44/1.9 \approx 0.76 \text{ MeV}`,n:`The whole difference.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p, n \text{ a piece of } 2}`,n:`One particle, two settings.`}
+],{title:'The slides · isospin · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'map',t:R`f \mapsto f \otimes f`,n:`A map of categories.`},
-  {k:'ember',kl:'reading',t:R`B \circ (Q \otimes Q)`,n:`Run Q first.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{G \mapsto Q^{\mathsf T}GQ}`,n:`Forced, not chosen.`}
-],{title:'The slides · carried along · ← → keys work'});
+  {k:'ember',kl:'rows',t:R`1232,\ 1384.6,\ 1531.8`,n:`Even steps.`},
+  {k:'ember',kl:'gap',t:R`\approx 1682 \text{ MeV}`,n:`Predicted.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Omega^-:\ 1672.45 \text{ MeV}}`,n:`Found in 1964.`}
+],{title:'The slides · eightfold · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'stretches',t:R`\lambda(Q^{\mathsf T}GQ) = \lambda(G)`,n:`Same principal stresses.`},
-  {k:'ember',kl:'rank',t:R`\mathrm{rank}\,Q^{\mathsf T}GQ = \mathrm{rank}\,G`,n:`Same fewest terms.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{shear} \ne \text{one pull}}`,n:`On every axes.`}
-],{title:'The slides · kept · ← → keys work'});
+  {k:'ember',kl:'charges',t:R`u: \tfrac23,\ d, s: -\tfrac13`,n:`Thirds.`},
+  {k:'ember',kl:'proton',t:R`uud = 1`,n:`And udd = 0.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta^{++} = uuu \Rightarrow \text{colour}}`,n:`The swap sign.`}
+],{title:'The slides · quarks · ← → keys work'});
+stepper('#sl5',[
+  {k:'ember',kl:'deuteron',t:R`2.224 \text{ MeV}`,n:`Mass missing.`},
+  {k:'ember',kl:'technique',t:R`15.8A - 18.3A^{2/3} - \cdots`,n:`A drop.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{iron: } 8.65 \text{ MeV each}}`,n:`The most bound.`}
+],{title:'The slides · binding · ← → keys work'});
+stepper('#sl6',[
+  {k:'ember',kl:'neutron',t:R`n \to p + e^- + \bar\nu`,n:`0.782 MeV.`},
+  {k:'ember',kl:'counts',t:R`Q,\ \text{heavy},\ \text{light}`,n:`All kept.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{p \not\to e^+ + \pi^0}`,n:`Heavy count.`}
+],{title:'The slides · decays · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

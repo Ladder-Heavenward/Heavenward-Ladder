@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Turns of Space</title>
+<title>Determinants by Hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,110 +48,217 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r27l.html">← 27l eigenvectors by hand</a><a href="r27cb24.html">next: 27·cb24 systems of rate statements →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27l.html">← 27l solving systems by elimination</a><a href="r27n.html">next: 27n eigenvectors by hand →</a></p>
   <div class="tags"><span class="tag tech">27m · technique</span></div>
-  <h1>Turns of Space</h1>
-  <p data-pid="461734">Rung twenty turned the plane about a point, and every such turn was one pair of numbers. Space can be turned in far more ways: tip a globe, spin a ball, roll a die across a table. A turn of space keeps every length and keeps which way round things stand. Turn a ball any way you like, as many times as you like, and one line through its centre ends up exactly where it started. That line is the axis, and the whole tangle of turns comes down to one turn about it. The proof is a few lines of determinants, and it needs space to have an odd number of directions. This step finds the axis of a turn by elimination, its angle from the sum down its middle, and builds the grid of any turn from its axis and angle. And it finds what rung twenty never met: two turns of space, done in the two orders, give two different turns.</p>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\Box(\text{keeps lengths} \Leftrightarrow\\ &amp;\qquad \text{columns unit, perpendicular}) \quad\text{(3b2)}\end{aligned}"></div>
-  <p class="gesture" data-pid="75a407">A grid keeps lengths exactly when its columns have length one and stand at right angles. A turn of space keeps lengths and handedness, and it always leaves one line in place: a vector it only stretches by one. About that axis it is a turn of the plane, and its angle is read off the sum down its middle. Turns of space do not commute.</p>
+  <h1>Determinants by Hand</h1>
+  <p data-pid="e1626e">The determinant was found as a sum over every shuffle, one term for each way of picking an entry from every column. For a grid of ten rows that is more than three million terms, each a product of ten numbers. Nobody works it out that way. The row moves that solved systems also find determinants: a swap changes the sign, adding a stretch of one row to another changes nothing, and once the grid is a staircase the determinant is the product down its middle. A row or a column with many zeros gives another road, through the smaller determinants of the stand-in grid. And when a system has exactly one answer, each unknown is one determinant divided by another, a formula that shows how the answer moves when the numbers do.</p>
+  <p class="gesture" data-pid="b865dd">Bring a grid to a staircase by row moves, counting the swaps, and its determinant is the product down the middle, with a sign for each swap. Or expand along any row or column through smaller determinants. When the determinant is not zero, each unknown of a system is a ratio of two determinants.</p>
 </header>
 
 <section class="class step" data-step="27m1">
-  <h2 class="sthead"><span class="stno">27m1</span>Grids That Keep Lengths</h2>
-  <p data-pid="6dcdf1">Length-keeper technique: <b>for a square grid Q, these three are the same: Q keeps every length, |Qx| = |x|; Q keeps every dot, Qx · Qy = x · y; QᵀQ = I, so the columns of Q have length 1 and stand at right angles. Then Q⁻¹ = Qᵀ, and det Q is 1 or −1.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the length-keeper technique">
-x\cdot y = \tfrac12\big(|x + y|^2 - |x|^2 - |y|^2\big) @@ the dot technique (27i1), as in the right-triangle technique (18a4)
-|Qx| = |x| \text{ for all } x \Rightarrow Qx\cdot Qy = x\cdot y @@ Q keeps sums (27c1), so every length on the right is kept
-Qx\cdot Qy = \textstyle\sum_{j,k} x_j\,(Qe_j\cdot Qe_k)\,y_k @@ the two-slot technique (27h2), with Gⱼₖ = Qeⱼ · Qeₖ
-\text{keeps dots} \iff Qe_j\cdot Qe_k = e_j\cdot e_k \iff Q^{\mathsf T}Q = I @@ the grid of a two-slot reading is unique; column j of Q is Qeⱼ, so Qeⱼ · Qeₖ is place j, k of QᵀQ (27d2)
-Q^{\mathsf T}Q = I \Rightarrow Q \text{ loses only } 0 \Rightarrow Q^{-1} = Q^{\mathsf T} @@ Qx = 0 gives x = QᵀQx = 0; the undoable-group technique (27d3)
-\htmlClass{new}{(\det Q)^2 = \det Q^{\mathsf T}\det Q = \det I = 1} \quad \blacksquare @@ the side-turn (27g1) and det-product (27e3) techniques
+  <h2 class="sthead"><span class="stno">27m1</span>Determinants Down the Stairs</h2>
+  <p data-pid="b14b5d">Stair-det technique: <b>if every entry below the middle of a square grid is 0, its determinant is the product of the entries down the middle. So if row moves with s swaps, and otherwise only adding stretches of rows, bring A to a staircase, det A is (−1)ˢ times the product down the middle of the staircase.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stair-det technique">
+\det A = \textstyle\sum_\sigma \operatorname{sign}\sigma\ a_{\sigma(1)1}\cdots a_{\sigma(n)n} @@ the three-conditions technique (27e2)
+a_{\sigma(j)j} = 0 \text{ whenever } \sigma(j) > j @@ that entry is below the middle
+\text{a term that is not } 0 \text{ has } \sigma(j) \le j \text{ for every } j \Rightarrow \sigma(1) = 1,\ \sigma(2) = 2,\ \ldots @@ σ(j) ≤ j, and 1, …, j − 1 are already taken; induction on j
+\det A = a_{11}a_{22}\cdots a_{nn} @@ only doing nothing is left, and it is even (19e)
+\text{a row swap changes the sign; adding a stretch of a row changes nothing} @@ the column-slide technique (27e1), carried to rows by the side-turn technique (27g1)
+\htmlClass{new}{\det A = (-1)^s \times \text{the product down the middle of the staircase}} \quad \blacksquare
   </pre>
-  <p data-pid="e988d1">A <i>turn of space</i> is a 3 × 3 grid that keeps lengths and has det 1. The det says which way round: Qe₁, Qe₂, Qe₃ stand the way e₁, e₂, e₃ do, as 20g asked of the plane. A grid that keeps lengths with det −1, like a mirror, swaps the hands. Turns of space form a group, a part-group of the undoable grids (27d3, 19a): a turn after a turn keeps lengths, with det 1 · 1 = 1, and the undo of a turn keeps lengths, since |Q⁻¹x| = |QQ⁻¹x| = |x|, with det 1. Accepted name: the turns of space form SO(3).</p>
-  <pre class="lines" data-k="ember" data-label="this step: a turn and a mirror">
-R = \begin{pmatrix}0&-1&0\\1&0&0\\0&0&1\end{pmatrix} @@ e₁ ↦ e₂, e₂ ↦ −e₁, e₃ ↦ e₃: a quarter turn of the floor, the up vector held
-\text{columns of length } 1,\ \text{dots } 0,\ \det R = 1 @@ the length-keeper technique; along the last column, det = 0·0 − (−1)·1 (27k2)
-M = \begin{pmatrix}1&0&0\\0&1&0\\0&0&-1\end{pmatrix} @@ the mirror of the floor: up becomes down
-\htmlClass{new}{R \text{ is a turn};\ \ M \text{ keeps lengths, but } \det M = -1} \quad \blacksquare @@ M swaps the hands: a mirror, not a turn
+  <pre class="lines" data-k="ember" data-label="this step: a grid of four rows">
+A = \begin{pmatrix}1&2&0&1\\2&5&1&3\\0&3&4&2\\1&2&2&6\end{pmatrix} @@ given
+\begin{pmatrix}1&2&0&1\\0&1&1&1\\0&3&4&2\\0&0&2&5\end{pmatrix} @@ add −2 times row 1 to row 2, and −1 times row 1 to row 4: det unchanged
+\begin{pmatrix}1&2&0&1\\0&1&1&1\\0&0&1&-1\\0&0&2&5\end{pmatrix} @@ add −3 times row 2 to row 3
+\begin{pmatrix}1&2&0&1\\0&1&1&1\\0&0&1&-1\\0&0&0&7\end{pmatrix} @@ add −2 times row 3 to row 4; no swaps, s = 0
+\htmlClass{new}{\det A = 1\cdot1\cdot1\cdot7 = 7} \quad \blacksquare @@ the stair-det technique
   </pre>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · keeping lengths · ← → keys work</div></section>
+  <p data-pid="36d2eb">The formula over shuffles has n! terms. For n = 10 that is 3 628 800 terms of 9 multiplications each, about 33 million. Down the stairs it is the elimination of 27l3 without a right side, a few hundred. For n = 20 the shuffles number about 2.4 × 10¹⁸; the stairs take about three thousand.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · down the stairs · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27m1.1</span><span class="ph understand">understand</span>What does the length-keeper technique say? <br>What is a turn of space?</li>
+      <li><span class="qid">27m1.1</span><span class="ph understand">understand</span>What does the stair-det technique say? <br>Why is it so much faster than the formula over shuffles?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="27m2">
-  <h2 class="sthead"><span class="stno">27m2</span>Every Turn Has an Axis</h2>
-  <p data-pid="12af26">Axis technique: <b>every turn Q of space keeps some vector u ≠ 0 in place: Qu = u. Take u of length 1. Then Q keeps the plane of vectors at right angles to u and turns it: for one θ, Qw = cos θ w + sin θ (u × w) for every w in that plane. And the middle sum of Q is 1 + 2 cos θ.</b> The line along u is the axis of the turn, and θ its angle.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the axis technique">
-\det(Q - I) = \det(Q - QQ^{\mathsf T}) = \det Q\,\det(I - Q^{\mathsf T}) @@ QQᵀ = I (27m1); Q − QQᵀ = Q(I − Qᵀ); the det-product technique (27e3)
-= \det\big((I - Q)^{\mathsf T}\big) = \det(I - Q) = (-1)^3\det(Q - I) @@ det Q = 1; the side-turn technique (27g1); each of three columns stretched by −1 (27e2)
-\det(Q - I) = 0 \Rightarrow Qu = u \text{ for some } u \ne 0 @@ a number equal to its opposite is 0; the nonzero-det technique (27e4)
-w\cdot u = 0 \Rightarrow Qw\cdot u = Qw\cdot Qu = w\cdot u = 0 @@ Q keeps dots (27m1): the plane at right angles to u is kept
-w_1 \perp u,\ |w_1| = 1,\ w_2 = u\times w_1:\ \ Qw_1 = c\,w_1 + s\,w_2,\ \ c^2 + s^2 = 1 @@ u, w₁, w₂ are of length 1 and at right angles (27i3); read Qw₁ off (27i2)
-Qw_2 = \pm(-s\,w_1 + c\,w_2) @@ of length 1, in the plane, at right angles to Qw₁
-\text{in the basis } u, w_1, w_2 \text{ the grid of } Q \text{ has det } \pm(c^2 + s^2) = \pm1 = \det Q = 1 @@ P⁻¹QP has the same polynomial, so the same det (27l1): the sign is +
-c = \cos\theta,\ s = \sin\theta,\ \ Q(\alpha w_1 + \beta w_2) = c(\alpha w_1 + \beta w_2) + s\,u\times(\alpha w_1 + \beta w_2) @@ a turn of the plane is a pair (20j) at one angle (21b); u × w₂ = −w₁, as (u × w₂) · w₁ = det[u w₂ w₁] = −1
-\htmlClass{new}{\text{middle sum of } Q = 1 + c + c = 1 + 2\cos\theta} \quad \blacksquare @@ the middle-sum technique (27l1): P⁻¹QP has rows (1, 0, 0), (0, c, −s), (0, s, c)
+  <h2 class="sthead"><span class="stno">27m2</span>Along Any Row or Column</h2>
+  <p data-pid="382ad2">Expansion technique: <b>for any column j, det A = a₁ⱼC₁ⱼ + ⋯ + aₙⱼCₙⱼ; and for any row i, det A = aᵢ₁Cᵢ₁ + ⋯ + aᵢₙCᵢₙ, where Cᵢⱼ is the stand-in for place i, j: (−1)^(i + j) times the det of A with row i and column j struck.</b> Choose the row or column with the most zeros.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the expansion technique">
+\det A = \textstyle\sum_i a_{ij}\,\det(A \text{ with column } j \text{ replaced by } e_i) @@ the first line of the stand-in technique (27g2): straight in column j
+\det(A \text{ with column } j \text{ replaced by } e_i) = C_{ij} @@ the second line of the stand-in technique (27g2)
+\det A = \textstyle\sum_i a_{ij}C_{ij} @@ down column j
+\text{striking row } j, \text{ column } i \text{ of } A^{\mathsf T} \text{ leaves the side-turn of what striking row } i, \text{ column } j \text{ of } A \text{ leaves} @@ (Aᵀ)ⱼᵢ = aᵢⱼ
+\htmlClass{new}{\det A = \det A^{\mathsf T} = \textstyle\sum_j a_{ij}C_{ij}} \quad \blacksquare @@ the side-turn technique (27g1), twice: down column i of Aᵀ is along row i of A
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: the axis of a turn that cycles the three directions">
-C = \begin{pmatrix}0&0&1\\1&0&0\\0&1&0\end{pmatrix} @@ e₁ ↦ e₂ ↦ e₃ ↦ e₁; columns of length 1 at right angles, det 1: a turn
-C - I = \begin{pmatrix}-1&0&1\\1&-1&0\\0&1&-1\end{pmatrix} \to \begin{pmatrix}1&0&-1\\0&1&-1\\0&0&0\end{pmatrix} @@ lowest terms (27j2)
-u = \tfrac{1}{\sqrt3}(1, 1, 1) @@ x = z, y = z, z free; stretched to length 1
-\htmlClass{new}{1 + 2\cos\theta = 0 + 0 + 0,\ \ \cos\theta = -\tfrac12,\ \ \theta = \pm\tfrac{2\pi}{3}} \quad \blacksquare @@ the middle sum: a third of a turn about the long diagonal of the cube
+  <pre class="lines" data-k="ember" data-label="this step: a column of zeros but one, and the six-term technique">
+\det\begin{pmatrix}2&0&1\\3&0&4\\1&5&2\end{pmatrix} = 5\cdot(-1)^{3+2}\det\begin{pmatrix}2&1\\3&4\end{pmatrix} @@ down column 2: only a₃₂ = 5 is not 0
+= -5\,(8 - 3) = -25 @@ the 2 × 2 det, ad − bc (27e2)
+\det\begin{pmatrix}a&b&c\\d&e&f\\g&h&i\end{pmatrix} = a(ei - fh) - b(di - fg) + c(dh - eg) @@ along row 1, signs +, −, +
+\htmlClass{new}{= aei + bfg + cdh - ceg - afh - bdi} \quad \blacksquare @@ multiply out: six terms, one for each shuffle of three (19e)
   </pre>
-  <p data-pid="b01a67">The proof used three in one place: (−1)³ = −1. In the plane the same line gives det(Q − I) = (−1)² det(Q − I), which says nothing, and indeed a quarter turn of the plane moves every vector but 0. A turn of space with an even number of directions need not have an axis; with an odd number it always does.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · the axis · ← → keys work</div></section>
+  <p data-pid="b964c6">Signs run like a chessboard, + in the top left corner. A grid of four rows has 24 terms, and the six-term pattern of diagonals does not stretch to it: copied to four rows it finds only 8.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · expand · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27m2.1</span><span class="ph understand">understand</span>What does the axis technique say? <br>Why does its proof that det(Q − I) = 0 need an odd number of directions?</li>
+      <li><span class="qid">27m2.1</span><span class="ph understand">understand</span>What does the expansion technique say? <br>What is the stand-in Cᵢⱼ?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="27m3">
-  <h2 class="sthead"><span class="stno">27m3</span>A Turn From Its Axis and Angle</h2>
-  <p data-pid="08f421">Axis-turn technique: <b>the turn by θ about a vector u of length 1 sends x to cos θ x + sin θ (u × x) + (1 − cos θ)(u · x)u. And for a turn Q with axis u, and any w ≠ 0 at right angles to u, sin θ has the sign of det[w Qw u].</b> The second sentence settles which way round a turn goes, which the middle sum cannot see.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the axis-turn technique">
-x = (u\cdot x)\,u + w,\ \ w = x - (u\cdot x)\,u,\ \ w\cdot u = 0 @@ the part along u, and the rest (27i2)
-u\times x = u\times w @@ u × u = 0: u and u are not free (27i3)
-Rx = (u\cdot x)\,u + \cos\theta\,w + \sin\theta\,(u\times w) @@ R keeps u and turns the plane at right angles to u (27m2)
-\htmlClass{new}{Rx = \cos\theta\,x + \sin\theta\,(u\times x) + (1 - \cos\theta)(u\cdot x)\,u} @@ put back w = x − (u · x)u
-\det[w\ \ Qw\ \ u] = \sin\theta\,\det[w\ \ u\times w\ \ u] @@ Qw = cos θ w + sin θ (u × w); straight and flat in column 2 (27e2)
-\det[w\ \ u\times w\ \ u] = \det[u\ \ w\ \ u\times w] = (u\times w)\cdot(u\times w) > 0 \quad \blacksquare @@ two swaps keep the sign (27e1); the cross technique (27i3)
+  <h2 class="sthead"><span class="stno">27m3</span>Answers as Ratios of Determinants</h2>
+  <p data-pid="6b4167">Det-ratio technique: <b>if det A ≠ 0, then Ax = b has exactly one answer, and xⱼ = det Aⱼ / det A, where Aⱼ is A with column j replaced by b.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the det-ratio technique">
+A \text{ undoable, so } x = A^{-1}b \text{ is the one answer} @@ the nonzero-det technique (27e4)
+b = Ax = x_1(\text{col } 1) + \cdots + x_n(\text{col } n) @@ Ax is the mix of the columns with the numbers of x (27d1)
+\det A_j = \textstyle\sum_k x_k \det(A \text{ with column } j \text{ replaced by column } k) @@ straight in column j (27e1)
+\text{for } k \ne j \text{ that grid has column } k \text{ twice} @@ flat: its det is 0
+\htmlClass{new}{\det A_j = x_j\det A,\ \ x_j = \tfrac{\det A_j}{\det A}} \quad \blacksquare @@ only k = j is left; divide by det A ≠ 0
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: a half turn, column by column">
-\theta = \pi,\ \ u = \tfrac{1}{\sqrt2}(1, 1, 0):\ \ Rx = -x + 2(u\cdot x)\,u @@ cos π = −1, sin π = 0
-Re_1 = -e_1 + 2\cdot\tfrac{1}{\sqrt2}\cdot\tfrac{1}{\sqrt2}(1, 1, 0) = (0, 1, 0) @@ u · e₁ = 1/√2
-Re_2 = (1, 0, 0),\ \ Re_3 = -e_3 + 0 = (0, 0, -1) @@ the same, with u · e₂ = 1/√2 and u · e₃ = 0
-\htmlClass{new}{R = \begin{pmatrix}0&1&0\\1&0&0\\0&0&-1\end{pmatrix}} \quad \blacksquare @@ the columns are Re₁, Re₂, Re₃ (27d1); check: middle sum −1 = 1 + 2 cos π
+  <pre class="lines" data-k="ember" data-label="this step: two samenesses">
+2x + y = 5,\ \ x + 3y = 10 @@ given
+\det A = 2\cdot3 - 1\cdot1 = 5 @@ not 0: exactly one answer
+x = \tfrac{1}{5}\det\begin{pmatrix}5&1\\10&3\end{pmatrix} = \tfrac{15 - 10}{5} = 1 @@ column 1 replaced by b
+\htmlClass{new}{y = \tfrac15\det\begin{pmatrix}2&5\\1&10\end{pmatrix} = \tfrac{20 - 5}{5} = 3} \quad \blacksquare @@ check: 2 + 3 = 5, 1 + 9 = 10
   </pre>
-  <p data-pid="668839">Two turns about different axes, done one after the other, are one turn about a third axis, since turns form a group and every turn has an axis. But the order matters. A quarter turn about the up vector, done after a quarter turn about e₁, is a third of a turn about (1, 1, 1); done before it, a third of a turn about (1, −1, 1). Rung 20’s turns of the plane commuted. Turns of space do not.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · axis and angle · ← → keys work</div></section>
+  <p data-pid="4339d8">For many unknowns the ratios are slow: n + 1 determinants where one elimination will do. Their worth is the formula. Every answer of a system with whole numbers is a fraction with det A below. And the undo of a 2 × 2 grid, by the stand-in technique, is the grid with rows (d, −b), (−c, a), divided by ad − bc.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · ratios · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27m3.1</span><span class="ph understand">understand</span>What does the axis-turn technique say? <br>What does its second statement settle that the middle sum cannot?</li>
+      <li><span class="qid">27m3.1</span><span class="ph understand">understand</span>What does the det-ratio technique say? <br>Which condition of the determinant makes every term but one vanish in its proof?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="27m4">
-  <h2 class="sthead"><span class="stno">27m4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">27m4</span>Determinants of Blocks</h2>
+  <p data-pid="8fc3b5">Many grids come in blocks: a square grid A in the top left corner, a square grid D in the bottom right, a block B above D, and only zeros below A.</p>
+  <p data-pid="3ff50d">Block-det technique: <b>if M has the square blocks A and D down its middle and only zeros below A, then det M = det A · det D, whatever the block B above D holds.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the block-det technique">
+M = \begin{pmatrix}A & B\\ 0 & D\end{pmatrix} @@ A is r × r and D is s × s; the 0 block is s × r
+\text{rows } 1 \text{ to } r:\ A \to A_1 \text{, a staircase} @@ by p swaps and adding stretches of rows; B becomes some B₁
+\text{rows } r + 1 \text{ to } r + s:\ D \to D_1 @@ a staircase, by q swaps and adding stretches; the 0 block stays 0
+\begin{pmatrix}A_1 & B_1\\ 0 & D_1\end{pmatrix} \text{ is a staircase} @@ every entry below its middle is 0
+\det M = (-1)^{p+q}\,\Pi(A_1)\,\Pi(D_1) @@ the stair-det technique (27m1); Π is the product down the middle
+\htmlClass{new}{\det M = \det A \cdot \det D} \quad \blacksquare @@ the stair-det technique again, for A and for D
+  </pre>
+  <p data-pid="3d6c0d">The grid with rows (1, 2, 5, 6), (3, 4, 7, 8), (0, 0, 2, 1), (0, 0, 1, 1) has determinant (4 − 6)(2 − 1) = −2, and the 5, 6, 7, 8 never enter. By the side-turn technique the same holds with the zeros above D. And with more blocks down the middle, the determinant is the product of all their determinants.</p>
+  <p data-pid="5c3c48">When all four blocks are full, there is still a formula as long as A can be undone.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the four-blocks technique">
+L = \begin{pmatrix}I & 0\\ CA^{-1} & I\end{pmatrix},\ \ \det L = 1 @@ its side-turn is a staircase with 1 down its middle (27g1, 27m1)
+U = \begin{pmatrix}A & B\\ 0 & D - CA^{-1}B\end{pmatrix} @@ four r × r blocks
+LU = \begin{pmatrix}A & B\\ C & D\end{pmatrix} @@ blocks multiply as entries do (27d2): CA⁻¹A = C, and CA⁻¹B + D − CA⁻¹B = D
+\det(LU) = \det A \cdot \det(D - CA^{-1}B) @@ the det-product technique (27e3) and the block-det technique
+\htmlClass{new}{= \det(AD - CB) \text{ when } AC = CA} \quad \blacksquare @@ det-product: A(D − CA⁻¹B) = AD − ACA⁻¹B, and ACA⁻¹ = CAA⁻¹ = C
+  </pre>
+  <p data-pid="48aebb">Four-blocks technique: <b>if A, B, C, D are r × r and A is undoable, the grid with rows of blocks (A, B), (C, D) has determinant det A · det(D − CA⁻¹B); and that is det(AD − CB) when AC = CA.</b></p>
+  <p data-pid="58fd3f">The 2 × 2 formula ad − bc does not carry over to blocks as det A · det D − det B · det C. Put the 2 × 2 grids 0, I, I, 0 in the four places. The grid swaps e₁ with e₃ and e₂ with e₄: two swaps, so its determinant is 1. The copied formula gives 0 − 1 = −1.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27m4.1</span><span class="ph understand">understand</span>What is the determinant of a grid with square blocks A and D down its middle and zeros below A? <br>Why does the block above D not matter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27m5">
+  <h2 class="sthead"><span class="stno">27m5</span>A Staircase in Some Basis</h2>
+  <p data-pid="ced8a3">Not every grid can be straightened out: the slide with rows (1, 1), (0, 1) cannot (27f3). But the slide is already a staircase. Over ℂ every grid can be brought that far.</p>
+  <p data-pid="906ce2">Staircase-basis technique: <b>for every n × n grid A with entries in ℂ there is an undoable P with P⁻¹AP a staircase. The stretches of A stand down its middle, each as often as its factor appears in det(A − λI).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the staircase-basis technique">
+Av_1 = \lambda_1v_1,\ v_1 \neq 0 @@ det(A − λI) has a root in ℂ (25d); the stretch-test technique (27f1)
+P_1 = (v_1\ v_2\ \cdots\ v_n) \text{, undoable} @@ grow v₁ to a basis (27b3) and write it down as columns
+P_1^{-1}AP_1e_1 = P_1^{-1}\lambda_1v_1 = \lambda_1e_1 @@ P₁e₁ = v₁
+P_1^{-1}AP_1 = \begin{pmatrix}\lambda_1 & *\\ 0 & A_1\end{pmatrix} @@ its first column is λ₁e₁; A₁ is (n − 1) × (n − 1)
+Q^{-1}A_1Q \text{ is a staircase} @@ the induction hypothesis, for size n − 1 (4f); size 1 is the base
+P = P_1\begin{pmatrix}1 & 0\\ 0 & Q\end{pmatrix}:\ P^{-1}AP = \begin{pmatrix}\lambda_1 & *\\ 0 & Q^{-1}A_1Q\end{pmatrix} @@ multiply the blocks (27d2)
+\htmlClass{new}{P^{-1}AP = S \text{, a staircase}} \quad \blacksquare @@ zeros below the middle
+  </pre>
+  <p data-pid="72f7f0">The middle of S holds the stretches. By the det-product technique det(P⁻¹(A − λI)P) = det(A − λI), and P⁻¹(A − λI)P = S − λI is a staircase, so det(A − λI) = (s₁₁ − λ)⋯(sₙₙ − λ) by the stair-det technique. A real grid may have no real staircase: the quarter turn has no real stretch at all.</p>
+  <p data-pid="9672cb">Stretches-of-f technique: <b>if f is a polynomial and the stretches of A are λ₁, …, λₙ, each as often as its factor appears, then the stretches of f(A) are f(λ₁), …, f(λₙ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the stretches-of-f technique">
+(ST)_{ij} = \textstyle\sum_k s_{ik}t_{kj},\ \ s_{ik} = 0 \text{ for } k \lt i,\ t_{kj} = 0 \text{ for } k \gt j @@ S and T staircases
+i \gt j:\ (ST)_{ij} = 0;\ \ (ST)_{ii} = s_{ii}t_{ii} @@ a term that is not 0 needs i ≤ k ≤ j
+S^k \text{ has } \lambda_i^k \text{ down its middle} @@ induction on k (4f); sums of staircases add their middles
+f(S) \text{ is a staircase, } f(\lambda_i) \text{ down its middle} @@ a polynomial is a sum of stretched powers
+f(A) = Pf(S)P^{-1} @@ Aᵏ = PSᵏP⁻¹: the P⁻¹P in the middle cancel
+\htmlClass{new}{\det(f(A) - \lambda I) = \textstyle\prod_i\big(f(\lambda_i) - \lambda\big)} \quad \blacksquare @@ as for A and S above
+  </pre>
+  <p data-pid="f008f3">The grid with rows (4, 1), (2, 3) stretches (1, 1) by 5 and (1, −2) by 2. So its square has the stretches 25 and 4, with no squaring of the grid. And a grid whose stretches are all 0 has a staircase with zeros down the middle, which fades out (27g5).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27m5.1</span><span class="ph understand">understand</span>What can be said of every grid over ℂ, even one that cannot be straightened out? <br>What are the stretches of f(A)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27m6">
+  <h2 class="sthead"><span class="stno">27m6</span>The Size Reached, From Smaller Determinants</h2>
+  <p data-pid="638e37">A square grid reaches everything exactly when its determinant is not 0 (27e4). For a grid of any shape, strike out some rows and some columns until a square k × k grid is left, and take its determinant. Those smaller determinants tell more.</p>
+  <p data-pid="56b247">Small-dets technique: <b>the dimension of what a grid A reaches is the largest k for which some k × k grid left by striking rows and columns of A has a determinant that is not 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the small-dets technique">
+r \text{ columns of } A \text{ are free} @@ r is the dimension reached; drop spare columns (27b1). Call the grid of those columns B
+r \text{ rows of } B \text{ are free} @@ the rows of B build dimension r too (27l5); drop spare rows
+C = \text{those rows of } B:\ \det C \neq 0 @@ r × r with free rows: it reaches everything (27l5), so it is undoable (27c2, 27d3, 27e4)
+\det C' \neq 0,\ C' \text{ a } k \times k \text{ grid inside } A @@ now the other way
+\text{the } k \text{ columns of } C' \text{ are free} @@ the nonzero-det technique (27e4)
+\text{the } k \text{ columns of } A \text{ holding them are free} @@ a mix of the long columns that is 0 is 0 in the kept rows too
+\htmlClass{new}{k \le r \text{, and } k = r \text{ happens}} \quad \blacksquare @@ free vectors in a space of dimension r (27b2)
+  </pre>
+  <p data-pid="cb9f69">The grid with rows (1, 2, 3), (2, 4, 6), (1, 0, 1) has determinant 0, since row 2 is twice row 1. Strike row 2 and column 2: rows (1, 3), (1, 1) are left, with determinant −2. So the grid reaches a plane.</p>
+  <p data-pid="670bbe">For finding r, row moves are far quicker. The worth of the technique is that each small determinant is a polynomial in the entries. Nudge the entries a little and a determinant that was not 0 stays not 0. So a small nudge can raise what a grid reaches, and can never lower it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27m6.1</span><span class="ph understand">understand</span>How do the smaller determinants of a grid give the dimension of what it reaches? <br>Why can a k × k grid inside A with determinant not 0 never have k above that dimension?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27m7">
+  <h2 class="sthead"><span class="stno">27m7</span>Determinants With Letters Inside</h2>
+  <p data-pid="fa2b08">The own-polynomial technique (27g3) took the determinant and the stand-in grid of A − λI, a grid whose entries hold a letter. Every technique for determinants was proved for grids of numbers. Do they hold for such a grid?</p>
+  <p data-pid="5a657c">Letters-inside technique: <b>the shuffle formula, det(AB) = det A · det B, and SA = (det A) I hold for square grids whose entries are polynomials, and for entries of any kind that add and multiply by the nine techniques (5d) with products that swap. Such a grid has an undo of its own kind exactly when its determinant has a reciprocal of that kind.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the letters-inside technique">
+\det A = \textstyle\sum_\sigma \operatorname{sign}\sigma\ a_{\sigma(1)1}\cdots a_{\sigma(n)n} @@ only adding and multiplying: it has a meaning for entries of any such kind
+F = \det(AB) - \det A\cdot\det B @@ a polynomial in the 2n² entries, taken as unknowns, with whole numbers in front
+F = 0 \text{ whenever numbers are put in} @@ the det-product technique (27e3)
+\text{one unknown: } F \text{ is the zero polynomial} @@ a polynomial of degree d ≥ 1 has at most d roots (25d)
+\text{many unknowns: the same} @@ induction on the number of unknowns (4f): hold all but one, and each number in front is 0 at every choice of the rest
+\htmlClass{new}{F = 0 \text{ as a polynomial}} \quad \blacksquare @@ so det(AB) = det A · det B with the entries as unknowns; and the same proof for SA = (det A) I, entry by entry
+  </pre>
+  <p data-pid="1ca19e">A sameness between polynomials with whole numbers in front stays true whatever is put in for the unknowns, as long as what is put in adds and multiplies by the nine techniques and its products swap. Only those techniques are used in multiplying out. So the two formulas hold for entries that are polynomials in λ, which is what 27g3 took on trust.</p>
+  <p data-pid="a06968">For the undo: if AB = I, then det A · det B = 1, so det A has a reciprocal. And if det A has a reciprocal, S times that reciprocal is the undo. Among the whole numbers only 1 and −1 have reciprocals. So a grid of whole numbers has an undo of whole numbers exactly when its determinant is 1 or −1. Rows (2, 1), (5, 3) have determinant 1, and the undo has rows (3, −1), (−5, 2). Rows (2, 0), (0, 1) have determinant 2, and the undo needs ½.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27m7.1</span><span class="ph understand">understand</span>Why do the determinant techniques hold for grids whose entries are polynomials? <br>When does a grid of whole numbers have an undo of whole numbers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27m8">
+  <h2 class="sthead"><span class="stno">27m8</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\det Q = 1 \Rightarrow Q \text{ keeps lengths}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; rows (2, 0, 0), (0, ½, 0), (0, 0, 1) have det 1 and double e₁
-\text{every turn of the plane keeps a vector in place}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the axis needs an odd number of directions: a quarter turn of the plane keeps only 0
-R_zR_x = R_xR_z\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; turns of space do not commute: one is a third of a turn about (1, 1, 1), the other about (1, −1, 1)
--I \text{ is a turn of space, with an axis}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it keeps lengths, but det(−I) = (−1)³ = −1; it moves every vector but 0
+\text{stretching a row by } c \text{ leaves det alone}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; det is straight in that row: it is multiplied by c
+\text{the six-term technique, copied to four rows}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; its diagonals find 8 terms; a grid of four rows has 4! = 24
+\det A = \textstyle\sum_j a_{1j}\det(\text{strike row } 1,\ \text{column } j)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the stand-ins carry the signs (−1)^(1 + j)
+x_j = \det A_j/\det A \text{ when } \det A = 0\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; there is no ratio; the system has no answer or many (27e4, 27l2)
+\det = \det A\det D - \det B\det C\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; with the blocks 0, I, I, 0 that gives −1, and the determinant is 1
+\text{every real grid has a real staircase}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the quarter turn has no real stretch: the staircase is over ℂ
+\det A = 0 \Rightarrow A \text{ reaches only } 0\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; it reaches less than everything; the smaller determinants say how much
+\det A \neq 0 \Rightarrow \text{a whole-number undo}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; rows (2, 0), (0, 1): the undo needs ½. The determinant must be 1 or −1
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27m4.1</span><span class="ph understand">understand</span>Why is “det Q = 1, so Q keeps lengths” a move to watch out for? <br>Why is “−I is a turn of space, with an axis” one?</li>
+      <li><span class="qid">27m8.1</span><span class="ph understand">understand</span>Why is “stretching a row by c leaves det alone” a move to watch out for? <br>Why is xⱼ = det Aⱼ/det A one when det A = 0?</li>
     </ol>
   </section>
 </section>
@@ -160,21 +267,20 @@ R_zR_x = R_xR_z\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">27m.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\theta = \tfrac{2\pi}{3},\ \ u = \tfrac{1}{\sqrt3}(1, 1, 1)"></span></span>Build the grid of this turn from the axis-turn technique, and compare it with the grid C that cycles e₁ ↦ e₂ ↦ e₃ ↦ e₁. Which way round does C turn?</div>
-  <div class="chq"><span class="chid">27m.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="Q = \tfrac19\begin{pmatrix}-7&amp;4&amp;4\\4&amp;-1&amp;8\\4&amp;8&amp;-1\end{pmatrix}"></span></span>Check that Q is a turn, and find its angle and its axis. <br>Why can the sign test of 27m3 not decide which way round it turns? <br>Find Q².</div>
-  <div class="chq"><span class="chid">27m.4.3</span><span class="tagq">converse</span>Every turn of space keeps a vector in place. Turn it round: must a 3 × 3 grid that keeps lengths and keeps some u ≠ 0 in place be a turn? Prove it, or find a grid that breaks it.</div>
-  <div class="chq"><span class="chid">27m.4.4</span><span class="tagq">reroute</span>The stretch polynomial of a turn Q is a cubic with real numbers, so it has a real root (12), and its three roots in ℂ multiply to det Q = 1 (27l1). Prove that 1 is a stretch of Q, from the fact that a real stretch of a length-keeper is 1 or −1 and that roots that are not real come in pairs a + bi, a − bi.</div>
-  <div class="chq"><span class="chid">27m.4.5</span><span class="tagq">seam</span>In 1830 an algebraist laid down a technique for new kinds of number: every technique of arithmetic must carry over, turn-about multiplication included. In 1843 a new kind of number was built to describe turns of space, and its multiplication did not turn about. <br>From this page, could any system that describes turns of space by multiplying keep the turn-about technique? <br>Was the 1830 technique a fact about numbers, or a wish?</div>
+  <div class="chq"><span class="chid">27m.4.1</span><span class="tagq">build</span>Build a 3 × 3 grid of whole numbers, none 0, with determinant 1, and find its undo. <br>Prove that every such grid has an undo of whole numbers.</div>
+  <div class="chq"><span class="chid">27m.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\begin{pmatrix}1&amp;2&amp;3\\4&amp;5&amp;6\\7&amp;8&amp;9\end{pmatrix},\ \ \begin{pmatrix}1&amp;2&amp;3\\4&amp;5&amp;6\\7&amp;8&amp;10\end{pmatrix}"></span></span>Find the det of the first and a vector it loses, and the det and the undo of the second. <br>What happens to the undo as the last entry heads to 9?</div>
+  <div class="chq"><span class="chid">27m.4.3</span><span class="tagq">converse</span>A grid of whole numbers with det 1 or −1 has an undo of whole numbers (27m.4.1). Turn it round: if A and A⁻¹ both hold whole numbers only, must det A be 1 or −1? Prove your answer.</div>
+  <div class="chq"><span class="chid">27m.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\det\begin{pmatrix}1&amp;a&amp;a^2\\1&amp;b&amp;b^2\\1&amp;c&amp;c^2\end{pmatrix}"></span></span>Find it by row moves. <br>Find it again as a polynomial in c that is 0 at c = a and at c = b (9g), with the number in front from expanding along row 3.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r27l.html">← 27l · eigenvectors by hand</a><a href="r27cb24.html">27·cb24 · systems of rate statements →</a></nav>
+<nav class="nextrung"><a href="r27l.html">← 27l · solving systems by elimination</a><a href="r27n.html">27n · eigenvectors by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>A grid that keeps lengths is an orthogonal matrix, with QᵀQ = I; the length-keepers form the orthogonal group O(n), and those with det 1 the special orthogonal group SO(n). The turns of space are rotations, and SO(3) is the rotation group; a length-keeper with det −1 is an improper rotation, a mirror reflection followed by a turn. The axis technique is Euler’s rotation theorem. The axis-turn technique is Rodrigues’ rotation formula. That turns of space do not commute is the non-commutativity of SO(3).</p>
+  <p>Finding a determinant down the stairs is computing it by Gaussian elimination, or by LU decomposition; a grid with zeros below its middle is upper triangular. Expanding along a row or column is cofactor expansion, or Laplace expansion, and the six-term rule for 3 × 3 grids is the rule of Sarrus. The det-ratio technique is Cramer’s rule. The determinant in 27m.4.4 is the Vandermonde determinant. A grid with a block of zeros below its middle blocks is block triangular, and D − CA⁻¹B is the Schur complement of A. Bringing a grid to a staircase in some basis is triangularisation; with a basis of unit vectors square to each other it is the Schur form. The stretches-of-f technique is the spectral mapping property for polynomials. A determinant of a k × k grid inside A is a minor of A, and this count is the determinantal rank. Entries that add and multiply by the nine techniques with products that swap form a commutative ring (rung 44); a member with a reciprocal is a unit, and a whole-number grid with determinant 1 or −1 is unimodular.</p>
   <h3>Who said it first</h3>
-  <p>Leonhard Euler proved in 1775 that any motion of a sphere about its centre leaves a diameter fixed. Olinde Rodrigues gave the axis-turn formula, and the rule for composing two turns, in 1840. George Peacock set out the principle of permanence of equivalent forms in his Treatise on Algebra of 1830. William Rowan Hamilton found the quaternions on 16 October 1843, walking by the Royal Canal in Dublin, and gave up turn-about multiplication to have them; they describe turns of space to this day, in spacecraft and in video games.</p>
+  <p>Gabriel Cramer published the ratio rule in 1750, in a book on curves through given points; Colin Maclaurin had used it for two and three unknowns in a treatise printed in 1748. Pierre-Simon Laplace gave the expansion by smaller determinants in 1772. Pierre Frédéric Sarrus taught the six-term rule in the 1830s. Alexandre-Théophile Vandermonde studied determinants as objects in their own right in 1772, though the determinant that bears his name does not appear in his papers.</p>
 </section>
 
 </div>
@@ -189,20 +295,20 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'lengths to dots',t:R`x\cdot y = \tfrac12(|x+y|^2 - |x|^2 - |y|^2)`,n:`Keep lengths, and dots are kept.`},
-  {k:'ember',kl:'dots to columns',t:R`Q^{\mathsf T}Q = I`,n:`Columns of length 1, at right angles.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{Q^{-1} = Q^{\mathsf T},\ \det Q = \pm1}`,n:`det 1: a turn. det −1: a mirror.`}
-],{title:'The slides · keeping lengths · ← → keys work'});
+  {k:'ember',kl:'a staircase',t:R`\det = a_{11}a_{22}\cdots a_{nn}`,n:`Only doing nothing survives.`},
+  {k:'ember',kl:'row moves',t:R`\text{swap} \to -\det,\ \ \text{add} \to \det`,n:`Turned on its side, rows act like columns.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\det A = (-1)^s\prod \text{middle}}`,n:`About n³/3 steps, not n!.`}
+],{title:'The slides · down the stairs · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'the key line',t:R`\det(Q - I) = (-1)^3\det(Q - I)`,n:`Three directions: an odd number.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{Qu = u,\ u \ne 0}`,n:`One line stays put.`},
-  {k:'ember',kl:'the angle',t:R`\text{middle sum} = 1 + 2\cos\theta`,n:`Read off the diagonal.`}
-],{title:'The slides · the axis · ← → keys work'});
+  {k:'ember',kl:'stand-ins',t:R`C_{ij} = (-1)^{i+j}\det(\text{strike row } i,\ \text{column } j)`,n:`Smaller determinants, signed like a chessboard.`},
+  {k:'ember',kl:'down a column',t:R`\det A = \textstyle\sum_i a_{ij}C_{ij}`,n:`From the stand-in technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\det A = \textstyle\sum_j a_{ij}C_{ij}}`,n:`Along a row too, by the side-turn.`}
+],{title:'The slides · expand · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'split',t:R`x = (u\cdot x)u + w`,n:`Along the axis, and across it.`},
-  {k:'ember',kl:'turn the rest',t:R`w \mapsto \cos\theta\,w + \sin\theta\,(u\times w)`,n:`A turn of the plane across u.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{Rx = \cos\theta\,x + \sin\theta\,u\times x + (1-\cos\theta)(u\cdot x)u}`,n:`Any turn, from an axis and an angle.`}
-],{title:'The slides · axis and angle · ← → keys work'});
+  {k:'ember',kl:'b is a mix',t:R`b = \textstyle\sum x_k(\text{col } k)`,n:`Put it in column j.`},
+  {k:'ember',kl:'flat',t:R`\det A_j = x_j\det A`,n:`Every other column appears twice.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{x_j = \det A_j/\det A}`,n:`Only when det A ≠ 0.`}
+],{title:'The slides · ratios · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

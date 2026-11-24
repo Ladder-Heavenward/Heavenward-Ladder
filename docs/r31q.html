@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Principal Components</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31p.html">← 31p eigenvalues by machine</a><a href="r31stat.html">next: 31·stat can a model fit too well? →</a></p>
+  <div class="tags"><span class="tag tech">31q · technique</span></div>
+  <h1>Principal Components</h1>
+  <p data-pid="7b6ebd">A naturalist measures a hundred Dungeness crabs on the beach at Long Beach, Washington: the width of the shell, its length, the size of the claw, the weight. Four numbers for each crab, and a cloud of a hundred points in a space with four directions. Most of the cloud runs along one direction, big crabs against small ones, with a little spread around it. Which direction is that, and how much of the spread does it carry? The spread of the cloud along any direction is a quadratic form, read off one symmetric grid made of the co-spreads. Its axes are the answer. The first axis carries the most spread, the next carries the most of what is left, at right angles, and so on. Keep the first few, and the flat piece they build is the one the whole cloud lies closest to. The axes are found by the techniques of the rung, and nothing about them says what they mean.</p>
+  <p class="gesture" data-pid="9d9d01">The spread of a cloud of data along a direction d of size 1 is dᵀCd, with C the grid of co-spreads. Its axes carry the most spread, in falling order, each at right angles to the ones before, and the stretches are the spreads they carry. The flat piece built by the first r axes is the one the cloud lies closest to.</p>
+</header>
+
+<section class="class step" data-step="31q1">
+  <h2 class="sthead"><span class="stno">31q1</span>Spread Along a Direction</h2>
+  <p data-pid="cf0c36">Take n points x₁, …, xₙ in lists of p numbers, with their average already taken away, so that the points add to 0. Stack them as the rows of a grid X. From here on, the <i>spread grid</i> is C = XᵀX/n: its place (j, k) is the average of the jth number times the kth, the co-spread of 30g, and its middle line holds the spreads. It is symmetric.</p>
+  <p data-pid="a68620">Spread-along technique: <b>the spread of the points along a direction d of size 1, the average of (xᵢ · d)², is dᵀCd.</b> The shadow of xᵢ on the line through d is (xᵢ · d)d (31b1), the readings xᵢ · d average to 0, and Σᵢ(xᵢ · d)² = |Xd|² = dᵀXᵀXd.</p>
+  <pre class="lines" data-k="ember" data-label="this step: four points in the plane">
+(3, 1),\ (-3, -1),\ (1, 1),\ (-1, -1) @@ they add to 0
+C = \tfrac14\begin{pmatrix} 20 & 8 \\ 8 & 4\end{pmatrix} = \begin{pmatrix} 5 & 2 \\ 2 & 1\end{pmatrix} @@ Σx² = 20, Σxy = 8, Σy² = 4
+d = (1, 0):\ \ d^{\mathsf T}Cd = 5;\ \ d = (0, 1):\ \ 1 @@ the spreads along the axes of the page
+\htmlClass{new}{d^{\mathsf T}Cd = \tfrac12(5 + 4 + 1) = 5} \quad \blacksquare @@ d = (1, 1)/√2: the spread-along technique
+  </pre>
+  <!--gfig 31q1--><div class="gfigs" data-gfig="31q1" data-story="[[&quot;Four points, (3, 1), (−3, −1), (1, 1) and (−1, −1). They add to 0.&quot;, [&quot;circle+ink&quot;, &quot;#35&quot;]], [&quot;Their spread grid is C = [5 2; 2 1]. The spread along a direction d is dᵀCd.&quot;, [&quot;#25&quot;, &quot;#26&quot;]], [&quot;Along (1, 0), across, the readings are 3, −3, 1, −1: spread 5.&quot;, [&quot;teal&quot;, &quot;#28&quot;, &quot;circle+ink&quot;]], [&quot;Along (0, 1), up, the readings are 1, −1, 1, −1: spread 1.&quot;, [&quot;gold&quot;, &quot;#30&quot;, &quot;circle+ink&quot;]], [&quot;Along the diagonal, each point drops a shadow on the line, the red dots. The spread of the shadows is 5.&quot;, [&quot;ember&quot;, &quot;#32&quot;, &quot;#33&quot;, &quot;#34&quot;, &quot;line+muted&quot;, &quot;circle+ink&quot;]]]"><svg class="gfig" viewBox="0 0 380 240" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="four points with three directions and their shadows on the diagonal, spreads 5, 1 and 5"><line x1="30" x2="240" y1="119.0" y2="119.0" style="stroke:var(--ink);stroke-width:1"/><line x1="56.2" x2="56.2" y1="119.0" y2="123.0" style="stroke:var(--ink);stroke-width:1"/><text x="56.2" y="134.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-3</text><line x1="213.8" x2="213.8" y1="119.0" y2="123.0" style="stroke:var(--ink);stroke-width:1"/><text x="213.8" y="134.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">3</text><line x1="30" x2="240" y1="197.8" y2="197.8" style="stroke:var(--grid);stroke-width:.7"/><text x="26" y="201.8" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-3</text><line x1="30" x2="240" y1="40.2" y2="40.2" style="stroke:var(--grid);stroke-width:.7"/><text x="26" y="44.2" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">3</text><line x1="135.0" x2="135.0" y1="224.0" y2="14.0" style="stroke:var(--ink);stroke-width:1;stroke-dasharray:"/><line x1="30.0" y1="119.0" x2="240.0" y2="119.0" style="stroke:var(--teal);stroke-width:2.4;stroke-dasharray:6 4"/><line x1="135.0" y1="224.0" x2="135.0" y2="14.0" style="stroke:var(--gold);stroke-width:2.4;stroke-dasharray:6 4"/><line x1="60.8" y1="193.2" x2="209.2" y2="44.8" style="stroke:var(--ember);stroke-width:1.6"/><line x1="213.8" y1="92.8" x2="187.5" y2="66.5" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:2 2"/><circle cx="187.5" cy="66.5" r="2.6" style="fill:var(--ember)"/><line x1="56.2" y1="145.2" x2="82.5" y2="171.5" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:2 2"/><circle cx="82.5" cy="171.5" r="2.6" style="fill:var(--ember)"/><line x1="161.2" y1="92.8" x2="161.2" y2="92.8" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:2 2"/><circle cx="161.2" cy="92.8" r="2.6" style="fill:var(--ember)"/><line x1="108.8" y1="145.2" x2="108.8" y2="145.2" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:2 2"/><circle cx="108.8" cy="145.2" r="2.6" style="fill:var(--ember)"/><circle cx="213.8" cy="92.8" r="4" style="fill:var(--ink)"/><circle cx="56.2" cy="145.2" r="4" style="fill:var(--ink)"/><circle cx="161.2" cy="92.8" r="4" style="fill:var(--ink)"/><circle cx="108.8" cy="145.2" r="4" style="fill:var(--ink)"/><text x="256.0" y="40.0" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">C = [5 2; 2 1]</text><text x="256.0" y="70.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">spread along d = dᵀCd</text><line x1="256.0" y1="92.0" x2="274.0" y2="92.0" style="stroke:var(--teal);stroke-width:2;stroke-dasharray:4 3"/><text x="280.0" y="96.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">d = (1, 0): 5</text><line x1="256.0" y1="112.0" x2="274.0" y2="112.0" style="stroke:var(--gold);stroke-width:2;stroke-dasharray:4 3"/><text x="280.0" y="116.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">d = (0, 1): 1</text><line x1="256.0" y1="132.0" x2="274.0" y2="132.0" style="stroke:var(--ember);stroke-width:2"/><text x="280.0" y="136.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">d = (1, 1)/√2: 5</text><text x="256.0" y="168.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">red dots: shadows on</text><text x="256.0" y="184.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">the diagonal line</text><text x="366" y="234" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">points (3, 1), (−3, −1), (1, 1), (−1, −1)</text></svg></div><!--/gfig 31q1-->
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · spread grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31q1.1</span><span class="ph understand">understand</span>What is the spread grid C of a cloud of points?  <br>What does the spread-along technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31q2">
+  <h2 class="sthead"><span class="stno">31q2</span>The Directions of Most Spread</h2>
+  <p data-pid="df6189">Most-spread technique: <b>the direction of most spread is the axis e₁ of C’s largest stretch λ₁, and the spread along it is λ₁; among directions at right angles to e₁, the most spread is λ₂, along e₂; and so on. The spreads along all the axes add to the middle sum of C, the total spread.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the most-spread technique">
+d^{\mathsf T}Cd = \lambda_1y_1^2 + \cdots + \lambda_py_p^2,\ \ y_1^2 + \cdots + y_p^2 = 1 @@ the axes-form technique (31e1); |d| = 1
+\le \lambda_1,\ \text{with equality at } d = e_1 @@ λ₁ is the largest
+d \perp e_1 \Rightarrow y_1 = 0,\ \ d^{\mathsf T}Cd \le \lambda_2 @@ the same, one axis fewer
+\htmlClass{new}{\lambda_1 + \cdots + \lambda_p = C_{11} + \cdots + C_{pp}} \quad \blacksquare @@ the middle-sum technique (27n1)
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: the four points, along their axes">
+\det(C - \lambda I) = \lambda^2 - 6\lambda + 1 @@ the stretch-test technique
+\lambda_1 = 3 + 2\sqrt2 \approx 5.83,\ \ \lambda_2 = 3 - 2\sqrt2 \approx 0.17 @@ the roots
+e_1 \propto (2,\ \lambda_1 - 5) = (2,\ 2\sqrt2 - 2) \propto (1,\ \sqrt2 - 1) @@ (C − λ₁I)e₁ = 0, top row
+\htmlClass{new}{e_1 \text{ at } 22.5^\circ,\ \ \text{carrying } \tfrac{5.83}{6} \approx 97\% \text{ of the spread}} \quad \blacksquare @@ tan 22.5° = √2 − 1 (21k)
+  </pre>
+  <p data-pid="670a61">From here on, the readings xᵢ · eₖ are the kth <i>components</i> of the points. Different components never co-spread: the average of (xᵢ · e₁)(xᵢ · e₂) is e₁ᵀCe₂ = λ₂ e₁ · e₂ = 0.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · most spread · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31q2.1</span><span class="ph understand">understand</span>What does the most-spread technique say?  <br>What are the components of the points, and why do two different components never co-spread?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31q3">
+  <h2 class="sthead"><span class="stno">31q3</span>The Flat Piece the Cloud Lies Nearest</h2>
+  <p data-pid="9d296c">Closest-piece technique: <b>among all flat pieces of dimension r through the average, the one built by e₁, …, eᵣ makes the total squared distance from the points least, and that least total is n(λᵣ₊₁ + ⋯ + λₚ).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the closest-piece technique">
+W \text{ built by a right-angled list } d_1, \ldots, d_r @@ any flat piece of dimension r through 0
+\textstyle\sum_i |x_i - Px_i|^2 = \sum_i |x_i|^2 - \sum_i |Px_i|^2 = n\,\text{tr}\,C - n\sum_{k \le r} d_k^{\mathsf T}Cd_k @@ the square-sum technique; |Px|² = Σ(x · dₖ)² (31b2); tr C, the middle sum
+\textstyle\sum_{k \le r} d_k^{\mathsf T}Cd_k = \sum_j \lambda_j\,w_j,\ \ w_j = \sum_{k \le r}(d_k\cdot e_j)^2 @@ the axes-form technique, for each dₖ
+0 \le w_j \le 1,\ \ \textstyle\sum_j w_j = r @@ the energy-bound technique (31h2): eⱼ read along the list dₖ; each dₖ has size 1
+\textstyle\sum_j \lambda_jw_j \le \lambda_1 + \cdots + \lambda_r @@ weights of at most 1 each, r in all, do best on the r largest
+\htmlClass{new}{\textstyle\sum_i |x_i - Px_i|^2 \ge n(\lambda_{r+1} + \cdots + \lambda_p)} \quad \blacksquare @@ with equality when dₖ = eₖ
+  </pre>
+  <p data-pid="011c0a">For the four points, the line along e₁ leaves a total squared distance of 4 × 0.17 = 0.69, against 4 × 1 = 4 for the line along the first axis of the page. In practice, points with many numbers each are kept as a few components, and the rest of the spread is reported as lost.</p>
+  <p data-pid="354950">Which units the numbers are in decides C, so it decides the axes. Measure claw size in millimetres and weight in kilograms, and the first axis is almost all claw. That is why each number is often first divided by its own spread width, which uses the grid of correlations instead. Neither choice is the true one; the report must say which was made.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · closest piece · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31q3.1</span><span class="ph understand">understand</span>What does the closest-piece technique say?  <br>In its proof, which technique gives 0 ≤ wⱼ ≤ 1, and why do the units of the numbers change the answer?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31q4">
+  <h2 class="sthead"><span class="stno">31q4</span>Moves to Watch Out For</h2>
+  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
+\text{the first axis is the cause of the spread}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it is a direction of most spread; what it means is a guess about the world
+\text{the axes do not depend on the units}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; changing one number’s units stretches one place of every point, and C changes
+\text{the first axis is the best line of } y \text{ on } x\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; that line makes misses up and down least; the axis makes misses at right angles least
+\text{components left out carry nothing}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; they carry n(λᵣ₊₁ + ⋯ + λₚ), stated, and sometimes the small spread is the interesting one
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31q4.1</span><span class="ph understand">understand</span>Why is the first axis not the best line of y on x?  <br>Why is the first axis not shown to be a cause of the spread?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">31q.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(2, 0, 1),\ (-2, 0, -1),\ (0, 1, 0),\ (0, -1, 0)"></span></span>Build C, its stretches and axes, and the share of the spread the first axis carries.  <br>Find the flat piece of dimension 2 the points lie nearest, and the total squared distance left.</div>
+  <div class="chq"><span class="chid">31q.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="C = \begin{pmatrix} 4 &amp; 0 \\ 0 &amp; 4\end{pmatrix}"></span></span>Find the direction of most spread.  <br>Which line of the most-spread technique has no single answer, and what does the cloud look like?</div>
+  <div class="chq"><span class="chid">31q.5.3</span><span class="tagq">converse</span>Different components never co-spread. Turn it round: if the readings along two directions d and d′ of size 1 never co-spread, must d and d′ be axes of C?</div>
+  <div class="chq"><span class="chid">31q.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="X \text{ with rows } (3, 1), (-3, -1), (1, 1), (-1, -1)"></span></span>Find the axes of C a second way, from the turn-stretch-turn of X (31f2).  <br>Check that σₖ²/n = λₖ.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r31p.html">← 31p · eigenvalues by machine</a><a href="r31stat.html">31·stat · can a model fit too well? →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The spread grid is the sample covariance matrix (often with n − 1 in place of n), and with each number divided by its spread width it is the correlation matrix. Its axes are the principal axes, the readings along them the principal component scores, and the method is principal component analysis (PCA). The share λ₁/(λ₁ + ⋯ + λₚ) is the proportion of variance explained. The bound with the weights wⱼ is Ky Fan’s maximum principle. Finding the axes from the SVD of X is how machines do it.</p>
+  <h3>Who said it first</h3>
+  <p>Karl Pearson in 1901 found the lines and planes of closest fit to systems of points in space. Harold Hotelling in 1933 found the components of a set of test scores, and gave them their name. Ky Fan proved the bound on sums of the largest stretches in 1949.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'grid',t:R`C = X^{\mathsf T}X/n`,n:`Co-spreads.`},
+  {k:'ember',kl:'along d',t:R`\tfrac1n\textstyle\sum(x_i\cdot d)^2`,n:`Shadows on a line.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{d^{\mathsf T}Cd}`,n:`A quadratic form.`}
+],{title:'The slides · spread grid · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'axes',t:R`d^{\mathsf T}Cd = \textstyle\sum\lambda_ky_k^2`,n:`Axes form.`},
+  {k:'ember',kl:'first',t:R`\le \lambda_1 = e_1^{\mathsf T}Ce_1`,n:`The most.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\textstyle\sum\lambda_k = \text{total spread}}`,n:`The middle sum.`}
+],{title:'The slides · most spread · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'miss',t:R`\textstyle\sum|x_i - Px_i|^2 = n\,\text{tr}C - n\sum d_k^{\mathsf T}Cd_k`,n:`Square-sum.`},
+  {k:'ember',kl:'weights',t:R`0 \le w_j \le 1,\ \textstyle\sum w_j = r`,n:`Energy bound.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\ge n(\lambda_{r+1} + \cdots + \lambda_p)}`,n:`The first r axes win.`}
+],{title:'The slides · closest piece · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

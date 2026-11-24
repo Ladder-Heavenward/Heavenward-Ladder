@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>18·logi2 · Why Not Just Round the Best Plan?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r18logi.html">← 18·logi how many of each loaf should a bakery bake?</a><a href="r18phys.html">next: 18·phys why do planets travel on ellipses? →</a></p>
+  <div class="tags"><span class="tag logi">18·logi2 · logistics</span></div>
+  <h1>Why Not Just Round the Best Plan?</h1>
+  <p data-pid="645068">Why not just round the best plan? 18·logi found the best plan for a bakery at a corner of the region its limits draw. Loaves can be counted in halves on paper, but crates, trucks and people cannot: a plan for three and a half crates is no plan. This page loads a van with whole crates, finds that rounding the corner breaks the limits or throws profit away, and that the best whole plan can sit far from the corner. Then it finds the best whole plan by splitting the region in two and using the corner of each part as a ceiling, without listing every plan.</p>
+  <p class="gesture" data-pid="848baa">Find the best corner as in 18·logi. Its value is a ceiling: no whole plan earns more. If the corner is not whole, split the region on a fractional count, x ≤ the count rounded down or x ≥ it rounded up, and find each part’s best corner. A part whose ceiling is below the best whole plan found so far can be dropped unexplored.</p>
+</header>
+
+<section class="class step" data-step="18logi21">
+  <h2 class="sthead"><span class="stno">18logi21</span>Whole Crates Only</h2>
+  <p data-pid="586747">Claire drives a van to a market. It has room for 5 crates and can carry 1100 kg. A crate of apples weighs 100 kg and earns 10 dollars; a crate of honey weighs 500 kg and earns 40. With x crates of apples and y of honey, the van’s limits and the earnings are these.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th></th><th>apples, x</th><th>honey, y</th><th>limit</th></tr>
+    <tr><th>room</th><td>1</td><td>1</td><td>5</td></tr>
+    <tr><th>weight, 100 kg</th><td>1</td><td>5</td><td>11</td></tr>
+    <tr><th>earns, 10 dollars</th><td>1</td><td>4</td><td></td></tr>
+  </table></div>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;x + y \le 5,\ \ x + 5y \le 11,\ \ x, y \ge 0\\ &amp;\text{earnings } E = x + 4y\end{aligned}"></div>
+  <p data-pid="7825c1">From here on, on this page, a <i>whole plan</i> is one in which x and y are whole numbers. The van takes crates, not parts of them.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18·logi2.1.1</span><span class="ph understand">understand</span>What limits does Claire’s van set, and what makes a plan a whole plan?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18logi22">
+  <h2 class="sthead"><span class="stno">18logi22</span>The Best Corner Is Not Whole</h2>
+  <p data-pid="cf0b94">Leave wholeness aside for a moment and find the best plan in the region, as 18·logi did.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the best corner">
+\text{corners: } (0,0),\ (5,0),\ (0, 2.2),\ \text{and where the limits cross} @@ the region’s corners
+x + y = 5,\ x + 5y = 11 \Rightarrow 4y = 6 @@ two lines meet (18c)
+(3.5,\ 1.5):\ E = 3.5 + 6 = 9.5 @@ against 5 and 8.8 at the others
+\htmlClass{new}{\text{best corner } (3.5, 1.5),\ E = 9.5} @@ the best-corner technique (18g)
+  </pre>
+  <p data-pid="09c2f6">Ceiling technique: <b>every whole plan lies in the region, so none earns more than the best corner.</b> No whole plan earns more than 95 dollars. The question is how close a whole plan can come.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18·logi2.2.1</span><span class="ph understand">understand</span>Where is the best corner, and why does its value bound every whole plan?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18logi23">
+  <h2 class="sthead"><span class="stno">18logi23</span>Rounding Fails</h2>
+  <p data-pid="0aece1">Round the corner to the nearest whole plan, or round it down to be safe, and compare with the best whole plan found by listing all 13.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three tries">
+\text{round: } (4, 2):\ 4 + 2 = 6 > 5 @@ breaks the room limit
+\text{and } 4 + 10 = 14 > 11 @@ and the weight limit
+\text{round down: } (3, 1):\ E = 7 @@ allowed, and 25 dollars below the ceiling
+\htmlClass{new}{\text{best whole plan: } (1, 2),\ E = 9} @@ two from the corner in apples, by listing
+  </pre>
+  <p data-pid="f8135f"><b>Rounding the best corner can break the limits, and rounding down can leave much behind; the best whole plan can lie away from the corner.</b> Listing every whole plan works for a van. For a hundred trucks it does not: each yes-or-no choice doubles the list.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{corner } (3.5, 1.5) \to (1, 2)\\ &amp;\text{not the nearest whole point}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18·logi2.3.1</span><span class="ph understand">understand</span>Why do rounding and rounding down both fail for Claire’s van, and why is listing every plan no cure in general?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18logi24">
+  <h2 class="sthead"><span class="stno">18logi24</span>Split, and Use the Corners as Ceilings</h2>
+  <p data-pid="7effa3">Every whole plan has y ≤ 1 or y ≥ 2, since no whole number lies strictly between 1 and 2. So split the region on y = 1.5 into two parts, and find the best corner of each.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two parts">
+y \le 1:\ \text{best corner } (4, 1),\ E = 8 @@ whole already: a plan in hand
+y \ge 2:\ x + 5y \le 11 \Rightarrow x \le 1 @@ the weight limit squeezes
+\text{corners } (0, 2),\ (1, 2),\ (0, 2.2):\ E = 8,\ 9,\ 8.8 @@ the best-corner technique (18g)
+\htmlClass{new}{(1, 2),\ E = 9 \ge 8} @@ whole, and it beats the other part’s ceiling
+  </pre>
+  <p data-pid="e27a2b">The part y ≤ 1 has ceiling 8, below the 9 in hand, so nothing there needs looking at again. Split technique: <b>split on a fractional count into its two whole sides, take each part’s best corner as its ceiling, and drop any part whose ceiling is below the best whole plan found.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18·logi2.4.1</span><span class="ph understand">understand</span>How does splitting on y = 1.5 find the best whole plan, and why can a part with a low ceiling be dropped?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18logi25">
+  <h2 class="sthead"><span class="stno">18logi25</span>Why the Ceilings Save Work</h2>
+  <p data-pid="edd8b3">A part that is dropped takes every plan inside it with it, unlisted. Here two parts settled what listing 13 plans did. With fifty yes-or-no choices there are 2<sup>50</sup> plans, about a million billion.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what a drop is worth">
+\text{part ceiling } < \text{best in hand} @@ no plan inside can win
+\text{drop it: every plan inside, unlisted} @@ one corner found in place of the list
+2^{50} = (2^{10})^5 > (10^3)^5 = 10^{15} @@ the list for fifty choices
+\htmlClass{new}{\text{a good plan early makes more parts drop}} @@ so start from a rounded-down plan
+  </pre>
+  <p data-pid="a95c00">There is no promise. Some problems force a split after a split down to almost every plan, and no one knows a way that never does. In practice, ceilings close to the truth and a good plan found early drop most of the parts, and the splitting finishes in seconds where the list would take ages.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18·logi2.5.1</span><span class="ph understand">understand</span>What is dropped with a part whose ceiling is too low, and why does a good plan found early help?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="18logi26">
+  <h2 class="sthead"><span class="stno">18logi26</span>Moves to Watch Out For</h2>
+  <p data-pid="d74b3c">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{round the best corner to the nearest whole plan}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it can break the limits, as (4, 2) does (18logi23)
+\text{round down: always allowed, so always best}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; allowed here, and 20 dollars short of the best whole plan (18logi23)
+\text{split on } y \le 1.5 \text{ and } y \ge 1.5\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; split on the whole sides, y ≤ 1 and y ≥ 2, so the corner is cut away (18logi24)
+\text{drop the part } y \ge 2: \text{its corner } (0, 2.2) \text{ is not whole}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a part drops only when its ceiling is below the best in hand; its ceiling, 9, is not (18logi24)
+\text{splitting always beats the list}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; usually far quicker, with no promise for every problem (18logi25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">18·logi2.6.1</span><span class="ph understand">understand</span>Which move above splits without cutting the corner away, and what split cuts it out?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">18·logi2.7.1</span><span class="tagq">do</span>The van’s weight limit rises to 1300 kg. Find the best corner, its rounded and rounded-down plans, and the best whole plan by splitting.</div>
+  <div class="chq"><span class="chid">18·logi2.7.2</span><span class="tagq">make</span>Make up two limits and earnings for which rounding the best corner down gives the best whole plan, and two for which it does not.</div>
+  <div class="chq"><span class="chid">18·logi2.7.3</span><span class="tagq">converse</span>Every whole plan earns no more than the best corner. Decide whether a whole plan that earns as much as the best corner must be a best whole plan.</div>
+  <div class="chq"><span class="chid">18·logi2.7.4</span><span class="tagq">edge</span>Claire must take at least one crate of each. Add the two limits and find the best whole plan.</div>
+  <div class="chq"><span class="chid">18·logi2.7.5</span><span class="tagq">open</span>In 18logi24, the region was split on y. Split it on x = 3.5 instead, and say how many parts must be explored before the best whole plan is certain.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r18logi.html">← 18·logi · how many of each loaf should a bakery bake?</a><a href="r18phys.html">18·phys · why do planets travel on ellipses? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="74e18a">A best plan with some counts forced whole is an <b>integer program</b>; leaving wholeness aside gives its <b>linear relaxation</b>, whose best value is a <b>bound</b>. Splitting and dropping parts by their bounds is <b>branch and bound</b>; the parts are <b>branches</b>, and dropping one is <b>pruning</b>. Integer programs are <b>NP-hard</b>: no way that is quick on every one is known.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="3585fc">Ailsa Land and Alison Doig set out branch and bound in Econometrica, 1960. Ralph Gomory showed in 1958 how to cut fractional corners away with extra limits.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

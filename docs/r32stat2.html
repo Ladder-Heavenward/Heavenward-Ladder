@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>32·stat2 · What Changes When Today Remembers Yesterday?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r32stat.html">← 32·stat why does the bell curve keep turning up?</a><a href="r32then.html">next: 32·then what can a spectrum tell us? →</a></p>
+  <div class="tags"><span class="tag stat">32·stat2 · statistics</span></div>
+  <h1>What Changes When Today Remembers Yesterday?</h1>
+  <p data-pid="8e2fb0">What changes when today remembers yesterday? Rung 30’s samples were drawn independently. Readings in time are not: a warm day tends to follow a warm day, a busy week a busy week. This page writes the simplest memory, today as a share of yesterday plus something new, finds its spread with 22’s geometric sums, forecasts with it, finds why remembered data look like more evidence than they are, and, with rung 32’s turnings, sees why such data rumble with slow swings.</p>
+  <p class="gesture" data-pid="abaf22">Model today as φ times yesterday plus a fresh, independent shock of spread σ. Unroll it: today is a geometric sum of past shocks, so its spread² is σ²/(1 − φ²) and its correlation k days apart is φᵏ. Forecast k days ahead by φᵏ times today. n remembered readings carry about n(1 − φ)/(1 + φ) readings’ worth of evidence about the mean. As a filter of shocks, the model strengthens slow turnings by up to ((1 + φ)/(1 − φ))².</p>
+</header>
+
+<section class="class step" data-step="32stat21">
+  <h2 class="sthead"><span class="stno">32stat21</span>Today Like Yesterday</h2>
+  <p data-pid="ab9e38">Jean records how far each day’s temperature is from the season’s usual, in degrees. From here on, on this page, x<sub>t</sub> is day t’s departure, and the <i>memory model</i> says x<sub>t</sub> = φ x<sub>t−1</sub> + e<sub>t</sub>, where each e<sub>t</sub> is a fresh shock, independent of all before, with average 0 and spread σ, and 0 < φ < 1.</p>
+  <pre class="lines" data-k="ember" data-label="this page: unrolling">
+x_t = e_t + \varphi x_{t-1} @@ the model
+= e_t + \varphi e_{t-1} + \varphi^2 x_{t-2} @@ put it in again
+\htmlClass{new}{= e_t + \varphi e_{t-1} + \varphi^2 e_{t-2} + \cdots} @@ a geometric weighting of past shocks
+\varphi = 0.6:\ \text{a shock is } 0.6^5 \approx 0.08 \text{ of itself after 5 days} @@ memory fades by the ratio
+  </pre>
+  <p data-pid="3aa8d7">Today is all of the past shocks, each faded by φ for every day since. This is 17·logi’s smoothing seen from the other side: there a forecast averaged the past; here the weather itself does.</p>
+  <!--gfig 32stat21--><div class="gfigs" data-gfig="32stat21" data-story="[[&quot;Three runs of Jean’s departures, all driven by the same 120 shocks: each day is φ times yesterday plus the new shock.&quot;, []], [&quot;Grey, φ = 0: no memory. Each day is just its own shock.&quot;, [&quot;muted&quot;]], [&quot;Teal, φ = 0.6: a shock fades to 0.6 of itself each day, so the run wanders a little.&quot;, [&quot;teal&quot;]], [&quot;Ember, φ = 0.95: a shock fades slowly, and the run makes long swings away from 0.&quot;, [&quot;ember&quot;]]]"><svg class="gfig" viewBox="0 0 420 250" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="three daily runs driven by the same shocks: with no memory they jitter, with 0.6 they wander a little, with 0.95 they make long slow swings"><line x1="40" x2="390" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="40.0" x2="40.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="40.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="127.5" x2="127.5" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="127.5" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">30</text><line x1="215.0" x2="215.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="215.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">60</text><line x1="302.5" x2="302.5" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="302.5" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">90</text><line x1="390.0" x2="390.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="390.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">120</text><line x1="40" x2="390" y1="159.7" y2="159.7" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="163.7" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-5</text><line x1="40" x2="390" y1="99.0" y2="99.0" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="103.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="40" x2="390" y1="38.3" y2="38.3" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="42.3" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">5</text><line x1="40" x2="390" y1="99.0" y2="99.0" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:"/><polyline points="40.0,91.6 42.9,95.1 45.8,107.5 48.8,74.4 51.7,118.4 54.6,98.5 57.5,87.3 60.4,90.5 63.3,90.8 66.2,111.3 69.2,75.4 72.1,107.5 75.0,99.3 77.9,98.7 80.8,98.8 83.8,105.3 86.7,79.4 89.6,97.8 92.5,86.3 95.4,118.3 98.3,91.2 101.2,101.4 104.2,93.6 107.1,96.0 110.0,93.1 112.9,99.8 115.8,97.7 118.8,96.9 121.7,95.8 124.6,98.0 127.5,103.4 130.4,93.2 133.3,109.2 136.2,73.0 139.2,88.0 142.1,79.6 145.0,100.2 147.9,114.7 150.8,117.5 153.8,108.5 156.7,106.5 159.6,103.6 162.5,103.3 165.4,91.0 168.3,128.1 171.2,78.0 174.2,103.1 177.1,97.0 180.0,121.0 182.9,95.8 185.8,116.8 188.8,92.7 191.7,95.3 194.6,96.6 197.5,101.0 200.4,102.2 203.3,102.8 206.2,87.7 209.2,97.9 212.1,95.9 215.0,69.1 217.9,97.7 220.8,110.2 223.8,126.7 226.7,129.1 229.6,97.4 232.5,88.1 235.4,111.8 238.3,113.3 241.2,101.3 244.2,97.2 247.1,87.3 250.0,100.4 252.9,106.9 255.8,90.5 258.8,110.7 261.7,116.9 264.6,112.7 267.5,103.0 270.4,104.3 273.3,99.0 276.2,98.4 279.2,69.6 282.1,93.9 285.0,125.7 287.9,116.6 290.8,97.0 293.8,109.4 296.7,72.1 299.6,104.6 302.5,103.9 305.4,97.6 308.3,102.1 311.2,92.3 314.2,102.3 317.1,95.2 320.0,106.8 322.9,132.0 325.8,93.8 328.8,78.5 331.7,111.0 334.6,106.1 337.5,89.1 340.4,105.5 343.3,97.6 346.2,101.9 349.2,91.5 352.1,100.7 355.0,73.9 357.9,98.4 360.8,102.2 363.8,116.9 366.7,97.8 369.6,110.8 372.5,91.0 375.4,92.0 378.3,66.2 381.2,108.8 384.2,97.4 387.1,86.0" style="fill:none;stroke:var(--muted);stroke-width:1"/><polyline points="40.0,91.6 42.9,90.6 45.8,102.5 48.8,76.5 51.7,104.9 54.6,102.1 57.5,89.1 60.4,84.5 63.3,82.2 66.2,101.2 69.2,76.7 72.1,94.2 75.0,96.4 77.9,97.1 80.8,97.7 83.8,104.5 86.7,82.7 89.6,88.0 92.5,79.7 95.4,106.7 98.3,95.8 101.2,99.4 104.2,93.9 107.1,92.9 110.0,89.5 112.9,94.1 115.8,94.8 118.8,94.4 121.7,93.0 124.6,94.4 127.5,100.6 130.4,94.2 133.3,106.3 136.2,77.4 139.2,75.0 142.1,65.2 145.0,79.9 147.9,103.2 150.8,120.1 153.8,121.2 156.7,119.8 159.6,116.0 162.5,113.6 165.4,99.8 168.3,128.6 171.2,95.8 174.2,101.2 177.1,98.3 180.0,120.5 182.9,108.7 185.8,122.6 188.8,106.8 191.7,100.0 194.6,97.3 197.5,100.0 200.4,102.8 203.3,105.1 206.2,91.4 209.2,93.3 212.1,92.5 215.0,65.2 217.9,77.5 220.8,97.3 223.8,125.7 226.7,145.2 229.6,125.1 232.5,103.7 235.4,114.6 238.3,122.7 241.2,115.5 244.2,107.1 247.1,92.2 250.0,96.3 252.9,105.3 255.8,94.2 258.8,107.9 261.7,122.2 264.6,126.7 267.5,119.6 270.4,116.6 273.3,109.6 276.2,104.8 279.2,73.0 282.1,78.3 285.0,113.3 287.9,125.2 290.8,112.7 293.8,117.6 296.7,83.3 299.6,95.2 302.5,101.6 305.4,99.2 308.3,102.2 311.2,94.2 314.2,99.5 317.1,95.5 320.0,104.7 322.9,135.4 325.8,115.7 328.8,88.5 331.7,104.7 334.6,109.5 337.5,95.4 340.4,103.4 343.3,100.2 346.2,102.6 349.2,93.7 352.1,97.5 355.0,73.0 357.9,82.8 360.8,92.5 363.8,113.0 366.7,106.2 369.6,115.1 372.5,100.7 375.4,93.0 378.3,62.6 381.2,87.0 384.2,90.1 387.1,80.7" style="fill:none;stroke:var(--teal);stroke-width:1.5"/><polyline points="40.0,91.6 42.9,88.0 45.8,97.1 48.8,72.6 51.7,93.3 54.6,93.1 57.5,81.7 60.4,74.0 63.3,67.1 66.2,81.0 69.2,58.3 72.1,68.9 75.0,70.7 77.9,71.8 80.8,73.0 83.8,80.6 86.7,61.9 89.6,62.5 92.5,51.6 95.4,73.3 98.3,66.8 101.2,70.7 104.2,66.8 107.1,65.4 110.0,61.2 112.9,63.9 115.8,64.4 118.8,64.0 121.7,62.5 124.6,63.3 127.5,69.5 130.4,65.2 133.3,77.1 136.2,52.2 139.2,43.5 142.1,26.9 145.0,31.7 147.9,50.7 150.8,71.7 153.8,82.6 156.7,90.9 159.6,95.8 162.5,100.4 165.4,92.3 168.3,121.8 171.2,99.6 174.2,103.7 177.1,101.5 180.0,123.3 182.9,118.9 185.8,135.7 188.8,127.5 191.7,122.4 194.6,118.9 197.5,119.9 200.4,122.1 203.3,124.8 206.2,112.2 209.2,110.4 212.1,106.7 215.0,76.5 217.9,76.3 220.8,88.7 223.8,116.9 226.7,146.2 229.6,142.2 232.5,129.1 235.4,140.4 238.3,152.6 241.2,152.2 244.2,147.8 247.1,133.7 250.0,133.3 252.9,139.5 255.8,128.9 258.8,139.2 261.7,155.1 264.6,166.0 267.5,166.6 270.4,168.5 273.3,165.0 276.2,161.2 279.2,128.6 282.1,122.0 285.0,147.6 287.9,162.8 290.8,157.6 293.8,165.0 296.7,134.8 299.6,138.7 302.5,141.6 305.4,138.1 308.3,139.2 311.2,130.5 314.2,132.3 317.1,126.8 320.0,133.2 322.9,164.5 325.8,156.0 328.8,132.7 331.7,143.0 334.6,147.9 337.5,135.6 340.4,140.2 343.3,136.8 346.2,137.8 349.2,128.3 352.1,128.5 355.0,102.0 357.9,101.2 360.8,104.4 363.8,122.0 366.7,119.7 369.6,130.4 372.5,120.8 375.4,112.8 378.3,79.2 381.2,90.1 384.2,88.9 387.1,76.3" style="fill:none;stroke:var(--ember);stroke-width:1.5"/><line x1="52" x2="70" y1="210" y2="210" style="stroke:var(--muted);stroke-width:2"/><text x="76" y="214" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">φ = 0: no memory</text><line x1="52" x2="70" y1="226" y2="226" style="stroke:var(--teal);stroke-width:2"/><text x="76" y="230" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">φ = 0.6</text><line x1="52" x2="70" y1="242" y2="242" style="stroke:var(--ember);stroke-width:2"/><text x="76" y="246" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">φ = 0.95: long swings</text></svg></div><!--/gfig 32stat21-->
+  <!--gwid 32stat21--><section class="pic gwid">
+    <div class="eyebrow">The picture · today like yesterday, with φ chosen</div>
+    <div class="panels">
+    <div class="panel"><canvas id="g32v"></canvas><div class="kn"><span class="m">φ</span><input type="range" id="g32p" min="-0.9" max="0.99" step="0.01" value="0.6"><output id="g32po"></output></div><div class="chips" id="g32c"></div><div class="cap">Grey: the shocks e<sub>t</sub> alone. Ember: x<sub>t</sub> = φx<sub>t−1</sub> + e<sub>t</sub>, from the same shocks.</div><div class="verdict" id="g32d"></div></div>
+  </div>
+  </section><!--/gwid 32stat21-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.1.1</span><span class="ph understand">understand</span>What does the memory model say about today, and how does it look when unrolled into past shocks?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat22">
+  <h2 class="sthead"><span class="stno">32stat22</span>Spread and Memory</h2>
+  <p data-pid="7c37bc">The shocks are independent, so the spreads squared of the faded shocks add.</p>
+  <pre class="lines" data-k="ember" data-label="this page: spread and correlation">
+\text{spread}^2 = \sigma^2 (1 + \varphi^2 + \varphi^4 + \cdots) @@ spreads² of independent parts add
+= \dfrac{\sigma^2}{1 - \varphi^2} @@ the endless-ratio-sum technique (15i), ratio φ²
+\text{correlation of } x_t \text{ and } x_{t-k} = \varphi^k @@ they share the shocks before t − k
+\htmlClass{new}{\varphi = 0.6,\ \sigma = 2:\ \text{spread} = 2/\sqrt{0.64} = 2.5} @@ one day apart 0.6, two days 0.36
+  </pre>
+  <p data-pid="dbb5cd">Memory technique: <b>in the memory model, the spread² is σ²/(1 − φ²), and readings k days apart have correlation φᵏ.</b> Measuring the correlation one day apart estimates φ, and the rest follows.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.2.1</span><span class="ph understand">understand</span>What are the spread and the correlation k days apart in the memory model, and why?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat23">
+  <h2 class="sthead"><span class="stno">32stat23</span>Forecasting Ahead</h2>
+  <p data-pid="19020d">Today’s departure is +5 degrees. The future shocks average 0, so the forecast drops them.</p>
+  <pre class="lines" data-k="ember" data-label="this page: forecasts">
+\text{forecast } k \text{ days ahead} = \varphi^k x_t @@ future shocks average 0
+\varphi = 0.6:\ 5,\ 3,\ 1.8,\ 1.08,\ \ldots @@ back toward the usual
+\text{forecast spread}^2 = \sigma^2(1 + \varphi^2 + \cdots + \varphi^{2(k-1)}) @@ the shocks still to come
+\htmlClass{new}{= \sigma^2 \dfrac{1 - \varphi^{2k}}{1 - \varphi^2} \to \dfrac{\sigma^2}{1 - \varphi^2}} @@ the finite-ratio-sum technique (15i)
+  </pre>
+  <p data-pid="75ca9a"><b>Forecasts fade toward the average by the factor φ each day, and their spread grows toward the spread of the data itself.</b> Far enough ahead, the forecast is just the usual, and today tells you nothing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.3.1</span><span class="ph understand">understand</span>How do forecasts from the memory model behave as they look further ahead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat24">
+  <h2 class="sthead"><span class="stno">32stat24</span>Remembered Data Count for Less</h2>
+  <p data-pid="e68b72">Average n readings to estimate the season’s usual. With independent readings, rung 30 gives the spread of the average as spread/√n. Remembered readings repeat each other’s shocks.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the worth of n readings">
+\text{spread}^2 \text{ of the average} \approx \dfrac{\text{spread}^2}{n} \cdot \dfrac{1 + \varphi}{1 - \varphi} @@ adding all the correlations φᵏ
+\text{as if } n\,\dfrac{1 - \varphi}{1 + \varphi} \text{ independent readings} @@ the worth of the data
+\varphi = 0.6:\ n \cdot \tfrac{0.4}{1.6} = n/4 @@ a quarter
+\htmlClass{new}{100 \text{ days are worth about } 25} @@ a test that ignores this is four times too sure
+  </pre>
+  <p data-pid="78b424">Worth technique: <b>n readings with memory φ carry about n(1 − φ)/(1 + φ) readings’ worth of evidence about their average.</b> Two series that both drift slowly will often seem to move together by chance; tests built for independent samples call that real far too often.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.4.1</span><span class="ph understand">understand</span>Why are 100 remembered readings worth only about 25 independent ones when φ = 0.6?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat25">
+  <h2 class="sthead"><span class="stno">32stat25</span>Slow Swings Rumble Loudest</h2>
+  <p data-pid="6123ac">Rung 32 breaks a signal into turnings. The memory model is a filter: shocks of every frequency go in equally, and come out shaped.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shaped spectrum">
+e_t = e^{2\pi i f t} \text{ in, out } \dfrac{e^{2\pi i f t}}{1 - \varphi e^{-2\pi i f}} @@ try a turning (32j)
+\text{power} = \dfrac{\sigma^2}{|1 - \varphi e^{-2\pi i f}|^2} = \dfrac{\sigma^2}{1 - 2\varphi\cos 2\pi f + \varphi^2} @@ size squared
+f = 0:\ \dfrac{\sigma^2}{(1 - \varphi)^2};\ \ f = \tfrac12:\ \dfrac{\sigma^2}{(1 + \varphi)^2} @@ slowest and fastest
+\htmlClass{new}{\varphi = 0.6:\ \left(\tfrac{1.6}{0.4}\right)^2 = 16 \text{ times stronger at the slow end}} @@ the ratio of the two
+  </pre>
+  <p data-pid="07088d"><b>Memory piles the power into slow swings, so remembered data seem to show long cycles that are only the fading of shocks.</b> Before calling a slow swing in a record a cycle with a cause, compare it with what the memory model alone would make.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.5.1</span><span class="ph understand">understand</span>How does the memory model shape the spectrum, and why can it make cycles appear that have no cause?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="32stat26">
+  <h2 class="sthead"><span class="stno">32stat26</span>Moves to Watch Out For</h2>
+  <p data-pid="a5b854">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{100 daily readings: spread} / 10\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; with memory 0.6, more like spread/5 (32stat24)
+\text{forecast tomorrow} = \text{today}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; φ times today: forecasts fade to the usual (32stat23)
+\text{spread}^2 = \sigma^2/(1 - \varphi)\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the ratio is φ²: σ²/(1 − φ²) (32stat22)
+\text{a slow swing in the record, so a cycle}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; memory alone piles power into slow swings (32stat25)
+\text{test first, then check whether the data remember}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; measure φ first: it decides what the data are worth (32stat24)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">32·stat2.6.1</span><span class="ph understand">understand</span>Which move above sums the wrong geometric series for the spread, and what ratio do the spreads squared fall by?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">32·stat2.7.1</span><span class="tagq">do</span>With φ = 0.8 and σ = 1, find the spread, the correlation three days apart, and the forecast two days after a departure of +4.</div>
+  <div class="chq"><span class="chid">32·stat2.7.2</span><span class="tagq">make</span>Make up φ for which 100 readings are worth 50 independent ones.</div>
+  <div class="chq"><span class="chid">32·stat2.7.3</span><span class="tagq">converse</span>In the memory model, correlation k apart is φᵏ. Decide whether data whose correlations fall as φᵏ must follow the memory model.</div>
+  <div class="chq"><span class="chid">32·stat2.7.4</span><span class="tagq">edge</span>Let φ head to 1. Say what happens to the spread, to the forecasts, and to the worth of n readings.</div>
+  <div class="chq"><span class="chid">32·stat2.7.5</span><span class="tagq">open</span>Two cities’ yearly rainfall both drift slowly and seem to move together. Say how differences from year to year might test whether the link is real.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r32stat.html">← 32·stat · why does the bell curve keep turning up?</a><a href="r32then.html">32·then · what can a spectrum tell us? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="ea75d0">Readings in time form a <b>time series</b>; the memory model is an <b>autoregressive model of order 1</b>, AR(1); correlation with the past is <b>autocorrelation</b>; a series whose spread and correlations do not change is <b>stationary</b>. The worth of the data is the <b>effective sample size</b>, and series that drift together by chance give <b>spurious regression</b>. Power piled at slow frequencies is <b>red noise</b>, and the power by frequency is the <b>spectrum</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="1ead67">George Udny Yule fitted a memory model to sunspot numbers in 1927, and warned of chance links between drifting series in 1926. George Box and Gwilym Jenkins made such models a standard tool in 1970.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<!--gwjs 32stat21--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+let seed=32, E=null;
+function shocks(){ let s=seed>>>0; const r=()=>{ s=(s*1664525+1013904223)>>>0; return (s+0.5)/4294967296; }; E=[]; for(let i=0;i<150;i++){ E.push(Math.sqrt(-2*Math.log(r()))*Math.cos(2*Math.PI*r())); } }
+const P=plane($('g32v'),{x:[0,15],y:[-8,8],grid:2,aspect:0.62,labels:false,draw:P=>{ P.axes(); const ph=+$('g32p').value;
+  P.poly(E.map((e,t)=>[t/10,e]),'--muted',null,1,false); let x=0; const pts=E.map((e,t)=>{ x=ph*x+e; return [t/10,Math.max(-8,Math.min(8,x))]; });
+  [0,50,100,150].forEach(d=>P.text('day '+d,d/10,-7.4,'--muted',d===0?'left':d===150?'right':'center',11)); P.poly(pts,'--ember',null,1.8,false);
+  $('g32po').textContent=f(ph,2); $('g32d').textContent='φ = '+f(ph,2)+': a shock is φ⁵ = '+f(Math.pow(ph,5),3)+' of itself after 5 days.'+(ph<0?' A negative φ flips the sign each day.':''); }});
+const b=document.createElement('button'); b.textContent='new shocks'; b.onclick=()=>{ seed=(seed*7+11)%100003; shocks(); P.redraw(); }; $('g32c').appendChild(b);
+shocks(); $('g32p').oninput=()=>P.redraw(); P.redraw();
+})();
+</script><!--/gwjs 32stat21-->
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

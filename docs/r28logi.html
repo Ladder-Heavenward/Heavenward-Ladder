@@ -48,7 +48,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r28bio.html">← 28·bio why do foxes and rabbits take turns?</a><a href="r28now.html">next: 28·now how does a machine learn from its mistakes? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28bio.html">← 28·bio why do foxes and rabbits take turns?</a><a href="r28eng.html">next: 28·eng how does a robot arm know how to reach? →</a></p>
   <div class="tags"><span class="tag logi">28·logi · logistics</span></div>
   <h1>Where Should the Warehouse Go?</h1>
   <p data-pid="1b3bf6">Where should the warehouse go? A grocery chain with stores in Truckee, Grass Valley, Auburn and South Lake Tahoe sends trucks from one warehouse to all four, every week, all year. Each kilometre of each trip costs fuel, a driver’s time and wear on the truck. Put the warehouse in the wrong town and the chain pays for it on every trip for decades. The question is old. In the seventeenth century it was asked for three points: find the one point whose distances to all three add up to the least. What makes it hard is that there are two inputs, east and west, north and south, and moving the warehouse toward one store moves it away from others. There is no formula for the answer in general. And the answer depends on what you add up. Add the squares of the distances and the best point is an average, found in one line. Add the distances themselves, which is what the trucks pay for, and the best point is somewhere else. This page finds both with the flat maps of rung twenty-eight: the uphill vector of the total, the point where it is zero, and a walk downhill to reach it.</p>
@@ -122,7 +122,7 @@ G(tp + (1 - t)q) \le t\,G(p) + (1 - t)\,G(q),\ \ 0 \le t \le 1 @@ the triangle i
 
 <section class="class step" data-step="28logi4">
   <h2 class="sthead"><span class="stno">28logi4</span>Stepping Downhill by Reweighting</h2>
-  <p data-pid="bf0283">Where the pulls balance has no formula. So walk downhill (28o): p ↦ p − η∇G(p), for a step size η. One step size turns each step into an average.</p>
+  <p data-pid="bf0283">Where the pulls balance has no formula. So walk downhill (28q): p ↦ p − η∇G(p), for a step size η. One step size turns each step into an average.</p>
   <pre class="lines" data-k="ember" data-label="this page: the reweighting technique">
 \nabla G(p) = \textstyle\sum_i \tfrac{w_i}{d_i}\,(p - s_i),\ \ d_i = |p - s_i| @@ 28·logi.3
 \eta = \Big(\textstyle\sum_i \tfrac{w_i}{d_i}\Big)^{-1}:\ \ p' = p - \eta\nabla G(p) = \tfrac{\sum (w_i/d_i)\,s_i}{\sum w_i/d_i} @@ the step lands on an average, store i weighted by wᵢ/dᵢ
@@ -215,20 +215,37 @@ w_k + R\cdot u \ge w_k - |R| @@ the dot bound (18b)
     </ol>
   </section>
 </section>
+<section class="class step" data-step="28logi8">
+  <h2 class="sthead"><span class="stno">28logi8</span>How Many Warehouses?</h2>
+  <p data-pid="4591c1">Opening another warehouse cuts driving and adds rent. Three stores sit on one road at miles 0, 4 and 10, each needing one truck a day. A warehouse costs 5 a day, and each mile driven costs 1.</p>
+  <pre class="lines" data-k="ember" data-label="this page: counting both costs">
+\text{one, at the middle store, mile 4: } 4 + 0 + 6 = 10;\ \text{total } 15 @@ 28logi1’s middle
+\text{two, at 4 and 10: store at 0 drives 4; total } 4 + 10 = 14 @@ or at 0 and 10, also 14
+\text{three, one at each store: } 0 + 15 = 15 @@ all rent
+\htmlClass{new}{\text{best: two warehouses, 14 a day}} @@ rent against driving
+  </pre>
+  <p data-pid="ccfe62">Network-design technique: <b>add a warehouse only while the driving it saves is more than its rent, placing each one at the middle of the stores it serves.</b> With hundreds of sites the choices multiply, and firms solve it as 18·logi2 solved whole plans, with yes-or-no choices and branch and bound.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·logi.8.1</span><span class="ph understand">understand</span>How many warehouses should serve the three stores, and how is that decided?</li>
+    </ol>
+  </section>
+</section>
 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">28·logi.8.1</span><span class="tagq">build</span>Build a technique for the best place for the warehouse when it must sit on Interstate 80, a straight line through two of the stores, using 28g’s lines-up technique.</div>
-  <div class="chq"><span class="chid">28·logi.8.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">three stores, one truck each, at the corners of a triangle</span></span>Find the best point when every angle of the triangle is below 120°. <br>Find it when one angle is 120° or more.</div>
-  <div class="chq"><span class="chid">28·logi.8.3</span><span class="tagq">converse</span>If a point that is not a store is the best point, must the pulls balance there?</div>
-  <div class="chq"><span class="chid">28·logi.8.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">one truck each to (0, 0), (8, 0) and (0, 6)</span></span>Find the best point a second way, by walking downhill with a fixed step size η = 1, and compare the number of steps with reweighting.</div>
-  <div class="chq"><span class="chid">28·logi.8.5</span><span class="tagq">seam</span>One school of planners put each warehouse at the point that makes the truck-kilometres least, as on this page. Another held that firms cluster near each other, near ports and near workers, and that the least-distance point is where no one builds. <br>Which gives the better advice to a chain choosing a town in the Sierra, and what would you measure to decide?</div>
+  <div class="chq"><span class="chid">28·logi.9.1</span><span class="tagq">build</span>Build a technique for the best place for the warehouse when it must sit on Interstate 80, a straight line through two of the stores, using 28g’s lines-up technique.</div>
+  <div class="chq"><span class="chid">28·logi.9.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx">three stores, one truck each, at the corners of a triangle</span></span>Find the best point when every angle of the triangle is below 120°. <br>Find it when one angle is 120° or more.</div>
+  <div class="chq"><span class="chid">28·logi.9.3</span><span class="tagq">converse</span>If a point that is not a store is the best point, must the pulls balance there?</div>
+  <div class="chq"><span class="chid">28·logi.9.4</span><span class="tagq">reroute</span><span class="givens"><span class="gtx">one truck each to (0, 0), (8, 0) and (0, 6)</span></span>Find the best point a second way, by walking downhill with a fixed step size η = 1, and compare the number of steps with reweighting.</div>
+  <div class="chq"><span class="chid">28·logi.9.5</span><span class="tagq">seam</span>One school of planners put each warehouse at the point that makes the truck-kilometres least, as on this page. Another held that firms cluster near each other, near ports and near workers, and that the least-distance point is where no one builds. <br>Which gives the better advice to a chain choosing a town in the Sierra, and what would you measure to decide?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r28bio.html">← 28·bio · why do foxes and rabbits take turns?</a><a href="r28now.html">28·now · how does a machine learn from its mistakes? →</a></nav>
+<nav class="nextrung"><a href="r28bio.html">← 28·bio · why do foxes and rabbits take turns?</a><a href="r28eng.html">28·eng · how does a robot arm know how to reach? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>

@@ -1,10 +1,15 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Machines That Only Talk</title>
+<title>45b · Polynomials in Several Letters</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
    then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
@@ -32,72 +37,78 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r45a.html">← 45a numbers for every machine</a><a href="r45c.html">next: 45c the two generals →</a></p>
-  <div class="tags"><span class="tag proof">45b · proof</span></div>
-  <h1>Machines That Only Talk</h1>
-  <p data-pid="ee7f97">Until now one machine did the work. From here many machines share it, and they share nothing but messages. This step sets down what a machine can know in such a network, and the one fact that every later impossibility leans on.</p>
-  <p class="gesture" data-pid="d9b149">A machine knows its own state and the messages it has received, nothing more. Two runs that look the same to it get the same move from it.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45a.html">← 45a rings whose ideals are finitely made</a><a href="r45c.html">next: 45c shapes cut out by equations →</a></p>
+  <div class="tags"><span class="tag tech">45b · technique</span></div>
+  <h1>Polynomials in Several Letters</h1>
+  <p data-pid="58ad1d">Polynomials in one letter over a field have finitely made ideals. Add a letter: are the ideals of F[x, y] still finitely made? Hilbert proved in 1890 that adding a letter never breaks the condition. So any system of polynomial equations in finitely many letters, even endlessly many equations, says no more than finitely many of them. This step proves the adding-a-letter technique and reads off what it says about equations.</p>
+  <p class="gesture" data-pid="37ce1c">If every ideal of R is finitely made, so is every ideal of R[x]. Take the top coefficients of the members of an ideal I: they form an ideal of R, finitely made. Members with those tops, together with finitely many of each low degree, make I, by dividing away the tops. By induction, F[x₁, …, xₙ] has finitely made ideals.</p>
 </header>
 
 <section class="class step" data-step="45b1">
-  <h2 class="sthead"><span class="stno">45b1</span>The Model</h2>
-  <p data-pid="1c49ab">There are n machines joined by links. Each machine follows its own program, as in rung 40. A message sent may arrive after any delay, may be lost, and may arrive after a message sent later. There is no clock that all machines share.</p>
-  <p data-pid="b80d6e">A machine’s view is its own state and the list of messages it has received so far. Its next move is a function of its view and of nothing else.</p>
+  <h2 class="sthead"><span class="stno">45b1</span>Top Coefficients Form an Ideal</h2>
+  <pre class="lines" data-k="ember" data-label="this step: I an ideal of R[x]">
+L = \{\text{top coefficients of members of } I\} \cup \{0\} @@ top of a member
+a, b \in L \Rightarrow a + b \in L @@ raise the lower member by a power of x, then add
+r \in R,\ a \in L \Rightarrow ra \in L @@ multiply the member by r
+\htmlClass{new}{L = (a_1, \ldots, a_k),\ a_j \text{ the top of } f_j \in I} @@ R’s ideals are finitely made
+  </pre>
+  <p data-pid="e97d26"><b>The top coefficients of the members of an ideal of R[x] form an ideal of R;</b> so finitely many members of I already show every top.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45b1.1</span><span class="ph understand">understand</span>What is a machine’s view? <br>What may happen to a message?</li>
+      <li><span class="qid">45b1.1</span><span class="ph understand">understand</span>Why do the top coefficients of an ideal of R[x] form an ideal of R?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45b2">
-  <h2 class="sthead"><span class="stno">45b2</span>Runs That Look the Same</h2>
-  <p data-pid="225faa">Same-view technique: <b>if two runs give a machine the same view, the machine makes the same move in both.</b></p>
-  <p data-pid="73cbf8">Its move is a function of its view (45b1), and a function gives one value for one input (9a). So any argument that a machine must act differently in two runs must first show that its views differ.</p>
+  <h2 class="sthead"><span class="stno">45b2</span>Dividing Away the Tops</h2>
+  <pre class="lines" data-k="ember" data-label="this step: N = the largest degree of f₁, …, fₖ">
+f \in I,\ \deg f \ge N:\ f - \textstyle\sum r_j x^{\deg f - \deg f_j} f_j \text{ has lower degree} @@ match its top with the a_j
+\text{repeat until the degree is below } N @@ each step lowers the degree (44c)
+\text{members of degree} < N:\ \text{an } R\text{-module made by finitely many} @@ tops of each degree d < N: an ideal of R, finitely made
+\htmlClass{new}{I = (f_1, \ldots, f_k,\ g_1, \ldots, g_m)} @@ finitely made
+  </pre>
+  <p data-pid="0cd601">Adding-a-letter technique: <b>if every ideal of R is finitely made, so is every ideal of R[x];</b> so F[x₁, …, xₙ] and ℤ[x₁, …, xₙ] have finitely made ideals.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45b2.1</span><span class="ph understand">understand</span>What does the same-view technique say? <br>Why does it follow from the model?</li>
+      <li><span class="qid">45b2.1</span><span class="ph understand">understand</span>How does dividing away the tops show that finitely many members make I?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45b3">
-  <h2 class="sthead"><span class="stno">45b3</span>Slow or Dead</h2>
-  <p data-pid="3432a1"><b>When delays have no bound, no machine can tell a crashed machine from a slow one.</b> Take any run in which B has crashed, and stop it at any moment. Now take the run in which B is alive but every message B sent is still on its way. A has received the same messages in both, so by the same-view technique it acts the same in both.</p>
-  <p data-pid="a177f1">So any technique of the form “if B has not answered, B is dead” is wrong in some run. Waiting longer only moves the moment.</p>
+  <h2 class="sthead"><span class="stno">45b3</span>Endlessly Many Equations Say Finitely Much</h2>
+  <pre class="lines" data-k="ember" data-label="this step: a system in n letters">
+\{f = 0 : f \in S\},\ S \text{ endless} @@ any set of equations
+(S) = (f_1, \ldots, f_k),\ \text{each } f_j \text{ from } S @@ finitely made, makers chosen from S
+\text{every } f \in S \text{ is } \textstyle\sum r_j f_j @@ so it is 0 wherever f₁, …, fₖ are
+\htmlClass{new}{\text{the system says exactly what } f_1 = \cdots = f_k = 0 \text{ says}} @@ finitely many suffice
+  </pre>
+  <p data-pid="2d3362"><b>Any set of polynomial equations in finitely many letters has the same answers as finitely many of its equations.</b> Hilbert’s proof showed that the makers exist without building them, which Gordan called theology, not mathematics.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45b3.1</span><span class="ph understand">understand</span>Why can A not tell a dead B from a slow one? <br>Why does waiting longer not help?</li>
+      <li><span class="qid">45b3.1</span><span class="ph understand">understand</span>Why does any system of polynomial equations say no more than finitely many of them?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45b4">
-  <h2 class="sthead"><span class="stno">45b4</span>Bounds Change the Model</h2>
-  <p data-pid="d81137">If every message arrives within a known time d, and every machine takes its steps at a known pace, then silence for longer than d means a crash. That is a different model, with bounds. Real networks lie between the two: the bounds usually hold, and sometimes do not.</p>
-  <p data-pid="b608e7">The rest of the rung says which model each technique needs, because a technique proved with bounds can fail without them.</p>
+  <h2 class="sthead"><span class="stno">45b4</span>Moves to Watch Out For</h2>
+  <p data-pid="01d65c">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the tops form an ideal of } R[x]\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; they are numbers in R: an ideal of R (45b1)
+\text{dividing away tops may raise the degree}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; each step lowers it (45b2)
+\text{only one letter can be added}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; add one at a time, by induction (45b2)
+\text{the makers must be new equations}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; they can be chosen from S itself (45b3)
+\text{the proof builds the makers}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it shows they exist; building them is 45h (45b3)
+  </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45b4.1</span><span class="ph understand">understand</span>What does a known bound on delay make possible? <br>Why does the rung say which model each technique needs?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="45b5">
-  <h2 class="sthead"><span class="stno">45b5</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{no answer for a long time, so it crashed}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; with no bound on delay, a slow machine looks the same
-\text{messages arrive in the order they were sent}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the model allows any order
-\text{every machine can read the time}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; there is no shared clock; 45e orders events without one
-</pre>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">45b5.1</span><span class="ph understand">understand</span>Why is a long silence not proof of a crash? <br>Why may messages arrive out of order?</li>
+      <li><span class="qid">45b4.1</span><span class="ph understand">understand</span>Which move above puts the top coefficients in the wrong ring, and which ring holds them?</li>
     </ol>
   </section>
 </section>
@@ -105,20 +116,25 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
-  <div class="chq"><span class="chid">45b.6.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">what a timeout buys</span></span>A program declares a machine dead after ten seconds of silence. In which runs is it wrong, and what harm can that do? What would you need to know to make it never wrong?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">45b.5.1</span><span class="tagq">do</span>Show that the equations x²ⁿ − y = 0, for n = 1, 2, 3, …, together with x² − y = 0, have the same answers as two of them.</div>
+  <div class="chq"><span class="chid">45b.5.2</span><span class="tagq">make</span>Make up an ideal of ℤ[x] that needs two makers.</div>
+  <div class="chq"><span class="chid">45b.5.3</span><span class="tagq">converse</span>R with finitely made ideals gives R[x] with them. Decide whether R[x] having them forces R to have them.</div>
+  <div class="chq"><span class="chid">45b.5.4</span><span class="tagq">edge</span>Let I = {0}. Say what L and the makers are.</div>
+  <div class="chq"><span class="chid">45b.5.5</span><span class="tagq">open</span>Say why power series in x also have finitely made ideals when R does.</div>
 </section>
 <div class="themecert themeend"></div>
-
-<nav class="nextrung"><a href="r45a.html">← 45a · numbers for every machine</a><a href="r45c.html">45c · the two generals →</a></nav>
+<nav class="nextrung"><a href="r45a.html">← 45a · rings whose ideals are finitely made</a><a href="r45c.html">45c · shapes cut out by equations →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>The model without bounds is the asynchronous model; with bounds it is synchronous; the usual case between is partial synchrony. The same-view technique is the indistinguishability argument, and a machine that stops for good has a crash fault.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="703ddf">This is the <b>Hilbert basis theorem</b>; the makers are a <b>basis</b> of the ideal in the old sense. Gordan’s remark, “Das ist nicht Mathematik, das ist Theologie,” is reported from 1888 or 1890.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="d11f2b">David Hilbert proved it in 1890, settling the invariant problem of Paul Gordan, who had built makers by hand for small cases.</p>
 </section>
 
 </div>
-<script>/* 0.3.88 Phase I: new 45a, old r45a is now r45b; old ticks -> new ids */window.LADDER_MV2={f:"mv:I",m:{"q:45a1.1": "q:45b1.1", "q:45a2.1": "q:45b2.1", "q:45a3.1": "q:45b3.1", "q:45a4.1": "q:45b4.1", "q:45a5.1": "q:45b5.1", "c:45a.6.1": "c:45b.6.1"}};</script><script src="rung.js"></script>
+<script src="rung.js"></script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

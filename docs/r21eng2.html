@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>21·eng2 · Why Does a Ship Roll Back Upright?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21eng.html">← 21·eng how does a crank turn a wheel into a push?</a><a href="r21concl.html">next: 21·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag eng">21·eng2 · engineering</span></div>
+  <h1>Why Does a Ship Roll Back Upright?</h1>
+  <p data-pid="5af88b">Why does a ship roll back upright? A wave tips it, and it swings back; but in 1628 the Swedish warship Vasa heeled over in a light breeze less than a mile into its first voyage and sank in minutes, with guns too heavy and too high. A ship’s weight pulls down at one point and the water’s lift, 16·cb12’s displaced weight, pushes up at another. When the ship tips, the lift moves sideways, because the shape under water changes. Whether it moves far enough to turn the ship back is a matter of strip sums and rung 21’s sine. This page finds where the lift moves to, prices a barge’s stability by hand, says what too much and too little feel like, and why loose water on a deck is so dangerous.</p>
+  <p class="gesture" data-pid="e1d697">Weight acts at G, lift at B, the middle of the water pushed aside. Tip by a small angle θ: a wedge of water moves from the high side to the low, and B moves sideways by θ·I/V, I the waterline area’s second moment. The upward line from the new B crosses the centreline at M, a height I/V above B. If M is above G, the pair turns the ship back with arm GM sin θ; if below, it turns it over.</p>
+</header>
+
+<section class="class step" data-step="21eng21">
+  <h2 class="sthead"><span class="stno">21eng21</span>Weight Down, Lift Up</h2>
+  <p data-pid="75a7f4">Evita’s barge floats upright. Its weight pulls down through G, the balance point of the barge and its load. The water pushes up through B, the balance point of the water it pushes aside (16·cb12).</p>
+  <pre class="lines" data-k="ember" data-label="this page: two points on one line">
+\text{weight} = \text{lift} @@ it floats
+G \text{ and } B \text{ on one upright line} @@ so they do not turn it
+B \text{ lies below } G \text{ in most ships} @@ cargo and decks above the water
+\htmlClass{new}{\text{yet ships stand: } B \text{ must move when it tips}} @@ or every ship would turn over
+  </pre>
+  <p data-pid="fc550d">From here on, on this page, to <i>heel</i> is to tip sideways by an angle θ.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng2.1.1</span><span class="ph understand">understand</span>Why can a ship be stable even though its lift acts below its weight?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21eng22">
+  <h2 class="sthead"><span class="stno">21eng22</span>The Lift Moves Over</h2>
+  <p data-pid="3d7d3a">Heel the barge by a small angle θ. The side going down sinks deeper, the side rising comes up: a wedge of water is pushed aside on the low side and given back on the high.</p>
+  <pre class="lines" data-k="ember" data-label="this page: strip sums across the waterline">
+\text{a strip at } y \text{ from the centre sinks by about } y\theta @@ sin θ ≈ θ (21f)
+\text{its turning effect: } y \cdot (y\theta) \cdot L\,dy @@ distance times volume
+\text{total} = \theta \int y^2 L\,dy = \theta I @@ strip sums (15c)
+\htmlClass{new}{B \text{ moves sideways by } \dfrac{\theta I}{V}} @@ V the volume under water
+  </pre>
+  <p data-pid="1a31aa">Metacentre technique: <b>a small heel moves the lift sideways by θ times the waterline’s second moment over the volume under water; the lift’s line then crosses the centreline at M, a height I/V above B.</b> The ship is stable when M is above G.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng2.2.1</span><span class="ph understand">understand</span>How far does the lift move when the barge heels, and where does its line cross the centreline?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21eng23">
+  <h2 class="sthead"><span class="stno">21eng23</span>A Barge by Hand</h2>
+  <pre class="lines" data-k="ember" data-label="this page: a box 50 m long, 10 m wide, 4 m under water">
+V = 50 \cdot 10 \cdot 4 = 2000 \text{ m}^3 @@ volume under water
+I = \int_{-5}^{5} 50\,y^2\,dy = \dfrac{50 \cdot 10^3}{12} \approx 4167 \text{ m}^4 @@ strip sums (16c)
+BM = \dfrac{I}{V} \approx 2.08 \text{ m};\ B \text{ is } 2 \text{ m up: } M \text{ is } 4.08 \text{ m up} @@ from the bottom
+\htmlClass{new}{G \text{ at } 3.5 \text{ m: } GM = 0.58 \text{ m, stable};\ G \text{ at } 4.5 \text{ m: } GM < 0, \text{ it capsizes}} @@ stacking cargo high
+  </pre>
+  <p data-pid="9d75eb">The righting turn at a small heel is the weight times GM sin θ (21b). <b>A wider hull raises M fast, since I grows as the cube of the width; heavy loads up high raise G.</b> Vasa’s high gun decks put G above M.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng2.3.1</span><span class="ph understand">understand</span>Where is M for the barge, and how high can its load sit before it capsizes?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21eng24">
+  <h2 class="sthead"><span class="stno">21eng24</span>Stiff and Tender</h2>
+  <pre class="lines" data-k="ember" data-label="this page: too much and too little">
+\text{large } GM:\ \text{a strong turn back} @@ a quick, jerky roll
+\text{small } GM:\ \text{a weak turn back} @@ a slow, lazy roll
+\text{large: cargo shifts and crew are thrown about} @@ too stiff
+\htmlClass{new}{\text{small: a gust or a turn tips it far}} @@ too tender
+  </pre>
+  <p data-pid="6407a5"><b>Designers aim for a GM large enough to come back from wind and waves, small enough for a gentle roll:</b> often under a metre for big ships. Sailors judge it by the time each roll takes.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng2.4.1</span><span class="ph understand">understand</span>What does a ship feel like with too much stability, and with too little?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21eng25">
+  <h2 class="sthead"><span class="stno">21eng25</span>Loose Water on the Deck</h2>
+  <p data-pid="5f4368">A tank half full, or water sloshing on a car deck, runs to the low side when the ship heels. Its own surface acts like a small waterline inside the ship.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a free surface">
+\text{the loose water’s middle moves by } \theta\,i / v @@ the same strip sum, inside
+\text{as if } G \text{ rose by } \dfrac{i}{V} @@ i that surface’s second moment
+\text{10 cm of water across a car deck 25 m wide} @@ i grows as width cubed
+\htmlClass{new}{\text{a little water spread wide can wipe out } GM} @@ depth hardly matters
+  </pre>
+  <p data-pid="344fa8">In 1987 the ferry Herald of Free Enterprise left Zeebrugge with its bow doors open; water spread over the car deck and it capsized in minutes, with 193 lost. <b>Loose liquid with a wide surface raises the ship’s effective G, however shallow it is;</b> tanks are divided lengthwise and car decks now carry barriers.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng2.5.1</span><span class="ph understand">understand</span>Why does a thin layer of loose water across a wide deck threaten a ship?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21eng26">
+  <h2 class="sthead"><span class="stno">21eng26</span>Moves to Watch Out For</h2>
+  <p data-pid="324328">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a ship is stable only if } B \text{ is above } G\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; B moves when it tips; M above G is what counts (21eng21)
+BM = \dfrac{V}{I}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; BM = I/V: wide waterline, small volume, high M (21eng22)
+\text{make the hull deeper to raise } M\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; I grows as width cubed; widen it (21eng23)
+\text{the more } GM \text{ the better}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; too stiff a ship rolls violently (21eng24)
+\text{loose water is safe if it is shallow}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; its width, not depth, sets the loss of GM (21eng25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·eng2.6.1</span><span class="ph understand">understand</span>Which move above turns the metacentre height upside down, and what is BM?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">21·eng2.7.1</span><span class="tagq">do</span>A box barge 40 m long, 8 m wide floats 3 m deep with G 3 m above the bottom. Find GM.</div>
+  <div class="chq"><span class="chid">21·eng2.7.2</span><span class="tagq">make</span>Make up a box barge and load height for which GM is exactly zero.</div>
+  <div class="chq"><span class="chid">21·eng2.7.3</span><span class="tagq">converse</span>A ship with M above G comes back from a small heel. Decide whether it must come back from a large one.</div>
+  <div class="chq"><span class="chid">21·eng2.7.4</span><span class="tagq">edge</span>Let the barge be a round log floating level. Say where M is.</div>
+  <div class="chq"><span class="chid">21·eng2.7.5</span><span class="tagq">open</span>Say why a ship gets less stable as it burns fuel from tanks low in its hull.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r21eng.html">← 21·eng · how does a crank turn a wheel into a push?</a><a href="r21concl.html">21·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="1c9334">M is the <b>metacentre</b>, GM the <b>metacentric height</b>, the arm GM sin θ the <b>righting arm</b> GZ. I is the <b>second moment of area</b> of the waterplane. A ship with large GM is <b>stiff</b>, small GM <b>tender</b>; the loose-water loss is the <b>free surface effect</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="58e185">Pierre Bouguer named the metacentre in his Traité du navire of 1746, and Leonhard Euler worked out ship stability in the same years. Vasa sank on 10 August 1628 and was raised in 1961; the Herald of Free Enterprise capsized on 6 March 1987.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

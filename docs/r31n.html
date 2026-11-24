@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Eigenvalues by Machine</title>
+<title>Correlation and Regression</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,80 +48,84 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r31m.html">← 31m interpolation and orthogonal polynomials</a><a href="r31o.html">next: 31o principal components →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31m.html">← 31m projections and least squares by hand</a><a href="r31o.html">next: 31o interpolation and orthogonal polynomials →</a></p>
   <div class="tags"><span class="tag tech">31n · technique</span></div>
-  <h1>Eigenvalues by Machine</h1>
-  <p data-pid="da765b">Rung twenty seven found stretches as the roots of a polynomial. For a grid of three rows that is work; for a grid of a thousand rows, the polynomial is hopeless, since its numbers are huge and a tiny error in them moves the roots far. Machines do not use it. They use two ideas this rung has already proved. The first is to apply the grid again and again to one vector: the largest stretch takes over, and the vector swings onto its axis. Reading the vector with the grid on both sides then gives the stretch, with an error that is the square of the vector’s error. Undoing the grid after a shift aims the same trick at any stretch you like. The second idea straightens the columns, multiplies the pieces back in the other order, and does it again. It is the first idea run on every column at once, it never changes the stretches, and a symmetric grid slides towards its own axes form.</p>
-  <p class="gesture" data-pid="03ca12">Applying a grid again and again swings a vector onto the axis of the largest stretch, and the vector read with the grid on both sides gives the stretch with a squared error. A shift and an undoing aim it at any stretch. Straightening, then multiplying back the other way, keeps the stretches and runs the same idea on every column at once.</p>
+  <h1>Correlation and Regression</h1>
+  <p data-pid="fb1a4a">Two lists of numbers that rise together, like the July temperature in Sacramento and the sales of ice cream there, give a correlation and a fitted line. Both are easy to compute and easy to misread. Seen with the rung’s geometry they are one angle. Take each list away from its own average, and treat what is left as a vector with one place for each day. The correlation is the cosine of the angle between the two vectors. The fitted line is a shadow of one on the other, and there are two shadows, one each way, which is why the line that predicts sales from heat is not the line that predicts heat from sales. A third list that both vectors lean towards, such as the number of people at the beach, can make the angle small with no link between the first two at all. Take its shadow out of both, and the angle that is left is the honest one.</p>
+  <p class="gesture" data-pid="c908bb">The correlation is the cosine of the angle between the two lists of deviations. Each fitted line is a shadow of one list on the other, and the two slopes multiply to the correlation squared. A third list’s shadow, taken out of both, leaves the angle between what it does not explain.</p>
 </header>
 
 <section class="class step" data-step="31n1">
-  <h2 class="sthead"><span class="stno">31n1</span>Again and Again</h2>
-<div class="eqline c6 lsyn" data-was="0a26e2" data-tex="\begin{aligned}&amp;\text{27l2: } A^kx/\lambda_1^k \to c_1v_1,\ \ |\lambda_1| \text{ the largest}\\ &amp;\lambda_1 \text{ not yet known}:\ \text{cut to size } 1 \text{ each step}\\ &amp;\qquad x_{k+1} = Ax_k/|Ax_k|\\ &amp;\qquad x_k \text{ swings onto the axis of } \lambda_1\\ &amp;\qquad\text{error} \times |\lambda_2/\lambda_1| \text{ each step}\\ &amp;A \text{ symmetric}:\ \ R(x) := x^{\mathsf T}Ax/x^{\mathsf T}x\end{aligned}"></div>
-  <p data-pid="f81a74">Two-sided-reading technique: <b>for symmetric A, if x makes an angle ε with an axis e of stretch λ, then |R(x) − λ| ≤ (λmax − λmin) sin²ε: the reading’s error is the square of the vector’s.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the two-sided-reading technique">
-x = \cos\varepsilon\,e + \sin\varepsilon\,w,\ \ |e| = |w| = 1,\ w \perp e @@ split x along e and at right angles; R does not change when x is stretched
-x^{\mathsf T}Ax = \lambda\cos^2\varepsilon + (w^{\mathsf T}Aw)\sin^2\varepsilon @@ Ae = λe, and e ⊥ w, so the cross terms are 0
-R(x) - \lambda = (w^{\mathsf T}Aw - \lambda)\sin^2\varepsilon @@ xᵀx = 1; cos² = 1 − sin²
-\htmlClass{new}{|R(x) - \lambda| \le (\lambda_{\max} - \lambda_{\min})\sin^2\varepsilon} \quad \blacksquare @@ wᵀAw lies between λmin and λmax (31e1)
+  <h2 class="sthead"><span class="stno">31n1</span>A Correlation Is a Cosine</h2>
+  <p data-pid="bca406">Take paired data and the deviation lists u = (x₁ − x̄, …, xₙ − x̄) and v = (y₁ − ȳ, …, yₙ − ȳ), vectors of lists of n numbers. 8·stat’s correlation was r = u · v/(|u| |v|), and 8·stat bounded it by the dot bound. 31a4 gives the bound its meaning.</p>
+  <p data-pid="3b750a">Correlation-angle technique: <b>r is the cosine of the angle between the deviation vectors u and v, and r² is the share of the spread of y that the best line accounts for.</b> The first part is 31a4’s angle with the dot. The second is 13·stat’s residuals technique read as 31b4’s square-sum: the shadow of v on u has squared size r²|v|², and the miss carries the rest.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 8·stat’s lists, as an angle">
+u = (-1.5, -0.5, 0.5, 1.5),\ \ v = (-0.5, -1.5, 1.5, 0.5) @@ the deviations of 8·stat
+u\cdot v = 3,\ \ |u|^2 = |v|^2 = 5 @@ the dot
+r = \tfrac{3}{5} = 0.6,\ \ \theta = \arccos 0.6 \approx 53.1^\circ @@ the correlation-angle technique
+\htmlClass{new}{r^2 = 0.36} \quad \blacksquare @@ the line takes 36% of the spread of y, and the miss keeps 64%
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: one grid, by hand">
-A = \begin{pmatrix} 2 & 1 \\ 1 & 2\end{pmatrix},\ \ x_0 = (1, 0) @@ stretches 3 and 1 (31d3)
-Ax_0 = (2, 1),\ \ A(2, 1) = (5, 4),\ \ A(5, 4) = (14, 13) @@ cutting to size can wait: only directions matter
-R(2, 1) = \tfrac{14}{5} = 2.8,\ \ R(5, 4) = \tfrac{122}{41} \approx 2.9756,\ \ R(14, 13) \approx 2.9973 @@ the two-sided reading
-\htmlClass{new}{\text{errors } 0.2,\ 0.024,\ 0.0027} \quad \blacksquare @@ each about 1/9 of the last: the angle shrinks by λ₂/λ₁ = 1/3, the reading by its square
-  </pre>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · again · ← → keys work</div></section>
+<div class="eqline c6 lsyn" data-was="e528a3" data-tex="\begin{aligned}&amp;r = 0:\ u \perp v\\ &amp;r = \pm1:\ v \text{ lies along } u\\ &amp;r = 0.6:\ \theta = 53^\circ,\ \text{far from lying along}\\ &amp;\qquad\text{most of } v \text{ is at right angles to } u\end{aligned}"></div>
+  <!--gfig 31n1--><div class="gfigs" data-gfig="31n1" data-story="[[&quot;Four points: the deviations of 8·stat, each x and each y measured from its own average.&quot;, [&quot;circle&quot;, &quot;~deviations of&quot;]], [&quot;The teal line is their best line. Its slope is r = 0.6.&quot;, [&quot;polyline+teal&quot;, &quot;~slope r&quot;, &quot;circle&quot;]], [&quot;The ember dashes are the misses, from each point up or down to the line. They hold 64% of the spread of y. The line accounts for the other 36%, which is r².&quot;, [&quot;line+ember&quot;, &quot;circle&quot;, &quot;polyline+teal&quot;, &quot;~deviations of&quot;]]]"><svg class="gfig" viewBox="0 0 360 260" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="four deviation points with their best line of slope 0.6 and the misses"><defs><clipPath id="gc7ed4610b"><rect x="64" y="12" width="234" height="214"/></clipPath></defs><line x1="66" x2="296" y1="119.0" y2="119.0" style="stroke:var(--ink);stroke-width:1"/><line x1="94.8" x2="94.8" y1="119.0" y2="123.0" style="stroke:var(--ink);stroke-width:1"/><text x="94.8" y="134.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-1.5</text><line x1="152.2" x2="152.2" y1="119.0" y2="123.0" style="stroke:var(--ink);stroke-width:1"/><text x="152.2" y="134.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-0.5</text><line x1="209.8" x2="209.8" y1="119.0" y2="123.0" style="stroke:var(--ink);stroke-width:1"/><text x="209.8" y="134.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="267.2" x2="267.2" y1="119.0" y2="123.0" style="stroke:var(--ink);stroke-width:1"/><text x="267.2" y="134.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1.5</text><line x1="66" x2="296" y1="197.8" y2="197.8" style="stroke:var(--grid);stroke-width:.7"/><text x="62" y="201.8" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-1.5</text><line x1="66" x2="296" y1="145.2" y2="145.2" style="stroke:var(--grid);stroke-width:.7"/><text x="62" y="149.2" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-0.5</text><line x1="66" x2="296" y1="92.8" y2="92.8" style="stroke:var(--grid);stroke-width:.7"/><text x="62" y="96.8" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="66" x2="296" y1="40.2" y2="40.2" style="stroke:var(--grid);stroke-width:.7"/><text x="62" y="44.2" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1.5</text><line x1="181.0" x2="181.0" y1="224.0" y2="14.0" style="stroke:var(--ink);stroke-width:1;stroke-dasharray:"/><polyline clip-path="url(#gc7ed4610b)" points="66.0,182.0 67.0,181.5 67.9,180.9 68.9,180.4 69.8,179.9 70.8,179.4 71.8,178.8 72.7,178.3 73.7,177.8 74.6,177.3 75.6,176.8 76.5,176.2 77.5,175.7 78.5,175.2 79.4,174.6 80.4,174.1 81.3,173.6 82.3,173.1 83.2,172.6 84.2,172.0 85.2,171.5 86.1,171.0 87.1,170.4 88.0,169.9 89.0,169.4 90.0,168.9 90.9,168.3 91.9,167.8 92.8,167.3 93.8,166.8 94.8,166.2 95.7,165.7 96.7,165.2 97.6,164.7 98.6,164.1 99.5,163.6 100.5,163.1 101.5,162.6 102.4,162.0 103.4,161.5 104.3,161.0 105.3,160.5 106.2,159.9 107.2,159.4 108.2,158.9 109.1,158.4 110.1,157.8 111.0,157.3 112.0,156.8 113.0,156.3 113.9,155.8 114.9,155.2 115.8,154.7 116.8,154.2 117.8,153.7 118.7,153.1 119.7,152.6 120.6,152.1 121.6,151.6 122.5,151.0 123.5,150.5 124.5,150.0 125.4,149.4 126.4,148.9 127.3,148.4 128.3,147.9 129.2,147.4 130.2,146.8 131.2,146.3 132.1,145.8 133.1,145.2 134.0,144.7 135.0,144.2 136.0,143.7 136.9,143.1 137.9,142.6 138.8,142.1 139.8,141.6 140.8,141.1 141.7,140.5 142.7,140.0 143.6,139.5 144.6,138.9 145.5,138.4 146.5,137.9 147.5,137.4 148.4,136.8 149.4,136.3 150.3,135.8 151.3,135.3 152.2,134.8 153.2,134.2 154.2,133.7 155.1,133.2 156.1,132.7 157.0,132.1 158.0,131.6 159.0,131.1 159.9,130.6 160.9,130.0 161.8,129.5 162.8,129.0 163.8,128.4 164.7,127.9 165.7,127.4 166.6,126.9 167.6,126.4 168.5,125.8 169.5,125.3 170.5,124.8 171.4,124.2 172.4,123.7 173.3,123.2 174.3,122.7 175.2,122.2 176.2,121.6 177.2,121.1 178.1,120.6 179.1,120.0 180.0,119.5 181.0,119.0 182.0,118.5 182.9,118.0 183.9,117.4 184.8,116.9 185.8,116.4 186.8,115.8 187.7,115.3 188.7,114.8 189.6,114.3 190.6,113.8 191.5,113.2 192.5,112.7 193.5,112.2 194.4,111.6 195.4,111.1 196.3,110.6 197.3,110.1 198.2,109.6 199.2,109.0 200.2,108.5 201.1,108.0 202.1,107.4 203.0,106.9 204.0,106.4 205.0,105.9 205.9,105.4 206.9,104.8 207.8,104.3 208.8,103.8 209.8,103.3 210.7,102.7 211.7,102.2 212.6,101.7 213.6,101.1 214.5,100.6 215.5,100.1 216.5,99.6 217.4,99.1 218.4,98.5 219.3,98.0 220.3,97.5 221.2,97.0 222.2,96.4 223.2,95.9 224.1,95.4 225.1,94.8 226.0,94.3 227.0,93.8 228.0,93.3 228.9,92.8 229.9,92.2 230.8,91.7 231.8,91.2 232.8,90.7 233.7,90.1 234.7,89.6 235.6,89.1 236.6,88.5 237.5,88.0 238.5,87.5 239.5,87.0 240.4,86.4 241.4,85.9 242.3,85.4 243.3,84.9 244.2,84.3 245.2,83.8 246.2,83.3 247.1,82.8 248.1,82.2 249.0,81.7 250.0,81.2 251.0,80.7 251.9,80.1 252.9,79.6 253.8,79.1 254.8,78.6 255.8,78.1 256.7,77.5 257.7,77.0 258.6,76.5 259.6,76.0 260.5,75.4 261.5,74.9 262.5,74.4 263.4,73.8 264.4,73.3 265.3,72.8 266.3,72.3 267.2,71.8 268.2,71.2 269.2,70.7 270.1,70.2 271.1,69.7 272.0,69.1 273.0,68.6 274.0,68.1 274.9,67.6 275.9,67.0 276.8,66.5 277.8,66.0 278.8,65.4 279.7,64.9 280.7,64.4 281.6,63.9 282.6,63.4 283.5,62.8 284.5,62.3 285.5,61.8 286.4,61.2 287.4,60.7 288.3,60.2 289.3,59.7 290.2,59.2 291.2,58.6 292.2,58.1 293.1,57.6 294.1,57.1 295.0,56.5 296.0,56.0" style="fill:none;stroke:var(--teal);stroke-width:1.8"/><line x1="94.8" y1="166.2" x2="94.8" y2="145.2" style="stroke:var(--ember);stroke-width:1.2;stroke-dasharray:3 2"/><circle cx="94.8" cy="145.2" r="3.5" style="fill:var(--ink)"/><line x1="152.2" y1="134.8" x2="152.2" y2="197.8" style="stroke:var(--ember);stroke-width:1.2;stroke-dasharray:3 2"/><circle cx="152.2" cy="197.8" r="3.5" style="fill:var(--ink)"/><line x1="209.8" y1="103.3" x2="209.8" y2="40.2" style="stroke:var(--ember);stroke-width:1.2;stroke-dasharray:3 2"/><circle cx="209.8" cy="40.2" r="3.5" style="fill:var(--ink)"/><line x1="267.2" y1="71.8" x2="267.2" y2="92.8" style="stroke:var(--ember);stroke-width:1.2;stroke-dasharray:3 2"/><circle cx="267.2" cy="92.8" r="3.5" style="fill:var(--ink)"/><text x="290.2" y="53.2" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">slope r = 0.6</text><text x="180" y="254" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">deviations of 8·stat; ember: the misses, 64% of the spread</text></svg></div><!--/gfig 31n1-->
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · a cosine · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31n1.1</span><span class="ph understand">understand</span>What is done at each step of applying A again and again while λ₁ is not yet known, and how fast does the error shrink?  <br>What does the two-sided-reading technique say?</li>
+      <li><span class="qid">31n1.1</span><span class="ph understand">understand</span>What does the correlation-angle technique say?  <br>What angle does a correlation of 0 mean, and what does r² measure?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="31n2">
-  <h2 class="sthead"><span class="stno">31n2</span>Aiming at Any Stretch</h2>
-<div class="eqline c6 lsyn" data-was="ee602f" data-tex="\begin{aligned}&amp;\text{again-and-again}:\ \text{only the largest stretch}\\ &amp;A - sI:\ \text{the same axes, stretched by } \lambda - s\\ &amp;\text{its undoing}:\ \text{stretched by } 1/(\lambda - s)\\ &amp;\qquad\text{largest for the } \lambda \text{ nearest } s\end{aligned}"></div>
-  <p data-pid="a46270">Near-shift technique: <b>if s is nearer to the stretch λ than to any other, then applying (A − sI)⁻¹ again and again swings a vector onto λ’s axis, its error shrinking each step by |λ − s| over the next nearest |λ′ − s|.</b> It is 27l2 run on (A − sI)⁻¹, whose stretches are the 1/(λ − s) of A’s axes.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the middle stretch of a three-row grid">
-A = \begin{pmatrix} 4 & 1 & 0 \\ 1 & 3 & 1 \\ 0 & 1 & 1\end{pmatrix},\ \ s = 3.1 @@ a guess near the middle stretch
-x_0 = (1, 1, 1);\ \ \text{solve } (A - 3.1I)x_{k+1} = x_k,\ \text{cut to size} @@ solving by elimination (27j), not undoing
-R(x_1) \approx 3.229,\ \ R(x_2) \approx 2.791,\ \ R(x_3) \approx 2.762 @@ a machine’s arithmetic
-\htmlClass{new}{\lambda \approx 2.761} \quad \blacksquare @@ the other stretches are about 0.539 and 4.700
+  <h2 class="sthead"><span class="stno">31n2</span>Two Shadows, Two Lines</h2>
+<div class="eqline c6 lsyn" data-was="27d7f3" data-tex="\begin{aligned}&amp;y \text{ on } x:\ \text{the shadow of } v \text{ on } u\\ &amp;\qquad b = (u \cdot v)/|u|^2 = r\,\sigma_y/\sigma_x\\ &amp;x \text{ on } y:\ \text{the shadow of } u \text{ on } v\\ &amp;\qquad b&#x27; = r\,\sigma_x/\sigma_y \quad (x \text{ per unit of } y)\end{aligned}"></div>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\Box(\text{one line} \Leftrightarrow r = \pm 1) \quad\text{(3b2)}\end{aligned}"></div>
+  <p data-pid="335bae">Two-lines technique: <b>the two slopes multiply to r², so the two lines are the same line exactly when r = ±1; in standard units, where each list is measured in its own spread widths from its own average, the line of y on x predicts r times the units of x.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-lines technique">
+b = \tfrac{u\cdot v}{|u|^2},\ \ b' = \tfrac{u\cdot v}{|v|^2} @@ two shadows (31b1)
+bb' = \tfrac{(u\cdot v)^2}{|u|^2|v|^2} = r^2 \le 1 @@ the product bound (31a3)
+\text{the line of } x \text{ on } y, \text{ drawn in the } (x, y) \text{ plane, has slope } 1/b' @@ x = b′y read the other way
+\htmlClass{new}{b = 1/b' \iff bb' = 1 \iff r = \pm 1} \quad \blacksquare @@ otherwise the line of x on y is steeper
   </pre>
-  <p data-pid="9dc43b">Solving with A − sI when s is near a stretch looks dangerous. Its stretch sizes have a huge ratio σ₁/σₙ (31f3), and a machine loses about that many powers of ten in digits. Here the lost digits all point along the wanted axis, which is the one direction the answer needs. The danger and the purpose are the same direction.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · aiming · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: back towards the middle">
+r = 0.5 \text{ between a first and a second test score} @@ a model class
+\text{first score } 2 \text{ widths above average} @@ standard units
+\htmlClass{new}{\text{predicted second score: } 0.5 \times 2 = 1 \text{ width above}} \quad \blacksquare @@ the two-lines technique; and a second score 2 widths up predicts a first score 1 width up
+  </pre>
+  <p data-pid="74a05b">Each line pulls towards the middle, both ways at once. Nothing has happened to the students. The pull is the angle between two vectors, which is not 0.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · two lines · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31n2.1</span><span class="ph understand">understand</span>What does the near-shift technique say, and what are the stretches of (A − sI)⁻¹?  <br>Why are the digits lost in solving with A − sI harmless here?</li>
+      <li><span class="qid">31n2.1</span><span class="ph understand">understand</span>What are the two slopes, and what does the two-lines technique say they multiply to?  <br>Why does each line predict a value closer to the middle than the one it starts from?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="31n3">
-  <h2 class="sthead"><span class="stno">31n3</span>Straighten, Then Multiply Back</h2>
-  <p data-pid="57c04e">Start with A₀ = A. At each step straighten the columns, Aₖ = QₖRₖ (31c3), and multiply back in the other order: Aₖ₊₁ = RₖQₖ.</p>
-  <p data-pid="863bc8">Same-stretches technique: <b>every Aₖ has the same stretches as A, and if A is symmetric so is every Aₖ.</b> Rₖ = QₖᵀAₖ, so Aₖ₊₁ = QₖᵀAₖQₖ: a turn of the measuring directions, which keeps the stretch-test polynomial, since det(QᵀAQ − λI) = det(Qᵀ(A − λI)Q) = det(A − λI), and keeps symmetry, since (QᵀAQ)ᵀ = QᵀAᵀQ.</p>
-  <p data-pid="89c147">Powers-in-QR technique: <b>(Q₀Q₁⋯Qₖ₋₁)(Rₖ₋₁⋯R₁R₀) = Aᵏ: the straightened columns of Aᵏ are Q₀⋯Qₖ₋₁, so the method applies A again and again to every column at once, keeping them at right angles.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the powers-in-QR technique">
-k = 1:\ \ Q_0R_0 = A_0 = A @@ the first straightening
-\text{suppose } (Q_0\cdots Q_{k-1})(R_{k-1}\cdots R_0) = A^k @@ induction (4b)
-Q_0\cdots Q_{k-1}A_k = AQ_0\cdots Q_{k-1} @@ Aₖ = (Q₀⋯Qₖ₋₁)ᵀ A (Q₀⋯Qₖ₋₁), unwinding the same-stretches technique
-A^{k+1} = A\,(Q_0\cdots Q_{k-1})(R_{k-1}\cdots R_0) = Q_0\cdots Q_{k-1}\,Q_kR_k\,(R_{k-1}\cdots R_0) @@ the line above, then Aₖ = QₖRₖ
-\htmlClass{new}{A^{k+1} = (Q_0\cdots Q_k)(R_k\cdots R_0)} \quad \blacksquare @@ a product of staircases is a staircase, its middle numbers above 0
+  <h2 class="sthead"><span class="stno">31n3</span>What the Line Does Not Say</h2>
+  <p data-pid="4e1cb3">A small angle between u and v can come from a third list w that both lean towards: heat drives ice cream sales and beach crowds, and the crowds drive drownings. To see what is left, take the shadow of w out of both, and measure the angle between the misses.</p>
+  <p data-pid="305b20">Take-out technique: <b>the correlation of x and y with w taken out is the cosine of the angle between the misses of u and v from their shadows on the deviation vector of w, and it equals (r_xy − r_xw r_yw)/√((1 − r_xw²)(1 − r_yw²)).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the take-out technique">
+|u| = |v| = |w| = 1 \text{ first} @@ stretch each deviation vector; correlations do not change
+\tilde u = u - r_{xw}w,\ \ \tilde v = v - r_{yw}w @@ the closest-point technique: u · w = r_xw
+\tilde u\cdot\tilde v = r_{xy} - r_{xw}r_{yw} - r_{yw}r_{xw} + r_{xw}r_{yw} = r_{xy} - r_{xw}r_{yw} @@ straight in each slot; w · w = 1
+|\tilde u|^2 = 1 - r_{xw}^2,\ \ |\tilde v|^2 = 1 - r_{yw}^2 @@ the square-sum technique
+\htmlClass{new}{r_{xy\cdot w} = \tfrac{r_{xy} - r_{xw}r_{yw}}{\sqrt{(1 - r_{xw}^2)(1 - r_{yw}^2)}}} \quad \blacksquare @@ the cosine of the misses’ angle
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: 31n1’s grid, straightened and multiplied back">
-A_1 = \begin{pmatrix} 2.8 & 0.6 \\ 0.6 & 1.2\end{pmatrix} @@ one step; the corner 2.8 is 31n1’s first reading
-A_2 \approx \begin{pmatrix} 2.9756 & 0.2195 \\ 0.2195 & 1.0244\end{pmatrix} @@ the corner is the second reading
-\htmlClass{new}{A_4 \approx \begin{pmatrix} 2.9997 & 0.0247 \\ 0.0247 & 1.0003\end{pmatrix}} \quad \blacksquare @@ the off-corner number shrinks by 1/3 a step: the grid slides to its axes form
-  </pre>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · QR, again · ← → keys work</div></section>
+  <p data-pid="040be7">With r_xy = 0.6 between sales and drownings, r_xw = 0.8 between sales and heat, and r_yw = 0.75 between drownings and heat, the take-out correlation is (0.6 − 0.6)/… = 0. All of the link went through heat. Taking out a list that was measured is a technique. Taking out one that was not measured is impossible, and a line through data can never show that no such list exists.</p>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud</div>
+    <p data-pid="996343">30q reported an average with its width. A correlation from a sample is an estimate too, and it wobbles. For a bell-shaped cloud of n pairs, its width is about (1 − r²)/√n.</p>
+    <p data-pid="3e04cf"><b>A correlation from a sample is the middle of a cloud and is reported with its width, about (1 − r²)/√n.</b></p>
+    <p data-pid="21cd1c">With 30 pairs and r = 0.6, the width is about 0.12, so the honest report is 0.6 give or take 0.12: an angle somewhere between about 43° and 61°. With 100 pairs and r = 0.5, it is 0.5 give or take 0.075.</p>
+    <p class="bait" data-pid="d9a2c8">A study of 25 streams in the Willamette Valley finds r = 0.3 between shade and trout numbers. Is that angle clearly short of a right angle? What width would you report?</p>
+  </aside>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · take out · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31n3.1</span><span class="ph understand">understand</span>What are the steps of straighten-then-multiply-back?  <br>What do the same-stretches and powers-in-QR techniques say?</li>
+      <li><span class="qid">31n3.1</span><span class="ph understand">understand</span>What does the take-out technique say, and which misses does it measure the angle between?  <br>Why can a fitted line never show that no third list explains the link?</li>
     </ol>
   </section>
 </section>
@@ -129,15 +133,15 @@ A_2 \approx \begin{pmatrix} 2.9756 & 0.2195 \\ 0.2195 & 1.0244\end{pmatrix} @@ t
 <section class="class step" data-step="31n4">
   <h2 class="sthead"><span class="stno">31n4</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{find the stretches of a large grid from the roots of } \det(A - \lambda I)\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; the polynomial’s numbers are huge, and small errors in them move roots far
-\text{again and again always finds the largest stretch}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a start with c₁ = 0 never swings onto it; two stretches of the same size never settle
-A_{k+1} = Q_kR_k\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; that is Aₖ again; the step multiplies back in the other order, RₖQₖ
-\text{the two-sided reading of any } x \text{ is a stretch}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only of an axis; otherwise it lies between λmin and λmax
+\text{the line of } x \text{ on } y \text{ is the line of } y \text{ on } x \text{ turned round}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; their slopes multiply to r², not 1
+r = 0.6 \Rightarrow 60\% \text{ of the spread of } y \text{ is explained}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the share is r² = 36%
+\text{students far above average fell back: the second test was harder for them}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the pull to the middle is the angle; it runs both ways at once
+r_{xy\cdot w} \text{ small} \Rightarrow x \text{ does not drive } y\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it may drive y through w; taking out a list answers a question about angles, not causes
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31n4.1</span><span class="ph understand">understand</span>Why does a machine not find stretches from det(A − λI)?  <br>When does applying A again and again fail to find the largest stretch?</li>
+      <li><span class="qid">31n4.1</span><span class="ph understand">understand</span>Why is the line of x on y not the line of y on x turned round?  <br>Why does r = 0.6 not mean that 60% of the spread is explained?</li>
     </ol>
   </section>
 </section>
@@ -146,20 +150,22 @@ A_{k+1} = Q_kR_k\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt;
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">31n.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 4 &amp; 1 \\ 2 &amp; 3\end{pmatrix},\ \ x_0 = (1, 0)"></span></span>Build three steps of again-and-again by hand, and the ratio of the last two vectors’ first places.  <br>Find the stretches exactly and check the rate of approach.</div>
-  <div class="chq"><span class="chid">31n.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0\end{pmatrix}"></span></span>Run again-and-again from (1, 0), and straighten-then-multiply-back from the grid itself.  <br>What happens, and which demand of 27l2 fails?</div>
-  <div class="chq"><span class="chid">31n.5.3</span><span class="tagq">converse</span>The two-sided reading of an axis is its stretch. Turn it round: if R(x) = λmax, must x lie along an axis of λmax?</div>
-  <div class="chq"><span class="chid">31n.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix} 2 &amp; 1 \\ 1 &amp; 2\end{pmatrix}"></span></span>Find A₁ of straighten-then-multiply-back by hand, from Q and R of the column-straightening technique.  <br>Check that its corner is 2.8.</div>
+  <div class="chq"><span class="chid">31n.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="x: 1, 2, 3, 4, 5;\ \ y: 2, 4, 5, 4, 5"></span></span>Build u, v, r and the angle between u and v.  <br>Find both lines, check that their slopes multiply to r², and find the share of the spread of y that the line of y on x takes.</div>
+  <div class="chq"><span class="chid">31n.5.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="r_{xw} = 1"></span></span>What happens to the take-out technique when x lies exactly along w?  <br>What does the misses’ angle mean then, and what should be reported?</div>
+  <div class="chq"><span class="chid">31n.5.3</span><span class="tagq">converse</span>If x and y are independent chance variables, their correlation is 0 (30g3). Turn it round: if two lists have r = 0, must they be unrelated? Build a list y that is fixed by x and has r = 0.</div>
+  <div class="chq"><span class="chid">31n.5.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="r_{xy} = 0.6,\ r_{xw} = 0.8,\ r_{yw} = 0.75"></span></span>Find the take-out correlation a second way: fit y on x and w together by the miss-at-right-angles technique in standard units, and read the part of y that x adds once w is in.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r31m.html">← 31m · interpolation and orthogonal polynomials</a><a href="r31o.html">31o · principal components →</a></nav>
+<nav class="nextrung"><a href="r31m.html">← 31m · projections and least squares by hand</a><a href="r31o.html">31o · interpolation and orthogonal polynomials →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Again and again is the power method (or power iteration), and R(x) the Rayleigh quotient. The near-shift technique is inverse iteration with a shift. Straighten-then-multiply-back is the QR algorithm; machines add shifts and first squeeze the grid into a near-staircase (Hessenberg form). The same-stretches technique says the Aₖ are similar, by orthogonal similarity. The ratio σ₁/σₙ is the condition number.</p>
+  <p>r is Pearson’s correlation coefficient, here read as the cosine of the angle between centred data vectors. The share r² is the coefficient of determination. The line of y on x and the line of x on y are the two regression lines; the pull to the middle is regression to the mean. The take-out correlation is the partial correlation, and a third list that drives both is a confounder (or lurking variable). The width (1 − r²)/√n is the large-sample standard error of r for bivariate normal data.</p>
   <h3>Who said it first</h3>
-  <p>Richard von Mises and Hilda Pollaczek-Geiringer described the power method in 1929. John William Strutt, Lord Rayleigh, used the quotient for the tones of vibrating bodies in the 1870s. John Francis in England and Vera Kublanovskaya in the Soviet Union found the QR algorithm independently in 1959 to 1961, building on Heinz Rutishauser’s earlier method of 1958 with a different splitting. It is counted among the most important computations of the 20th century.</p>
+  <p>Francis Galton found the pull to the middle in the heights of parents and children in 1886, and named correlation in 1888. Karl Pearson gave the formula for r in 1896, and George Udny Yule the partial correlation in 1897. Ronald Fisher found the exact spread of r for bell-shaped data in 1915.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“Taller parents have children closer to the average, so in a few generations everyone will be the same height.” Not allowed: the pull runs both ways, children of the tallest children have parents closer to the average too, and the spread of the whole list stays put. The angle says how two lists lean, not that either is shrinking.</p>
 </section>
 
 </div>
@@ -174,20 +180,20 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'step',t:R`x_{k+1} = Ax_k/|Ax_k|`,n:`Cut to size each time.`},
-  {k:'ember',kl:'read',t:R`R(x) = \tfrac{x^{\mathsf T}Ax}{x^{\mathsf T}x}`,n:`Grid on both sides.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|R - \lambda| \le (\lambda_{\max} - \lambda_{\min})\sin^2\varepsilon}`,n:`A squared error.`}
-],{title:'The slides · again · ← → keys work'});
+  {k:'ember',kl:'vectors',t:R`u = x - \bar x\,1,\ \ v = y - \bar y\,1`,n:`Deviations.`},
+  {k:'ember',kl:'cosine',t:R`r = \tfrac{u\cdot v}{|u|\,|v|} = \cos\theta`,n:`31a4.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{r^2 = \text{share of spread}}`,n:`Square-sum.`}
+],{title:'The slides · a cosine · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'shift',t:R`(A - sI)v = (\lambda - s)v`,n:`Same axes.`},
-  {k:'ember',kl:'undo',t:R`(A - sI)^{-1}v = \tfrac{1}{\lambda - s}v`,n:`Nearest is largest.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{rate } |\lambda - s|/|\lambda^{\prime} - s|}`,n:`Any stretch you aim at.`}
-],{title:'The slides · aiming · ← → keys work'});
+  {k:'ember',kl:'y on x',t:R`b = r\,\sigma_y/\sigma_x`,n:`Shadow of v on u.`},
+  {k:'ember',kl:'x on y',t:R`b^{\prime} = r\,\sigma_x/\sigma_y`,n:`Shadow of u on v.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{bb^{\prime} = r^2}`,n:`The same line only at ±1.`}
+],{title:'The slides · two lines · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'step',t:R`A_k = Q_kR_k,\ \ A_{k+1} = R_kQ_k`,n:`Straighten, multiply back.`},
-  {k:'ember',kl:'keeps',t:R`A_{k+1} = Q_k^{\mathsf T}A_kQ_k`,n:`Same stretches.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{(Q_0\cdots Q_k)(R_k\cdots R_0) = A^{k+1}}`,n:`Every column at once.`}
-],{title:'The slides · QR, again · ← → keys work'});
+  {k:'ember',kl:'misses',t:R`\tilde u = u - r_{xw}w`,n:`Shadow on w removed.`},
+  {k:'ember',kl:'product',t:R`\tilde u\cdot\tilde v = r_{xy} - r_{xw}r_{yw}`,n:`Straight in each slot.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{r_{xy\cdot w}}`,n:`The honest angle.`}
+],{title:'The slides · take out · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

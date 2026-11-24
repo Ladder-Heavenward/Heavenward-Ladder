@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Projections and Least Squares by Hand</title>
+<title>31k · Compact Symmetric Maps</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,94 +37,78 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r31j.html">← 31j polynomials are everywhere near</a><a href="r31l.html">next: 31l correlation and regression →</a></p>
-  <div class="tags"><span class="tag tech">31k · technique</span></div>
-  <h1>Projections and Least Squares by Hand</h1>
-  <p data-pid="f0c19f">A surveyor in Bellingham has a point and a sloping plane of ground, and needs the foot of the drop. A student rolls a ball down a ramp and times it, and needs the curve the timings lie near. A laboratory in Corvallis reads the colour of four known solutions, and needs the line that turns a colour into a strength. Each is a shadow, and the rung has already proved how to find one. This step does them by hand, with the shortcuts that make the hand work short. A plane is best handled through the one vector at right angles to it. A curve with powers in it is a fit whose columns are the powers. A line forced through zero needs only one ratio. And readings that are not all equally good get a product that trusts each one as much as it deserves.</p>
-  <p class="gesture" data-pid="e436b8">To drop a vector onto a plane, take away its shadow on the vector at right angles to the plane. To fit a polynomial, use the powers as the columns. A line through zero has slope the sum of products over the sum of squares. Readings of different widths are fitted under a product that weights each by one over its spread.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31j.html">← 31j readings that reach the whole space</a><a href="r31l.html">next: 31l polynomials are everywhere near →</a></p>
+  <div class="tags"><span class="tag proof">31k · proof</span></div>
+  <h1>Compact Symmetric Maps</h1>
+  <p data-pid="34b18a">A symmetric map of n directions has a right-angled basis it only stretches (31d). With endlessly many directions the promise can fail: some symmetric maps stretch no vector at all. It comes back for maps that squeeze: maps that send every bounded list to one with a settling sub-list. Such a map has stretches that shrink to 0, and its stretched vectors fill the space. This step defines the squeezing maps, proves the largest stretch is reached, and finds the waves sin kx as the axes of undoing a second slope.</p>
+  <p class="gesture" data-pid="a99235">A bounded map K is compact if every bounded list fₙ has a sub-list with Kfₙ settling. If K is compact and symmetric on a complete product space, there is a right-angled list of vectors it stretches by λ₁, λ₂, … → 0, and every f is Σ⟨f, eₖ⟩eₖ plus what K loses.</p>
 </header>
 
 <section class="class step" data-step="31k1">
-  <h2 class="sthead"><span class="stno">31k1</span>A Shadow on a Plane</h2>
-  <p data-pid="2b3e2d">A plane through 0 in space is the set of vectors at right angles to one vector n, its <i>normal</i>. Its shadow is easiest found from n alone, with no basis of the plane at all.</p>
-  <p data-pid="fdd3d1">Through-the-normal technique: <b>the shadow of f on the plane at right angles to n is f − ((f · n)/|n|²) n, and the distance from f to the plane is |f · n|/|n|.</b> The plane is W, its W⊥ is the line through n (27i2), and f splits into its shadow on that line and the rest (31b1). The rest is the shadow on W.</p>
-  <pre class="lines" data-k="ember" data-label="this step: one drop onto a plane">
-f = (1, 2, 3),\ \ n = (1, 1, 1),\ \ \text{plane } x + y + z = 0 @@ the plane at right angles to n
-f\cdot n = 6,\ \ |n|^2 = 3 @@ the dot
-Pf = (1, 2, 3) - 2(1, 1, 1) = (-1, 0, 1) @@ the through-the-normal technique
-Pf\cdot n = -1 + 0 + 1 = 0 @@ check: Pf lies in the plane
-\htmlClass{new}{\text{distance } = \tfrac{|f\cdot n|}{|n|} = \tfrac{6}{\sqrt3} = 2\sqrt3 \approx 3.46} \quad \blacksquare @@ the length of 2(1, 1, 1)
+  <h2 class="sthead"><span class="stno">31k1</span>Maps That Squeeze</h2>
+  <pre class="lines" data-k="ember" data-label="this step: in ℓ²">
+I e_k = e_k,\ \ \|e_j - e_k\| = \sqrt2 @@ the identity: no sub-list settles
+K c = (c_1, \tfrac12 c_2, \tfrac13 c_3, \ldots) @@ each place shrunk by its number
+\|Kc - K_n c\| \le \tfrac{1}{n+1}\|c\|,\ \ K_n \text{ keeps the first } n @@ K is near maps of finite dimension
+\htmlClass{new}{K \text{ is compact; } I \text{ is not}} @@ bounded lists in n directions have settling sub-lists (22)
   </pre>
-<div class="eqline c6 lsyn" data-was="9be455" data-tex="\begin{aligned}&amp;P = I - nn^{\mathsf T}/|n|^2\\ &amp;x + y + z = 3:\ \text{not through } 0\\ &amp;\qquad\text{subtract } (1, 1, 1),\ \text{drop, slide back}\end{aligned}"></div>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · plane · ← → keys work</div></section>
+  <p data-pid="f8aa3d">Compact technique: <b>a bounded map is compact when it sends every bounded list to a list with a settling sub-list;</b> every limit of maps of finite dimension is compact, and on endlessly many directions the identity is not.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31k1.1</span><span class="ph understand">understand</span>What is the normal of a plane through 0?  <br>What does the through-the-normal technique say?</li>
+      <li><span class="qid">31k1.1</span><span class="ph understand">understand</span>Why is the shrinking map compact and the identity not?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="31k2">
-  <h2 class="sthead"><span class="stno">31k2</span>A Curve Through Timings</h2>
-  <p data-pid="4781a7">Power-columns technique: <b>to fit y ≈ c₀ + c₁x + ⋯ + c_d x^d to n points, use the columns 1, x, …, x^d; then XᵀX has Σᵢ xᵢ^(j+k) in row j and column k, and the best c solves XᵀXc = Xᵀy.</b> It is the miss-at-right-angles technique of 31b3 with powers for columns, and its grid needs only the sums of powers.</p>
-  <pre class="lines" data-k="ember" data-label="this step: a ball rolling down a ramp">
-t: 0, 1, 2, 3 \text{ s};\ \ s: 0.0,\ 1.1,\ 3.9,\ 9.1 \text{ m} @@ distances rolled, read off a tape; the numbers are a model
-\textstyle\sum t^0, \ldots, \sum t^4 = 4,\ 6,\ 14,\ 36,\ 98 @@ the sums of powers
-\begin{pmatrix} 4 & 6 & 14 \\ 6 & 14 & 36 \\ 14 & 36 & 98\end{pmatrix}c = \begin{pmatrix} 14.1 \\ 36.2 \\ 98.6\end{pmatrix} @@ Σs, Σts, Σt²s
-c = (0.035,\ -0.065,\ 1.025) @@ elimination (27j)
-\text{misses: } -0.035,\ 0.105,\ -0.105,\ 0.035 @@ they add to 0, and to 0 against t and t²: right angles (31b4)
-\htmlClass{new}{s \approx 1.025\,t^2,\ \ \text{an acceleration of about } 2.05 \text{ m/s}^2} \quad \blacksquare @@ s = ½ g′ t² with g′ = 2c₂
+  <h2 class="sthead"><span class="stno">31k2</span>The Largest Stretch Is Reached</h2>
+  <pre class="lines" data-k="ember" data-label="this step: K compact and symmetric">
+\|K\| = \sup_{\|f\| = 1} |\langle Kf, f\rangle| @@ for symmetric maps: split ⟨K(f + g), f + g⟩ as in 27h
+\langle Kf_n, f_n\rangle \to \lambda = \pm\|K\|,\ \ \|f_n\| = 1 @@ a list that nearly reaches it
+\|Kf_n - \lambda f_n\|^2 \le 2\lambda^2 - 2\lambda\langle Kf_n, f_n\rangle \to 0 @@ multiply out
+\htmlClass{new}{Kf_n \text{ settles at } g \Rightarrow f_n \to g/\lambda,\ \ Kg = \lambda g} @@ compactness gives the limit
   </pre>
-  <p data-pid="2c2044">The fit put tiny numbers in front of 1 and t. That is a finding, not a demand: the ball started at rest at the zero of the tape. Had the timings been fitted with columns 1 and t only, the shadow would have been the best line, and its misses would have shown a curve, high at the ends and low in the middle.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · powers · ← → keys work</div></section>
+  <p data-pid="a0b3cb">Square-axes technique: <b>a compact symmetric map on a complete product space stretches some vector by ±‖K‖; repeating at right angles to the vectors found gives a right-angled list e₁, e₂, … with stretches λₖ → 0, and Kf = Σλₖ⟨f, eₖ⟩eₖ for every f.</b> It is 31d’s technique, in endlessly many directions.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31k2.1</span><span class="ph understand">understand</span>What does the power-columns technique say, and what fills XᵀX?  <br>What do the misses of the ramp fit add to, and against which columns?</li>
+      <li><span class="qid">31k2.1</span><span class="ph understand">understand</span>How does compactness make the largest stretch a real stretch of a vector?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="31k3">
-  <h2 class="sthead"><span class="stno">31k3</span>Lines Through Zero, and Readings That Are Not All as Good</h2>
-  <p data-pid="816eca">Through-zero technique: <b>the best line y ≈ bx through 0 has b = Σxᵢyᵢ / Σxᵢ².</b> It is the closest-point technique of 31b1 on the line through x, with g = x.</p>
-  <pre class="lines" data-k="ember" data-label="this step: a colour calibration line">
-x: 0.5,\ 1,\ 2,\ 4 \text{ mg/L};\ \ y: 0.11,\ 0.20,\ 0.41,\ 0.79 @@ four known strengths and the colour each reads; the numbers are a model
-\textstyle\sum x_iy_i = 4.235,\ \ \sum x_i^2 = 21.25 @@ products and squares
-b = 4.235/21.25 \approx 0.1993 @@ the through-zero technique
-\htmlClass{new}{\text{a reading of } 0.30 \text{ means about } 0.30/0.1993 \approx 1.51 \text{ mg/L}} \quad \blacksquare @@ the line, run backwards
+  <h2 class="sthead"><span class="stno">31k3</span>Undoing a Second Slope</h2>
+  <pre class="lines" data-k="ember" data-label="this step: −u″ = f on [0, π], u(0) = u(π) = 0">
+Kf = u,\ \ Kf(x) = \textstyle\int_0^\pi G(x, y) f(y)\,dy @@ K undoes −u″ with the ends held
+G(x, y) = G(y, x) @@ K is symmetric
+K \sin kx = \dfrac{\sin kx}{k^2} @@ since −(sin kx / k²)″ = sin kx
+\htmlClass{new}{\text{stretches } 1, \tfrac14, \tfrac19, \ldots \to 0;\ \ \text{axes } \sin kx} @@ the waves of a held string
   </pre>
-<div class="eqline c6 lsyn" data-was="404e6b" data-tex="\begin{aligned}&amp;\text{readings not all as good}:\ \text{not to count alike}\\ &amp;\text{reading } i \text{ with spread } \sigma_i^2:\\ &amp;\qquad \langle u, v\rangle = \textstyle\sum_i u_iv_i/\sigma_i^2 \quad\text{(31a1)}\\ &amp;\text{trust in proportion to } 1/\sigma_i^2\end{aligned}"></div>
-  <p data-pid="30887c">Weighted-shadow technique: <b>with weights wᵢ = 1/σᵢ², the best fit is the shadow under the weighted product, and solves XᵀWXc = XᵀWy, with W the grid of the wᵢ down its middle. Fitting one number to the readings gives Σwᵢyᵢ / Σwᵢ, with spread 1/Σwᵢ.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: one length, read three times">
-y: 10.2,\ 9.8,\ 10.9 \text{ cm};\ \ \sigma: 0.1,\ 0.2,\ 0.5 @@ three tools of different quality
-w: 100,\ 25,\ 4 @@ one over each spread
-\textstyle\sum w_iy_i = 1308.6,\ \ \sum w_i = 129 @@ X is the column of 1s
-\htmlClass{new}{\hat y = 1308.6/129 \approx 10.14 \text{ cm},\ \ \text{width } 1/\sqrt{129} \approx 0.088} \quad \blacksquare @@ the independent-spreads-add technique (30g3), on Σwᵢyᵢ/Σwᵢ
-  </pre>
-  <p data-pid="fa2e03">The plain average, 10.30, leans towards the worst tool. The weighted one stays near the best, and its width is smaller than the best tool’s alone.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · weights · ← → keys work</div></section>
+  <p data-pid="8acfa7"><b>Undoing a second slope with held ends is a compact symmetric map, and its axes are the waves sin kx, so every function on [0, π] is a sum of them.</b> The same technique, for other rate statements, gives the shapes of drums and the energy levels of atoms.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31k3.1</span><span class="ph understand">understand</span>What do the through-zero and weighted-shadow techniques say?  <br>Why should a reading with a larger spread count for less?</li>
+      <li><span class="qid">31k3.1</span><span class="ph understand">understand</span>Why are the waves sin kx the axes of undoing −u″, and what are their stretches?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="31k4">
   <h2 class="sthead"><span class="stno">31k4</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{the shadow of } f \text{ on the plane at right angles to } n \text{ is } (f\cdot n)n\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; that is the shadow on the line through n, and only for |n| = 1
-\text{fit } y \approx c_0 + c_1x + c_2x^2 \text{ by three fits of one column each}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the columns are not at right angles; fit them together, or straighten them first
-\text{a line through 0 fits better than a line with a start}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it is the shadow on a smaller piece: its misses can only be larger
-\text{weight a reading by } 1/\sigma\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the weight is one over the spread, 1/σ²
+  <p data-pid="44ff3e">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{every bounded symmetric map has a stretched vector}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; only compact ones are promised one (31k2)
+\lambda_k \to \infty\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the stretches of a compact map shrink to 0 (31k2)
+\text{the identity on } \ell^2 \text{ is compact}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; the basis vectors stay √2 apart (31k1)
+K\sin kx = k^2 \sin kx\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; K undoes the second slope: it divides by k² (31k3)
+\text{the axes need not be at right angles}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; symmetric maps stretch at right angles (31d) (31k2)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">31k4.1</span><span class="ph understand">understand</span>Why can a quadratic fit not be done one column at a time?  <br>Why does forcing the line through 0 never make the misses smaller?</li>
+      <li><span class="qid">31k4.1</span><span class="ph understand">understand</span>Which move above multiplies by k² where K divides, and why does K divide?</li>
     </ol>
   </section>
 </section>
@@ -143,50 +116,25 @@ w: 100,\ 25,\ 4 @@ one over each spread
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">31k.5.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{plane } 2x - y + 2z = 6,\ \ f = (4, 1, 5)"></span></span>Build the point of the plane closest to f, by sliding the plane through 0, dropping, and sliding back.  <br>Find the distance from f to the plane, and check it with the through-the-normal technique.</div>
-  <div class="chq"><span class="chid">31k.5.2</span><span class="tagq">edge</span><span class="givens"><span class="gtx"> 0, 1, 2;\ \ s: 0.0,\ 1.1,\ 3.9</span></span>Fit c₀ + c₁t + c₂t² to only three timings. Find the misses.  <br>What does a fit with as many columns as points tell you about the ball, and what can it not tell you?</div>
-  <div class="chq"><span class="chid">31k.5.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="x: 1, 2, 3, 4;\ \ y: 2, 1, 4, 3"></span></span>Fit y ≈ k + bx by straightening the columns 1 and x first (31c), so that each number is one reading.  <br>Check that k = 1 and b = 0.6, and find which reading gave b.</div>
-  <div class="chq"><span class="chid">31k.5.4</span><span class="tagq">converse</span>The weighted average with weights 1/σᵢ² has spread 1/Σ(1/σᵢ²). Turn it round: among all averages Σcᵢyᵢ with Σcᵢ = 1, is this one the one with least spread?  <br>Prove it with the product bound (31a3).</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">31k.5.1</span><span class="tagq">do</span>Find the stretches and axes of Kc = (c₁, c₂/4, c₃/9, …) on ℓ².</div>
+  <div class="chq"><span class="chid">31k.5.2</span><span class="tagq">make</span>Make up a compact symmetric map on ℓ² whose stretches are 1/2ᵏ.</div>
+  <div class="chq"><span class="chid">31k.5.3</span><span class="tagq">converse</span>Every compact symmetric map has stretches shrinking to 0. Decide whether a symmetric map with stretches shrinking to 0 and a right-angled basis of axes must be compact.</div>
+  <div class="chq"><span class="chid">31k.5.4</span><span class="tagq">edge</span>Let K = 0. Say what its stretches and axes are.</div>
+  <div class="chq"><span class="chid">31k.5.5</span><span class="tagq">open</span>Say why a compact map on endlessly many directions can never be undone by a bounded map.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r31j.html">← 31j · readings that reach the whole space</a><a href="r31l.html">31l · polynomials are everywhere near →</a></nav>
 
-<nav class="nextrung"><a href="r31j.html">← 31j · polynomials are everywhere near</a><a href="r31l.html">31l · correlation and regression →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>The normal of a plane is its normal vector, and I − nnᵀ/|n|² is the orthogonal projector onto the plane. Fitting with the powers as columns is polynomial regression, and X with columns 1, x, …, x^d is a Vandermonde matrix. A line through 0 is regression through the origin. The weighted-shadow technique is weighted least squares, and Σwᵢyᵢ/Σwᵢ with wᵢ = 1/σᵢ² is the inverse-variance weighted mean. A colour reading against strength is a calibration curve, and in a spectrometer its straightness is the Beer–Lambert law.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="60315e">A compact map is a <b>compact operator</b>, a symmetric one <b>self-adjoint</b>; this is the <b>spectral theorem for compact self-adjoint operators</b>, or the <b>Hilbert-Schmidt theorem</b>. G is a <b>Green’s function</b>, and −u″ with held ends is a <b>Sturm-Liouville problem</b>.</p>
   <h3>Who said it first</h3>
-  <p>Galileo Galilei timed balls rolling down ramps about 1604 and found distances in proportion to the squares of the times. Carl Friedrich Gauss weighted readings by their precision in 1809 and 1823. August Beer stated the law of colour and strength in 1852.</p>
+  <p data-pid="bda1a3">David Hilbert (1904 to 1910) and Erhard Schmidt (1907) found the axes of symmetric integral maps; Frigyes Riesz set out compact maps in 1918.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'normal',t:R`W = n^{\perp}`,n:`One vector fixes the plane.`},
-  {k:'ember',kl:'drop',t:R`Pf = f - \tfrac{f\cdot n}{|n|^2}\,n`,n:`Take away the normal part.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{distance} = \tfrac{|f\cdot n|}{|n|}}`,n:`No basis needed.`}
-],{title:'The slides · plane · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'columns',t:R`1,\ x,\ \ldots,\ x^d`,n:`One per power.`},
-  {k:'ember',kl:'grid',t:R`(X^{\mathsf T}X)_{jk} = \textstyle\sum x_i^{j+k}`,n:`Sums of powers.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{s \approx 1.025\,t^2}`,n:`A curve through timings.`}
-],{title:'The slides · powers · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'through 0',t:R`b = \textstyle\sum x_iy_i/\sum x_i^2`,n:`A shadow on a line.`},
-  {k:'ember',kl:'weights',t:R`w_i = 1/\sigma_i^2`,n:`Trust by spread.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{X^{\mathsf T}WXc = X^{\mathsf T}Wy}`,n:`The weighted shadow.`}
-],{title:'The slides · weights · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

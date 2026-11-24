@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>e^(iθ) by Hand</title>
+<title>26i · Maps That Keep Angles</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,104 +37,79 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r26h.html">← 26h residues</a><a href="r26j.html">next: 26j why 1/(1 + x²) has radius 1 →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26h.html">← 26h residues</a><a href="r26j.html">next: 26j one function, carried further →</a></p>
   <div class="tags"><span class="tag tech">26i · technique</span></div>
-  <h1>e^(iθ) by Hand</h1>
-  <p data-pid="af3d33">Rung twenty one proved the sum formulas for the cosine and the sine by turning the plane, and proved the powers of a turn by induction, one power at a time. Rung twenty six showed that a turn is the growth function fed an imaginary number, and that the growth function still turns adding into multiplying. With those two facts in hand, the old formulas stop being things to remember. Multiply out one complex number, and read off its floor part and its upright part: two formulas fall out at once. Raise a turn to a power, and the formulas for every multiple of an angle fall out the same way. Run it backwards, writing the cosine as half of a turn plus its flip, and every power of the cosine or the sine turns into a plain sum of cosines and sines, ready to be integrated.</p>
-  <p class="gesture" data-pid="8a17ac">Find one complex number two ways and compare the parts: the floor parts agree, and the upright parts agree. A turn raised to a power gives the formulas for multiple angles. The cosine is half a turn plus its flip, so its powers become sums.</p>
+  <h1>Maps That Keep Angles</h1>
+  <p data-pid="83b3dc">A function with a complex slope does something to the plane that no other map does as cheaply: near each point where its slope is not 0 it acts as a turn and a stretch, the same in every direction. So it keeps the angle at which any two curves cross. This step proves that from 26d’s complex slope, finds where the keeping fails, and uses angle-keeping maps to carry a hard shape onto an easy one, which is how the flow of air past a wing was first computed.</p>
+  <p class="gesture" data-pid="985a67">Near z₀, f(z₀ + w) ≈ f(z₀) + f′(z₀)w, and multiplying by f′(z₀) = re^(iφ) stretches by r and turns by φ. Two curves through z₀ are both turned by φ, so their angle is kept wherever f′ ≠ 0. Where f′ = 0, as for z² at 0, angles are multiplied.</p>
 </header>
 
 <section class="class step" data-step="26i1">
-  <h2 class="sthead"><span class="stno">26i1</span>The Sum Formulas in One Line</h2>
-  <p data-pid="2507b2">21d proved the sum technique by carrying arcs round the circle with a turn. Here is the same result again, with nothing to carry and nothing to remember.</p>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\Box(z = w \Leftrightarrow \text{both parts equal}) \quad\text{(25a, 3b2)}\end{aligned}"></div>
-  <p data-pid="48f180">Part-reading technique: <b>to prove a fact about cos and sin, find one complex number two ways, each written as floor part plus i times upright part; then the floor parts agree, and the upright parts agree.</b> Two numbers of the plane are equal exactly when their floor parts and their upright parts are (25a).</p>
-  <pre class="lines" data-k="ember" data-label="this step: the sum technique, read off">
-e^{i(\alpha+\beta)} = e^{ia}\,e^{ib} @@ the plane-adding technique (26b1)
-= (\cos \alpha + i\sin \alpha)(\cos \beta + i\sin \beta) @@ the turn-growth technique (26a3), twice
-= (\cos \alpha\cos \beta - \sin \alpha\sin \beta) + i(\sin \alpha\cos \beta + \cos \alpha\sin \beta) @@ share out; i² = −1
-e^{i(\alpha+\beta)} = \cos(\alpha+\beta) + i\sin(\alpha+\beta) @@ the turn-growth technique at α + β
-\htmlClass{new}{\cos(\alpha+\beta) = \cos \alpha\cos \beta - \sin \alpha\sin \beta,\ \ \sin(\alpha+\beta) = \sin \alpha\cos \beta + \cos \alpha\sin \beta} \quad \blacksquare @@ the part-reading technique: floor parts, then upright parts
+  <h2 class="sthead"><span class="stno">26i1</span>A Turn and a Stretch Up Close</h2>
+  <p data-pid="38c009">Angle-keeping technique: <b>if f has a complex slope at z₀ and f′(z₀) ≠ 0, then any two curves crossing at z₀ at an angle θ are carried to curves crossing at f(z₀) at the same angle θ, turned the same way.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the angle-keeping technique">
+\gamma(t),\ \gamma(0) = z_0:\ (f \circ \gamma)^{\prime}(0) = f^{\prime}(z_0)\,\gamma^{\prime}(0) @@ the chain technique for complex slopes
+f^{\prime}(z_0) = re^{i\varphi}:\ \text{every arrow at } z_0 \text{ is stretched by } r, \text{ turned by } \varphi @@ multiplying (26a)
+\arg\big((f\circ\gamma_2)^{\prime}\big) - \arg\big((f\circ\gamma_1)^{\prime}\big) = \arg \gamma_2^{\prime} - \arg \gamma_1^{\prime} @@ φ cancels
+\htmlClass{new}{\text{the crossing angle, and its sense, are kept}} \quad \blacksquare @@ f′(z₀) ≠ 0 so the arrows are not crushed to 0
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: cos 75°">
-\tfrac{5\pi}{12} = \tfrac{\pi}{4} + \tfrac{\pi}{6} @@ 75° as a sum of angles whose cos and sin are known (21b)
-\cos\tfrac{5\pi}{12} = \tfrac{\sqrt2}{2}\cdot\tfrac{\sqrt3}{2} - \tfrac{\sqrt2}{2}\cdot\tfrac12 @@ the floor part of the line above
-\htmlClass{new}{\cos\tfrac{5\pi}{12} = \tfrac{\sqrt6 - \sqrt2}{4} \approx 0.2588} \quad \blacksquare @@ check: cos 75° = 0.258819 to six places
-  </pre>
-  <p data-pid="e8cff7">21d needed one argument for the cosine and another for the sine. Here one multiplication gives both, because one complex number holds both. The difference formulas of 21e come the same way from e^(i(α − β)) = e^(iα) e^(−iβ), with e^(−iβ) = cos β − i sin β by reversing an angle (21e1).</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · read the parts · ← → keys work</div></section>
+  <p data-pid="a1cccf">From here on, an <i>angle-keeping map</i> is a function with a complex slope that is never 0 on the region considered.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26i1.1</span><span class="ph understand">understand</span>What does the part-reading technique say? <br>How does it give the sum formulas for cos and sin in one line?</li>
+      <li><span class="qid">26i1.1</span><span class="ph understand">understand</span>Why does multiplying every arrow by f′(z₀) keep the angle between two curves?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="26i2">
-  <h2 class="sthead"><span class="stno">26i2</span>Powers of a Turn in One Line</h2>
-  <p data-pid="3f2d13">21·cb20 proved that the n-th power of cos θ + i sin θ is cos nθ + i sin nθ, by the multiply-and-add technique and induction, one power at a time. The plane-adding technique does it in one line, and for negative powers too.</p>
-  <p data-pid="d32f75">Many-angle technique: <b>for every whole n, (cos θ + i sin θ)ⁿ = cos nθ + i sin nθ; so cos nθ and sin nθ are the floor and upright parts of (cos θ + i sin θ)ⁿ multiplied out by the two-term power.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the many-angle technique">
-(\cos\theta + i\sin\theta)^n = \big(e^{i\theta}\big)^n @@ the turn-growth technique (26a3)
-\big(e^{i\theta}\big)^n = e^{in\theta} \text{ for } n \ge 1 @@ the plane-adding technique (26b1), n − 1 times; induction (4c)
-\big(e^{i\theta}\big)^{-n} = 1/e^{in\theta} = e^{-in\theta} @@ 1/e^z = e^(−z) (26b2)
-\htmlClass{new}{(\cos\theta + i\sin\theta)^n = \cos n\theta + i\sin n\theta \text{ for every whole } n} \quad \blacksquare @@ the turn-growth technique at nθ
+  <h2 class="sthead"><span class="stno">26i2</span>Where Keeping Fails</h2>
+  <pre class="lines" data-k="ember" data-label="this step: z² at 0">
+f(z) = z^2,\ f^{\prime}(0) = 0 @@ the slope vanishes
+re^{i\theta} \mapsto r^2 e^{2i\theta} @@ angles from 0 are doubled
+\text{two rays at } 90^\circ \mapsto \text{rays at } 180^\circ @@ a corner opened flat
+\htmlClass{new}{\text{elsewhere, } f^{\prime}(z) = 2z \ne 0: \text{ angles kept}} @@ the doubling only at 0
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: cos 3θ and sin 3θ">
-(c + is)^3 = c^3 + 3c^2(is) + 3c(is)^2 + (is)^3 @@ c = cos θ, s = sin θ; the two-term power (4k)
-= (c^3 - 3cs^2) + i(3c^2 s - s^3) @@ i² = −1, i³ = −i
-\cos 3\theta = c^3 - 3c(1 - c^2),\ \ \sin 3\theta = 3(1 - s^2)s - s^3 @@ the part-reading technique (26i1); s² = 1 − c² (21c)
-\htmlClass{new}{\cos 3\theta = 4\cos^3\theta - 3\cos\theta,\ \ \sin 3\theta = 3\sin\theta - 4\sin^3\theta} \quad \blacksquare
-  </pre>
-  <p data-pid="4201ac">The same line finds any power of any number of the plane. 1 + i is √2 e^(iπ/4), so (1 + i)¹⁰ = 2⁵ e^(i10π/4) = 32 e^(iπ/2) e^(2πi) = 32i. Ten multiplications become one.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · many angles · ← → keys work</div></section>
+  <p data-pid="9f3c9b"><b>At a point where the slope is 0 and the first nonzero term of the series is the k-th power, angles are multiplied by k.</b> That flaw is a tool: z² opens a quarter plane into a half plane.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26i2.1</span><span class="ph understand">understand</span>What does the many-angle technique say, and why does the plane-adding technique prove it in one line?</li>
+      <li><span class="qid">26i2.1</span><span class="ph understand">understand</span>What happens to angles at a point where the complex slope is 0?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="26i3">
-  <h2 class="sthead"><span class="stno">26i3</span>Powers of cos and sin as Sums</h2>
-  <p data-pid="1ec4df">Run the turn-growth technique at θ and at −θ, and add or subtract. The cosine and the sine come out as halves of a turn and its flip.</p>
-  <p data-pid="56f3c4">Power-to-sum technique: <b>cos θ = (e^(iθ) + e^(−iθ))/2 and sin θ = (e^(iθ) − e^(−iθ))/(2i); so every power of cos θ or sin θ, and every product of such powers, is a sum of terms cos kθ and sin kθ, found by multiplying out.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the power-to-sum technique">
-e^{-i\theta} = \cos\theta - i\sin\theta @@ the turn-growth technique at −θ (26a3); cos(−θ) = cos θ, sin(−θ) = −sin θ (21e1)
-e^{i\theta} + e^{-i\theta} = 2\cos\theta,\ \ e^{i\theta} - e^{-i\theta} = 2i\sin\theta @@ add; subtract
-\htmlClass{new}{\cos\theta = \tfrac{e^{i\theta} + e^{-i\theta}}{2},\ \ \sin\theta = \tfrac{e^{i\theta} - e^{-i\theta}}{2i}} \quad \blacksquare
+  <h2 class="sthead"><span class="stno">26i3</span>Hard Shapes Onto Easy Ones</h2>
+  <pre class="lines" data-k="ember" data-label="this step: three maps">
+z \mapsto z^2:\ \text{quarter plane} \to \text{half plane} @@ angles at 0 doubled
+z \mapsto \dfrac{z - i}{z + i}:\ \text{upper half plane} \to \text{the unit disc} @@ distance to i over distance to −i is below 1
+z \mapsto \tfrac12\big(z + \tfrac1z\big):\ \text{a slightly shifted circle} \to \text{a wing’s outline} @@ Joukowski, 1910
+\htmlClass{new}{\text{solve on the easy shape, carry the answer back}} @@ the easy answer comes back along the map
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: cos³θ">
-\cos^3\theta = \tfrac18\big(e^{i\theta} + e^{-i\theta}\big)^3 @@ the power-to-sum technique
-= \tfrac18\big(e^{3i\theta} + 3e^{i\theta} + 3e^{-i\theta} + e^{-3i\theta}\big) @@ the two-term power (4k); e^(iθ)e^(−iθ) = 1 (26b1)
-= \tfrac18\big(2\cos 3\theta + 6\cos\theta\big) @@ pair each term with its flip: e^(ikθ) + e^(−ikθ) = 2 cos kθ
-\htmlClass{new}{\cos^3\theta = \tfrac34\cos\theta + \tfrac14\cos 3\theta} \quad \blacksquare
-  </pre>
-  <p data-pid="2dad03">The terms always come in flipped pairs, so a power of the cosine is a sum of cosines: cos⁴θ = (3 + 4 cos 2θ + cos 4θ)/8. Over a whole turn every cos kθ with k ≠ 0 has area 0, so ∫ from 0 to 2π of cos⁴θ dθ is 2π · 3/8 = 3π/4. 21n halved the arc twice to get there; here it is one multiplication.</p>
-  <p data-pid="63ecdc">For a complex z, cos z and sin z mean their endless sums (23b2), which settle everywhere by the plane-size technique (26a1). Splitting e^(iz) and e^(−iz) into even and odd pieces, as 26a3 did, gives cos z = (e^(iz) + e^(−iz))/2 and sin z = (e^(iz) − e^(−iz))/(2i) for every complex z, not only real θ.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · powers to sums · ← → keys work</div></section>
+  <p data-pid="4b749a">A still flow of air solved round a circle, carried back by Joukowski’s map, gives the flow round a wing. <b>Every region of the plane without holes, short of the whole plane, can be carried onto the unit disc by an angle-keeping map;</b> that theorem, Riemann’s, is held in trust here, and the three maps above are cases of it that can be checked by hand.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26i3.1</span><span class="ph understand">understand</span>What does the power-to-sum technique say? <br>Why does a power of the cosine come out as a sum of cosines?</li>
+      <li><span class="qid">26i3.1</span><span class="ph understand">understand</span>How do angle-keeping maps turn a hard region into an easy one, and why does a solved flow carry over?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="26i4">
   <h2 class="sthead"><span class="stno">26i4</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\cos^3\theta = \cos 3\theta\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a power of the cosine is not the cosine of a multiple: cos³θ = (3 cos θ + cos 3θ)/4 (26i3)
-(\cos\theta + i\sin\theta)^n = \cos^n\theta + i\sin^n\theta\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the power of a sum is not the sum of the powers (4k); the middle terms carry the turn
-\cos\theta \text{ is the floor part of } e^{i\theta}, \text{ so } \cos^2\theta \text{ is the floor part of } e^{2i\theta}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the floor part of a product is not the product of the floor parts: cos 2θ = cos²θ − sin²θ
-e^{i\theta} + e^{-i\theta} = 2i\sin\theta\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the sum is 2 cos θ; the difference is 2i sin θ
+  <p data-pid="bfc73d">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+z^2 \text{ keeps angles everywhere}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; at 0 its slope is 0 and angles double (26i2)
+\text{an angle-keeping map keeps lengths}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it stretches by |f′|, which changes from point to point (26i1)
+\bar z \text{ keeps angles}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; it keeps their size but reverses their sense; it has no complex slope (26i1)
+\text{carry the answer first, then solve}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; solve on the easy shape, then carry it back (26i3)
+\text{any smooth map of the plane keeps angles}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only those with a nonzero complex slope (26i1)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26i4.1</span><span class="ph understand">understand</span>Why is “cos³θ = cos 3θ” a move to watch out for?</li>
+      <li><span class="qid">26i4.1</span><span class="ph understand">understand</span>Which move above confuses keeping angles with keeping lengths, and what does the map do to lengths?</li>
     </ol>
   </section>
 </section>
@@ -153,51 +117,25 @@ e^{i\theta} + e^{-i\theta} = 2i\sin\theta\,? @@ &lt;span class="vd vd-p"&gt;outs
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">26i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\textstyle\sum_{k=0}^{n-1} \cos k\theta"></span></span>Build a closed form, for θ not a whole number of turns, as the floor part of a geometric sum of e^(ikθ), and prove it. <br>Check it at n = 3, θ = π/2.</div>
-  <div class="chq"><span class="chid">26i.4.2</span><span class="tagq">edge</span>Prove that cos nθ is a polynomial in cos θ for every whole n ≥ 0. <br>Find whether sin nθ is a polynomial in sin θ for every whole n, and where it fails.</div>
-  <div class="chq"><span class="chid">26i.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="1 + \cos 2\theta + \cos 3\theta"></span></span>Is every sum u₀ + u₁ cos θ + ⋯ + uₙ cos nθ a polynomial of degree at most n in cos θ? Prove it or refute it. <br>Find the polynomial for the given.</div>
-  <div class="chq"><span class="chid">26i.4.4</span><span class="tagq">reroute</span>Prove cos²(θ/2) = (1 + cos θ)/2 and sin²(θ/2) = (1 − cos θ)/2 from the power-to-sum technique, each in one line.</div>
-  <div class="chq"><span class="chid">26i.4.5</span><span class="tagq">seam</span>The many-angle formula was in use around 1722, a quarter of a century before anyone wrote e to an imaginary power. It was checked case by case, and it never failed. <br>Was it known before it was proved? <br>What did the plane-adding technique give that the cases did not?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">26i.5.1</span><span class="tagq">do</span>Find the stretch and the turn of f(z) = z³ at z = 1 + i.</div>
+  <div class="chq"><span class="chid">26i.5.2</span><span class="tagq">make</span>Make up an angle-keeping map that carries the strip 0 < Im z < π onto the upper half plane.</div>
+  <div class="chq"><span class="chid">26i.5.3</span><span class="tagq">converse</span>A nonzero complex slope keeps angles. Decide whether a map that keeps all angles and their sense must have a complex slope.</div>
+  <div class="chq"><span class="chid">26i.5.4</span><span class="tagq">edge</span>Let f(z) = az + b with a ≠ 0. Say what it does to every shape.</div>
+  <div class="chq"><span class="chid">26i.5.5</span><span class="tagq">open</span>Say why the whole plane cannot be carried onto the disc by an angle-keeping map.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r26h.html">← 26h · residues</a><a href="r26j.html">26j · one function, carried further →</a></nav>
 
-<nav class="nextrung"><a href="r26h.html">← 26h · residues</a><a href="r26j.html">26j · why 1/(1 + x²) has radius 1 →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>The many-angle technique is de Moivre’s formula. The power-to-sum technique gives Euler’s formulas for cosine and sine, cos θ = (e^(iθ) + e^(−iθ))/2 and sin θ = (e^(iθ) − e^(−iθ))/(2i); writing powers of cos and sin as sums of multiple angles is called linearization, or power reduction. cos 3θ = 4cos³θ − 3cos θ is the triple-angle formula, and cos nθ written as a polynomial in cos θ is the Chebyshev polynomial Tₙ.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="388d1c">An angle-keeping map is <b>conformal</b>; (z − i)/(z + i) is a <b>Möbius</b> or <b>Cayley transform</b>; ½(z + 1/z) is the <b>Joukowski transform</b>; the theorem held in trust is the <b>Riemann mapping theorem</b>. The impossibility for the whole plane is <b>Liouville’s theorem</b>.</p>
   <h3>Who said it first</h3>
-  <p>Abraham de Moivre used the many-angle pattern in 1722 and in his Miscellanea analytica of 1730, without writing e to an imaginary power. Leonhard Euler wrote cos θ = (e^(iθ) + e^(−iθ))/2 in his Introductio of 1748, and from it read off the sum formulas and the multiple-angle formulas as this step does. Pafnuty Chebyshev studied the polynomials Tₙ from 1854.</p>
+  <p data-pid="576e47">Bernhard Riemann stated the mapping theorem in his 1851 thesis; its first full proof came from Constantin Carathéodory and Paul Koebe around 1912. Nikolai Joukowski used his map for wing sections in 1910.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'two ways',t:R`e^{i(\alpha+\beta)} = e^{i\alpha}e^{i\beta}`,n:`Adding becomes multiplying.`},
-  {k:'ember',kl:'multiply out',t:R`(\cos \alpha + i\sin \alpha)(\cos \beta + i\sin \beta)`,n:`Share out; i² = −1.`},
-  {k:'ember',kl:'read off',t:R`\htmlClass{new}{\cos(\alpha+\beta) = \cos \alpha\cos \beta - \sin \alpha\sin \beta}`,n:`And the upright part gives sin(α + β).`}
-],{title:'The slides · read the parts · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'a turn, n times',t:R`(e^{i\theta})^n = e^{in\theta}`,n:`Adding becomes multiplying.`},
-  {k:'ember',kl:'multiply out',t:R`(c + is)^3 = (c^3 - 3cs^2) + i(3c^2s - s^3)`,n:`The two-term power.`},
-  {k:'ember',kl:'read off',t:R`\htmlClass{new}{\cos 3\theta = 4\cos^3\theta - 3\cos\theta}`,n:`With s² = 1 − c².`}
-],{title:'The slides · many angles · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'halves',t:R`\cos\theta = \tfrac{e^{i\theta} + e^{-i\theta}}{2}`,n:`A turn plus its flip.`},
-  {k:'ember',kl:'cube',t:R`\tfrac18(e^{3i\theta} + 3e^{i\theta} + 3e^{-i\theta} + e^{-3i\theta})`,n:`The two-term power.`},
-  {k:'ember',kl:'pair the flips',t:R`\htmlClass{new}{\cos^3\theta = \tfrac34\cos\theta + \tfrac14\cos 3\theta}`,n:`Cosines only.`}
-],{title:'The slides · powers to sums · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

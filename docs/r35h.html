@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dust With No Length, and Dimensions Between Whole Numbers</title>
+<title>Countable or Not, by Hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,129 +48,96 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r35g.html">← 35g countable or not, by hand</a><a href="r35i.html">next: 35i a line onto a square →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35g.html">← 35g points as the shapes of orders</a><a href="r35i.html">next: 35i dust with no length, and dimensions between whole numbers →</a></p>
   <div class="tags"><span class="tag tech">35h · technique</span></div>
-  <h1>Dust With No Length, and Dimensions Between Whole Numbers</h1>
-  <p data-pid="4d0742">Take a stretch of the line and throw away its open middle third. Throw away the middle third of each of the two pieces left, then of each of the four, and keep going for ever. What is left is a dust. Its total length shrinks by a third at every stage, so in the end it has no length at all. It holds no stretch of the line, however short. And yet it has exactly as many points as the whole line, because each point of the dust is an endless string of choices, left or right, one at each stage. So length and size come apart completely. Then the step asks a sharper question: how much room does the dust take up, if not length? Cover it with little pieces of one width, and count how many it takes. Halve the width and a line needs twice as many, a square four times as many. The dust needs a number of pieces that grows like a power between the two, and that power is its dimension. It is not a whole number. A triangle with its middles thrown out has a dimension between one and two, and so does a curve made of ever smaller bumps.</p>
-  <p class="gesture" data-pid="ec0d1d">The dust left after every middle third is thrown out has length zero and the size of the line: lengths and sizes measure different things. Count the pieces of width w that cover a set; if the count grows like one over w to a power, that power is the set’s dimension, and for the dust it is log 2 over log 3.</p>
+  <h1>Countable or Not, by Hand</h1>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;2^{\mathbb N} \hookrightarrow A \Rightarrow \neg\Diamond(A \text{ listed}) \quad\text{(3b3)}\end{aligned}"></div>
+  <p data-pid="62e21c">The proof steps of this rung settled a handful of sets: the fractions and the algebraic reals can be listed, the line and the parts of the counting numbers cannot. Most sets that turn up in practice are settled by one of two moves, done by hand. To list a set, give each member a height, a counting number, with only finitely many members at each height, and list height by height. To show a set cannot be listed, find inside it a copy of the endless strings of zeros and ones: a way of sending each such string to a different member. When a set has both a way into the line and such a copy inside it, it has the size of the line exactly. This step gives the three moves and runs them on a row of sets: the finite strings of a keyboard, the finite parts of the counting numbers, the ways to shuffle the counting numbers, the circles in the plane, and the reals that use only two digits. The hard part is never the proof. It is seeing which move fits.</p>
+  <p class="gesture" data-pid="73bc8a">Countable: find a height with finitely many members at each height. Not countable: send the endless strings of zeros and ones one-to-one into the set. The size of the line: both a way into the line and a copy of the strings.</p>
 </header>
 
 <section class="class step" data-step="35h1">
-  <h2 class="sthead"><span class="stno">35h1</span>The Middle-Thirds Dust</h2>
-  <p data-pid="0556fd">Let K₀ = [0, 1]. Make Kₙ₊₁ from Kₙ by throwing out the open middle third of each of its intervals. So K₁ = [0, 1/3] ∪ [2/3, 1], and Kₙ is 2ⁿ closed intervals, each of length 3⁻ⁿ. The <i>dust</i> K is what is in every Kₙ. Each Kₙ is closed, and the part of a space outside an overlap of closed sets is a union of open ones (<a href="r34a.html">34a</a>), so K is closed.</p>
-  <p data-pid="a27594">Dust technique: <b>the middle-thirds dust has length 0 and the size of the line.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the dust technique">
-m^*(K) \le m^*(K_n) \le 2^n \cdot 3^{-n} = (\tfrac23)^n \text{ for every } n @@ K ⊆ Kₙ; cover-total and outer-adds-at-most (30a)
-m^*(K) = 0 @@ (2/3)ⁿ heads to 0: the terms of the settling geometric sum Σ(2/3)ⁿ (22e) must shrink to 0 (22d)
-c(b) = \textstyle\sum_{n \ge 0} 2\,b(n)\,3^{-(n+1)} \text{ for } b \in 2^{\mathbb N} @@ a real with base-3 digits 0 and 2 only; the sum settles (geometric yardstick, 22e)
-c(b) \in K @@ the first n digits keep it in one interval of Kₙ: digit 0 the left third, digit 2 the right
-b \ne b' \text{ first at } n \Rightarrow |c(b) - c(b')| \ge 2\cdot3^{-(n+1)} - \textstyle\sum_{k > n} 2\cdot 3^{-(k+1)} = 3^{-(n+1)} @@ the first difference outweighs all the rest: a geometric sum (22e)
-c \text{ is one-to-one, and } K \subseteq \mathbb R @@ a copy of the bits inside K, and a way into the line
-\htmlClass{new}{m^*(K) = 0,\ \ |K| = 2^{\aleph_0}} \quad \blacksquare @@ the line-sized-by-hand technique (35g3)
+  <h2 class="sthead"><span class="stno">35h1</span>Listing by Height</h2>
+  <p data-pid="f83c3d"><a href="r35a.html">35a4</a> listed the algebraic reals by giving each polynomial a height. The move works on any set.</p>
+  <p data-pid="5493a0">Height-listing technique: <b>if each member of A is given a height in ℕ, and only finitely many members share each height, then A is countable.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the height-listing technique">
+H_k = \{x \in A : x \text{ has height } k\} \text{ is finite} @@ given; with a list of its own, its entries in a fixed order
+\text{list } H_0, \text{ then } H_1, \text{ then } H_2, \ldots @@ one finite run after another, the empty ones skipped
+\text{every } x \in A \text{ has some height } k,\ \text{so it is reached in } H_k @@ it comes after the finitely many members of lower height
+\htmlClass{new}{A \text{ is countable}} \quad \blacksquare @@ a list, or A is empty
   </pre>
-<div class="eqline c6 lsyn" data-was="dfccd9" data-tex="\begin{aligned}&amp;K \text{ holds no interval}:\\ &amp;\qquad\text{one of length } \ell \text{ would give } K \text{ length} \ge \ell\\ &amp;\tfrac14 = 0.0202\ldots_3 \in K,\ \text{no end of any piece}\\ &amp;K:\ \text{closed, length } 0,\ \text{not countable}\\ &amp;\text{countable} \Rightarrow \text{length } 0 \quad\text{(30a2)}\\ &amp;\qquad\text{the way back fails}\end{aligned}"></div>
-  <aside class="nature">
-    <div class="eyebrow">Anexact, yet rigorous · two sizes of truth</div>
-    <p data-pid="bad779">30c set a claim about the whole beside a claim about each point. Here are two claims about one set. Its length is a crowd claim: it adds up how much of the line is taken, and it cannot see any one point. Its size is a count by matching: it sees every point, and it cannot see how they are spread.</p>
-    <p data-pid="f272a8"><b>Length and size are two claims about one set, each exact, and neither gives the other.</b></p>
-    <p data-pid="559fd4">The dust is all point and no length. The fractions are fewer points and no length. A stretch is as many points as the dust, with length. Each claim is exact. Neither one can be read off the other.</p>
-    <p class="bait" data-pid="34c079">One rain gauge in Truckee records a storm’s total depth of rain. Another counts the drops. Which of the two claims does each make? Could two storms agree on one and differ on the other?</p>
-  </aside>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · dust · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: two worked runs">
+\text{a string of length } n \text{ from a keyboard of } 100 \text{ keys: height } n @@ 100ⁿ strings of each length (counted-functions, 4k9)
+\text{every program, every recipe, every book ever printed is such a string} @@ so the programs are countable
+\text{a finite part } s \subseteq \mathbb N \mapsto \textstyle\sum_{j \in s} 2^j @@ the part read as the 1s of a numeral in base 2 (4i)
+\{0, 2, 3\} \mapsto 1 + 4 + 8 = 13,\ \ \varnothing \mapsto 0 @@ different parts, different numerals
+\htmlClass{new}{\text{the finite parts of } \mathbb N \text{ are matched with } \mathbb N} \quad \blacksquare @@ every number has one numeral in base 2: a matching, no height needed
+  </pre>
+  <p data-pid="d8c785">The second run beats a height. When a set can be read off as the numerals of the counting numbers, the matching is written in one line. When it cannot, a height is the fallback, and the thinning technique turns the list into a matching.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · height · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">35h1.1</span><span class="ph understand">understand</span>How is the dust built, and what does the dust technique say? <br>Why is the map c from the strings of 0s and 1s into the dust one-to-one?</li>
+      <li><span class="qid">35h1.1</span><span class="ph understand">understand</span>What does the height-listing technique say? <br>What height lists the strings of a keyboard, and what matches the finite parts of ℕ with ℕ?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="35h2">
-  <h2 class="sthead"><span class="stno">35h2</span>Counting Covers</h2>
-  <p data-pid="f3259a">How much room does a set take, if not length? Cover it with closed intervals of one width w and let N(w) be the least number that covers it. For [0, 1], N(w) is about 1/w; for a square covered by little squares of side w, about 1/w². From here on, the <i>dimension</i> of a set is the number D at which log N(w) / log(1/w) settles as w heads to 0, when it settles. Its accepted name is the box-counting dimension.</p>
-  <p data-pid="f940b5">Box-count technique: <b>the middle-thirds dust has dimension log 2 / log 3, about 0.631.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the box-count technique">
-w = 3^{-n}:\ \ N(w) \le 2^n @@ the 2ⁿ pieces of Kₙ cover K
-\text{pieces of } K_n \text{ are at least } 3^{-n} \text{ apart} @@ each gap is a thrown-out third, of length 3⁻ᵏ with k ≤ n
-\text{an interval of width } 3^{-n} \text{ meets at most two pieces of } K_n @@ it cannot reach across a gap and a piece and a gap
-\text{each piece holds a point of } K,\ \text{so } N(w) \ge 2^n / 2 @@ its left end, which stays in every later stage
-\tfrac{(n - 1)\log 2}{n \log 3} \le \tfrac{\log N(w)}{\log(1/w)} \le \tfrac{n\log 2}{n\log 3} @@ logs keep order (17g)
-\htmlClass{new}{D = \tfrac{\log 2}{\log 3} \approx 0.6309} \quad \blacksquare @@ squeezed as n grows; between the widths 3⁻ⁿ, N changes by at most a factor of 2, which the squeeze absorbs
+  <h2 class="sthead"><span class="stno">35h2</span>A Copy of the Bits</h2>
+  <p data-pid="6eb270">An endless string of 0s and 1s is a function from ℕ to 2. Write 2^ℕ for the set of them; <a href="r04k.html">4k10</a> matched it with 𝒫(ℕ), and 35c2 showed that no list holds it.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;2^{\mathbb N} \hookrightarrow A \Rightarrow \neg\Diamond(A \text{ listed}) \quad\text{(3b3)}\end{aligned}"></div>
+  <p data-pid="bef105">Copy-of-the-bits technique: <b>if 2^ℕ goes one-to-one into A, then A cannot be listed.</b> A list of A would give a list of the strings sent into it: keep the entries that are images, and read each back through the one-to-one map.</p>
+  <pre class="lines" data-k="ember" data-label="this step: three copies of the bits">
+b \mapsto \{\,2n : b(n) = 1\,\} \cup \{\,\text{every odd number}\} @@ into the endless parts of ℕ: each image holds every odd number, so it is endless
+b \mapsto 0.e_0e_1\cdots,\ e_n = 3 \text{ if } b(n) = 0,\ 7 \text{ if } b(n) = 1 @@ into the reals written with 3s and 7s only; no 9s, so different strings give different reals (8·cb5)
+b \mapsto \sigma_b,\ \ \sigma_b \text{ swaps } 2n \text{ and } 2n + 1 \text{ when } b(n) = 1 @@ into the shuffles of ℕ: each σ_b is a matching of ℕ with itself, and different b give different σ_b
+\htmlClass{new}{\text{none of the three sets can be listed}} \quad \blacksquare @@ the copy-of-the-bits technique, three times
   </pre>
-<div class="eqline c6 lsyn" data-was="61000a" data-tex="\begin{aligned}&amp;\text{the count says what the dust is}:\\ &amp;\text{width} \div 3:\ \text{a line needs } 3 \text{ times the pieces},\\ &amp;\qquad\text{a square } 9 \text{ times, the dust } 2 \text{ times}\\ &amp;3^1 = 3,\qquad 3^2 = 9,\qquad 3^D = 2\\ &amp;\text{more than a point, less than a line}\end{aligned}"></div>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · dimension · ← → keys work</div></section>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\neg\Diamond(\text{the endless parts of } \mathbb N \text{ listed}) \quad\text{(3b3)}\end{aligned}"></div>
+<div class="eqline c6 lsyn" data-was="e8888a" data-tex="\begin{aligned}&amp;\text{the finite parts of } \mathbb N:\ \text{listed}\\ &amp;\mathcal P(\mathbb N) \text{ less a countable set}:\\ &amp;\qquad\text{still not listed} \quad\text{(35b3)}\\ &amp;\text{so the endless parts cannot be listed}\end{aligned}"></div>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the bits · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">35h2.1</span><span class="ph understand">understand</span>What is N(w), and what is the dimension of a set? <br>What does the box-count technique say, and why does a cover of width 3⁻ⁿ need at least 2ⁿ / 2 intervals?</li>
+      <li><span class="qid">35h2.1</span><span class="ph understand">understand</span>What does the copy-of-the-bits technique say? <br>How do the strings of 0s and 1s go one-to-one into the shuffles of ℕ?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="35h3">
-  <h2 class="sthead"><span class="stno">35h3</span>Dimensions Between Whole Numbers</h2>
-  <p data-pid="0ec8c0">Scaled-copies technique: <b>a set made of N copies of itself, each scaled by 1/s and kept apart or meeting in only finitely many points, has dimension log N / log s.</b> At stage n it is covered by Nⁿ copies of width s⁻ⁿ, and, as for the dust, by not many fewer. The count is the dust’s proof, with 2 copies at 1/3 replaced by N copies at 1/s.</p>
-  <pre class="lines" data-k="ember" data-label="this step: three shapes">
-\text{the triangle of 9a, its middles thrown out: } N = 3,\ s = 2 @@ three corner triangles, each half as wide
-D = \tfrac{\log 3}{\log 2} \approx 1.585,\ \ \text{area} \le (\tfrac34)^n \to 0 @@ more than a line, less than a plane, and no area
-\text{a bump curve: each segment becomes four, each a third as long} @@ N = 4, s = 3
-D = \tfrac{\log 4}{\log 3} \approx 1.262,\ \ \text{length } (\tfrac43)^n \to \text{passes every bound} @@ endlessly long, between a line and a plane
-\text{a square cut into } 3 \times 3 \text{ and the middle thrown out, for ever} @@ N = 8, s = 3
-\htmlClass{new}{D = \tfrac{\log 8}{\log 3} \approx 1.893} \quad \blacksquare @@ the scaled-copies technique
+  <h2 class="sthead"><span class="stno">35h3</span>The Size of the Line, by Hand</h2>
+  <p data-pid="1df9b6">Line-sized-by-hand technique: <b>if A goes one-to-one into ℝ, and 2^ℕ goes one-to-one into A, then A has the size of the line.</b> The first map gives |A| ≤ |ℝ|. The second gives |𝒫(ℕ)| ≤ |A|. The line-size technique (35e2) and the two-one-way technique (35d1) finish it.</p>
+  <pre class="lines" data-k="ember" data-label="this step: four sets sorted">
+\text{circles with fraction centre and fraction radius: height } h = \text{the height of the three fractions} @@ countable: three fractions name the circle; each fraction’s height is |z| + q; finitely many below each h
+\text{all circles in the plane} \to \mathbb R^3 \to \mathbb R @@ centre and radius, one-to-one; the plane-as-line technique twice (35e2)
+\text{radius } 0.e_0e_1\cdots \text{ in 3s and 7s, centre } (0, 0) @@ a copy of the bits among the circles
+\htmlClass{new}{\text{the circles have the size of the line}} @@ the line-sized-by-hand technique
+\text{the functions from } \mathbb N \text{ to } \mathbb N \to \mathcal P(\mathbb N \times \mathbb N) \to \mathcal P(\mathbb N) @@ a function is its pairs (9a); carry parts through the pair-listing matching
+\htmlClass{new}{|\{f : \mathbb N \to \mathbb N\}| = 2^{\aleph_0}} \quad \blacksquare @@ the functions to 2 sit among them
   </pre>
-  <p data-pid="421af7">9a’s green box asked of the triangle: at every stage it has finitely many pieces, so where do the extra points come from? Each point is an endless string of choices among three corners, and those strings cannot be listed (35g2). The dimension answers a different question: how the pieces crowd in as they shrink. Between them, size and dimension tell the triangle from a line, which length and area cannot.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · between · ← → keys work</div></section>
+<div class="eqline c6 lsyn" data-was="b810e1" data-tex="\begin{aligned}&amp;\aleph_0^{\aleph_0} = 2^{\aleph_0}\\ &amp;\qquad\text{more choices at each place, no larger size}\\ &amp;\text{shuffles of } \mathbb N,\ \text{circles of the plane},\\ &amp;\text{endless walks, reals with two digits}:\\ &amp;\qquad\text{each the line&#x27;s size,}\\ &amp;\qquad\text{once both maps are written}\end{aligned}"></div>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · line sized · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">35h3.1</span><span class="ph understand">understand</span>What does the scaled-copies technique say? <br>What are the dimension and the area of 9a’s triangle with its middles thrown out?</li>
+      <li><span class="qid">35h3.1</span><span class="ph understand">understand</span>What does the line-sized-by-hand technique say, and which two maps does it need? <br>Why are the circles with fraction centre and radius countable, while all circles have the size of the line?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="35h4">
-  <h2 class="sthead"><span class="stno">35h4</span>Thick Points, and Sets With No Lonely Point</h2>
-  <p data-pid="ea3391">The dust is closed, and no point of it stands alone: every interval round a point of the dust holds other points of the dust (35h1). Call a point of a set A of reals <b>lonely</b> when some interval round it holds no other point of A. And call a real x a <b>thick point</b> of A when every interval round x holds a part of A that cannot be listed.</p>
-  <p data-pid="2469d9">No-lonely-point technique: <b>a closed set of reals with a member and no lonely point cannot be listed.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the no-lonely-point technique">
-\text{suppose } x_1, x_2, x_3, \ldots \text{ lists } P @@ for contradiction; P is closed, with no lonely point
-K_1 \text{ round a point of } P \text{, missing } x_1 @@ a closed interval; P has a point other than x₁: no point is lonely
-K_2 \subseteq K_1 \text{, missing } x_2 @@ round a point of P inside K₁: the inside of K₁ holds endlessly many points of P: its centre is not lonely
-K_1 \supseteq K_2 \supseteq \cdots,\ \ \text{lengths heading to } 0 @@ and so on: Kₙ misses xₙ, and its centre is in P
-\text{the centres settle, at } p \in P \text{, with } p \in K_n \text{ for all } n @@ they crowd (22c); P and each Kₙ are closed (34a3)
-\htmlClass{new}{p \in P \text{ is no } x_n:\ \bot} \quad \blacksquare @@ Kₙ misses xₙ
-  </pre>
-  <p data-pid="7085e2">So the dust cannot be listed, with no ternary digits used: closed, and no lonely point, is enough. Next, where does a set that cannot be listed keep its bulk? At its thick points.</p>
-  <pre class="lines" data-k="ember" data-label="this step: thick points">
-x \in A \text{ not thick} \Rightarrow x \in J,\ J \cap A \text{ countable} @@ some interval J round x with fraction ends holds only a countable part of A
-\text{there are countably many such } J @@ pairs of fractions (35a2, 35a3)
-\text{the non-thick points of } A \text{ are countable} @@ the countable-union technique (35a)
-T = \text{the thick points of } A \text{ is closed} @@ a limit of thick points has a thick point in every interval round it
-\htmlClass{new}{T \text{ has no lonely point}} \quad \blacksquare @@ if an interval round x in T held no other thick point, the other points of A in it would be countable (the third line), and x would not be thick
-  </pre>
-  <p data-pid="8aca42">Put together: if A is a closed set of reals that cannot be listed, then T is closed with no lonely point, T lies in A, and A is T together with a countable set. Every closed set of reals is a countable set, or a set with no lonely point plus a countable set.</p>
-  <p data-pid="b9160e">For the dust itself T is all of it. For the dust together with the fractions of [2, 3], T is still the dust alone: the fractions fit in a list, and they are thin where they stand.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">35h4.1</span><span class="ph understand">understand</span>What is a lonely point, and what is a thick point? <br>Why can a closed set with no lonely point not be listed?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="35h5">
-  <h2 class="sthead"><span class="stno">35h5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">35h4</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{the dust has length } 0, \text{ so it is countable}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; countable gives length 0; length 0 does not give countable: the dust has the line’s size
-\text{only the ends of the pieces are left}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the ends are countable; the dust is not, and 1/4 is no end
-\text{the dust has dimension } 0, \text{ since it holds no interval}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; holding no interval says D &lt; 1 for a part of the line; its count gives log 2/log 3
-\text{the bump curve has length, so its dimension is } 1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; its length passes every bound; its count gives log 4/log 3
-\text{closed and unlistable} \Rightarrow \text{no lonely point}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the dust with the point 2 added is closed and unlistable, and 2 is lonely; only its set of thick points has none
+\text{height } = \text{ the first digit, for the reals in } [0, 1)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; each height holds endlessly many reals; a height must leave finitely many
+\text{a copy of the bits must reach every member of } A\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it must be one-to-one, not onto: endless parts missing an odd number are never reached, and need not be
+\text{each finite part is countable, so } \mathcal P(\mathbb N) \text{ is}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the members being countable says nothing of how many there are
+\text{a set that is not listed has the size of the line}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; that needs a way into the line and a copy of the bits; ω₁ has the first and perhaps not the second (35f)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">35h5.1</span><span class="ph understand">understand</span>Why is “the dust has length 0, so it is countable” a move to watch out for?</li>
+      <li><span class="qid">35h4.1</span><span class="ph understand">understand</span>Why is “each finite part of ℕ is countable, so 𝒫(ℕ) is countable” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -179,23 +146,23 @@ T = \text{the thick points of } A \text{ is closed} @@ a limit of thick points h
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">35h.4.1</span><span class="tagq">build</span>Build the dust that throws out the open middle fifth of each piece at every stage, keeping two pieces of 2/5. <br>Find its length and its dimension, and prove it has the size of the line.</div>
-  <div class="chq"><span class="chid">35h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\tfrac14,\ \ \tfrac{3}{10},\ \ \tfrac{1}{3},\ \ \tfrac{3}{4}"></span></span>Find which of these are in the middle-thirds dust, from their base-3 digits. <br>One real has two base-3 decimals, one using a 1 and one not. Find it here, and which decimal the dust technique’s c uses.</div>
-  <div class="chq"><span class="chid">35h.4.3</span><span class="tagq">converse</span>Countable sets have length 0, and the dust shows the way back fails. Is there a set of length 0 with dimension 1? Build one from dusts that throw out less and less. <br>What does that say about reading dimension from length?</div>
-  <div class="chq"><span class="chid">35h.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="K + K = \{x + y : x, y \in K\}"></span></span>Show that K + K is all of [0, 2], though K has length 0. Use the base-3 digits: a digit of x + y from digits 0 and 2 of x and y. <br>Find what this says about adding sets of length 0.</div>
-  <div class="chq"><span class="chid">35h.4.5</span><span class="tagq">seam</span>Rung 8 asked whether the line is made of points, and rung 30 gave it length 1 while each of its points has length 0. The dust has as many points as the line and no length at all. <br>One side holds that a stretch is made of its points, and length is something the points add up to. The other holds that a stretch comes first, that points are only ends and cuts, and that a heap of points has no length to add. <br>Which side does the dust help? Which side does a set of length 1 made of points of length 0 help?</div>
+  <div class="chq"><span class="chid">35h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{the finite parts of } \mathbb N,\ \ s \mapsto \textstyle\sum_{j \in s} 2^j"></span></span>Find the part matched with 100, and with 2⁶ − 1. <br>Build a height for the finite parts of ℤ, and find how many parts have height 2.</div>
+  <div class="chq"><span class="chid">35h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the endless strings of 0s and 1s with only finitely many 1s}"></span> <span data-tex-inline="\text{those that repeat from some place on}"></span></span>Find whether each set can be listed. <br>Find which of the two moves of this step settles each one, and why the other move cannot.</div>
+  <div class="chq"><span class="chid">35h.4.3</span><span class="tagq">converse</span>Copy-of-the-bits: a copy of 2^ℕ inside A means A cannot be listed. Turn it round: if A cannot be listed, must 2^ℕ go one-to-one into A? <br>Find what the converse says about ω₁, and which result of 35f stands in the way of proving or refuting it.</div>
+  <div class="chq"><span class="chid">35h.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{the shuffles of } \mathbb N"></span></span>Prove that the shuffles of ℕ cannot be listed with no copy of the bits, by a diagonal: given a list σ₀, σ₁, …, build a shuffle that differs from σₙ at some input, for every n. <br>Find where your shuffle must be careful to stay a matching.</div>
+  <div class="chq"><span class="chid">35h.4.5</span><span class="tagq">seam</span>8·cb5.7.4 asked whether every real has a technique for its digits. A technique a machine can follow is a program, and the programs are countable, so most reals have no such technique. <br>One side holds that a real with no technique for its digits is no real at all: a number is what can be computed. The other holds that the line is all the cuts of the fractions, whatever can be computed. <br>The diagonal of a list of every program’s real is described by a technique. Why is it not on the list? Find what would have to be decidable, and whether a machine could decide it.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r35g.html">← 35g · countable or not, by hand</a><a href="r35i.html">35i · a line onto a square →</a></nav>
+<nav class="nextrung"><a href="r35g.html">← 35g · points as the shapes of orders</a><a href="r35i.html">35i · dust with no length, and dimensions between whole numbers →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The middle-thirds dust is the Cantor set, or Cantor ternary set. The box-counting dimension is also called the Minkowski dimension; the dimension that the scaled-copies technique gives for such shapes also equals the Hausdorff dimension, defined by covers of varying widths. The triangle of 9a is the Sierpiński triangle, the bump curve the Koch curve, and the square with its middles thrown out the Sierpiński carpet. The dusts of 35h.4.3 are fat Cantor sets, or Smith–Volterra–Cantor sets when they have positive length. A shape made of scaled copies of itself is self-similar, and sets of dimension not a whole number are fractals. A lonely point is an isolated point; a closed set with no isolated point is a perfect set; a thick point is a condensation point; the splitting of a closed set is Cantor’s and Bendixson’s.</p>
+  <p>The height-listing technique is the usual proof that a set is countable by an enumeration by rank. 2^ℕ is Cantor space. The line-sized-by-hand technique is the standard way of showing a set has the cardinality of the continuum, through Cantor–Schröder–Bernstein. A shuffle of ℕ is a permutation, and the shuffles form the infinite symmetric group. ℵ₀^ℵ₀ = 2^ℵ₀ is the usual identity of cardinal arithmetic. Reals whose digits a program prints are computable reals; the reason the diagonal of 35h.5.5 is not one is the undecidability of the halting problem.</p>
   <h3>Who said it first</h3>
-  <p>Henry Smith described such a set in 1875, and Georg Cantor in 1883. Felix Hausdorff defined his dimension in 1918. Helge von Koch drew his curve in 1904, Wacław Sierpiński his triangle in 1915 and his carpet in 1916. Lewis Fry Richardson measured coasts with shorter and shorter rulers and found their lengths growing; Benoit Mandelbrot read his measurements as a dimension in “How long is the coast of Britain?” (1967) and coined “fractal” in 1975.</p>
+  <p>Georg Cantor listed rationals and algebraic numbers by height, and introduced the dust of the next step in 1883. The countability of the computable reals, and the diagonal against them, are in Alan Turing’s paper of 1936, which began from the question of which reals a machine can write out. Émile Borel had raised the same doubt about reals with no description in 1927.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“At stage n the dust is 2ⁿ intervals. Their ends are 2ⁿ⁺¹ points. Every point of the dust is an end at some stage, and the ends of all stages can be listed. So the dust is countable.” Not allowed: “every point is an end at some stage” is false. 1/4 is in every stage and is never an end.</p>
+  <p>“Give each real in [0, 1) the height n, where n is the place of its first 7. Each height then holds the reals with their first 7 there, and the list runs height by height.” Not allowed: each height holds endlessly many reals, so “list Hₙ” is not one finite run, and reals with no 7 get no height at all.</p>
 </section>
 
 </div>
@@ -210,20 +177,20 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'stages',t:R`K_n:\ 2^n \text{ pieces of length } 3^{-n}`,n:`Middles thrown out.`},
-  {k:'ember',kl:'length',t:R`m^*(K) \le (\tfrac23)^n`,n:`So 0.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{m^*(K) = 0,\ |K| = 2^{\aleph_0}}`,n:`No length, every size.`}
-],{title:'The slides · dust · ← → keys work'});
+  {k:'ember',kl:'heights',t:R`H_k \text{ finite}`,n:`Finitely many each.`},
+  {k:'ember',kl:'list',t:R`H_0, H_1, H_2, \ldots`,n:`Run after run.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \text{ is countable}}`,n:`Strings, programs, finite parts.`}
+],{title:'The slides · height · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'cover',t:R`N(w)`,n:`Least count of width w.`},
-  {k:'ember',kl:'rate',t:R`\tfrac{\log N(w)}{\log(1/w)}`,n:`Where it settles.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{D = \tfrac{\log 2}{\log 3}}`,n:`Between a point and a line.`}
-],{title:'The slides · dimension · ← → keys work'});
+  {k:'ember',kl:'strings',t:R`2^{\mathbb N}`,n:`Endless 0s and 1s.`},
+  {k:'ember',kl:'copy',t:R`b \mapsto \sigma_b`,n:`One-to-one into A.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{A \text{ cannot be listed}}`,n:`Shuffles, endless parts, 3s and 7s.`}
+],{title:'The slides · the bits · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'copies',t:R`N \text{ at } 1/s`,n:`Self-made.`},
-  {k:'ember',kl:'triangle',t:R`\tfrac{\log 3}{\log 2} \approx 1.585`,n:`No area.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{D = \tfrac{\log N}{\log s}}`,n:`Not a whole number.`}
-],{title:'The slides · between · ← → keys work'});
+  {k:'ember',kl:'into',t:R`A \to \mathbb R`,n:`One-to-one.`},
+  {k:'ember',kl:'copy',t:R`2^{\mathbb N} \to A`,n:`One-to-one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{|A| = 2^{\aleph_0}}`,n:`Circles, functions, shuffles.`}
+],{title:'The slides · line sized · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

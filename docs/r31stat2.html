@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>31·stat2 · How Sure Can You Be With Only the Sample You Have?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31stat.html">← 31·stat can a model fit too well?</a><a href="r31stat3.html">next: 31·stat3 why would you hold a fit back on purpose? →</a></p>
+  <div class="tags"><span class="tag stat">31·stat2 · statistics</span></div>
+  <h1>How Sure Can You Be With Only the Sample You Have?</h1>
+  <p data-pid="176a17">How sure can you be with only the sample you have? For an average, rung 30 gave a formula for how far a sample’s answer tends to miss. For a median, a ratio or anything more tangled, there may be no formula at all. One idea, from 1979, answers them all: treat the sample as if it were the whole population, draw new samples from it, and watch how the answer wobbles. This page does it exactly on a sample of three, checks it against the formula for an average, applies it to a median, and finds the one kind of answer it gets wrong.</p>
+  <p class="gesture" data-pid="1eae5d">Draw n values from the sample, with putting back, many times; work out the answer on each; the spread of those answers stands in for the spread of the answer over real samples. For an average it gives the formula’s spread exactly. Read a range from the middle 95% of the redrawn answers. It fails for answers set by the extremes, like the largest value, which a redraw can never exceed.</p>
+</header>
+
+<section class="class step" data-step="31stat21">
+  <h2 class="sthead"><span class="stno">31stat21</span>The Sample as a Stand-In</h2>
+  <p data-pid="66377d">Mike measures how long three batteries last: 1, 4 and 10 days. He wants the median, and how far it might be from the median of all such batteries. Rung 30 would draw fresh samples from the population; he has none. So he draws from his sample instead.</p>
+  <p data-pid="8d3072">From here on, on this page, a <i>redraw</i> is n values picked from the sample one at a time, each pick equally likely to be any of the n, with putting back, so a value can come twice. With n = 3 there are 3³ = 27 redraws, all equally likely.</p>
+<div class="eqline c6" data-tex="\{1, 4, 10\} \to (1, 1, 4),\ (10, 4, 10),\ (4, 4, 4),\ \ldots \quad 27 \text{ in all}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat2.1.1</span><span class="ph understand">understand</span>What is a redraw, and why does Mike draw from his own sample?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat22">
+  <h2 class="sthead"><span class="stno">31stat22</span>Checked Against the Average</h2>
+  <p data-pid="c8fe77">First, a case where the answer is known. Work out the average of each of the 27 redraws, and their spread.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the redrawn averages">
+\text{the 27 averages average } 5 @@ the sample’s own average
+\text{their spread} \approx 2.16 @@ counted over all 27
+\text{the sample’s spread} / \sqrt{3} = 3.74/1.73 \approx 2.16 @@ rung 30’s formula, with the sample’s spread
+\htmlClass{new}{\text{the same}} @@ exactly, for every sample
+  </pre>
+  <p data-pid="f57260">Redraw technique: <b>the spread of an answer over redraws from the sample stands in for its spread over fresh samples from the population; for an average it gives the formula’s answer exactly.</b> The redraw needs no formula, so it works where none is known.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat2.2.1</span><span class="ph understand">understand</span>How does redrawing reproduce rung 30’s formula for the spread of an average?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat23">
+  <h2 class="sthead"><span class="stno">31stat23</span>A Median With No Formula</h2>
+  <p data-pid="b12866">Now the median of each redraw.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the redrawn medians">
+\text{median } 4:\ 13 \text{ redraws};\ \ 1:\ 7;\ \ 10:\ 7 @@ count them
+\text{average} \approx 4.8,\ \text{spread} \approx 3.3 @@ over all 27
+\text{real samples: thousands of redraws, picked at random} @@ n¹⁰ cannot be listed
+\htmlClass{new}{\text{a range: the middle } 95\% \text{ of the redrawn medians}} @@ read off, with no formula
+  </pre>
+  <p data-pid="f1ade6"><b>For any answer worked out from a sample, the redrawn answers give its spread and a range, by the same procedure.</b> With ten values there are 10¹⁰ redraws, so a computer picks a few thousand at random and lets the bell of rung 30 settle their summary.</p>
+  <!--gfig 31stat23--><div class="gfigs" data-gfig="31stat23" data-story="[[&quot;Each bar counts how often a median came up among the 27 redraws.&quot;, [&quot;gold&quot;]], [&quot;The median was 1 seven times, 4 thirteen times, and 10 seven times.&quot;, [&quot;gold&quot;, &quot;~7&quot;, &quot;~13&quot;]], [&quot;Over all 27, the medians average about 4.8 with a spread of about 3.3.&quot;, [&quot;~average&quot;]]]"><svg class="gfig" viewBox="0 0 380 210" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="a bar chart of the 27 redrawn medians: 7 at 1, 13 at 4 and 7 at 10"><line x1="44" x2="344" y1="164.0" y2="164.0" style="stroke:var(--ink);stroke-width:1"/><line x1="71.3" x2="71.3" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="71.3" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="153.1" x2="153.1" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="153.1" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">4</text><line x1="316.7" x2="316.7" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="316.7" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10</text><line x1="44" x2="344" y1="110.4" y2="110.4" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="114.4" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">5</text><line x1="44" x2="344" y1="56.9" y2="56.9" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="60.9" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10</text><rect x="60.4" y="89.0" width="21.8" height="75.0" style="fill:var(--gold);fill-opacity:0.55;stroke:var(--card);stroke-width:.6"/><text x="71.3" y="82.6" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">7</text><rect x="142.2" y="24.7" width="21.8" height="139.3" style="fill:var(--gold);fill-opacity:0.55;stroke:var(--card);stroke-width:.6"/><text x="153.1" y="18.3" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">13</text><rect x="305.8" y="89.0" width="21.8" height="75.0" style="fill:var(--gold);fill-opacity:0.55;stroke:var(--card);stroke-width:.6"/><text x="316.7" y="82.6" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">7</text><text x="180.4" y="46.1" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">average ≈ 4.8, spread ≈ 3.3</text><text x="190.0" y="202" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">the median of each of the 27 redraws</text></svg></div><!--/gfig 31stat23-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat2.3.1</span><span class="ph understand">understand</span>How are the spread and a range of the median found by redrawing, and how is it done when the redraws are too many to list?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat24">
+  <h2 class="sthead"><span class="stno">31stat24</span>Where Redrawing Fails</h2>
+  <p data-pid="e68a03">Try the largest value. Batteries’ longest life is an answer about the edge.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the redrawn largest">
+\text{largest} = 10 \text{ unless all three picks miss } 10 @@ each pick misses 10 with chance ⅔
+1 - (2/3)^3 = 19/27 \text{ redraws give exactly } 10 @@ none can give more
+\text{the true longest life is surely more than } 10 @@ a sample’s largest is below the population’s
+\htmlClass{new}{\text{redrawing cannot see past the sample’s edge}} @@ it is too sure, and too low
+  </pre>
+  <p data-pid="b4477d"><b>Redrawing fails for answers decided by the extremes, since no redraw can exceed the sample.</b> It works for answers that each value nudges a little, like averages, medians of large samples, slopes and ratios.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat2.4.1</span><span class="ph understand">understand</span>Why does redrawing go wrong for the largest value?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat25">
+  <h2 class="sthead"><span class="stno">31stat25</span>Why It Works, and When to Trust It</h2>
+  <p data-pid="1bef72">Redrawing swaps the unknown population for the sample’s own spread of values. Two errors remain: the sample is not the population, and a finite number of redraws is not all of them.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two errors">
+\text{sample} \ne \text{population} @@ shrinks as n grows (30h)
+\text{some redraws} \ne \text{all redraws} @@ shrinks as more are drawn
+\text{second error: as small as you like, for computer time} @@ the cheap one
+\htmlClass{new}{\text{first error: as small as the data allow}} @@ the honest limit
+  </pre>
+  <p data-pid="ad938c"><b>With a fair sample of fair size, the redrawn spread is close to the true one; nothing makes a small or slanted sample look like more than it is.</b> Redrawing replaced pages of formulas with a loop, which is why it spread so fast once computers were cheap.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat2.5.1</span><span class="ph understand">understand</span>What two errors remain in redrawing, and which one more computing can remove?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat26">
+  <h2 class="sthead"><span class="stno">31stat26</span>Moves to Watch Out For</h2>
+  <p data-pid="52dd17">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{redraw without putting back}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; that only reorders the sample: every redraw gives the same answer (31stat21)
+\text{redraws make the sample bigger}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; they measure wobble; they add no information (31stat25)
+\text{redraw the largest value too}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; no redraw can pass the sample’s edge (31stat24)
+\text{more redraws fix a small sample}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; they shrink the second error only (31stat25)
+\text{pick the range, then redraw}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the range is read off the redrawn answers (31stat23)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat2.6.1</span><span class="ph understand">understand</span>Which move above draws without putting back, and why does that make every redraw the same?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">31·stat2.7.1</span><span class="tagq">do</span>Take the sample 2, 3, 7. List the 27 redraws’ medians and find their spread.</div>
+  <div class="chq"><span class="chid">31·stat2.7.2</span><span class="tagq">make</span>Make up a sample of three for which the redrawn medians have spread 0, and say why.</div>
+  <div class="chq"><span class="chid">31·stat2.7.3</span><span class="tagq">converse</span>For the average, redrawing gives the formula’s spread. Decide whether an answer whose redrawn spread matches a formula must be an average.</div>
+  <div class="chq"><span class="chid">31·stat2.7.4</span><span class="tagq">edge</span>A sample has one value, n = 1. Say what redrawing gives, and what that says about its limits.</div>
+  <div class="chq"><span class="chid">31·stat2.7.5</span><span class="tagq">open</span>Two groups of patients are compared by their medians. Say how to redraw so that the range for the difference of medians is honest.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r31stat.html">← 31·stat · can a model fit too well?</a><a href="r31stat3.html">31·stat3 · why would you hold a fit back on purpose? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="8d1e49">Redrawing from the sample is the <b>bootstrap</b>, a redraw a <b>bootstrap sample</b>, and the range from the middle 95% a <b>percentile interval</b>. Drawing with putting back is <b>resampling with replacement</b>. Answers decided by the extremes are where the bootstrap is <b>inconsistent</b>. An older relative, leaving out one value at a time, is the <b>jackknife</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="da7afb">Bradley Efron introduced the bootstrap in the Annals of Statistics in 1979. Maurice Quenouille and John Tukey had built the jackknife in the 1950s.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

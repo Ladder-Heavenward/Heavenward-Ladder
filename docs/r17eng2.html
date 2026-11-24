@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>17·eng2 · How Can a Model Tell You How Hard a Ship Pushes Through Water?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17eng.html">← 17·eng why does riding faster take so much more push?</a><a href="r17concl.html">next: 17·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag eng">17·eng2 · engineering</span></div>
+  <h1>How Can a Model Tell You How Hard a Ship Pushes Through Water?</h1>
+  <p data-pid="f2b68a">How can a model tell you how hard a ship pushes through water? A ship costs millions and takes years to build; its engines must be sized before its hull is tried. In the 1870s William Froude towed wooden models a few metres long down a long tank and predicted the power of full-size warships, and model tanks are still in use today. The trick is 17·eng’s matching of units: the water’s waves depend on gravity, and only one grouping of speed, length and gravity has no units. Run the model at that same grouping and its waves are a small copy of the ship’s. This page finds the grouping, scales a model up, meets the clash that forced Froude’s split, and finds the speed at which a ship starts to climb its own bow wave.</p>
+  <p class="gesture" data-pid="81f98d">A ship’s wave push R can depend on speed v, length L, gravity g and the water’s heaviness ρ. Matching units: R / (ρv²L²) depends only on v²/(gL). Run a model at the same v/√(gL): its waves copy the ship’s, and force scales as length cubed. Friction obeys a different grouping, so it is worked out apart. A ship makes a wave as long as itself at v/√(gL) ≈ 0.4.</p>
+</header>
+
+<section class="class step" data-step="17eng21">
+  <h2 class="sthead"><span class="stno">17eng21</span>A Ship Makes Waves</h2>
+  <p data-pid="0aad99">Claire’s ship, 100 m long, pushes water aside and leaves a train of waves. Lifting that water takes work against gravity: that is the wave part of the push the engines must give.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what the wave push can depend on">
+v \ (\text{m/s}),\ L \ (\text{m}),\ g \ (\text{m/s}^2),\ \rho \ (\text{kg/m}^3) @@ speed, length, gravity, water
+R \ (\text{kg m/s}^2) @@ a force
+R = C\,\rho^a v^b L^c g^d @@ a product of powers (17·eng)
+\htmlClass{new}{\text{five quantities, three units: two free groupings}} @@ one more than 17·eng’s drag
+  </pre>
+  <p data-pid="a74cad">From here on, on this page, the <i>wave push</i> is the part of the water’s push on the hull spent on making waves.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·eng2.1.1</span><span class="ph understand">understand</span>What can the wave push on a ship depend on, and why does gravity enter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17eng22">
+  <h2 class="sthead"><span class="stno">17eng22</span>Matching the Units</h2>
+  <pre class="lines" data-k="ember" data-label="this page: logs make the powers add">
+\text{kg}:\ a = 1 @@ only ρ carries kg
+\text{s}:\ -b - 2d = -2 @@ v and g carry seconds
+\text{m}:\ -3a + b + c + d = 1 @@ every quantity carries metres
+\htmlClass{new}{\dfrac{R}{\rho v^2 L^2} = f\!\left(\dfrac{v^2}{gL}\right)} @@ d free: its grouping has no units
+  </pre>
+  <p data-pid="8c4068">Froude technique: <b>the wave push, divided by ρv²L², depends only on the one unit-free grouping v/√(gL).</b> Two hulls of the same shape at the same v/√(gL) make waves of the same shape, scaled.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·eng2.2.1</span><span class="ph understand">understand</span>How does matching units show that the wave push depends only on v/√(gL)?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17eng23">
+  <h2 class="sthead"><span class="stno">17eng23</span>Scaling the Model Up</h2>
+  <pre class="lines" data-k="ember" data-label="this page: a model at one twenty-fifth">
+L_{\text{model}} = 4 \text{ m} @@ 100 m divided by 25
+\text{same } \dfrac{v}{\sqrt{gL}}:\ v_{\text{model}} = \dfrac{v}{\sqrt{25}} = \dfrac{v}{5} @@ 10 m/s ship, 2 m/s model
+R \propto \rho v^2 L^2 \propto L \cdot L^2 = L^3 @@ v² grows with L
+\htmlClass{new}{R_{\text{ship}} = 25^3 \cdot R_{\text{model}} = 15\,625 \cdot R_{\text{model}}} @@ a few newtons become tens of kilonewtons
+  </pre>
+  <p data-pid="ea7a53"><b>Run the model at the speed that keeps v/√(gL) the same, and multiply its wave push by the scale cubed.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·eng2.3.1</span><span class="ph understand">understand</span>How fast must the model run, and how is its measured push scaled to the ship?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17eng24">
+  <h2 class="sthead"><span class="stno">17eng24</span>Two Rules That Clash</h2>
+  <p data-pid="3476c4">The water also rubs along the hull. That friction depends on the water’s stickiness, and its unit-free grouping is speed times length over stickiness.</p>
+  <pre class="lines" data-k="ember" data-label="this page: friction wants another speed">
+\text{friction: same } vL \Rightarrow v_{\text{model}} = 25\,v @@ faster, not slower
+\text{waves: } v_{\text{model}} = v/5 @@ Froude’s rule
+\text{no model speed obeys both} @@ in the same water
+\htmlClass{new}{\text{measure total push; take away friction from a flat plank; scale the rest}} @@ Froude’s split
+  </pre>
+  <p data-pid="826946">Froude towed flat planks to measure friction alone, took it from each model’s total, scaled the remainder as waves, and added back friction worked out for the full ship. <b>When two effects obey different unit-free groupings, a model can copy only one, and the other is reckoned apart.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·eng2.4.1</span><span class="ph understand">understand</span>Why can no model copy both the waves and the friction, and how did Froude get round it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17eng25">
+  <h2 class="sthead"><span class="stno">17eng25</span>The Wave a Ship Cannot Outrun</h2>
+  <pre class="lines" data-k="ember" data-label="this page: hull speed">
+\text{deep-water waves of length } \lambda \text{ travel at } \sqrt{g\lambda / 2\pi} @@ measured, and derived by Airy
+\text{a ship’s bow wave travels with it: speed } v @@ so its length is 2πv²/g
+\lambda = L:\ v = \sqrt{gL/2\pi},\ \tfrac{v}{\sqrt{gL}} \approx 0.40 @@ the ship sits in its own wave
+\htmlClass{new}{L = 100 \text{ m}:\ v \approx 12.5 \text{ m/s} \approx 24 \text{ knots}} @@ push rises steeply beyond
+  </pre>
+  <p data-pid="065135"><b>At v/√(gL) near 0.4 a hull is cradled between its bow wave and a trough at its stern, and going faster means climbing the wave.</b> That is why long ships are faster, and why fast boats lift out of the water and skim instead.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·eng2.5.1</span><span class="ph understand">understand</span>At what speed does a ship start climbing its own bow wave, and why are long ships faster?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="17eng26">
+  <h2 class="sthead"><span class="stno">17eng26</span>Moves to Watch Out For</h2>
+  <p data-pid="25e55a">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{run the model at the ship’s own speed}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; its waves would be far too long; run it at v/5 (17eng23)
+R_{\text{ship}} = 25^2 \cdot R_{\text{model}}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; v² also grows with L: scale by 25³ (17eng23)
+\text{scale the whole measured push by } 25^3\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; take friction out first, scale the waves, then add friction back (17eng24)
+\dfrac{R}{\rho v^2 L^2} \text{ depends on } \dfrac{gL}{v}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; gL/v has units; the unit-free grouping is v²/(gL) (17eng22)
+\text{a bigger engine pushes any hull past its wave}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the push rises steeply past v/√(gL) ≈ 0.4; lengthen or skim (17eng25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·eng2.6.1</span><span class="ph understand">understand</span>Which move above scales the model by the square of its size, and what power is right?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">17·eng2.7.1</span><span class="tagq">do</span>A 200 m ship sails at 12 m/s. Find the speed of a 5 m model that makes the same waves.</div>
+  <div class="chq"><span class="chid">17·eng2.7.2</span><span class="tagq">make</span>Make up a ship length whose hull speed is 20 knots.</div>
+  <div class="chq"><span class="chid">17·eng2.7.3</span><span class="tagq">converse</span>Ships of the same shape at the same v/√(gL) make waves of the same shape. Decide whether two ships making waves of the same shape must have the same v/√(gL).</div>
+  <div class="chq"><span class="chid">17·eng2.7.4</span><span class="tagq">edge</span>Let gravity be very weak. Say what happens to the hull speed.</div>
+  <div class="chq"><span class="chid">17·eng2.7.5</span><span class="tagq">open</span>Say why a model tank must be long, and why it is often filled with fresh water though ships sail in salt.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r17eng.html">← 17·eng · why does riding faster take so much more push?</a><a href="r17concl.html">17·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="5b9b96">v/√(gL) is the <b>Froude number</b>; the friction grouping vL/ν is the <b>Reynolds number</b>; the wave push is <b>wave-making resistance</b> and the friction <b>frictional resistance</b>. The speed at Froude number about 0.4 is the <b>hull speed</b>; skimming is <b>planing</b>; a model tank is a <b>towing tank</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="1d088d">William Froude built a towing tank at Torquay in 1871 and checked his models against towing trials of the warship HMS Greyhound in 1871 and 1872. George Airy gave the speed of water waves in 1841.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

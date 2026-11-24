@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>38q · Proofs With No Detours at All</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38p.html">← 38p natural deduction by hand</a><a href="r38r.html">next: 38r a falling run proves arithmetic safe →</a></p>
+  <div class="tags"><span class="tag tech">38q · technique</span></div>
+  <h1>Proofs With No Detours at All</h1>
+  <p data-pid="637cad">A detour makes a mark and takes it apart at once, and one detour can be cut out (38p). Cutting one can make others, so whether all can be cut is a real question. Write proofs as claims “from all of these, one of those,” with each move adding one mark on one side, and one move, the cut, that brings in a lemma and uses it up. Every proof can be rewritten with no cuts. A proof with no cuts uses only parts of its own foot. This step writes the claims, cuts the cuts, and reads off what a cut-free proof can contain.</p>
+  <p class="gesture" data-pid="466edc">G ⇒ D: if all of G hold, one of D does. Moves add a mark on the left or right. Cut: from G ⇒ D, A and A, G ⇒ D, get G ⇒ D. Every proof becomes cut-free, each cut pushed upward until it vanishes, the bigger first. A cut-free proof uses only parts of its foot, so ⇒ with nothing on either side has no proof.</p>
+</header>
+
+<section class="class step" data-step="38q1">
+  <h2 class="sthead"><span class="stno">38q1</span>Claims With Two Sides</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the claim calculus">
+G \Rightarrow D:\ \text{all of } G \text{ give one of } D @@ two lists of statements
+\dfrac{G \Rightarrow D, A \quad G \Rightarrow D, B}{G \Rightarrow D, A \wedge B} @@ and on the right
+\dfrac{A, G \Rightarrow D}{G \Rightarrow D, \neg A} @@ not on the right: move A across
+\htmlClass{new}{\text{cut: } \dfrac{G \Rightarrow D, A \quad A, G \Rightarrow D}{G \Rightarrow D}} @@ a lemma A proved and used up
+  </pre>
+  <p data-pid="8b34e1">Claim technique: <b>a claim G ⇒ D says that all of G give one of D; each move adds one mark on one side, except the cut, which proves a lemma and uses it.</b> The claims reached are the same as 38b’s columns reach (38c, 38d).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38q1.1</span><span class="ph understand">understand</span>What does a claim G ⇒ D say, and what does the cut move do?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38q2">
+  <h2 class="sthead"><span class="stno">38q2</span>Cutting Every Cut</h2>
+  <pre class="lines" data-k="ember" data-label="this step: a cut on A ∧ B">
+\text{left: } G \Rightarrow A \text{ and } G \Rightarrow B;\ \ \text{right: } A, G \Rightarrow D @@ the cut’s two inputs end in ∧ moves
+\text{replace by one cut on } A @@ a smaller lemma
+\text{measure: (size of the cut mark, height of the cut)} @@ compared first by size
+\htmlClass{new}{\text{each rewrite lowers the measure; the measure cannot fall for ever}} @@ a falling run (29·cb3)
+  </pre>
+  <p data-pid="a8d2e5">Cut-free technique: <b>every proof in the claim calculus can be rewritten into a proof of the same claim with no cuts;</b> each rewrite trades a cut for cuts on smaller marks or higher in the proof, and the measure falls. The cost: a proof of n lines can grow to a tower of 2s of height about n.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38q2.1</span><span class="ph understand">understand</span>Why does trading a cut for smaller or higher cuts always end?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38q3">
+  <h2 class="sthead"><span class="stno">38q3</span>Only Parts of the Foot</h2>
+  <pre class="lines" data-k="ember" data-label="this step: cut-free proofs">
+\text{every move but the cut keeps its inputs as parts of its output} @@ nothing comes from outside
+\text{every line of a cut-free proof is made of parts of its foot} @@ the parts property
+\Rightarrow \text{ (nothing on either side) has no parts to start from} @@ no proof without cuts
+\htmlClass{new}{\text{so pure logic reaches no clash}} @@ from within, by counting parts
+  </pre>
+  <p data-pid="afd4a5"><b>A cut-free proof builds its foot from its own parts, so it can be found by working backward from the foot, and the empty claim has none: pure logic is clash-free.</b> Machines that search for proofs work this way.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38q3.1</span><span class="ph understand">understand</span>Why does a cut-free proof use only parts of its foot, and what does that say about the empty claim?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38q4">
+  <h2 class="sthead"><span class="stno">38q4</span>Moves to Watch Out For</h2>
+  <p data-pid="45bff0">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{cutting one detour cuts them all}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; cutting can make new cuts; a measure must fall (38q2)
+\dfrac{G \Rightarrow D, A}{A, G \Rightarrow D}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; not moves A across: ¬A on the other side (38q1)
+\text{cut-free proofs are shorter}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; they can be a tower of 2s longer (38q2)
+\text{a cut-free proof may use any lemma}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only parts of its foot (38q3)
+\text{the measure is the height alone}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; size of the cut mark first, then height (38q2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38q4.1</span><span class="ph understand">understand</span>Which move above moves A across without a not, and where must the not go?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">38q.5.1</span><span class="tagq">do</span>Write a cut-free proof of ⇒ P ∨ ¬P in the claim calculus.</div>
+  <div class="chq"><span class="chid">38q.5.2</span><span class="tagq">make</span>Make up a proof with one cut on P ∧ Q and rewrite it with cuts on P and on Q only.</div>
+  <div class="chq"><span class="chid">38q.5.3</span><span class="tagq">converse</span>Every cut-free proof uses only parts of its foot. Decide whether a proof using only parts of its foot must be cut-free.</div>
+  <div class="chq"><span class="chid">38q.5.4</span><span class="tagq">edge</span>Let the cut mark be an atom. Say how its cut is pushed upward.</div>
+  <div class="chq"><span class="chid">38q.5.5</span><span class="tagq">open</span>Say why lemmas make human proofs short, though they can always be cut out.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r38p.html">← 38p · natural deduction by hand</a><a href="r38r.html">38r · a falling run proves arithmetic safe →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="28152c">The claim calculus is the <b>sequent calculus</b> LK; claims are <b>sequents</b>; cutting every cut is <b>cut elimination</b>, Gentzen’s <b>Hauptsatz</b>; the parts property is the <b>subformula property</b>. The tower is the <b>non-elementary</b> cost of cut elimination (Statman, Orevkov 1979).</p>
+  <h3>Who said it first</h3>
+  <p data-pid="491211">Gerhard Gentzen introduced sequents and proved cut elimination in 1934 and 1935, in the same paper as natural deduction.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

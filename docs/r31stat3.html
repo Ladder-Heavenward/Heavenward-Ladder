@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>31·stat3 · Why Would You Hold a Fit Back on Purpose?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r31stat2.html">← 31·stat2 how sure can you be with only the sample you have?</a><a href="r31then.html">next: 31·then how do you fit a curve to noisy data? →</a></p>
+  <div class="tags"><span class="tag stat">31·stat3 · statistics</span></div>
+  <h1>Why Would You Hold a Fit Back on Purpose?</h1>
+  <p data-pid="fe1d18">Why would you hold a fit back on purpose? 31·stat found that a fit with many columns flatters itself on the data in hand. Worse happens when two columns say almost the same thing: the best fit gives them huge weights of opposite signs, and a tiny change in one number flips them. This page finds that wobble in a fit by rung 31’s closest point, tames it by charging for large weights, sees with rung 31’s axes exactly what the charge does, and picks the charge with data held back.</p>
+  <p class="gesture" data-pid="1513df">Least squares finds b making |y − Xb|² smallest. Add a charge λ|b|²: the best b solves (XᵀX + λI)b = Xᵀy. Along each axis of XᵀX, with stretch d², the plain fit is multiplied by d²/(d² + λ): weak axes, where columns nearly repeat, are shrunk almost to 0, and strong ones barely touched. Choose λ by the misses on data held back.</p>
+</header>
+
+<section class="class step" data-step="31stat31">
+  <h2 class="sthead"><span class="stno">31stat31</span>Two Columns That Nearly Repeat</h2>
+  <p data-pid="0a9809">Sarah predicts a crop y from two measurements of rainfall, x₁ and x₂, taken by two gauges a field apart. They nearly agree.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>x₁</th><th>x₂</th><th>y</th></tr>
+    <tr><td>1</td><td>1</td><td>2.1</td></tr>
+    <tr><td>2</td><td>2</td><td>3.9</td></tr>
+    <tr><td>3</td><td>3.1</td><td>6.2</td></tr>
+    <tr><td>4</td><td>4</td><td>7.8</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: the closest fit">
+\text{least squares: } X^{\mathsf T} X\, b = X^{\mathsf T} y @@ the closest point (31b)
+b = (-1.33,\ 3.29) @@ one gauge counts against the crop
+\text{change } y_3 \text{ from } 6.2 \text{ to } 6.3 @@ a tenth of a unit
+\htmlClass{new}{b = (-2.33,\ 4.29)} @@ each weight moves by a whole unit
+  </pre>
+  <p data-pid="67f1fe">Rain cannot hurt the crop through one gauge and help it through the other. The two columns nearly repeat, so the fit can trade weight between them almost freely, and noise decides the trade.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.1.1</span><span class="ph understand">understand</span>Why does the closest fit give the two gauges large weights of opposite signs, and what does a small change in y do to them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat32">
+  <h2 class="sthead"><span class="stno">31stat32</span>Charge for Large Weights</h2>
+  <p data-pid="1c2a18">From here on, on this page, the <i>charged fit</i> makes |y − Xb|² + λ|b|² smallest, for a chosen λ > 0: misses cost, and so does size.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the charged fit">
+\text{slope 0 in every } b_j:\ X^{\mathsf T}(Xb - y) + \lambda b = 0 @@ partial slopes (28a)
+(X^{\mathsf T} X + \lambda I)\, b = X^{\mathsf T} y @@ always undoable for λ > 0
+\lambda = 1:\ b = (0.96,\ 0.99) @@ both gauges count, about equally
+\htmlClass{new}{y_3 \to 6.3:\ b = (0.96,\ 1.00)} @@ the change barely shows
+  </pre>
+  <p data-pid="c2ea5c">Charge technique: <b>adding λ|b|² to the misses gives the fit (XᵀX + λI)b = Xᵀy, which always has one answer and moves little when the data move a little.</b> The price is that it no longer makes the misses on the data in hand as small as possible.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.2.1</span><span class="ph understand">understand</span>What equation does the charged fit solve, and why is its answer steady when the plain fit’s is not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat33">
+  <h2 class="sthead"><span class="stno">31stat33</span>What the Charge Does, Axis by Axis</h2>
+  <p data-pid="72f367">XᵀX is symmetric, so it has square axes (31d): unit arrows u₁, u₂ at right angles that it only stretches, by d₁² and d₂².</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shrink on each axis">
+X^{\mathsf T} X:\ d_1^2 \approx 60.6,\ \ d_2^2 \approx 0.0035 @@ the gauges together, and their difference
+\text{plain fit along } u_i:\ c_i / d_i^2 @@ dividing by a tiny d² blows noise up
+\text{charged fit along } u_i:\ c_i / (d_i^2 + \lambda) @@ the same with λ added
+\htmlClass{new}{\text{ratio } \dfrac{d_i^2}{d_i^2 + \lambda}:\ 0.98 \text{ and } 0.003} @@ the weak axis is all but removed
+  </pre>
+  <p data-pid="b8667e">Axis technique: <b>the charge multiplies the plain fit along each square axis of XᵀX by d²/(d² + λ), keeping strong directions and silencing weak ones.</b> The weak axis is the difference between the gauges, which the data barely measured; the charge stops the fit from guessing about it.</p>
+  <!--gfig 31stat33--><div class="gfigs" data-gfig="31stat33" data-story="[[&quot;Across is the charge λ, from 10⁻⁵ to 10³, each mark ten times the last. Up is the factor d²/(d² + λ) kept on each axis.&quot;, []], [&quot;Teal is the strong axis, d² ≈ 60.6. It keeps nearly all of itself until λ nears 60.&quot;, [&quot;teal&quot;, &quot;~strong&quot;]], [&quot;Ember is the weak axis, d² ≈ 0.0035. It is already halved at λ = 0.0035.&quot;, [&quot;ember&quot;, &quot;~weak&quot;]], [&quot;At λ = 1 the strong axis keeps 0.98 and the weak one 0.003.&quot;, [&quot;line+muted&quot;, &quot;~λ = 1&quot;, &quot;~0.98&quot;]]]"><svg class="gfig" viewBox="0 0 400 220" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="two falling curves of the factor d squared over d squared plus lambda against lambda from ten to the minus 5 to ten cubed: the weak axis falls early, the strong axis late"><defs><clipPath id="gc7ab2aa28"><rect x="38" y="12" width="334" height="164"/></clipPath></defs><line x1="40" x2="370" y1="174.0" y2="174.0" style="stroke:var(--ink);stroke-width:1"/><line x1="40.0" x2="40.0" y1="174.0" y2="178.0" style="stroke:var(--ink);stroke-width:1"/><text x="40.0" y="189.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10⁻⁵</text><line x1="81.2" x2="81.2" y1="174.0" y2="178.0" style="stroke:var(--ink);stroke-width:1"/><text x="81.2" y="189.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10⁻⁴</text><line x1="122.5" x2="122.5" y1="174.0" y2="178.0" style="stroke:var(--ink);stroke-width:1"/><text x="122.5" y="189.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10⁻³</text><line x1="163.8" x2="163.8" y1="174.0" y2="178.0" style="stroke:var(--ink);stroke-width:1"/><text x="163.8" y="189.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10⁻²</text><line x1="205.0" x2="205.0" y1="174.0" y2="178.0" style="stroke:var(--ink);stroke-width:1"/><text x="205.0" y="189.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10⁻¹</text><line x1="246.2" x2="246.2" y1="174.0" y2="178.0" style="stroke:var(--ink);stroke-width:1"/><text x="246.2" y="189.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10⁰</text><line x1="287.5" x2="287.5" y1="174.0" y2="178.0" style="stroke:var(--ink);stroke-width:1"/><text x="287.5" y="189.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10¹</text><line x1="328.8" x2="328.8" y1="174.0" y2="178.0" style="stroke:var(--ink);stroke-width:1"/><text x="328.8" y="189.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10²</text><line x1="370.0" x2="370.0" y1="174.0" y2="178.0" style="stroke:var(--ink);stroke-width:1"/><text x="370.0" y="189.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10³</text><line x1="40" x2="370" y1="135.9" y2="135.9" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="139.9" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.25</text><line x1="40" x2="370" y1="97.8" y2="97.8" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="101.8" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="40" x2="370" y1="59.7" y2="59.7" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="63.7" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.75</text><line x1="40" x2="370" y1="21.6" y2="21.6" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="25.6" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><polyline clip-path="url(#gc7ab2aa28)" points="40.0,21.6 41.4,21.6 42.7,21.6 44.1,21.6 45.5,21.6 46.9,21.6 48.3,21.6 49.6,21.6 51.0,21.6 52.4,21.6 53.7,21.6 55.1,21.6 56.5,21.6 57.9,21.6 59.2,21.6 60.6,21.6 62.0,21.6 63.4,21.6 64.7,21.6 66.1,21.6 67.5,21.6 68.9,21.6 70.2,21.6 71.6,21.6 73.0,21.6 74.4,21.6 75.8,21.6 77.1,21.6 78.5,21.6 79.9,21.6 81.2,21.6 82.6,21.6 84.0,21.6 85.4,21.6 86.8,21.6 88.1,21.6 89.5,21.6 90.9,21.6 92.2,21.6 93.6,21.6 95.0,21.6 96.4,21.6 97.8,21.6 99.1,21.6 100.5,21.6 101.9,21.6 103.2,21.6 104.6,21.6 106.0,21.6 107.4,21.6 108.8,21.6 110.1,21.6 111.5,21.6 112.9,21.6 114.2,21.6 115.6,21.6 117.0,21.6 118.4,21.6 119.8,21.6 121.1,21.6 122.5,21.6 123.9,21.6 125.3,21.6 126.6,21.6 128.0,21.6 129.4,21.6 130.8,21.6 132.1,21.6 133.5,21.6 134.9,21.6 136.2,21.6 137.6,21.6 139.0,21.6 140.4,21.6 141.8,21.6 143.1,21.6 144.5,21.6 145.9,21.6 147.2,21.6 148.6,21.6 150.0,21.6 151.4,21.6 152.8,21.6 154.1,21.6 155.5,21.6 156.9,21.6 158.2,21.6 159.6,21.6 161.0,21.6 162.4,21.6 163.8,21.6 165.1,21.6 166.5,21.6 167.9,21.7 169.2,21.7 170.6,21.7 172.0,21.7 173.4,21.7 174.8,21.7 176.1,21.7 177.5,21.7 178.9,21.7 180.2,21.7 181.6,21.7 183.0,21.7 184.4,21.7 185.8,21.7 187.1,21.7 188.5,21.7 189.9,21.7 191.2,21.7 192.6,21.7 194.0,21.8 195.4,21.8 196.8,21.8 198.1,21.8 199.5,21.8 200.9,21.8 202.2,21.8 203.6,21.9 205.0,21.9 206.4,21.9 207.8,21.9 209.1,21.9 210.5,22.0 211.9,22.0 213.2,22.0 214.6,22.0 216.0,22.1 217.4,22.1 218.8,22.2 220.1,22.2 221.5,22.2 222.9,22.3 224.2,22.4 225.6,22.4 227.0,22.5 228.4,22.5 229.7,22.6 231.1,22.7 232.5,22.8 233.9,22.9 235.2,23.0 236.6,23.1 238.0,23.2 239.4,23.3 240.7,23.4 242.1,23.6 243.5,23.7 244.9,23.9 246.2,24.1 247.6,24.3 249.0,24.5 250.4,24.7 251.8,25.0 253.1,25.2 254.5,25.5 255.9,25.8 257.2,26.1 258.6,26.5 260.0,26.9 261.4,27.3 262.8,27.7 264.1,28.1 265.5,28.6 266.9,29.2 268.2,29.7 269.6,30.4 271.0,31.0 272.4,31.7 273.8,32.5 275.1,33.3 276.5,34.1 277.9,35.0 279.2,36.0 280.6,37.0 282.0,38.1 283.4,39.3 284.8,40.5 286.1,41.8 287.5,43.2 288.9,44.7 290.2,46.2 291.6,47.8 293.0,49.5 294.4,51.3 295.8,53.2 297.1,55.2 298.5,57.2 299.9,59.4 301.2,61.6 302.6,63.9 304.0,66.3 305.4,68.7 306.8,71.3 308.1,73.9 309.5,76.5 310.9,79.3 312.2,82.0 313.6,84.9 315.0,87.7 316.4,90.6 317.8,93.5 319.1,96.4 320.5,99.3 321.9,102.3 323.2,105.2 324.6,108.1 326.0,110.9 327.4,113.7 328.8,116.5 330.1,119.2 331.5,121.9 332.9,124.5 334.2,127.0 335.6,129.5 337.0,131.9 338.4,134.2 339.8,136.4 341.1,138.5 342.5,140.5 343.9,142.5 345.2,144.4 346.6,146.2 348.0,147.9 349.4,149.5 350.8,151.0 352.1,152.5 353.5,153.9 354.9,155.2 356.2,156.4 357.6,157.6 359.0,158.7 360.4,159.7 361.8,160.6 363.1,161.6 364.5,162.4 365.9,163.2 367.2,163.9 368.6,164.6 370.0,165.3" style="fill:none;stroke:var(--teal);stroke-width:2"/><polyline clip-path="url(#gc7ab2aa28)" points="40.0,22.1 41.4,22.1 42.7,22.1 44.1,22.2 45.5,22.2 46.9,22.3 48.3,22.3 49.6,22.4 51.0,22.4 52.4,22.5 53.7,22.6 55.1,22.6 56.5,22.7 57.9,22.8 59.2,22.9 60.6,23.0 62.0,23.1 63.4,23.2 64.7,23.3 66.1,23.5 67.5,23.6 68.9,23.8 70.2,23.9 71.6,24.1 73.0,24.3 74.4,24.5 75.8,24.8 77.1,25.0 78.5,25.3 79.9,25.5 81.2,25.9 82.6,26.2 84.0,26.5 85.4,26.9 86.8,27.3 88.1,27.8 89.5,28.2 90.9,28.7 92.2,29.3 93.6,29.8 95.0,30.5 96.4,31.1 97.8,31.8 99.1,32.6 100.5,33.4 101.9,34.2 103.2,35.2 104.6,36.1 106.0,37.2 107.4,38.3 108.8,39.5 110.1,40.7 111.5,42.0 112.9,43.4 114.2,44.9 115.6,46.4 117.0,48.1 118.4,49.8 119.8,51.6 121.1,53.5 122.5,55.5 123.9,57.5 125.3,59.7 126.6,61.9 128.0,64.2 129.4,66.6 130.8,69.1 132.1,71.7 133.5,74.3 134.9,76.9 136.2,79.7 137.6,82.5 139.0,85.3 140.4,88.1 141.8,91.0 143.1,93.9 144.5,96.9 145.9,99.8 147.2,102.7 148.6,105.6 150.0,108.5 151.4,111.3 152.8,114.2 154.1,116.9 155.5,119.6 156.9,122.3 158.2,124.9 159.6,127.4 161.0,129.8 162.4,132.2 163.8,134.5 165.1,136.7 166.5,138.8 167.9,140.9 169.2,142.8 170.6,144.7 172.0,146.4 173.4,148.1 174.8,149.7 176.1,151.3 177.5,152.7 178.9,154.1 180.2,155.4 181.6,156.6 183.0,157.7 184.4,158.8 185.8,159.8 187.1,160.8 188.5,161.7 189.9,162.5 191.2,163.3 192.6,164.1 194.0,164.7 195.4,165.4 196.8,166.0 198.1,166.6 199.5,167.1 200.9,167.6 202.2,168.0 203.6,168.5 205.0,168.8 206.4,169.2 207.8,169.6 209.1,169.9 210.5,170.2 211.9,170.5 213.2,170.7 214.6,170.9 216.0,171.2 217.4,171.4 218.8,171.6 220.1,171.7 221.5,171.9 222.9,172.1 224.2,172.2 225.6,172.3 227.0,172.5 228.4,172.6 229.7,172.7 231.1,172.8 232.5,172.9 233.9,172.9 235.2,173.0 236.6,173.1 238.0,173.2 239.4,173.2 240.7,173.3 242.1,173.3 243.5,173.4 244.9,173.4 246.2,173.5 247.6,173.5 249.0,173.5 250.4,173.6 251.8,173.6 253.1,173.6 254.5,173.7 255.9,173.7 257.2,173.7 258.6,173.7 260.0,173.8 261.4,173.8 262.8,173.8 264.1,173.8 265.5,173.8 266.9,173.8 268.2,173.8 269.6,173.9 271.0,173.9 272.4,173.9 273.8,173.9 275.1,173.9 276.5,173.9 277.9,173.9 279.2,173.9 280.6,173.9 282.0,173.9 283.4,173.9 284.8,173.9 286.1,173.9 287.5,173.9 288.9,174.0 290.2,174.0 291.6,174.0 293.0,174.0 294.4,174.0 295.8,174.0 297.1,174.0 298.5,174.0 299.9,174.0 301.2,174.0 302.6,174.0 304.0,174.0 305.4,174.0 306.8,174.0 308.1,174.0 309.5,174.0 310.9,174.0 312.2,174.0 313.6,174.0 315.0,174.0 316.4,174.0 317.8,174.0 319.1,174.0 320.5,174.0 321.9,174.0 323.2,174.0 324.6,174.0 326.0,174.0 327.4,174.0 328.8,174.0 330.1,174.0 331.5,174.0 332.9,174.0 334.2,174.0 335.6,174.0 337.0,174.0 338.4,174.0 339.8,174.0 341.1,174.0 342.5,174.0 343.9,174.0 345.2,174.0 346.6,174.0 348.0,174.0 349.4,174.0 350.8,174.0 352.1,174.0 353.5,174.0 354.9,174.0 356.2,174.0 357.6,174.0 359.0,174.0 360.4,174.0 361.8,174.0 363.1,174.0 364.5,174.0 365.9,174.0 367.2,174.0 368.6,174.0 370.0,174.0" style="fill:none;stroke:var(--ember);stroke-width:2"/><line x1="246.2" x2="246.2" y1="174.0" y2="14.0" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/><text x="242.1" y="64.3" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">λ = 1:</text><text x="242.1" y="79.5" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">0.98 and 0.003</text><text x="48.3" y="143.5" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">weak axis</text><text x="295.8" y="36.9" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">strong axis</text><text x="200.0" y="212" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">the charge λ keeps the strong axis and all but removes the weak one</text></svg></div><!--/gfig 31stat33-->
+  <!--gwid 31stat33--><section class="pic gwid">
+    <div class="eyebrow">The picture · the charge λ, and what each axis keeps</div>
+    <div class="panels">
+    <div class="panel"><canvas id="g31v"></canvas><div class="kn"><span class="m">log₁₀ λ</span><input type="range" id="g31l" min="-5" max="3" step="0.1" value="0"><output id="g31lo"></output></div><div class="cap">Across: log₁₀ λ. Teal: the strong axis keeps 60.6/(60.6 + λ). Ember: the weak axis keeps 0.0035/(0.0035 + λ).</div><div class="verdict" id="g31d"></div></div>
+  </div>
+  </section><!--/gwid 31stat33-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.3.1</span><span class="ph understand">understand</span>How does the charge act along each square axis of XᵀX, and which direction does it silence here?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat34">
+  <h2 class="sthead"><span class="stno">31stat34</span>Choosing the Charge</h2>
+  <p data-pid="1643e0">λ = 0 is the plain fit; λ very large gives b near 0. Somewhere between, the fit predicts new data best. 31·stat’s held-back data find it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: held back, five ways">
+\text{split the data into 5 parts} @@ at random
+\text{for each } \lambda:\ \text{fit on 4 parts, measure misses on the fifth} @@ held-back data (31stat3)
+\text{each part held back once; add the misses} @@ every value tested once
+\htmlClass{new}{\text{choose the } \lambda \text{ with least held-back miss}} @@ refit on all the data with it
+  </pre>
+  <p data-pid="f8c1c0"><b>The charge trades a little bias for a lot less wobble, and held-back data say how much to trade.</b> The fit on the data in hand always prefers λ = 0; only fresh data can show the gain.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.4.1</span><span class="ph understand">understand</span>How is λ chosen, and why can the misses on the data in hand not choose it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat35">
+  <h2 class="sthead"><span class="stno">31stat35</span>A Different Charge Picks Columns</h2>
+  <p data-pid="52a862">Charge the sum of the weights’ sizes, |b₁| + |b₂| + ⋯, instead of their squares. The corners of the region |b₁| + |b₂| ≤ t lie on the axes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two charges compared">
+\text{squares: the region is round} @@ the best point is rarely on an axis
+\text{sizes: the region is a diamond} @@ the best point is often at a corner
+\text{at a corner, some weights are exactly } 0 @@ those columns drop out
+\htmlClass{new}{\text{charging sizes chooses columns as it fits}} @@ with a hundred columns, keeps a few
+  </pre>
+  <p data-pid="d60e70"><b>Charging the squares shrinks every weight; charging the sizes sets some exactly to zero, choosing which columns matter.</b> Both are ways of telling a fit that a simple answer is more likely than a wild one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.5.1</span><span class="ph understand">understand</span>How does charging the sizes of the weights differ from charging their squares, and why does it drop columns?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="31stat36">
+  <h2 class="sthead"><span class="stno">31stat36</span>Moves to Watch Out For</h2>
+  <p data-pid="c5784b">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{one gauge hurts the crop: } b_1 < 0\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the columns nearly repeat; noise decides the trade (31stat31)
+\text{choose } \lambda \text{ by the misses on the data in hand}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; those always prefer λ = 0: hold data back (31stat34)
+\text{the charge shrinks every direction alike}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; by d²/(d² + λ): strong kept, weak silenced (31stat33)
+\text{charge the weights, then measure the columns’ scales}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; put the columns on one scale first, or the charge favours the large ones (31stat32)
+\lambda \text{ huge, to be safe}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; every weight heads to 0, and the fit says nothing (31stat34)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·stat3.6.1</span><span class="ph understand">understand</span>Which move above chooses the charge on the data in hand, and what do those misses always prefer?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">31·stat3.7.1</span><span class="tagq">do</span>With one column, find the charged fit b = Σxy/(Σx² + λ) for x = (1, 2, 3), y = (2, 4, 7) and λ = 0, 1 and 10.</div>
+  <div class="chq"><span class="chid">31·stat3.7.2</span><span class="tagq">make</span>Make up three columns, two of which nearly repeat, and say which square axis of XᵀX will be weak.</div>
+  <div class="chq"><span class="chid">31·stat3.7.3</span><span class="tagq">converse</span>For λ > 0, XᵀX + λI is undoable. Decide whether XᵀX itself must be undoable when its columns are all different.</div>
+  <div class="chq"><span class="chid">31·stat3.7.4</span><span class="tagq">edge</span>Let λ grow without bound. Find what the charged fit heads to, and what d²/(d² + λ) does on every axis.</div>
+  <div class="chq"><span class="chid">31·stat3.7.5</span><span class="tagq">open</span>A model has more columns than rows of data. Say why the plain fit has no single answer, and what the two charges of this page do there.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r31stat2.html">← 31·stat2 · how sure can you be with only the sample you have?</a><a href="r31then.html">31·then · how do you fit a curve to noisy data? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="21b2c3">Columns that nearly repeat are <b>collinear</b>. The charged fit with squares is <b>ridge regression</b> or <b>Tikhonov regularisation</b>; λ is the <b>regularisation parameter</b>; the trade is the <b>bias-variance trade-off</b>. Choosing λ with five held-back parts is <b>5-fold cross-validation</b>. Charging the sizes is the <b>lasso</b>, and fitting by charging is <b>regularisation</b> in general.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="df0e23">Andrey Tikhonov used the charge for unsteady problems in 1943 and 1963; Arthur Hoerl and Robert Kennard named ridge regression in 1970. Robert Tibshirani introduced the lasso in 1996.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<!--gwjs 31stat33--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const P=plane($('g31v'),{x:[-5,3],y:[-0.08,1.08],grid:1,aspect:0.62,draw:P=>{ P.axes(); const u=+$('g31l').value, L=Math.pow(10,u);
+  P.fn(t=>60.6/(60.6+Math.pow(10,t)),'--teal',2); P.fn(t=>0.0035/(0.0035+Math.pow(10,t)),'--ember',2); P.line(u,0,u,1,'--muted',1,[3,3]);
+  P.dot(u,60.6/(60.6+L),'--teal',4.5); P.dot(u,0.0035/(0.0035+L),'--ember',4.5);
+  $('g31lo').textContent=f(u,1); $('g31d').textContent='λ = '+(L>=1?f(L,1):L.toPrecision(2))+': the strong axis keeps '+f(60.6/(60.6+L),3)+', the weak one '+f(0.0035/(0.0035+L),3)+'.'; }});
+$('g31l').oninput=()=>P.redraw(); P.redraw();
+})();
+</script><!--/gwjs 31stat33-->
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

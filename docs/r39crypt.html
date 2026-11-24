@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>39·crypt · Can a Chip Leak Its Key Through Its Power Cord?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r39comp.html">← 39·comp why is fast memory so small?</a><a href="r39bio.html">next: 39·bio is a neuron a gate? →</a></p>
+  <div class="tags"><span class="tag crypt">39·crypt · cryptography</span></div>
+  <h1>Can a Chip Leak Its Key Through Its Power Cord?</h1>
+  <p data-pid="b13b05">Can a chip leak its key through its power cord? A cipher can be beyond any known attack on paper and still give its key away in practice, because the machine running it takes time and draws power, and both depend on the secret. In 1996 Paul Kocher timed how long a chip took to sign and read its key off the clock; in 1999 he read keys off a chip’s power draw. This page counts how much a check that stops early gives away, finds from 39·eng’s energy per switch why power follows the bits, shows how averaging many readings pulls a faint signal out of noise, and says how code is written to leak nothing.</p>
+  <p class="gesture" data-pid="500a2f">A check that stops at the first wrong byte tells by its time how many bytes were right, so the key falls a byte at a time: 16 × 256 tries, not 256¹⁶. Each switch that flips spends energy C V², so power tracks how many bits flip. Averaging N readings shrinks the noise by √N. Code that takes the same time and draws the same power whatever the secret leaks nothing.</p>
+</header>
+
+<section class="class step" data-step="39crypt1">
+  <h2 class="sthead"><span class="stno">39crypt1</span>A Check That Stops Early</h2>
+  <p data-pid="a8ddbc">Randy’s door lock compares a typed 16-byte code with the stored one, byte by byte, and stops at the first that differs. Mike can time each try.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what the clock says">
+\text{first byte wrong: stop after } 1 \text{ comparison} @@ quickest
+\text{first byte right: stop after } 2 @@ a few billionths longer
+\text{time} \propto 1 + \text{number of right bytes in front} @@ the time counts the right bytes
+\htmlClass{new}{\text{the slowest of 256 guesses for byte 1 is right}} @@ then the same for byte 2
+  </pre>
+  <p data-pid="4484f9">From here on, on this page, a <i>side channel</i> is anything the machine gives off besides its answer that depends on the secret: time, power, sound, heat.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·crypt.1.1</span><span class="ph understand">understand</span>How does the time a check takes give away how much of a guess is right?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39crypt2">
+  <h2 class="sthead"><span class="stno">39crypt2</span>Counting the Tries</h2>
+  <pre class="lines" data-k="ember" data-label="this page: whole code against byte by byte">
+\text{whole code: } 256^{16} = 2^{128} \text{ guesses} @@ the counting principle (4·stat)
+\text{byte by byte: } 16 \times 256 = 4096 @@ each byte found alone
+2^{128} \approx 3.4 \times 10^{38} @@ beyond every computer
+\htmlClass{new}{\text{a leak turns a product of choices into a sum}} @@ 4096 tries, a minute at the door
+  </pre>
+  <p data-pid="fe93ec">Side-channel technique: <b>when a machine’s time or power reveals one piece of the secret at a time, the secret falls piece by piece, and the count of tries drops from a product to a sum.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·crypt.2.1</span><span class="ph understand">understand</span>Why does learning one byte at a time cut the tries from 2¹²⁸ to 4096?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39crypt3">
+  <h2 class="sthead"><span class="stno">39crypt3</span>Power Follows the Flips</h2>
+  <p data-pid="495981">39·eng found that each switch that flips charges or drains a tiny capacitance, spending energy C V² each cycle it does so. A switch that stays still spends almost nothing.</p>
+  <pre class="lines" data-k="ember" data-label="this page: power and bits">
+E_{\text{flip}} \approx C V^2 @@ 39·eng, per switch per flip
+E \approx k \cdot C V^2 @@ k the number of bits that flip
+\text{loading } 0000\,0000 \to 1111\,0000:\ k = 4 @@ four flips
+\htmlClass{new}{\text{power} \approx a + b \cdot (\text{bits that flip})} @@ a straight line in the flip count
+  </pre>
+  <p data-pid="d45a0b">When a chip mixes a key byte into a message byte it knows, the bits that flip depend on the key byte. Mike guesses the key byte and predicts the flip count for many messages. <b>The guess whose predictions rise and fall with the measured power is the key.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·crypt.3.1</span><span class="ph understand">understand</span>Why does a chip’s power draw depend on the bits it handles?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39crypt4">
+  <h2 class="sthead"><span class="stno">39crypt4</span>Averaging Pulls Out the Key</h2>
+  <p data-pid="163af6">One reading is mostly noise: the flip of one byte is buried under thousands of other switches. Mike records many runs and lines them up.</p>
+  <pre class="lines" data-k="ember" data-label="this page: signal and noise">
+\text{one reading: signal } s,\ \text{noise spread } \sigma @@ σ ≫ s
+\text{mean of } N:\ \text{noise spread } \sigma / \sqrt{N} @@ the spread of a mean (30q)
+\sigma = 50 s:\ \ N = 2500 \Rightarrow \sigma/\sqrt{N} = s @@ the signal stands as tall as the noise
+\htmlClass{new}{\text{a few thousand runs read a key no single run shows}} @@ and computers record millions
+  </pre>
+  <p data-pid="cda91f"><b>Noise shrinks as one over the square root of the number of readings, so a leak too faint to see once is plain after thousands.</b> That is why a small leak is a broken lock, not a small weakness.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·crypt.4.1</span><span class="ph understand">understand</span>Why does a leak buried in noise become readable after many runs?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39crypt5">
+  <h2 class="sthead"><span class="stno">39crypt5</span>Code That Leaks Nothing</h2>
+  <pre class="lines" data-k="ember" data-label="this page: closing the channels">
+\text{compare every byte, always} @@ the time no longer counts right bytes
+\text{no jump (40b) or table look-up that depends on the secret} @@ jumps and caches (39comp) take secret-dependent time
+\text{mask: work on } x \oplus r,\ r \text{ fresh and random} @@ the flips no longer follow the key
+\htmlClass{new}{\text{same time, same power, whatever the secret}} @@ the side channel carries nothing
+  </pre>
+  <p data-pid="63c10d">Even the cache leaks: a program that reads a table at a secret place leaves that place in the cache, and another program on the same chip can time its own reads to find it. In 2018 the Spectre attacks used the chip’s own guessing at jumps to read memory across walls. <b>A cipher is only as secret as the machine that runs it.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·crypt.5.1</span><span class="ph understand">understand</span>How is code written so that time and power say nothing about the secret?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="39crypt6">
+  <h2 class="sthead"><span class="stno">39crypt6</span>Moves to Watch Out For</h2>
+  <p data-pid="4b066d">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the cipher has no known attack, so the chip is safe}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the machine’s time and power are part of what an attacker sees (39crypt1)
+\text{the leak shows one byte, so it saves a factor of } 16\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it turns 256¹⁶ into 16 × 256, a product into a sum (39crypt2)
+\text{one reading is noise, so the leak is harmless}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; averaging N readings shrinks noise by √N (39crypt4)
+\text{power depends on how many bits are } 1\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; mostly on how many flip from the last value (39crypt3)
+\text{stop the check early, then add a random wait}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; averaging cancels random waits; compare every byte (39crypt5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">39·crypt.6.1</span><span class="ph understand">understand</span>Which move above undervalues the leak, and what does learning one byte at a time save?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">39·crypt.7.1</span><span class="tagq">do</span>A lock checks a 6-digit code digit by digit and stops at the first wrong one. Count the tries needed with and without timing.</div>
+  <div class="chq"><span class="chid">39·crypt.7.2</span><span class="tagq">make</span>Make up a register load from one byte to another in which 6 bits flip.</div>
+  <div class="chq"><span class="chid">39·crypt.7.3</span><span class="tagq">converse</span>Code that takes the same time whatever the secret leaks nothing by time. Decide whether it then leaks nothing at all.</div>
+  <div class="chq"><span class="chid">39·crypt.7.4</span><span class="tagq">edge</span>Let the noise spread be zero. Say how many runs a power attack needs.</div>
+  <div class="chq"><span class="chid">39·crypt.7.5</span><span class="tagq">open</span>Say why masking with a fresh random r each run defeats the flip-count guess.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r39comp.html">← 39·comp · why is fast memory so small?</a><a href="r39bio.html">39·bio · is a neuron a gate? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="31384f">These are <b>side-channel attacks</b>: <b>timing attacks</b>, <b>simple</b> and <b>differential power analysis</b> (DPA), <b>correlation power analysis</b> and <b>cache-timing attacks</b>; the flip count is the <b>Hamming distance</b>, the count of 1s the <b>Hamming weight</b>. Code that leaks nothing by time is <b>constant-time</b>; working on x ⊕ r is <b>masking</b>. <b>Spectre</b> and <b>Meltdown</b> (2018) abuse <b>speculative execution</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="5dbd64">Paul Kocher published timing attacks on RSA and similar systems in 1996, and with Joshua Jaffe and Benjamin Jun differential power analysis in 1999. Spectre was found in 2017 and announced in January 2018 by several teams, among them Jann Horn of Google and a group including Kocher.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

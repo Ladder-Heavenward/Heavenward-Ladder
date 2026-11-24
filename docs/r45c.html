@@ -1,10 +1,15 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Two Generals</title>
+<title>45c · Shapes Cut Out by Equations</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
    then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
@@ -32,89 +37,78 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r45b.html">← 45b machines that only talk</a><a href="r45d.html">next: 45d handshakes →</a></p>
-  <div class="tags"><span class="tag proof">45c · proof</span></div>
-  <h1>The Two Generals</h1>
-  <p data-pid="ac782b">Two generals must attack together or not at all, and their only link is a messenger who may be caught. This step proves that no plan, however long, is safe.</p>
-  <p class="gesture" data-pid="f9c2b6">The sender of the last message cannot know it arrived, so it was not needed. Remove it, and the next, down to none.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45b.html">← 45b polynomials in several letters</a><a href="r45d.html">next: 45d the zero-place technique →</a></p>
+  <div class="tags"><span class="tag tech">45c · technique</span></div>
+  <h1>Shapes Cut Out by Equations</h1>
+  <p data-pid="db88af">A circle is where x² + y² − 1 is 0; a pair of crossing lines is where xy is 0; the curve (t, t², t³) in space is where y − x² and z − x³ are both 0. Any set of polynomials cuts out a shape: the points where all of them are 0. Shapes and ideals answer each other: an ideal cuts out a shape, and a shape is cut out by the ideal of all polynomials that vanish on it. This step defines both, joins and meets shapes, and finds the shapes of one letter.</p>
+  <p class="gesture" data-pid="298112">V(S) = the points where every f in S is 0; V(S) = V((S)). I(X) = the polynomials that are 0 on X, an ideal. V(fg) = V(f) ∪ V(g); V(I + J) = V(I) ∩ V(J). Bigger ideal, smaller shape. In one letter, the shapes are the finite sets and the whole line.</p>
 </header>
 
 <section class="class step" data-step="45c1">
-  <h2 class="sthead"><span class="stno">45c1</span>The Puzzle</h2>
-  <p data-pid="a56e4b">General A alone knows whether to attack today. Every plan of messages must meet three demands. If A’s answer is no, nobody attacks. If it is yes and no messenger is caught, both attack. And never does one attack alone.</p>
+  <h2 class="sthead"><span class="stno">45c1</span>Zeros of an Ideal</h2>
+  <pre class="lines" data-k="ember" data-label="this step: V and I">
+V(S) = \{p : f(p) = 0 \text{ for all } f \in S\} @@ the shape S cuts out
+V(S) = V((S)) = V(f_1, \ldots, f_k) @@ the ideal’s members vanish there too; finitely made (45b)
+I(X) = \{f : f(p) = 0 \text{ for all } p \in X\} @@ an ideal: sums and multiples of zeros are zeros
+\htmlClass{new}{J \subseteq J^{\prime} \Rightarrow V(J) \supseteq V(J^{\prime});\ \ X \subseteq V(I(X))} @@ more equations, fewer points
+  </pre>
+  <p data-pid="b5c54c">Zero-shape technique: <b>every set of polynomials cuts out the same shape as the ideal it makes, and so as finitely many polynomials; and every set of points X lies in the shape cut out by I(X), the ideal of what vanishes on it.</b></p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45c1.1</span><span class="ph understand">understand</span>What three demands must a plan meet? <br>Who knows whether to attack?</li>
+      <li><span class="qid">45c1.1</span><span class="ph understand">understand</span>Why do a set of polynomials and the ideal it makes cut out the same shape?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45c2">
-  <h2 class="sthead"><span class="stno">45c2</span>Remove the Last Message</h2>
-  <p data-pid="a860c6">Last-message technique: <b>in a plan that meets the demands, if a run ends with both attacking, then the same run with its last delivered message lost also ends with both attacking.</b></p>
-  <p data-pid="1cec48">The sender’s view is the same whether the last message arrived or not, because nothing came back after it. So the sender acts the same, and attacks (45b2). The two never act apart, so the receiver attacks too.</p>
+  <h2 class="sthead"><span class="stno">45c2</span>Joining and Meeting Shapes</h2>
+  <pre class="lines" data-k="ember" data-label="this step: two shapes">
+V(f) \cup V(g) = V(fg) @@ fg is 0 exactly where f or g is (44c: no zero products in a field)
+V(I) \cup V(J) = V(IJ) @@ products of members
+V(I) \cap V(J) = V(I + J) @@ both sets of equations
+\htmlClass{new}{V(xy) = \{x\text{-axis}\} \cup \{y\text{-axis}\}} @@ two lines from one equation
+  </pre>
+  <p data-pid="c6fc6d">Join-meet technique: <b>finite unions and any meets of shapes are shapes;</b> the empty set is V(1) and the whole space is V(0).</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45c2.1</span><span class="ph understand">understand</span>What does the last-message technique say? <br>Why does the sender act the same?</li>
+      <li><span class="qid">45c2.1</span><span class="ph understand">understand</span>Why is the union of two shapes cut out by the products of their equations?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45c3">
-  <h2 class="sthead"><span class="stno">45c3</span>Down to No Messages</h2>
-  <p data-pid="df47c3">Start from the run where A says yes and nothing is lost: both attack. Remove the last delivered message, then the one before, and so on. Each time both still attack, by the last-message technique. After finitely many steps, A says yes, no message arrives, and both attack.</p>
-  <pre class="lines" data-k="ember" data-label="this step: no plan is safe">
-\text{A says yes, nothing arrives: B attacks} @@ the end of the removals
-\text{A says no, nothing arrives: B’s view is the same} @@ B has received nothing in either run
-\text{so B attacks when A said no} @@ the same-view technique (45b2)
-\htmlClass{new}{\text{the first demand fails}} \quad \blacksquare @@ no plan meets all three
-</pre>
-  <!--gfig 45c3--><div class="gfigs" data-gfig="45c3" data-story="[[&quot;Five runs, left to right. In each, time runs down the lines of generals A and B, and an arrow is a message delivered.&quot;, [&quot;line+ink&quot;, &quot;#2&quot;, &quot;#3&quot;]], [&quot;First run: A says yes, and all three messages arrive. Both attack.&quot;, [&quot;#0-11&quot;]], [&quot;Lose the last message. Whoever sent it sees no difference, so still attacks, and so both attack. Lose the one before, and the one before that: the same each time.&quot;, [&quot;#12-41&quot;]], [&quot;That reaches a run where nothing is delivered at all, and both still attack.&quot;, [&quot;#34-41&quot;]], [&quot;Last run: A says no, and nothing is delivered. B sees exactly what it saw in the run before, so B attacks, alone.&quot;, [&quot;#42-48&quot;]]]"><svg class="gfig" viewBox="0 0 440 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="two generals: delivered messages removed one at a time, both still attack, down to a run with none"><line x1="24.0" y1="22.0" x2="24.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><line x1="80.0" y1="22.0" x2="80.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><text x="24.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A</text><text x="80.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">B</text><line x1="24.0" y1="30.0" x2="77.6" y2="68.3" style="stroke:var(--teal);stroke-width:1.6"/><polygon points="80.0,70.0 76.5,62.8 72.1,69.1" style="fill:var(--teal)"/><line x1="80.0" y1="70.0" x2="26.4" y2="108.3" style="stroke:var(--teal);stroke-width:1.6"/><polygon points="24.0,110.0 31.9,109.1 27.5,102.8" style="fill:var(--teal)"/><line x1="24.0" y1="110.0" x2="77.6" y2="148.3" style="stroke:var(--teal);stroke-width:1.6"/><polygon points="80.0,150.0 76.5,142.8 72.1,149.1" style="fill:var(--teal)"/><text x="52.0" y="178.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A: yes</text><text x="52.0" y="194.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">both attack</text><line x1="110.0" y1="22.0" x2="110.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><line x1="166.0" y1="22.0" x2="166.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><text x="110.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A</text><text x="166.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">B</text><line x1="110.0" y1="30.0" x2="163.6" y2="68.3" style="stroke:var(--teal);stroke-width:1.6"/><polygon points="166.0,70.0 162.5,62.8 158.1,69.1" style="fill:var(--teal)"/><line x1="166.0" y1="70.0" x2="112.4" y2="108.3" style="stroke:var(--teal);stroke-width:1.6"/><polygon points="110.0,110.0 117.9,109.1 113.5,102.8" style="fill:var(--teal)"/><line x1="110.0" y1="110.0" x2="166.0" y2="150.0" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/><text x="138.0" y="126.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ember)">×</text><text x="138.0" y="178.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A: yes</text><text x="138.0" y="194.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">both attack</text><line x1="196.0" y1="22.0" x2="196.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><line x1="252.0" y1="22.0" x2="252.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><text x="196.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A</text><text x="252.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">B</text><line x1="196.0" y1="30.0" x2="249.6" y2="68.3" style="stroke:var(--teal);stroke-width:1.6"/><polygon points="252.0,70.0 248.5,62.8 244.1,69.1" style="fill:var(--teal)"/><line x1="252.0" y1="70.0" x2="196.0" y2="110.0" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/><text x="224.0" y="86.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ember)">×</text><text x="224.0" y="178.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A: yes</text><text x="224.0" y="194.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">both attack</text><line x1="282.0" y1="22.0" x2="282.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><line x1="338.0" y1="22.0" x2="338.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><text x="282.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A</text><text x="338.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">B</text><line x1="282.0" y1="30.0" x2="338.0" y2="70.0" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/><text x="310.0" y="46.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ember)">×</text><text x="310.0" y="178.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A: yes</text><text x="310.0" y="194.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">both attack</text><line x1="368.0" y1="22.0" x2="368.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><line x1="424.0" y1="22.0" x2="424.0" y2="160.0" style="stroke:var(--ink);stroke-width:1.2"/><text x="368.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A</text><text x="424.0" y="16.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">B</text><text x="396.0" y="178.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ember)">A: no</text><text x="396.0" y="194.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ember)">B attacks</text><text x="335.0" y="212.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">B’s view: the same, nothing came</text></svg></div><!--/gfig 45c3-->
+  <h2 class="sthead"><span class="stno">45c3</span>Shapes of One Letter</h2>
+  <pre class="lines" data-k="ember" data-label="this step: shapes on the line">
+V(I) = V(g),\ \ I = (g) @@ one maker (44c)
+g \ne 0:\ V(g) = \text{the roots of } g,\ \text{at most } \deg g @@ a finite set: each root splits off a factor x − r (44c)
+g = 0:\ V(g) = \text{the whole line} @@ every point
+\htmlClass{new}{\text{shapes in a line: finite sets, and the line}} @@ no interval is a shape
+  </pre>
+  <p data-pid="b0d6a2"><b>On a line the shapes are the finite sets and the whole line;</b> an interval is no shape, because a polynomial that vanishes on endlessly many points vanishes everywhere.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45c3.1</span><span class="ph understand">understand</span>Why do both still attack after every removal? <br>Why must B attack when A said no?</li>
+      <li><span class="qid">45c3.1</span><span class="ph understand">understand</span>Why are the only shapes in a line the finite sets and the line itself?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45c4">
-  <h2 class="sthead"><span class="stno">45c4</span>What Is Left</h2>
-<div class="eqline c6 lsyn" data-was="019bc9" data-tex="\begin{aligned}&amp;\text{certainty is gone, chance is not}\\ &amp;k \text{ messengers},\\ &amp;\qquad\text{each caught with chance } q\\ &amp;\text{all caught}:\ q^k \quad\text{(41i)}\\ &amp;\text{agreement}:\ 1 - q^k,\ \text{never } 1\\ &amp;\text{every protocol on a lossy link}\\ &amp;\qquad\text{lives here}\end{aligned}"></div>
+  <h2 class="sthead"><span class="stno">45c4</span>Moves to Watch Out For</h2>
+  <p data-pid="248d6f">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{more equations, more points}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; more equations, fewer points (45c1)
+V(f) \cup V(g) = V(f + g)\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the union is V(fg) (45c2)
+V(I) \cap V(J) = V(IJ)\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; the meet is V(I + J); V(IJ) is the union (45c2)
+\text{an interval is a shape}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; only finite sets and the whole line (45c3)
+X = V(I(X)) \text{ for every set } X\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only X ⊆ V(I(X)); an interval gives the whole line (45c3)
+  </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45c4.1</span><span class="ph understand">understand</span>What does sending k messengers buy? <br>Why is it never certainty?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="45c5">
-  <h2 class="sthead"><span class="stno">45c5</span>Knowing as a Mark</h2>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;K_A P \quad\text{﹀}\quad P \text{ in every run}\\ &amp;\qquad A \text{ cannot tell apart} \quad\text{(3b2)}\\ &amp;\neg\Diamond(\text{a finite exchange reaches}\\ &amp;\qquad K_A K_B \cdots P) \quad\text{(3b3)}\end{aligned}"></div>
-  <p data-pid="ce1cf4">Write K<sub>A</sub>P for “machine A knows P”: every run that looks the same to A, given what A has received, makes P true. That is 3b2’s □, with the boxes A could open narrowed to the runs A cannot tell apart (45b2). A knows what holds in all of them, and no more.</p>
-  <p data-pid="47edfb">45f2 in these marks: the machine that voted yes and hears nothing has runs that look the same to it in which the coordinator committed and in which another machine voted no; so neither K<sub>A</sub>(commit) nor K<sub>A</sub>(abort) holds, and it must wait. 45g3: when one machine may crash, no fixed method brings every machine to K<sub>A</sub>(decided) in every run.</p>
-  <p data-pid="b42f91">For two machines to act together, each must know that the other knows, and so on without end: K<sub>A</sub>P, K<sub>B</sub>K<sub>A</sub>P, K<sub>A</sub>K<sub>B</sub>K<sub>A</sub>P, … Over a channel that may lose a message, no finite exchange reaches the whole tower; that is the generals’ result of this page in one line. Accepted names: epistemic logic for the logic of K, common knowledge for the tower.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">45c5.1</span><span class="ph understand">understand</span>Why does machine A’s knowledge count as a □? <br>Why does no finite exchange over a lossy channel give common knowledge?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="45c6">
-  <h2 class="sthead"><span class="stno">45c6</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{acknowledge the acknowledgments until sure}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the last acknowledgment can always be lost; it was not needed
-\text{the generals fail because one lies}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; nobody lies here; messages are lost. Liars are 45h
-</pre>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">45c6.1</span><span class="ph understand">understand</span>Why do acknowledgments of acknowledgments not help? <br>How is this different from lying?</li>
+      <li><span class="qid">45c4.1</span><span class="ph understand">understand</span>Which move above confuses the union with the meet, and what cuts out each?</li>
     </ol>
   </section>
 </section>
@@ -122,20 +116,25 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
-  <div class="chq"><span class="chid">45c.6.1</span><span class="tagq">converse</span><span class="givens"><span class="gtx">a link that never loses</span></span>If no messenger can be caught but delays have no bound, can the generals agree? What if delays are bounded?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">45c.5.1</span><span class="tagq">do</span>Find the shape V(x² − y², x − 1) in the plane.</div>
+  <div class="chq"><span class="chid">45c.5.2</span><span class="tagq">make</span>Make up two equations whose shape is four points.</div>
+  <div class="chq"><span class="chid">45c.5.3</span><span class="tagq">converse</span>Every shape is V(I(X)) of itself. Decide whether every set with X = V(I(X)) is a shape.</div>
+  <div class="chq"><span class="chid">45c.5.4</span><span class="tagq">edge</span>Let I be the whole ring. Say what V(I) is.</div>
+  <div class="chq"><span class="chid">45c.5.5</span><span class="tagq">open</span>Say why an endless union of shapes need not be a shape.</div>
 </section>
 <div class="themecert themeend"></div>
-
-<nav class="nextrung"><a href="r45b.html">← 45b · machines that only talk</a><a href="r45d.html">45d · handshakes →</a></nav>
+<nav class="nextrung"><a href="r45b.html">← 45b · polynomials in several letters</a><a href="r45d.html">45d · the zero-place technique →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>This is the two generals problem, or coordinated attack. Its proof is the standard example of an indistinguishability argument.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="0f8b85">A shape cut out by polynomials is an <b>affine algebraic set</b> or <b>affine variety</b>; V is the <b>vanishing locus</b> and I(X) the <b>ideal of X</b>. Shapes as closed sets give the <b>Zariski topology</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="555ad9">René Descartes and Pierre de Fermat described curves by equations in 1637; Oscar Zariski made shapes the closed sets of a topology in 1944.</p>
 </section>
 
 </div>
-<script>/* 0.3.88 Phase I map kept, plus 0.3.102 C6 new footing 45c5: 45c5 -> 45c6 */window.LADDER_MV2={f:"mv:C6m45",m:{"q:45b1.1": "q:45c1.1", "q:45b2.1": "q:45c2.1", "q:45b3.1": "q:45c3.1", "q:45b4.1": "q:45c4.1", "q:45b5.1": "q:45c6.1", "c:45b.6.1": "c:45c.6.1", "q:45c5.1": "q:45c6.1"}};</script><script src="rung.js"></script>
+<script src="rung.js"></script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

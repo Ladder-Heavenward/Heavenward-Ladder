@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>27·crypt2 · How Can Randy Tell the Message Was Not Changed?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27crypt.html">← 27·crypt can a grid of numbers scramble letters?</a><a href="r27comp.html">next: 27·comp how does a screen turn a shape? →</a></p>
+  <div class="tags"><span class="tag crypt">27·crypt2 · cryptography</span></div>
+  <h1>How Can Randy Tell the Message Was Not Changed?</h1>
+  <p data-pid="16c882">How can Randy tell the message was not changed? Hiding a message is not the same as protecting it. Mike cannot read Evita’s scrambled order to her bank, but he may be able to change it, and the bank would unscramble his change without a murmur. Every secure connection today adds a short check, a tag, that only the key holders can make. This page shows a change slipping through a perfect scramble, builds a tag from a polynomial whose secret is where it is evaluated, counts the forger’s chance by counting roots, and shows why the tag must be checked before anything else, and why its one-time part must never be used twice.</p>
+  <p class="gesture" data-pid="fd36cf">Adding bits to a scrambled message adds the same bits to the message inside. So tag it: read the blocks as numbers mod a prime p and evaluate their polynomial at a secret r, plus a one-time secret s. A different message with the same tag makes r a root of a nonzero polynomial of degree at most n, which has at most n roots: the forger wins with chance at most n/p. Tag the scrambled message and check it first; never reuse r and s.</p>
+</header>
+
+<section class="class step" data-step="27crypt21">
+  <h2 class="sthead"><span class="stno">27crypt21</span>Hidden Is Not Safe</h2>
+  <p data-pid="0b3df4">Say Evita scrambles her order by adding, without carry as in 20·crypt2, a stream of key bits k that only she and the bank know: she sends c = m ⊕ k. Mike cannot read m. But he guesses what it says.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a change slips through">
+c = m \oplus k @@ perfectly hidden
+\text{Mike sends } c \oplus d @@ d any bits he chooses
+(c \oplus d) \oplus k = m \oplus d @@ the bank unscrambles
+\htmlClass{new}{\text{“pay 100” becomes “pay 900”, if Mike knows where the digit sits}} @@ without ever reading it
+  </pre>
+  <p data-pid="94168f"><b>A scramble can hide a message perfectly and still let it be changed unseen.</b> The bank needs a second thing: a check that only a key holder could have made for exactly this message.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·crypt2.1.1</span><span class="ph understand">understand</span>How can Mike change Evita’s scrambled order without reading it, and what does that show?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27crypt22">
+  <h2 class="sthead"><span class="stno">27crypt22</span>A Tag From a Polynomial</h2>
+  <p data-pid="0bd12f">From here on, on this page, the message is cut into blocks m₁, …, mₙ, each read as a number mod a prime p. Evita and the bank share two more secrets, numbers r and s mod p. The <i>tag</i> is the polynomial with the blocks as its coefficients, evaluated at r, plus s.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a toy tag, p = 101">
+t = m_1 r + m_2 r^2 + \cdots + m_n r^n + s \pmod p @@ the tag
+r = 7,\ s = 20,\ (m_1, m_2) = (3, 5) @@ toy secrets and message
+3 \cdot 7 + 5 \cdot 49 + 20 = 286 @@ work it out
+\htmlClass{new}{t = 286 - 2 \cdot 101 = 84} @@ sent with the message
+  </pre>
+  <p data-pid="a9dc09">The bank recomputes the tag from what arrives and compares. Changing m₂ to 6 changes the tag to 32: Mike would have to know r to fix it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·crypt2.2.1</span><span class="ph understand">understand</span>How is the tag made from the message blocks and the secrets r and s, and how does the bank use it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27crypt23">
+  <h2 class="sthead"><span class="stno">27crypt23</span>The Forger’s Chance, by Counting Roots</h2>
+  <p data-pid="441905">Mike sees one message m and its tag t, and sends a different m′ with a tag t′ of his choice. He wins if t′ is the right tag for m′.</p>
+  <pre class="lines" data-k="ember" data-label="this page: why forging fails">
+\textstyle\sum m_i r^i + s = t,\ \ \sum m\prime_i r^i + s = t\prime @@ both tags right
+\textstyle\sum (m_i - m\prime_i)\, r^i - (t - t\prime) = 0 @@ subtract: s cancels
+\text{a nonzero polynomial of degree} \le n \text{ in } r @@ since m′ ≠ m
+\text{at most } n \text{ roots mod } p @@ factor out each root (25d); mod a prime, no zero products
+\htmlClass{new}{\text{chance} \le n/p} @@ r was any of p values, each equally likely
+  </pre>
+  <p data-pid="8d1598">Root-count technique: <b>a forger must hit a root of a nonzero polynomial of degree at most n, so wins with chance at most n/p, however clever.</b> With p near 2<sup>130</sup> and a million blocks, that is below 2<sup>−110</sup>.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·crypt2.3.1</span><span class="ph understand">understand</span>Why does a forger who changes the message hit the right tag with chance at most n/p?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27crypt24">
+  <h2 class="sthead"><span class="stno">27crypt24</span>Scramble, Then Tag, Then Check First</h2>
+  <p data-pid="d1c2d8">Evita has two jobs: scramble and tag. The order matters, and so does what the bank does first.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the safe order">
+c = \text{scramble}(m),\ \ t = \text{tag}(c) @@ tag what is sent, not what is hidden
+\text{bank: check } t \text{ against } c @@ before anything else
+\text{wrong: throw it away, unread} @@ no unscrambling, no error message
+\htmlClass{new}{\text{right: only now unscramble}} @@ a changed message never reaches the unscrambler
+  </pre>
+  <p data-pid="b6fc73"><b>Tag the scrambled message, and check the tag before unscrambling, so that nothing a forger made is ever handled.</b> Banks that unscrambled first, and answered differently when the result looked odd, have leaked whole messages a guess at a time through those answers.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·crypt2.4.1</span><span class="ph understand">understand</span>Why should the tag be made on the scrambled message and checked before unscrambling?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27crypt25">
+  <h2 class="sthead"><span class="stno">27crypt25</span>Never the Same Secrets Twice</h2>
+  <p data-pid="e54839">The root count assumed Mike saw one tag. Say Evita reuses r and s for a second message, (3, 6), whose tag is 32, and Mike sees both.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two tags, one r">
+84 - 32 = (5 - 6)\,r^2 \pmod{101} @@ subtract: s cancels
+-r^2 \equiv 52,\ \ r^2 \equiv 49 @@ −52 ≡ 49 mod 101
+r \equiv 7 \text{ or } 94 @@ the two square roots
+\htmlClass{new}{\text{Mike can now tag anything}} @@ and s follows from either tag
+  </pre>
+  <p data-pid="785e76">One-time technique: <b>the secret s, or the r and s together, must be fresh for every message; a reused pair hands the forger r.</b> Real systems make them from the key and a number used once, a counter that never repeats.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·crypt2.5.1</span><span class="ph understand">understand</span>How does reusing r and s for two messages hand Mike the secret r?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="27crypt26">
+  <h2 class="sthead"><span class="stno">27crypt26</span>Moves to Watch Out For</h2>
+  <p data-pid="41b8bc">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{hidden, so it cannot be changed}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; adding d to the scramble adds d to the message (27crypt21)
+\text{tag the message, send it with the scramble}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; tag what is sent, and check it first (27crypt24)
+\text{chance of forging} = 1/p\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; up to n/p: the polynomial can have n roots (27crypt23)
+\text{reuse } r, s: \text{ they are still secret}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; two tags give r away (27crypt25)
+\text{unscramble, then check the tag}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; check first, so a forgery is never handled (27crypt24)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">27·crypt2.6.1</span><span class="ph understand">understand</span>Which move above counts the forger’s chance as 1/p, and why can it be as large as n/p?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">27·crypt2.7.1</span><span class="tagq">do</span>With p = 101, r = 7 and s = 20, find the tag of the message (2, 4, 1), and the tag after the second block is changed to 5.</div>
+  <div class="chq"><span class="chid">27·crypt2.7.2</span><span class="tagq">make</span>Make up two different two-block messages and a prime p for which, with some r, the two have the same tag.</div>
+  <div class="chq"><span class="chid">27·crypt2.7.3</span><span class="tagq">converse</span>A forger wins with chance at most n/p. Decide whether there are r for which a given forgery always wins, and how many.</div>
+  <div class="chq"><span class="chid">27·crypt2.7.4</span><span class="tagq">edge</span>Let s be 0 always, with r fresh for each message. Say whether a forger who sees one message and tag can make a different message with a right tag.</div>
+  <div class="chq"><span class="chid">27·crypt2.7.5</span><span class="tagq">open</span>In 27crypt25, Mike found two candidates for r. Say how he could tell which is right using only the two messages and tags he saw.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r27crypt.html">← 27·crypt · can a grid of numbers scramble letters?</a><a href="r27comp.html">27·comp · how does a screen turn a shape? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="eeea74">A tag is a <b>message authentication code</b> (MAC). The polynomial tag is a <b>polynomial MAC</b>, a case of <b>Carter-Wegman authentication</b> with a <b>universal hash</b>. Changing a scramble unseen is <b>malleability</b>. Scrambling and tagging together is <b>authenticated encryption</b>; tagging the scramble is <b>encrypt-then-MAC</b>. The number used once is a <b>nonce</b>, and leaking a message through error answers is a <b>padding oracle attack</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="2cd0ce">Larry Carter and Mark Wegman built tags from hash families of this kind in 1979 and 1981. Polynomial tags with a prime near 2<sup>130</sup> were published by Daniel Bernstein in 2005, and are used in secure web connections today.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>28·eng · How Does a Robot Arm Know How to Reach?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28logi.html">← 28·logi where should the warehouse go?</a><a href="r28nav.html">next: 28·nav which way is “up” for a plane over Paris? →</a></p>
+  <div class="tags"><span class="tag eng">28·eng · engineering</span></div>
+  <h1>How Does a Robot Arm Know How to Reach?</h1>
+  <p data-pid="2a59aa">How does a robot arm know how to reach? An arm on a factory floor is told where its hand must be, not how to bend. Its motors turn only its joints. Going from the joints to the hand is easy; going back from the hand to the joints is a puzzle with two answers or none. This page builds a two-joint arm with cos and sin, finds its joint angles for a target by the law of the triangle, uses rung 28’s best flat map to steer the hand in a straight line, finds the poses where the arm cannot move its hand some way at all, and turns a weight in the hand into the turning effort each motor must give.</p>
+  <p class="gesture" data-pid="c5e558">Write the hand as a function of the joint angles with cos and sin. Go back with the triangle law: cos θ₂ = (x² + y² − a² − b²)/(2ab), with two elbows. For small moves, the slope grid J sends joint speeds to hand speeds; solve J θ′ = p′. det J = ab sin θ₂: where it is 0 the arm is stretched or folded and some hand moves are impossible. A force F at the hand needs turning efforts Jᵀ F at the joints.</p>
+</header>
+
+<section class="class step" data-step="28eng1">
+  <h2 class="sthead"><span class="stno">28eng1</span>From Joints to Hand</h2>
+  <p data-pid="783ec8">Sarah programs an arm with an upper arm of length a from the shoulder at the origin and a forearm of length b. The shoulder turns the upper arm to the angle θ₁; the elbow turns the forearm a further θ₂. Each piece is an arrow with cos and sin parts, as in 21·phys, and the arrows add.</p>
+  <pre class="lines" data-k="ember" data-label="this page: where the hand is">
+\text{elbow} = (a\cos\theta_1,\ a\sin\theta_1) @@ the upper arm
+x = a\cos\theta_1 + b\cos(\theta_1 + \theta_2) @@ the forearm turned by both angles
+y = a\sin\theta_1 + b\sin(\theta_1 + \theta_2) @@ the same, with sin
+\htmlClass{new}{a = b = 1,\ \theta_1 = 0,\ \theta_2 = 90°:\ (x, y) = (1, 1)} @@ elbow at (1, 0), forearm straight up
+  </pre>
+  <p data-pid="d9c729">From here on, on this page, the <i>pose</i> is the pair of joint angles (θ₁, θ₂), and the <i>hand</i> is the point (x, y) the pose puts the hand at.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng.1.1</span><span class="ph understand">understand</span>How does the pose of a two-joint arm fix where its hand is?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng2">
+  <h2 class="sthead"><span class="stno">28eng2</span>From Hand Back to Joints</h2>
+  <p data-pid="b950db">Given a target (x, y), the shoulder, elbow and hand make a triangle with sides a, b and r = √(x² + y²). The triangle law (18f) fixes the angle at the elbow.</p>
+  <pre class="lines" data-k="ember" data-label="this page: reaching (1, 1) with a = b = 1">
+r^2 = a^2 + b^2 + 2ab\cos\theta_2 @@ the triangle law, θ₂ measured from straight
+\cos\theta_2 = \dfrac{x^2 + y^2 - a^2 - b^2}{2ab} = \dfrac{2 - 2}{2} = 0 @@ solve for cos θ₂ (5g)
+\theta_2 = 90° \text{ or } -90° @@ elbow one way or the other
+\htmlClass{new}{(0°, 90°) \text{ or } (90°, -90°)} @@ two poses reach the same hand
+  </pre>
+  <p data-pid="6454b2">Reach technique: <b>a two-joint arm reaches a target at distance r from the shoulder in two poses when |a − b| < r < a + b, in one at either end, and in none outside.</b> Its program must choose an elbow, and keep to it, or the arm flips through on the way.</p>
+<div class="eqline c6" data-tex="|a - b| \le r \le a + b"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng.2.1</span><span class="ph understand">understand</span>How does the triangle law give the elbow angle for a target, and why are there two poses, one or none?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng3">
+  <h2 class="sthead"><span class="stno">28eng3</span>Steering the Hand in a Straight Line</h2>
+  <p data-pid="53d355">To slide the hand steadily to the right, the joints must turn at speeds that change as the pose changes. Near a pose, rung 28’s best flat map turns small joint changes into small hand changes.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the slope grid at (0°, 90°)">
+J = \begin{pmatrix} -a\sin\theta_1 - b\sin(\theta_1+\theta_2) & -b\sin(\theta_1+\theta_2) \\ a\cos\theta_1 + b\cos(\theta_1+\theta_2) & b\cos(\theta_1+\theta_2) \end{pmatrix} @@ the slope grid (28b)
+= \begin{pmatrix} -1 & -1 \\ 1 & 0 \end{pmatrix} @@ at θ₁ = 0, θ₂ = 90°
+J\,\theta\prime = (0.1,\ 0) @@ the hand to the right at 0.1 a second
+\htmlClass{new}{\theta_1\prime = 0,\ \theta_2\prime = -0.1} @@ only the elbow turns, clockwise
+  </pre>
+  <p data-pid="80e3ca">Steering technique: <b>at each moment, solve J θ′ = p′ for the joint speeds that give the hand speed p′; as the pose changes, J changes, and the solve is done again.</b> Arms do it hundreds of times a second.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng.3.1</span><span class="ph understand">understand</span>How does the slope grid turn a wanted hand speed into joint speeds?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng4">
+  <h2 class="sthead"><span class="stno">28eng4</span>Poses Where the Hand Is Stuck</h2>
+  <p data-pid="dc7453">The solve needs J undoable, which is det J ≠ 0 (27e). Expand the determinant.</p>
+  <pre class="lines" data-k="ember" data-label="this page: det J">
+\det J = (-a s_1 - b s_{12})\,b c_{12} + b s_{12}\,(a c_1 + b c_{12}) @@ s, c for sin, cos of the angles
+= ab\,(s_{12} c_1 - s_1 c_{12}) @@ the b² terms cancel
+= ab\,\sin(\theta_1 + \theta_2 - \theta_1) @@ the sum formulas (21d)
+\htmlClass{new}{\det J = ab\sin\theta_2} @@ zero when the arm is straight or folded
+  </pre>
+  <p data-pid="34168c">Stuck-pose technique: <b>where det J = 0, the arm is stretched straight or folded back, and the hand cannot move along the arm at all, however the joints turn.</b> Near such a pose, small hand moves ask for huge joint speeds, so arms are kept away from them.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng.4.1</span><span class="ph understand">understand</span>Why is det J = ab sin θ₂, and what can the hand not do when the arm is straight?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng5">
+  <h2 class="sthead"><span class="stno">28eng5</span>A Weight in the Hand</h2>
+  <p data-pid="bddedd">The hand holds a weight that pulls with a force F. Each motor must give a turning effort τ₁, τ₂. If the joints turn by a small δθ, the hand moves by J δθ, and the work the motors put in must equal the work done against F.</p>
+  <pre class="lines" data-k="ember" data-label="this page: efforts from a force">
+\tau \cdot \delta\theta = F \cdot (J\,\delta\theta) @@ work in equals work out
+= (J^{\mathsf T} F) \cdot \delta\theta @@ a dot product moves across a grid as its side-turn (27g)
+\tau = J^{\mathsf T} F @@ for every small δθ
+\htmlClass{new}{F = (0, -10):\ \tau = (-10,\ 0)} @@ the shoulder holds it all
+  </pre>
+  <p data-pid="fc468f">Effort technique: <b>the turning efforts that hold a force F at the hand are Jᵀ F.</b> Here the forearm stands straight up, so the weight pulls straight through the elbow, and the elbow motor need give nothing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng.5.1</span><span class="ph understand">understand</span>How are the joint efforts that hold a weight found from the slope grid, and why does the elbow give nothing in the pose of 28eng1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng6">
+  <h2 class="sthead"><span class="stno">28eng6</span>Moves to Watch Out For</h2>
+  <p data-pid="76fe91">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{one target, one pose}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; inside the reach, two poses: elbow one way or the other (28eng2)
+\text{the same joint speeds all the way}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; J changes with the pose: solve again at each moment (28eng3)
+\det J = ab\cos\theta_2\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; det J = ab sin θ₂: zero when straight, not when bent square (28eng4)
+\tau = J F\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the efforts are Jᵀ F, the side-turned grid (28eng5)
+\text{steer first, then check the reach}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; a target past a + b has no pose to steer toward (28eng2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng.6.1</span><span class="ph understand">understand</span>Which move above puts cos where det J has sin, and in which poses is the hand really stuck?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">28·eng.7.1</span><span class="tagq">do</span>With a = 2 and b = 1, find both poses that reach (2, 1), and det J at each.</div>
+  <div class="chq"><span class="chid">28·eng.7.2</span><span class="tagq">make</span>Make up a pose and a hand speed for which the shoulder must turn and the elbow must not.</div>
+  <div class="chq"><span class="chid">28·eng.7.3</span><span class="tagq">converse</span>In a stuck pose, det J = 0. Decide whether det J = 0 means the hand cannot move at all, or only that some directions are lost.</div>
+  <div class="chq"><span class="chid">28·eng.7.4</span><span class="tagq">edge</span>At the pose with θ₂ = 0, the arm straight out along the x axis, try to solve J θ′ = (0.1, 0). Say what goes wrong, and which hand moves are still possible.</div>
+  <div class="chq"><span class="chid">28·eng.7.5</span><span class="tagq">open</span>A real arm has six joints and a hand that can also turn. Say what the slope grid becomes, and what det J = 0 would mean then.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r28logi.html">← 28·logi · where should the warehouse go?</a><a href="r28nav.html">28·nav · which way is “up” for a plane over Paris? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="92eba4">From joints to hand is <b>forward kinematics</b>, and back is <b>inverse kinematics</b>. The pose is the <b>configuration</b>, and the two poses are <b>elbow up</b> and <b>elbow down</b>. The slope grid is the arm’s <b>Jacobian</b>, a stuck pose a <b>singularity</b>, and the reachable ring the <b>workspace</b>. τ = Jᵀ F is the <b>principle of virtual work</b> for the arm, and the turning efforts are <b>torques</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="895c70">Jacques Denavit and Richard Hartenberg gave a standard way to write any arm’s joints in 1955. Daniel Whitney steered a hand by solving with the Jacobian, resolved-motion rate control, in 1969.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

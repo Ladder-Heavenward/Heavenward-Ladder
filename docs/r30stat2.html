@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>30·stat2 · Can You Test a Difference Without Trusting the Bell Curve?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r30stat.html">← 30·stat did the treatment work?</a><a href="r30bio.html">next: 30·bio how does a gene spread through a population? →</a></p>
+  <div class="tags"><span class="tag stat">30·stat2 · statistics</span></div>
+  <h1>Can You Test a Difference Without Trusting the Bell Curve?</h1>
+  <p data-pid="e2ef55">Can you test a difference without trusting the bell curve? Most tests on rung 30 compare averages, and their chances come from the bell curve. One wild value can drag an average anywhere, and small samples give no reason to believe in a bell. Keep only the order of the numbers, and the chances can be counted exactly, by listing arrangements, whatever shape the numbers came from. This page tests with signs alone, then with ranks, counts the chances exactly, finds the bell curve again for large samples, and asks what is given up.</p>
+  <p class="gesture" data-pid="cd153a">Replace each number by its sign, or by its rank among all the numbers. If the treatment does nothing, every pattern of signs, or every way of sharing the ranks between the groups, is equally likely, so the chance of a result at least as strong is a count over a total. For large groups the rank sum has a known average and spread, and the bell curve gives the chance.</p>
+</header>
+
+<section class="class step" data-step="30stat21">
+  <h2 class="sthead"><span class="stno">30stat21</span>One Wild Value</h2>
+  <p data-pid="6211e1">Claire tests a fertiliser on 8 pots, 4 treated and 4 not. Growth in millimetres:</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th></th><th>growth</th></tr>
+    <tr><th>treated</th><td>12, 15, 18, 400</td></tr>
+    <tr><th>untreated</th><td>10, 11, 13, 14</td></tr>
+  </table></div>
+  <p data-pid="99537b">The treated average is 111, the untreated 12. But 400 is a pot where a seed of a different plant sprouted. Drop it and the averages are 15 and 12; keep it and it decides everything. A test built on averages and a bell curve inherits that. From here on, on this page, a test is <i>by order</i> when it uses only which numbers are larger than which.</p>
+<div class="eqline c6" data-tex="\text{average: } (12 + 15 + 18 + 400)/4 = 111"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·stat2.1.1</span><span class="ph understand">understand</span>How does one wild value spoil a comparison of averages, and what does a test by order use instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30stat22">
+  <h2 class="sthead"><span class="stno">30stat22</span>Signs Alone</h2>
+  <p data-pid="64747f">Ten patients are measured before and after a treatment, and nine improve. If the treatment does nothing, each patient is as likely to get better as worse, by the same coin toss, separately.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the sign test">
+\text{no effect: each sign } + \text{ or } - \text{ with chance } \tfrac12 @@ like a fair coin (30f)
+\text{at least 9 of 10 plus: } \binom{10}{9} + \binom{10}{10} = 11 \text{ patterns} @@ counting (4)
+11 / 2^{10} = 11/1024 \approx 0.011 @@ of 1024 equally likely
+\htmlClass{new}{\text{either way: } \approx 0.021} @@ nine or more, up or down
+  </pre>
+  <p data-pid="a5f1d9">Sign technique: <b>if a treatment does nothing, each change is up or down with chance ½, so the chance of so many ups is a count of coin patterns, exactly.</b> Nothing was assumed about how big the changes are or what shape they come from.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·stat2.2.1</span><span class="ph understand">understand</span>How is the chance of nine improvements in ten found exactly when the treatment does nothing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30stat23">
+  <h2 class="sthead"><span class="stno">30stat23</span>Ranks, and Every Way to Share Them</h2>
+  <p data-pid="b5c704">Back to the pots. Rank all 8 numbers from smallest, 1, to largest, 8. The wild 400 becomes just rank 8, one more than 18.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the rank-sum test">
+\text{treated ranks: } 3, 6, 7, 8;\ \text{sum } 24 @@ 12, 15, 18 and 400 among all eight
+\text{no effect: every 4 of the 8 ranks equally likely} @@ shuffle the labels (30stat3)
+\binom{8}{4} = 70 \text{ ways};\ \text{sum} \ge 24:\ \{3678\}, \{4578\}, \{4678\}, \{5678\} @@ list them
+\htmlClass{new}{\text{chance} = 4/70 \approx 0.057} @@ exactly, whatever the shape
+  </pre>
+  <p data-pid="f4a268">Rank technique: <b>replace the numbers by their ranks; if the labels do not matter, every way of sharing the ranks is equally likely, so the chance of a rank sum so large is a count over the total.</b> One wild value moves the result by at most one rank. Here the evidence is suggestive, not strong: 4 ways in 70.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·stat2.3.1</span><span class="ph understand">understand</span>How is the chance of a rank sum of 24 or more counted exactly, and why does the wild value no longer decide it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30stat24">
+  <h2 class="sthead"><span class="stno">30stat24</span>Large Groups: the Bell Again</h2>
+  <p data-pid="900874">With 30 in each group, listing every share is out of the question. But the rank sum is a sum of many draws, and its average and spread can be found by the techniques of rung 30.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the rank sum’s average and spread">
+\text{each rank in a group of } n_1 \text{ averages } (N + 1)/2 @@ ranks 1 to N, equally likely
+\text{average sum} = n_1 (N + 1)/2 @@ averages add (30g)
+\text{spread}^2 = n_1 n_2 (N + 1)/12 @@ drawing without putting back
+\htmlClass{new}{n_1 = n_2 = 4:\ \text{average } 18,\ \text{spread}^2 = 12} @@ the pots: 24 is 1.7 spreads up
+  </pre>
+  <p data-pid="d76db5">For large groups, the rank sum follows the bell curve (30j) with this average and spread, whatever the numbers’ own shape, since the ranks are always 1 to N. <b>Tests by order get their bell curve from the ranks, not from the data.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·stat2.4.1</span><span class="ph understand">understand</span>What are the average and spread of the rank sum when the treatment does nothing, and why does the bell curve now apply?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30stat25">
+  <h2 class="sthead"><span class="stno">30stat25</span>What Order Gives Up</h2>
+  <p data-pid="12cb17">Throwing away sizes costs something when the data really do follow a bell. The cost has been measured: how many more patients a test by order needs to see what the average test sees.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the price of ranks">
+\text{bell-shaped data: ranks need about } \pi/3 \text{ times the patients} @@ about 5% more
+3/\pi \approx 0.955 @@ the efficiency
+\text{heavy tails or wild values: ranks need fewer} @@ sometimes far fewer
+\htmlClass{new}{\text{never less than } 0.864 \text{ of the average test}} @@ whatever the shape
+  </pre>
+  <p data-pid="0964e0"><b>A test by order costs about 5% of the sample when the bell is true, and can save a great deal when it is not.</b> The same idea gives a rank correlation, which asks whether two measurements rise together in order, not in a straight line.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·stat2.5.1</span><span class="ph understand">understand</span>What does a test by order give up when the data do follow a bell curve, and what can it gain when they do not?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="30stat26">
+  <h2 class="sthead"><span class="stno">30stat26</span>Moves to Watch Out For</h2>
+  <p data-pid="de1e64">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the averages differ by 99, so the fertiliser works}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; one wild pot makes the average; by ranks the chance is 4/70 (30stat23)
+\text{rank first, then decide which pot is wild}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; no pot needs dropping: ranks blunt it (30stat23)
+\text{chance} = 1/70 \text{, the one best share}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; count every share at least as strong: 4/70 (30stat23)
+\text{ranks lose information, so never use them}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; about 5% on bell data, and a gain with wild values (30stat25)
+\text{a bell curve for the rank sum needs bell data}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the ranks are always 1 to N: the bell comes from them (30stat24)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">30·stat2.6.1</span><span class="ph understand">understand</span>Which move above counts only the single best share of ranks, and what should the count include?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">30·stat2.7.1</span><span class="tagq">do</span>Five pots treated and three not, with all treated pots growing more than all untreated. Find the exact chance of a rank sum so large under no effect.</div>
+  <div class="chq"><span class="chid">30·stat2.7.2</span><span class="tagq">make</span>Make up two groups of four in which the averages differ a lot but the rank-sum chance is above 0.3.</div>
+  <div class="chq"><span class="chid">30·stat2.7.3</span><span class="tagq">converse</span>If the treatment does nothing, every share of the ranks is equally likely. Decide whether every share being equally likely means the treatment does nothing.</div>
+  <div class="chq"><span class="chid">30·stat2.7.4</span><span class="tagq">edge</span>Two pots grow exactly the same. Say how to rank them, and how the count of 30stat23 must change.</div>
+  <div class="chq"><span class="chid">30·stat2.7.5</span><span class="tagq">open</span>A drug trial measures pain on a scale of 0 to 10. Say why a test by order suits such numbers better than a test of averages.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r30stat.html">← 30·stat · did the treatment work?</a><a href="r30bio.html">30·bio · how does a gene spread through a population? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="2be0e4">Tests by order are <b>nonparametric</b> or <b>distribution-free</b> tests. Signs alone give the <b>sign test</b>; signs with the sizes ranked give the <b>Wilcoxon signed-rank test</b>; the rank sum is the <b>Wilcoxon rank-sum</b> or <b>Mann-Whitney U test</b>. The 3/π and 0.864 are its <b>asymptotic relative efficiency</b>. The rank correlation is <b>Spearman’s rho</b>; Kendall’s tau counts pairs in order.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="d21dbd">Frank Wilcoxon published the rank tests in 1945, and Henry Mann and Donald Whitney the two-group form in 1947. Joseph Hodges and Erich Lehmann showed in 1956 that the efficiency never falls below 0.864.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

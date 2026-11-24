@@ -46,7 +46,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r17comp.html">← 17·comp what is the quickest way to sort a list?</a><a href="r17concl.html">next: 17·∎ conclusion →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r17comp.html">← 17·comp what is the quickest way to sort a list?</a><a href="r17logi.html">next: 17·logi how many will we sell next week? →</a></p>
   <div class="tags"><span class="tag crypt">17·crypt · cryptography</span></div>
   <h1>How Long Would It Take to Guess a Password?</h1>
   <p data-pid="c64cc5">How long would it take to guess a password? A password is a short secret, and a machine that wants it can simply try one guess after another. So the question comes down to two counts. How many passwords are there of the kind you chose? And how many guesses a second can the machine make? The first count grows so fast that its numbers stop meaning anything when they are written out in full. Logs bring them back to a size a person can read and compare. Sites used to tell people to add capitals, digits and odd symbols, and people did, and their passwords fell anyway. This page counts the passwords, measures the count in bits, which are logs base two, and shows why adding letters beats adding odd symbols. Then it turns bits into years at real guessing speeds. And it finds where the count stops telling the truth: people do not choose at random.</p>
@@ -179,18 +179,35 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
     </ol>
   </section>
 </section>
+<section class="class step" data-step="17crypt6">
+  <h2 class="sthead"><span class="stno">17crypt6</span>Making Each Guess Cost More</h2>
+  <p data-pid="ce8d3b">A site must check passwords without keeping them. It keeps a fingerprint instead: easy to compute from the password, and believed impossible to undo, a one-way function. But a stolen list of fingerprints lets a guesser test guesses as fast as fingerprints can be computed.</p>
+  <pre class="lines" data-k="ember" data-label="this page: salt and slowness">
+\text{store } H(\text{salt} \,\|\, \text{password}),\ \text{a fresh random salt each} @@ one table of guesses no longer fits every user
+\text{apply } H \text{ about } 2^{20} \text{ times over} @@ a million fingerprints per check
+\log_2 2^{20} = 20 \text{ bits} @@ the cost multiplies, so the bits add (17crypt2)
+\htmlClass{new}{\text{a 40-bit password costs like a 60-bit one}} @@ a check of a fraction of a second, for the site
+  </pre>
+  <p data-pid="b4d067">Slow-fingerprint technique: <b>making each guess cost 2ᵏ times as much work adds k bits to every password,</b> while the site pays the cost once per login. The same one-way idea, run as a stream, stretches a short random key into a long string no quick test can tell from coin tosses.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">17·crypt.6.1</span><span class="ph understand">understand</span>How do salt and a slow fingerprint protect stolen password lists, and why does slowness add bits?</li>
+    </ol>
+  </section>
+</section>
 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
-  <div class="chq"><span class="chid">17·crypt.6.1</span><span class="tagq">build</span>Make a way of choosing passwords of your own, with dice, coins or a deck of cards.<br>Find its bits, and the average time to guess at 10¹¹ guesses a second.</div>
-  <div class="chq"><span class="chid">17·crypt.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = 26,"></span> <span data-tex-inline="\text{no letter used twice}"></span></span>Find the bits for L = 8 and for L = 26.<br>Find how many bits the requirement costs at each length.</div>
-  <div class="chq"><span class="chid">17·crypt.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="N \text{ passwords},"></span> <span class="gtx">every order of guessing finds the chosen one</span> <span class="gtx">in (N + 1)/2 guesses on average</span></span>Prove or refute: each of the N is chosen equally often.</div>
-  <div class="chq"><span class="chid">17·crypt.6.4</span><span class="tagq">seam</span>In 2003 a standards office advised that passwords mix capitals, digits and symbols, and be changed every ninety days. In 2017 the same office withdrew both requirements. People made to add a symbol had added it in the same few places, and people made to change a password had changed one character. Yet a site that hands out random passwords gets them written on notes stuck to screens.<br>Should a site set requirements for the passwords people choose, or choose for them?</div>
+  <div class="chq"><span class="chid">17·crypt.7.1</span><span class="tagq">build</span>Make a way of choosing passwords of your own, with dice, coins or a deck of cards.<br>Find its bits, and the average time to guess at 10¹¹ guesses a second.</div>
+  <div class="chq"><span class="chid">17·crypt.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="A = 26,"></span> <span data-tex-inline="\text{no letter used twice}"></span></span>Find the bits for L = 8 and for L = 26.<br>Find how many bits the requirement costs at each length.</div>
+  <div class="chq"><span class="chid">17·crypt.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="N \text{ passwords},"></span> <span class="gtx">every order of guessing finds the chosen one</span> <span class="gtx">in (N + 1)/2 guesses on average</span></span>Prove or refute: each of the N is chosen equally often.</div>
+  <div class="chq"><span class="chid">17·crypt.7.4</span><span class="tagq">seam</span>In 2003 a standards office advised that passwords mix capitals, digits and symbols, and be changed every ninety days. In 2017 the same office withdrew both requirements. People made to add a symbol had added it in the same few places, and people made to change a password had changed one character. Yet a site that hands out random passwords gets them written on notes stuck to screens.<br>Should a site set requirements for the passwords people choose, or choose for them?</div>
 </section>
 <div class="themecert themeend"></div>
-<nav class="nextrung"><a href="r17comp.html">← 17·comp · what is the quickest way to sort a list?</a><a href="r17concl.html">17·∎ · conclusion →</a></nav>
+<nav class="nextrung"><a href="r17comp.html">← 17·comp · what is the quickest way to sort a list?</a><a href="r17logi.html">17·logi · how many will we sell next week? →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>

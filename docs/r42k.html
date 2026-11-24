@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Shortest Paths and Greedy Choices</title>
+<title>42k · Counting Shapes With Stored Lists</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,118 +37,78 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42j.html">← 42j disorder is impossible</a><a href="r42l.html">next: 42l best from best pieces →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42j.html">← 42j disorder is impossible</a><a href="r42l.html">next: 42l counting up to turning →</a></p>
   <div class="tags"><span class="tag tech">42k · technique</span></div>
-  <h1>Shortest Paths and Greedy Choices</h1>
-  <p data-pid="18c983">Rung 39 found that taking the best-looking step at every moment, the greedy choice, sometimes gives the best answer and sometimes a poor one, and that a proof is the only way to tell which. On graphs there are two famous places where greed is safe. One is finding the shortest routes from a starting town to every other: settle the nearest town not yet settled, again and again, and every distance settled is final. The other is joining every town by the cheapest network of roads: take the cheapest road that does not close a loop, again and again, and the result is cheapest. Both proofs are exchanges: if the greedy choice were wrong, a better answer could be swapped into a cheaper one. And both fail in a clear place, the first when a road can have negative length, the second when the network must be a single tour. Along the way the step counts the cost of a recipe in a new way, by charging each step to a link or a dot and adding up the charges, so that a dot with many links costs no more in total than the links it has.</p>
-  <p class="gesture" data-pid="21dace">Walk out from a dot in layers to find every distance in links, at a cost of each link looked at twice. With lengths at least 0, settle the nearest unsettled dot; its distance is final. Taking the cheapest link that closes no cycle builds a cheapest spanning tree, because the cheapest link across any split belongs to some cheapest tree. Merging pieces by relabelling the smaller one costs at most n log₂ n in all.</p>
+  <h1>Counting Shapes With Stored Lists</h1>
+  <p data-pid="395844">A list can be stored in one function (23j). When the things being counted are built from smaller things of the same kind, the building rule becomes an equation for the storing function, and solving it counts them all at once. Ways to bracket a product, trees with two branches at each fork, and paths that never dip below the start are all counted by one list, 1, 1, 2, 5, 14, 42. Ways to split a number into parts are counted by an endless product. This step counts both and proves that splitting into odd parts and splitting into different parts give the same count.</p>
+  <p class="gesture" data-pid="85931f">A tree with two branches is empty or a fork with two trees: C(x) = 1 + x C(x)², so C(x) = (1 − √(1 − 4x))/(2x) and Cₙ = (2n)!/(n!(n + 1)!). Splittings of n into parts are stored in 1/((1 − x)(1 − x²)(1 − x³)⋯). Odd parts and different parts have the same storing product.</p>
 </header>
 
 <section class="class step" data-step="42k1">
-  <h2 class="sthead"><span class="stno">42k1</span>Layer by Layer</h2>
-  <p data-pid="62e846">39n’s queue holds things in the order they came, first in, first out. Put a start dot r in it, at distance 0. Then, while the queue is not empty, take out its first dot u, and put in every neighbour of u not yet seen, each at u’s distance plus 1.</p>
-  <p data-pid="3e84e3">Layer-by-layer technique: <b>walking out from r in this way gives every dot its distance from r in links, and looks at each link at most twice.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the layer-by-layer technique">
-\text{the queue holds the dots at distance } k \text{, then some at } k + 1 \text{, never others} @@ induction on the moves: each dot taken out at k adds only k + 1
-\text{a dot at distance } k + 1 \text{ has a neighbour at distance } k @@ the last link of a least walk (42a2)
-\text{it is seen when that neighbour, or an earlier one at } k \text{, is taken out} @@ so it gets k + 1, and no less
-\text{each dot enters the queue once; its links are looked at when it leaves} @@ seen dots are not put in again
-\htmlClass{new}{\text{cost: } |V| \text{ dots and } \textstyle\sum_u d(u) = 2|E| \text{ link looks}} \quad \blacksquare @@ the ends-count technique
+  <h2 class="sthead"><span class="stno">42k1</span>Building Rules Become Equations</h2>
+  <pre class="lines" data-k="ember" data-label="this step: trees with two branches at each fork">
+C_0 = 1,\ \ C_{n+1} = \textstyle\sum_{k=0}^{n} C_k C_{n-k} @@ a fork, a left tree of k forks, a right of n − k
+C(x) = 1 + x\,C(x)^2 @@ the sum is the product of storing functions
+C(x) = \dfrac{1 - \sqrt{1 - 4x}}{2x} @@ the root that stays finite at 0
+\htmlClass{new}{C_n = \dfrac{1}{n + 1}\dbinom{2n}{n}:\ 1, 1, 2, 5, 14, 42, \ldots} @@ the series of √(1 − 4x) (23j)
   </pre>
-  <p data-pid="310123">The cost was counted by charging each look to a link, not to a move of the recipe. One move may look at a thousand links, but no link is looked at more than twice over the whole run. Counting by charges is the accepted name’s <i>amortized cost</i>, from the Old French <i>amortir</i>, to deaden: the large moves are paid for by the many small ones. The same walk settles 42a’s odd-cycle question in one pass.</p>
-  <!--gfig 42k1--><div class="gfigs" data-gfig="42k1" data-story="[[&quot;Start at r, the ember dot, at distance 0. It is the first into the queue and the first out.&quot;, [&quot;#16&quot;, &quot;#17&quot;]], [&quot;Taking a dot out puts in each neighbour not yet seen, one link farther. The teal link is the one each dot was first seen by.&quot;, [&quot;teal&quot;, &quot;#42&quot;, &quot;#43&quot;]], [&quot;The numbers are the order dots leave the queue: all the dots at distance 1, then all at distance 2, then 3.&quot;, [&quot;circle+ink&quot;, &quot;circle+ember&quot;, &quot;#40&quot;, &quot;#41&quot;]], [&quot;So the dots fall into rings by their distance from r.&quot;, [&quot;grid&quot;, &quot;#38&quot;, &quot;#39&quot;]], [&quot;The muted links were looked at and found to lead to dots already seen.&quot;, [&quot;line+muted&quot;]]]"><svg class="gfig" viewBox="0 0 420 270" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="a walk out from r in layers, each ring one link farther, with the queue order numbered"><circle cx="150" cy="130" r="38" style="fill:none;stroke:var(--grid);stroke-width:1;stroke-dasharray:3 3"/><circle cx="150" cy="130" r="76" style="fill:none;stroke:var(--grid);stroke-width:1;stroke-dasharray:3 3"/><circle cx="150" cy="130" r="114" style="fill:none;stroke:var(--grid);stroke-width:1;stroke-dasharray:3 3"/><line x1="150.0" y1="130.0" x2="150.0" y2="92.0" style="stroke:var(--teal);stroke-width:1.6"/><line x1="150.0" y1="130.0" x2="182.9" y2="149.0" style="stroke:var(--teal);stroke-width:1.6"/><line x1="150.0" y1="130.0" x2="117.1" y2="149.0" style="stroke:var(--teal);stroke-width:1.6"/><line x1="150.0" y1="92.0" x2="112.0" y2="64.2" style="stroke:var(--teal);stroke-width:1.6"/><line x1="150.0" y1="92.0" x2="188.0" y2="64.2" style="stroke:var(--teal);stroke-width:1.6"/><line x1="182.9" y1="149.0" x2="188.0" y2="195.8" style="stroke:var(--teal);stroke-width:1.6"/><line x1="117.1" y1="149.0" x2="74.0" y2="130.0" style="stroke:var(--teal);stroke-width:1.6"/><line x1="112.0" y1="64.2" x2="62.7" y2="56.7" style="stroke:var(--teal);stroke-width:1.6"/><line x1="188.0" y1="195.8" x2="237.3" y2="203.3" style="stroke:var(--teal);stroke-width:1.6"/><line x1="188.0" y1="195.8" x2="130.2" y2="242.3" style="stroke:var(--teal);stroke-width:1.6"/><line x1="182.9" y1="149.0" x2="117.1" y2="149.0" style="stroke:var(--muted);stroke-width:1"/><line x1="188.0" y1="64.2" x2="188.0" y2="195.8" style="stroke:var(--muted);stroke-width:1"/><line x1="74.0" y1="130.0" x2="62.7" y2="56.7" style="stroke:var(--muted);stroke-width:1"/><circle cx="150.0" cy="130.0" r="9" style="fill:var(--ember)"/><text x="150.0" y="134.0" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">1</text><circle cx="150.0" cy="92.0" r="9" style="fill:var(--ink)"/><text x="150.0" y="96.0" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">2</text><circle cx="182.9" cy="149.0" r="9" style="fill:var(--ink)"/><text x="182.9" y="153.0" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">3</text><circle cx="117.1" cy="149.0" r="9" style="fill:var(--ink)"/><text x="117.1" y="153.0" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">4</text><circle cx="112.0" cy="64.2" r="9" style="fill:var(--ink)"/><text x="112.0" y="68.2" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">5</text><circle cx="188.0" cy="64.2" r="9" style="fill:var(--ink)"/><text x="188.0" y="68.2" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">6</text><circle cx="188.0" cy="195.8" r="9" style="fill:var(--ink)"/><text x="188.0" y="199.8" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">7</text><circle cx="74.0" cy="130.0" r="9" style="fill:var(--ink)"/><text x="74.0" y="134.0" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">8</text><circle cx="62.7" cy="56.7" r="9" style="fill:var(--ink)"/><text x="62.7" y="60.7" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">9</text><circle cx="237.3" cy="203.3" r="9" style="fill:var(--ink)"/><text x="237.3" y="207.3" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">10</text><circle cx="130.2" cy="242.3" r="9" style="fill:var(--ink)"/><text x="130.2" y="246.3" text-anchor="middle" style="font:600 10px Nunito,system-ui,sans-serif;fill:var(--card)">11</text><text x="290.0" y="60.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">rings: distance</text><text x="290.0" y="76.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0, 1, 2, 3 from r</text><text x="290.0" y="110.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">numbers: the order</text><text x="290.0" y="126.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">dots leave the queue</text><text x="290.0" y="160.0" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">teal: the link each</text><text x="290.0" y="176.0" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">dot was first seen by</text></svg></div><!--/gfig 42k1-->
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · layers · ← → keys work</div></section>
+  <p data-pid="8c33e2">Building-rule technique: <b>if each thing of size n + 1 is a fork joined to an ordered pair of things whose sizes add to n, the storing function solves C = 1 + xC², and Cₙ = (2n)!/(n!(n + 1)!).</b> Bracketings of n + 1 factors and paths of n up-steps and n down-steps that never dip below the start are built the same way.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42k1.1</span><span class="ph understand">understand</span>What does the layer-by-layer technique say? <br>Why is its cost |V| plus 2|E|, even when one dot has very many links?</li>
+      <li><span class="qid">42k1.1</span><span class="ph understand">understand</span>How does the rule for building trees become C = 1 + xC², and what list does it give?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42k2">
-  <h2 class="sthead"><span class="stno">42k2</span>The Nearest First</h2>
-  <p data-pid="72f95f">Now each link {u, w} has a length ℓ(u, w) ≥ 0, and the distance is the least total length of a path. Keep a <i>settled</i> set, at first {r} with distance 0; write dist(u) for the distance of a settled dot u. Each unsettled dot w has a <i>tentative distance</i> t(w): the least dist(u) + ℓ(u, w) over settled u, or no value. At each move, settle the unsettled dot with the least tentative distance.</p>
-  <p data-pid="7736bc">Nearest-first technique: <b>if every length is at least 0, the tentative distance of a dot, when it is settled, is its distance from r.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the nearest-first technique">
-w \text{ is settled at } t(w) \text{; suppose a path from } r \text{ to } w \text{ is shorter} @@ settled distances so far are right (induction on the moves)
-\text{the path leaves the settled set first along a link } \{u, x\},\ u \text{ settled} @@ r is settled and w is not
-\text{length of the path} \ge \mathrm{dist}(u) + \ell(u, x) \ge t(x) @@ the rest of the path has length at least 0
-t(x) \ge t(w) @@ w had the least tentative distance
-\htmlClass{new}{\bot:\ \text{no path is shorter than } t(w)} \quad \blacksquare @@ 
+  <h2 class="sthead"><span class="stno">42k2</span>Splitting a Number</h2>
+  <pre class="lines" data-k="ember" data-label="this step: splittings of n into parts, order ignored">
+\dfrac{1}{1 - x^k} = 1 + x^k + x^{2k} + \cdots @@ how many parts of size k: none, one, two, …
+\textstyle\sum_n p(n)x^n = \prod_{k \ge 1}\dfrac{1}{1 - x^k} @@ choose a count for each size
+4 = 4 = 3 + 1 = 2 + 2 = 2 + 1 + 1 = 1 + 1 + 1 + 1 @@ p(4) = 5
+\htmlClass{new}{p(n):\ 1, 1, 2, 3, 5, 7, 11, 15, 22, \ldots} @@ read off the product
   </pre>
-  <pre class="lines" data-k="ember" data-label="this page: the nearest first, from Seattle">
-\text{about: Seattle–Tacoma 55, Tacoma–Olympia 50, Olympia–Portland 185, Seattle–Ellensburg 175,} @@ road kilometres, rounded
-\text{Ellensburg–Yakima 55, Yakima–Portland 300} @@ the last by the Columbia gorge
-\text{settled in order: Seattle 0, Tacoma 55, Olympia 105, Ellensburg 175, Yakima 230} @@ the least tentative distance each time
-\htmlClass{new}{\text{Portland: } \min(105 + 185,\ 230 + 300) = 290} \quad \blacksquare @@ settled last
-  </pre>
-<div class="eqline c6 lsyn" data-was="8416c9" data-tex="\begin{aligned}&amp;\text{the proof used } \ell \ge 0 \text{ in its third line}\\ &amp;r \to x:\ 2,\quad r \to y:\ 3,\quad y \to x:\ -2\\ &amp;x \text{ settled at } 2;\ \text{through } y:\ 3 - 2 = 1\\ &amp;\text{negative lengths}:\ \text{42l, at a higher cost}\end{aligned}"></div>
-  <!--gfig 42k2--><div class="gfigs" data-gfig="42k2" data-story="[[&quot;Six towns and the lengths of the roads between them. Seattle is settled first, at 0.&quot;, [&quot;#18&quot;, &quot;#19&quot;, &quot;path&quot;]], [&quot;Each time, the unsettled town with the least tentative distance is settled: Tacoma at 55, Olympia at 105, Ellensburg at 175, Yakima at 230.&quot;, [&quot;#20-23&quot;, &quot;#26-29&quot;]], [&quot;Portland is settled last, at 290.&quot;, [&quot;#24&quot;, &quot;#25&quot;]], [&quot;The ember roads are the shortest path to it: Seattle, Tacoma, Olympia, Portland.&quot;, [&quot;ember&quot;, &quot;#30&quot;]]]"><svg class="gfig" viewBox="0 0 440 276" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="six towns with road lengths, each settled at its distance from Seattle"><circle cx="130" cy="34" r="6" style="fill:var(--ember)"/><circle cx="120" cy="90" r="6" style="fill:var(--ember)"/><circle cx="90" cy="145" r="6" style="fill:var(--ember)"/><circle cx="140" cy="225" r="6" style="fill:var(--ember)"/><circle cx="320" cy="60" r="6" style="fill:var(--teal)"/><circle cx="340" cy="140" r="6" style="fill:var(--teal)"/><path d="M128.9,40.2 Q125.0,62.0 121.1,83.8" style="fill:none;stroke:var(--ember);stroke-width:2"/><text x="136.8" y="68.1" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">55</text><path d="M116.6,96.2 Q105.0,117.5 93.4,138.8" style="fill:none;stroke:var(--ember);stroke-width:2"/><text x="115.5" y="127.2" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">50</text><path d="M93.9,151.2 Q115.0,185.0 136.1,218.8" style="fill:none;stroke:var(--ember);stroke-width:2"/><text x="126.9" y="181.6" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">185</text><path d="M136.2,34.9 Q225.0,47.0 313.8,59.1" style="fill:none;stroke:var(--muted);stroke-width:1.3"/><text x="226.4" y="41.1" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">175</text><path d="M321.6,66.2 Q330.0,100.0 338.4,133.8" style="fill:none;stroke:var(--muted);stroke-width:1.3"/><text x="318.4" y="106.9" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">55</text><path d="M333.8,142.7 Q240.0,182.5 146.2,222.3" style="fill:none;stroke:var(--muted);stroke-width:1.3"/><text x="235.3" y="175.5" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">300</text><text x="118" y="38" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">Seattle</text><text x="118" y="52" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">0</text><text x="108" y="94" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">Tacoma</text><text x="108" y="108" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">55</text><text x="78" y="149" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">Olympia</text><text x="78" y="163" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">105</text><text x="128" y="229" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">Portland</text><text x="128" y="243" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">290</text><text x="332" y="64" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">Ellensburg</text><text x="332" y="78" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">175</text><text x="352" y="144" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">Yakima</text><text x="352" y="158" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">230</text><text x="220.0" y="268" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">teal: distance when settled. Ember: the shortest path to Portland, 290.</text></svg></div><!--/gfig 42k2-->
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · nearest first · ← → keys work</div></section>
+  <p data-pid="ac7bad">Splitting technique: <b>the number of ways to split n into parts, order ignored, is the coefficient of xⁿ in the product of 1/(1 − xᵏ) over all k;</b> each factor chooses how many parts of size k to use.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42k2.1</span><span class="ph understand">understand</span>What does the nearest-first technique say? <br>Which line of its proof needs every length to be at least 0, and what goes wrong without it?</li>
+      <li><span class="qid">42k2.1</span><span class="ph understand">understand</span>Why does the product of 1/(1 − xᵏ) store the number of splittings?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42k3">
-  <h2 class="sthead"><span class="stno">42k3</span>The Cheapest Tree, Greedily</h2>
-  <p data-pid="8b140a">The graph is in one piece, so it has spanning trees. Each link now has a cost, and a cheapest spanning tree is one whose costs add to the least. A <i>split</i> of the dots is a set S with something in it and something outside; a link <i>crosses</i> it when one end is in S and one out.</p>
-  <p data-pid="03ca66">Cheapest-across technique: <b>for every split, a cheapest link crossing it belongs to some cheapest spanning tree.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the cheapest-across technique">
-T \text{ a cheapest spanning tree},\ e \text{ a cheapest crossing link},\ e \notin T @@ else done
-T + e \text{ has exactly one cycle, through } e @@ the one path in T between e’s ends, and e (42b2)
-\text{the cycle crosses the split again, along a link } f \text{ of } T @@ a closed walk crosses a split an even number of times
-T + e - f \text{ is in one piece with } n - 1 \text{ links: a spanning tree} @@ the any-two-of-three technique
-\htmlClass{new}{\text{cost}(T + e - f) \le \text{cost}(T):\ \text{a cheapest tree holding } e} \quad \blacksquare @@ cost(e) ≤ cost(f)
+  <h2 class="sthead"><span class="stno">42k3</span>Odd Parts and Different Parts</h2>
+  <pre class="lines" data-k="ember" data-label="this step: two products">
+\text{different parts: } \textstyle\prod_k (1 + x^k) @@ each size used at most once
+1 + x^k = \dfrac{1 - x^{2k}}{1 - x^k} @@ a difference of squares
+\textstyle\prod_k \dfrac{1 - x^{2k}}{1 - x^k} = \prod_{k \text{ odd}} \dfrac{1}{1 - x^k} @@ the even factors cancel
+\htmlClass{new}{\text{different parts} = \text{odd parts, for every } n} @@ n = 5: 5, 4 + 1, 3 + 2; and 5, 3 + 1 + 1, 1 + 1 + 1 + 1 + 1
   </pre>
-  <p data-pid="c863d1">Sort the links by cost, and take each in turn unless it closes a cycle with those already taken. Each link taken is a cheapest link crossing the split between the piece holding one of its ends and the rest: any cheaper crossing link came earlier and was refused, so it closed a cycle inside the taken links, and could not have crossed. By the cheapest-across technique, at each moment the links taken lie in some cheapest tree; at the end they are one.</p>
-  <p data-pid="3303fd">This is where greed is safe, and the exchange is the reason. The tour of a delivery van (22·logi) has no such exchange: taking the nearest stop next can give a tour far longer than the best, as 39o found for greed in general.</p>
-  <!--gfig 42k3--><div class="gfigs" data-gfig="42k3" data-story="[[&quot;Left: a cheapest tree T in teal, and a split S of the dots. The dashed ember link e crosses the split and costs 3.&quot;, [&quot;#0-11&quot;]], [&quot;Add e to T and there is one cycle. A cycle that crosses the split once must cross back: it crosses again at f, which costs 5.&quot;, [&quot;#7-11&quot;, &quot;#8&quot;, &quot;#2-6&quot;]], [&quot;Right: take f out and leave e in. It is a tree again, and no dearer.&quot;, [&quot;#18-26&quot;]]]"><svg class="gfig" viewBox="0 0 440 220" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="a cheapest tree, a cheaper crossing link e making one cycle that crosses the split again at f, and the swap"><path d="M120,18 C108,70 132,130 120,180" style="fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:5 4"/><text x="60.0" y="192.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">S</text><line x1="40.0" y1="50.0" x2="90.0" y2="100.0" style="stroke:var(--teal);stroke-width:2.2"/><line x1="40.0" y1="150.0" x2="90.0" y2="100.0" style="stroke:var(--teal);stroke-width:2.2"/><line x1="150.0" y1="100.0" x2="200.0" y2="50.0" style="stroke:var(--teal);stroke-width:2.2"/><line x1="150.0" y1="100.0" x2="200.0" y2="150.0" style="stroke:var(--teal);stroke-width:2.2"/><line x1="90.0" y1="100.0" x2="150.0" y2="100.0" style="stroke:var(--teal);stroke-width:2.2"/><text x="120.0" y="92.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">f  5</text><line x1="40.0" y1="150.0" x2="200.0" y2="150.0" style="stroke:var(--ember);stroke-width:2.2;stroke-dasharray:5 3"/><text x="150.0" y="166.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ember)">e  3</text><path d="M90,108 L150,108 L196,146 L44,146 Z" style="fill:var(--gold);fill-opacity:.18;stroke:none"/><text x="120.0" y="208.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">T + e: one cycle, crossing at e and f</text><circle cx="40.0" cy="50.0" r="5" style="fill:var(--ink)"/><circle cx="40.0" cy="150.0" r="5" style="fill:var(--ink)"/><circle cx="90.0" cy="100.0" r="5" style="fill:var(--ink)"/><circle cx="150.0" cy="100.0" r="5" style="fill:var(--ink)"/><circle cx="200.0" cy="50.0" r="5" style="fill:var(--ink)"/><circle cx="200.0" cy="150.0" r="5" style="fill:var(--ink)"/><path d="M340,18 C328,70 352,130 340,180" style="fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:5 4"/><text x="280.0" y="192.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">S</text><line x1="260.0" y1="50.0" x2="310.0" y2="100.0" style="stroke:var(--teal);stroke-width:2.2"/><line x1="260.0" y1="150.0" x2="310.0" y2="100.0" style="stroke:var(--teal);stroke-width:2.2"/><line x1="370.0" y1="100.0" x2="420.0" y2="50.0" style="stroke:var(--teal);stroke-width:2.2"/><line x1="370.0" y1="100.0" x2="420.0" y2="150.0" style="stroke:var(--teal);stroke-width:2.2"/><line x1="310.0" y1="100.0" x2="370.0" y2="100.0" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/><line x1="260.0" y1="150.0" x2="420.0" y2="150.0" style="stroke:var(--ember);stroke-width:2.2"/><text x="340.0" y="208.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">T + e − f: a tree, no dearer</text><circle cx="260.0" cy="50.0" r="5" style="fill:var(--ink)"/><circle cx="260.0" cy="150.0" r="5" style="fill:var(--ink)"/><circle cx="310.0" cy="100.0" r="5" style="fill:var(--ink)"/><circle cx="370.0" cy="100.0" r="5" style="fill:var(--ink)"/><circle cx="420.0" cy="50.0" r="5" style="fill:var(--ink)"/><circle cx="420.0" cy="150.0" r="5" style="fill:var(--ink)"/></svg></div><!--/gfig 42k3-->
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · greedy tree · ← → keys work</div></section>
+  <p data-pid="ceba1d"><b>For every n, the splittings of n into different parts are exactly as many as the splittings into odd parts;</b> two storing products are the same function, so their lists agree (23j). A matching can be built too, by halving even parts, but the products find the fact first.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42k3.1</span><span class="ph understand">understand</span>What does the cheapest-across technique say? <br>Why does the cycle in T + e cross the split a second time, and why is T + e − f a spanning tree?</li>
+      <li><span class="qid">42k3.1</span><span class="ph understand">understand</span>Why do the different-parts product and the odd-parts product agree?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42k4">
-  <h2 class="sthead"><span class="stno">42k4</span>Who Is in Which Piece</h2>
-  <p data-pid="e20e43">The greedy tree needs, for each link, whether its ends are already in one piece. Keep for each dot the name of its piece, and a list of each piece’s dots. Two ends are in one piece exactly when their names match. Taking a link merges two pieces: relabel every dot of the smaller.</p>
-  <p data-pid="117c61">Doubling-piece technique: <b>relabelling the smaller piece at each merge relabels each dot at most log₂ n times, so all the merges together cost at most n log₂ n relabellings.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the doubling-piece technique">
-\text{a dot is relabelled only when its piece joins one at least as large} @@ the smaller is relabelled
-\text{after } j \text{ relabellings its piece has at least } 2^j \text{ dots} @@ each one at least doubles it
-2^j \le n \Rightarrow j \le \log_2 n @@ a piece has at most n dots
-\htmlClass{new}{\text{all relabellings} \le n \log_2 n} \quad \blacksquare @@ charged to the dots, not to the merges
-  </pre>
-  <p data-pid="f4a161">One merge may relabel n/2 dots, so the worst single move is costly. Charged to the dots, the total is small, which is the amortized count of the first footing at work again. Sorting the links costs about |E| log₂ |E| comparisons, more than the merges; 42m asks whether anything faster is possible, and finds where the floor is.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · pieces · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">42k4.1</span><span class="ph understand">understand</span>What does the doubling-piece technique say? <br>Why does a dot’s piece at least double each time the dot is relabelled?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="42k5">
-  <h2 class="sthead"><span class="stno">42k5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">42k4</span>Moves to Watch Out For</h2>
+  <p data-pid="cd810e">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
   <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
-\text{the nearest-first technique works with any lengths}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; with a length −2, x is settled at 2 and a path of length 1 reaches it
-\text{the cheapest link at each dot is in every cheapest tree}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; in some cheapest tree; with ties there may be others without it
-\text{one merge can relabel } n/2 \text{ dots, so } n \text{ merges cost } n^2/2\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a dot is relabelled at most log₂ n times; the costly merges are rare
-\text{greed builds the cheapest tree, so it builds the cheapest tour}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a tour has no exchange step; the nearest-stop technique can be far from best
+C(x) = \dfrac{1 + \sqrt{1 - 4x}}{2x}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; that root is endless at 0; take the minus sign (42k1)
+C_{n+1} = \textstyle\sum C_k C_k\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the sizes add to n: CₖCₙ₋ₖ (42k1)
+\text{splittings: } \textstyle\prod (1 + x^k)\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; that allows each size at most once; repeats need 1/(1 − xᵏ) (42k2)
+p(4) = 4\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; five: 4, 3+1, 2+2, 2+1+1, 1+1+1+1 (42k2)
+\text{the odd-parts fact needs a matching first}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; equal storing functions give equal lists (42k3)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42k5.1</span><span class="ph understand">understand</span>Why does a negative length break the nearest-first technique? <br>Why is n²/2 not the cost of n merges by the doubling-piece technique?</li>
+      <li><span class="qid">42k4.1</span><span class="ph understand">understand</span>Which move above takes the wrong root, and why does it fail at 0?</li>
     </ol>
   </section>
 </section>
@@ -167,57 +116,25 @@ T + e - f \text{ is in one piece with } n - 1 \text{ links: a spanning tree} @@ 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42k.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{lengths: } AB = 4,\ AC = 1,\ CB = 2,\ BD = 5,\ CD = 8,\ DE = 3,\ CE = 10"></span></span>Run the nearest first from A, writing the tentative distances at each move. <br>Build a cheapest spanning tree greedily on the same links, as costs. Are the shortest-path links from A a cheapest tree here? Must they be?</div>
-  <div class="chq"><span class="chid">42k.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{all costs different}"></span></span>Prove that when all link costs are different, the cheapest spanning tree is unique. <br>With all costs equal, how many cheapest spanning trees has K₄?</div>
-  <div class="chq"><span class="chid">42k.6.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{grow one tree from } r"></span></span>Reroute the greedy tree: start from one dot, and at each move take the cheapest link from the tree to a dot outside it. Prove by the cheapest-across technique that this also gives a cheapest tree. <br>How is it like the nearest first, and where does it differ?</div>
-  <div class="chq"><span class="chid">42k.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">22·logi: the nearest-stop technique and its floor</span></span>22·logi found that taking the nearest stop next can be far from the best tour, and bounded every tour from below. A cheapest spanning tree is at most a best tour, since a tour less one link is a spanning path. <br>Walk round a cheapest spanning tree, along each link twice, and skip dots already seen. When lengths obey the triangle inequality, how long is that tour, at worst, compared with the best?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">42k.5.1</span><span class="tagq">do</span>List the five trees with three forks, or the five bracketings of four factors.</div>
+  <div class="chq"><span class="chid">42k.5.2</span><span class="tagq">make</span>Make up a building rule and write the equation for its storing function.</div>
+  <div class="chq"><span class="chid">42k.5.3</span><span class="tagq">converse</span>Equal storing functions give equal counts. Decide whether equal counts give equal storing functions.</div>
+  <div class="chq"><span class="chid">42k.5.4</span><span class="tagq">edge</span>Let n = 0. Say what C₀ and p(0) count.</div>
+  <div class="chq"><span class="chid">42k.5.5</span><span class="tagq">open</span>Say how to match each splitting into odd parts with one into different parts.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r42j.html">← 42j · disorder is impossible</a><a href="r42l.html">42l · counting up to turning →</a></nav>
 
-<nav class="nextrung"><a href="r42j.html">← 42j · disorder is impossible</a><a href="r42l.html">42l · best from best pieces →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>Walking out in layers is breadth-first search. The nearest first is Dijkstra's algorithm (1956, published 1959). The greedy tree is Kruskal's algorithm (1956), and the tree grown from one dot (42k.6.3) is Prim's algorithm (1957, found first by Vojtěch Jarník in 1930). The cheapest-across technique is the cut property. The doubling-piece technique is the union-by-size bound for disjoint sets, and charging is amortized analysis. The tour of 42k.6.4 is the tree-doubling 2-approximation for the metric travelling salesman problem.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="6282f8">Cₙ are the <b>Catalan numbers</b>; storing functions are <b>generating functions</b>; p(n) is the <b>partition function</b>; odd parts equal to distinct parts is <b>Euler’s partition theorem</b>. The paths are <b>Dyck paths</b>.</p>
   <h3>Who said it first</h3>
-  <p>Otakar Borůvka found a greedy cheapest tree in 1926, for the electrical network of Moravia. Edsger Dijkstra found the nearest first in 1956, he said in about twenty minutes, sitting at a café in Amsterdam, and published it in 1959. Joseph Kruskal published his recipe in 1956 and Robert Prim his in 1957. Robert Tarjan set out amortized analysis as a method in 1985.</p>
-  <h3>A proof that is not allowed</h3>
-  <p>“The nearest first settles the closest dot each time, so it settles the dots in order of distance, so every settled distance is right.” Not allowed: settling in order of tentative distance is what the recipe does; that the tentative distance is the true one is what must be proved. The exchange step, that a shorter path would leave the settled set at a dot with smaller tentative distance, is the proof, and it needs lengths at least 0.</p>
+  <p data-pid="a22c75">Leonhard Euler found the partition product and the odd-distinct theorem in 1748; Eugène Catalan studied bracketings in 1838, after Euler and Segner had counted cuttings of polygons into triangles.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'queue',t:R`k,\ \dots,\ k,\ k+1,\ \dots`,n:`Two layers at most.`},
-  {k:'ember',kl:'charge',t:R`\textstyle\sum_u d(u) = 2|E|`,n:`Each link twice.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{|V| + 2|E|}`,n:`Every distance.`}
-],{title:'The slides · layers · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'settle',t:R`\min t(w)`,n:`Among the unsettled.`},
-  {k:'ember',kl:'exchange',t:R`\text{a shorter path leaves at } x`,n:`And t(x) ≥ t(w).`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{t(w) = \mathrm{dist}(w)}`,n:`Final when settled.`}
-],{title:'The slides · nearest first · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'across',t:R`e = \text{cheapest crossing}`,n:`Any split.`},
-  {k:'ember',kl:'swap',t:R`T + e - f`,n:`No dearer.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{greed builds a cheapest tree}}`,n:`An exchange.`}
-],{title:'The slides · greedy tree · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'names',t:R`\text{same name} \iff \text{same piece}`,n:`A check is one look.`},
-  {k:'ember',kl:'merge',t:R`\text{relabel the smaller}`,n:`At least doubles.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\le n \log_2 n}`,n:`All merges together.`}
-],{title:'The slides · pieces · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

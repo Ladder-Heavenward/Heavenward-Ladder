@@ -48,7 +48,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42eng.html">← 42·eng what holds cloth and rope together?</a><a href="r42econ.html">next: 42·econ can everyone be paired so no two would rather swap? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42eng.html">← 42·eng what holds cloth and rope together?</a><a href="r42logi2.html">next: 42·logi2 which truck should visit which stop? →</a></p>
   <div class="tags"><span class="tag logi">42·logi · logistics</span></div>
   <h1>What Is the Cheapest Way to Ship?</h1>
   <p data-pid="aadf55">What is the cheapest way to ship? A freight company has two ports, three cities that want containers, a map of roads, two bridges over a river and a warehouse to build by a deadline. Each of these is a question about a network, and this rung has already answered each one in the abstract. This page puts numbers on them. It finds the shortest road from Seattle to Bend, and the nearest warehouse to every town in one run. It finds the most traffic that can cross the Columbia River north out of Portland, and why widening the wrong road adds nothing. It finds the cheapest plan for moving 700 containers from Seattle and Oakland to three cities, proves that no plan is cheaper, and reads off what a container is worth at each port. And it finds the chain of tasks that sets how long a project must take, and how long every other task may slip.</p>
@@ -57,14 +57,14 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 
 <section class="class step" data-step="42·logi.1">
   <h2 class="sthead"><span class="stno">42·logi.1</span>The Shortest Road, and the Nearest Warehouse</h2>
-  <p data-pid="3b0b96">Roads between six towns, in rounded road km: Seattle to Ellensburg 175, Ellensburg to Yakima 55, Yakima to The Dalles 160, Seattle to Portland 280, Portland to The Dalles 135, The Dalles to Bend 210, and Portland to Bend 260 over Mount Hood. Every length is at least 0, so the nearest-first technique of 42k applies: settle the nearest unsettled town, then lower the tentative distances of its neighbours.</p>
+  <p data-pid="3b0b96">Roads between six towns, in rounded road km: Seattle to Ellensburg 175, Ellensburg to Yakima 55, Yakima to The Dalles 160, Seattle to Portland 280, Portland to The Dalles 135, The Dalles to Bend 210, and Portland to Bend 260 over Mount Hood. Every length is at least 0, so the nearest-first technique of 42m applies: settle the nearest unsettled town, then lower the tentative distances of its neighbours.</p>
   <pre class="lines" data-k="ember" data-label="this step: Seattle to Bend, nearest first">
 \text{settle Seattle } 0;\ \ \text{Ellensburg } 175,\ \text{Portland } 280 @@ tentative
 \text{settle Ellensburg } 175;\ \ \text{Yakima } 175 + 55 = 230 @@ 
 \text{settle Yakima } 230;\ \ \text{The Dalles } 230 + 160 = 390 @@ 
 \text{settle Portland } 280;\ \ \text{The Dalles stays } 390 < 280 + 135,\ \text{Bend } 280 + 260 = 540 @@ 415 is longer
 \text{settle The Dalles } 390;\ \ \text{Bend stays } 540 < 390 + 210 @@ 600 is longer
-\htmlClass{new}{\text{Seattle to Bend: } 540 \text{ km, by Portland and Mount Hood}} \quad \blacksquare @@ the nearest-first technique (42k)
+\htmlClass{new}{\text{Seattle to Bend: } 540 \text{ km, by Portland and Mount Hood}} \quad \blacksquare @@ the nearest-first technique (42m)
   </pre>
   <p data-pid="2094f1">When snow shuts the pass over Mount Hood, the link from Portland to Bend goes and the run gives 175 + 55 + 160 + 210 = 600 km by Yakima and The Dalles. A freight planner keeps the same map and changes the lengths: km for fuel, hours for drivers, dollars for tolls. The technique does not care which, so long as no length is below 0.</p>
   <p data-pid="fe02de">Shared-start technique: <b>add one new dot with a link of length 0 to every warehouse; one nearest-first run from it gives every town its distance to the nearest warehouse.</b></p>
@@ -168,7 +168,7 @@ q_{\text{Sea}} = 760 - 540 = 220,\ \ p_{\text{Por}} = 220 + 280 = 500 @@ equal o
 
 <section class="class step" data-step="42·logi.5">
   <h2 class="sthead"><span class="stno">42·logi.5</span>The Longest Chain of Tasks</h2>
-  <p data-pid="818239">A warehouse is built in seven tasks, in days: survey S 2; dig B 3, after S; order the frame C 4; raise the frame D 5, after B and C; roof E 2, after D; wire F 3, after D; finish G 2, after E and F. Make each task a dot with a link to each task that must wait for it. The graph is one-way with no cycle, so by the forward-order technique of 42l it has a forward order, and the earliest start of each task is the latest finish of the tasks before it.</p>
+  <p data-pid="818239">A warehouse is built in seven tasks, in days: survey S 2; dig B 3, after S; order the frame C 4; raise the frame D 5, after B and C; roof E 2, after D; wire F 3, after D; finish G 2, after E and F. Make each task a dot with a link to each task that must wait for it. The graph is one-way with no cycle, so by the forward-order technique of 42n it has a forward order, and the earliest start of each task is the latest finish of the tasks before it.</p>
   <pre class="lines" data-k="ember" data-label="this step: earliest starts, in forward order">
 S: 0,\ \ B: 2,\ \ C: 0 @@ S and C wait for nothing
 D: \max(2 + 3,\ 0 + 4) = 5 @@ B finishes at 5, C at 4
@@ -216,13 +216,13 @@ G: \max(10 + 2,\ 10 + 3) = 13 @@ F finishes later
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
   <div class="chq"><span class="chid">42·logi.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{supply Seattle } 300,\ \text{Oakland } 400;\ \text{wants } 200, 300, 150"></span></span>Portland now wants only 200. Add a city of leftovers with cost 0 from each port, so that supply meets want. Find the cheapest plan with the same route costs, and prices that prove it. <br>Which port keeps the 50 spare containers, and why does its price say so?</div>
-  <div class="chq"><span class="chid">42·logi.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a link of length } -50"></span></span>A toll road pays drivers 50 km worth to use it, so a link has length −50. Show by a small map that nearest-first can settle a town too early. <br>Which technique of 42l handles it, and what must never be on the map?</div>
+  <div class="chq"><span class="chid">42·logi.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a link of length } -50"></span></span>A toll road pays drivers 50 km worth to use it, so a link has length −50. Show by a small map that nearest-first can settle a town too early. <br>Which technique of 42n handles it, and what must never be on the map?</div>
   <div class="chq"><span class="chid">42·logi.7.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\text{the river: smallest cut } 14\,000"></span></span>Prove that 14 000 vehicles an hour can cross by writing down a flow of that size, with numbers on each road, so that the bottleneck technique is not needed. <br>Then reroute: prove the smallest cut is on the river by finding the dots reachable from s when the flow is full.</div>
   <div class="chq"><span class="chid">42·logi.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">22·logi: tours of n stops</span></span>22·logi counted the tours of n stops and found the nearest-stop technique can be far off. Shortest routes, flows and shipping plans all have fast methods. <br>What does a tour ask that a shortest route does not? Which question of 41h is the tour, and why does the tree-corner technique give no help with it?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r42eng.html">← 42·eng · what holds cloth and rope together?</a><a href="r42econ.html">42·econ · can everyone be paired so no two would rather swap? →</a></nav>
+<nav class="nextrung"><a href="r42eng.html">← 42·eng · what holds cloth and rope together?</a><a href="r42logi2.html">42·logi2 · which truck should visit which stop? →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>

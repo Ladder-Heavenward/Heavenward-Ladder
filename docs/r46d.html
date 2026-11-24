@@ -1,26 +1,10 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Subgroups and Middle Fields</title>
+<title>Handshakes</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
-<style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
-table.tt td.l{text-align:left}
-
-</style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
    then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
@@ -48,102 +32,58 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r46c.html">← 46c the symmetries of the roots</a><a href="r46e.html">next: 46e groups taken apart →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r46c.html">← 46c the two generals</a><a href="r46e.html">next: 46e order without a clock →</a></p>
   <div class="tags"><span class="tag proof">46d · proof</span></div>
-  <h1>Subgroups and Middle Fields</h1>
-  <p data-pid="96f94c">Between the rationals and the field the roots make there are fields in the middle, and inside the group of the equation there are smaller groups. This step matches them exactly. Each smaller group leaves some members of the field alone, and those members make a middle field. Each middle field is left alone by some of the symmetries, and those make a smaller group. The two ways round undo each other, the bigger group goes with the smaller field, and the sizes match: how many symmetries a part-group has is how far the field climbs above its middle field. So a question about fields, which may be endless sets, becomes a question about a finite group, which can be listed. One more thing comes out. Some middle fields are themselves the fields of roots of an equation, and they are exactly the ones whose groups are normal, the kind of part-group rung 43 cut along.</p>
-  <p class="gesture" data-pid="3b8f86">A part-group H gives the field of what H leaves alone; a middle field E gives the group of symmetries that leave E alone. These undo each other, reverse containment, and the field climbs above its middle field by exactly as many steps as the part-group has members. A middle field is a splitting field exactly when its group is normal, and then its own group is the quotient.</p>
+  <h1>Handshakes</h1>
+  <p data-pid="27a83a">46c showed that a lossy link gives no certainty. This step builds what it does give: every message delivered, in order, once, with a chance as near 1 as you please. It is how the internet’s connections work.</p>
+  <p class="gesture" data-pid="dc0d7f">Number every message, resend until it is acknowledged, and throw away repeats. Open with three messages, and read the numbers on a clock.</p>
 </header>
 
 <section class="class step" data-step="46d1">
-  <h2 class="sthead"><span class="stno">46d1</span>Fixed Fields and Fixing Groups</h2>
-  <p data-pid="f99b85">Let K be the splitting field of a polynomial over F inside ℂ, and G = Aut(K/F). For a part-group H of G, the <i>fixed field</i> K^H is the set of a in K with σ(a) = a for every σ in H. It is a field between F and K: if σ fixes a and b, it fixes a + b, ab, −a and 1/a. For a field E with F ⊆ E ⊆ K, a <i>middle field</i>, Aut(K/E) is the part-group of G that fixes every member of E.</p>
-  <pre class="lines" data-k="ember" data-label="this step: two of each, for x³ − 2">
-\tau = \text{the flip of } \mathbb C \text{ on } K:\ \ \sqrt[3]2 \mapsto \sqrt[3]2,\ \ \omega \mapsto \omega^2 @@ 25a’s flip keeps sums and products, and K is closed under it
-K^{\{e, \tau\}} \supseteq \mathbb Q(\sqrt[3]2) @@ τ fixes ∛2
-\sigma:\ \sqrt[3]2 \mapsto \omega\sqrt[3]2,\ \ \omega \mapsto \omega,\ \ \text{the loop } (1\ 2\ 3) @@ a symmetry, by the count of 46c3
-\htmlClass{new}{K^{\{e, \sigma, \sigma^2\}} \supseteq \mathbb Q(\omega),\ \ \mathrm{Aut}(K/\mathbb Q(\omega)) \supseteq \{e, \sigma, \sigma^2\}} \quad \blacksquare @@ σ fixes ω
-  </pre>
-  <p data-pid="58f2c0">The containments go both ways round: a bigger part-group fixes fewer members, and a bigger middle field is fixed by fewer symmetries. The next two footings turn the ⊇ above into =.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · fixing · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">46d1</span>Resend Until Acknowledged</h2>
+  <p data-pid="085e1b">The sender numbers each message. The receiver acknowledges each number it gets, keeps them in order, and drops any number it already has. The sender resends a message until its acknowledgment comes back.</p>
+  <p data-pid="88d93a">Resend technique: <b>if each try gets through and is acknowledged with chance at least p > 0, independently, then every message is acknowledged with chance 1.</b></p>
+<div class="eqline c6 lsyn" data-was="df168f" data-tex="\begin{aligned}&amp;P(k \text{ tries all fail}) \le (1 - p)^k\\ &amp;\qquad \to 0 \quad\text{(41i)}\\ &amp;P(\text{never succeeding}) = 0\end{aligned}"></div>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">46d1.1</span><span class="ph understand">understand</span>What is the fixed field of a part-group H, and why is it a field? <br>Why does a bigger part-group have a smaller fixed field?</li>
+      <li><span class="qid">46d1.1</span><span class="ph understand">understand</span>What does the resend technique say? <br>Why do repeats do no harm?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="46d2">
-  <h2 class="sthead"><span class="stno">46d2</span>A Part-Group Fixes a Field of Its Own Size</h2>
-  <p data-pid="752b41">Fixed-size technique: <b>for every part-group H of G, [K : K^H] = |H|.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the fixed-size technique">
-H = \{h_1, \ldots, h_m\},\ \ h_1 = e;\ \ x_1, \ldots, x_{m+1} \in K @@ to show: any m + 1 members of K are tied over K^H, so [K : K^H] ≤ m
-\textstyle\sum_j h_i(x_j)\,y_j = 0,\ \ i = 1, \ldots, m @@ m conditions on m + 1 unknowns in K
-\text{some answer } y \ne 0;\ \text{take one with fewest } y_j \ne 0, \text{ and } y_1 = 1 @@ lost plus reached (27c): the map from K^(m+1) to K^m loses more than 0; renumber and scale
-\textstyle\sum_j h_i(x_j)\,h(y_j) = 0 \text{ for } h \in H @@ apply h to the i-th condition: h hᵢ runs over H as hᵢ does (19b’s one-answer technique)
-y - h(y) \text{ is an answer with } y_1 - h(y_1) = 0 @@ subtract; it has fewer entries that are not 0, so it is 0
-h(y_j) = y_j \text{ for every } h, \text{ so every } y_j \in K^H @@ fewest
-\textstyle\sum_j x_j y_j = 0 \text{ with } y_j \in K^H \text{ not all } 0 @@ the condition for h₁ = e
-[K : K^H] \le m \le |\mathrm{Aut}(K/K^H)| = [K : K^H] @@ H ⊆ Aut(K/K^H), and K is the splitting field over K^H too, so 46c3 counts it
-\htmlClass{new}{[K : K^H] = |H|,\ \ \mathrm{Aut}(K/K^H) = H} \quad \blacksquare @@ the sizes force equality
-  </pre>
-<div class="eqline c6 lsyn" data-was="531b6f" data-tex="\begin{aligned}&amp;H = G:\ \ K^G = E,\ \ F \subseteq E\\ &amp;[K : E] = |G| = [K : F]\\ &amp;F \subseteq E \subseteq K:\ \ [E : F] = 1,\ \ E = F\\ &amp;\text{what every symmetry leaves alone}:\\ &amp;\qquad\text{exactly } F\end{aligned}"></div>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · fixed size · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">46d2</span>Three Messages to Open</h2>
+  <p data-pid="7ec76b">To open a connection, each side picks a starting number. A sends its number a. B answers with its own number b and acknowledges a + 1. A acknowledges b + 1. After three messages, each side has the other’s starting number, and each knows the other has its own.</p>
+  <p data-pid="4bcac4">The starting numbers are picked fresh, not from 0, so that a stray message from an old connection is not taken for a new one.</p>
+  <!--gfig 46d2--><div class="gfigs" data-gfig="46d2" data-story="[[&quot;Time runs down the lines of A and B.&quot;, [&quot;#0-9&quot;]], [&quot;A sends its starting number, a.&quot;, [&quot;#10-12&quot;]], [&quot;B answers with its own number b, and acknowledges a + 1.&quot;, [&quot;#13-15&quot;]], [&quot;A acknowledges b + 1. After three messages each side has both numbers, and knows the other has them.&quot;, [&quot;#16-19&quot;]]]"><svg class="gfig" viewBox="0 0 400 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="the three-message open between A and B"><text x="110" y="22" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A</text><line x1="110" y1="30" x2="110" y2="210" style="stroke:var(--grid);stroke-width:1.6"/><text x="290" y="22" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">B</text><line x1="290" y1="30" x2="290" y2="210" style="stroke:var(--grid);stroke-width:1.6"/><circle cx="110" cy="50" r="3" style="fill:var(--ink)"/><circle cx="290" cy="90" r="3" style="fill:var(--ink)"/><circle cx="290" cy="105" r="3" style="fill:var(--ink)"/><circle cx="110" cy="145" r="3" style="fill:var(--ink)"/><circle cx="110" cy="160" r="3" style="fill:var(--ink)"/><circle cx="290" cy="200" r="3" style="fill:var(--ink)"/><path d="M113.1,50.7 Q200.0,70.0 286.9,89.3" style="fill:none;stroke:var(--teal);stroke-width:1.4"/><polygon points="286.9,89.3 279.9,83.7 278.2,91.5" style="fill:var(--teal)"/><text x="202.2" y="64.2" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">a</text><path d="M286.9,105.7 Q200.0,125.0 113.1,144.3" style="fill:none;stroke:var(--plum);stroke-width:1.4"/><polygon points="113.1,144.3 121.8,146.5 120.1,138.7" style="fill:var(--plum)"/><text x="202.6" y="140.7" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">b, ack a + 1</text><path d="M113.1,160.7 Q200.0,180.0 286.9,199.3" style="fill:none;stroke:var(--teal);stroke-width:1.4"/><polygon points="286.9,199.3 279.9,193.7 278.2,201.5" style="fill:var(--teal)"/><text x="202.2" y="174.2" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">ack b + 1</text><text x="200" y="224" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">three messages: each side has both numbers</text></svg></div><!--/gfig 46d2-->
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">46d2.1</span><span class="ph understand">understand</span>What does the fixed-size technique say? <br>Why is what every symmetry of K over F leaves alone exactly F?</li>
+      <li><span class="qid">46d2.1</span><span class="ph understand">understand</span>What does each of the three messages carry? <br>Why are starting numbers not 0?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="46d3">
-  <h2 class="sthead"><span class="stno">46d3</span>The Two Ways Round Undo Each Other</h2>
-  <p data-pid="89aa3c">Middle-field technique: <b>H ↦ K^H and E ↦ Aut(K/E) are matchings between the part-groups of G and the middle fields, each undoing the other, with bigger part-groups going to smaller fields, and [E : F] = |G|/|Aut(K/E)|.</b> In 20h2’s words, more moves keep fewer facts: the matching turns the order of part-groups about.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the middle-field technique">
-\mathrm{Aut}(K/K^H) = H @@ the fixed-size technique
-K \text{ is the splitting field of the same polynomial over } E @@ its coefficients are in F ⊆ E
-K^{\mathrm{Aut}(K/E)} = E @@ the fixed-size technique with E in place of F: what every symmetry over E leaves alone is E
-[E : F] = [K : F]/[K : E] = |G|/|\mathrm{Aut}(K/E)| @@ degrees up the tower, and 46c3 twice
-\htmlClass{new}{\text{each way round undoes the other}} \quad \blacksquare @@ the first and third lines
-  </pre>
-  <pre class="lines" data-k="ember" data-label="this step: x³ − 2, every middle field">
-\text{part-groups of } S_3:\ \{e\},\ \{e, (2\ 3)\},\ \{e, (1\ 3)\},\ \{e, (1\ 2)\},\ \{e, \sigma, \sigma^2\},\ S_3 @@ sizes dividing 6 (19d), listed
-\{e, (2\ 3)\} = \{e, \tau\} \leftrightarrow \mathbb Q(\sqrt[3]2) @@ τ fixes root 1; [ℚ(∛2) : ℚ] = 3 = 6/2
-\{e, (1\ 3)\} \leftrightarrow \mathbb Q(\omega\sqrt[3]2),\ \ \{e, (1\ 2)\} \leftrightarrow \mathbb Q(\omega^2\sqrt[3]2) @@ each swap fixes one root, and that root makes a field of degree 3
-\{e, \sigma, \sigma^2\} \leftrightarrow \mathbb Q(\omega) @@ degree 2 = 6/3
-\htmlClass{new}{\text{six part-groups, six middle fields, and no others}} \quad \blacksquare @@ {e} ↔ K, S₃ ↔ ℚ
-  </pre>
-  <!--gfig 46d3--><div class="gfigs" data-gfig="46d3" data-story="[[&quot;Left: the part-groups of S₃. The whole group on top, {e} at the bottom, and between them A₃ and the three swaps, each with e.&quot;, [&quot;#0-19&quot;, &quot;#40&quot;]], [&quot;Right: the fields between ℚ and ℚ(∛2, ω). The small one, ℚ, is at the top.&quot;, [&quot;#20-39&quot;, &quot;#41&quot;]], [&quot;The two pictures match, place for place. A₃ goes to ℚ(ω), and each swap to one of the three fields with a cube root of 2.&quot;, [&quot;#2-9&quot;, &quot;#22-29&quot;]], [&quot;The order is turned about: the bigger the part-group, the smaller the field it keeps fixed. S₃ keeps only ℚ, and {e} keeps everything.&quot;, [&quot;#0&quot;, &quot;#1&quot;, &quot;#10&quot;, &quot;#11&quot;, &quot;#20&quot;, &quot;#21&quot;, &quot;#30&quot;, &quot;#31&quot;]]]"><svg class="gfig" viewBox="0 0 440 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="the part-groups of S3 and the middle fields of Q of cube root two and omega, matched with the order turned about"><rect x="104.4" y="19.0" width="21.2" height="22" rx="5" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="115" y="34" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">S₃</text><rect x="29.4" y="99.0" width="21.2" height="22" rx="5" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="40" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A₃</text><rect x="71.0" y="99.0" width="38.0" height="22" rx="5" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="90" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">(2 3)</text><rect x="121.0" y="99.0" width="38.0" height="22" rx="5" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="140" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">(1 3)</text><rect x="171.0" y="99.0" width="38.0" height="22" rx="5" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="190" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">(1 2)</text><rect x="101.6" y="179.0" width="26.799999999999997" height="22" rx="5" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="115" y="194" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">{e}</text><path d="M104.3,178.6 Q77.5,150.0 50.7,121.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M111.4,178.6 Q102.5,150.0 93.6,121.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M118.6,178.6 Q127.5,150.0 136.4,121.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M125.7,178.6 Q152.5,150.0 179.3,121.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M50.7,98.6 Q77.5,70.0 104.3,41.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M93.6,98.6 Q102.5,70.0 111.4,41.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M136.4,98.6 Q127.5,70.0 118.6,41.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M179.3,98.6 Q152.5,70.0 125.7,41.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><rect x="316.2" y="19.0" width="15.6" height="22" rx="5" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="324" y="34" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">ℚ</text><rect x="231.8" y="99.0" width="32.4" height="22" rx="5" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="248" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">ℚ(ω)</text><rect x="273.0" y="99.0" width="38.0" height="22" rx="5" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="292" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">ℚ(∛2)</text><rect x="320.2" y="99.0" width="43.599999999999994" height="22" rx="5" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="342" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">ℚ(ω∛2)</text><rect x="375.4" y="99.0" width="49.199999999999996" height="22" rx="5" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="400" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">ℚ(ω²∛2)</text><rect x="296.6" y="179.0" width="54.8" height="22" rx="5" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="324" y="194" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">ℚ(∛2, ω)</text><path d="M313.1,178.6 Q286.0,150.0 258.9,121.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M319.4,178.6 Q308.0,150.0 296.6,121.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M326.6,178.6 Q333.0,150.0 339.4,121.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M334.9,178.6 Q362.0,150.0 389.1,121.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M258.9,98.6 Q286.0,70.0 315.9,38.5" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M296.6,98.6 Q308.0,70.0 319.4,41.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M339.4,98.6 Q333.0,70.0 326.6,41.4" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><path d="M389.1,98.6 Q362.0,70.0 332.1,38.5" style="fill:none;stroke:var(--grid);stroke-width:1.4"/><text x="115" y="222" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">part-groups of S₃ (each swap with e)</text><text x="324" y="222" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">middle fields, small at the top</text></svg></div><!--/gfig 46d3-->
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · correspondence · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">46d3</span>Numbers on a Clock</h2>
+  <p data-pid="b3c027">Sequence numbers have a fixed number of bits, 32 on the internet, so they count on a clock of 2³² hours (<a href="r43a.html">43a</a>). After 2³² − 1 comes 0. To say which of two numbers is newer, the clock reads a as newer than b when the remainder of a − b by 2³² is less than 2³¹.</p>
+  <p data-pid="82b82c">That reading is right only while fewer than half the clock’s numbers are in flight at once. So a fast link must not have more than 2³¹ unacknowledged numbers out.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">46d3.1</span><span class="ph understand">understand</span>What does the middle-field technique say? <br>Why is there no middle field of degree 4 over ℚ inside the splitting field of x³ − 2?</li>
+      <li><span class="qid">46d3.1</span><span class="ph understand">understand</span>Why do sequence numbers wrap? <br>When is a newer than b on the clock?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="46d4">
-  <h2 class="sthead"><span class="stno">46d4</span>Normal Middles</h2>
-  <p data-pid="ad7287">A middle field E is <i>closed</i> when every σ in G sends E onto E. Then each σ, cut down to E, is a symmetry of E over F.</p>
-  <p data-pid="d1a35c">Normal-middle technique: <b>E = K^H is closed exactly when H is normal in G; then E is the splitting field of a polynomial over F, and Aut(E/F) matches the quotient G/H.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the normal-middle technique">
-\sigma(K^H) = K^{\sigma H \sigma^{-1}} @@ a is fixed by H exactly when σ(a) is fixed by σHσ⁻¹
-E \text{ closed} \iff \sigma H \sigma^{-1} = H \text{ for every } \sigma \iff H \text{ normal} @@ the middle-field technique: different part-groups, different fields
-a \in E \text{ closed}:\ \ g_a(x) = \textstyle\prod (x - b) \text{ over the different } \sigma(a) @@ its roots are in E, and G shuffles them
-g_a \text{ has coefficients in } K^G = F @@ symmetric in the σ(a), so fixed by every σ (46b), and 46d2
-E \text{ is the splitting field of the product of } g_a \text{ over finitely many } a \text{ that build it} @@ [E : F] is finite
-G \to \mathrm{Aut}(E/F),\ \ \sigma \mapsto \sigma \text{ on } E: \text{ keeps composing, loses exactly } H @@ σ fixes E exactly when σ is in Aut(K/E) = H
-\htmlClass{new}{\mathrm{Aut}(E/F) \text{ matches } G/H} \quad \blacksquare @@ onto, since both have |G|/|H| members (46c3); the first isomorphism technique (43·cb19)
-  </pre>
-  <p data-pid="08b11e">For x³ − 2: {e, σ, σ²} is normal in S₃, and ℚ(ω) is the splitting field of x² + x + 1, with group S₃/{e, σ, σ²} of size 2. {e, τ} is not normal, since σ τ σ⁻¹ = (1 3); and ℚ(∛2) is not closed, since σ sends ∛2 to ω∛2, outside it. Here τ (little tau) is a swap of two roots, and e is the shuffle that moves nothing, not 17e's number e.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · normal · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">46d4</span>Closing, and the Generals Again</h2>
+  <p data-pid="963776">To close, each side says it is done and the other acknowledges. The last acknowledgment can be lost, as 46c promised. So the side that sent it waits a while before forgetting the connection, to answer a resent goodbye. Time and chance stand in for the certainty 46c ruled out.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">46d4.1</span><span class="ph understand">understand</span>When is a middle field closed? <br>What does the normal-middle technique say, and why is ℚ(∛2) not closed?</li>
+      <li><span class="qid">46d4.1</span><span class="ph understand">understand</span>Why does the closing side wait before forgetting? <br>How does this meet 46c?</li>
     </ol>
   </section>
 </section>
@@ -151,15 +91,13 @@ G \to \mathrm{Aut}(E/F),\ \ \sigma \mapsto \sigma \text{ on } E: \text{ keeps co
 <section class="class step" data-step="46d5">
   <h2 class="sthead"><span class="stno">46d5</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{a bigger part-group has a bigger fixed field}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the other way: more symmetries leave fewer members alone; G fixes only F
-[\mathbb Q(\sqrt[3]2) : \mathbb Q] = |\{e, \tau\}| = 2\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the degree of the fixed field over F is the index |G|/|H| = 3; |H| = 2 is the climb from it to K
-\mathbb Q(\sqrt[3]2) \text{ has a symmetry group of size 3 over } \mathbb Q\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it is not closed; its only symmetry over ℚ is the identity (46c5), and the quotient needs H normal
-\text{every field between } \mathbb Q \text{ and } \mathbb C \text{ appears in the matching}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only the middle fields of one splitting field K, between F and K
-  </pre>
+\text{after the handshake both are certain}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; each knows what it has received; 46c still holds for the last message
+5 \text{ is older than } 2^{32} - 3\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; on the clock 5 is newer: the count wrapped
+</pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">46d5.1</span><span class="ph understand">understand</span>Why is the degree of ℚ(∛2) over ℚ not the size of the part-group that fixes it? <br>Why does ℚ(∛2) not have a symmetry group S₃/{e, τ}?</li>
+      <li><span class="qid">46d5.1</span><span class="ph understand">understand</span>Why is neither side certain after the handshake? <br>Why is 5 newer than 2³² − 3?</li>
     </ol>
   </section>
 </section>
@@ -167,57 +105,20 @@ G \to \mathrm{Aut}(E/F),\ \ \sigma \mapsto \sigma \text{ on } E: \text{ keeps co
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">46d.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="K = \mathbb Q(\sqrt2, \sqrt3)"></span></span>Build the whole matching for the splitting field of x⁴ − 5x² + 6: every part-group of its group of 4, and the middle field each one fixes. <br>Which middle fields are closed, and why must all of them be here?</div>
-  <div class="chq"><span class="chid">46d.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="H = \{e\},\ \ H = G"></span></span>At the two ends of the matching, H = {e} and H = G. Which fields do they fix, and which lines of the fixed-size technique’s proof become empty or trivial? <br>Does the proof need H to be a part-group, or would any set of symmetries do?</div>
-  <div class="chq"><span class="chid">46d.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="E \text{ closed} \Rightarrow H \text{ normal}"></span></span>The normal-middle technique runs both ways. Prove directly, without the matching, that if E is the splitting field of some polynomial over F, then every σ in G sends E onto E. <br>Which technique of 46c does it use?</div>
-  <div class="chq"><span class="chid">46d.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\mathbb Q(\omega\sqrt[3]2)"></span></span>Reroute the line that ℚ(ω∛2) is fixed by {e, (1 3)}: find the symmetry that swaps roots 1 and 3 as a map of ∛2 and ω, and check by hand that it fixes ω∛2. <br>Is ℚ(ω∛2) the same field as ℚ(∛2)? How can two fields of degree 3 inside K differ?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
+  <div class="chq"><span class="chid">46d.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">a window</span></span>The sender may have w messages out unacknowledged. With a delay of t seconds each way, how many messages a second can it send? What limits w?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r46c.html">← 46c · the symmetries of the roots</a><a href="r46e.html">46e · groups taken apart →</a></nav>
+<nav class="nextrung"><a href="r46c.html">← 46c · the two generals</a><a href="r46e.html">46e · order without a clock →</a></nav>
+
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The middle-field technique is the fundamental theorem of Galois theory, and the matching is the Galois correspondence. The fixed-size technique is Artin’s theorem, and its proof is Artin’s lemma on the independence of the symmetries, in the form of a fewest-terms argument. A closed middle field is a normal extension of F. The middle fields are intermediate fields.</p>
-  <h3>Who said it first</h3>
-  <p>Évariste Galois described, in his memoir of 1831, how adjoining a root of an auxiliary equation shrinks the group of an equation, and when the smaller group is what he called a proper decomposition, the normal case. The matching of part-groups with middle fields, stated as an exact correspondence, comes from Richard Dedekind and Heinrich Weber in the 1890s. Emil Artin gave the proof by linear algebra used here, in lectures at Notre Dame in 1938, printed in 1942.</p>
-  <h3>A proof that is not allowed</h3>
-  <p>“The middle fields of x³ − 2 are ℚ(∛2), ℚ(ω) and nothing else, since ∛2 and ω make K.” Not allowed: a middle field is any field between, and ℚ(ω∛2) and ℚ(ω²∛2) are two more, each of degree 3. Listing the generators misses them; listing the part-groups does not.</p>
+  <p>This is TCP, the transmission control protocol. The opening is the three-way handshake, with SYN and ACK messages. Messages allowed out at once make the sliding window, and the closing side’s wait is TIME-WAIT.</p>
 </section>
 
 </div>
-<script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'group to field',t:R`H \mapsto K^H`,n:`What H leaves alone.`},
-  {k:'ember',kl:'field to group',t:R`E \mapsto \mathrm{Aut}(K/E)`,n:`What leaves E alone.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{H_1 \subseteq H_2 \Rightarrow K^{H_1} \supseteq K^{H_2}}`,n:`They reverse.`}
-],{title:'The slides · fixing · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'tied',t:R`\textstyle\sum_j x_j y_j = 0,\ y_j \in K^H`,n:`m + 1 members.`},
-  {k:'ember',kl:'count',t:R`[K : K^H] \le |H| \le [K : K^H]`,n:`Both ways.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[K : K^H] = |H|}`,n:`And K^G = F.`}
-],{title:'The slides · fixed size · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'part-groups',t:R`\{e\} \subset \{e, \tau\} \subset S_3`,n:`Up the group.`},
-  {k:'ember',kl:'fields',t:R`K \supset \mathbb Q(\sqrt[3]2) \supset \mathbb Q`,n:`Down the fields.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[E : F] = |G|/|\mathrm{Aut}(K/E)|}`,n:`Sizes match.`}
-],{title:'The slides · correspondence · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'conjugate',t:R`\sigma(K^H) = K^{\sigma H\sigma^{-1}}`,n:`Fields move with groups.`},
-  {k:'ember',kl:'closed',t:R`\sigma H \sigma^{-1} = H`,n:`Normal.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\mathrm{Aut}(E/F) \cong G/H}`,n:`The quotient.`}
-],{title:'The slides · normal · ← → keys work'});
-})();
-</script>
+<script>/* 0.3.88 Phase I: new 46a, old r46c is now r46d; old ticks -> new ids */window.LADDER_MV2={f:"mv:I",m:{"q:46c1.1": "q:46d1.1", "q:46c2.1": "q:46d2.1", "q:46c3.1": "q:46d3.1", "q:46c4.1": "q:46d4.1", "q:46c5.1": "q:46d5.1", "c:46c.6.1": "c:46d.6.1"}};</script><script src="rung.js"></script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

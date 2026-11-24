@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4·bio · How Do Four Letters Spell Twenty Things?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r04econ.html">← 4·econ can a threat be empty?</a><a href="r04m.html">next: 4m processes without things →</a></p>
+  <div class="tags"><span class="tag bio">4·bio · biology</span></div>
+  <h1>How Do Four Letters Spell Twenty Things?</h1>
+  <p data-pid="501bfb">How do four letters spell twenty things? A cell keeps its instructions in a long string written with four letters, and builds its proteins from twenty kinds of small piece, the amino acids. Somewhere between the string and the protein, a short run of letters has to stand for one piece. This page counts the runs of each length, finds the shortest length that is enough, reads each run as a number written with four digits, and then looks at the table the cell actually uses: more runs than pieces, so most pieces have several spellings, and three runs that mean stop.</p>
+  <p class="gesture" data-pid="fb2819">Count the strings of length k over four letters by stages-multiply: 4 to the power k. Take the least k whose count reaches the number of things to name. Read a string as a numeral in base four, so each string has exactly one number. Then a table that gives every string a meaning is a function from the strings to the meanings; count each meaning’s strings, and the counts add to the whole.</p>
+</header>
+
+<section class="class step" data-step="4bio1">
+  <h2 class="sthead"><span class="stno">4bio1</span>Strings of Four Letters</h2>
+  <p data-pid="3f65b6">The cell copies the part of its DNA it needs into RNA, a string over four letters: A, C, G and U. Machines in the cell read the RNA three letters at a time, from a fixed starting place, and each run of three, called a <i>codon</i>, stands for one amino acid or for stop.</p>
+  <p data-pid="d98d6f">From here on, on this page, a <i>string of length k</i> is a function from the places {1, …, k} to the letters {A, C, G, U}, as in 4d: one letter at each place. How many strings of length 3 are there? Pick the letter at place 1, then at place 2, then at place 3. Each stage has 4 choices, whatever was picked before.</p>
+  <pre class="lines" data-k="ember" data-label="this page: counting the codons">
+\{1, 2, 3\} \to \{\text{A}, \text{C}, \text{G}, \text{U}\} @@ a codon is a function from 3 places to 4 letters
+4 \cdot 4 \cdot 4 @@ the stages-multiply technique (4k), one stage a place
+\htmlClass{new}{4^3 = 64} @@ the counted-functions technique (4k): m to the power n
+  </pre>
+  <p data-pid="09274c">The same count for every length: <b>there are 4 to the power k strings of length k over four letters.</b></p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{length } k\text{: } 4^k \text{ strings}\\ &amp;k = 1, 2, 3\text{: } 4,\ 16,\ 64\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·bio.1.1</span><span class="ph understand">understand</span>What is a codon, as a function, and which technique of 4k counts the codons?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4bio2">
+  <h2 class="sthead"><span class="stno">4bio2</span>Why Three Letters</h2>
+  <p data-pid="a9be69">There are 20 amino acids, and the cell also needs a way to say stop. That is 21 things to name, at the least. Runs of one letter give 4 names, and runs of two give 16. Neither is enough.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shortest length that is enough">
+\{k \in \mathbb{N} : 21 \le 4^k\} \text{ has the member } 3 @@ 21 ≤ 64
+\text{it is settled at each } k @@ the settled-order technique (4h)
+\text{so it has a least member} @@ the least-member technique (4h)
+4^0 = 1,\ 4^1 = 4,\ 4^2 = 16, \text{ each } < 21 @@ k = 0, 1, 2 are not in it
+\htmlClass{new}{3 \text{ is the least length that is enough}} @@ the least member
+  </pre>
+  <p data-pid="448efe">Length 3 is not just enough: it is far more than enough. 64 strings name 21 things, so most things get more than one string.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;16 &lt; 21 \le 64\\ &amp;\text{length } 2 \text{ too short, length } 3 \text{ enough}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·bio.2.1</span><span class="ph understand">understand</span>Why are runs of two letters too short, and which technique says there is a shortest length that is enough?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4bio3">
+  <h2 class="sthead"><span class="stno">4bio3</span>A Codon Is a Number in Base Four</h2>
+  <p data-pid="d6fcbc">Give the letters digits: A is 0, C is 1, G is 2, U is 3. Then a codon is a numeral with three digits in base four, and reads as a number the way 4i reads a tens numeral, with 4 in the place of ten.</p>
+  <pre class="lines" data-k="ember" data-label="this page: reading a codon">
+\text{GCU} \to 2,\ 1,\ 3 @@ the digits
+(2 \cdot 4 + 1) \cdot 4 + 3 @@ the reading technique (4i), base four: multiply by 4, add the digit
+\htmlClass{new}{39} @@ 36 + 3
+  </pre>
+  <p data-pid="a92590">Base-four technique: <b>each codon reads as exactly one number from 0 to 63, and each number from 0 to 63 is read from exactly one codon.</b> The first half is 4i’s reading. The second is 4i’s split-by-a-base and one-split, with 4 for 10: split the number by 4 three times, and the three remainders are the digits.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;abc \mapsto 16a + 4b + c\\ &amp;\text{AAA} \mapsto 0,\ \ \text{UUU} \mapsto 63\end{aligned}"></div>
+  <p data-pid="746198">So the codons are matched with the numbers below 64, which is one more way to count them.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·bio.3.1</span><span class="ph understand">understand</span>How does a codon read as a number, and why does each number below 64 come from only one codon?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4bio4">
+  <h2 class="sthead"><span class="stno">4bio4</span>The Table the Cell Uses</h2>
+  <p data-pid="51514e">The cell’s table gives every codon one meaning, so it is a function from the 64 codons to 21 meanings: twenty amino acids and stop. It is not a matching. Six codons mean leucine; one, AUG, means methionine and also marks where reading starts; three, UAA, UAG and UGA, mean stop.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>codons for each</th><th>meanings with that many</th><th>codons in all</th></tr>
+    <tr><th>6</th><td>leucine, serine, arginine</td><td>18</td></tr>
+    <tr><th>4</th><td>valine, proline, threonine, alanine, glycine</td><td>20</td></tr>
+    <tr><th>3</th><td>isoleucine; stop</td><td>6</td></tr>
+    <tr><th>2</th><td>nine amino acids</td><td>18</td></tr>
+    <tr><th>1</th><td>methionine, tryptophan</td><td>2</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: the counts add to the whole">
+18 + 20 + 6 + 18 + 2 @@ the codons sorted by meaning share nothing
+\htmlClass{new}{64} @@ the separate-piles technique (4k), pile by pile
+  </pre>
+  <p data-pid="d04440">Sorting the codons by meaning puts each codon in exactly one pile, so the piles must add to 64. A count that did not add up would show a mistake in the table. <b>The table uses every one of the 21 meanings, and gives most meanings more than one codon.</b></p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;64 \text{ codons} \to 21 \text{ meanings}\\ &amp;\text{many codons, one meaning}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·bio.4.1</span><span class="ph understand">understand</span>Why is the cell’s table a function but not a matching, and how do the piles check the table?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4bio5">
+  <h2 class="sthead"><span class="stno">4bio5</span>Reading From the Right Place</h2>
+  <p data-pid="ced3a4">The RNA has no gaps between codons. Where reading begins decides every codon after it. Starting one letter later reads a different run of codons, and two letters later, another. A fourth start, three letters later, reads the first again, less one codon.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three ways to read one string">
+\text{AUGGCUUAA} \to \text{AUG, GCU, UAA} @@ start at 1: methionine, alanine, stop
+\text{start at } 2 \to \text{UGG, CUU} @@ tryptophan, leucine
+\text{start at } 3 \to \text{GGC, UUA} @@ glycine, leucine
+\htmlClass{new}{\text{the start counts by its remainder on division by } 3} @@ division with remainder (4j)
+  </pre>
+  <p data-pid="415f76">Lose one letter from the middle of the string, and every codon after it is read from the wrong place. A change of one letter can change one amino acid. A lost letter changes all the rest.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{starts } 1, 4, 7, \ldots \text{ read alike}\\ &amp;\text{remainders } 0, 1, 2\text{: three readings}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·bio.5.1</span><span class="ph understand">understand</span>Why are there exactly three ways to read a string, and why does losing one letter do more harm than changing one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="4bio6">
+  <h2 class="sthead"><span class="stno">4bio6</span>Moves to Watch Out For</h2>
+  <p data-pid="249052">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+4 + 4 + 4 = 12 \text{ codons}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the places are stages, so the counts multiply: 4 · 4 · 4 (4bio1)
+20 \text{ amino acids, so } 4^2 = 16 \text{ is close enough}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; 16 strings cannot name 21 things (4bio2)
+\text{GCU} \mapsto 2 + 1 + 3 = 6\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; each place is worth 4 times the next: 2 · 16 + 1 · 4 + 3 (4bio3)
+\text{64 codons, so 64 amino acids}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the table sends 64 codons to 21 meanings, not one each (4bio4)
+\text{read from any letter you like}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the starting place decides every codon after it (4bio5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">4·bio.6.1</span><span class="ph understand">understand</span>Which move above adds the choices at the three places, and what should be done with them instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">4·bio.7.1</span><span class="tagq">do</span>Write UGA, CAU and GGG as numbers in base four, and write 50 and 17 back as codons.</div>
+  <div class="chq"><span class="chid">4·bio.7.2</span><span class="tagq">make</span>A made-up life uses only the letters A and U, and 9 amino acids with no stop. Find the shortest run of letters that is enough, and how many runs are spare.</div>
+  <div class="chq"><span class="chid">4·bio.7.3</span><span class="tagq">converse</span>Every number below 64 comes from exactly one codon. Decide whether every amino acid comes from at least one codon, using only the table on this page.</div>
+  <div class="chq"><span class="chid">4·bio.7.4</span><span class="tagq">edge</span>A string of 10 letters is read from place 1 in codons. Say how many whole codons are read and how many letters are left over, and do the same for a string of n letters.</div>
+  <div class="chq"><span class="chid">4·bio.7.5</span><span class="tagq">open</span>Some living things read one of the stop codons as an amino acid. Say what changes in the counts of 4bio4, and what the pile check still guarantees.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r04econ.html">← 4·econ · can a threat be empty?</a><a href="r04m.html">4m · processes without things →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="58426e">The cell’s table is the <b>genetic code</b>, and the one most living things use is the <b>standard code</b>. Several codons with one meaning are called <b>synonymous</b>, and the code is called <b>degenerate</b>. AUG as the place where reading begins is the <b>start codon</b>; UAA, UAG and UGA are <b>stop codons</b>. A way of reading from a fixed start is a <b>reading frame</b>, and a lost or added letter causes a <b>frameshift</b>. Copying DNA into RNA is <b>transcription</b>, and reading RNA into protein is <b>translation</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="da7862">The first codon was read in 1961, when Marshall Nirenberg and Heinrich Matthaei showed that RNA made only of U builds a string of phenylalanine. The whole table was known by 1966.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
