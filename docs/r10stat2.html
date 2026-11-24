@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10·stat2 · How Much Can One Term Move a GPA?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10stat.html">← 10·stat why sort the people before you pick them?</a><a href="r10bio.html">next: 10·bio how fast can an enzyme go? →</a></p>
+  <div class="tags"><span class="tag stat">10·stat2 · statistics</span></div>
+  <h1>How Much Can One Term Move a GPA?</h1>
+  <p data-pid="ee9da2">How much can one term move a GPA? A grade point average weighs every course by its credits. A hard term early on can drag it down a long way; the same term in the last year barely shows. This page builds a term’s GPA as a weighted average with 5j’s ratios, writes the running GPA as an update that moves by a share of the surprise, finds why that share shrinks as credits pile up, and finds the bound on how far the GPA can still move before graduation, a bound that closes in on the GPA itself as the credits run out, in rung 10’s sense.</p>
+  <p class="gesture" data-pid="e3f27e">New GPA = old GPA + (this term’s credits ÷ all credits so far) × (this term’s GPA − old GPA). The share in front is the term’s weight; it falls as the credits grow. With R credits left of T, the final GPA lies within 4R/T of where it would be with only zeros or only top grades still to come.</p>
+</header>
+
+<section class="class step" data-step="10stat21">
+  <h2 class="sthead"><span class="stno">10stat21</span>A Term’s GPA</h2>
+  <p data-pid="b6730a">Zoe’s college grades each course on a 4-point scale: an A is 4, a B is 3, a C is 2. A course is worth a number of credits, about the hours it takes a week. Her first term:</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>course</th><th>credits</th><th>grade</th><th>points × credits</th></tr>
+    <tr><th>calculus</th><td>4</td><td>A, 4</td><td>16</td></tr>
+    <tr><th>chemistry</th><td>4</td><td>B, 3</td><td>12</td></tr>
+    <tr><th>writing</th><td>3</td><td>A, 4</td><td>12</td></tr>
+    <tr><th>history</th><td>3</td><td>B, 3</td><td>9</td></tr>
+    <tr><th>total</th><td>14</td><td></td><td>49</td></tr>
+  </table></div>
+  <p data-pid="9d9417">From here on, on this page, a term’s <i>GPA</i> is the total of grade points times credits, over the total credits: each grade weighted by its credits.</p>
+  <pre class="lines" data-k="ember" data-label="this page: Zoe’s first term">
+\text{GPA} = \dfrac{\sum \text{grade} \times \text{credits}}{\sum \text{credits}} @@ a weighted average (5j)
+\htmlClass{new}{= \tfrac{49}{14} = 3.5} @@ 
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat2.1.1</span><span class="ph understand">understand</span>How is a term’s GPA worked out from grades and credits, and why does a 4-credit course count more than a 3-credit one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10stat22">
+  <h2 class="sthead"><span class="stno">10stat22</span>The Running GPA</h2>
+  <p data-pid="8777c2">The <i>cumulative</i> GPA treats every course taken so far as one long term: all the grade points times credits, over all the credits. It can be kept up to date term by term without listing every course again.</p>
+  <pre class="lines" data-k="ember" data-label="this page: keeping it running">
+\text{after } c \text{ credits at GPA } g:\ \text{grade points so far} = g \cdot c @@ undo the division
+\text{add a term: } t \text{ credits at GPA } s @@ 
+\htmlClass{new}{g_{\text{new}} = \dfrac{g\,c + s\,t}{c + t}} @@ all the points over all the credits
+  </pre>
+  <p data-pid="bfa440">Only two numbers have to be kept between terms: the GPA so far and the credits so far.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat2.2.1</span><span class="ph understand">understand</span>What two numbers does the running GPA need between terms, and how is the new GPA found from them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10stat23">
+  <h2 class="sthead"><span class="stno">10stat23</span>The Update: A Share of the Surprise</h2>
+  <p data-pid="bc794f">Rewrite the running GPA to show how far it moves. Call s − g the <i>surprise</i>: how far this term landed from the GPA so far.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the update">
+g_{\text{new}} = \dfrac{g\,c + s\,t}{c + t} = \dfrac{g\,(c + t) + (s - g)\,t}{c + t} @@ add and take away g·t
+\htmlClass{new}{g_{\text{new}} = g + \dfrac{t}{c + t}\,(s - g)} @@ old, plus a share of the surprise
+  </pre>
+  <p data-pid="e9f9c3">Running-update technique: <b>the new GPA is the old GPA plus this term’s share of all the credits so far, times how far this term’s GPA landed from the old.</b> A term that matches the old GPA changes nothing; a term above it pulls the GPA up, by a share of the gap and never all of it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat2.3.1</span><span class="ph understand">understand</span>How does the update show the new GPA as the old GPA plus a share of the surprise, and what is that share?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10stat24">
+  <h2 class="sthead"><span class="stno">10stat24</span>The Share Shrinks</h2>
+  <p data-pid="dc1e09">Take one hard term: 15 credits at a GPA of 2.0. Compare it after one year (30 credits at 3.6) and in the final year (105 credits at 3.6).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the same term, two times">
+\text{first year: share } \tfrac{15}{30 + 15} = \tfrac{1}{3} @@ 
+g_{\text{new}} = 3.6 + \tfrac{1}{3}(2.0 - 3.6) \approx 3.07 @@ down more than half a point
+\text{final year: share } \tfrac{15}{105 + 15} = \tfrac{1}{8} @@ 
+\htmlClass{new}{g_{\text{new}} = 3.6 + \tfrac{1}{8}(2.0 - 3.6) = 3.4} @@ down a fifth of a point
+  </pre>
+  <p data-pid="c7e092"><b>The share t/(c + t) falls as credits pile up, so later terms move the GPA less.</b> An adviser reading a transcript knows this: a first-year GPA says little, and a fourth-year GPA is hard to move either way.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat2.4.1</span><span class="ph understand">understand</span>Why does the same hard term move a first-year GPA so much more than a final-year one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10stat25">
+  <h2 class="sthead"><span class="stno">10stat25</span>How Far It Can Still Move</h2>
+  <p data-pid="ea53eb">Zoe’s degree takes 120 credits. With c done and R = 120 − c left, her final GPA is fixed except for the R credits to come, each worth between 0 and 4 points.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the bound">
+\text{lowest final: } \dfrac{g\,c + 0 \cdot R}{120},\ \ \text{highest: } \dfrac{g\,c + 4R}{120} @@ all zeros, or all top grades, to come
+\text{width of the range} = \dfrac{4R}{120} @@ highest minus lowest
+c = 105,\ g = 3.4:\ \text{range } 2.98 \text{ to } 3.48 @@ R = 15: width 0.5
+\htmlClass{new}{R \to 0:\ \dfrac{4R}{120} \to 0} @@ the range closes in on one number (10a)
+  </pre>
+  <p data-pid="c846a3"><b>With R credits left of T, the final GPA lies in a range of width 4R/T, and the range closes in on the final GPA as R runs out.</b> Pick any closeness, ε: once R is below εT/4, the final GPA is known to within ε. That is rung 10’s challenge and answer, met by a transcript. A registrar can tell a student in their last term exactly which GPAs are still within reach.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat2.5.1</span><span class="ph understand">understand</span>How wide is the range the final GPA can still reach with R credits left, and how small must R be to know it within ε?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10stat26">
+  <h2 class="sthead"><span class="stno">10stat26</span>Moves to Watch Out For</h2>
+  <p data-pid="11fb6b">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{GPA} = \text{the average of the grades}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; each grade is weighted by its credits (10stat21)
+g_{\text{new}} = \tfrac{g + s}{2}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; that weighs the term as much as everything before it; weigh by credits (10stat22)
+g_{\text{new}} = g + (s - g)\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; that jumps all the way to the term; the share is t/(c + t) (10stat23)
+\text{a hard term costs the same any year}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the share falls from 1/3 to 1/8 as credits pile up (10stat24)
+\text{one great last term can fix any GPA}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; with R credits left, the GPA can move at most 4R/120 in all (10stat25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat2.6.1</span><span class="ph understand">understand</span>Which move above averages the old GPA and the new term equally, and what weights do the credits give instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">10·stat2.7.1</span><span class="tagq">do</span>A student has 60 credits at 2.8. Find the GPA after a 16-credit term at 3.75, and the highest GPA still reachable at 120 credits.</div>
+  <div class="chq"><span class="chid">10·stat2.7.2</span><span class="tagq">make</span>Make up a student and a term such that the term raises the GPA by exactly 0.1.</div>
+  <div class="chq"><span class="chid">10·stat2.7.3</span><span class="tagq">converse</span>A term above the old GPA pulls the GPA up. Decide whether a GPA that went up means the term was above the old GPA, and give a reason.</div>
+  <div class="chq"><span class="chid">10·stat2.7.4</span><span class="tagq">edge</span>Say what the update gives in the very first term, when c = 0, and whether the formula still makes sense there.</div>
+  <div class="chq"><span class="chid">10·stat2.7.5</span><span class="tagq">open</span>A chess rating uses the same update but with a fixed share instead of t/(c + t). Say what a fixed share would do to a GPA, and why it suits a rating better than a transcript.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r10stat.html">← 10·stat · why sort the people before you pick them?</a><a href="r10bio.html">10·bio · how fast can an enzyme go? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="7bceb0">The cumulative GPA is a <b>running weighted mean</b>, and writing it as old plus a share of the surprise is the <b>incremental</b> or <b>online update</b>. The width of the reachable range closing to 0 is a <b>limit</b> in rung 10’s sense.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="b38dd7">The chess rating of Arpad Elo, adopted by the international chess federation in 1970, uses the same update, new = old + K × (result − expected), with a fixed share K instead of one that shrinks.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

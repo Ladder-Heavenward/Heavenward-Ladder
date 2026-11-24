@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>12·eng2 · Why Does a Fan Twice as Fast Use Eight Times the Power?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12eng.html">← 12·eng will the shelf hold?</a><a href="r12comp.html">next: 12·comp what can a machine with no memory check? →</a></p>
+  <div class="tags"><span class="tag eng">12·eng2 · engineering</span></div>
+  <h1>Why Does a Fan Twice as Fast Use Eight Times the Power?</h1>
+  <p data-pid="2f2225">Why does a fan twice as fast use eight times the power? Turn a fan up from half speed to full and it moves twice the air, pushes it twice as hard twice over, and draws eight times the power. Pumps and fans of every size follow the same three powers of speed. This page builds the flow, the push and the power from how fast the blades meet the air, scales a pump up by its size as well as its speed, and uses 12a to show that some speed between two settings gives exactly the flow a building needs.</p>
+  <p class="gesture" data-pid="c51a4a">Every speed in the fan scales with its turning speed n. Air moved per second scales with n; the push, a pressure, scales with the square of a speed, n²; power is flow times push, n³. Making the fan D times bigger multiplies the flow by D³ and the push by D², so the power by D⁵.</p>
+</header>
+
+<section class="class step" data-step="12eng21">
+  <h2 class="sthead"><span class="stno">12eng21</span>Flow Grows With the Speed</h2>
+  <p data-pid="290da4">Mike looks after the air handling in a school. Its big fan turns n times a minute. Each turn, the blades sweep a fixed volume of air through the duct. So the air moved per minute, the <i>flow</i> Q, is that volume times the turns a minute.</p>
+  <pre class="lines" data-k="ember" data-label="this page: flow">
+Q = (\text{volume per turn}) \cdot n @@ a fixed fan
+\htmlClass{new}{\dfrac{Q_2}{Q_1} = \dfrac{n_2}{n_1}} @@ twice the speed, twice the flow
+  </pre>
+  <p data-pid="04d821">This holds as long as the duct and the fan stay the same: the air leaves the blades at the same angles at every speed, only faster.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12·eng2.1.1</span><span class="ph understand">understand</span>Why does a fan’s flow grow in proportion to its turning speed?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12eng22">
+  <h2 class="sthead"><span class="stno">12eng22</span>Push Grows as Its Square</h2>
+  <p data-pid="5f1b23">The fan pushes the air into the duct with a pressure, its <i>push</i> p. The push comes from speeding the air up: the air’s energy of motion per cubic metre is half its density times its speed squared, and every speed in the fan is proportional to n.</p>
+  <pre class="lines" data-k="ember" data-label="this page: push">
+\text{air speed} \propto n @@ every speed scales with the turning
+p \propto \tfrac{1}{2}\rho\,(\text{air speed})^2 \propto n^2 @@ energy of motion per volume
+\htmlClass{new}{\dfrac{p_2}{p_1} = \left(\dfrac{n_2}{n_1}\right)^2} @@ twice the speed, four times the push
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12·eng2.2.1</span><span class="ph understand">understand</span>Why does the push grow as the square of the speed?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12eng23">
+  <h2 class="sthead"><span class="stno">12eng23</span>Power Grows as Its Cube</h2>
+  <p data-pid="915952">Power is the work done each second: pushing a volume Q each second against pressure p takes p·Q (pressure times volume is energy, 5j).</p>
+  <pre class="lines" data-k="ember" data-label="this page: power">
+P = p \cdot Q @@ push times flow
+P \propto n^2 \cdot n = n^3 @@ 
+\htmlClass{new}{\dfrac{P_2}{P_1} = \left(\dfrac{n_2}{n_1}\right)^3} @@ twice the speed, eight times the power
+  </pre>
+  <p data-pid="d7128d">Fan-scaling technique: <b>for one fan in one duct, flow goes as the speed, push as its square and power as its cube.</b> Run the other way, it pays: turning a fan down to 80% speed cuts its flow to 80% but its power to 0.8³ ≈ 51%. That is why buildings now fit fans with speed controls instead of dampers that choke the air.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12·eng2.3.1</span><span class="ph understand">understand</span>Why does power grow as the cube of the speed, and how much power does turning a fan down to 80% save?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12eng24">
+  <h2 class="sthead"><span class="stno">12eng24</span>Scaling a Pump Up by Its Size</h2>
+  <p data-pid="25e0b7">An engineer testing a small model pump wants to know what a pump of the same shape, D times bigger, will do. Every length scales by D: the volume swept per turn by D³, and each speed at a given turning rate by D.</p>
+  <pre class="lines" data-k="ember" data-label="this page: same shape, D times the size">
+Q \propto n\,D^3 @@ volume per turn grows as D³
+p \propto n^2 D^2 @@ speeds grow as nD
+P = p\,Q \propto n^3 D^5 @@ 
+\htmlClass{new}{D = 2,\ \text{same } n:\ 8 \text{ times the flow, } 32 \text{ times the power}} @@ size matters more than speed
+  </pre>
+  <p data-pid="a9e042">A pump maker tests a model a quarter the size, measures its flow and push at one speed, and multiplies by these powers to predict the full pump before building it. The full pump, tested, lands close to the prediction when the two are truly the same shape.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12·eng2.4.1</span><span class="ph understand">understand</span>How do flow, push and power scale with the size of a pump of the same shape, and why does doubling the size multiply the power by 32?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12eng25">
+  <h2 class="sthead"><span class="stno">12eng25</span>Some Speed Gives Exactly the Flow You Need</h2>
+  <p data-pid="214057">The school needs 12 cubic metres of air a second. At 600 turns a minute the fan gives 10; at 900 it gives 15. Is there a speed that gives exactly 12?</p>
+  <pre class="lines" data-k="ember" data-label="this page: the speed for a needed flow">
+Q(600) = 10,\ \ Q(900) = 15 @@ the fan’s two settings
+Q \text{ is continuous in } n @@ flow changes without jumps as the speed changes
+10 < 12 < 15 @@ 
+\text{some } n \text{ in } (600, 900) \text{ has } Q(n) = 12 @@ the intermediate value technique (12a)
+\htmlClass{new}{Q \propto n:\ n = 600 \cdot \tfrac{12}{10} = 720} @@ and here it can be found exactly
+  </pre>
+  <p data-pid="cd5015"><b>Between two speeds that give too little and too much, some speed gives exactly the flow needed.</b> The technique says a speed exists even when the fan’s real curve is not a clean proportion; a commissioning engineer then finds it by halving the gap, as 12e does, adjusting the drive and reading a flow meter until it says 12.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12·eng2.5.1</span><span class="ph understand">understand</span>Why must some speed give exactly 12 cubic metres a second, and how would an engineer find it on a real fan?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="12eng26">
+  <h2 class="sthead"><span class="stno">12eng26</span>Moves to Watch Out For</h2>
+  <p data-pid="a9e308">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{twice the speed, twice the power}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; power goes as the cube: eight times (12eng23)
+\text{80\% speed, 80\% power}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; power falls to 0.8³, about 51% (12eng23)
+p \propto n\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; push comes from speed squared: p goes as n² (12eng22)
+\text{twice the size, twice the flow}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; flow grows as D³: eight times at the same turning speed (12eng24)
+\text{no speed may give exactly 12}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; flow is continuous between 10 and 15, so some speed gives 12 (12eng25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12·eng2.6.1</span><span class="ph understand">understand</span>Which move above turns a fan down to 80% speed and expects 80% of the power, and what does the cube give instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">12·eng2.7.1</span><span class="tagq">do</span>A pump moves 40 litres a second at 1,500 turns a minute, with a push of 200 kilopascals, drawing 12 kW. Find all three at 1,200 turns a minute.</div>
+  <div class="chq"><span class="chid">12·eng2.7.2</span><span class="tagq">make</span>Make up a fan speed change that halves the power, and find the flow it then gives.</div>
+  <div class="chq"><span class="chid">12·eng2.7.3</span><span class="tagq">converse</span>Same fan, same duct gives flow as n. Decide whether flow in proportion to speed means the fan and duct are unchanged, and give a reason.</div>
+  <div class="chq"><span class="chid">12·eng2.7.4</span><span class="tagq">edge</span>Say what the scaling gives as the speed goes toward 0, and why a real fan stops moving air before its blades stop.</div>
+  <div class="chq"><span class="chid">12·eng2.7.5</span><span class="tagq">open</span>The duct resists air more as the flow grows. Say how you would find the speed for a needed flow when the push must also overcome a duct whose resistance grows with the flow.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r12eng.html">← 12·eng · will the shelf hold?</a><a href="r12comp.html">12·comp · what can a machine with no memory check? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="e6fbf1">The three powers of speed are the <b>fan laws</b> or <b>affinity laws</b>. Same shape at a different size is <b>geometric similarity</b>, and scaling by D³ and D⁵ is the affinity law for diameter. The push is the fan’s <b>pressure rise</b> or a pump’s <b>head</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="e3ddfa">The scaling follows from treating every speed in a machine as proportional to its tip speed; it is taught in every first course on fluid machines, and engineering bodies such as the Air Movement and Control Association publish its derivation.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

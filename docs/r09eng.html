@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9·eng · Why Is Carbon Fibre Stiff One Way and Soft the Other?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09chem.html">← 9·chem does every gas follow the same law?</a><a href="r09concl.html">next: 9·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag eng">9·eng · engineering</span></div>
+  <h1>Why Is Carbon Fibre Stiff One Way and Soft the Other?</h1>
+  <p data-pid="c21fec">Why is carbon fibre stiff one way and soft the other? A bicycle frame or an aircraft wing made of carbon fibre is a bundle of very stiff threads held in a soft glue. Pull along the threads and it barely stretches. Pull across them and it gives far more. This page finds the stiffness along the threads as a weighted average, the stiffness across them as a different average, writes both as functions of the share of fibre with rung 9’s functions, shows that every real layup lies between the two, and finds the measure that tells a designer which material to choose.</p>
+  <p class="gesture" data-pid="d04fa2">Along the fibres, fibre and glue stretch by the same amount, so their stiffnesses add in proportion to their shares. Across the fibres, they carry the same pull, so their softnesses, one over stiffness, add instead. Both are functions of the fibre share f, and the first is always at least the second.</p>
+</header>
+
+<section class="class step" data-step="9eng1">
+  <h2 class="sthead"><span class="stno">9eng1</span>Stretched Together: A Weighted Average</h2>
+  <p data-pid="2f0536">A material’s <i>stiffness</i>, written E, is how hard you must pull to stretch it by a given share of its length: pull per area over stretch per length. Stiff steel has E about 200 gigapascals (GPa); the carbon fibres Terry uses have E about 230 GPa, and the epoxy glue about 3.5 GPa.</p>
+  <p data-pid="c514f4">From here on, on this page, f is the share of the material’s cross-section that is fibre, and 1 − f the share that is glue. Terry’s layup has f = 0.6. Pull along the fibres: fibre and glue are bonded side by side, so they stretch by the same share, and each carries pull in proportion to its own stiffness and its own area.</p>
+  <pre class="lines" data-k="ember" data-label="this page: stiffness along the fibres">
+\text{pull} = E_f \cdot f \cdot \text{stretch} + E_m (1 - f) \cdot \text{stretch} @@ same stretch, shares of area
+E_\parallel = f\,E_f + (1 - f)\,E_m @@ a weighted average (5j’s ratios)
+\htmlClass{new}{E_\parallel = 0.6 \cdot 230 + 0.4 \cdot 3.5 = 139.4 \text{ GPa}} @@ the fibres carry nearly all of it
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·eng.1.1</span><span class="ph understand">understand</span>Why do fibre and glue add their stiffnesses in proportion to their shares when pulled along the fibres?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9eng2">
+  <h2 class="sthead"><span class="stno">9eng2</span>Pulled Across: The Softnesses Add</h2>
+  <p data-pid="ceb224">Pull across the fibres. Now fibre and glue lie one after the other in the path of the pull, like links in a chain: each carries the whole pull, and their stretches add. Stretch is pull over stiffness, so it is the softnesses, 1/E, that add in proportion to the shares.</p>
+  <pre class="lines" data-k="ember" data-label="this page: stiffness across the fibres">
+\dfrac{1}{E_\perp} = \dfrac{f}{E_f} + \dfrac{1 - f}{E_m} @@ softnesses add
+= \dfrac{0.6}{230} + \dfrac{0.4}{3.5} \approx 0.0026 + 0.1143 = 0.1169 @@ 
+\htmlClass{new}{E_\perp \approx 8.6 \text{ GPa}} @@ sixteen times softer than along
+  </pre>
+  <p data-pid="e606a1">Across the fibres the soft glue dominates: it is only 40% of the material, but it does nearly all the stretching. The two directions differ by a factor of sixteen, from the same fibres and glue.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·eng.2.1</span><span class="ph understand">understand</span>Why do the softnesses add when the material is pulled across the fibres, and which part does most of the stretching?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9eng3">
+  <h2 class="sthead"><span class="stno">9eng3</span>Two Functions of the Fibre Share</h2>
+  <p data-pid="ea6ccd">Both stiffnesses depend only on f, once the fibre and glue are chosen. So each is a function of f on the interval from 0 to 1 (9a), and each can be drawn (9e).</p>
+  <pre class="lines" data-k="ember" data-label="this page: two functions">
+E_\parallel(f) = E_m + (E_f - E_m)\,f @@ a straight line from E_m to E_f
+E_\perp(f) = \dfrac{E_f E_m}{E_m f + E_f (1 - f)} @@ a rational function (9g)
+E_\parallel(0) = E_\perp(0) = E_m,\ \ E_\parallel(1) = E_\perp(1) = E_f @@ they meet at the ends
+\htmlClass{new}{E_\perp(0.5) \approx 6.9,\ \ E_\parallel(0.5) \approx 117} @@ far apart in between
+  </pre>
+  <p data-pid="de47b6">The first is a straight line; the second hugs the glue’s value until f is nearly 1 and then shoots up. Adding fibre helps the along-stiffness steadily and the across-stiffness hardly at all until the glue is almost gone.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·eng.3.1</span><span class="ph understand">understand</span>What kinds of function of f are the two stiffnesses, and where do their graphs meet?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9eng4">
+  <h2 class="sthead"><span class="stno">9eng4</span>Every Layup Lies Between Them</h2>
+  <p data-pid="e89a82">Real materials are not perfectly side by side or perfectly in a chain: fibres wander, layers cross. But the two cases are the extremes. Stiffness is greatest when every part stretches together, and least when every part carries the whole pull.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the two bounds">
+E_\perp(f) \le E \le E_\parallel(f) @@ for any arrangement with fibre share f
+E_\parallel - E_\perp = \dfrac{f(1 - f)(E_f - E_m)^2}{E_m f + E_f (1 - f)} \ge 0 @@ a square over a positive: never negative
+\htmlClass{new}{\text{equal only at } f = 0,\ f = 1, \text{ or } E_f = E_m} @@ one material, or two the same
+  </pre>
+  <p data-pid="f7ba9c">Two-bounds technique: <b>a mix of two materials with shares f and 1 − f has a stiffness no greater than the weighted average of their stiffnesses and no less than the weighted average of their softnesses, turned back into a stiffness.</b> An engineer checking a supplier’s figure for a new layup checks first that it falls between the bounds; one that falls outside is wrong.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·eng.4.1</span><span class="ph understand">understand</span>What are the two bounds on the stiffness of any layup, and how does an engineer use them to check a figure?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9eng5">
+  <h2 class="sthead"><span class="stno">9eng5</span>Stiffness per Weight</h2>
+  <p data-pid="26bc03">A wing must be stiff and light. The measure that matters is stiffness over density, ρ: how stiff each kilogram is. Compare Terry’s layup along its fibres with steel and aluminium.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>material</th><th>E (GPa)</th><th>ρ (tonnes per cubic metre)</th><th>E/ρ</th></tr>
+    <tr><th>steel</th><td>200</td><td>7.8</td><td>about 26</td></tr>
+    <tr><th>aluminium</th><td>70</td><td>2.7</td><td>about 26</td></tr>
+    <tr><th>carbon layup, along</th><td>139</td><td>1.6</td><td>about 87</td></tr>
+    <tr><th>carbon layup, across</th><td>8.6</td><td>1.6</td><td>about 5</td></tr>
+  </table></div>
+  <p data-pid="07163d"><b>Along its fibres, carbon layup is more than three times as stiff per kilogram as steel or aluminium; across them, it is five times worse.</b> So designers lay sheets at several angles, 0°, 90° and ±45°, so every direction gets some fibres, and they point most fibres the way the load runs. A materials engineer, testing a strip cut along the fibres, measures close to the 139 GPa this page found.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·eng.5.1</span><span class="ph understand">understand</span>Why is stiffness per weight the measure that picks the material, and why are carbon sheets laid at several angles?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9eng6">
+  <h2 class="sthead"><span class="stno">9eng6</span>Moves to Watch Out For</h2>
+  <p data-pid="032eae">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+E_\perp = f E_f + (1 - f) E_m\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; across the fibres the softnesses add, not the stiffnesses (9eng2)
+\text{more fibre, much stiffer across}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; E⊥ barely rises until f is near 1 (9eng3)
+E = 150 \text{ GPa at } f = 0.6\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; outside the bounds: no layup beats the along-stiffness 139 GPa (9eng4)
+\text{steel is stiffer, so steel is better}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; for a light structure compare stiffness per weight (9eng5)
+\dfrac{1}{E_\perp} = \dfrac{1}{E_f} + \dfrac{1}{E_m}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; each softness is weighted by its share (9eng2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·eng.6.1</span><span class="ph understand">understand</span>Which move above adds the stiffnesses across the fibres, and what adds instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">9·eng.7.1</span><span class="tagq">do</span>Glass fibre has E about 72 GPa and density 2.5. With epoxy at 3.5 GPa and f = 0.5, find both bounds and the along-stiffness per weight, taking the glue’s density as 1.2.</div>
+  <div class="chq"><span class="chid">9·eng.7.2</span><span class="tagq">make</span>Make up two materials and a fibre share for which the along-stiffness is exactly twice the across-stiffness.</div>
+  <div class="chq"><span class="chid">9·eng.7.3</span><span class="tagq">converse</span>Equal bounds came from f = 0, f = 1 or equal stiffnesses. Decide whether equal bounds must mean one of these three, using the difference formula.</div>
+  <div class="chq"><span class="chid">9·eng.7.4</span><span class="tagq">edge</span>Say what the across-stiffness does as the glue’s stiffness falls toward 0, and what that means for a layup with a crack along its fibres.</div>
+  <div class="chq"><span class="chid">9·eng.7.5</span><span class="tagq">open</span>Sheets laid at 0° and 90° give stiffness in two directions. Say how you would estimate the stiffness at 45° from what this page has, and what the page cannot yet do.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r09chem.html">← 9·chem · does every gas follow the same law?</a><a href="r09concl.html">9·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="64d1db">Stiffness E is <b>Young’s modulus</b>, and a material that is stiffer one way than another is <b>anisotropic</b>. The weighted average along the fibres is the <b>rule of mixtures</b> or <b>Voigt bound</b>, and the average of softnesses is the <b>inverse rule of mixtures</b> or <b>Reuss bound</b>. E/ρ is the <b>specific modulus</b>. The glue is the <b>matrix</b>, and f the <b>fibre volume fraction</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="2ee9f6">Woldemar Voigt set out the equal-stretch average in 1889 and András Reuss the equal-pull average in 1929, both for crystals; Rodney Hill showed in 1952 that they bound the true value.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
