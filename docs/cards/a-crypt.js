@@ -432,3 +432,27 @@
  {"u": "46·crypt.5.1", "q": "Why does a key stolen years later not open talk recorded today?", "a": "each session’s halves are fresh and forgotten after, and the long-term key only signs, never locks the secret; recovering the secret still needs one of the forgotten halves, which is the hard problem", "w": ["recorded talk is deleted automatically", "the long-term key changes every second", "old talk is locked under the long-term key, which is stored safely"], "why": "Forward secrecy."},
  {"u": "46·crypt.6.1", "q": "Which move above trusts a key without a chain, and what must it chain to?", "a": "the move that trusts any checking key the server sends: the key must chain through signed certificates up to a root key the browser already trusts", "w": ["the move that locks the exchange: it must chain to the client", "the move that checks after sending: it must chain to the password", "the move that uses one key for all: it must chain to the cipher"], "why": "Trust runs down from a root."});
 /*end gapcards 46·crypt*/
+/*gapcards2 0·crypt*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["0·crypt"]=window.LADDER_CARDS["0·crypt"]||[]).push(
+ {"u": "0·crypt.5.1", "q": "Why does a second question of a different kind make a gate harder to pass than one question?", "a": "the two questions are of different kinds, something known and something held, so passing needs two different thefts: an overheard word without the token is stopped, and so is a stolen token without the word", "w": ["two questions take longer to answer, so a thief gives up", "the second guard checks the first, so neither can be fooled", "two questions of the same kind are twice as hard to overhear"], "why": "Something known and something held."});
+/*end gapcards2 0·crypt*/
+/*gapcards2 1·crypt*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["1·crypt"]=window.LADDER_CARDS["1·crypt"]||[]).push(
+ {"u": "1·crypt.10.1", "q": "Why are two leaks that are harmless alone dangerous together, and how does telling each helper only their part help?", "a": "leaks pile up as an and, so two leaks each leaving 4 rows can join to leave 1, the key; telling each helper only their part means one helper’s leak leaves many rows, and the key needs leaks from several at once", "w": ["two leaks cancel each other; telling helpers less makes them leak more", "each leak crosses out half the rows; telling helpers less changes nothing", "leaks add rows back; telling helpers their part keeps the key whole"], "why": "Leaks pile up as an and (1crypt3)."});
+/*end gapcards2 1·crypt*/
+/*gapcards2 2·crypt*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["2·crypt"]=window.LADDER_CARDS["2·crypt"]||[]).push(
+ {"u": "2·crypt.12.1", "q": "How does a list kept beside a file decide who may open it, and why should the list be as small as the work allows?", "a": "asking whether a person may open it is asking whether they are a member of the file’s list, checked at every opening; the smallest list that still lets the work get done leaves the fewest people who could misuse it", "w": ["the list gives each person a key; a long list is safer since more people watch", "the list is checked once a year; its size does not matter", "the list names who may not open it; it should be as long as possible"], "why": "Membership (2d)."});
+/*end gapcards2 2·crypt*/
+/*gapcards2 3·crypt*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["3·crypt"]=window.LADDER_CARDS["3·crypt"]||[]).push(
+ {"u": "3·crypt.10.1", "q": "Why is a code that changes each minute of little use to someone who overhears it?", "a": "both the fob and the door take the next code in the same run each minute, so a code overheard now is stale once the minute turns", "w": ["the code is too long to remember", "the door changes its lock each minute", "the overheard code works only on a different door"], "why": "Accepting one minute either side keeps a slow fob in step."});
+/*end gapcards2 3·crypt*/
+/*gapcards2 5·crypt*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["5·crypt"]=window.LADDER_CARDS["5·crypt"]||[]).push(
+ {"u": "5·crypt.12.1", "q": "Why should the secret be kept in the numbers and not in the shape of the steps?", "a": "a story can be guessed, copied or stolen and is hard to change once in use, while numbers are easy to change and many to choose from; even knowing every step, the stranger finds 32 still fits many messages", "w": ["the steps are too long to steal; numbers are harder to remember", "numbers are never stolen; steps are easy to change", "the stranger cannot read steps; numbers are shorter to send"], "why": "Key-not-story technique."});
+/*end gapcards2 5·crypt*/
+/*gapcards2 43·crypt*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["43·crypt"]=window.LADDER_CARDS["43·crypt"]||[]).push(
+ {"u": "43·crypt.7.1", "q": "How large must the prime clock be, and why does two shares’ guess stay hopeless when it is?", "a": "larger than the secret and the number of people, so every value and hour are distinct, and so large that guessing is hopeless; two shares leave every secret equally likely, so a guess is right only 1 in p, about once in 10³⁸ for 2¹²⁷ − 1", "w": ["as large as the number of people; two shares narrow the secret to half", "exactly 11; two shares reveal the secret if p is prime", "any size, since the shares are hidden; two shares give it away"], "why": "The work of opening grows only with p’s digits."});
+/*end gapcards2 43·crypt*/
