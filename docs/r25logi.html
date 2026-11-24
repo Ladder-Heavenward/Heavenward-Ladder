@@ -132,7 +132,58 @@ j = 6:\ 0.23;\ \ j = 12:\ 0.43;\ \ j = 18:\ 0.59;\ \ j = 24:\ 0.72 @@
 </section>
 
 <section class="class step" data-step="25logi6">
-  <h2 class="sthead"><span class="stno">25logi6</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">25logi6</span>The Road In Has Five Obstacles</h2>
+  <p data-pid="27e035">The parts reach station 1 by truck. Claire’s supplier sends one every hour, day and night, so a truck can reach the road at any moment of the week. On the way it passes five obstacles: a city with stop-and-go traffic, three rail crossings, and a lifting bridge. Each one can make the truck late.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a truck meets each obstacle by the share of time it blocks">
+\text{chance a truck meets an obstacle} = \text{share of the week it blocks the road} @@ the truck arrives at any moment
+\text{city: } 5 \times 2 \times 2 = 20 \text{ hours of } 168:\ \tfrac{20}{168} \approx 0.12,\ \text{adds } 40 \text{ min} @@ weekdays, two rushes of two hours
+\text{one crossing: } 2 \text{ trains of } 4 \text{ or } 12 \text{ min}:\ \tfrac{16}{1\,440} = \tfrac{1}{90} @@ every day
+\text{three crossings clear: } \big(\tfrac{89}{90}\big)^3 \approx 0.967 @@ the chances multiply (25logi2)
+\htmlClass{new}{\text{wait if caught: } \tfrac{3}{4} \times 6 + \tfrac{1}{4} \times 2 = 5 \text{ min, not } 4} @@ a long train blocks 12 of the 16 minutes, so it catches 3/4 of the stopped trucks
+\text{bridge: } n \text{ lifts of } 30 \text{ min a day: chance } \tfrac{n}{48},\ \text{wait } 15 \text{ min} @@ n is not known
+\htmlClass{new}{\text{bridge in a rush: a } 90 \text{ min standstill, chance } \tfrac{n}{16},\ \text{wait } 45 \text{ min}} @@ the overlap is its own case, not 40 + 15
+n = 2:\ \ 4.76 + 0.17 + 0.55 + 0.67 \approx 6.2 \text{ min a truck} @@ city, crossings, bridge, bridge in a rush: averages add
+  </pre>
+  <p data-pid="797502">The bridge in a rush comes less often than the bridge alone, yet adds more to the average. The three crossings look like three obstacles and add about ten seconds.</p>
+  <p data-pid="cfb6ca">Time-share technique: <b>an obstacle that blocks the road for a share f of the time meets a truck arriving at a random moment with chance f; a caught truck waits on average half a block, each block weighted by its length; and when two obstacles together cause more delay than the two apart, their overlap is a case of its own.</b></p>
+  <!--gfig 25logi6--><div class="gfigs" data-gfig="25logi6" data-story="[[&quot;Each row is one obstacle. The pale bar runs from no wait to the longest wait a caught truck can have; the thick mark is the average wait.&quot;, [&quot;~wait if caught&quot;]], [&quot;The city meets 0.12 of the trucks and always adds 40 minutes: 4.76 minutes for the average truck, most of the total.&quot;, [&quot;ember&quot;, &quot;~city&quot;, &quot;~4.76 min&quot;]], [&quot;Each crossing catches 1 truck in 90. A caught truck waits 5 minutes on average, not 4, since long trains catch more trucks.&quot;, [&quot;teal&quot;, &quot;~crossing 1&quot;, &quot;~crossing 2&quot;, &quot;~crossing 3&quot;]], [&quot;At two lifts a day, the bridge catches 0.042 of the trucks, for 15 minutes on average.&quot;, [&quot;gold&quot;, &quot;~bridge&quot;, &quot;~0.55 min&quot;]], [&quot;In a rush the lift becomes a 90-minute standstill. It is rarer, 0.015, yet adds more, 0.67 minutes. Together: 6.2 minutes a truck.&quot;, [&quot;plum&quot;, &quot;~bridge in rush&quot;, &quot;~0.67 min&quot;, &quot;~6.2 min&quot;]]]"><svg class="gfig" viewBox="0 0 420 300" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="six rows, one per obstacle: the city adds 40 minutes with chance 0.12; each crossing waits up to 12, on average 5, with chance 1/90; the bridge up to 30, average 15, chance 0.042; the bridge in a rush up to 90, average 45, chance 0.015; together they add 6.2 minutes to the average truck"><text x="92" y="14" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">wait if caught (min)</text><text x="274" y="14" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">chance</text><text x="332" y="14" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">adds</text><text x="86" y="43" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">city</text><rect x="92.0" y="32" width="75.6" height="16" rx="3" style="fill:var(--ember);fill-opacity:.22;stroke:var(--ember);stroke-width:1"/><line x1="167.6" x2="167.6" y1="29" y2="51" style="stroke:var(--ember);stroke-width:3"/><text x="171.6" y="61" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">40 min</text><text x="274" y="43" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">0.12</text><text x="332" y="43" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">4.76 min</text><text x="86" y="83" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">crossing 1</text><rect x="92.0" y="72" width="22.7" height="16" rx="3" style="fill:var(--teal);fill-opacity:.22;stroke:var(--teal);stroke-width:1"/><line x1="101.4" x2="101.4" y1="69" y2="91" style="stroke:var(--teal);stroke-width:3"/><text x="118.7" y="101" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">avg 5, up to 12</text><text x="274" y="83" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">1/90</text><text x="332" y="83" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">0.06 min</text><text x="86" y="123" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">crossing 2</text><rect x="92.0" y="112" width="22.7" height="16" rx="3" style="fill:var(--teal);fill-opacity:.22;stroke:var(--teal);stroke-width:1"/><line x1="101.4" x2="101.4" y1="109" y2="131" style="stroke:var(--teal);stroke-width:3"/><text x="118.7" y="141" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">avg 5, up to 12</text><text x="274" y="123" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">1/90</text><text x="332" y="123" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">0.06 min</text><text x="86" y="163" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">crossing 3</text><rect x="92.0" y="152" width="22.7" height="16" rx="3" style="fill:var(--teal);fill-opacity:.22;stroke:var(--teal);stroke-width:1"/><line x1="101.4" x2="101.4" y1="149" y2="171" style="stroke:var(--teal);stroke-width:3"/><text x="118.7" y="181" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">avg 5, up to 12</text><text x="274" y="163" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">1/90</text><text x="332" y="163" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">0.06 min</text><text x="86" y="203" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">bridge</text><rect x="92.0" y="192" width="56.7" height="16" rx="3" style="fill:var(--gold);fill-opacity:.22;stroke:var(--gold);stroke-width:1"/><line x1="120.3" x2="120.3" y1="189" y2="211" style="stroke:var(--gold);stroke-width:3"/><text x="152.7" y="221" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">avg 15, up to 30</text><text x="274" y="203" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">0.042</text><text x="332" y="203" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">0.55 min</text><text x="86" y="243" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">bridge in rush</text><rect x="92.0" y="232" width="170.0" height="16" rx="3" style="fill:var(--plum);fill-opacity:.22;stroke:var(--plum);stroke-width:1"/><line x1="177.0" x2="177.0" y1="229" y2="251" style="stroke:var(--plum);stroke-width:3"/><text x="260.0" y="261" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">avg 45, up to 90</text><text x="274" y="243" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">0.015</text><text x="332" y="243" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">0.67 min</text><line x1="92" y1="264" x2="262" y2="264" style="stroke:var(--ink);stroke-width:1"/><text x="92.0" y="276" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><text x="148.7" y="276" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">30</text><text x="205.3" y="276" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">60</text><text x="262.0" y="276" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">90</text><text x="332" y="276" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">6.2 min</text><text x="210.0" y="292" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">two bridge lifts a day; adds = chance × average wait</text></svg></div><!--/gfig 25logi6-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·logi.6.1</span><span class="ph understand">understand</span>Why does a long train cost more than its share of the trains, and why is the bridge in a rush its own case?</li>
+    </ol>
+  </section>
+</section>
+<section class="class step" data-step="25logi7">
+  <h2 class="sthead"><span class="stno">25logi7</span>Slack That Absorbs the Road</h2>
+  <p data-pid="d44e17">Slack on the road works as a buffer at station 1: either the truck sets out s minutes early, or station 1 holds s minutes of parts. Either way, a road delay up to s is absorbed.</p>
+  <pre class="lines" data-k="ember" data-label="this page: slack s = 45 min">
+\text{the truck is late only when its road delay is more than } s @@ slack absorbs the rest
+s = 45:\ \text{city } 40,\ \text{bridge} \le 30,\ \text{bridge and a long train} \le 42 \text{ all absorbed} @@ each case on its own
+\text{not absorbed: city and standstill, } 0.12 \times \tfrac{n}{16} \approx 0.0074\,n @@ the overlap of 25logi6
+\text{not absorbed: city and a long train past } 5 \text{ min, } \approx 0.0017 @@ rare
+q \approx 0.0074\,n + 0.0017:\ \ n = 1:\ \tfrac{1}{109};\ \ n = 2:\ \tfrac{1}{60};\ \ n = 4:\ \tfrac{1}{32} @@ q grows with n
+\htmlClass{new}{q \le 0.02 \text{ holds while } n \le 2.4} @@ the unknown becomes a limit
+\text{a late truck is a slip at station 1: } r^{23} \approx 0.50 \text{ at } r = 0.97 @@ the knock-on series (25logi3, 25logi4)
+\htmlClass{new}{\text{no trucks in the rush removes the } 40 \text{ and the standstill together}} @@ absorbing the standstill would take 130 min of stock
+  </pre>
+  <p data-pid="bb50fb">Nobody knows how often the bridge lifts, so the plan does not guess: it says how many lifts a day its slack absorbs, two, and a log of past lifts says which side of two the bridge falls. At two lifts a day, about 1 truck in 60 is late and 1 order in 120 (counting every overlap exactly, as the picture below does, gives 1 in 64 and 1 in 129). The cheaper fix keeps trucks out of the rushes, and station 1 holds two hours of parts at each rush instead, the trade of stock against orders in 14·logi.</p>
+  <p data-pid="e60c8a">Slack technique: <b>slack of s minutes absorbs every case whose delay is at most s; the chance of a late truck is the sum of the chances of the cases longer than s, and an unknown rate is handled by finding the largest rate the slack still absorbs.</b></p>
+  <!--gwid 25logi7--><section class="pic gwid">
+    <div class="eyebrow">The picture · set the delays and the slack, watch the late trucks</div>
+    <div class="panels">
+    <div class="panel"><canvas id="w257v"></canvas><div class="verdict" id="w257o"></div><div class="kn"><span class="m">slack</span><input type="range" id="w257s" min="0" max="150" step="5" value="45"><output id="w257so"></output></div><div class="kn"><span class="m">city adds</span><input type="range" id="w257d" min="0" max="90" step="5" value="40"><output id="w257do"></output></div><div class="kn"><span class="m">bridge lifts</span><input type="range" id="w257n" min="0" max="6" step="1" value="2"><output id="w257no"></output></div><div class="kn"><span class="m">standstill</span><input type="range" id="w257q" min="30" max="150" step="5" value="90"><output id="w257qo"></output></div><div class="chips" id="w257c"></div><div class="cap">Teal: the chance a truck’s road delay is longer than each number of minutes; each step down is ten times rarer. Gold: the slack. Knobs in minutes, except the bridge’s lifts a day. Trains block 4 or 12 minutes.</div></div>
+  </div>
+  </section><!--/gwid 25logi7-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·logi.7.1</span><span class="ph understand">understand</span>How does the plan deal with the unknown number of bridge lifts, and why is avoiding the rush cheaper than stock for a standstill?</li>
+    </ol>
+  </section>
+</section>
+<section class="class step" data-step="25logi8">
+  <h2 class="sthead"><span class="stno">25logi8</span>Moves to Watch Out For</h2>
   <p data-pid="b6458f">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
   <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
 \text{a five-minute delay costs five minutes}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it passes along: on average 1/(1 − r) stations (25logi3)
@@ -140,11 +191,14 @@ j = 6:\ 0.23;\ \ j = 12:\ 0.43;\ \ j = 18:\ 0.59;\ \ j = 24:\ 0.72 @@
 \text{an early delay has time to clear}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; with r near 1, r^(24 − k) stays large (25logi4)
 \text{put the buffer at the very end}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it catches most, but holding finished stock costs most (25logi5)
 \text{lean lines never hold stock}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a few buffers before the slowest stations pay for themselves (25logi5)
+\text{a lift in a rush costs } 30 \text{ min}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it is a 90 min standstill, its own case (25logi6)
+\text{a train costs half the average train}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; longer trains catch more trucks: 5 min, not 4 (25logi6)
+\text{guess one lift a day and plan for it}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; state the n the slack absorbs, then check the log (25logi7)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">25·logi.6.1</span><span class="ph understand">understand</span>Which move above adds the chances along the line, and how do they really combine?</li>
+      <li><span class="qid">25·logi.8.1</span><span class="ph understand">understand</span>Which move above adds the chances along the line, and how do they really combine?</li>
     </ol>
   </section>
 </section>
@@ -153,11 +207,11 @@ j = 6:\ 0.23;\ \ j = 12:\ 0.43;\ \ j = 18:\ 0.59;\ \ j = 24:\ 0.72 @@
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
-  <div class="chq"><span class="chid">25·logi.7.1</span><span class="tagq">do</span>With r = 0.95, find the chance a delay at station 10 reaches the deadline, and the average number of stations it reaches.</div>
-  <div class="chq"><span class="chid">25·logi.7.2</span><span class="tagq">make</span>Make up an r for which a delay at station 4 reaches the deadline with chance exactly one half.</div>
-  <div class="chq"><span class="chid">25·logi.7.3</span><span class="tagq">converse</span>Slack at every station gives a small r. Decide whether a small r means every station has slack, or whether one station’s slack can do it.</div>
-  <div class="chq"><span class="chid">25·logi.7.4</span><span class="tagq">edge</span>Say what happens to the spread of a delay when r = 0, and when r = 1.</div>
-  <div class="chq"><span class="chid">25·logi.7.5</span><span class="tagq">open</span>Delays also start at more than one station in a day. Say how two delays on the same line change the chance of meeting the deadline.</div>
+  <div class="chq"><span class="chid">25·logi.9.1</span><span class="tagq">do</span>With r = 0.95, find the chance a delay at station 10 reaches the deadline, and the average number of stations it reaches.</div>
+  <div class="chq"><span class="chid">25·logi.9.2</span><span class="tagq">make</span>Make up an r for which a delay at station 4 reaches the deadline with chance exactly one half.</div>
+  <div class="chq"><span class="chid">25·logi.9.3</span><span class="tagq">converse</span>Slack at every station gives a small r. Decide whether a small r means every station has slack, or whether one station’s slack can do it.</div>
+  <div class="chq"><span class="chid">25·logi.9.4</span><span class="tagq">edge</span>Say what happens to the spread of a delay when r = 0, and when r = 1.</div>
+  <div class="chq"><span class="chid">25·logi.9.5</span><span class="tagq">open</span>Delays also start at more than one station in a day. Say how two delays on the same line change the chance of meeting the deadline.</div>
 </section>
 <div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r25econ.html">← 25·econ · why do some countries grow richer?</a><a href="r25now.html">25·now · which numbers never escape? →</a></nav>
@@ -165,13 +219,37 @@ j = 6:\ 0.23;\ \ j = 12:\ 0.43;\ \ j = 18:\ 0.59;\ \ j = 24:\ 0.72 @@
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>Accepted names</h3>
-  <p data-pid="01f2d0">A line with no stock between stations is <b>just-in-time</b> production; a buffer of stock is <b>safety stock</b>, and delays passed down a line are <b>knock-on</b> or <b>propagated delays</b>. The study of where buffers go is <b>buffer allocation</b>.</p>
+  <p data-pid="01f2d0">A line with no stock between stations is <b>just-in-time</b> production; a buffer of stock is <b>safety stock</b>, and delays passed down a line are <b>knock-on</b> or <b>propagated delays</b>. The study of where buffers go is <b>buffer allocation</b>. A caught truck waiting longer than half the average train, because long trains catch more trucks, is the <b>inspection paradox</b>; slack kept against the road is <b>safety time</b>.</p>
   <h3>Who said it first</h3>
   <p data-pid="a22d94">Just-in-time production grew up in Japanese car factories after the Second World War, chiefly under Taiichi Ohno (not yet revisited).</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
+<!--gwjs 25logi7--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const H=0.5, N=601; let norush=false;
+const conv=(a,b)=>{ const o=new Float64Array(N); for(let i=0;i<N;i++){ if(!a[i]) continue; for(let j=0;i+j<N;j++) if(b[j]) o[i+j]+=a[i]*b[j]; } return o; };
+const part=(p,L,fixed)=>{ const b=new Float64Array(N); b[0]=1-p; if(fixed){ b[Math.min(N-1,Math.round(L/H))]+=p; return b; } const k=Math.max(1,Math.round(L/H)); for(let j=1;j<=k;j++) b[j]+=p/k; return b; };
+const mix=(a,b,w)=>a.map((v,i)=>(1-w)*v+w*b[i]);
+const P=plane($('w257v'),{x:[0,150],y:[-4.3,0.15],grid:0,labels:false,aspect:0.62,draw:P=>{
+  const s=+$('w257s').value, D=+$('w257d').value, L=12, n=+$('w257n').value, S=+$('w257q').value, m=norush?0:20/168;
+  let base=new Float64Array(N); base[0]=1;
+  for(let c=0;c<3;c++){ base=conv(base,part(4/1440,4)); base=conv(base,part(L/1440,L)); }
+  const calm=conv(base,part(Math.min(1,n*30/1440),30)), rush=conv(conv(base,part(1,D,true)),part(Math.min(1,n*S/1440),S));
+  const d=mix(calm,rush,m); const sv=new Float64Array(N); let t=0; for(let i=N-1;i>=0;i--){ sv[i]=t; t+=d[i]; }
+  let avg=0; d.forEach((v,i)=>avg+=v*i*H);
+  [0,-1,-2,-3,-4].forEach(e=>{ P.line(0,e,150,e,'--grid',1); P.text(e===0?'1':e===-1?'0.1':e===-2?'0.01':e===-3?'0.001':'0.0001',2,e+0.12,'--muted','left',10); });
+  [0,30,60,90,120,150].forEach(x=>P.text(x+' min',x,-4.22,'--muted',x===0?'left':x===150?'right':'center',10));
+  const pts=[]; for(let i=0;i<=300;i++){ const v=sv[i]; if(v<1e-4){ pts.push([i*H,-4]); break; } pts.push([i*H,Math.log10(v)]); } P.poly(pts,'--teal',null,2.2,false);
+  const q=sv[Math.round(s/H)]; P.line(s,-4.3,s,0.15,'--gold',2.5); if(q>1e-5) P.dot(s,Math.log10(q),'--gold',5);
+  $('w257so').textContent=s; $('w257do').textContent=D; $('w257no').textContent=n; $('w257qo').textContent=S;
+  const one=x=>x<1e-4?'fewer than 1 in 10 000':'1 in '+Math.round(1/x).toLocaleString('en'), ord=q*Math.pow(0.97,23);
+  $('w257o').textContent='Average road delay '+f(avg,1)+' min. With '+s+' min of slack, '+one(q)+' trucks is late'+(q>=1e-4?'; at r = 0.97 about half of those make the order late, '+one(ord)+'.':'.')+(norush?' No trucks in the rushes: station 1 holds two hours of parts at each rush.':''); }});
+const b=document.createElement('button'); b.textContent='no trucks in the rushes'; b.onclick=()=>{ norush=!norush; b.classList.toggle('on',norush); P.redraw(); }; $('w257c').appendChild(b);
+['w257s','w257d','w257n','w257q'].forEach(id=>$(id).oninput=()=>P.redraw()); P.redraw();
+})();
+</script><!--/gwjs 25logi7-->
 <!--gwjs 25logi5--><script>
 (function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
 const P=plane($('w25v'),{x:[0.2,25.2],y:[-0.16,1.12],grid:0,labels:false,aspect:0.6,draw:P=>{
