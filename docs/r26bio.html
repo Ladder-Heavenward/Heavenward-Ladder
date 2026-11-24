@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>26·bio · Why Does More Choice Take Longer?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26chem.html">← 26·chem which reactor turns more into product?</a><a href="r26then.html">next: 26·then how can a circuit say true or false? →</a></p>
+  <div class="tags"><span class="tag bio">26·bio · biology</span></div>
+  <h1>Why Does More Choice Take Longer?</h1>
+  <p data-pid="4f0640">Why does more choice take longer? A driver facing two exits picks faster than one facing eight. A cook finds the salt at once in a rack of three jars and hunts in a rack of thirty. Yet the time does not grow in step with the choices: eight takes far less than four times as long as two. This page finds that time grows by a fixed amount for each doubling of the choices (17), sees the doubling as yes-or-no questions, finds that the smallest change we notice grows with what is already there, turns that into feeling as a log of strength with 17i, and ends with the powers that fit some senses better.</p>
+  <p class="gesture" data-pid="f87f71">Picking among n equally likely choices takes a + b log₂(n + 1): each doubling adds the time of one more yes-or-no question. The smallest change we notice is a fixed share of the stimulus, so adding up noticeable steps gives feeling as a log of strength. For many senses a power, feeling ∝ strength^a, fits better, a straight line on log-log paper.</p>
+</header>
+
+<section class="class step" data-step="26bio1">
+  <h2 class="sthead"><span class="stno">26bio1</span>Time Grows With Each Doubling of the Choices</h2>
+  <p data-pid="4c9029">Zoe studies reaction times. A person watches a row of lights with a button under each, and presses the button under whichever light comes on. With more lights, each equally likely, the press comes later.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>lights, n</th><th>log₂(n + 1)</th><th>time (ms)</th></tr>
+    <tr><th>1</th><td>1</td><td>350</td></tr>
+    <tr><th>3</th><td>2</td><td>500</td></tr>
+    <tr><th>7</th><td>3</td><td>650</td></tr>
+    <tr><th>15</th><td>4</td><td>800</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: a straight line in the log">
+T = a + b\log_2(n + 1) @@ n + 1 counts the choices and the chance of none
+\htmlClass{new}{a = 200 \text{ ms},\ \ b = 150 \text{ ms for each doubling}} @@ Zoe’s fit
+  </pre>
+  <p data-pid="42c46e">From here on, on this page, a <i>bit</i> is one doubling of the number of choices. Zoe’s volunteers all fall close to one straight line when time is plotted against bits.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·bio.1.1</span><span class="ph understand">understand</span>How does choice time grow with the number of choices, and what is a bit?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26bio2">
+  <h2 class="sthead"><span class="stno">26bio2</span>Halving the Choices as Yes-or-No Questions</h2>
+  <p data-pid="989f21">To find one of 8 equal choices, ask: is it in the left half? Then: in the left half of that? Three questions settle it, because each halves what is left.</p>
+  <pre class="lines" data-k="ember" data-label="this page: questions to settle n + 1 choices">
+2^q = n + 1 @@ 
+\htmlClass{new}{q = \log_2(n + 1)} @@ the log undoes the power (17)
+  </pre>
+  <p data-pid="76f995">Bits-per-choice technique: <b>choosing among N equally likely things takes a fixed time plus a fixed time for each yes-or-no question needed, log₂ N; the mind seems to narrow the choices by halves.</b> A designer laying out a menu or a control panel uses this: one menu of 16 items is quicker than four menus of 4 opened in turn, though both settle 4 bits, because each menu opened costs its own fixed start.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·bio.2.1</span><span class="ph understand">understand</span>Why does settling among n + 1 choices take log₂(n + 1) questions, and how does a designer use this?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26bio3">
+  <h2 class="sthead"><span class="stno">26bio3</span>The Least Change You Can Notice Grows With the Stimulus</h2>
+  <p data-pid="3e88b5">Hold a 100 g weight, then one slightly heavier: most people notice a difference at about 102 g. Holding 1,000 g, they need about 1,020 g. The smallest noticeable change is not a fixed amount but a fixed share.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the least noticeable change">
+\Delta I = k\,I @@ k about 0.02 for lifted weights
+\htmlClass{new}{\dfrac{\Delta I}{I} = k} @@ the same share at every strength
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·bio.3.1</span><span class="ph understand">understand</span>How does the least noticeable change depend on the weight already held?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26bio4">
+  <h2 class="sthead"><span class="stno">26bio4</span>Feeling as the Log of Strength</h2>
+  <p data-pid="ff943d">Count feeling in noticeable steps: each step is the same to the person, and each step is the same share of the strength. Adding up shares is adding up dI/I, whose total is a log (17i).</p>
+  <pre class="lines" data-k="ember" data-label="this page: steps added up">
+dS = c\,\dfrac{dI}{I} @@ one noticeable step, the same size each time
+\htmlClass{new}{S = c\,\ln\dfrac{I}{I_0}} @@ the slope of ln is 1/x (17i); I₀ the faintest felt
+  </pre>
+  <p data-pid="3036c2"><b>If each noticeable step is a fixed share of the strength, felt strength grows as the log of the real strength.</b> That is why loudness is measured in decibels: ten times the strength of a sound sounds like one more fixed step, not ten times louder.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·bio.4.1</span><span class="ph understand">understand</span>How does adding up noticeable steps give a log, and why are sounds measured in decibels?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26bio5">
+  <h2 class="sthead"><span class="stno">26bio5</span>Powers Instead of Logs</h2>
+  <p data-pid="cd2a8e">When people are asked instead to give numbers to how strong things feel, their answers fit a power of the strength better than a log, with a different power for each sense.</p>
+  <pre class="lines" data-k="ember" data-label="this page: felt strength as a power">
+S = k\,I^a @@ 
+\log S = \log k + a\log I @@ a straight line on log-log paper (17)
+\htmlClass{new}{a \approx 0.67 \text{ loudness},\ \ 1 \text{ length},\ \ 3.5 \text{ electric shock}} @@ below 1 squeezes, above 1 stretches
+  </pre>
+  <p data-pid="d908af"><b>Power or log, felt strength squeezes a huge range of real strength into a small range of feeling, which is how eyes and ears work from a whisper to a jet engine.</b> A sound engineer setting a volume knob makes it turn in equal felt steps, not equal strength.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·bio.5.1</span><span class="ph understand">understand</span>How does a power differ from a log for felt strength, and what does a power below 1 do?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26bio6">
+  <h2 class="sthead"><span class="stno">26bio6</span>Moves to Watch Out For</h2>
+  <p data-pid="2ab817">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{twice the choices, twice the time}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; each doubling adds one fixed step: a + b log₂(n + 1) (26bio1)
+T = a + b\log_2 n\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the chance of no light counts too: n + 1 (26bio1)
+\text{the least noticeable change is a fixed weight}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it is a fixed share, about 2% (26bio3)
+\text{ten times the sound, ten times as loud}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; felt strength grows as a log or a small power (26bio4)
+\text{four menus of 4 are as quick as one of 16}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; same bits, but each menu opened costs its own start (26bio2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·bio.6.1</span><span class="ph understand">understand</span>Which move above makes choice time grow in step with the choices, and how does it really grow?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">26·bio.7.1</span><span class="tagq">do</span>With a = 200 ms and b = 150 ms, find the choice time for 31 lights and for 63.</div>
+  <div class="chq"><span class="chid">26·bio.7.2</span><span class="tagq">make</span>Make up a sense with a power a for which doubling the strength feels exactly half again as strong.</div>
+  <div class="chq"><span class="chid">26·bio.7.3</span><span class="tagq">converse</span>A fixed noticeable share gave a log. Decide whether felt strength growing as a log means the noticeable share is fixed.</div>
+  <div class="chq"><span class="chid">26·bio.7.4</span><span class="tagq">edge</span>Say what the choice time is for one light that always comes on, and why the n + 1 form gives a fixed time there.</div>
+  <div class="chq"><span class="chid">26·bio.7.5</span><span class="tagq">open</span>Practice makes some choices nearly instant whatever their number. Say what that suggests about the halving model.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r26chem.html">← 26·chem · which reactor turns more into product?</a><a href="r26then.html">26·then · how can a circuit say true or false? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="5fec35">The choice time rule is the <b>Hick-Hyman law</b>; the least noticeable change is the <b>just-noticeable difference</b>, its fixed share is <b>Weber’s law</b>, the log is <b>Fechner’s law</b>, and the power <b>Stevens’ power law</b>. The study of felt strength is <b>psychophysics</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="1a096d">William Hick published the choice time rule in 1952 and Ray Hyman extended it in 1953; Gustav Fechner set out the log in 1860; Stanley Smith Stevens the powers in 1957 (not yet revisited for the dates).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>26·eng2 · How Does a Building Ride Out an Earthquake?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26eng.html">← 26·eng why does the power grid swing back and forth?</a><a href="r26nav.html">next: 26·nav how does radar tell how fast the rain is moving? →</a></p>
+  <div class="tags"><span class="tag eng">26·eng2 · engineering</span></div>
+  <h1>How Does a Building Ride Out an Earthquake?</h1>
+  <p data-pid="5a0694">How does a building ride out an earthquake? In one earthquake, short buildings fall while tall ones nearby stand; in another, it is the other way round. The ground shakes back and forth at its own pace, and a building sways at its own. This page models a building as a mass on a spring with damping (26·cb24), drives it with shaking ground written as a turning arrow (26a), finds that the sway peaks near the building’s own frequency, draws the chart engineers design from, and shows how setting a building on soft bearings moves it out of the way.</p>
+  <p class="gesture" data-pid="30260a">Ground shaking at ω drives a building of natural frequency ω_n. Write the shaking as Re(A e^(iωt)): the sway comes out as A over the complex number ω_n² − ω² + 2iζω_nω. Near ω = ω_n only the damping term is left, and the sway is about 1/(2ζ) times the ground’s. Moving ω_n far below the shaking makes the sway tiny.</p>
+</header>
+
+<section class="class step" data-step="26eng21">
+  <h2 class="sthead"><span class="stno">26eng21</span>The Building as a Mass on a Spring With Damping</h2>
+  <p data-pid="d07e46">Randy designs buildings in a city near a fault. A building’s floors are heavy and its columns bend like springs; its walls and joints rub and lose energy. Measure x as the sway of the top relative to the ground.</p>
+  <p data-pid="36b102">From here on, on this page, ω_n = √(k/m) is the building’s own frequency, the rate it sways at if pushed and let go, and ζ is its <i>damping share</i>: how much of a swing it loses, about 0.05 for a typical building.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the sway">
+m\,x\prime\prime + c\,x\prime + k\,x = -m\,a_g(t) @@ the ground’s shaking acts as a push on the floors
+\htmlClass{new}{x\prime\prime + 2\zeta\omega_n x\prime + \omega_n^2 x = -a_g(t)} @@ divided by m (26·cb24)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng2.1.1</span><span class="ph understand">understand</span>How is a building modelled as a mass on a spring, and what do ω_n and ζ measure?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng22">
+  <h2 class="sthead"><span class="stno">26eng22</span>Shaking Ground Drives It</h2>
+  <p data-pid="8fc548">Let the ground shake as a_g = A cos ωt, the real part of A e^(iωt) (26a). Try a sway of the same form, X e^(iωt), and each slope multiplies by iω (26·eng).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the steady sway">
+(-\omega^2 + 2i\zeta\omega_n\omega + \omega_n^2)\,X = -A @@ 
+X = \dfrac{-A}{\omega_n^2 - \omega^2 + 2i\zeta\omega_n\omega} @@ 
+\htmlClass{new}{\dfrac{\omega_n^2 |X|}{A} = \dfrac{1}{\left|1 - r^2 + 2i\zeta r\right|},\ \ r = \dfrac{\omega}{\omega_n}} @@ the size of a complex number (25c)
+  </pre>
+  <p data-pid="de2f2c">The left side, ω_n²|X|, is the push per kilogram the columns feel. Divided by the ground’s A, it says how many times the building multiplies the shaking.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng2.2.1</span><span class="ph understand">understand</span>How does writing the shaking as a turning arrow give the steady sway, and what does the ratio measure?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng23">
+  <h2 class="sthead"><span class="stno">26eng23</span>The Sway Peaks Near the Natural Frequency</h2>
+  <pre class="lines" data-k="ember" data-label="this page: ζ = 0.05">
+r \ll 1:\ \text{ratio} \approx 1 @@ slow shaking: the building rides along
+r = 1:\ \text{ratio} = \dfrac{1}{2\zeta} = 10 @@ shaking in step: ten times the ground
+\htmlClass{new}{r \gg 1:\ \text{ratio} \approx \dfrac{1}{r^2}} @@ fast shaking: the building barely follows
+  </pre>
+  <p data-pid="f1fbd0">Detuning technique: <b>a building multiplies ground shaking by 1/|1 − r² + 2iζr|, about 1/(2ζ) when the shaking matches its own frequency and about 1/r² when the shaking is much faster; to protect a building, move its own frequency away from the shaking’s.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng2.3.1</span><span class="ph understand">understand</span>Where does the sway peak, and how big is it there for a typical building?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng24">
+  <h2 class="sthead"><span class="stno">26eng24</span>The Response Spectrum: Peak Sway Against Period</h2>
+  <p data-pid="65250a">Real ground shaking mixes many frequencies. Engineers run a recorded earthquake through buildings of every period T = 2π/ω_n and plot the largest push each feels. The chart is the design code’s starting point.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>building</th><th>own period</th><th>push felt in a typical strong quake</th></tr>
+    <tr><th>2 storeys</th><td>about 0.2 s</td><td>high: in step with the strongest shaking</td></tr>
+    <tr><th>10 storeys</th><td>about 1 s</td><td>moderate</td></tr>
+    <tr><th>40 storeys</th><td>about 4 s</td><td>low, but large sways</td></tr>
+  </table></div>
+  <p data-pid="7ff8ce">Most strong shaking near a fault is quick, with periods of a few tenths of a second, so low stiff buildings are often in step with it. Soft ground under a city can slow the shaking and put tall buildings in step instead, which is why different quakes topple different buildings.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng2.4.1</span><span class="ph understand">understand</span>What does the response spectrum chart show, and why can different quakes topple different buildings?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng25">
+  <h2 class="sthead"><span class="stno">26eng25</span>Base Isolation Moves the Period Away From the Shaking</h2>
+  <p data-pid="25aab5">Set the whole building on thick bearings of rubber and steel, soft sideways. The building above moves as one block on them, with a period of about 2.5 seconds, and the bearings damp more, ζ ≈ 0.1.</p>
+  <pre class="lines" data-k="ember" data-label="this page: shaking with period 0.3 s">
+\text{fixed base, period } 0.3 \text{ s}:\ r = 1,\ \text{ratio} = 10 @@ 
+\text{on bearings, period } 2.5 \text{ s}:\ r \approx 8.3,\ \ |1 - 69.4 + 1.67i| \approx 68 @@ 
+\htmlClass{new}{\text{ratio} \approx 0.015:\ \text{about 700 times less push}} @@ the bearings take the movement
+  </pre>
+  <p data-pid="92e0ec"><b>Base isolation makes the building’s own period long, far from the quick shaking, so the building above hardly feels it while the bearings take the ground’s movement.</b> Randy watches a scale model tested on a shaking table: fixed to the table, the model rocks wildly; set on bearings, it glides as the table shakes beneath it, as the ratio says. Hospitals and emergency centres are built this way, to work the day after a quake.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng2.5.1</span><span class="ph understand">understand</span>How does base isolation protect a building, and where does the ground’s movement go?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26eng26">
+  <h2 class="sthead"><span class="stno">26eng26</span>Moves to Watch Out For</h2>
+  <p data-pid="b8e576">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a stiffer building is always safer}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; stiffness sets its period; in step with the shaking it sways most (26eng23)
+\text{the sway at resonance grows without end}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; damping caps it at 1/(2ζ) (26eng23)
+\text{ratio} = 1/(1 - r^2)\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; take the size of 1 − r² + 2iζr: the damping term matters near r = 1 (26eng22)
+\text{every quake topples the same buildings}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; different shaking periods put different buildings in step (26eng24)
+\text{isolation makes the building stronger}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it makes it softer at the base, moving its period away (26eng25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·eng2.6.1</span><span class="ph understand">understand</span>Which move above lets the sway at resonance grow without end, and what caps it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">26·eng2.7.1</span><span class="tagq">do</span>A building has period 0.5 s and ζ = 0.05. Find how many times it multiplies shaking of period 0.5 s, 1 s and 0.25 s.</div>
+  <div class="chq"><span class="chid">26·eng2.7.2</span><span class="tagq">make</span>Make up a period for an isolated building that cuts shaking of period 0.4 s to a hundredth, with ζ = 0.1.</div>
+  <div class="chq"><span class="chid">26·eng2.7.3</span><span class="tagq">converse</span>Moving far from the shaking period cut the push. Decide whether making a building much stiffer, with a far shorter period, would also cut it, and say what it costs.</div>
+  <div class="chq"><span class="chid">26·eng2.7.4</span><span class="tagq">edge</span>Say what the ratio is when ζ = 0 and r = 1, and what that means for a building with no damping.</div>
+  <div class="chq"><span class="chid">26·eng2.7.5</span><span class="tagq">open</span>Tall towers carry a huge swinging weight near the top. Say, with two masses on springs, how such a weight can cut the sway.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r26eng.html">← 26·eng · why does the power grid swing back and forth?</a><a href="r26nav.html">26·nav · how does radar tell how fast the rain is moving? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="af2dc5">ζ is the <b>damping ratio</b>; the multiplying factor is the <b>dynamic amplification</b>, and its peak at r = 1 is <b>resonance</b>. The chart is the <b>response spectrum</b>, and the bearings are <b>base isolators</b>, such as lead-rubber bearings. The swinging weight is a <b>tuned mass damper</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="c01148">Maurice Biot proposed the response spectrum in the early 1930s, and George Housner made it the basis of design in the following decades (not yet revisited for the dates).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

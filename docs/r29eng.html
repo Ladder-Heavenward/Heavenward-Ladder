@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>29·eng · How Does a Wing Hold a Plane Up?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29time.html">← 29·G sometimes time has holes, and apparently that’s ok (I)</a><a href="r29eng2.html">next: 29·eng2 why do power stations run two engines? →</a></p>
+  <div class="tags"><span class="tag eng">29·eng · engineering</span></div>
+  <h1>How Does a Wing Hold a Plane Up?</h1>
+  <p data-pid="17bc04">How does a wing hold a plane up? A small plane weighs a tonne, and its wings hold it on nothing but moving air. The air flows a little faster over the top of the wing than under it, and that small difference in speed is enough. This page writes the flow past a wing as a stream plus a swirl, with 28l’s circulation, finds the pressure difference with 28·phys’s speed and pressure rule, gets the lift from density, speed and circulation, treats a propeller blade as a turning wing, and finds why wings stall.</p>
+  <p class="gesture" data-pid="21bb3f">Flow past a tilted wing is the passing stream plus a swirl round the wing. The swirl adds speed on top and takes it away below, so the pressure is lower on top. Lift per metre of span is ρ V Γ, with Γ the circulation round the wing. For a thin wing at a small tilt α, Γ = πcVα, so lift grows in step with the tilt, until the flow tears off the top and the lift collapses.</p>
+</header>
+
+<section class="class step" data-step="29eng1">
+  <h2 class="sthead"><span class="stno">29eng1</span>Flow Past a Wing as a Stream Plus a Swirl</h2>
+  <p data-pid="55291b">Terry tests wings in a wind tunnel. Air streams past a wing at speed V. A wing tilted slightly nose-up turns the air: it runs faster over the top and slower underneath. That is the stream plus a swirl round the wing.</p>
+  <p data-pid="1dc5ad">From here on, on this page, the <i>circulation</i> Γ is the swirl’s total: the speed along a loop round the wing, added up all the way round (28l). The plain stream alone adds to 0 round any loop.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a simple wing, chord c">
+\text{top: } V + w,\ \ \text{bottom: } V - w @@ w the swirl’s extra speed
+\Gamma = \oint \vec v \cdot d\vec s \approx (V + w)\,c - (V - w)\,c @@ along the top one way, back underneath (28l)
+\htmlClass{new}{\Gamma \approx 2wc} @@ 
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·eng.1.1</span><span class="ph understand">understand</span>How is the flow past a wing split into a stream and a swirl, and what is the circulation?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29eng2">
+  <h2 class="sthead"><span class="stno">29eng2</span>Faster on Top, Lower Pressure</h2>
+  <p data-pid="73eefe">Along a stream with no friction, pressure plus ½ρ times speed squared stays the same (28·phys). Faster air on top is at lower pressure.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the pressure difference">
+p + \tfrac12 \rho v^2 = \text{the same for all streams from far ahead} @@ 28·phys
+p_{\text{below}} - p_{\text{above}} = \tfrac12\rho\left[(V + w)^2 - (V - w)^2\right] @@ 
+\htmlClass{new}{= 2\rho V w} @@ the squares of V cancel
+  </pre>
+  <p data-pid="ea7446">The top air does not race to meet the bottom air at the back edge; it arrives well ahead of it. What matters is only that it is faster.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·eng.2.1</span><span class="ph understand">understand</span>Why is the pressure lower on top, and how big is the difference?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29eng3">
+  <h2 class="sthead"><span class="stno">29eng3</span>Lift From Density, Speed and Circulation</h2>
+  <pre class="lines" data-k="ember" data-label="this page: lift per metre of span">
+L\prime = (2\rho V w) \times c = \rho\,V\,(2wc) @@ pressure difference times chord
+\htmlClass{new}{L\prime = \rho\,V\,\Gamma} @@ 
+1\,000 \text{ kg, span } 10 \text{ m}:\ L\prime = 981 \text{ N/m};\ \ V = 50,\ \rho = 1.2:\ \Gamma \approx 16 \text{ m}^2/\text{s} @@ 
+c = 1.5 \text{ m}:\ w = \dfrac{\Gamma}{2c} \approx 5.5 \text{ m/s} @@ top 55.5, bottom 44.5 m/s
+  </pre>
+  <p data-pid="287020">Circulation-lift technique: <b>a wing’s lift per metre of span is the air’s density times its speed times the circulation round the wing.</b> For a thin wing tilted α, the air leaving smoothly off the sharp back edge sets Γ = πcVα, so lift = ½ρV² c (2πα): a 4° tilt holds Terry’s plane at 50 m/s. In the tunnel, Terry’s measured lift rises in a straight line with tilt, at the slope 2π per radian this gives, up to about 15°.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·eng.3.1</span><span class="ph understand">understand</span>How do density, speed and circulation give the lift, and what tilt holds a small plane at 50 m/s?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29eng4">
+  <h2 class="sthead"><span class="stno">29eng4</span>A Propeller Blade Is a Turning Wing</h2>
+  <p data-pid="4888d7">A propeller blade is a wing that goes round. Each piece of it, at radius r, meets the air at the plane’s speed V forward plus its own speed ωr round: two arrows square to each other (21·phys).</p>
+  <pre class="lines" data-k="ember" data-label="this page: a blade piece at r = 0.8 m, 2,400 turns a minute">
+\omega r \approx 251 \times 0.8 \approx 201 \text{ m/s} @@ 
+\text{air meets it at } \arctan\dfrac{50}{201} \approx 14° \text{ to the turning} @@ arrows add (21·phys)
+\htmlClass{new}{\text{set at } 18°:\ \text{tilt } 4°,\ \text{the same as the wing}} @@ 
+  </pre>
+  <p data-pid="a0753b">Further out, ωr is larger and the air comes in flatter, so the blade is twisted, steep near the hub and flat near the tip, to keep every piece at the same small tilt.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·eng.4.1</span><span class="ph understand">understand</span>How does each piece of a propeller blade meet the air, and why are blades twisted?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29eng5">
+  <h2 class="sthead"><span class="stno">29eng5</span>Why Wings Stall</h2>
+  <p data-pid="4fd2a0">Past a tilt of about 15°, the air can no longer follow the curved top of the wing. It tears away into swirling eddies, the circulation collapses, and the lift falls suddenly.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the slowest flight">
+W = \tfrac12 \rho V^2 S\, C_{\max} @@ S wing area, C_max the most lift per ½ρV²S
+V_{\text{stall}} = \sqrt{\dfrac{2W}{\rho S C_{\max}}} @@ 
+\htmlClass{new}{W = 9\,810 \text{ N},\ S = 15 \text{ m}^2,\ C_{\max} = 1.5:\ V_{\text{stall}} \approx 27 \text{ m/s}} @@ about 52 knots
+  </pre>
+  <p data-pid="64dd7d"><b>Lift grows with tilt only until the air tears off the top of the wing; slower than the stall speed, no tilt can hold the plane up.</b> Pilots land well above it, and flaps that curve the wing at landing raise C_max to lower it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·eng.5.1</span><span class="ph understand">understand</span>What happens when a wing stalls, and how does the stall set the slowest a plane can fly?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="29eng6">
+  <h2 class="sthead"><span class="stno">29eng6</span>Moves to Watch Out For</h2>
+  <p data-pid="9e8c2d">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{top air must meet bottom air at the back edge}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it arrives ahead; only that it is faster matters (29eng2)
+L\prime = \rho V^2 \Gamma\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; one V: L′ = ρVΓ (29eng3)
+\text{tilt the wing more for more lift, always}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; past about 15° the flow tears off and lift collapses (29eng5)
+\text{a propeller blade has the same tilt all along}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the air comes in flatter further out: the blade is twisted (29eng4)
+\text{the plain stream makes lift}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; its circulation is 0; lift needs the swirl (29eng1)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">29·eng.6.1</span><span class="ph understand">understand</span>Which move above makes the top air meet the bottom air at the back edge, and what really sets the lift?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">29·eng.7.1</span><span class="tagq">do</span>A glider of 400 kg has a 15 m span and flies at 25 m/s. Find the circulation round its wing, with ρ = 1.2.</div>
+  <div class="chq"><span class="chid">29·eng.7.2</span><span class="tagq">make</span>Make up a plane, its weight, wing area and C_max, whose stall speed is exactly 30 m/s.</div>
+  <div class="chq"><span class="chid">29·eng.7.3</span><span class="tagq">converse</span>A swirl round the wing gives lift. Decide whether any lift needs a swirl, using L′ = ρVΓ.</div>
+  <div class="chq"><span class="chid">29·eng.7.4</span><span class="tagq">edge</span>Say what the lift is when the air speed V nears 0, and what the stall-speed formula says about it.</div>
+  <div class="chq"><span class="chid">29·eng.7.5</span><span class="tagq">open</span>A spinning ball curves in flight. Say, with circulation, which way a ball spinning with its top moving forward curves.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r29time.html">← 29·G · sometimes time has holes, and apparently that’s ok (I)</a><a href="r29eng2.html">29·eng2 · why do power stations run two engines? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="92e4a2">L′ = ρVΓ is the <b>Kutta-Joukowski theorem</b>; the air leaving smoothly off the back edge is the <b>Kutta condition</b>, and Γ = πcVα comes from <b>thin airfoil theory</b>. The tilt is the <b>angle of attack</b>, lift per ½ρV²S the <b>lift coefficient</b>, and the swerve of a spinning ball the <b>Magnus effect</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="629e31">Martin Kutta (1902) and Nikolai Joukowski (1906) found the lift from circulation independently.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

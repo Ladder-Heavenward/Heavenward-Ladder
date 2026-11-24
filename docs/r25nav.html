@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>25·nav · Why Is Changing an Orbit’s Plane So Costly?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r25phys.html">← 25·phys how long can a star shine?</a><a href="r25econ.html">next: 25·econ why do some countries grow richer? →</a></p>
+  <div class="tags"><span class="tag nav">25·nav · navigation</span></div>
+  <h1>Why Is Changing an Orbit’s Plane So Costly?</h1>
+  <p data-pid="788cac">Why is changing an orbit’s plane so costly? A satellite in a low orbit can climb thousands of kilometres for less fuel than it takes to tilt its orbit by a few degrees. Launch sites near the equator charge more, and are worth it. This page sets out an orbit’s plane and tilt, finds the cost of turning a speed through an angle with 21’s sines, prices a 10° turn in low orbit, finds why a turn is best done where the craft is slow, and why rockets launch east from near the equator.</p>
+  <p class="gesture" data-pid="d469dd">To turn a speed v through an angle Δ without changing its size, the push is the third side of an isosceles triangle: 2v sin(Δ/2). It grows with v, so turn where the craft is slowest, and combine the turn with another push to save more. A rocket launched due east from latitude λ starts in a plane tilted λ, with the earth’s own spin as a free push.</p>
+</header>
+
+<section class="class step" data-step="25nav1">
+  <h2 class="sthead"><span class="stno">25nav1</span>An Orbit’s Plane and Its Tilt</h2>
+  <p data-pid="b16b5d">Terry plans satellite launches. An orbit about the earth lies in a flat plane through the earth’s centre (18·phys). Its <i>tilt</i> is the angle between that plane and the equator’s.</p>
+  <p data-pid="196f13">From here on, on this page, a craft launched due east from latitude λ starts in an orbit tilted λ, since its plane must pass through both the earth’s centre and the launch site. A satellite meant to hang over the equator needs tilt 0.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·nav.1.1</span><span class="ph understand">understand</span>What is an orbit’s tilt, and why does a launch due east from latitude λ give tilt λ?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25nav2">
+  <h2 class="sthead"><span class="stno">25nav2</span>Turning a Speed Costs Twice the Speed Times the Sine of Half the Angle</h2>
+  <p data-pid="a8d888">To change the plane, the craft must turn its speed arrow through the angle Δ between the planes, keeping its size v. The push is the arrow from the old speed to the new (21·phys).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the push for a turn">
+\text{old and new speed: two sides of length } v, \text{ angle } \Delta \text{ between} @@ an isosceles triangle
+\text{split it in half: each half has } v\sin(\Delta/2) \text{ opposite } \Delta/2 @@ sin as a side (21h)
+\htmlClass{new}{\Delta v = 2v\sin\dfrac{\Delta}{2}} @@ the third side
+  </pre>
+  <p data-pid="86de40">Plane-turn technique: <b>turning a craft’s speed v through Δ costs a push of 2v sin(Δ/2), so the cost grows with the speed at which the turn is made.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·nav.2.1</span><span class="ph understand">understand</span>Why is the push for a turn the third side of an isosceles triangle, and what does it grow with?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25nav3">
+  <h2 class="sthead"><span class="stno">25nav3</span>At Low Orbit, a 10° Turn Costs About 1.3 km/s</h2>
+  <pre class="lines" data-k="ember" data-label="this page: low orbit, v = 7.7 km/s">
+\Delta = 10°:\ 2 \times 7.7 \times \sin 5° \approx 1.34 \text{ km/s} @@ 
+\Delta = 28.5°:\ 2 \times 7.7 \times \sin 14.25° \approx 3.79 \text{ km/s} @@ about half of what it took to reach orbit
+\htmlClass{new}{\text{climbing from 300 km to 1\,000 km costs about } 0.4 \text{ km/s}} @@ two pushes, as 21·nav2’s transfer
+  </pre>
+  <p data-pid="cf24e4">A tilt of 10° costs over three times what climbing 700 km does. That is why satellites are launched as near as possible to the plane they will work in.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·nav.3.1</span><span class="ph understand">understand</span>What does a 10° turn cost in low orbit, and how does that compare with climbing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25nav4">
+  <h2 class="sthead"><span class="stno">25nav4</span>Turn Where the Craft Is Slow</h2>
+  <p data-pid="c4a94b">A satellite bound for the equator’s plane at 35,786 km goes first onto a long ellipse, from low orbit up to that height. At the far end of the ellipse it moves only about 1.6 km/s; there it must speed up to 3.07 km/s anyway. Turning and speeding up in one push makes one triangle, with the cosine-side technique (21h).</p>
+  <pre class="lines" data-k="ember" data-label="this page: from a site at 28.5°, at the far end">
+\text{separately: speed up } 1.47 + \text{turn } 2 \times 3.07 \times \sin 14.25° \approx 1.47 + 1.51 = 2.98 \text{ km/s} @@ 
+\text{together: } \sqrt{1.6^2 + 3.07^2 - 2 \times 1.6 \times 3.07\cos 28.5°} \approx 1.83 \text{ km/s} @@ the cosine-side technique (21h)
+\htmlClass{new}{\text{from a site at } 5°:\ \sqrt{1.6^2 + 3.07^2 - 2 \times 1.6 \times 3.07\cos 5°} \approx 1.48 \text{ km/s}} @@ 
+  </pre>
+  <p data-pid="fb490c"><b>Make the turn where the craft is slowest, and fold it into a push that must be made anyway; the triangle’s third side is shorter than the two pushes added.</b> Flight controllers plan every such push this way, and the craft’s tracking afterwards shows it in the new plane at the new speed.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·nav.4.1</span><span class="ph understand">understand</span>Why is the turn cheapest at the far end of the ellipse, and why does combining it with the speed-up save fuel?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25nav5">
+  <h2 class="sthead"><span class="stno">25nav5</span>Launch East, Near the Equator</h2>
+  <p data-pid="3edbb3">The ground turns east under a rocket before it lifts off. At latitude λ the ground moves 465 cos λ metres a second (21b). Launching east takes that speed for free, and a site near the equator both gets the most of it and starts at the smallest tilt.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>site latitude</th><th>free speed east</th><th>tilt to remove for the equator’s plane</th><th>last push at the far end</th></tr>
+    <tr><th>5°</th><td>463 m/s</td><td>5°</td><td>about 1.48 km/s</td></tr>
+    <tr><th>28.5°</th><td>409 m/s</td><td>28.5°</td><td>about 1.83 km/s</td></tr>
+  </table></div>
+  <p data-pid="87a3a1"><b>A launch site near the equator saves fuel twice: once from the ground’s faster spin, and again from the smaller tilt to remove.</b> A satellite operator choosing a launch weighs this saving, which can mean years more fuel for keeping station, against the launch price.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·nav.5.1</span><span class="ph understand">understand</span>Why does a site near the equator save fuel twice?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25nav6">
+  <h2 class="sthead"><span class="stno">25nav6</span>Moves to Watch Out For</h2>
+  <p data-pid="e491cd">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a small tilt costs little}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 2v sin(Δ/2) at 7.7 km/s: 10° costs 1.34 km/s (25nav3)
+\Delta v = v\,\Delta\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the third side: 2v sin(Δ/2), close to vΔ only for small Δ (25nav2)
+\text{turn right after launch, while the engine is running}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it works, but it is dearest there; turn where the craft is slow (25nav4)
+\text{turn and speed up as two pushes}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; one combined push is the shorter third side (25nav4)
+\text{launch north to save the turn}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a launch due east from λ gives tilt λ; go near the equator (25nav5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·nav.6.1</span><span class="ph understand">understand</span>Which move above makes a turn cost its speed times the angle, and what does the triangle really give?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">25·nav.7.1</span><span class="tagq">do</span>Find the push to turn a low orbit, at 7.7 km/s, through 51.6°.</div>
+  <div class="chq"><span class="chid">25·nav.7.2</span><span class="tagq">make</span>Make up a speed and an angle whose turn costs exactly 1 km/s.</div>
+  <div class="chq"><span class="chid">25·nav.7.3</span><span class="tagq">converse</span>Turning at a lower speed costs less. Decide whether the cheapest turn is always at the slowest point, if the craft must also change speed somewhere.</div>
+  <div class="chq"><span class="chid">25·nav.7.4</span><span class="tagq">edge</span>Say what a turn of 180° costs, and what such a turn does to the orbit.</div>
+  <div class="chq"><span class="chid">25·nav.7.5</span><span class="tagq">open</span>Some craft change plane by first going far out, where they are very slow, then coming back. Say, with the plane-turn technique, when this three-push route beats one turn.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r25phys.html">← 25·phys · how long can a star shine?</a><a href="r25econ.html">25·econ · why do some countries grow richer? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="c708d7">The tilt is the orbit’s <b>inclination</b>; a turn alone is a <b>simple plane change</b>, and one folded into a speed change is a <b>combined plane change</b>. The long ellipse is a <b>geostationary transfer orbit</b>, and its far end the <b>apogee</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="410a2d">The plane-change push is worked out in every first course on orbits. The European launch site at Kourou in French Guiana lies at about 5° north; Cape Canaveral in Florida at about 28.5° north.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
