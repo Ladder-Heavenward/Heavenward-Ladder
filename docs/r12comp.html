@@ -47,7 +47,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r12eng.html">← 12·eng will the shelf hold?</a><a href="r12econ.html">next: 12·econ must there be a price where buyers and sellers match? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r12eng2.html">← 12·eng2 why does a fan twice as fast use eight times the power?</a><a href="r12econ.html">next: 12·econ must there be a price where buyers and sellers match? →</a></p>
   <div class="tags"><span class="tag comp">12·comp · computing</span></div>
   <h1>What Can a Machine With No Memory Check?</h1>
   <p data-pid="fe1772">What can a machine with no memory check? A card reader checks that a number has the right count of digits. A spreadsheet checks that every bracket opened in a formula is closed. Each reads a string of symbols one at a time and answers yes or no at the end. Some checks need only a fixed handful of states, such as which digit you are on. Others seem to need a memory that grows with the string. Where exactly is the line? The question is hard because a clever machine might find a trick. “I can't think of one” proves nothing. This page writes techniques that build strings, by 4d's recursion, and sorts them into four families. Then it builds the machine with no memory, and proves with 8·cb5's pigeonhole technique what it cannot check. Rung 12 turns up in the middle: a count of brackets, like a continuous curve, never skips.</p>
@@ -255,19 +255,36 @@ a^ib^i \in L,\ \ a^jb^i \notin L @@ the machine says yes to both or to neither
     </ol>
   </section>
 </section>
+<section class="class step" data-step="12comp10">
+  <h2 class="sthead"><span class="stno">12comp10</span>A Pattern That Checks a Postcode</h2>
+  <p data-pid="779afd">A machine with no memory moves between a fixed few states as it reads (12comp5). Programmers write such machines as patterns: a digit, a count, a part that may be missing. A form that asks for a postcode of five digits, with an optional extension of four, checks it with one pattern.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the pattern and four strings">
+\texttt{[0-9]\{5\}(-[0-9]\{4\})?} @@ five digits, then maybe a hyphen and four
+\texttt{94110} \checkmark \qquad \texttt{94110-1234} \checkmark @@ 
+\texttt{9411} \times \qquad \texttt{94110-12} \times @@ too short, extension cut off
+\htmlClass{new}{\text{brackets matched to any depth: no pattern can check it}} @@ unbounded count (12comp7)
+  </pre>
+  <p data-pid="1d4258">Pattern technique: <b>write what valid input looks like as a pattern of pieces, counts and optional parts; a memoryless machine checks it in one pass. What needs an unbounded count, like matched brackets, no pattern can check.</b> Shown in a run: the pattern, run over a test list of good and bad postcodes, accepts exactly the good ones and refuses every bad one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">12·comp.10.1</span><span class="ph understand">understand</span>What can a pattern check about a postcode, and what kind of check is beyond any pattern?</li>
+    </ol>
+  </section>
+</section>
 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
-  <div class="chq"><span class="chid">12·comp.10.1</span><span class="tagq">build</span>Choose a language of your own, strings of a’s and b’s not on this page, that no machine with no memory checks. <br>Write a grammar for it, and prove the wall for it, every line cited. <br>Then change the language as little as you can so that a machine with no memory checks it, and build that machine.</div>
-  <div class="chq"><span class="chid">12·comp.10.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a laptop with } 16 \text{ GB of memory,}"></span> <span data-tex-inline="\text{so finitely many states}"></span></span>Decide whether it is a machine with no memory, and whether it can check every balanced string.</div>
-  <div class="chq"><span class="chid">12·comp.10.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{bounded-depth:}"></span> <span data-tex-inline="k + 2 \text{ states check}"></span> <span data-tex-inline="\text{the balanced strings}"></span> <span data-tex-inline="\text{of depth} \le k"></span></span>Prove or refute that every machine with no memory that checks them has at least as many states.</div>
-  <div class="chq"><span class="chid">12·comp.10.4</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="S \to (S)S \mid \varepsilon"></span></span>Prove that every sentence of this grammar is balanced.</div>
-  <div class="chq"><span class="chid">12·comp.10.5</span><span class="tagq">seam</span>In 1957 a linguist wrote “Colorless green ideas sleep furiously”: a sentence no one had said before, which every speaker hears as built right and meaning nothing. No count of what people had said, he argued, would tell it from the same words in reverse order. So a language is what its techniques can reach, not what people are likely to say. The machines that write today learned by counting what people say. <br>Is a sentence what the techniques can reach, or what people are likely to say?</div>
+  <div class="chq"><span class="chid">12·comp.11.1</span><span class="tagq">build</span>Choose a language of your own, strings of a’s and b’s not on this page, that no machine with no memory checks. <br>Write a grammar for it, and prove the wall for it, every line cited. <br>Then change the language as little as you can so that a machine with no memory checks it, and build that machine.</div>
+  <div class="chq"><span class="chid">12·comp.11.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a laptop with } 16 \text{ GB of memory,}"></span> <span data-tex-inline="\text{so finitely many states}"></span></span>Decide whether it is a machine with no memory, and whether it can check every balanced string.</div>
+  <div class="chq"><span class="chid">12·comp.11.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{bounded-depth:}"></span> <span data-tex-inline="k + 2 \text{ states check}"></span> <span data-tex-inline="\text{the balanced strings}"></span> <span data-tex-inline="\text{of depth} \le k"></span></span>Prove or refute that every machine with no memory that checks them has at least as many states.</div>
+  <div class="chq"><span class="chid">12·comp.11.4</span><span class="tagq">loop</span><span class="givens"><span data-tex-inline="S \to (S)S \mid \varepsilon"></span></span>Prove that every sentence of this grammar is balanced.</div>
+  <div class="chq"><span class="chid">12·comp.11.5</span><span class="tagq">seam</span>In 1957 a linguist wrote “Colorless green ideas sleep furiously”: a sentence no one had said before, which every speaker hears as built right and meaning nothing. No count of what people had said, he argued, would tell it from the same words in reverse order. So a language is what its techniques can reach, not what people are likely to say. The machines that write today learned by counting what people say. <br>Is a sentence what the techniques can reach, or what people are likely to say?</div>
 </section>
 <div class="themecert themeend"></div>
-<nav class="nextrung"><a href="r12eng.html">← 12·eng · will the shelf hold?</a><a href="r12econ.html">12·econ · must there be a price where buyers and sellers match? →</a></nav>
+<nav class="nextrung"><a href="r12eng2.html">← 12·eng2 · why does a fan twice as fast use eight times the power?</a><a href="r12econ.html">12·econ · must there be a price where buyers and sellers match? →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>

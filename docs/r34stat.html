@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>34·stat · How Close Is a Poll?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r34chem.html">← 34·chem where does the carbon go?</a><a href="r34now.html">next: 34·now can loops tell you the shape of space? →</a></p>
+  <div class="tags"><span class="tag stat">34·stat · statistics</span></div>
+  <h1>How Close Is a Poll?</h1>
+  <p data-pid="cb402e">How close is a poll? A town asks whether its schools should start later in the morning. A pollster phones a thousand people and reports 54% in favour, “plus or minus three points”. What does the three mean, and why do two polls on the same day sometimes disagree by more? This page finds the margin of error from the sample size with 30’s spreads, finds why halving it takes four times the people, averages polls together, measures one pollster’s steady lean, and finds the errors that averaging cannot remove.</p>
+  <p class="gesture" data-pid="fd689e">A share from n people randomly chosen spreads around the true share by about √(p(1 − p)/n); twice that is the margin of error. The spread falls as 1/√n, so halving it takes four times the people. Averaging independent polls shrinks the spread the same way, but errors that all polls share, from people they all miss, do not shrink at all.</p>
+</header>
+
+<section class="class step" data-step="34stat1">
+  <h2 class="sthead"><span class="stno">34stat1</span>The Margin of Error From the Sample Size</h2>
+  <p data-pid="fb05da">Evita runs a polling firm. She asks n people, chosen at random from the town, whether they favour a later school start. If the true share in the town is p, each answer is a yes with chance p, and her poll’s share is an average of n such answers.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the spread of a poll’s share">
+\text{spread} = \sqrt{\dfrac{p(1 - p)}{n}} @@ the spread of an average (30h, 30j)
+p \approx 0.5,\ n = 1\,000:\ \sqrt{0.25 / 1\,000} \approx 0.016 @@ 
+\htmlClass{new}{\text{margin of error} \approx 1.96 \times 0.016 \approx 3 \text{ points}} @@ 95 polls in 100 land within it (30j)
+  </pre>
+  <p data-pid="f6f4e7">From here on, on this page, the <i>margin</i> is 1.96 spreads: the distance within which 95 of 100 such polls fall of the true share.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34·stat.1.1</span><span class="ph understand">understand</span>Where does the margin of error come from, and what does three points mean for a poll of a thousand?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34stat2">
+  <h2 class="sthead"><span class="stno">34stat2</span>Halving It Takes Four Times the People</h2>
+  <pre class="lines" data-k="ember" data-label="this page: margin against size">
+\text{margin} \propto \dfrac{1}{\sqrt n} @@ 
+n = 4\,000:\ 1.5 \text{ points};\ \ n = 16\,000:\ 0.8 \text{ points} @@ 
+\htmlClass{new}{\text{each halving of the margin costs four times the calls}} @@ 
+  </pre>
+  <p data-pid="95d383">Margin technique: <b>a random sample of n gives a share within about 1/√n of the truth, 95 times in 100; to halve the margin, ask four times as many.</b> The size of the town hardly matters: a thousand people pin down a town of fifty thousand as well as a nation of millions.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34·stat.2.1</span><span class="ph understand">understand</span>Why does halving the margin take four times the people, and why does the town’s size hardly matter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34stat3">
+  <h2 class="sthead"><span class="stno">34stat3</span>Averaging Polls Together</h2>
+  <p data-pid="3a8b70">Five firms each poll a thousand people in the same week, independently. Their average is like one poll of five thousand.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>firm</th><th>in favour</th></tr>
+    <tr><th>A</th><td>54%</td></tr>
+    <tr><th>B</th><td>51%</td></tr>
+    <tr><th>C</th><td>55%</td></tr>
+    <tr><th>D</th><td>52%</td></tr>
+    <tr><th>E</th><td>53%</td></tr>
+    <tr><th>average</th><td>53%, margin about 1.4 points</td></tr>
+  </table></div>
+  <p data-pid="d8d989">The firms differ by up to four points, which looks alarming, but is what five polls of a thousand should show: each has a margin of three.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34·stat.3.1</span><span class="ph understand">understand</span>Why do five polls disagree by several points, and what does their average achieve?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34stat4">
+  <h2 class="sthead"><span class="stno">34stat4</span>House Lean: One Pollster’s Steady Tilt</h2>
+  <p data-pid="93c5a5">Over a year, firm C comes out about two points above the average of the others on every question, whatever the week. That is not chance, which would go both ways. It is its <i>house lean</i>, from how it words questions, which hours it calls, or how it weights its answers.</p>
+  <pre class="lines" data-k="ember" data-label="this page: finding a house lean">
+\text{lean} = \text{average of (firm’s share} - \text{average of all), over many polls} @@ 
+\text{spread of that average over 25 polls} \approx \dfrac{1.6}{\sqrt{25}} \approx 0.3 \text{ points} @@ 
+\htmlClass{new}{\text{a steady 2 point lean is far outside chance: subtract it}} @@ 
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34·stat.4.1</span><span class="ph understand">understand</span>What is a house lean, and how is it told apart from chance?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34stat5">
+  <h2 class="sthead"><span class="stno">34stat5</span>Errors That Move Together, So Averaging Does Not Remove Them</h2>
+  <p data-pid="6aa760">Suppose every firm misses the same people: those who never answer calls from unknown numbers, who lean differently on the question. Then every poll is off the same way, by an amount averaging cannot touch.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a shared error of 2 points">
+\text{total spread} = \sqrt{\dfrac{s^2}{k} + e^2} @@ k polls, own spread s, shared error e (30)
+s = 1.6,\ e = 2,\ k = 10:\ \sqrt{0.26 + 4} \approx 2.1 \text{ points} @@ 
+\htmlClass{new}{\text{ten polls barely beat one: the shared part stays}} @@ 
+  </pre>
+  <p data-pid="b5065d"><b>Averaging polls shrinks the errors that are each poll’s own, but not the error they all share; the margin printed on a poll counts only the first.</b> When the town votes, Evita compares the result with the final polls: the average missed by about the size of the shared error, as the count allows, and next time she weights her sample by how often each kind of person answers.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34·stat.5.1</span><span class="ph understand">understand</span>Why does averaging fail to remove errors that all polls share, and what does the printed margin leave out?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="34stat6">
+  <h2 class="sthead"><span class="stno">34stat6</span>Moves to Watch Out For</h2>
+  <p data-pid="03e5c7">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a bigger town needs a bigger poll}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the margin depends on n, hardly on the town’s size (34stat2)
+\text{twice the people, half the margin}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; four times the people for half (34stat2)
+\text{polls four points apart means one is wrong}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; polls of a thousand each have a three-point margin (34stat3)
+\text{average enough polls and the error vanishes}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; shared errors stay, whatever the number of polls (34stat5)
+\text{one firm high twice is a house lean}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; only a steady tilt over many polls, beyond chance (34stat4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">34·stat.6.1</span><span class="ph understand">understand</span>Which move above makes averaging remove every error, and which errors does it leave?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">34·stat.7.1</span><span class="tagq">do</span>A poll of 600 finds 46%. Find its margin, and the size of poll needed for a margin of 2 points.</div>
+  <div class="chq"><span class="chid">34·stat.7.2</span><span class="tagq">make</span>Make up a shared error and a number of polls for which the average’s total spread is exactly 2.5 points, with each poll’s own spread 1.6.</div>
+  <div class="chq"><span class="chid">34·stat.7.3</span><span class="tagq">converse</span>A random sample gave a margin of 1/√n. Decide whether a poll whose margin is 1/√n must have been random, and what else could give it.</div>
+  <div class="chq"><span class="chid">34·stat.7.4</span><span class="tagq">edge</span>Say what the margin formula gives when the true share is 0 or 1, and why that is right.</div>
+  <div class="chq"><span class="chid">34·stat.7.5</span><span class="tagq">open</span>Some polls ask the same people again each month. Say what that does to the change from month to month, compared with fresh samples.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r34chem.html">← 34·chem · where does the carbon go?</a><a href="r34now.html">34·now · can loops tell you the shape of space? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="1e14e3">The spread is the <b>standard error</b>, and 1.96 of them the <b>margin of error</b> of a <b>95% confidence interval</b>. A house lean is a <b>house effect</b>; averaging polls is <b>poll aggregation</b>; people who never answer cause <b>nonresponse bias</b>, part of the <b>total survey error</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="90631e">Jerzy Neyman showed in 1934 why random samples beat hand-picked ones and set out confidence intervals (not yet revisited for the date).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

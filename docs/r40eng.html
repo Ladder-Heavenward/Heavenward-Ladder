@@ -32,7 +32,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r40l.html">← 40l compiling by hand</a><a href="r40comp.html">next: 40·comp what did a missing check cost? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40l.html">← 40l compiling by hand</a><a href="r40eng2.html">next: 40·eng2 can a loom follow a program? →</a></p>
   <div class="tags"><span class="tag eng">40·eng · engineering</span></div>
   <h1>How Do You Know the Compiler Is Right?</h1>
   <p data-pid="298ea8">40j proved that a compiler built right shape by shape keeps every run. Real compilers are millions of lines, and nobody has proved most of them. This annex shows how engineers test them anyway, and what a test can and cannot show.</p>
@@ -87,16 +87,33 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
     </ol>
   </section>
 </section>
+<section class="class step" data-step="40eng5">
+  <h2 class="sthead"><span class="stno">40eng5</span>What the Tests Reach, and Halving a Failure</h2>
+  <p data-pid="f6ab15">A compiler is checked by what its programs do (40eng1). Two counts say how much a set of tests has checked: the share of the compiler’s own lines it ran, and the share of its branches it took each way. When a random program exposes a fault, it is often thousands of lines long; halving shrinks it to the few lines that matter.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a 1,024-line program that the two compilers disagree on">
+\text{lines reached} = \tfrac{9\,200}{10\,000} = 92\%;\ \ \text{branches both ways} = 81\% @@ a line never run is never tested
+\text{cut half the program; still disagree? keep the half} @@ halving-traps (12e)
+\text{one guilty line: } \log_2 1\,024 = 10 \text{ runs} @@ 
+\htmlClass{new}{\text{two lines that fail only together: cut in quarters, and keep trying smaller pieces}} @@ more runs, still far fewer than all
+  </pre>
+  <p data-pid="4d512e">Shrinking technique: <b>count the share of lines and branches the tests reach, since nothing unreached is checked; and shrink a failing program by cutting pieces away while it still fails, halving when one piece is to blame.</b> Shown on a test farm: two compilers fed random programs disagree on one; halving shrinks it to six lines, and those six lines point to the one wrong step in one compiler, which its makers fix.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·eng.5.1</span><span class="ph understand">understand</span>What do coverage counts measure, and how does halving shrink a failing program to the few lines that matter?</li>
+    </ol>
+  </section>
+</section>
 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The annex is complete without them.</p>
-  <div class="chq"><span class="chid">40·eng.5.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">the oracle</span></span>Random testing needs a way to tell a right answer. With two compilers, the oracle is the other one. What if there is only one? Name two other oracles.</div>
+  <div class="chq"><span class="chid">40·eng.6.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">the oracle</span></span>Random testing needs a way to tell a right answer. With two compilers, the oracle is the other one. What if there is only one? Name two other oracles.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r40l.html">← 40l · compiling by hand</a><a href="r40comp.html">40·comp · what did a missing check cost? →</a></nav>
+<nav class="nextrung"><a href="r40l.html">← 40l · compiling by hand</a><a href="r40eng2.html">40·eng2 · can a loom follow a program? →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>

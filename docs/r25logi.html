@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>25·logi · Why Does a Five-Minute Delay Miss the Deadline?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r25econ.html">← 25·econ why do some countries grow richer?</a><a href="r25now.html">next: 25·now which numbers never escape? →</a></p>
+  <div class="tags"><span class="tag logi">25·logi · logistics</span></div>
+  <h1>Why Does a Five-Minute Delay Miss the Deadline?</h1>
+  <p data-pid="d6593c">Why does a five-minute delay miss the deadline? A factory that holds no spare parts saves money every day, until one late delivery at the start of the line stops every station after it, and the day’s order ships late. This page models the line as a chain of handoffs, lets each late handoff pass its delay on with some chance, adds up how far one delay spreads as 22’s geometric sum, finds why an early slip predicts a missed deadline when there is no slack, and weighs where one buffer of stock does the most good, as 14·logi weighed stock against orders.</p>
+  <p class="gesture" data-pid="e094c7">A delay at one station passes to the next with chance r, and is absorbed with chance 1 − r. The stations it reaches add up as 1 + r + r² + … = 1/(1 − r). With no slack, r is near 1, so a slip at station k reaches the end with chance r^(24 − k). A buffer catches what arrives; it does more good the later it sits, but costs more there.</p>
+</header>
+
+<section class="class step" data-step="25logi1">
+  <h2 class="sthead"><span class="stno">25logi1</span>Just in Time: a Chain of Handoffs</h2>
+  <p data-pid="815bf8">Claire runs an assembly line with 24 stations. Each station waits for the part from the one before, works on it, and hands it on. To save money, no station keeps a stock of finished parts: each part arrives just as it is needed.</p>
+  <p data-pid="523a0a">From here on, on this page, a <i>station</i> is one of the 24 handoffs in order, and the <i>deadline</i> is the moment the last one must finish.</p>
+  <p data-pid="ebbf45">With no stock between stations, a station that finishes late makes the next one start late. Whether the next one makes up the time depends on how much slack it has.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·logi.1.1</span><span class="ph understand">understand</span>Why does a line with no stock between stations pass delays along?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25logi2">
+  <h2 class="sthead"><span class="stno">25logi2</span>A Late Handoff Passes Its Delay On With Chance r</h2>
+  <p data-pid="9a02d0">Say a late part reaches a station. If the station has slack, a few spare minutes in its work, it absorbs the delay and hands on in time. If not, it hands on late.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one station">
+\text{passes the delay on: chance } r @@ 
+\text{absorbs it: chance } 1 - r @@ slack at the station
+\htmlClass{new}{\text{stations independent: the chance of passing } n \text{ in a row is } r^n} @@ chances multiply
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·logi.2.1</span><span class="ph understand">understand</span>What does slack at a station do to a delay, and why do the chances multiply along the line?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25logi3">
+  <h2 class="sthead"><span class="stno">25logi3</span>How Far One Delay Spreads</h2>
+  <pre class="lines" data-k="ember" data-label="this page: stations a delay reaches, on average">
+1 + r + r^2 + r^3 + \cdots = \dfrac{1}{1 - r} @@ the geometric sum (22e)
+r = 0.5:\ 2 \text{ stations};\ \ r = 0.9:\ 10;\ \ r = 0.97:\ 33 @@ 
+\htmlClass{new}{\text{as } r \to 1, \text{ one delay reaches the whole line}} @@ the line has only 24 to reach
+  </pre>
+  <p data-pid="7eb37d">Knock-on series technique: <b>if each station passes a delay on with chance r, one delay reaches on average 1/(1 − r) stations; when 1/(1 − r) is longer than the line, a delay anywhere usually reaches the end.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·logi.3.1</span><span class="ph understand">understand</span>How does the geometric sum count the stations a delay reaches, and what happens as r nears 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25logi4">
+  <h2 class="sthead"><span class="stno">25logi4</span>With No Slack, a Small Early Slip Predicts a Missed Deadline</h2>
+  <p data-pid="59f7a8">A delay at station k must pass 24 − k more stations to reach the deadline.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>chance r of passing on</th><th>delay at station 4 reaches the deadline</th><th>at station 20</th></tr>
+    <tr><th>0.90</th><td>0.90²⁰ ≈ 0.12</td><td>0.90⁴ ≈ 0.66</td></tr>
+    <tr><th>0.97</th><td>0.97²⁰ ≈ 0.54</td><td>0.97⁴ ≈ 0.89</td></tr>
+    <tr><th>0.99</th><td>0.99²⁰ ≈ 0.82</td><td>0.99⁴ ≈ 0.96</td></tr>
+  </table></div>
+  <p data-pid="790ce0"><b>On a lean line, with r close to 1, a five-minute slip at the fourth station misses the deadline more often than not.</b> That is why a line manager watching a just-in-time line treats the first late handoff of the day as a warning for the last, and acts at once rather than waiting to see if it clears.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·logi.4.1</span><span class="ph understand">understand</span>Why does a slip early on a lean line predict a missed deadline, and what does a line manager do about it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25logi5">
+  <h2 class="sthead"><span class="stno">25logi5</span>Where One Buffer Does the Most Good</h2>
+  <p data-pid="522c87">A buffer is a small stock of finished parts at one station: when a delay arrives there, the stock covers it. Say a delay is equally likely to start at any station, and r = 0.97. A buffer at station j catches every delay that reaches j.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what a buffer at station j catches">
+\text{chance a delay reaches } j = \dfrac{1}{24}\,(1 + r + \cdots + r^{j-1}) = \dfrac{1}{24} \cdot \dfrac{1 - r^j}{1 - r} @@ from stations 1 to j
+j = 6:\ 0.23;\ \ j = 12:\ 0.43;\ \ j = 18:\ 0.59;\ \ j = 24:\ 0.72 @@ 
+\htmlClass{new}{\text{the gain flattens as } j \text{ grows, while the stock’s value grows with each station}} @@ 
+  </pre>
+  <p data-pid="aee97f"><b>A buffer later in the line catches more delays, but each later station adds less, while stock held there is worth more and costs more to hold; the best place is where one more station’s gain just pays for its extra holding cost (14·logi, 14h).</b> Planners of lean lines place a few such buffers before the slowest stations and leave the rest bare.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·logi.5.1</span><span class="ph understand">understand</span>Why does a buffer catch more the later it sits, and why is the latest place not always the best?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="25logi6">
+  <h2 class="sthead"><span class="stno">25logi6</span>Moves to Watch Out For</h2>
+  <p data-pid="b6458f">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a five-minute delay costs five minutes}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it passes along: on average 1/(1 − r) stations (25logi3)
+\text{stations reached} = 1 + 24r\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the chances multiply: 1 + r + r² + … (25logi3)
+\text{an early delay has time to clear}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; with r near 1, r^(24 − k) stays large (25logi4)
+\text{put the buffer at the very end}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it catches most, but holding finished stock costs most (25logi5)
+\text{lean lines never hold stock}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a few buffers before the slowest stations pay for themselves (25logi5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">25·logi.6.1</span><span class="ph understand">understand</span>Which move above adds the chances along the line, and how do they really combine?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">25·logi.7.1</span><span class="tagq">do</span>With r = 0.95, find the chance a delay at station 10 reaches the deadline, and the average number of stations it reaches.</div>
+  <div class="chq"><span class="chid">25·logi.7.2</span><span class="tagq">make</span>Make up an r for which a delay at station 4 reaches the deadline with chance exactly one half.</div>
+  <div class="chq"><span class="chid">25·logi.7.3</span><span class="tagq">converse</span>Slack at every station gives a small r. Decide whether a small r means every station has slack, or whether one station’s slack can do it.</div>
+  <div class="chq"><span class="chid">25·logi.7.4</span><span class="tagq">edge</span>Say what happens to the spread of a delay when r = 0, and when r = 1.</div>
+  <div class="chq"><span class="chid">25·logi.7.5</span><span class="tagq">open</span>Delays also start at more than one station in a day. Say how two delays on the same line change the chance of meeting the deadline.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r25econ.html">← 25·econ · why do some countries grow richer?</a><a href="r25now.html">25·now · which numbers never escape? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="01f2d0">A line with no stock between stations is <b>just-in-time</b> production; a buffer of stock is <b>safety stock</b>, and delays passed down a line are <b>knock-on</b> or <b>propagated delays</b>. The study of where buffers go is <b>buffer allocation</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="a22d94">Just-in-time production grew up in Japanese car factories after the Second World War, chiefly under Taiichi Ohno (not yet revisited).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>37·stat · Did You Hear It, or Just Say Yes?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r37bio.html">← 37·bio how does the ear tell one pitch from another?</a><a href="r37crypt.html">next: 37·crypt can a voice be hidden? →</a></p>
+  <div class="tags"><span class="tag stat">37·stat · statistics</span></div>
+  <h1>Did You Hear It, or Just Say Yes?</h1>
+  <p data-pid="51d840">Did you hear it, or just say yes? In a hearing test, faint beeps come through headphones and you press a button when you hear one. Someone eager presses at every faint hiss and catches every beep; someone cautious waits to be sure and misses some. Who hears better? Counting the beeps caught cannot say. This page counts hits and false alarms, puts two bell curves and one line for saying yes on 30j’s bell curve, measures how far apart the curves sit, moves the line to trade hits for false alarms, and measures hearing by the area under the trade-off curve, with 15.</p>
+  <p class="gesture" data-pid="723c07">Each trial gives the listener an inner reading: noise alone spreads as one bell curve, a beep in noise as the same curve shifted. The listener says yes past some line. How far apart the curves sit, d′, is the hearing; where the line sits is the caution. d′ = z(hits) − z(false alarms). Moving the line traces a curve of hits against false alarms, and the area under it is the chance of telling a beep trial from a silent one.</p>
+</header>
+
+<section class="class step" data-step="37stat1">
+  <h2 class="sthead"><span class="stno">37stat1</span>Hits and False Alarms</h2>
+  <p data-pid="c5e4a0">Mike is an audiologist. In each trial of his test, a faint beep is played or not, at random, in a hiss of noise, and the listener says yes or no.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th></th><th>says yes</th><th>says no</th></tr>
+    <tr><th>beep played</th><td>hit</td><td>miss</td></tr>
+    <tr><th>no beep</th><td>false alarm</td><td>correct no</td></tr>
+  </table></div>
+  <p data-pid="a9dd0d">From here on, on this page, the <i>hit share</i> is the share of beep trials answered yes, and the <i>false alarm share</i> the share of silent trials answered yes. An eager listener raises both; a cautious one lowers both. Hits alone cannot tell hearing from eagerness.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.1.1</span><span class="ph understand">understand</span>What are hits and false alarms, and why can hits alone not measure hearing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat2">
+  <h2 class="sthead"><span class="stno">37stat2</span>Two Bell Curves and One Line for Saying Yes</h2>
+  <p data-pid="18a648">Model each trial as an inner reading. With noise alone, it spreads as a bell curve with mean 0 and spread 1 (30j); with a beep, the same curve shifted up by d′. The listener says yes when the reading passes a line c.</p>
+  <pre class="lines" data-k="ember" data-label="this page: shares from the curves">
+\text{false alarm share} = P(Z > c) @@ Z a standard bell curve (30j)
+\text{hit share} = P(Z > c - d\prime) @@ 
+\htmlClass{new}{d\prime \text{ is the hearing; } c \text{ is the caution}} @@ two separate things
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.2.1</span><span class="ph understand">understand</span>How do two bell curves and a line model the test, and what do d′ and c stand for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat3">
+  <h2 class="sthead"><span class="stno">37stat3</span>How Far Apart the Curves Sit</h2>
+  <p data-pid="cb52f0">Turn each share back into a position on the bell curve, z, the point with that share above it, and subtract.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a listener with hits 84% and false alarms 16%">
+d\prime = z(\text{hits}) - z(\text{false alarms}) @@ 
+z(0.84) \approx 1,\ \ z(0.16) \approx -1 @@ the bell curve’s table
+\htmlClass{new}{d\prime = 1 - (-1) = 2} @@ the curves sit two spreads apart
+  </pre>
+  <p data-pid="48a907">Separation technique: <b>measure how well a signal can be told from noise by how many spreads apart the two bell curves sit, d′ = z(hits) − z(false alarms), which does not change with the listener’s caution.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.3.1</span><span class="ph understand">understand</span>How is d′ found from the two shares, and why does caution not change it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat4">
+  <h2 class="sthead"><span class="stno">37stat4</span>Moving the Line Trades Hits for False Alarms</h2>
+  <p data-pid="773f99">Ask the same listener to be more willing to say yes. Their d′ stays 2, but the line moves down.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>line c</th><th>hits</th><th>false alarms</th></tr>
+    <tr><th>1.5 (cautious)</th><td>69%</td><td>7%</td></tr>
+    <tr><th>1 (middle)</th><td>84%</td><td>16%</td></tr>
+    <tr><th>0</th><td>98%</td><td>50%</td></tr>
+    <tr><th>−0.5 (eager)</th><td>99%</td><td>69%</td></tr>
+  </table></div>
+  <p data-pid="9183a3"><b>For a fixed hearing, every gain in hits costs false alarms; the line can only choose where on the trade-off to sit.</b> Mike tells two listeners apart this way: one with many hits and many false alarms, one with fewer of both, can turn out to have exactly the same d′, and so the same hearing.</p>
+  <!--gfig 37stat4--><div class="gfigs" data-gfig="37stat4" data-story="[[&quot;Left: the noise curve and the signal curve, two spreads apart, d′ = 2.&quot;, [&quot;ember&quot;, &quot;~noise&quot;, &quot;~signal&quot;]], [&quot;Say yes above the line c = 1. Signal past the line is a hit; noise past it is a false alarm.&quot;, [&quot;line+ink&quot;, &quot;~line c&quot;]], [&quot;Right: that line gives 84% hits and 16% false alarms.&quot;, [&quot;gold&quot;, &quot;~84%&quot;]], [&quot;Moving the line only slides along the one trade-off curve.&quot;, [&quot;teal&quot;]]]"><svg class="gfig" viewBox="0 0 420 240" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="left, two bell curves two spreads apart with a yes line at 1, shading hits and false alarms; right, the trade-off curve of hits against false alarms with the four line positions marked"><defs><clipPath id="gc226e8707"><rect x="28" y="12" width="184" height="174"/></clipPath></defs><line x1="30" x2="210" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="52.5" x2="52.5" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="52.5" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-2</text><line x1="97.5" x2="97.5" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="97.5" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="142.5" x2="142.5" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="142.5" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">2</text><line x1="187.5" x2="187.5" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="187.5" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">4</text><polygon points="120.0,92.6 120.8,89.5 121.5,86.5 122.2,83.5 123.0,80.5 123.8,77.5 124.5,74.6 125.2,71.7 126.0,68.8 126.8,66.0 127.5,63.3 128.2,60.7 129.0,58.1 129.8,55.6 130.5,53.3 131.2,51.0 132.0,48.8 132.8,46.8 133.5,44.9 134.2,43.1 135.0,41.4 135.8,39.9 136.5,38.6 137.2,37.3 138.0,36.3 138.8,35.4 139.5,34.6 140.2,34.0 141.0,33.6 141.8,33.4 142.5,33.3 143.2,33.4 144.0,33.6 144.8,34.0 145.5,34.6 146.2,35.4 147.0,36.3 147.8,37.3 148.5,38.6 149.2,39.9 150.0,41.4 150.8,43.1 151.5,44.9 152.2,46.8 153.0,48.8 153.8,51.0 154.5,53.3 155.2,55.6 156.0,58.1 156.8,60.7 157.5,63.3 158.2,66.0 159.0,68.8 159.8,71.7 160.5,74.6 161.2,77.5 162.0,80.5 162.8,83.5 163.5,86.5 164.2,89.5 165.0,92.6 165.8,95.6 166.5,98.7 167.2,101.7 168.0,104.7 168.8,107.7 169.5,110.6 170.2,113.6 171.0,116.4 171.8,119.3 172.5,122.0 173.2,124.8 174.0,127.4 174.8,130.0 175.5,132.6 176.2,135.1 177.0,137.5 177.8,139.8 178.5,142.1 179.2,144.3 180.0,146.4 180.8,148.5 181.5,150.4 182.2,152.3 183.0,154.2 183.8,155.9 184.5,157.6 185.2,159.2 186.0,160.7 186.8,162.2 187.5,163.6 188.2,164.9 189.0,166.2 189.8,167.4 190.5,168.5 191.2,169.6 192.0,170.6 192.8,171.6 193.5,172.5 194.2,173.3 195.0,174.1 195.8,174.8 196.5,175.5 197.2,176.2 198.0,176.8 198.8,177.4 199.5,177.9 200.2,178.4 201.0,178.9 201.8,179.3 202.5,179.7 203.2,180.1 204.0,180.4 204.8,180.7 205.5,181.0 206.2,181.3 207.0,181.5 207.8,181.8 208.5,182.0 209.2,182.2 210.0,182.3 210.0,184.0 209.2,184.0 208.5,184.0 207.8,184.0 207.0,184.0 206.2,184.0 205.5,184.0 204.8,184.0 204.0,184.0 203.2,184.0 202.5,184.0 201.8,184.0 201.0,184.0 200.2,184.0 199.5,184.0 198.8,184.0 198.0,184.0 197.2,184.0 196.5,184.0 195.8,184.0 195.0,184.0 194.2,184.0 193.5,184.0 192.8,184.0 192.0,184.0 191.2,184.0 190.5,184.0 189.8,184.0 189.0,184.0 188.2,184.0 187.5,184.0 186.8,184.0 186.0,184.0 185.2,184.0 184.5,184.0 183.8,184.0 183.0,184.0 182.2,184.0 181.5,184.0 180.8,184.0 180.0,184.0 179.2,184.0 178.5,184.0 177.8,184.0 177.0,184.0 176.2,184.0 175.5,184.0 174.8,184.0 174.0,184.0 173.2,184.0 172.5,184.0 171.8,184.0 171.0,184.0 170.2,184.0 169.5,184.0 168.8,184.0 168.0,184.0 167.2,184.0 166.5,184.0 165.8,184.0 165.0,184.0 164.2,184.0 163.5,184.0 162.8,184.0 162.0,184.0 161.2,184.0 160.5,184.0 159.8,184.0 159.0,184.0 158.2,184.0 157.5,184.0 156.8,184.0 156.0,184.0 155.2,184.0 154.5,184.0 153.8,184.0 153.0,184.0 152.2,184.0 151.5,184.0 150.8,184.0 150.0,184.0 149.2,184.0 148.5,184.0 147.8,184.0 147.0,184.0 146.2,184.0 145.5,184.0 144.8,184.0 144.0,184.0 143.2,184.0 142.5,184.0 141.8,184.0 141.0,184.0 140.2,184.0 139.5,184.0 138.8,184.0 138.0,184.0 137.2,184.0 136.5,184.0 135.8,184.0 135.0,184.0 134.2,184.0 133.5,184.0 132.8,184.0 132.0,184.0 131.2,184.0 130.5,184.0 129.8,184.0 129.0,184.0 128.2,184.0 127.5,184.0 126.8,184.0 126.0,184.0 125.2,184.0 124.5,184.0 123.7,184.0 123.0,184.0 122.2,184.0 121.5,184.0 120.8,184.0 120.0,184.0" style="fill:var(--teal);fill-opacity:0.3;stroke:none"/><polygon points="120.0,92.6 120.8,95.6 121.5,98.7 122.2,101.7 123.0,104.7 123.8,107.7 124.5,110.6 125.2,113.6 126.0,116.4 126.8,119.3 127.5,122.0 128.2,124.8 129.0,127.4 129.8,130.0 130.5,132.6 131.2,135.1 132.0,137.5 132.8,139.8 133.5,142.1 134.2,144.3 135.0,146.4 135.8,148.5 136.5,150.4 137.2,152.3 138.0,154.2 138.8,155.9 139.5,157.6 140.2,159.2 141.0,160.7 141.8,162.2 142.5,163.6 143.2,164.9 144.0,166.2 144.8,167.4 145.5,168.5 146.2,169.6 147.0,170.6 147.8,171.6 148.5,172.5 149.2,173.3 150.0,174.1 150.8,174.8 151.5,175.5 152.2,176.2 153.0,176.8 153.8,177.4 154.5,177.9 155.2,178.4 156.0,178.9 156.8,179.3 157.5,179.7 158.2,180.1 159.0,180.4 159.8,180.7 160.5,181.0 161.2,181.3 162.0,181.5 162.8,181.8 163.5,182.0 164.2,182.2 165.0,182.3 165.8,182.5 166.5,182.6 167.2,182.8 168.0,182.9 168.8,183.0 169.5,183.1 170.2,183.2 171.0,183.3 171.8,183.3 172.5,183.4 173.2,183.5 174.0,183.5 174.8,183.6 175.5,183.6 176.2,183.7 177.0,183.7 177.8,183.7 178.5,183.8 179.2,183.8 180.0,183.8 180.8,183.8 181.5,183.9 182.2,183.9 183.0,183.9 183.8,183.9 184.5,183.9 185.2,183.9 186.0,183.9 186.8,183.9 187.5,183.9 188.2,184.0 189.0,184.0 189.8,184.0 190.5,184.0 191.2,184.0 192.0,184.0 192.8,184.0 193.5,184.0 194.2,184.0 195.0,184.0 195.8,184.0 196.5,184.0 197.2,184.0 198.0,184.0 198.8,184.0 199.5,184.0 200.2,184.0 201.0,184.0 201.8,184.0 202.5,184.0 203.2,184.0 204.0,184.0 204.8,184.0 205.5,184.0 206.2,184.0 207.0,184.0 207.8,184.0 208.5,184.0 209.2,184.0 210.0,184.0 210.0,184.0 209.2,184.0 208.5,184.0 207.8,184.0 207.0,184.0 206.2,184.0 205.5,184.0 204.8,184.0 204.0,184.0 203.2,184.0 202.5,184.0 201.8,184.0 201.0,184.0 200.2,184.0 199.5,184.0 198.8,184.0 198.0,184.0 197.2,184.0 196.5,184.0 195.8,184.0 195.0,184.0 194.2,184.0 193.5,184.0 192.8,184.0 192.0,184.0 191.2,184.0 190.5,184.0 189.8,184.0 189.0,184.0 188.2,184.0 187.5,184.0 186.8,184.0 186.0,184.0 185.2,184.0 184.5,184.0 183.8,184.0 183.0,184.0 182.2,184.0 181.5,184.0 180.8,184.0 180.0,184.0 179.2,184.0 178.5,184.0 177.8,184.0 177.0,184.0 176.2,184.0 175.5,184.0 174.8,184.0 174.0,184.0 173.2,184.0 172.5,184.0 171.8,184.0 171.0,184.0 170.2,184.0 169.5,184.0 168.8,184.0 168.0,184.0 167.2,184.0 166.5,184.0 165.8,184.0 165.0,184.0 164.2,184.0 163.5,184.0 162.8,184.0 162.0,184.0 161.2,184.0 160.5,184.0 159.8,184.0 159.0,184.0 158.2,184.0 157.5,184.0 156.8,184.0 156.0,184.0 155.2,184.0 154.5,184.0 153.8,184.0 153.0,184.0 152.2,184.0 151.5,184.0 150.8,184.0 150.0,184.0 149.2,184.0 148.5,184.0 147.8,184.0 147.0,184.0 146.2,184.0 145.5,184.0 144.8,184.0 144.0,184.0 143.2,184.0 142.5,184.0 141.8,184.0 141.0,184.0 140.2,184.0 139.5,184.0 138.8,184.0 138.0,184.0 137.2,184.0 136.5,184.0 135.8,184.0 135.0,184.0 134.2,184.0 133.5,184.0 132.8,184.0 132.0,184.0 131.2,184.0 130.5,184.0 129.8,184.0 129.0,184.0 128.2,184.0 127.5,184.0 126.8,184.0 126.0,184.0 125.2,184.0 124.5,184.0 123.7,184.0 123.0,184.0 122.2,184.0 121.5,184.0 120.8,184.0 120.0,184.0" style="fill:var(--ember);fill-opacity:0.45;stroke:none"/><polyline clip-path="url(#gc226e8707)" points="30.0,182.3 30.7,182.2 31.5,182.0 32.2,181.8 33.0,181.5 33.8,181.3 34.5,181.0 35.2,180.7 36.0,180.4 36.8,180.1 37.5,179.7 38.2,179.3 39.0,178.9 39.8,178.4 40.5,177.9 41.2,177.4 42.0,176.8 42.7,176.2 43.5,175.5 44.2,174.8 45.0,174.1 45.8,173.3 46.5,172.5 47.2,171.6 48.0,170.6 48.8,169.6 49.5,168.5 50.2,167.4 51.0,166.2 51.8,164.9 52.5,163.6 53.2,162.2 54.0,160.7 54.8,159.2 55.5,157.6 56.2,155.9 57.0,154.2 57.8,152.3 58.5,150.4 59.2,148.5 60.0,146.4 60.8,144.3 61.5,142.1 62.2,139.8 63.0,137.5 63.8,135.1 64.5,132.6 65.2,130.0 66.0,127.4 66.8,124.8 67.5,122.0 68.2,119.3 69.0,116.4 69.8,113.6 70.5,110.6 71.2,107.7 72.0,104.7 72.8,101.7 73.5,98.7 74.2,95.6 75.0,92.6 75.8,89.5 76.5,86.5 77.2,83.5 78.0,80.5 78.8,77.5 79.5,74.6 80.2,71.7 81.0,68.8 81.8,66.0 82.5,63.3 83.2,60.7 84.0,58.1 84.8,55.6 85.5,53.3 86.2,51.0 87.0,48.8 87.8,46.8 88.5,44.9 89.2,43.1 90.0,41.4 90.8,39.9 91.5,38.6 92.2,37.3 93.0,36.3 93.8,35.4 94.5,34.6 95.2,34.0 96.0,33.6 96.8,33.4 97.5,33.3 98.2,33.4 99.0,33.6 99.8,34.0 100.5,34.6 101.2,35.4 102.0,36.3 102.8,37.3 103.5,38.6 104.2,39.9 105.0,41.4 105.8,43.1 106.5,44.9 107.2,46.8 108.0,48.8 108.8,51.0 109.5,53.3 110.2,55.6 111.0,58.1 111.8,60.7 112.5,63.3 113.2,66.0 114.0,68.8 114.8,71.7 115.5,74.6 116.2,77.5 117.0,80.5 117.8,83.5 118.5,86.5 119.2,89.5 120.0,92.6 120.8,95.6 121.5,98.7 122.2,101.7 123.0,104.7 123.8,107.7 124.5,110.6 125.2,113.6 126.0,116.4 126.8,119.3 127.5,122.0 128.2,124.8 129.0,127.4 129.8,130.0 130.5,132.6 131.2,135.1 132.0,137.5 132.8,139.8 133.5,142.1 134.2,144.3 135.0,146.4 135.8,148.5 136.5,150.4 137.2,152.3 138.0,154.2 138.8,155.9 139.5,157.6 140.2,159.2 141.0,160.7 141.8,162.2 142.5,163.6 143.2,164.9 144.0,166.2 144.8,167.4 145.5,168.5 146.2,169.6 147.0,170.6 147.8,171.6 148.5,172.5 149.2,173.3 150.0,174.1 150.8,174.8 151.5,175.5 152.2,176.2 153.0,176.8 153.8,177.4 154.5,177.9 155.2,178.4 156.0,178.9 156.8,179.3 157.5,179.7 158.2,180.1 159.0,180.4 159.8,180.7 160.5,181.0 161.2,181.3 162.0,181.5 162.8,181.8 163.5,182.0 164.2,182.2 165.0,182.3 165.8,182.5 166.5,182.6 167.2,182.8 168.0,182.9 168.8,183.0 169.5,183.1 170.2,183.2 171.0,183.3 171.8,183.3 172.5,183.4 173.2,183.5 174.0,183.5 174.8,183.6 175.5,183.6 176.2,183.7 177.0,183.7 177.8,183.7 178.5,183.8 179.2,183.8 180.0,183.8 180.8,183.8 181.5,183.9 182.2,183.9 183.0,183.9 183.8,183.9 184.5,183.9 185.2,183.9 186.0,183.9 186.8,183.9 187.5,183.9 188.2,184.0 189.0,184.0 189.8,184.0 190.5,184.0 191.2,184.0 192.0,184.0 192.8,184.0 193.5,184.0 194.2,184.0 195.0,184.0 195.8,184.0 196.5,184.0 197.2,184.0 198.0,184.0 198.8,184.0 199.5,184.0 200.2,184.0 201.0,184.0 201.8,184.0 202.5,184.0 203.2,184.0 204.0,184.0 204.8,184.0 205.5,184.0 206.2,184.0 207.0,184.0 207.8,184.0 208.5,184.0 209.2,184.0 210.0,184.0" style="fill:none;stroke:var(--ember);stroke-width:1.8"/><polyline clip-path="url(#gc226e8707)" points="30.0,184.0 30.7,184.0 31.5,184.0 32.2,184.0 33.0,184.0 33.8,184.0 34.5,184.0 35.2,184.0 36.0,184.0 36.8,184.0 37.5,184.0 38.2,184.0 39.0,184.0 39.8,184.0 40.5,184.0 41.2,184.0 42.0,184.0 42.7,184.0 43.5,184.0 44.2,184.0 45.0,184.0 45.8,184.0 46.5,184.0 47.2,184.0 48.0,184.0 48.8,184.0 49.5,184.0 50.2,184.0 51.0,184.0 51.8,184.0 52.5,183.9 53.2,183.9 54.0,183.9 54.8,183.9 55.5,183.9 56.2,183.9 57.0,183.9 57.8,183.9 58.5,183.9 59.2,183.8 60.0,183.8 60.8,183.8 61.5,183.8 62.2,183.7 63.0,183.7 63.8,183.7 64.5,183.6 65.2,183.6 66.0,183.5 66.8,183.5 67.5,183.4 68.2,183.3 69.0,183.3 69.8,183.2 70.5,183.1 71.2,183.0 72.0,182.9 72.8,182.8 73.5,182.6 74.2,182.5 75.0,182.3 75.8,182.2 76.5,182.0 77.2,181.8 78.0,181.5 78.8,181.3 79.5,181.0 80.2,180.7 81.0,180.4 81.8,180.1 82.5,179.7 83.2,179.3 84.0,178.9 84.8,178.4 85.5,177.9 86.2,177.4 87.0,176.8 87.8,176.2 88.5,175.5 89.2,174.8 90.0,174.1 90.8,173.3 91.5,172.5 92.2,171.6 93.0,170.6 93.8,169.6 94.5,168.5 95.2,167.4 96.0,166.2 96.8,164.9 97.5,163.6 98.2,162.2 99.0,160.7 99.8,159.2 100.5,157.6 101.2,155.9 102.0,154.2 102.8,152.3 103.5,150.4 104.2,148.5 105.0,146.4 105.8,144.3 106.5,142.1 107.2,139.8 108.0,137.5 108.8,135.1 109.5,132.6 110.2,130.0 111.0,127.4 111.8,124.8 112.5,122.0 113.2,119.3 114.0,116.4 114.8,113.6 115.5,110.6 116.2,107.7 117.0,104.7 117.8,101.7 118.5,98.7 119.2,95.6 120.0,92.6 120.8,89.5 121.5,86.5 122.2,83.5 123.0,80.5 123.8,77.5 124.5,74.6 125.2,71.7 126.0,68.8 126.8,66.0 127.5,63.3 128.2,60.7 129.0,58.1 129.8,55.6 130.5,53.3 131.2,51.0 132.0,48.8 132.8,46.8 133.5,44.9 134.2,43.1 135.0,41.4 135.8,39.9 136.5,38.6 137.2,37.3 138.0,36.3 138.8,35.4 139.5,34.6 140.2,34.0 141.0,33.6 141.8,33.4 142.5,33.3 143.2,33.4 144.0,33.6 144.8,34.0 145.5,34.6 146.2,35.4 147.0,36.3 147.8,37.3 148.5,38.6 149.2,39.9 150.0,41.4 150.8,43.1 151.5,44.9 152.2,46.8 153.0,48.8 153.8,51.0 154.5,53.3 155.2,55.6 156.0,58.1 156.8,60.7 157.5,63.3 158.2,66.0 159.0,68.8 159.8,71.7 160.5,74.6 161.2,77.5 162.0,80.5 162.8,83.5 163.5,86.5 164.2,89.5 165.0,92.6 165.8,95.6 166.5,98.7 167.2,101.7 168.0,104.7 168.8,107.7 169.5,110.6 170.2,113.6 171.0,116.4 171.8,119.3 172.5,122.0 173.2,124.8 174.0,127.4 174.8,130.0 175.5,132.6 176.2,135.1 177.0,137.5 177.8,139.8 178.5,142.1 179.2,144.3 180.0,146.4 180.8,148.5 181.5,150.4 182.2,152.3 183.0,154.2 183.8,155.9 184.5,157.6 185.2,159.2 186.0,160.7 186.8,162.2 187.5,163.6 188.2,164.9 189.0,166.2 189.8,167.4 190.5,168.5 191.2,169.6 192.0,170.6 192.8,171.6 193.5,172.5 194.2,173.3 195.0,174.1 195.8,174.8 196.5,175.5 197.2,176.2 198.0,176.8 198.8,177.4 199.5,177.9 200.2,178.4 201.0,178.9 201.8,179.3 202.5,179.7 203.2,180.1 204.0,180.4 204.8,180.7 205.5,181.0 206.2,181.3 207.0,181.5 207.8,181.8 208.5,182.0 209.2,182.2 210.0,182.3" style="fill:none;stroke:var(--teal);stroke-width:1.8"/><line x1="120.0" x2="120.0" y1="184.0" y2="14.0" style="stroke:var(--ink);stroke-width:1;stroke-dasharray:"/><text x="120.0" y="21.6" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">line c = 1</text><text x="63.8" y="70.7" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">noise</text><text x="178.5" y="70.7" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">signal</text><line x1="250" x2="400" y1="164.0" y2="164.0" style="stroke:var(--ink);stroke-width:1"/><line x1="250.0" x2="250.0" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="250.0" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="325.0" x2="325.0" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="325.0" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="400.0" x2="400.0" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="400.0" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="250" x2="400" y1="89.0" y2="89.0" style="stroke:var(--grid);stroke-width:.7"/><text x="246" y="93.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="250" x2="400" y1="14.0" y2="14.0" style="stroke:var(--grid);stroke-width:.7"/><text x="246" y="18.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><polyline points="250.0,163.8 250.0,163.8 250.0,163.7 250.0,163.7 250.0,163.6 250.0,163.6 250.0,163.5 250.0,163.4 250.0,163.3 250.0,163.2 250.0,163.1 250.0,162.9 250.0,162.8 250.0,162.6 250.0,162.4 250.0,162.2 250.0,161.9 250.0,161.6 250.0,161.3 250.0,161.0 250.0,160.6 250.0,160.2 250.0,159.7 250.0,159.2 250.0,158.6 250.0,158.0 250.0,157.3 250.0,156.6 250.0,155.8 250.0,154.9 250.0,154.0 250.0,153.0 250.1,151.9 250.1,150.7 250.1,149.5 250.1,148.2 250.1,146.7 250.1,145.2 250.1,143.7 250.2,142.0 250.2,140.2 250.2,138.3 250.3,136.4 250.3,134.4 250.4,132.2 250.4,130.0 250.5,127.7 250.6,125.3 250.7,122.9 250.8,120.3 250.9,117.7 251.1,115.0 251.2,112.3 251.4,109.5 251.6,106.7 251.8,103.8 252.1,100.9 252.4,97.9 252.7,95.0 253.0,92.0 253.4,89.0 253.8,86.0 254.3,83.0 254.8,80.1 255.4,77.1 256.0,74.2 256.7,71.3 257.4,68.5 258.2,65.7 259.1,63.0 260.0,60.3 261.0,57.7 262.1,55.1 263.3,52.7 264.5,50.3 265.8,48.0 267.3,45.8 268.8,43.6 270.3,41.6 272.0,39.7 273.8,37.8 275.7,36.0 277.6,34.3 279.6,32.8 281.8,31.3 284.0,29.8 286.3,28.5 288.7,27.3 291.1,26.1 293.7,25.0 296.3,24.0 299.0,23.1 301.7,22.2 304.5,21.4 307.3,20.7 310.2,20.0 313.1,19.4 316.1,18.8 319.0,18.3 322.0,17.8 325.0,17.4 328.0,17.0 331.0,16.7 333.9,16.4 336.9,16.1 339.8,15.8 342.7,15.6 345.5,15.4 348.3,15.2 351.0,15.1 353.7,14.9 356.3,14.8 358.9,14.7 361.3,14.6 363.7,14.5 366.0,14.4 368.2,14.4 370.4,14.3 372.4,14.3 374.3,14.2 376.2,14.2 378.0,14.2 379.7,14.1 381.2,14.1 382.7,14.1 384.2,14.1 385.5,14.1 386.7,14.1 387.9,14.1 389.0,14.0 390.0,14.0 390.9,14.0 391.8,14.0 392.6,14.0 393.3,14.0 394.0,14.0 394.6,14.0 395.2,14.0 395.7,14.0 396.2,14.0 396.6,14.0 397.0,14.0 397.3,14.0 397.6,14.0 397.9,14.0 398.2,14.0 398.4,14.0 398.6,14.0 398.8,14.0 398.9,14.0 399.1,14.0 399.2,14.0 399.3,14.0 399.4,14.0 399.5,14.0 399.6,14.0 399.6,14.0 399.7,14.0 399.7,14.0 399.8,14.0 399.8,14.0 399.8,14.0 399.9,14.0 399.9,14.0 399.9,14.0 399.9,14.0 399.9,14.0 399.9,14.0 399.9,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0 400.0,14.0" style="fill:none;stroke:var(--teal);stroke-width:2"/><polyline points="250.0,164.0 400.0,14.0" style="fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3"/><circle cx="260.0" cy="60.3" r="3" style="fill:var(--muted)"/><circle cx="273.8" cy="37.8" r="4" style="fill:var(--gold)"/><circle cx="325.0" cy="17.4" r="3" style="fill:var(--muted)"/><circle cx="353.7" cy="14.9" r="3" style="fill:var(--muted)"/><text x="287.5" y="74.0" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">84% hits, 16% false</text><text x="325" y="186" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">false alarms → hits ↑</text><text x="210.0" y="232" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">d′ = 2: moving the line slides along one trade-off curve</text></svg></div><!--/gfig 37stat4-->
+  <!--gwid 37stat4--><section class="pic gwid">
+    <div class="eyebrow">The picture · move the yes line</div>
+    <div class="panels">
+    <div class="panel"><canvas id="w37a"></canvas><div class="kn"><span class="m">c</span><input type="range" id="w37c" min="-1" max="3" step="0.05" value="1"><output id="w37co"></output></div><div class="cap">Ember: noise alone; teal: signal, two spreads to the right (d′ = 2). Say yes above the line c. Shaded: hits (teal) and false alarms (ember).</div></div>
+    <div class="panel"><canvas id="w37b"></canvas><div class="cap">The trade-off: hits against false alarms as the line moves. Gold: where the line is now.</div><div class="verdict" id="w37d"></div></div>
+  </div>
+  </section><!--/gwid 37stat4-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.4.1</span><span class="ph understand">understand</span>What does moving the line do to hits and false alarms, and what stays fixed?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat5">
+  <h2 class="sthead"><span class="stno">37stat5</span>The Area Under the Trade-Off Curve</h2>
+  <p data-pid="f28aa2">Plot hits against false alarms as the line sweeps from very cautious to very eager. The curve runs from (0, 0) to (1, 1), bowing up more the bigger d′ is. Its area (15) is a single measure of hearing that uses every line at once.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the area for d′ = 2">
+\text{area} = P(\text{beep reading} > \text{silent reading}) = P\!\left(Z < \dfrac{d\prime}{\sqrt 2}\right) @@ the difference of two readings has spread √2
+\htmlClass{new}{d\prime = 2:\ P(Z < 1.41) \approx 0.92} @@ 0.5 for no hearing at all, 1 for perfect
+  </pre>
+  <p data-pid="9af631"><b>The area under the trade-off curve is the chance that a beep trial reads higher than a silent one, a measure of telling signal from noise that ignores caution.</b> The same area grades medical tests, radar screens, and machine sorters. Mike’s hearing booth, run with many listeners at several cautions, gives points that lie on the curve for each listener’s d′, as the two-curve model says.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.5.1</span><span class="ph understand">understand</span>What does the area under the trade-off curve measure, and how big is it for d′ = 2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat6">
+  <h2 class="sthead"><span class="stno">37stat6</span>Moves to Watch Out For</h2>
+  <p data-pid="59721d">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{more hits means better hearing}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; eagerness raises hits too; use d′ (37stat3)
+d\prime = \text{hits} - \text{false alarms}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; subtract their z positions, not the shares (37stat3)
+\text{an eager listener hears better}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; caution moves the line, not the curves (37stat4)
+\text{an area of 0 means no hearing}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; no hearing gives 0.5, the diagonal (37stat5)
+\text{test at one line only}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it gives d′, but the whole curve checks the model (37stat5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.6.1</span><span class="ph understand">understand</span>Which move above subtracts the shares directly, and what must be subtracted instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">37·stat.7.1</span><span class="tagq">do</span>A listener has hits 93% and false alarms 31%. Find d′ and the area under the curve.</div>
+  <div class="chq"><span class="chid">37·stat.7.2</span><span class="tagq">make</span>Make up a hit share and false alarm share that give d′ = 1 with the line in the middle.</div>
+  <div class="chq"><span class="chid">37·stat.7.3</span><span class="tagq">converse</span>Equal d′ means equal hearing in the model. Decide whether two listeners with the same area under the curve must have the same d′.</div>
+  <div class="chq"><span class="chid">37·stat.7.4</span><span class="tagq">edge</span>Say what d′ is when the hit share equals the false alarm share, and what the curve looks like then.</div>
+  <div class="chq"><span class="chid">37·stat.7.5</span><span class="tagq">open</span>A smoke alarm can be set cautious or eager. Say how you would choose its line, weighing false alarms against missed fires.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r37bio.html">← 37·bio · how does the ear tell one pitch from another?</a><a href="r37crypt.html">37·crypt · can a voice be hidden? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="641877">This is <b>signal detection theory</b>; d′ is read “d prime”, c the <b>criterion</b>; the trade-off curve is the <b>receiver operating characteristic</b>, ROC, and its area the <b>AUC</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="8816fb">Wilson Tanner and John Swets set out signal detection for human seeing and hearing in 1954, carried over from the study of radar operators in the Second World War (not yet revisited for the date).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<!--gwjs 37stat4--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const erf=x=>{ const t=1/(1+0.3275911*Math.abs(x)), y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x); return x>=0?y:-y; };
+const Phi=x=>0.5*(1+erf(x/Math.SQRT2)), phi=x=>Math.exp(-x*x/2)/Math.sqrt(2*Math.PI);
+const A=plane($('w37a'),{x:[-3,5],y:[0,0.45],grid:0,labels:false,aspect:0.62,draw:P=>{ const c=+$('w37c').value;
+  const sh=(g,col)=>{ const pts=[[c,0]]; for(let x=c;x<=5;x+=0.05) pts.push([x,g(x)]); pts.push([5,0]); P.ctx.globalAlpha=0.35; P.poly(pts,null,col); P.ctx.globalAlpha=1; };
+  sh(x=>phi(x-2),'--teal'); sh(phi,'--ember'); P.fn(phi,'--ember',1.8); P.fn(x=>phi(x-2),'--teal',1.8); P.line(-3,0,5,0,'--muted',1); P.line(c,0,c,0.44,'--ink',1.6);
+  P.text('noise',-1.4,0.3,'--muted','center',11); P.text('signal',3.4,0.3,'--muted','center',11); }});
+const B=plane($('w37b'),{x:[0,1],y:[0,1],grid:0.5,aspect:0.85,draw:P=>{ P.axes(); const c=+$('w37c').value, H=1-Phi(c-2), F=1-Phi(c);
+  const pts=[]; for(let k=5;k>=-3;k-=0.05) pts.push([1-Phi(k),1-Phi(k-2)]); P.poly(pts,'--teal',null,2,false); P.line(0,0,1,1,'--muted',1,[4,3]); P.dot(F,H,'--gold',5.5);
+  $('w37co').textContent=f(c,2); $('w37d').textContent='Line at '+f(c,2)+': hits '+Math.round(100*H)+'%, false alarms '+Math.round(100*F)+'%. The hearing, d′ = 2, stays the same.'; }});
+$('w37c').oninput=()=>{ A.redraw(); B.redraw(); }; A.redraw(); B.redraw();
+})();
+</script><!--/gwjs 37stat4-->
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -4691,6 +4691,109 @@ K({id:'ghalf',step:'24·stat',title:'when half are gone, off a steady-hazard cur
     why:'S = e^(−'+dec(h)+'t) = 1/2 when t = ln 2/'+dec(h)+' ≈ '+dec(Math.round(half*10)/10)+' years, where the curve crosses the dashed line. 1/'+dec(h)+' = '+dec(Math.round(10/h)/10)+' is the average life, not the half-life.'}); }});
 })();
 /* ===== end of gap Read Graph ===== */
+/* ===== gap2 Read Graph kinds (gapbuild2/laundry/gaprgraph2.js; plan doc "Laundry: seed, link and bank members", Andrew 2026-11-24 05:45Z
+   "time to build"). Six kinds where the graph is the point: a line on log paper (35·phys2, 38·comp), a staircase between curves (23·chem),
+   a hump and its top (14·eng, 36·eng), two bell curves and a trade-off curve (37·stat), a decay with its tangent (23·bio), boxes with flows
+   (34·chem). Spliced after the gap Read Graph block by gapbuild2/laundry/splice2.py. Every answer is computed from the seed. ===== */
+(function(){
+const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph; if(!G||!G.F) return;
+const {dec,sg,uniq}=G, plot=G.F.plot;
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const card=(k,o)=>Object.assign({index:'g:'+k.id+'['+o.ix+']'+(o.links&&o.links.length?'.'+o.links.join('+'):''), a3:['g.'+k.id+'['+o.ix+']',(o.links&&o.links.length?o.links.join('+'):k.step),'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+const four=(right,c)=>{ const ws=uniq(right,c).slice(0,3); return ws.length<3?null:sh([right,...ws]); };
+const fr=(p,q)=>{ const g=(a,b)=>b?g(b,a%b):Math.abs(a), d=g(p,q)||1; p/=d; q/=d; if(q<0){ p=-p; q=-q; } return q===1?sg(p):(p<0?'−':'')+Math.abs(p)+'/'+q; };
+const pow10=e=>e>=0?sg(10**e):fr(1,10**(-e));
+const big=n=>{ const s=String(Math.round(n)); return s.length>4?s.replace(/\B(?=(\d{3})+(?!\d))/g,' '):s; };
+const K=k=>G.K(k);
+
+/* 35·phys2: a line on log paper, quakes a year against magnitude */
+K({id:'glogquake',step:'35·phys2',title:'quakes a year read off log paper',make(){
+  const a=pk([5,6,7]), m=a-pk([-1,0,1,2,3]), e=a-m;
+  const parts=[{t:'fn',f:M=>a-M,from:1,to:8,k:'a'},{t:'line',pts:[[m,-2],[m,a-m]],k:'c',dash:1},{t:'dots',pts:[[m,a-m]],k:'b',r:4}];
+  const right=pow10(e), o=four(right,[pow10(e+1),pow10(e-1),sg(e),e>0?sg(2**e):fr(1,2**(-e)),sg(a)]); if(!o) return null;
+  return card(this,{ix:a+','+m,links:['35·phys2.count'],fig:plot({x:[1,8],y:[-2,6],sx:1,sy:1,lx:1,ly:1,xl:'magnitude M',yl:'log₁₀ N',parts},'a falling straight line of log₁₀ N against magnitude, with a dot at magnitude '+m),
+    ask:'The line gives log₁₀ N, where N is quakes a year of magnitude M or more on one fault. About how many a year reach magnitude '+m+' or more?',right,opts:o,
+    why:'At M = '+m+' the line stands at log₁₀ N = '+sg(e)+', so N = 10^'+(e<0?'('+sg(e)+')':e)+' = '+right+' a year. The height read is the log, not the count; each step of magnitude makes quakes ten times rarer.'}); }});
+
+/* 38·comp: a line on log paper, a word's count against its rank */
+K({id:'glogword',step:'38·comp',title:'a word’s count read off log paper',make(){
+  const c=pk([4,5]), C=10**c, r=pk([2,5,10,20,50,100,1000]), L=Math.log10(r);
+  const parts=[{t:'fn',f:x=>c-x,from:0,to:3.5,k:'a'},{t:'dots',pts:[[L,c-L]],k:'b',r:4},{t:'line',pts:[[L,0],[L,c-L]],k:'c',dash:1}];
+  const right=big(C/r), o=four(right,[big(C/(r*r)),big(C-r),big(C*r),big(C/(2*r)),big(C/10/r)]); if(!o) return null;
+  return card(this,{ix:c+','+r,links:['38·comp.count'],fig:plot({x:[0,3.5],y:[0,c+0.5],sx:0.5,sy:1,lx:1,ly:1,xl:'log₁₀ rank',yl:'log₁₀ count',parts},'a straight line of slope −1 on log paper, a word’s count against its rank, with a dot at rank '+r),
+    ask:'On log paper, each word’s count against its rank falls on the line drawn. The dot is the word of rank '+r+'. About how many times does it appear?',right,opts:o,
+    why:'The line starts at log₁₀ count = '+c+', so the commonest word appears '+big(C)+' times, and its slope is −1: count × rank stays near '+big(C)+'. At rank '+r+': '+big(C)+'/'+r+' = '+right+'.'}); }});
+
+/* 23·chem: a staircase between the equilibrium curve and the diagonal, all the liquid sent back */
+K({id:'gstair',step:'23·chem',title:'trays counted on a staircase',make(){
+  const al=pk([2,3,4]), xB=pk([0.05,0.1]), xD=pk([0.9,0.95]), eq=x=>al*x/(1+(al-1)*x);
+  const pts=[[xB,xB]]; let x=xB, n=0; while(x<xD&&n<20){ const y=eq(x); pts.push([x,y]); pts.push([y,y]); x=y; n++; } if(n<2||n>12) return null;
+  const parts=[{t:'fn',f:eq,from:0,to:1,k:'a'},{t:'fn',f:x=>x,from:0,to:1,k:'c',dash:1},{t:'line',pts,k:'b'},{t:'line',pts:[[xD,0],[xD,xD]],k:'c',dash:1},{t:'line',pts:[[xB,0],[xB,xB]],k:'c',dash:1}];
+  const right=String(n), o=four(right,[String(n-1),String(n+1),String(2*n),String(n+2)]); if(!o) return null;
+  return card(this,{ix:al+','+xB+','+xD,links:['23·chem.odds'],fig:plot({x:[0,1],y:[0,1],sx:0.1,sy:0.1,lx:0.2,ly:0.2,xl:'x, light share in the liquid',yl:'y, in the vapour',parts},'an equilibrium curve above a dashed diagonal, with a staircase of steps between them'),
+    ask:'All the liquid is sent back, so the staircase steps between the curve (α = '+al+') and the diagonal, from '+dec(xB)+' up to '+dec(xD)+'. How many trays does it take?',right,opts:o,
+    why:'Each step up to the curve is one tray’s equilibrium, and each step across to the diagonal carries the vapour up as the next liquid. Counting the steps from x = '+dec(xB)+' until one passes '+dec(xD)+' gives '+n+'.'}); }});
+
+/* 14·eng: the hump of power against slowing, and its top */
+K({id:'ghumpwind',step:'14·eng',title:'the top of a turbine’s hump',make(){
+  const W=pk([270,540,810,1080]), P=a=>W*4*a*(1-a)*(1-a);
+  const parts=[{t:'fn',f:P,from:0,to:1,k:'a'},{t:'line',pts:[[0,W],[1,W]],k:'c',dash:1},{t:'dots',pts:[[1/3,P(1/3)]],k:'b',r:4}];
+  const right=big(W*16/27)+' kW', o=four(right,[big(W)+' kW',big(W/2)+' kW',big(W*8/9)+' kW',big(W/3)+' kW']); if(!o) return null;
+  const top=Math.ceil(W*1.1/100)*100;
+  return card(this,{ix:String(W),links:['14·eng.share'],fig:plot({x:[0,1],y:[0,top],sx:0.1,sy:top/10,lx:0.2,ly:top/5,xl:'a, share the wind is slowed',yl:'power taken, kW',parts},'a hump of power taken against the share the wind is slowed, under a dashed line for the wind’s whole power'),
+    ask:'The curve is the power a turbine takes against the share a it slows the wind; the dashed line is all '+big(W)+' kW the wind carries. What does it take at the top?',right,opts:o,
+    why:'The curve is '+big(W)+' · 4a(1 − a)². Its top is at a = 1/3, where 4 · 1/3 · (2/3)² = 16/27, so '+big(W)+' · 16/27 = '+right+'. No turbine takes the whole wind: stopping it would stop the flow.'}); }});
+
+/* 36·eng: the hump of a panel's power against its voltage */
+K({id:'ghumppanel',step:'36·eng',title:'the top of a panel’s power hump',make(){
+  const Voc=pk([20,25,40,45]), L=pk([4,5,8]), I=V=>L*(1-Math.pow(V/Voc,8)), P=V=>V*I(V), Vs=Voc*Math.pow(1/9,1/8), Ps=P(Vs);
+  const top=Math.ceil(Voc*L*1.05/20)*20, parts=[{t:'fn',f:P,from:0,to:Voc,k:'a'},{t:'dots',pts:[[Vs,Ps]],k:'b',r:4},{t:'line',pts:[[Vs,0],[Vs,Ps]],k:'c',dash:1}];
+  const right='about '+Math.round(Ps)+' W', o=four(right,['about '+Voc*L+' W','about '+Math.round(Voc*L/2)+' W','about '+Math.round(Vs*L)+' W','about '+Math.round(Ps/2)+' W']); if(!o) return null;
+  return card(this,{ix:Voc+','+L,links:['36·eng.power'],fig:plot({x:[0,Voc*1.05],y:[0,top],sx:Voc/5,sy:top/8,lx:Voc/5,ly:top/4,xl:'voltage, V',yl:'power, W',parts},'a hump of a panel’s power against its voltage, falling to zero at '+Voc+' volts, with its top marked'),
+    ask:'The curve is a panel’s power against its voltage; it gives '+L+' A short-circuited and '+Voc+' V open. About how much power does it give at the top of the hump?',right,opts:o,
+    why:'Read the dot: the top sits near '+dec(Math.round(Vs*10)/10)+' V, where the current has only begun to fall, and P = IV ≈ '+Math.round(Ps)+' W. The corner '+Voc+' V × '+L+' A = '+Voc*L+' W is never reached, since the current falls before the voltage is full.'}); }});
+
+/* 37·stat: two bell curves and the line between them */
+const Phi=z=>{ const t=1/(1+0.2316419*Math.abs(z)), d=0.3989423*Math.exp(-z*z/2), p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274)))); return z>0?1-p:p; };
+K({id:'gbells',step:'37·stat',title:'how far apart two bell curves sit',make(){
+  const d=pk([1,1.5,2,2.5,3]), c=pk([0.5,1,1.5]), b=z=>Math.exp(-z*z/2)/Math.sqrt(2*Math.PI);
+  const parts=[{t:'fn',f:b,from:-3.5,to:6,k:'a'},{t:'fn',f:z=>b(z-d),from:-3.5,to:6,k:'b'},{t:'line',pts:[[c,0],[c,0.45]],k:'c',dash:1}];
+  const right='d′ = '+dec(d), o=four(right,['d′ = '+dec(d/2),'d′ = '+dec(2*d),'d′ = '+dec(c),'d′ = '+dec(d+1)]); if(!o) return null;
+  return card(this,{ix:d+','+c,links:['37·stat.dprime'],fig:plot({x:[-3.5,6],y:[0,0.45],sx:0.5,sy:0.1,lx:1,ly:0.2,xl:'z',yl:'',parts},'two equal bell curves, noise and signal, with a dashed line between them'),
+    ask:'The left bell is the noise, the right the signal, each of spread 1; the dashed line is where a yes begins. How far apart are the bells, d′?',right,opts:o,
+    why:'d′ is the gap between the two centres in units of the spread: the noise peaks at 0 and the signal at '+dec(d)+', so d′ = '+dec(d)+'. The dashed line at '+dec(c)+' sets the trade of hits for false alarms, not the gap.'}); }});
+K({id:'gtrade',step:'37·stat',title:'which trade-off curve has the larger d′',make(){
+  const dA=pk([0.5,1,1.5]), dB=pk([2,2.5,3]), swap=R()<0.5, d1=swap?dB:dA, d2=swap?dA:dB, roc=d=>F=>{ if(F<=0) return 0; if(F>=1) return 1; let lo=-6,hi=6; for(let i=0;i<40;i++){ const m=(lo+hi)/2; if(1-Phi(m)>F) lo=m; else hi=m; } return 1-Phi((lo+hi)/2-d); };
+  const parts=[{t:'fn',f:roc(d1),from:0,to:1,k:'a',n:120},{t:'fn',f:roc(d2),from:0,to:1,k:'b',n:120},{t:'fn',f:F=>F,from:0,to:1,k:'c',dash:1},{t:'text',at:[0.6,roc(d1)(0.6)],s:'A',dx:0,dy:d1>d2?-6:14},{t:'text',at:[0.6,roc(d2)(0.6)],s:'B',dx:0,dy:d2>d1?-6:14}];
+  const right=d1>d2?'A':'B', o=four(right,['A','B','both the same','neither: both lie on the diagonal']); if(!o) return null;
+  return card(this,{ix:d1+','+d2,links:['37·stat.dprime'],fig:plot({x:[0,1],y:[0,1],sx:0.1,sy:0.1,lx:0.2,ly:0.2,xl:'false alarms',yl:'hits',parts},'two trade-off curves of hits against false alarms, A and B, above a dashed diagonal'),
+    ask:'Each curve shows the hits a reader gets for the false alarms allowed, as the yes-line moves. Which reader tells signal from noise better?',right,opts:o,
+    why:'Moving the line trades one for the other along a curve. The curve that bows further up from the diagonal, '+right+', buys more hits for the same false alarms, so its d′ is larger; the diagonal is d′ = 0, pure guessing.'}); }});
+
+/* 23·bio: pressure falling with height, and its tangent at the ground */
+K({id:'gscale',step:'23·bio',title:'the scale height off a tangent',make(){
+  const H=pk([6,7,8,8.5]), p0=100, f=h=>p0*Math.exp(-h/H);
+  const parts=[{t:'fn',f,from:0,to:30,k:'a'},{t:'fn',f:h=>p0*(1-h/H),from:0,to:H,k:'b',dash:1},{t:'dots',pts:[[H,0]],k:'b',r:4}];
+  const right=dec(H)+' km', o=four(right,[dec(Math.round(H*Math.LN2*10)/10)+' km',dec(2*H)+' km',dec(H/2)+' km',dec(Math.round(H*Math.E*10)/10)+' km']); if(!o) return null;
+  return card(this,{ix:String(H),links:['23·bio.height'],fig:plot({x:[0,30],y:[0,105],sx:5,sy:10,lx:5,ly:20,xl:'height, km',yl:'pressure, kPa',parts},'air pressure falling with height, with its dashed tangent at the ground meeting zero'),
+    ask:'The curve is air pressure against height; the dashed line is its tangent at the ground. Where the tangent reaches zero is the scale height. What is it?',right,opts:o,
+    why:'For p = p₀e^(−h/H) the slope at the ground is −p₀/H, so the tangent falls to zero at h = H = '+right+'. There the curve itself is down to 1/e, about 37%; half is lost sooner, at H ln 2.'}); }});
+
+/* 34·chem: boxes with flows, every box steady */
+K({id:'gboxes',step:'34·chem',title:'the missing flow between steady boxes',make(){
+  const a=pk([80,90,92]), b=a-pk([0,2,4]), c=pk([90,96,100,104]), d=b+c-a; if(d<=0) return null;
+  const s=(x,y)=>x+','+y, rect=(x,y,w,h,t)=>'<rect class="rg-uni" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="6"/><text class="rg-tag" x="'+(x+w/2)+'" y="'+(y+h/2+4)+'" text-anchor="middle">'+t+'</text>',
+    arr=(x1,y1,x2,y2,t,tx,ty)=>{ const L=Math.hypot(x2-x1,y2-y1), ux=(x2-x1)/L, uy=(y2-y1)/L, hx=x2-ux*8, hy=y2-uy*8;
+      return '<line class="rg-cv" x1="'+x1+'" y1="'+y1+'" x2="'+hx+'" y2="'+hy+'"/><polygon class="rg-dot" points="'+s(x2,y2)+' '+s(hx-uy*4,hy+ux*4)+' '+s(hx+uy*4,hy-ux*4)+'"/><text class="rg-lab" x="'+tx+'" y="'+ty+'" text-anchor="middle">'+t+'</text>'; };
+  const fig='<svg class="rgfig" viewBox="0 0 320 230" role="img" aria-label="three boxes, air, surface sea and deep sea, with arrows of carbon flows between them" xmlns="http://www.w3.org/2000/svg">'+
+    rect(100,14,120,40,'air')+rect(100,96,120,40,'surface sea')+rect(100,176,120,40,'deep sea')+
+    arr(130,54,130,96,String(a),112,80)+arr(190,96,190,54,String(b),210,80)+arr(130,136,130,176,String(c),112,160)+arr(190,176,190,136,'?',210,160)+'</svg>';
+  const right=d+' Gt a year', o=four(right,[(a+b-c>0?a+b-c:a+c-b)+' Gt a year',(c+a-b)+' Gt a year',c+' Gt a year',(a+b+c)+' Gt a year',(c-b+a+4)+' Gt a year']); if(!o) return null;
+  return card(this,{ix:[a,b,c].join(','),links:['34·chem.air'],fig,
+    ask:'Arrows give carbon flows in gigatonnes a year; every box is steady. What must the deep sea return to the surface, at the “?”',right,opts:o,
+    why:'A steady box takes in what it gives out. The surface takes '+a+' from the air and the “?” from the deep, and gives '+b+' to the air and '+c+' to the deep: '+a+' + ? = '+b+' + '+c+', so ? = '+d+'.'+(a>b?' For the air to stay steady it must also take in '+(a-b)+' from outside, such as burnt fuel.':'')}); }});
+})();
+/* ===== end of gap2 Read Graph ===== */
 /* ===== Laundry 5 (Andrew 2026-11-10 19:46Z: "Go ahead and do those floor 1 pools"; 19:49Z: "after floor 1 continue filling in pools by floor") =====
    Terms: one reader and writer for statements (¬ ∧ ∨ ⇒ ⇔ ⊤ ⊥) and for sets (∪ ∩ ∖ ∅). A rewrite technique is a pair of patterns;
    a chain is a seed rewritten link by link, each line citing its technique. A line is checked by its column: every way its letters can come out. */
@@ -27828,6 +27931,407 @@ if(W2){ const {G:Gp,Tm,Pr,In,Fr,Pl,X,own,LESS,LAWS,at,who,qq,num:wn}=W2;
 }
 })();
 /* ===== end of gap chains ===== */
+/* ===== gap2 chains (gapbuild2/laundry/gapchains2.js; Andrew 2026-11-24 05:45Z "time to build", plan doc "Laundry: seed, link and bank members").
+   One link for each of the 71 new annex pages of gap build 2, seeds for their numbers, and word laws with units (places, never persons).
+   Spliced after the gap chains block by gapbuild2/laundry/splice2.py, in its own markers. Every answer is an exact fraction. ===== */
+(function(){
+const {L,Q,qs,qa,qm,qn,qi}=CH;
+const num=v=>({k:'num',v:typeof v==='number'?Q(v):v});
+const W=v=>v&&v.q===1?v.p:null;
+const toQ=r=>r==null||r===false?null:typeof r==='number'?(Number.isInteger(r)&&Math.abs(r)<=99999?Q(r):null):r;
+const NL=(id,st,cite,say,f,sl,line,make)=>L.push({id,from:'num',to:'num',steps:()=>st,make,say:typeof say==='function'?say:()=>say,
+  act:(s,p)=>{ const r=toQ(f(s.v,p)); return r?num(r):null; },cite:()=>cite,
+  slips:(s,p)=>(sl?sl(s.v,p)||[]:[]).map(([why,r])=>({why,v:toQ(r)})).filter(w=>w.v),
+  line:(o,p,nm,nx,s)=>line(s.v,o.v,p,nm)});
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const fr=(a,b)=>Q(a,b), one=Q(1), sub=(a,b)=>qa(a,qn(b)), mul=(...a)=>a.map(y=>typeof y==='number'?Q(y):y).reduce((x,y)=>qm(x,y)), dv=(a,b)=>qm(a,qi(typeof b==='number'?Q(b):b));
+const isq=n=>{ if(n===null||n<0) return null; const r=Math.round(Math.sqrt(n)); return r*r===n?r:null; };
+const pw=(v,k)=>{ let r=one; for(let i=0;i<k;i++) r=qm(r,v); return r; };
+const fac=n=>{ let r=1; for(let i=2;i<=n;i++) r*=i; return r; };
+const frac01=v=>v.p>0&&v.p<v.q&&v.q<=100;          /* a share strictly between 0 and 1 */
+const pos=(v,m)=>v.p>0&&v.q<=12&&v.p<=(m||99)*v.q;  /* a modest positive number */
+const P=v=>v.p<0||v.q!==1?'('+qs(v)+')':qs(v);
+
+NL('1·comp2.order',['1·comp2'],'the order technique',(p,nm)=>nm+' rewrites are to be run one after another; in how many orders can they run?',
+  v=>{ const n=W(v); return n!==null&&n>=2&&n<=7?fac(n):null; },v=>{ const n=W(v); return n===null||n<2?[]:[['only the two ways round are counted',2],['each rewrite is taken to come first or not, 2 for each',2**n],['the rewrites are squared',n*n]]; },
+  (a,o)=>'orders of '+qs(a)+' rewrites: '+qs(a)+'! = '+qs(o));
+NL('3·comp2.most',['3·comp2'],'the pairing technique',(p,nm)=>'A has '+nm+' members; at least how many must be in B for “most A are B”?',
+  v=>{ const n=W(v); return n!==null&&n>=2&&n<=999?Math.floor(n/2)+1:null; },v=>{ const n=W(v); return n===null||n<2?[]:[['half is taken as enough, though a tie is not most',n%2?null:n/2],['every member is asked for, as with “every”',n],['one member is taken as enough, as with “some”',1]]; },
+  (a,o)=>'more inside than outside: '+qs(a)+' halved, rounded down, plus 1 = '+qs(o));
+NL('4·econ2.wasted',['4·econ2'],'the wasted-vote technique',(p,nm)=>'a group of 5 votes, needing 3 to win, splits '+nm+' for X; how many of X’s votes are wasted?',
+  v=>{ const x=W(v); return x!==null&&x>=0&&x<=5?(x>=3?x-3:x):null; },v=>{ const x=W(v); return x===null||x<0||x>5?[]:[['the winning votes are all counted as wasted',x>=3?x:null],['the other side’s votes are counted',5-x],['the votes past half, 2.5, are counted',x>=3?Q(2*x-5,2):null],['a losing side’s votes are taken as not wasted',x<3?0:null],['the votes short of 3 are counted',x<3?3-x:null]]; },
+  (a,o)=>(W(a)>=3?'X wins: '+qs(a)+' − 3 = '+qs(o):'X loses: all '+qs(o)+' wasted'));
+NL('5·econ2.quota',['5·econ2'],'the quota technique',(p,nm)=>'a town holds '+nm+' of '+p.T+' people and the council has '+p.S+' seats; give its quota',
+  (v,p)=>{ const n=W(v); return n!==null&&n>=1&&n<p.T?fr(n*p.S,p.T):null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the seats are left out: the share alone',fr(n,p.T)],['the share is turned over',n?fr(p.T*p.S,n):null],['the quota is rounded down',Math.floor(n*p.S/p.T)||null]]; },
+  (a,o,p)=>qs(a)+'/'+p.T+' · '+p.S+' = '+qs(o),()=>({T:pick([100,200,1000]),S:pick([5,8,10,12])}));
+NL('6·econ2.pivot',['6·econ2'],'the pivot technique',(p,nm)=>'a passing group holds '+nm+' votes and needs '+p.q+'; what is the most a bloc in it can hold and not be pivotal?',
+  (v,p)=>{ const n=W(v); return n!==null&&n>=p.q&&n<=30?n-p.q:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the quota itself is given',p.q],['one more than the margin is given, which is pivotal',n-p.q+1],['the margin is added',n+p.q]]; },
+  (a,o,p)=>'pivotal once '+qs(a)+' − b < '+p.q+': most not pivotal is '+qs(a)+' − '+p.q+' = '+qs(o),()=>({q:pick([6,7,8,9])}));
+NL('7·stat.positives',['7·stat'],'the count-the-positives technique',(p,nm)=>'1 person in '+nm+' is sick; the test finds every sick one and wrongly flags '+qs(p.f)+' of the well; what chance is a positive sick?',
+  (v,p)=>{ const n=W(v); return n!==null&&n>=10&&n<=10000?qi(qa(one,mul(Q(n-1),p.f))):null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the test’s catch rate, all of them, is given',1],['the share flagged wrongly is turned round',sub(one,p.f)],['the base rate alone is given',fr(1,n)]]; },
+  (a,o,p)=>'1 sick positive against ('+qs(a)+' − 1) · '+qs(p.f)+' false: 1/(1 + '+qs(mul(sub(a,one),p.f))+') = '+qs(o),()=>({f:pick([Q(1,20),Q(1,10),Q(1,50),Q(1,100)])}));
+NL('7·bio.estimate',['7·bio'],'the mark-share technique',(p,nm)=>p.M+' fish are marked, '+p.C+' caught later, and '+nm+' of the catch are marked; about how many fish are in the lake?',
+  (v,p)=>{ const r=W(v); return r!==null&&r>=1&&r<=p.C?fr(p.M*p.C,r):null; },(v,p)=>{ const r=W(v); return r===null||r<1?[]:[['the marked ones are divided out of the catch, not the lake',fr(p.C,r)],['marked and caught are added',p.M+p.C],['the count is multiplied in',p.M*p.C*r]]; },
+  (a,o,p)=>p.M+' · '+p.C+'/'+qs(a)+' = '+qs(o),()=>({M:pick([40,50,60,100]),C:pick([30,40,50,60])}));
+NL('7·eng.and',['7·eng'],'the fault-tree technique',(p,nm)=>'the top fails only if a part with chance '+nm+' and a part with chance '+qs(p.b)+' both fail; give the top’s chance',
+  (v,p)=>frac01(v)?qm(v,p.b):null,(v,p)=>[['the and gate is added like an or',qa(v,p.b)],['the or gate is used',sub(qa(v,p.b),qm(v,p.b))],['only the first part is counted',v]],
+  (a,o,p)=>'and gate: '+qs(a)+' · '+qs(p.b)+' = '+qs(o),()=>({b:pick([Q(1,10),Q(1,20),Q(1,100),Q(1,2)])}));
+NL('8·phys2.age',['8·phys2'],'the mirror-age technique',(p,nm)=>'a stripe lies '+nm+' km from the ridge, which spreads '+p.r+' cm a year each way; give its age in millions of years',
+  (v,p)=>pos(v,2000)?dv(v,10*p.r):null,(v,p)=>[['both sides’ spreading is counted for one side',dv(v,20*p.r)],['kilometres are not turned into centimetres',dv(v,p.r)],['distance is multiplied by the rate',mul(v,p.r)]],
+  (a,o,p)=>qs(a)+' km = '+qs(a)+' · 10⁵ cm; ÷ '+p.r+' cm a year = '+qs(o)+' million years',()=>({r:pick([1,2,4,5])}));
+NL('8·econ2.median',['8·econ2'],'the median-choice technique',(p,nm)=>nm+' members are lined up by their best times; whose time beats every other in a two-way vote?',
+  v=>{ const n=W(v); return n!==null&&n>=3&&n<=99&&n%2?(n+1)/2:null; },v=>{ const n=W(v); return n===null?[]:[['the middle is taken as half, rounded down',(n-1)/2],['the last in line is taken',n],['the first in line is taken',1]]; },
+  (a,o)=>'the middle of '+qs(a)+': ('+qs(a)+' + 1)/2 = '+qs(o));
+NL('8·bio.threshold',['8·bio'],'the threshold technique',(p,nm)=>'each case passes an infection to '+nm+' others; what share must be immune for it to die out?',
+  v=>{ const r=W(v); return r!==null&&r>=2&&r<=20?fr(r-1,r):null; },v=>{ const r=W(v); return r===null||r<2?[]:[['1/R is given, the share left open',fr(1,r)],['the share is taken as 1 − R',1-r],['half is taken whatever R is',fr(1,2)]]; },
+  (a,o)=>'1 − 1/'+qs(a)+' = '+qs(o));
+NL('9·stat2.share',['9·stat2'],'the output-ratio technique',(p,nm)=>'a line averages '+nm+' times its quota, with k = '+p.k+'; give its share of shifts meeting quota, rᵏ/(rᵏ + 1)',
+  (v,p)=>v.p>0&&v.q<=10&&v.p<=3*v.q?dv(pw(v,p.k),qa(pw(v,p.k),one)):null,(v,p)=>[['k is left off',dv(v,qa(v,one))],['the 1 is left out of the bottom',one],['the other share is given',dv(one,qa(pw(v,p.k),one))]],
+  (a,o,p)=>P(a)+'^'+p.k+'/('+P(a)+'^'+p.k+' + 1) = '+qs(o),()=>({k:pick([2,3])}));
+NL('9·eng.upper',['9·eng'],'the two-bounds technique',(p,nm)=>'a mix holds the share '+nm+' of a material of stiffness '+p.a+' and the rest of stiffness '+p.b+'; give the upper bound',
+  (v,p)=>frac01(v)?qa(mul(v,p.a),mul(sub(one,v),p.b)):null,(v,p)=>[['the lower bound is given',qi(qa(dv(v,p.a),dv(sub(one,v),p.b)))],['the shares are swapped',qa(mul(sub(one,v),p.a),mul(v,p.b))],['the plain average of the two is given',fr(p.a+p.b,2)]],
+  (a,o,p)=>qs(a)+' · '+p.a+' + (1 − '+qs(a)+') · '+p.b+' = '+qs(o),()=>({a:pick([200,100,70,400]),b:pick([2,4,5,10])}));
+NL('10·stat2.update',['10·stat2'],'the running-update technique',(p,nm)=>'a GPA of '+qs(p.g)+' over '+p.c+' credits takes a term of '+p.t+' credits at '+nm+'; give the new GPA',
+  (v,p)=>v.p>=0&&v.p<=4*v.q&&v.q<=10?qa(p.g,mul(fr(p.t,p.c+p.t),sub(v,p.g))):null,(v,p)=>[['the term’s credits are shared over the old credits, not all',qa(p.g,mul(fr(p.t,p.c),sub(v,p.g)))],['the two GPAs are averaged plainly',dv(qa(v,p.g),2)],['the old GPA is kept',p.g]],
+  (a,o,p)=>qs(p.g)+' + '+p.t+'/'+(p.c+p.t)+' · ('+qs(a)+' − '+qs(p.g)+') = '+qs(o),()=>({g:pick([Q(3),Q(5,2),Q(7,2),Q(13,4)]),c:pick([30,45,60,90]),t:15}));
+NL('11·phys.root',['11·phys'],'the equal-columns technique',(p,nm)=>'a range stands '+nm+' km above the lowland, crust 2.8 and mantle 3.3; how deep is its root?',
+  v=>pos(v,10)?mul(v,fr(28,5)):null,v=>[['the mantle’s weight is put on top',mul(v,fr(33,5))],['crust over mantle is used',mul(v,fr(28,33))],['the root is taken to match the height',v]],
+  (a,o)=>qs(a)+' · 2.8/(3.3 − 2.8) = '+qs(o)+' km');
+NL('11·stat.or',['11·stat'],'the odds-ratio technique',(p,nm)=>'of the ill, '+nm+' were exposed and '+p.b+' not; of the well, '+p.c+' were and '+p.d+' not; give the odds ratio',
+  (v,p)=>{ const a=W(v); return a!==null&&a>=1&&a<=200?fr(a*p.d,p.b*p.c):null; },(v,p)=>{ const a=W(v); return a===null?[]:[['the ratio is turned over',a?fr(p.b*p.c,a*p.d):null],['the risk shares are compared instead of the odds',fr(a*(p.c+p.d),p.c*(a+p.b))],['the cross is taken the wrong way',fr(a*p.c,p.b*p.d)]]; },
+  (a,o,p)=>'ad/bc = '+qs(a)+' · '+p.d+'/('+p.b+' · '+p.c+') = '+qs(o),()=>({b:pick([10,20,25]),c:pick([20,30,40]),d:pick([60,80,100])}));
+NL('12·bio.muscle',['12·bio'],'the joint-lever technique',(p,nm)=>'a load of '+nm+' N sits '+p.k+' times as far from the joint as the muscle; what pull must the muscle give?',
+  (v,p)=>pos(v,500)?mul(v,p.k):null,(v,p)=>[['the arm ratio is divided, as for a long lever',dv(v,p.k)],['the load alone is given',v],['the ratio is added',qa(v,Q(p.k))]],
+  (a,o,p)=>qs(a)+' · '+p.k+' = '+qs(o)+' N',()=>({k:pick([4,6,8,10])}));
+NL('12·eng2.power',['12·eng2'],'the fan-scaling technique',(p,nm)=>'a fan’s speed is multiplied by '+nm+'; by what is its power multiplied?',
+  v=>v.p>0&&v.q<=10&&v.p<=3*v.q&&!(v.p===v.q)?pw(v,3):null,v=>[['the push, the square, is given',pw(v,2)],['the flow, the speed itself, is given',v],['the power is taken to grow as the speed times 3',mul(v,3)]],
+  (a,o)=>P(a)+'³ = '+qs(o));
+NL('12·chem.liquid',['12·chem'],'the tie-line lever technique',(p,nm)=>'the tie line runs from the solid at '+p.s+'% to the liquid at '+p.l+'%; the alloy is at '+nm+'%; what share is liquid?',
+  (v,p)=>{ const x=W(v); return x!==null&&x>p.s&&x<p.l?fr(x-p.s,p.l-p.s):null; },(v,p)=>{ const x=W(v); return x===null?[]:[['the share of solid is given',fr(p.l-x,p.l-p.s)],['the alloy’s own share is given',fr(x,100)],['the distance is not divided by the whole length',x-p.s]]; },
+  (a,o,p)=>'('+qs(a)+' − '+p.s+')/('+p.l+' − '+p.s+') = '+qs(o),()=>({s:pick([5,10,20]),l:pick([60,70,80])}));
+NL('14·eng.share',['14·eng'],'the best-slowing technique',(p,nm)=>'a turbine slows the wind by the share a = '+nm+' at its blades; what share of the wind’s power does it take, 4a(1 − a)²?',
+  v=>frac01(v)&&v.q<=10?mul(4,v,pw(sub(one,v),2)):null,v=>[['the square is left off',mul(4,v,sub(one,v))],['the 4 is left out',mul(v,pw(sub(one,v),2))],['the best share 16/27 is given whatever a is',fr(16,27)]],
+  (a,o)=>'4 · '+qs(a)+' · (1 − '+qs(a)+')² = '+qs(o));
+NL('15·phys2.total',['15·phys2'],'the multiplication technique',(p,nm)=>'each split causes '+nm+' more, on average; starting from one, how many splits in all?',
+  v=>frac01(v)&&v.q<=20?qi(sub(one,v)):null,v=>[['1/k is given',qi(v)],['the next generation alone is given',v],['1 + k is given',qa(one,v)]],
+  (a,o)=>'1 + k + k² + … = 1/(1 − '+qs(a)+') = '+qs(o));
+NL('15·eng2.lift',['15·eng2'],'the area-built profile technique',(p,nm)=>'the valve accelerates at '+nm+' from rest for '+p.t+' time units; how far has it lifted?',
+  (v,p)=>pos(v,40)?mul(fr(1,2),v,p.t*p.t):null,(v,p)=>[['the speed, the first area, is given',mul(v,p.t)],['the half is left out',mul(v,p.t*p.t)],['the time is not squared',mul(fr(1,2),v,p.t)]],
+  (a,o,p)=>'½ · '+qs(a)+' · '+p.t+'² = '+qs(o),()=>({t:pick([2,3,4])}));
+NL('15·eng3.average',['15·eng3'],'the duty-average technique',(p,nm)=>'a '+p.v+' V supply is switched on for the share '+nm+' of each cycle; what voltage does smoothing pass?',
+  (v,p)=>frac01(v)?mul(v,p.v):null,(v,p)=>[['the off share is used',mul(sub(one,v),p.v)],['the supply is divided by the share',dv(Q(p.v),v)],['the full supply is given',p.v]],
+  (a,o,p)=>qs(a)+' · '+p.v+' = '+qs(o)+' V',()=>({v:pick([12,24,48,60])}));
+NL('19·phys.distance',['19·phys'],'the arrival-gap technique',(p,nm)=>'waves at 6 and 3.5 km/s arrive '+nm+' s apart; how far off is the quake?',
+  v=>pos(v,120)?mul(v,fr(42,5)):null,v=>[['the gap is multiplied by the fast speed alone',mul(v,6)],['the slow speed alone is used',mul(v,fr(7,2))],['the gap is divided by the speeds’ difference',dv(v,fr(5,2))]],
+  (a,o)=>qs(a)+' · 6 · 3.5/(6 − 3.5) = '+qs(o)+' km');
+NL('19·logi.lost',['19·logi'],'the boil-off technique',(p,nm)=>'a share '+qs(p.r)+' of the cargo boils off each day; about what share is lost in '+nm+' days?',
+  (v,p)=>{ const n=W(v); return n!==null&&n>=1&&n<=60?mul(p.r,n):null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the daily share is divided by the days',dv(p.r,n)],['what is left is given, not what is lost',sub(one,mul(p.r,n))],['one day’s share is given',p.r]]; },
+  (a,o,p)=>qs(a)+' · '+qs(p.r)+' = '+qs(o),()=>({r:pick([Q(3,2000),Q(1,1000),Q(1,500)])}));
+NL('19·eng2.heat',['19·eng2'],'the log-mean technique',(p,nm)=>'an exchanger has U = '+p.u+', area '+p.a+' and log-mean gap '+nm+'; what heat does it pass?',
+  (v,p)=>pos(v,80)?mul(v,p.u*p.a):null,(v,p)=>[['the area is left out',mul(v,p.u)],['the gap is divided',dv(Q(p.u*p.a),v)],['U and the area are added',mul(v,p.u+p.a)]],
+  (a,o,p)=>'Q = '+p.u+' · '+p.a+' · '+qs(a)+' = '+qs(o),()=>({u:pick([2,5,10]),a:pick([3,4,10])}));
+NL('20·eng.repeat',['20·eng'],'the weave-move technique',(p,nm)=>'a twill lifts '+nm+' threads and leaves '+p.b+'; after how many rows does it repeat?',
+  (v,p)=>{ const a=W(v); return a!==null&&a>=1&&a<=8?a+p.b:null; },(v,p)=>{ const a=W(v); return a===null?[]:[['only the lifted threads are counted',a],['the two are multiplied',a*p.b],['the repeat is taken as twice the lift',2*a===a+p.b?null:2*a]]; },
+  (a,o,p)=>qs(a)+' up, '+p.b+' down: one shift a row, '+qs(a)+' + '+p.b+' = '+qs(o)+' rows',()=>({b:pick([1,2,3])}));
+NL('20·nav2.range',['20·nav2'],'the range-log technique',(p,nm)=>'a plane’s range factor V(L/D)/(gc) is '+p.F+' km and its start weight is e^'+nm+' times its end weight; give its range',
+  (v,p)=>v.p>0&&v.q<=10&&v.p<=2*v.q?mul(v,p.F):null,(v,p)=>[['the weight ratio e^k is taken as k plus 1',mul(qa(v,one),p.F)],['the factor is divided by k',dv(Q(p.F),v)],['the factor alone is given',p.F]],
+  (a,o,p)=>p.F+' · ln e^'+P(a)+' = '+p.F+' · '+P(a)+' = '+qs(o)+' km',()=>({F:pick([10000,12000,15000])}));
+NL('20·eng2.energy',['20·eng2'],'the least-energy depth technique',(p,nm)=>'a flow runs at its critical depth of '+nm+' m; what is its energy head, depth plus v²/2g?',
+  v=>pos(v,10)?mul(v,fr(3,2)):null,v=>[['the speed head is left out',v],['the speed head is taken as the depth, not half',mul(v,2)],['half the depth is given',mul(v,fr(1,2))]],
+  (a,o)=>'v² = g y, so y + y/2 = 1.5 · '+qs(a)+' = '+qs(o)+' m');
+NL('21·phys2.made',['21·phys2'],'the made-good technique',(p,nm)=>'a boat sails at '+nm+' knots at an angle off the wind whose cosine is '+qs(p.c)+'; how fast does it gain toward the wind?',
+  (v,p)=>pos(v,20)?qm(v,p.c):null,(v,p)=>[['the sine is used',p.s?qm(v,p.s):null],['the speed alone is given',v],['the speed is divided by the cosine',dv(v,p.c)]],
+  (a,o,p)=>qs(a)+' · '+qs(p.c)+' = '+qs(o)+' knots',()=>pick([{c:Q(3,5),s:Q(4,5)},{c:Q(4,5),s:Q(3,5)},{c:Q(1,2),s:null}]));
+NL('23·phys2.critical',['23·phys2'],'the critical-angle technique',(p,nm)=>'light goes from glass of index '+nm+' into glass of index '+qs(p.n)+'; give sin θ_c',
+  (v,p)=>v.q<=100&&v.p*p.n.q>p.n.p*v.q&&v.p<=3*v.q?dv(p.n,v):null,(v,p)=>[['the ratio is turned over',dv(v,p.n)],['the difference is taken',sub(v,p.n)],['1 over the first index alone is given',qi(v)]],
+  (a,o,p)=>P(p.n)+'/'+P(a)+' = '+qs(o),()=>({n:pick([Q(7,5),Q(13,10),Q(1)])}));
+NL('23·eng2.radius',['23·eng2'],'the stress-circle technique',(p,nm)=>'the largest squeeze at a point is '+nm+' and the smallest '+p.s+'; what is the largest slide on any cut?',
+  (v,p)=>{ const a=W(v); return a!==null&&a>p.s&&a<=500?fr(a-p.s,2):null; },(v,p)=>{ const a=W(v); return a===null?[]:[['the centre is given',fr(a+p.s,2)],['the difference is not halved',a-p.s],['the largest squeeze is halved',fr(a,2)]]; },
+  (a,o,p)=>'radius ('+qs(a)+' − '+p.s+')/2 = '+qs(o),()=>({s:pick([10,20,40,60])}));
+NL('23·bio.height',['23·bio'],'the scale-height technique',(p,nm)=>'the scale height RT/(Mg) is '+p.H+' km at 250 K; what is it at '+nm+' K?',
+  (v,p)=>{ const t=W(v); return t!==null&&t>=150&&t<=400?fr(p.H*t,250):null; },(v,p)=>{ const t=W(v); return t===null?[]:[['the temperatures are turned over',fr(p.H*250,t)],['the height is left as it was',p.H],['the difference in temperature is added',p.H+t-250]]; },
+  (a,o,p)=>p.H+' · '+qs(a)+'/250 = '+qs(o)+' km',()=>({H:pick([5,7,8,10])}));
+NL('23·chem.odds',['23·chem'],'the tray-stepping technique',(p,nm)=>'with α = '+p.a+' and all the liquid sent back, the odds start at 1/9; what are they after '+nm+' trays?',
+  (v,p)=>{ const n=W(v); return n!==null&&n>=1&&n<=8?fr(p.a**n,9):null; },(v,p)=>{ const n=W(v); return n===null?[]:[['α is multiplied by the trays, not raised',fr(p.a*n,9)],['one tray too few',fr(p.a**(n-1),9)],['the odds are turned into a share',fr(p.a**n,9+p.a**n)]]; },
+  (a,o,p)=>'(1/9) · '+p.a+'^'+qs(a)+' = '+qs(o),()=>({a:pick([2,3])}));
+NL('25·chem2.cooling',['25·chem2'],'the pinch technique',(p,nm)=>'the hot streams give 480 kW and the cold take 470 kW; the cascade asks '+nm+' kW of steam; how much cooling?',
+  v=>{ const s=W(v); return s!==null&&s>=0&&s<=500?s+10:null; },v=>{ const s=W(v); return s===null?[]:[['the 10 kW is taken away',s-10],['the steam is left out',10],['steam and cooling are taken as equal',s]]; },
+  (a,o)=>'cooling − steam = 480 − 470: '+qs(a)+' + 10 = '+qs(o)+' kW');
+NL('25·eng2.power',['25·eng2'],'the swirl technique',(p,nm)=>'a jet at '+p.V+' m/s turns round cups moving at '+nm+' m/s; give the power per kilogram, 2u(V − u)',
+  (v,p)=>{ const u=W(v); return u!==null&&u>0&&u<p.V?2*u*(p.V-u):null; },(v,p)=>{ const u=W(v); return u===null?[]:[['the 2 is left out',u*(p.V-u)],['the jet’s speed is used for the cups’',2*p.V*(p.V-u)],['u is added to V',2*u*(p.V+u)]]; },
+  (a,o,p)=>'2 · '+qs(a)+' · ('+p.V+' − '+qs(a)+') = '+qs(o)+' J/kg',()=>({V:pick([40,60,80,100])}));
+NL('25·logi.reach',['25·logi'],'the knock-on series technique',(p,nm)=>'each station passes a delay on with chance '+nm+'; how many stations does one delay reach on average?',
+  v=>frac01(v)&&v.q<=100?qi(sub(one,v)):null,v=>[['1/r is given',qi(v)],['1 + r is given',qa(one,v)],['the chance of passing one more is given',v]],
+  (a,o)=>'1/(1 − '+qs(a)+') = '+qs(o));
+NL('25·nav.turn',['25·nav'],'the plane-turn technique',(p,nm)=>'a craft at '+nm+' km/s turns its plane with sin(Δ/2) = '+qs(p.s)+'; what push does it cost?',
+  (v,p)=>pos(v,12)?mul(2,v,p.s):null,(v,p)=>[['the 2 is left out',mul(v,p.s)],['the half angle is doubled again inside',mul(4,v,p.s)],['the speed itself is given',v]],
+  (a,o,p)=>'2 · '+qs(a)+' · '+qs(p.s)+' = '+qs(o)+' km/s',()=>({s:pick([Q(1,10),Q(1,4),Q(1,2),Q(1,20)])}));
+NL('26·phys2.radius',['26·phys2'],'the day-orbit technique',(p,nm)=>'a planet’s day is made '+nm+'³ times as long, its GM kept; by what is the still orbit’s radius multiplied?',
+  v=>{ const k=W(v); return k!==null&&k>=2&&k<=6?k*k:null; },v=>{ const k=W(v); return k===null?[]:[['the radius is taken to grow with the day',k**3],['the cube root is taken but not squared',k],['the square is taken of the cube',k**6>99999?null:k**6]]; },
+  (a,o)=>'r ∝ T^(2/3): ('+qs(a)+'³)^(2/3) = '+qs(o));
+NL('26·eng2.step',['26·eng2'],'the detuning technique',(p,nm)=>'a building with damping share ζ = '+nm+' is shaken in step with its own sway; by what does it multiply the shaking?',
+  v=>frac01(v)&&v.q<=50?qi(mul(2,v)):null,v=>[['the 2 is left out',qi(v)],['ζ is multiplied in',mul(2,v)],['the ratio 1 for slow shaking is given',1]],
+  (a,o)=>'1/(2 · '+qs(a)+') = '+qs(o));
+NL('26·nav.speed',['26·nav'],'the phase-step technique',(p,nm)=>'an echo turns '+nm+' of a full turn between bursts '+p.T+' ms apart, at λ = '+p.l+' cm; how fast is the rain coming?',
+  (v,p)=>frac01(v)&&v.p*2<v.q?mul(v,fr(p.l*1000,200*p.T)):null,(v,p)=>[['the out-and-back is not halved',mul(v,fr(p.l*1000,100*p.T))],['the turn is taken in radians as given',null],['the burst gap is multiplied, not divided',mul(v,fr(p.l*p.T,200))]],
+  (a,o,p)=>'λ · turns/(2T) = '+p.l/100+' · '+qs(a)+'/(2 · '+p.T/1000+') = '+qs(o)+' m/s',()=>({T:pick([1,2]),l:pick([10,5])}));
+NL('26·chem.tank',['26·chem'],'the residence-time technique',(p,nm)=>'a stirred tank has kτ = '+nm+'; what share does it turn to product?',
+  v=>pos(v,20)?dv(v,qa(one,v)):null,v=>[['the share left is given',qi(qa(one,v))],['kτ itself is given as the share',v.p<v.q?v:null],['the pipe’s first two terms, kτ − (kτ)²/2, are used',sub(v,mul(fr(1,2),v,v))]],
+  (a,o)=>P(a)+'/(1 + '+qs(a)+') = '+qs(o));
+NL('26·bio.time',['26·bio'],'the bits-per-choice technique',(p,nm)=>'with T = 200 + 150 log₂(n + 1) ms, give the choice time for '+nm+' lights',
+  v=>{ const n=W(v); if(n===null||n<1||n>1023) return null; const b=Math.log2(n+1); return Number.isInteger(b)?200+150*b:null; },v=>{ const n=W(v); if(n===null) return []; const b=Math.round(Math.log2(n+1)); return [['the fixed 200 ms is left out',150*b],['log₂ n is used, not log₂(n + 1)',Number.isInteger(Math.log2(n))?200+150*Math.log2(n):null],['each light adds 150 ms',200+150*n]]; },
+  (a,o)=>'200 + 150 · log₂('+qs(a)+' + 1) = '+qs(o)+' ms');
+NL('29·phys2.speed',['29·phys2'],'the pole-of-turning technique',(p,nm)=>'a plate moves '+nm+' cm a year at points 90° from its pole; how fast at points 30° from it?',
+  v=>pos(v,20)?mul(fr(1,2),v):null,v=>[['the speed is taken the same everywhere',v],['the speed is scaled by 30/90',mul(fr(1,3),v)],['cos 30° is used for sin 30°',null]],
+  (a,o)=>qs(a)+' · sin 30° = '+qs(a)+' · 1/2 = '+qs(o)+' cm a year');
+NL('29·nav2.wind',['29·nav2'],'the balanced-wind technique',(p,nm)=>'the pressure push is '+nm+' × 10⁻⁴ m/s² per kilogram and f = '+qs(p.f)+' × 10⁻⁴ a second; how fast is the balanced wind?',
+  (v,p)=>pos(v,30)?dv(v,p.f):null,(v,p)=>[['the push and f are multiplied',qm(v,p.f)],['f is put on top',dv(p.f,v)],['2Ω sin φ is doubled again',dv(v,mul(2,p.f))]],
+  (a,o,p)=>P(a)+'/'+P(p.f)+' = '+qs(o)+' m/s',()=>({f:pick([Q(1,2),Q(5,4),Q(3,2)])}));
+NL('29·eng.lift',['29·eng'],'the circulation-lift technique',(p,nm)=>'air of density 6/5 streams at '+p.V+' m/s past a wing with circulation '+nm+' m²/s; give the lift per metre',
+  (v,p)=>pos(v,60)?mul(fr(6,5),p.V,v):null,(v,p)=>[['the density is left out',mul(p.V,v)],['half of ρV² is used, as for a pressure',mul(fr(3,5),p.V,v)],['the speed is squared',mul(fr(6,5),p.V*p.V,v)]],
+  (a,o,p)=>'ρVΓ = 6/5 · '+p.V+' · '+qs(a)+' = '+qs(o)+' N/m',()=>({V:pick([20,25,50])}));
+NL('29·eng2.stack',['29·eng2'],'the stacked-cycle technique',(p,nm)=>'a gas turbine of efficiency '+nm+' feeds its waste heat to a steam cycle of '+qs(p.e)+'; give the pair’s efficiency',
+  (v,p)=>frac01(v)?sub(qa(v,p.e),qm(v,p.e)):null,(v,p)=>[['the two are added',qa(v,p.e)],['the two are multiplied',qm(v,p.e)],['the better engine alone is given',v.p*p.e.q>p.e.p*v.q?v:p.e]],
+  (a,o,p)=>qs(a)+' + '+qs(p.e)+' − '+qs(a)+' · '+qs(p.e)+' = '+qs(o),()=>({e:pick([Q(1,3),Q(7,20),Q(2,5),Q(3,10)])}));
+NL('33·nav.step',['33·nav'],'the grid-step technique',(p,nm)=>'the grid spacing is '+nm+' km and the fastest wind '+p.u+' m/s; give the longest safe step in seconds',
+  (v,p)=>pos(v,50)?mul(v,fr(1000,p.u)):null,(v,p)=>[['kilometres are not turned into metres',dv(v,p.u)],['the speed is multiplied',mul(v,1000*p.u)],['the step is halved for safety',mul(v,fr(500,p.u))]],
+  (a,o,p)=>qs(a)+' · 1000/'+p.u+' = '+qs(o)+' s',()=>({u:pick([40,50,60,80])}));
+NL('34·phys2.spin',['34·phys2'],'the kept-spin technique',(p,nm)=>'a swirl spinning at '+p.v+' m/s is drawn in until its radius is 1/'+nm+' of what it was; how fast does it spin?',
+  (v,p)=>{ const k=W(v); return k!==null&&k>=2&&k<=30?p.v*k:null; },(v,p)=>{ const k=W(v); return k===null?[]:[['the speed is divided by the shrink',fr(p.v,k)],['the speed grows as the square',p.v*k*k],['the speed is kept',p.v]]; },
+  (a,o,p)=>'v ∝ 1/r: '+p.v+' · '+qs(a)+' = '+qs(o)+' m/s',()=>({v:pick([1,2,3,5])}));
+NL('34·eng.time',['34·eng'],'the square-root depth technique',(p,nm)=>'a skin '+nm+' times as deep is wanted at the same heat; by what is the bake time multiplied?',
+  v=>v.p>v.q&&v.q<=10&&v.p<=5*v.q?pw(v,2):null,v=>[['the time is taken to grow with the depth',v],['the root is taken',null],['the depth is doubled',mul(2,v)]],
+  (a,o)=>'t ∝ x²: '+P(a)+'² = '+qs(o));
+NL('34·eng2.reflect',['34·eng2'],'the reflection technique',(p,nm)=>'a '+p.z+' ohm cable ends in a load of '+nm+' ohms; what share of the voltage comes back?',
+  (v,p)=>v.p>=0&&v.q<=10&&v.p<=1000*v.q?dv(sub(v,Q(p.z)),qa(v,Q(p.z))):null,(v,p)=>[['the subtraction is turned round',dv(sub(Q(p.z),v),qa(v,Q(p.z)))],['the power share, the square, is given',pw(dv(sub(v,Q(p.z)),qa(v,Q(p.z))),2)],['the load is divided by the cable',dv(v,p.z)]],
+  (a,o,p)=>'('+qs(a)+' − '+p.z+')/('+qs(a)+' + '+p.z+') = '+qs(o),()=>({z:pick([50,75])}));
+NL('34·bio2.cross',['34·bio2'],'the crossing-lines technique',(p,nm)=>'with a = b = 1/2, rooms K₁ = '+nm+' and K₂ = '+p.K+'; where do the stop lines cross, N₁ = (K₁ − K₂/2)/(3/4)?',
+  (v,p)=>{ const k=W(v); return k!==null&&k>p.K/2&&k<2*p.K&&k<=400?mul(sub(Q(k),fr(p.K,2)),fr(4,3)):null; },(v,p)=>{ const k=W(v); return k===null?[]:[['the 1 − ab is left out',sub(Q(k),fr(p.K,2))],['the room alone is given, as with no rival',k],['K₂ is not halved',mul(sub(Q(k),Q(p.K)),fr(4,3))]]; },
+  (a,o,p)=>'('+qs(a)+' − '+p.K+'/2)/(1 − 1/4) = '+qs(o),()=>({K:pick([60,80,100,120])}));
+NL('34·chem.air',['34·chem'],'the box-balance technique',(p,nm)=>'air and surface sea hold equal extra; the surface sinks 1/50 a year and the deep returns '+nm+' a year; what share of extra stays in the air?',
+  v=>v.p>0&&v.q<=1000&&v.p*50<v.q?qi(qa(Q(2),qi(mul(50,v)))):null,v=>[['the deep is left out',fr(1,2)],['the deep’s share is turned over',qi(qa(Q(2),mul(50,v)))],['the air alone over the deep is given',mul(50,v)]],
+  (a,o)=>'A : S : D = 1 : 1 : (1/50)/'+P(a)+': air 1/(2 + '+qs(qi(mul(50,a)))+') = '+qs(o));
+NL('34·stat.margin',['34·stat'],'the margin technique',(p,nm)=>'a random poll asks '+nm+' people; about how close to the truth is its share, 1/√n?',
+  v=>{ const r=isq(W(v)); return r!==null&&r>=10&&r<=200?fr(1,r):null; },v=>{ const n=W(v), r=isq(n); return r===null?[]:[['the root is not taken',fr(1,n)],['the spread, 1/(2√n), is given',fr(1,2*r)],['twice the margin is given',fr(2,r)]]; },
+  (a,o)=>'1/√'+qs(a)+' = '+qs(o));
+NL('35·phys2.count',['35·phys2'],'the scale-free count technique',(p,nm)=>'with log₁₀ N = '+p.a+' − M, how many quakes a year of magnitude '+nm+' or more?',
+  (v,p)=>{ const m=W(v); return m!==null&&m>=p.a-4&&m<=p.a+2?(m<=p.a?10**(p.a-m):fr(1,10**(m-p.a))):null; },(v,p)=>{ const m=W(v); if(m===null) return []; const t=(e)=>e>=0?10**e:fr(1,10**(-e)); return [['the log is given, not the count',p.a-m],['one step too many',t(p.a-m-1)],['the count is halved per step',m<=p.a?2**(p.a-m):fr(1,2**(m-p.a))]]; },
+  (a,o,p)=>'10^('+p.a+' − '+qs(a)+') = '+qs(o),()=>({a:pick([6,7,8])}));
+NL('35·nav.top',['35·nav'],'the near-target technique',(p,nm)=>'from the target, a push of '+nm+' m/s along the path, with n = 1/1000 per second; how high does the chaser rise, 4Δv/n?',
+  v=>pos(v,1)?mul(4000,v):null,v=>[['the 4 is left out',mul(1000,v)],['the upward loop’s Δv/n is given',mul(1000,v)],['the push is divided by 4n',mul(250,v)]],
+  (a,o)=>'4 · '+qs(a)+' · 1000 = '+qs(o)+' m');
+NL('35·eng.bias',['35·eng'],'the bias technique',(p,nm)=>'cloth has E = '+nm+' along its threads and G = '+p.G+'; give its stiffness at 45°, 1/(1/(2E) + 1/(4G))',
+  (v,p)=>{ const e=W(v); return e!==null&&e>=10&&e<=500?qi(qa(fr(1,2*e),fr(1,4*p.G))):null; },(v,p)=>{ const e=W(v); return e===null?[]:[['the stiffnesses are averaged',fr(e+p.G,2)],['the leaning term is left out',2*e],['the 4 is taken as 2',qi(qa(fr(1,2*e),fr(1,2*p.G)))]]; },
+  (a,o,p)=>'1/(1/(2 · '+qs(a)+') + 1/(4 · '+p.G+')) = '+qs(o),()=>({G:pick([2,4,5])}));
+NL('35·stat.stack',['35·stat'],'the spread-stack technique',(p,nm)=>nm+' parts, each with spread '+qs(p.s)+' mm, are stacked; give the stack’s spread',
+  (v,p)=>{ const r=isq(W(v)); return r!==null&&r>=2&&r<=10?mul(p.s,r):null; },(v,p)=>{ const n=W(v), r=isq(n); return r===null?[]:[['the spreads are added as sizes',mul(p.s,n)],['the spread is divided by √n',dv(p.s,r)],['one part’s spread is given',p.s]]; },
+  (a,o,p)=>qs(p.s)+' · √'+qs(a)+' = '+qs(o)+' mm',()=>({s:pick([Q(1,100),Q(1,50),Q(3,100)])}));
+NL('35·comp.bits',['35·comp'],'the constellation technique',(p,nm)=>'a pattern of '+nm+' points; how many bits does each symbol carry?',
+  v=>{ const m=W(v); if(m===null||m<2||m>4096) return null; const b=Math.log2(m); return Number.isInteger(b)?b:null; },v=>{ const m=W(v); return m===null?[]:[['the points are halved',m/2],['the square root is taken',isq(m)],['one bit per point',m]]; },
+  (a,o)=>'log₂ '+qs(a)+' = '+qs(o));
+NL('36·phys2.pixel',['36·phys2'],'the slice technique',(p,nm)=>'rows read 7 and 11, columns 8 and 10, and the diagonal through a and d reads '+nm+'; give a',
+  v=>{ const d=W(v); return d!==null&&d>=4&&d<=16?fr(d-3,2):null; },v=>{ const d=W(v); return d===null?[]:[['the 2 is not divided out',d-3],['half the diagonal is given',fr(d,2)],['the row sum is used for the column',fr(d-4,2)]]; },
+  (a,o)=>'d = '+qs(a)+' − a, c = 11 − d, a + c = 8: a = ('+qs(a)+' − 3)/2 = '+qs(o));
+NL('36·eng.power',['36·eng'],'the best-point technique',(p,nm)=>'a cell makes '+p.L+' A from light and leaks back '+qs(p.k)+' A at '+nm+' V; what power does it give there?',
+  (v,p)=>v.p>0&&v.q<=100&&v.p*10<=7*v.q?mul(v,sub(Q(p.L),p.k)):null,(v,p)=>[['the leak is left out',mul(v,p.L)],['the leak is added',mul(v,qa(Q(p.L),p.k))],['the voltage is left out',sub(Q(p.L),p.k)]],
+  (a,o,p)=>qs(a)+' · ('+p.L+' − '+qs(p.k)+') = '+qs(o)+' W',()=>({L:pick([6,8,9]),k:pick([Q(2,5),Q(1,2),Q(1,4)])}));
+NL('37·phys2.beat',['37·phys2'],'the beat-reading technique',(p,nm)=>'two cycles run at '+nm+' and '+p.P+' thousand years; give the beat period, P₁P₂/(P₂ − P₁)',
+  (v,p)=>{ const a=W(v); return a!==null&&a>=10&&a<p.P?fr(a*p.P,p.P-a):null; },(v,p)=>{ const a=W(v); return a===null?[]:[['the gap in periods is given',p.P-a],['the two periods are averaged',fr(a+p.P,2)],['the sum is used on the bottom',fr(a*p.P,a+p.P)]]; },
+  (a,o,p)=>qs(a)+' · '+p.P+'/('+p.P+' − '+qs(a)+') = '+qs(o),()=>({P:pick([23,24,41,30])}));
+NL('37·stat.dprime',['37·stat'],'the separation technique',(p,nm)=>'the hits sit at z = '+nm+' and the false alarms at z = '+qs(p.z)+'; give d′',
+  (v,p)=>v.q<=10&&Math.abs(v.p)<=3*v.q?sub(v,p.z):null,(v,p)=>[['the two are added',qa(v,p.z)],['the hits alone are given',v],['the false alarms are taken from 0, not from the hits',qn(p.z)]],
+  (a,o,p)=>qs(a)+' − ('+qs(p.z)+') = '+qs(o),()=>({z:pick([Q(-1),Q(-1,2),Q(-3,2),Q(0)])}));
+NL('38·eng.area',['38·eng'],'the throat technique',(p,nm)=>'air (γ = 1.4) leaves a nozzle at Mach '+nm+'; give the exit area over the throat, (1/M)((5 + M²)/6)³',
+  v=>v.p>v.q&&v.q<=4&&v.p<=4*v.q?dv(pw(dv(qa(Q(5),qm(v,v)),6),3),v):null,v=>[['the 1/M is left out',pw(dv(qa(Q(5),qm(v,v)),6),3)],['the cube is left off',dv(dv(qa(Q(5),qm(v,v)),6),v)],['M is not squared',dv(pw(dv(qa(Q(5),v),6),3),v)]],
+  (a,o)=>'(1/'+P(a)+')((5 + '+P(a)+'²)/6)³ = '+qs(o));
+NL('38·chem2.size',['38·chem2'],'the chain-size technique',(p,nm)=>'a chain has '+nm+' links of '+qs(p.b)+' nm; how far apart do its ends sit, b√N?',
+  (v,p)=>{ const r=isq(W(v)); return r!==null&&r>=10&&r<=300?mul(p.b,r):null; },(v,p)=>{ const n=W(v), r=isq(n); return r===null?[]:[['the full length, Nb, is given',mul(p.b,n)],['the root is taken of b too',null],['the links are halved',mul(p.b,n/2)]]; },
+  (a,o,p)=>qs(p.b)+' · √'+qs(a)+' = '+qs(o)+' nm',()=>({b:pick([Q(1,2),Q(2,5),Q(1)])}));
+NL('38·stat.chance',['38·stat'],'the item-curve technique',(p,nm)=>'a person’s e^(θ − b) on a question is '+nm+'; what chance do they answer it right?',
+  v=>v.p>0&&v.q<=10&&v.p<=20*v.q?dv(v,qa(one,v)):null,v=>[['the odds are given as the chance',v.p<v.q?v:null],['the chance of a wrong answer is given',qi(qa(one,v))],['1 is left out of the bottom',v.p<v.q?null:one]],
+  (a,o)=>P(a)+'/(1 + '+qs(a)+') = '+qs(o));
+NL('38·comp.count',['38·comp'],'the rank-count technique',(p,nm)=>'the commonest word appears '+p.C+' times; about how often does the word of rank '+nm+' appear?',
+  (v,p)=>{ const r=W(v); return r!==null&&r>=2&&r<=1000?fr(p.C,r):null; },(v,p)=>{ const r=W(v); return r===null?[]:[['the count falls as the square of rank',fr(p.C,r*r)],['the count falls by one a rank',p.C-r+1],['the rank is multiplied',p.C*r]]; },
+  (a,o,p)=>p.C+'/'+qs(a)+' = '+qs(o),()=>({C:pick([6000,7000,12000])}));
+NL('40·eng2.turns',['40·eng2'],'the card-row technique',(p,nm)=>'a ring of '+nm+' cards weaves '+p.R+' rows; how many times does it go round?',
+  (v,p)=>{ const k=W(v); return k!==null&&k>=2&&k<=p.R&&p.R%k===0?p.R/k:null; },(v,p)=>{ const k=W(v); return k===null?[]:[['the rows and cards are multiplied',k*p.R],['one card is taken off for the join',p.R%(k-1)===0?p.R/(k-1):null],['the rows themselves are given',p.R]]; },
+  (a,o,p)=>p.R+'/'+qs(a)+' = '+qs(o),()=>({R:pick([120,240,360])}));
+NL('41·comp2.tilt',['41·comp2'],'the two-flip search technique',(p,nm)=>'the start tilts '+nm+'° toward the marked box; after '+p.k+' rounds, how far has it tilted?',
+  (v,p)=>{ const t=W(v); return t!==null&&t>=1&&t<=30?(2*p.k+1)*t:null; },(v,p)=>{ const t=W(v); return t===null?[]:[['each round turns θ, not 2θ',(p.k+1)*t],['the start is left out',2*p.k*t],['the rounds double the tilt each time',t*2**p.k]]; },
+  (a,o,p)=>'(2 · '+p.k+' + 1) · '+qs(a)+'° = '+qs(o)+'°',()=>({k:pick([2,3])}));
+NL('43·eng.bsq',['43·eng'],'the critical-size technique',(p,nm)=>'a core mix has k = '+nm+' and wander length '+p.L+' cm; give B² = (k − 1)/L²',
+  (v,p)=>v.p>v.q&&v.q<=100&&v.p<=2*v.q?dv(sub(v,one),p.L*p.L):null,(v,p)=>[['the length is not squared',dv(sub(v,one),p.L)],['k is used, not k − 1',dv(v,p.L*p.L)],['the fraction is turned over',qm(Q(p.L*p.L),qi(sub(v,one)))]],
+  (a,o,p)=>'('+qs(a)+' − 1)/'+p.L+'² = '+qs(o),()=>({L:pick([5,8,10])}));
+NL('45·comp.fail',['45·comp'],'the parity-check technique',(p,nm)=>'each of three qubits flips with chance '+nm+'; what chance does the code fail, 3p² − 2p³?',
+  v=>frac01(v)&&v.q<=100?sub(mul(3,v,v),mul(2,v,v,v)):null,v=>[['the bare qubit’s chance is given',v],['the three-flip term is added',qa(mul(3,v,v),mul(v,v,v))],['only two flips are counted, 3p²',mul(3,v,v)]],
+  (a,o)=>'3 · '+P(a)+'² − 2 · '+P(a)+'³ = '+qs(o));
+
+/* seeds: numbers each page's link can work on, in its own range */
+const SEEDS=CH.SEEDS, ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const sd=(id,step,label,f)=>SEEDS.push({id,step,label,kind:'num',make(){ const v=f(); if(v==null) return null; const q=typeof v==='number'?Q(v):v; return {val:num(q),ix:qs(q)}; }});
+const PK=a=>()=>{ const x=pick(a); return Array.isArray(x)?Q(x[0],x[1]):x; };
+[['1·comp2','numbers of rewrites',()=>ri(3,7)],['3·comp2','sizes of a set',()=>ri(4,40)],['4·econ2','votes for one side',()=>ri(1,5)],
+ ['5·econ2','town sizes',PK([10,20,25,40,50,60,75,80])],['6·econ2','votes in a passing group',()=>ri(9,20)],['7·stat','base rates, 1 in n',PK([20,50,100,200,500,1000])],
+ ['7·bio','marked fish in a catch',()=>ri(2,20)],['7·eng','chances of a part failing',PK([[1,2],[1,5],[1,10],[1,20],[1,100]])],
+ ['8·phys2','distances from a ridge',PK([20,40,50,60,80,100,120,200])],['8·econ2','odd numbers of members',()=>2*ri(1,10)+1],['8·bio','reproduction numbers',()=>ri(3,18)],
+ ['9·stat2','output ratios',PK([[1,2],[2,1],[3,2],[2,3],[5,4]])],['9·eng','shares of a mix',PK([[1,4],[1,2],[3,4],[1,5],[2,5]])],
+ ['10·stat2','term GPAs',PK([2,4,[3,2],[11,4],1])],['11·phys','heights of ranges',PK([1,2,3,4,5,[5,2]])],['11·stat','exposed cases',()=>ri(5,60)],
+ ['12·bio','loads in newtons',PK([10,20,50,100])],['12·eng2','speed factors',PK([2,3,[1,2],[3,2],[2,3]])],['12·chem','alloy shares',()=>ri(25,55)],
+ ['14·eng','slowing shares',PK([[1,3],[1,2],[1,4],[1,5],[2,5],[1,10]])],['15·phys2','shares passed on',PK([[1,2],[2,3],[3,4],[9,10],[19,20]])],
+ ['15·eng2','accelerations',()=>ri(1,10)],['15·eng3','duty shares',PK([[1,4],[1,2],[3,4],[1,3],[2,3]])],['19·phys','arrival gaps',PK([5,10,15,20,30])],
+ ['19·logi','days at sea',PK([10,15,20,25,30])],['19·eng2','log-mean gaps',PK([10,20,25,40])],['20·eng','lifted threads',()=>ri(1,4)],
+ ['20·nav2','log weight ratios',PK([[1,5],[1,4],[3,10],[2,5],[1,2]])],['20·eng2','critical depths',PK([[1,2],1,2,[3,2],4])],['21·phys2','boat speeds',PK([5,6,8,10,12])],
+ ['23·phys2','core indexes',PK([[3,2],[8,5],[17,10]])],['23·eng2','largest squeezes',PK([80,100,120,140,200])],['23·bio','air temperatures',PK([200,225,275,300])],
+ ['23·chem','numbers of trays',()=>ri(1,6)],['25·chem2','steam from a cascade',PK([0,20,30,40,60])],['25·eng2','cup speeds',PK([10,15,20])],
+ ['25·logi','chances of passing a delay',PK([[1,2],[1,3],[1,4],[2,3],[3,4]])],['25·nav','orbit speeds',PK([3,4,7,8,[15,2]])],['26·phys2','day stretch factors',()=>ri(2,5)],
+ ['26·eng2','damping shares',PK([[1,20],[1,10],[1,50],[1,5]])],['26·nav','shares of a turn',PK([[1,10],[1,5],[1,4],[1,20]])],['26·chem','values of kτ',PK([2,3,4,[1,2],[1,3]])],
+ ['26·bio','numbers of lights',PK([1,3,7,15,31])],['29·phys2','plate speeds',PK([2,4,6,8,10])],['29·nav2','pressure pushes',PK([1,2,3,5,10])],
+ ['29·eng','circulations',PK([5,10,20,25])],['29·eng2','turbine efficiencies',PK([[1,3],[2,5],[3,10],[7,20]])],['33·nav','grid spacings',PK([2,5,10,20])],
+ ['34·phys2','shrink factors',()=>ri(2,10)],['34·eng','depth factors',PK([3,[3,2],[5,2]])],['34·eng2','load resistances',PK([10,25,100,150,300])],
+ ['34·bio2','rooms for the first species',PK([70,80,90,100])],['34·chem','deep return shares',PK([[1,100],[1,200],[1,500],[1,1000]])],['34·stat','poll sizes',PK([100,400,900,1600,2500,10000])],
+ ['35·phys2','magnitudes',()=>ri(4,8)],['35·nav','pushes',PK([[1,10],[1,2],[1,4],[1,5],1])],['35·eng','thread stiffnesses',PK([10,20,40,50,100])],
+ ['35·stat','numbers of parts',PK([4,9,16,25])],['35·comp','points in a pattern',PK([8,16,64,256])],['36·phys2','diagonal sums',()=>ri(5,15)],
+ ['36·eng','cell voltages',PK([[1,2],[3,5],[2,5],[1,4]])],['37·phys2','shorter periods',PK([19,20,22])],['37·stat','hit z-scores',PK([1,[3,2],2,[1,2]])],
+ ['38·eng','exit Mach numbers',PK([2,3,[3,2],[5,2]])],['38·chem2','numbers of links',PK([100,400,900,2500,10000])],['38·stat','odds e^(θ − b)',PK([1,3,[1,2],[1,3],4])],
+ ['38·comp','word ranks',PK([2,3,4,5,10,20,100])],['40·eng2','cards in a ring',PK([4,6,8,10,12])],['41·comp2','start tilts',PK([5,10,15,20])],
+ ['43·eng','multiplication factors',PK([[11,10],[21,20],[6,5],[101,100]])],['45·comp','flip chances',PK([[1,10],[1,100],[1,20],[1,5]])]
+].forEach(([st,label,f])=>sd(st+'.nums',st,label,f));
+
+/* word problems: one law for each page with units. Places and units, never persons */
+const W2=CH.W2;
+if(W2){ const {X,own,LAWS,at,qq,num:wn}=W2;
+  const par=v=>v.p<0||v.q!==1?'('+qs(v)+')':qs(v);
+  const lw=(id,label,fn,close)=>{ const L={id,step:id.split('.')[0],label,close,make(){ let S=null; try{ S=fn(); }catch(e){ S=null; } if(!S) return null; S.lawId=id; if(!S.ix) S.ix=S.c.map(x=>qs(qq(x))).join(',')+(S.k!==undefined?';'+S.k:''); return S; }}; LAWS.push(L); return L; };
+  const C=(kind,o)=>W2[{gap:'G',times:'Tm',per:'Pr',into:'In',frac:'Fr',plus:'Pl'}[kind]](o);
+  const N=(why,v)=>({why,v});
+  lw('7·bio.lake','fish marked in a lake',()=>({c:[0,20],story:'A survey at the lake by '+at()+' marks M(d) = 20d fish in d days of netting.',f:'M',x:'d',xu:'days',yu:'fish',rate:'fish a day',area:null,pts:[2,3,4,5]}),
+    [C('times',X({u:'yu',k:()=>pick([5,10,20]),ask:(S,p)=>'a later catch of '+4*wn(p.k)+' holds 4 marked fish: about how many fish are in the lake?',ln:()=>'fish in the lake',
+      w:['the marked count is divided by catch over marked, not multiplied','catch over marked is added, not multiplied'],xs:(S,p,q)=>[N('catch over marked alone is given',p.k),N('the marked fish are given as the whole lake',q.v)]},own('7·bio','the mark-share technique')))]);
+  lw('7·stat.screen','a screening clinic',()=>({c:[0,2000],story:'A clinic at '+at()+' screens P(w) = 2000w people in w weeks.',f:'P',x:'w',xu:'weeks',yu:'people',rate:'people a week',area:null,pts:[1,2,3,5]}),
+    [C('times',X({u:'yu',out:'positives',k:1,ask:()=>'1 in 100 is sick; the test finds every sick one and flags 1 in 20 of the well: how many positives?',ln:()=>'positives',
+      f:(S,p,q)=>qm(q.v,Q(119,2000)),ex:(S,p,q)=>par(q.v)+'/100 + '+par(q.v)+' · 99/2000',w:[null,null],
+      xs:(S,p,q)=>[N('only the sick are counted',qm(q.v,Q(1,100))),N('only the wrong flags are counted',qm(q.v,Q(99,2000))),N('1 in 20 of everyone is flagged, sick too',qm(q.v,Q(6,100)))]},own('7·stat','the count-the-positives technique')))]);
+  lw('8·phys2.ridge','stripes beside a ridge',()=>({c:[0,20],story:'A survey ship out of '+at()+' finds a stripe d(n) = 20n km from the ridge on survey line n.',f:'d',x:'n',xu:'lines',yu:'kilometres',rate:'kilometres a line',area:null,pts:[1,2,3,4,5]}),
+    [C('per',X({u:'yu',out:'million years',k:()=>pick([2,4,5])*10,ask:(S,p)=>'the ridge spreads '+wn(p.k)/10+' cm a year each way: how old is the stripe?',ln:()=>'age, km over km per million years',
+      w:['the distance is multiplied by the rate','the rate is taken away from the distance'],xs:(S,p,q)=>[N('both sides’ spreading is counted for one side',qm(q.v,qi(qm(p.k,Q(2)))))]},own('8·phys2','the mirror-age technique')))]);
+  lw('8·bio.immune','a model outbreak',()=>({c:[1,1],story:'In a model outbreak at '+at()+', each case infects R(s) = s + 1 others in season s.',f:'R',x:'s',xu:'seasons',yu:'others',rate:'others a season',area:null,pts:[1,2,3,4,5]}),
+    [C('times',X({u:'yu',out:'of the town',k:1,ask:()=>'what share of the town must be immune for it to die out?',ln:()=>'share to make immune',
+      f:(S,p,q)=>q.v.p>q.v.q?qa(Q(1),qn(qi(q.v))):null,ex:(S,p,q)=>'1 − 1/'+par(q.v),w:[null,null],
+      xs:(S,p,q)=>[N('1/R, the share left open, is given',qi(q.v)),N('half is taken whatever R is',Q(1,2)),N('R/(R + 1) is used',qm(q.v,qi(qa(q.v,Q(1)))))]},own('8·bio','the threshold technique')))]);
+  lw('11·phys.range','a rising range',()=>({c:[0,Q(1,2)],story:'A range near '+at()+' stands h(m) = m/2 km above the lowland after m million years of uplift.',f:'h',x:'m',xu:'million years',yu:'kilometres',rate:'kilometres a million years',area:null,pts:[2,4,6,8]}),
+    [C('times',X({u:'yu',k:Q(28,5),ask:()=>'crust 2.8, mantle 3.3: how deep is its root, h · 2.8/(3.3 − 2.8)?',ln:()=>'root depth',
+      w:['the height is divided by 5.6','5.6 is added'],xs:(S,p,q)=>[N('the mantle’s 3.3 is put on top',qm(q.v,Q(33,5))),N('the root is taken to match the height',q.v)]},own('11·phys','the equal-columns technique')))]);
+  lw('11·stat.cases','exposed cases in a study',()=>({c:[0,10],story:'A study at '+at()+' counts E(w) = 10w ill people who were exposed, after w weeks.',f:'E',x:'w',xu:'weeks',yu:'people',rate:'people a week',area:null,pts:[1,2,3,4]}),
+    [C('times',X({u:'yu',out:'as the odds ratio',k:Q(2,5),ask:()=>'of the ill, 10 were not exposed; of the well, 20 were and 80 not: give the odds ratio',ln:()=>'odds ratio, a · 80/(10 · 20)',
+      w:['the cross is divided the wrong way',null],xs:(S,p,q)=>[N('the risk shares are compared instead of the odds',qm(qm(q.v,qi(qa(q.v,Q(10)))),Q(5))),N('the ratio is turned over',qi(qm(q.v,Q(2,5))))]},own('11·stat','the odds-ratio technique')))]);
+  lw('12·chem.alloy','tin in an alloy',()=>({c:[20,5],story:'An alloy melted at '+at()+' holds x(b) = 5b + 20 percent tin in batch b.',f:'x',x:'b',xu:'batches',yu:'percent',rate:'percent a batch',area:null,pts:[1,2,3,4,5]}),
+    [C('times',X({u:'yu',out:'of it liquid',k:1,ask:()=>'the tie line runs from solid at 10% to liquid at 60%: what share is liquid?',ln:()=>'liquid share',
+      f:(S,p,q)=>qm(qa(q.v,Q(-10)),Q(1,50)),ex:(S,p,q)=>'('+par(q.v)+' − 10)/50',w:[null,null],
+      xs:(S,p,q)=>[N('the solid share is given',qm(qa(Q(60),qn(q.v)),Q(1,50))),N('the alloy’s own share is given',qm(q.v,Q(1,100))),N('the length is taken to 100, not 60',qm(qa(q.v,Q(-10)),Q(1,90)))]},own('12·chem','the tie-line lever technique')))]);
+  lw('12·eng2.fan','a fan’s power',()=>({c:[0,100],story:'A fan at '+at()+' draws P(n) = 100n watts on setting n.',f:'P',x:'n',xu:'settings',yu:'watts',rate:'watts a setting',area:null,pts:[1,2,3]}),
+    [C('times',X({u:'yu',k:()=>pick([8,27]),ask:(S,p)=>'its speed is '+(p.K==='8'?'doubled':'tripled')+': what power does it draw?',ln:()=>'new power, the cube of the speed',
+      w:['the power is divided by the cube','the cube is added'],xs:(S,p,q)=>[N('the square of the speed is used',qm(q.v,Q(p.K==='8'?4:9))),N('the power is taken to grow with the speed',qm(q.v,Q(p.K==='8'?2:3)))]},own('12·eng2','the fan-scaling technique')))]);
+  lw('14·eng.turbine','wind through a turbine',()=>({c:[0,50],story:'The wind through a turbine’s circle at '+at()+' carries W(n) = 50n kilowatts on day n.',f:'W',x:'n',xu:'days',yu:'kilowatts',rate:'kilowatts a day',area:null,pts:[1,2,3,4,6]}),
+    [C('frac',X({u:'yu',k:Q(16,27),ask:()=>'the blades slow the wind by a third: how many kilowatts does it take, 4a(1 − a)²?',ln:()=>'power taken',
+      w:['the share left in the wind is given','the power is divided by the share'],xs:(S,p,q)=>[N('the square is left off, 4a(1 − a)',qm(q.v,Q(8,9))),N('the slowing share itself is used',qm(q.v,Q(1,3)))]},own('14·eng','the best-slowing technique')))]);
+  lw('15·phys2.pile','splits in a model pile',()=>({c:[0,Q(1,10)],story:'In a model pile at '+at()+', each split causes k(n) = n/10 more splits with n rods drawn.',f:'k',x:'n',xu:'rods drawn',yu:'more splits each',rate:'a rod',area:null,pts:[2,5,8,9]}),
+    [C('times',X({u:'yu',out:'splits in all',k:1,ask:()=>'starting from one split, how many splits are there in all?',ln:()=>'splits in all',
+      f:(S,p,q)=>q.v.p>0&&q.v.p<q.v.q?qi(qa(Q(1),qn(q.v))):null,ex:(S,p,q)=>'1/(1 − '+par(q.v)+')',w:[null,null],
+      xs:(S,p,q)=>[N('1/k is given',qi(q.v)),N('1 + k is given',qa(Q(1),q.v)),N('the first split is left out',qm(q.v,qi(qa(Q(1),qn(q.v)))))]},own('15·phys2','the multiplication technique')))]);
+  lw('19·phys.quake','waves from a quake',()=>({c:[0,5],story:'A station at '+at()+' logs g(n) = 5n seconds between the two waves of the n-th quake of a swarm.',f:'g',x:'n',xu:'quakes',yu:'seconds',rate:'seconds a quake',area:null,pts:[1,2,3,4,5]}),
+    [C('times',X({u:'yu',out:'kilometres',k:Q(42,5),ask:()=>'the waves run at 6 and 3.5 km/s: how far off is the quake?',ln:()=>'distance, gap · 6 · 3.5/2.5',
+      w:['the gap is divided by 42/5','42/5 is added'],xs:(S,p,q)=>[N('the fast speed alone is used',qm(q.v,Q(6))),N('the slow speed alone is used',qm(q.v,Q(7,2))),N('the gap is divided by the difference',qm(q.v,Q(2,5)))]},own('19·phys','the arrival-gap technique')))]);
+  lw('19·logi.voyage','gas on a voyage',()=>({c:[0,1000],story:'A tanker leaving '+at()+' holds V(n) = 1000n cubic metres of cold gas in n tanks.',f:'V',x:'n',xu:'tanks',yu:'cubic metres',rate:'cubic metres a tank',area:null,pts:[2,3,4,5]}),
+    [C('frac',X({u:'yu',k:()=>Q(pick([10,15,20,25]),1000),ask:(S,p)=>'1/1000 boils off each day: about how much is lost on a '+wn(p.k)*1000+'-day voyage?',ln:()=>'gas lost',
+      w:['what is left is given, not what is lost','the gas is divided by the share'],xs:(S,p,q)=>[N('one day’s loss is given',qm(q.v,Q(1,1000)))]},own('19·logi','the boil-off technique')))]);
+  lw('21·phys2.tack','a boat on the wind',()=>({c:[2,Q(1,2)],story:'A boat out of '+at()+' sails v(w) = w/2 + 2 knots in a wind of w knots.',f:'v',x:'w',xu:'knots of wind',yu:'knots',rate:'knots a knot',area:null,pts:[4,6,8,12]}),
+    [C('times',X({u:'yu',k:Q(3,5),ask:()=>'it heads off the wind at an angle whose cosine is 3/5: how fast does it gain toward the wind?',ln:()=>'speed made good',
+      w:['the speed is divided by the cosine','the cosine is added'],xs:(S,p,q)=>[N('the sine, 4/5, is used',qm(q.v,Q(4,5))),N('the speed alone is given',q.v)]},own('21·phys2','the made-good technique')))]);
+  lw('23·bio.climb','air at the foot of a peak',()=>({c:[100,-2],story:'Air pressure at the foot of a peak near '+at()+' is p(d) = 100 − 2d kilopascals on day d of a storm.',f:'p',x:'d',xu:'days',yu:'kilopascals',rate:'kilopascals a day',area:null,pts:[0,1,2,3,5]}),
+    [C('frac',X({u:'yu',k:()=>pick([Q(1,2),Q(1,4),Q(1,8)]),ask:(S,p)=>'each 5.5 km up halves it: what is it '+5.5*Math.log2(1/wn(p.k))+' km up?',ln:()=>'pressure up there',
+      w:['the share lost is given, not the share left','the pressure is divided by the share'],xs:(S,p,q)=>[N('it is halved only once',qm(q.v,Q(1,2))===qm(q.v,p.k)?null:qm(q.v,Q(1,2))),N('the same amount, not the same share, is lost per step',qa(q.v,qn(qm(q.v,qm(Q(Math.round(Math.log2(1/wn(p.k)))),Q(1,4))))))]},own('23·bio','the scale-height technique')))]);
+  lw('23·chem.trays','odds at the foot of a column',()=>({c:[0,Q(1,10)],story:'At the foot of a column at '+at()+' the liquid holds light to heavy at odds o(b) = b/10 to 1 in batch b.',f:'o',x:'b',xu:'batches',yu:'to one',rate:'a batch',area:null,pts:[1,2,3,5]}),
+    [C('times',X({u:'yu',k:()=>pick([4,8,16]),ask:(S,p)=>'each tray doubles the odds: what are they after '+Math.log2(wn(p.k))+' trays?',ln:()=>'odds at the top',
+      w:['the odds are divided by the doubling','the doubling is added'],xs:(S,p,q)=>[N('2 is multiplied by the trays, not raised',qm(q.v,Q(2*Math.log2(wn(p.k)))))]},own('23·chem','the tray-stepping technique')))]);
+  lw('25·eng2.wheel','a jet on a wheel',()=>({c:[20,10],story:'A jet at '+at()+' strikes a wheel’s cups at V(h) = 10h + 20 m/s with h metres of head.',f:'V',x:'h',xu:'metres of head',yu:'metres a second',rate:'a second',area:null,pts:[1,2,3,4]}),
+    [C('times',X({u:'yu',out:'joules a kilogram',k:1,ask:()=>'the cups run at half the jet’s speed: what power per kilogram, 2u(V − u)?',ln:()=>'power per kilogram',
+      f:(S,p,q)=>qm(qm(q.v,q.v),Q(1,2)),ex:(S,p,q)=>par(q.v)+'²/2',w:[null,null],
+      xs:(S,p,q)=>[N('the 2 is left out',qm(qm(q.v,q.v),Q(1,4))),N('the jet’s whole V² is given',qm(q.v,q.v)),N('V is halved, not squared',qm(q.v,Q(1,2)))]},own('25·eng2','the swirl technique')))]);
+  lw('25·nav.plane','a craft turning its plane',()=>({c:[8,-1],story:'A craft launched from '+at()+' circles at v(r) = 8 − r km/s in ring r.',f:'v',x:'r',xu:'rings',yu:'kilometres a second',rate:'a ring',area:null,pts:[1,2,3,4]}),
+    [C('times',X({u:'yu',k:()=>qm(Q(2),pick([Q(1,4),Q(1,10),Q(1,5)])),ask:(S,p)=>'it turns by an angle whose half has sine '+qs(qm(p.k,Q(1,2)))+': what push does it cost?',ln:()=>'push, 2v sin(Δ/2)',
+      w:['the speed is divided by 2 sin(Δ/2)','2 sin(Δ/2) is added'],xs:(S,p,q)=>[N('the 2 is left out',qm(q.v,qm(p.k,Q(1,2)))),N('the speed itself is given',q.v)]},own('25·nav','the plane-turn technique')))]);
+  lw('26·nav.rain','echoes from rain',()=>({c:[0,Q(1,20)],story:'A radar near '+at()+' sees the echo turn φ(n) = n/20 of a full turn between bursts on scan n.',f:'φ',x:'n',xu:'scans',yu:'of a turn',rate:'a scan',area:null,pts:[1,2,3,4]}),
+    [C('times',X({u:'yu',out:'metres a second',k:50,ask:()=>'the bursts are 1 ms apart at a wavelength of 10 cm: how fast is the rain coming?',ln:()=>'speed, turn · λ/(2T)',
+      w:['the turn is divided by λ/(2T)','λ/(2T) is added'],xs:(S,p,q)=>[N('the out-and-back is not halved',qm(q.v,Q(100)))]},own('26·nav','the phase-step technique')))]);
+  lw('26·chem.tank','a stirred tank',()=>({c:[0,Q(1,2)],story:'A stirred tank at '+at()+' holds its feed kτ(v) = v/2 lifetimes of the reaction with v cubic metres.',f:'kτ',x:'v',xu:'cubic metres',yu:'lifetimes',rate:'a cubic metre',area:null,pts:[2,4,6]}),
+    [C('times',X({u:'yu',out:'of the feed',k:1,ask:()=>'what share does it turn to product, kτ/(1 + kτ)?',ln:()=>'share turned',
+      f:(S,p,q)=>qm(q.v,qi(qa(Q(1),q.v))),ex:(S,p,q)=>par(q.v)+'/(1 + '+par(q.v)+')',w:[null,null],
+      xs:(S,p,q)=>[N('the share left is given',qi(qa(Q(1),q.v))),N('1 − 1/kτ is used',qa(Q(1),qn(qi(q.v)))),N('kτ over 2 + kτ is used',qm(q.v,qi(qa(Q(2),q.v))))]},own('26·chem','the residence-time technique')))]);
+  lw('26·bio.lights','a choice among lights',()=>({c:[-1,4],story:'A test desk at '+at()+' asks for a choice among L(r) = 4r − 1 lights in round r.',f:'L',x:'r',xu:'rounds',yu:'lights',rate:'lights a round',area:null,pts:[1,2,4,8]}),
+    [C('times',X({u:'yu',out:'milliseconds',k:1,ask:()=>'with T = 200 + 150 log₂(n + 1) ms, how long does the choice take?',ln:()=>'choice time',
+      f:(S,p,q)=>{ const b=Math.log2(wn(q.v)+1); return Number.isInteger(b)?Q(200+150*b):null; },ex:(S,p,q)=>'200 + 150 · log₂('+par(q.v)+' + 1)',w:[null,null],
+      xs:(S,p,q)=>{ const b=Math.round(Math.log2(wn(q.v)+1)); return [N('the fixed 200 ms is left out',Q(150*b)),N('the time grows with the lights, not their bits',Q(200+150*wn(q.v))),N('one bit too many',Q(200+150*(b+1)))]; }},own('26·bio','the bits-per-choice technique')))]);
+  lw('29·phys2.plate','a plate on its pole',()=>({c:[2,1],story:'At 90° from its pole, a plate in a model moves v(e) = e + 2 cm a year in era e.',f:'v',x:'e',xu:'eras',yu:'centimetres a year',rate:'an era',area:null,pts:[1,2,4,6]}),
+    [C('times',X({u:'yu',k:Q(1,2),ask:()=>'how fast does it move at a point 30° from the pole, v sin 30°?',ln:()=>'speed at 30°',
+      w:['the speed is divided by sin 30°','sin 30° is added'],xs:(S,p,q)=>[N('the speed is taken the same everywhere',q.v),N('the speed is scaled by 30/90',qm(q.v,Q(1,3)))]},own('29·phys2','the pole-of-turning technique')))]);
+  lw('29·nav2.wind','a pressure push over the sea',()=>({c:[0,1],story:'Over the sea off '+at()+' the pressure push is a(d) = d ten-thousandths of a newton a kilogram on day d.',f:'a',x:'d',xu:'days',yu:'ten-thousandths of a newton a kilogram',rate:'a day',area:null,pts:[1,2,3,5]}),
+    [C('per',X({u:'yu',out:'metres a second',k:()=>pick([Q(3,2),Q(5,4),Q(1,2)]),ask:(S,p)=>'f is '+p.K+' × 10⁻⁴ a second there: how fast is the balanced wind?',ln:()=>'wind, push over f',
+      w:['the push and f are multiplied','f is taken away'],xs:(S,p,q)=>[N('2Ω sin φ is doubled again',qm(q.v,qi(qm(p.k,Q(2)))))]},own('29·nav2','the balanced-wind technique')))]);
+  lw('29·eng.wing','a glider’s wing',()=>({c:[10,5],story:'A glider from '+at()+' has circulation Γ(s) = 5s + 10 square metres a second at flap setting s.',f:'Γ',x:'s',xu:'settings',yu:'square metres a second',rate:'a setting',area:null,pts:[0,1,2,4]}),
+    [C('times',X({u:'yu',out:'newtons a metre',k:()=>pick([24,30,60]),ask:(S,p)=>'air of density 6/5 streams past at '+wn(p.k)*5/6+' m/s: what lift does each metre give?',ln:()=>'lift, ρVΓ',
+      w:['Γ is divided by ρV','ρV is added'],xs:(S,p,q)=>[N('the density is left out',qm(q.v,qm(p.k,Q(5,6)))),N('half of ρV is used',qm(q.v,qm(p.k,Q(1,2))))]},own('29·eng','the circulation-lift technique')))]);
+  lw('33·nav.grid','a forecast grid',()=>({c:[0,5],story:'A forecast for '+at()+' has grid spacing Δx(n) = 5n km at level n.',f:'Δx',x:'n',xu:'levels',yu:'kilometres',rate:'a level',area:null,pts:[1,2,4]}),
+    [C('times',X({u:'yu',out:'seconds',k:()=>pick([40,50,80]),ask:(S,p)=>'the fastest wind is '+p.K+' m/s: what is the longest safe step?',ln:()=>'step, Δx over v',
+      f:(S,p,q)=>qm(qm(q.v,Q(1000)),qi(p.k)),ex:(S,p,q)=>par(q.v)+' · 1000/'+p.K,w:[null,null],
+      xs:(S,p,q)=>[N('kilometres are not turned into metres',qm(q.v,qi(p.k))),N('the speed is multiplied',qm(qm(q.v,Q(1000)),p.k)),N('the step is halved for safety',qm(qm(q.v,Q(500)),qi(p.k)))]},own('33·nav','the grid-step technique')))]);
+  lw('34·eng.case','baking a hard skin',()=>({c:[1,1],story:'At a gear shop in '+at()+', baking a 1 mm skin takes t(s) = s + 1 hours in oven s.',f:'t',x:'s',xu:'ovens',yu:'hours',rate:'an oven',area:null,pts:[1,2,3,5]}),
+    [C('times',X({u:'yu',k:()=>pick([4,9]),ask:(S,p)=>'a skin '+(p.K==='4'?'twice':'three times')+' as deep is wanted: how long must it bake?',ln:()=>'new time, the square of the depth',
+      w:['the time is divided by the square','the square is added'],xs:(S,p,q)=>[N('the time is taken to grow with the depth',qm(q.v,Q(p.K==='4'?2:3)))]},own('34·eng','the square-root depth technique')))]);
+  lw('43·eng.core','a model core',()=>({c:[1,Q(1,100)],story:'In a model core at '+at()+', k(r) = 1 + r/100 with r rods drawn out.',f:'k',x:'r',xu:'rods',yu:'times per generation',rate:'a rod',area:null,pts:[2,5,10,20]}),
+    [C('times',X({u:'yu',out:'per square centimetre',k:()=>pick([5,10]),ask:(S,p)=>'the wander length is '+p.K+' cm: give B² = (k − 1)/L²',ln:()=>'B²',
+      f:(S,p,q)=>qm(qa(q.v,Q(-1)),qi(qm(p.k,p.k))),ex:(S,p,q)=>'('+par(q.v)+' − 1)/'+p.K+'²',w:[null,null],
+      xs:(S,p,q)=>[N('the length is not squared',qm(qa(q.v,Q(-1)),qi(p.k))),N('k is used, not k − 1',qm(q.v,qi(qm(p.k,p.k)))),N('the fraction is turned over',qm(qm(p.k,p.k),qi(qa(q.v,Q(-1)))))]},own('43·eng','the critical-size technique')))]);
+  lw('34·chem.carbon','extra carbon in the air',()=>({c:[0,12],story:'The air over '+at()+' takes on E(y) = 12y gigatonnes of extra carbon in y years.',f:'E',x:'y',xu:'years',yu:'gigatonnes',rate:'a year',area:null,pts:[1,2,3,5]}),
+    [C('frac',X({u:'yu',k:Q(1,12),ask:()=>'the surface sea sinks 1/50 a year and the deep returns 1/500: how much stays in the air?',ln:()=>'stays in the air',
+      w:['the share that leaves is given','the carbon is divided by the share'],xs:(S,p,q)=>[N('the deep is left out, half stays',qm(q.v,Q(1,2)))]},own('34·chem','the box-balance technique')))]);
+  lw('34·phys2.spin','a swirl drawn in',()=>({c:[1,1],story:'A dust swirl at '+at()+' spins v(w) = w + 1 m/s in a wind of w m/s.',f:'v',x:'w',xu:'metres a second of wind',yu:'metres a second',rate:'a metre a second',area:null,pts:[1,2,3,5]}),
+    [C('times',X({u:'yu',k:()=>pick([2,3,4,5]),ask:(S,p)=>'it is drawn in to 1/'+p.K+' of its radius: how fast does it spin?',ln:()=>'new speed, rv kept',
+      w:['the speed is divided by the shrink','the shrink is added'],xs:(S,p,q)=>[N('the speed grows as the square',qm(q.v,qm(p.k,p.k)))]},own('34·phys2','the kept-spin technique')))]);
+  lw('35·phys2.quakes','quakes on a fault',()=>({c:[0,1000],story:'A fault near '+at()+' gives N(t) = 1000t quakes of magnitude 3 or more in t years.',f:'N',x:'t',xu:'years',yu:'quakes',rate:'a year',area:null,pts:[1,2,3,5]}),
+    [C('per',X({u:'yu',k:()=>pick([10,100]),ask:(S,p)=>'about how many are of magnitude '+(3+Math.log10(wn(p.k)))+' or more?',ln:()=>'ten times rarer per step',
+      w:['the count is multiplied, not divided','the steps are taken away'],xs:(S,p,q)=>[N('the count is halved per step',qm(q.v,Q(1,p.K==='10'?2:4))),N('the steps are counted, not powered',qm(q.v,Q(1,p.K==='10'?10:20)))]},own('35·phys2','the scale-free count technique')))]);
+  lw('35·eng.bias','cloth on the bias',()=>({c:[0,10],story:'Cloth woven at '+at()+' has stiffness E(t) = 10t units along its threads with t threads a millimetre.',f:'E',x:'t',xu:'threads a millimetre',yu:'units',rate:'a thread',area:null,pts:[2,3,4,5]}),
+    [C('times',X({u:'yu',k:()=>pick([2,4,5]),ask:(S,p)=>'its shear stiffness G is '+p.K+' units: what is it at 45°, 1/(1/(2E) + 1/(4G))?',ln:()=>'stiffness at 45°',
+      f:(S,p,q)=>qi(qa(qi(qm(Q(2),q.v)),qi(qm(Q(4),p.k)))),ex:(S,p,q)=>'1/(1/(2 · '+par(q.v)+') + 1/(4 · '+p.K+'))',w:[null,null],
+      xs:(S,p,q)=>[N('the two are averaged',qm(qa(q.v,p.k),Q(1,2))),N('the leaning term is left out',qm(q.v,Q(2))),N('the 4 is taken as 2',qi(qa(qi(qm(Q(2),q.v)),qi(qm(Q(2),p.k)))))]},own('35·eng','the bias technique')))]);
+  lw('36·eng.panel','a panel at its best point',()=>({c:[1,Q(1,2)],story:'A solar panel at '+at()+' gives I(s) = s/2 + 1 amps at its best point at sun level s.',f:'I',x:'s',xu:'sun levels',yu:'amps',rate:'a level',area:null,pts:[2,4,6,8]}),
+    [C('times',X({u:'yu',out:'watts',k:()=>pick([30,36,40]),ask:(S,p)=>'its best point sits at '+p.K+' volts: what power does it give?',ln:()=>'power, IV',
+      w:['the current is divided by the voltage','the voltage is added'],xs:(S,p,q)=>[N('half of IV is taken, as for a swinging current',qm(qm(q.v,p.k),Q(1,2)))]},own('36·eng','the best-point technique')))]);
+  lw('38·chem2.chain','chains in a batch',()=>({c:[0,0,100],story:'A polymer batch at '+at()+' grows chains of N(h) = 100h² links in h hours.',f:'N',x:'h',xu:'hours',yu:'links',rate:'an hour',area:null,pts:[1,2,3,5]}),
+    [C('times',X({u:'yu',out:'nanometres',k:Q(1,2),ask:()=>'each link is 1/2 nm: how far apart do the ends sit, b√N?',ln:()=>'end to end',
+      f:(S,p,q)=>{ const r=isq(W(q.v)); return r?Q(r,2):null; },ex:(S,p,q)=>'1/2 · √'+par(q.v),w:[null,null],
+      xs:(S,p,q)=>{ const r=isq(W(q.v))||1; return [N('the full length, Nb, is given',qm(q.v,Q(1,2))),N('the root alone is given',Q(r)),N('the root is taken of b too, as √(Nb)',null)]; }},own('38·chem2','the chain-size technique')))]);
+  lw('38·comp.words','the commonest word',()=>({c:[0,1000],story:'A word list built at '+at()+' counts C(b) = 1000b uses of the commonest word in b books.',f:'C',x:'b',xu:'books',yu:'uses',rate:'a book',area:null,pts:[1,2,3,5]}),
+    [C('per',X({u:'yu',k:()=>pick([2,4,5,10]),ask:(S,p)=>'about how many uses has the word of rank '+p.K+'?',ln:()=>'count over rank',
+      w:['the count is multiplied by the rank','the rank is taken away'],xs:(S,p,q)=>[N('the count falls as the square of rank',qm(q.v,qi(qm(p.k,p.k))))]},own('38·comp','the rank-count technique')))]);
+  lw('41·comp2.search','a search that tilts',()=>({c:[1,1],story:'In a model search at '+at()+', the start tilts θ(n) = n + 1 degrees toward the marked box on run n.',f:'θ',x:'n',xu:'runs',yu:'degrees',rate:'a run',area:null,pts:[1,2,4,5]}),
+    [C('times',X({u:'yu',k:()=>pick([5,7]),ask:(S,p)=>'after '+(wn(p.k)-1)/2+' rounds of two flips, how far has it tilted?',ln:()=>'tilt, (2k + 1)θ',
+      w:['the tilt is divided','the rounds are added'],xs:(S,p,q)=>{ const k=(wn(p.k)-1)/2; return [N('each round turns θ, not 2θ',qm(q.v,Q(k+1))),N('the start is left out',qm(q.v,Q(2*k)))]; }},own('41·comp2','the two-flip search technique')))]);
+  lw('12·bio.arm','a load in the hand',()=>({c:[0,10],story:'At a clinic in '+at()+', a load of L(k) = 10k newtons is held in the hand on lift k.',f:'L',x:'k',xu:'lifts',yu:'newtons',rate:'a lift',area:null,pts:[1,2,3,5]}),
+    [C('times',X({u:'yu',k:()=>pick([6,8,10]),ask:(S,p)=>'the hand sits '+p.K+' times as far from the elbow as the muscle: what pull must the muscle give?',ln:()=>'muscle pull',
+      w:['the load is divided by the arm ratio, as for a long lever','the ratio is added'],xs:(S,p,q)=>[N('the load alone is given',q.v)]},own('12·bio','the joint-lever technique')))]);
+  lw('15·eng3.supply','a switched supply',()=>({c:[0,6],story:'A charger at '+at()+' runs from V(c) = 6c volts with c cells.',f:'V',x:'c',xu:'cells',yu:'volts',rate:'a cell',area:null,pts:[1,2,3,4]}),
+    [C('frac',X({u:'yu',k:()=>pick([Q(1,4),Q(1,3),Q(3,4)]),ask:(S,p)=>'it is switched on '+p.K+' of each cycle: what voltage does smoothing pass?',ln:()=>'smoothed voltage',
+      w:['the off share is used','the supply is divided by the share'],xs:(S,p,q)=>[N('the full supply is given',q.v)]},own('15·eng3','the duty-average technique')))]);
+  lw('19·eng2.heat','an exchanger’s gap',()=>({c:[10,5],story:'An exchanger at '+at()+' runs a log-mean gap of g(f) = 5f + 10 degrees at flow setting f.',f:'g',x:'f',xu:'settings',yu:'degrees',rate:'a setting',area:null,pts:[1,2,4,6]}),
+    [C('times',X({u:'yu',out:'watts',k:()=>pick([20,40,50]),ask:(S,p)=>'UA is '+p.K+' watts a degree: what heat does it pass?',ln:()=>'heat, UA · gap',
+      w:['the gap is divided by UA','UA is added'],xs:(S,p,q)=>[N('the gap alone is given',q.v)]},own('19·eng2','the log-mean technique')))]);
+  lw('20·eng2.channel','a channel at its critical depth',()=>({c:[1,Q(1,2)],story:'A channel at '+at()+' runs at its critical depth y(f) = f/2 + 1 metres at gate setting f.',f:'y',x:'f',xu:'settings',yu:'metres',rate:'a setting',area:null,pts:[0,2,4,6]}),
+    [C('times',X({u:'yu',k:Q(3,2),ask:()=>'what is its energy head, depth plus v²/2g?',ln:()=>'energy head, 3/2 of the depth',
+      w:['the depth is divided by 3/2','3/2 is added'],xs:(S,p,q)=>[N('the speed head is left out',q.v),N('the speed head is taken as the depth',qm(q.v,Q(2)))]},own('20·eng2','the least-energy depth technique')))]);
+}
+})();
+/* ===== end of gap2 chains ===== */
 
 for(let i=QP.length-1;i>=0;i--) if(qmode(QP[i])==='read') QP.splice(i,1); /* the Understanding pools now live in the crosswalk (rgraph) */
 const toggled=()=>[...LINKS,...QP,...OPS,...MOVES];

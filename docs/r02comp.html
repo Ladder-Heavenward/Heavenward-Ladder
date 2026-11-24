@@ -145,6 +145,23 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
     </ol>
   </section>
 </section>
+<section class="class step" data-step="2comp6">
+  <h2 class="sthead"><span class="stno">2comp6</span>A Guard Before a Divide</h2>
+  <p data-pid="3c2452">The and that stops early reads its left side first and, if that is false, never reads the right (2comp2). Put the check that makes the right side safe on the left, and the right side cannot fail. Moving the not inside, by the rewriting of 1f, says what the program does in the other case.</p>
+  <pre class="lines" data-k="ember" data-label="this page: an average of n scores, total t">
+n \ne 0 \;\text{and}\; t / n > 5 @@ guard on the left
+n = 0:\ \text{left false, right never read, no divide} @@ 
+t / n > 5 \;\text{and}\; n \ne 0,\ n = 0:\ \text{divides by } 0 \text{ first} @@ same column of ∧, a crash
+\htmlClass{new}{\text{not}(n \ne 0 \text{ and } t/n > 5) \;=\; (n = 0) \text{ or not}(t/n > 5)} @@ the not moved inside (1f)
+  </pre>
+  <p data-pid="91552b">Guard-first technique: <b>put the check that makes a step safe on the left of an and that stops early; to write the other case, move the not inside, turning and into or and each side into its opposite.</b> Shown in a run: a program asked for the average of an empty list, with its guard on the left, answers “no scores” and never crashes; with the two sides swapped it stops with a divide-by-zero error.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">2·comp.6.1</span><span class="ph understand">understand</span>Why does the order of the two sides of an early-stopping and decide whether a divide by zero happens?</li>
+    </ol>
+  </section>
+</section>
 
 
 <section class="challenge themeend">

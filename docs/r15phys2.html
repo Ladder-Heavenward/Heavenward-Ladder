@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15·phys2 · When Does a Chain Reaction Run Away?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15phys.html">← 15·phys where is the balance point of a shape?</a><a href="r15concl.html">next: 15·∎ conclusion →</a></p>
+  <div class="tags"><span class="tag phys">15·phys2 · physics</span></div>
+  <h1>When Does a Chain Reaction Run Away?</h1>
+  <p data-pid="749874">When does a chain reaction run away? When a heavy nucleus of uranium splits, it frees two or three neutrons, and each can split another nucleus, which frees more. Whether the chain dies out, holds steady or runs away depends on one number: how many of those neutrons go on to cause another split. This page counts neutrons by generations, adds them up with 15i’s geometric sums, finds that below one the total settles and above one it grows without end, and finds why a reactor can be steered at all: a small share of neutrons come late.</p>
+  <p class="gesture" data-pid="f66431">Let k be the number of new splits each split causes. Generation n has kⁿ splits. The total over all generations is 1 + k + k² + …, which settles to 1/(1 − k) when k < 1 and grows without end when k > 1. A reactor runs at k = 1, and holds there because a few neutrons arrive seconds late.</p>
+</header>
+
+<section class="class step" data-step="15phys21">
+  <h2 class="sthead"><span class="stno">15phys21</span>Each Split Frees Neutrons</h2>
+  <p data-pid="139060">A nucleus of uranium-235 that absorbs a slow neutron splits into two smaller nuclei, releasing energy and, on average, about 2.4 new neutrons. Some of these escape the fuel, some are absorbed without causing a split, and the rest each split another nucleus.</p>
+  <p data-pid="dee341">From here on, on this page, k is the average number of new splits caused by the neutrons from one split. It depends on the fuel, its shape and size, and what surrounds it, not on the uranium alone.</p>
+<div class="eqline c6" data-tex="k = (\text{neutrons per split}) \times (\text{share that cause another split})"></div>
+  <p data-pid="c91027">If 2.4 neutrons are freed and 40% of them cause another split, k = 0.96.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·phys2.1.1</span><span class="ph understand">understand</span>What does k measure, and why does it depend on more than the uranium?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15phys22">
+  <h2 class="sthead"><span class="stno">15phys22</span>The Generations</h2>
+  <p data-pid="beb71b">Start with one split. Its neutrons cause k splits on average; those cause k² ; and so on.</p>
+  <pre class="lines" data-k="ember" data-label="this page: splits by generation">
+\text{generation } 0, 1, 2, \ldots, n:\ 1,\ k,\ k^2, \ldots, k^n @@ each multiplies by k
+\text{total through generation } n:\ 1 + k + \cdots + k^n @@ 
+\htmlClass{new}{= \dfrac{1 - k^{n+1}}{1 - k}\quad (k \ne 1)} @@ geometric sums (15i)
+  </pre>
+  <!--gfig 15phys22--><div class="gfigs" data-gfig="15phys22" data-story="[[&quot;Each split frees neutrons; k is how many of them go on to split another.&quot;, [&quot;~splits in&quot;]], [&quot;k = 0.9: each generation smaller, fading.&quot;, [&quot;teal&quot;, &quot;~k = 0.9&quot;]], [&quot;k = 1: one split a generation, steady.&quot;, [&quot;~k = 1:&quot;]], [&quot;k = 1.1: 1.1³⁰ ≈ 17 by generation 30.&quot;, [&quot;ember&quot;, &quot;~k = 1.1&quot;]]]"><svg class="gfig" viewBox="0 0 400 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="splits in each generation for k of 0.9, 1 and 1.1 over thirty generations: fading, level, and growing to about 17"><line x1="44" x2="364" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="44.0" x2="44.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="44.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="150.7" x2="150.7" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="150.7" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10</text><line x1="257.3" x2="257.3" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="257.3" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">20</text><line x1="364.0" x2="364.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="364.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">30</text><line x1="44" x2="364" y1="136.8" y2="136.8" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="140.8" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">5</text><line x1="44" x2="364" y1="89.6" y2="89.6" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="93.6" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10</text><line x1="44" x2="364" y1="42.3" y2="42.3" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="46.3" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">15</text><polyline points="44.0,174.6 54.7,173.6 65.3,172.6 76.0,171.4 86.7,170.2 97.3,168.8 108.0,167.3 118.7,165.6 129.3,163.8 140.0,161.7 150.7,159.5 161.3,157.1 172.0,154.4 182.7,151.4 193.3,148.1 204.0,144.5 214.7,140.6 225.3,136.3 236.0,131.5 246.7,126.2 257.3,120.5 268.0,114.1 278.7,107.1 289.3,99.4 300.0,91.0 310.7,81.7 321.3,71.4 332.0,60.2 342.7,47.8 353.3,34.2 364.0,19.2" style="fill:none;stroke:var(--ember);stroke-width:1.8"/><polyline points="44.0,174.6 54.7,174.6 65.3,174.6 76.0,174.6 86.7,174.6 97.3,174.6 108.0,174.6 118.7,174.6 129.3,174.6 140.0,174.6 150.7,174.6 161.3,174.6 172.0,174.6 182.7,174.6 193.3,174.6 204.0,174.6 214.7,174.6 225.3,174.6 236.0,174.6 246.7,174.6 257.3,174.6 268.0,174.6 278.7,174.6 289.3,174.6 300.0,174.6 310.7,174.6 321.3,174.6 332.0,174.6 342.7,174.6 353.3,174.6 364.0,174.6" style="fill:none;stroke:var(--muted);stroke-width:1.8"/><polyline points="44.0,174.6 54.7,175.5 65.3,176.3 76.0,177.1 86.7,177.8 97.3,178.4 108.0,179.0 118.7,179.5 129.3,179.9 140.0,180.3 150.7,180.7 161.3,181.0 172.0,181.3 182.7,181.6 193.3,181.8 204.0,182.1 214.7,182.2 225.3,182.4 236.0,182.6 246.7,182.7 257.3,182.9 268.0,183.0 278.7,183.1 289.3,183.2 300.0,183.2 310.7,183.3 321.3,183.4 332.0,183.5 342.7,183.5 353.3,183.6 364.0,183.6" style="fill:none;stroke:var(--teal);stroke-width:1.8"/><text x="353.3" y="28.2" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">k = 1.1: 17 by generation 30</text><text x="353.3" y="168.9" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">k = 1: one a generation</text><text x="49.3" y="153.8" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">k = 0.9: the lowest, fading</text><text x="54.7" y="70.7" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">splits in generation n = kⁿ</text><text x="200.0" y="222" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">generation n</text></svg></div><!--/gfig 15phys22-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·phys2.2.1</span><span class="ph understand">understand</span>How many splits are in generation n, and what is the total through generation n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15phys23">
+  <h2 class="sthead"><span class="stno">15phys23</span>Below One, the Total Settles</h2>
+  <p data-pid="0870f8">When k < 1, kⁿ⁺¹ shrinks toward 0 as n grows, so the total closes in on 1/(1 − k). One split starts a chain that dies out after a finite total.</p>
+  <pre class="lines" data-k="ember" data-label="this page: k = 0.96">
+\text{total} \to \dfrac{1}{1 - 0.96} = 25 @@ one split leads to about 25 in all
+\text{a source of } S \text{ new neutrons each generation:}\ \ S \cdot 25 @@ each starts its own dying chain
+\htmlClass{new}{k \to 1^{-}:\ \dfrac{1}{1 - k} \to \text{as large as you like}} @@ close to 1, a big but finite total
+  </pre>
+  <p data-pid="4b4f9b"><b>A pile with k below 1 multiplies any neutrons fed into it by 1/(1 − k), and stays steady; the closer k is to 1, the bigger the multiplication.</b> Builders of the first reactor read this number as they added layers: the count from their neutron detectors climbed faster with each layer as k neared 1, telling them how close they were before they got there.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·phys2.3.1</span><span class="ph understand">understand</span>What happens to the total number of splits when k is below 1, and how did the first reactor’s builders use it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15phys24">
+  <h2 class="sthead"><span class="stno">15phys24</span>Above One, It Grows Without End</h2>
+  <p data-pid="fa6735">When k > 1, kⁿ grows past any bound: each generation is bigger than the last. How fast depends on how long a generation takes. In a reactor, neutrons from a split cause the next split in about a ten-thousandth of a second.</p>
+  <pre class="lines" data-k="ember" data-label="this page: k = 1.001, generations of 10⁻⁴ s">
+\text{generations per second} = 10\,000 @@ 
+1.001^{10\,000} \approx 22\,000 @@ by repeated squaring, or a calculator
+\htmlClass{new}{\text{twenty-two thousand times the splits each second}} @@ a tenth of a percent over 1
+  </pre>
+  <p data-pid="141af4">Multiplication technique: <b>a chain with k splits per split, starting from one, has kⁿ splits in generation n and a total that settles to 1/(1 − k) if k is below 1 and grows without end if k is above 1.</b> At k only 0.1% above 1, a reactor would run away far faster than any control rod could move.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·phys2.4.1</span><span class="ph understand">understand</span>Why would k = 1.001 run away so fast if every neutron came at once?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15phys25">
+  <h2 class="sthead"><span class="stno">15phys25</span>Steering Near One: Why a Few Late Neutrons Matter</h2>
+  <p data-pid="abb0f6">Not every neutron comes at once. About 0.65% of the neutrons from uranium-235 splits come from the split pieces themselves, seconds later. If k exceeds 1 by less than 0.0065, the chain cannot grow on the prompt neutrons alone: each generation has to wait for the late ones.</p>
+  <pre class="lines" data-k="ember" data-label="this page: k = 1.001 with late neutrons">
+\text{prompt neutrons alone: } 0.9935 \cdot 1.001 \approx 0.9945 < 1 @@ below one without the late ones
+\text{the waiting makes a generation about } 0.1 \text{ s} @@ set by the late neutrons
+1.001^{10} \approx 1.01 \text{ each second} @@ ten generations a second
+\htmlClass{new}{\text{about } 1\% \text{ a second instead of } 22\,000 \text{ times}} @@ slow enough to steer
+  </pre>
+  <p data-pid="4d4a12"><b>A reactor is kept just below the point where the prompt neutrons alone would keep the chain going; the late neutrons make up the rest, and make each generation slow enough for control rods to follow.</b> A reactor operator nudges k by moving rods that absorb neutrons, watching the power climb or fall by a percent or so a second. Bombs are built to do the opposite: to exceed 1 on prompt neutrons alone.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·phys2.5.1</span><span class="ph understand">understand</span>Why does a small share of late neutrons make a reactor steerable, and how fast does the power change at k = 1.001?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15phys26">
+  <h2 class="sthead"><span class="stno">15phys26</span>Moves to Watch Out For</h2>
+  <p data-pid="58bf87">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+k < 1 \text{ means no splits at all}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; each split still causes k more; the chain dies after a total of 1/(1 − k) (15phys23)
+1 + k + k^2 + \cdots = \dfrac{1}{1 - k} \text{ for every } k\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; only for k below 1; above 1 the sum grows without end (15phys24)
+k = 2.4 \text{ because each split frees } 2.4\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; k counts only the neutrons that cause another split (15phys21)
+k = 1.001 \text{ grows slowly, so it is safe}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; on prompt neutrons alone it grows 22,000 times a second (15phys24)
+\text{late neutrons speed the chain up}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; they slow each generation, which is what makes steering possible (15phys25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·phys2.6.1</span><span class="ph understand">understand</span>Which move above applies 1/(1 − k) to every k, and what does the sum do when k is above 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">15·phys2.7.1</span><span class="tagq">do</span>A pile has k = 0.99 and a source giving 1,000 neutrons each generation. Find the total splits per generation once it settles, and repeat for k = 0.999.</div>
+  <div class="chq"><span class="chid">15·phys2.7.2</span><span class="tagq">make</span>Make up a k and a generation time for which the number of splits doubles every minute.</div>
+  <div class="chq"><span class="chid">15·phys2.7.3</span><span class="tagq">converse</span>A total that settles comes from k below 1. Decide whether a total that grows without end must come from k above 1, considering k exactly 1.</div>
+  <div class="chq"><span class="chid">15·phys2.7.4</span><span class="tagq">edge</span>Say what the generation sum gives when k is exactly 1, and what a reactor at k = 1 does over time.</div>
+  <div class="chq"><span class="chid">15·phys2.7.5</span><span class="tagq">open</span>As a reactor heats up, its fuel absorbs more neutrons without splitting. Say what this does to k, and why designers want it that way.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r15phys.html">← 15·phys · where is the balance point of a shape?</a><a href="r15concl.html">15·∎ · conclusion →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="d51810">k is the <b>effective multiplication factor</b>; k = 1 is <b>critical</b>, below is <b>subcritical</b>, above is <b>supercritical</b>. The late neutrons are <b>delayed neutrons</b>, their share β ≈ 0.0065 the <b>delayed neutron fraction</b>; exceeding 1 on prompt neutrons alone is <b>prompt criticality</b>. Multiplication by 1/(1 − k) is <b>subcritical multiplication</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="009735">Leo Szilard conceived the neutron chain reaction in 1933. Enrico Fermi’s team brought the first reactor, Chicago Pile-1, to a slightly supercritical k, about 1.0006, on 2 December 1942.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

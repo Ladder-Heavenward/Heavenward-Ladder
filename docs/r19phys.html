@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>19·phys · Where Was the Earthquake?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19comp.html">← 19·comp how many ways can a puzzle cube be scrambled?</a><a href="r19logi.html">next: 19·logi why ship gas as a cold liquid? →</a></p>
+  <div class="tags"><span class="tag phys">19·phys · physics</span></div>
+  <h1>Where Was the Earthquake?</h1>
+  <p data-pid="d43b46">Where was the earthquake? An earthquake sends out two kinds of wave through the ground. The first squeezes and stretches the rock and travels fast; the second shakes it side to side and travels slower. A recording station feels the first, then, some seconds later, the second. The longer the gap, the further away the quake. This page turns the gap into a distance, draws a circle of that radius around each station with 18d’s circles, finds where three circles meet, sees why two stations leave two answers, and sees what a wrong wave speed does to the fix.</p>
+  <p class="gesture" data-pid="b8d8e2">Waves at speeds p and s arrive d/p and d/s after the quake, so the gap is d(1/s − 1/p) and d is the gap times ps/(p − s). Each station’s d is a circle around it; two circles cross at two points, and a third circle picks one.</p>
+</header>
+
+<section class="class step" data-step="19phys1">
+  <h2 class="sthead"><span class="stno">19phys1</span>Two Waves at Two Speeds</h2>
+  <p data-pid="9c2679">In the earth’s crust the fast wave, the push wave, travels about 6 km a second, and the slow wave, the shake wave, about 3.5 km a second. Both leave the quake at the same moment.</p>
+  <p data-pid="51ade5">From here on, on this page, p = 6 km/s and s = 3.5 km/s are the two speeds, d is a station’s distance from the quake in kilometres, and the <i>gap</i> is the time between the push wave’s arrival and the shake wave’s.</p>
+  <pre class="lines" data-k="ember" data-label="this page: arrival times">
+\text{push wave arrives } \tfrac{d}{p} \text{ after the quake} @@ time is distance over speed (5j)
+\text{shake wave arrives } \tfrac{d}{s} \text{ after it} @@ 
+\htmlClass{new}{\text{gap} = \dfrac{d}{s} - \dfrac{d}{p}} @@ the station can measure this without knowing when the quake struck
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·phys.1.1</span><span class="ph understand">understand</span>What two arrival times does a station see, and why can it measure the gap without knowing when the quake happened?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19phys2">
+  <h2 class="sthead"><span class="stno">19phys2</span>Distance From the Gap</h2>
+  <p data-pid="d9733d">Solve the gap for d.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the arrival-gap distance">
+\text{gap} = d\left(\dfrac{1}{s} - \dfrac{1}{p}\right) = d \cdot \dfrac{p - s}{p\,s} @@ 
+d = \text{gap} \cdot \dfrac{p\,s}{p - s} = \text{gap} \cdot \dfrac{6 \cdot 3.5}{2.5} @@ 
+\htmlClass{new}{d \approx 8.4 \text{ km for each second of gap}} @@ the seismologist’s rule of thumb
+  </pre>
+  <p data-pid="9f35fa">Arrival-gap technique: <b>a station’s distance from a quake is the gap between the two waves times ps/(p − s), about 8.4 km per second in the crust.</b> A station that records a gap of 6 seconds is about 50 km from the quake. It does not know in which direction.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·phys.2.1</span><span class="ph understand">understand</span>How does the gap give the distance, and why does a single station not know the direction?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19phys3">
+  <h2 class="sthead"><span class="stno">19phys3</span>Three Circles Meet</h2>
+  <p data-pid="0f9fe4">Three stations stand at A = (0, 0), B = (100, 0) and C = (0, 80), in kilometres on a map. Their gaps are about 5.95 s, 7.99 s and 7.62 s.</p>
+  <pre class="lines" data-k="ember" data-label="this page: three circles (18d)">
+A:\ x^2 + y^2 = 50^2 @@ 5.95 · 8.4 ≈ 50
+B:\ (x - 100)^2 + y^2 \approx 67.1^2 @@ 7.99 · 8.4 ≈ 67.1
+C:\ x^2 + (y - 80)^2 \approx 64.0^2 @@ 7.62 · 8.4 ≈ 64.0
+A - B:\ 200x - 10\,000 = 2\,500 - 4\,500 \Rightarrow x = 40 @@ subtract: the squares cancel, a line
+A - C:\ 160y - 6\,400 = 2\,500 - 4\,100 \Rightarrow y = 30 @@ another line
+\htmlClass{new}{\text{the quake is at } (40, 30)} @@ check: 40² + 30² = 50²
+  </pre>
+  <p data-pid="b8197b">Subtracting two circles’ statements cancels the squared terms and leaves a straight line (18c) through both crossing points. Two such lines meet at one point, the quake.</p>
+  <!--gfig 19phys3--><div class="gfigs" data-gfig="19phys3" data-story="[[&quot;Each station turns its gap between the two waves into a distance: radius = gap × 8.4 km.&quot;, []], [&quot;From A the quake is 50 km away: somewhere on the teal circle.&quot;, [&quot;teal&quot;, &quot;~A&quot;]], [&quot;From B it is 67.1 km: the ember circle. Two circles meet in two points.&quot;, [&quot;ember&quot;, &quot;~B&quot;]], [&quot;The third circle, 64.0 km from C, passes through only one of them: the quake at (40, 30).&quot;, [&quot;gold&quot;, &quot;~quake&quot;]]]"><svg class="gfig" viewBox="0 0 400 280" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="three circles around stations A, B and C, of radii 50, 67.1 and 64 kilometres, all passing through one point, the quake at 40, 30"><rect x="30" y="8" width="340" height="240" style="fill:none"/><polyline points="158.2,171.0 158.2,169.0 158.1,167.1 157.9,165.1 157.7,163.2 157.3,161.3 157.0,159.4 156.5,157.5 156.0,155.6 155.5,153.7 154.8,151.9 154.1,150.1 153.4,148.3 152.6,146.5 151.7,144.8 150.7,143.1 149.7,141.4 148.7,139.8 147.6,138.2 146.4,136.6 145.2,135.1 143.9,133.6 142.6,132.2 141.2,130.8 139.8,129.5 138.3,128.2 136.8,127.0 135.2,125.8 133.6,124.7 132.0,123.6 130.3,122.6 128.6,121.7 126.9,120.8 125.1,120.0 123.3,119.2 121.5,118.5 119.7,117.9 117.8,117.3 115.9,116.8 114.0,116.4 112.1,116.0 110.2,115.7 108.3,115.5 106.3,115.3 104.4,115.2 102.5,115.2 100.5,115.2 98.6,115.3 96.6,115.5 94.7,115.7 92.8,116.0 90.9,116.4 89.0,116.8 87.1,117.3 85.2,117.9 83.4,118.5 81.6,119.2 79.8,120.0 78.0,120.8 76.3,121.7 74.6,122.6 72.9,123.6 71.3,124.7 69.7,125.8 68.1,127.0 66.6,128.2 65.2,129.5 63.7,130.8 62.4,132.2 61.0,133.6 59.8,135.1 58.5,136.6 57.4,138.2 56.3,139.8 55.2,141.4 54.2,143.1 53.2,144.8 52.4,146.5 51.5,148.3 50.8,150.1 50.1,151.9 49.4,153.7 48.9,155.6 48.4,157.5 47.9,159.4 47.6,161.3 47.3,163.2 47.0,165.1 46.9,167.1 46.8,169.0 46.7,171.0 46.8,172.9 46.9,174.9 47.0,176.8 47.3,178.7 47.6,180.7 47.9,182.6 48.4,184.5 48.9,186.4 49.4,188.2 50.1,190.1 50.8,191.9 51.5,193.7 52.4,195.4 53.2,197.2 54.2,198.9 55.2,200.6 56.3,202.2 57.4,203.8 58.5,205.3 59.8,206.9 61.0,208.3 62.4,209.7 63.7,211.1 65.2,212.5 66.6,213.7 68.1,215.0 69.7,216.1 71.3,217.2 72.9,218.3 74.6,219.3 76.3,220.3 78.0,221.1 79.8,222.0 81.6,222.7 83.4,223.4 85.2,224.1 87.1,224.6 89.0,225.1 90.9,225.6 92.8,225.9 94.7,226.2 96.6,226.5 98.6,226.7 100.5,226.8 102.5,226.8 104.4,226.8 106.3,226.7 108.3,226.5 110.2,226.2 112.1,225.9 114.0,225.6 115.9,225.1 117.8,224.6 119.7,224.1 121.5,223.4 123.3,222.7 125.1,222.0 126.9,221.1 128.6,220.3 130.3,219.3 132.0,218.3 133.6,217.2 135.2,216.1 136.8,215.0 138.3,213.7 139.8,212.5 141.2,211.1 142.6,209.7 143.9,208.3 145.2,206.9 146.4,205.3 147.6,203.8 148.7,202.2 149.7,200.6 150.7,198.9 151.7,197.2 152.6,195.4 153.4,193.7 154.1,191.9 154.8,190.1 155.5,188.2 156.0,186.4 156.5,184.5 157.0,182.6 157.3,180.7 157.7,178.7 157.9,176.8 158.1,174.9 158.2,172.9 158.2,171.0" style="fill:none;stroke:var(--teal);stroke-width:1.8"/><circle cx="102.5" cy="171.0" r="4" style="fill:var(--teal)"/><polyline points="288.7,171.0 288.7,168.4 288.6,165.8 288.3,163.1 288.0,160.6 287.6,158.0 287.1,155.4 286.5,152.9 285.8,150.3 285.1,147.8 284.2,145.4 283.3,142.9 282.3,140.5 281.2,138.1 280.0,135.8 278.7,133.5 277.4,131.3 275.9,129.1 274.4,127.0 272.9,124.9 271.2,122.8 269.5,120.9 267.7,118.9 265.9,117.1 264.0,115.3 262.0,113.6 260.0,112.0 257.9,110.4 255.8,108.9 253.6,107.5 251.3,106.1 249.1,104.8 246.7,103.7 244.4,102.6 242.0,101.5 239.5,100.6 237.0,99.7 234.6,99.0 232.0,98.3 229.5,97.7 226.9,97.2 224.3,96.8 221.8,96.5 219.2,96.3 216.5,96.1 213.9,96.1 211.3,96.1 208.7,96.3 206.1,96.5 203.5,96.8 200.9,97.2 198.4,97.7 195.8,98.3 193.3,99.0 190.8,99.7 188.4,100.6 185.9,101.5 183.5,102.6 181.1,103.7 178.8,104.8 176.5,106.1 174.3,107.5 172.1,108.9 170.0,110.4 167.9,112.0 165.9,113.6 163.9,115.3 162.0,117.1 160.1,118.9 158.3,120.9 156.6,122.8 155.0,124.9 153.4,127.0 151.9,129.1 150.5,131.3 149.2,133.5 147.9,135.8 146.7,138.1 145.6,140.5 144.6,142.9 143.6,145.4 142.8,147.8 142.0,150.3 141.4,152.9 140.8,155.4 140.3,158.0 139.9,160.6 139.5,163.1 139.3,165.8 139.2,168.4 139.1,171.0 139.2,173.6 139.3,176.2 139.5,178.8 139.9,181.4 140.3,184.0 140.8,186.5 141.4,189.1 142.0,191.6 142.8,194.1 143.6,196.6 144.6,199.0 145.6,201.4 146.7,203.8 147.9,206.1 149.2,208.4 150.5,210.7 151.9,212.9 153.4,215.0 155.0,217.1 156.6,219.1 158.3,221.1 160.1,223.0 162.0,224.9 163.9,226.6 165.9,228.4 167.9,230.0 170.0,231.6 172.1,233.1 174.3,234.5 176.5,235.8 178.8,237.1 181.1,238.3 183.5,239.4 185.9,240.4 188.4,241.4 190.8,242.2 193.3,243.0 195.8,243.7 198.4,244.2 200.9,244.7 203.5,245.2 206.1,245.5 208.7,245.7 211.3,245.8 213.9,245.9 216.5,245.8 219.2,245.7 221.8,245.5 224.3,245.2 226.9,244.7 229.5,244.2 232.0,243.7 234.6,243.0 237.0,242.2 239.5,241.4 242.0,240.4 244.4,239.4 246.7,238.3 249.1,237.1 251.3,235.8 253.6,234.5 255.8,233.1 257.9,231.6 260.0,230.0 262.0,228.4 264.0,226.6 265.9,224.9 267.7,223.0 269.5,221.1 271.2,219.1 272.9,217.1 274.4,215.0 275.9,212.9 277.4,210.7 278.7,208.4 280.0,206.1 281.2,203.8 282.3,201.4 283.3,199.0 284.2,196.6 285.1,194.1 285.8,191.6 286.5,189.1 287.1,186.5 287.6,184.0 288.0,181.4 288.3,178.8 288.6,176.2 288.7,173.6 288.7,171.0" style="fill:none;stroke:var(--ember);stroke-width:1.8"/><circle cx="213.9" cy="171.0" r="4" style="fill:var(--ember)"/><polyline points="173.8,81.7 173.8,79.2 173.6,76.7 173.4,74.2 173.1,71.7 172.7,69.3 172.2,66.8 171.7,64.4 171.0,62.0 170.3,59.6 169.5,57.2 168.6,54.9 167.6,52.6 166.6,50.4 165.5,48.1 164.2,46.0 163.0,43.8 161.6,41.7 160.2,39.7 158.7,37.7 157.1,35.8 155.5,33.9 153.8,32.0 152.0,30.3 150.2,28.6 148.3,26.9 146.4,25.4 144.4,23.9 142.4,22.4 140.3,21.1 138.1,19.8 136.0,18.6 133.7,17.5 131.5,16.4 129.2,15.4 126.9,14.5 124.5,13.7 122.1,13.0 119.7,12.4 117.3,11.8 114.8,11.3 112.4,10.9 109.9,10.6 107.4,10.4 104.9,10.3 102.5,10.2 100.0,10.3 97.5,10.4 95.0,10.6 92.5,10.9 90.1,11.3 87.6,11.8 85.2,12.4 82.8,13.0 80.4,13.7 78.1,14.5 75.7,15.4 73.4,16.4 71.2,17.5 69.0,18.6 66.8,19.8 64.7,21.1 62.6,22.4 60.5,23.9 58.5,25.4 56.6,26.9 54.7,28.6 52.9,30.3 51.1,32.0 49.4,33.9 47.8,35.8 46.2,37.7 44.7,39.7 43.3,41.7 42.0,43.8 40.7,46.0 39.5,48.1 38.3,50.4 37.3,52.6 36.3,54.9 35.4,57.2 34.6,59.6 33.9,62.0 33.2,64.4 32.7,66.8 32.2,69.3 31.8,71.7 31.5,74.2 31.3,76.7 31.2,79.2 31.1,81.7 31.2,84.2 31.3,86.7 31.5,89.1 31.8,91.6 32.2,94.1 32.7,96.5 33.2,99.0 33.9,101.4 34.6,103.8 35.4,106.1 36.3,108.4 37.3,110.7 38.3,113.0 39.5,115.2 40.7,117.4 42.0,119.5 43.3,121.6 44.7,123.7 46.2,125.7 47.8,127.6 49.4,129.5 51.1,131.3 52.9,133.1 54.7,134.8 56.6,136.4 58.5,138.0 60.5,139.5 62.6,140.9 64.7,142.3 66.8,143.5 69.0,144.8 71.2,145.9 73.4,146.9 75.7,147.9 78.1,148.8 80.4,149.6 82.8,150.3 85.2,151.0 87.6,151.6 90.1,152.0 92.5,152.4 95.0,152.7 97.5,152.9 100.0,153.1 102.5,153.1 104.9,153.1 107.4,152.9 109.9,152.7 112.4,152.4 114.8,152.0 117.3,151.6 119.7,151.0 122.1,150.3 124.5,149.6 126.9,148.8 129.2,147.9 131.5,146.9 133.7,145.9 136.0,144.8 138.1,143.5 140.3,142.3 142.4,140.9 144.4,139.5 146.4,138.0 148.3,136.4 150.2,134.8 152.0,133.1 153.8,131.3 155.5,129.5 157.1,127.6 158.7,125.7 160.2,123.7 161.6,121.6 163.0,119.5 164.2,117.4 165.5,115.2 166.6,113.0 167.6,110.7 168.6,108.4 169.5,106.1 170.3,103.8 171.0,101.4 171.7,99.0 172.2,96.5 172.7,94.1 173.1,91.6 173.4,89.1 173.6,86.7 173.8,84.2 173.8,81.7" style="fill:none;stroke:var(--gold);stroke-width:1.8"/><circle cx="102.5" cy="81.7" r="4" style="fill:var(--gold)"/><text x="98.0" y="186.6" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">A</text><text x="218.4" y="186.6" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">B</text><text x="91.3" y="75.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">C</text><circle cx="147.0" cy="137.5" r="5" style="fill:var(--ink)"/><text x="153.7" y="128.6" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">quake (40, 30)</text><text x="200.0" y="272" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">radius = gap × 8.4 km: 50, 67.1 and 64.0 km</text></svg></div><!--/gfig 19phys3-->
+  <!--gwid 19phys3--><section class="pic gwid">
+    <div class="eyebrow">The picture · drag the quake, read the gaps</div>
+    <div class="panels">
+    <div class="panel"><canvas id="w19v" style="touch-action:none"></canvas><div class="cap">Drag the black dot. Each station’s gap between the two waves is its distance over 8.4 km a second; the circles are those distances.</div><div class="verdict" id="w19d"></div></div>
+  </div>
+  </section><!--/gwid 19phys3-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·phys.3.1</span><span class="ph understand">understand</span>How do three stations’ circles pin the quake down, and why does subtracting two circles’ statements give a line?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19phys4">
+  <h2 class="sthead"><span class="stno">19phys4</span>Why Two Stations Aren’t Enough</h2>
+  <p data-pid="b43bcb">With only A and B, the quake lies on both circles. The line x = 40 from subtracting them meets circle A where 40² + y² = 50², so y² = 900.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two circles, two points">
+y^2 = 900 \Rightarrow y = 30 \text{ or } y = -30 @@ two square roots (8f)
+\htmlClass{new}{(40, 30) \text{ and } (40, -30)} @@ mirror images in the line AB
+  </pre>
+  <p data-pid="fc82eb"><b>Two circles cross at two points, mirror images across the line joining their centres, so two stations always leave two candidates.</b> Flipping the map across AB leaves both stations’ distances unchanged, so nothing A and B measure can tell the two apart; a third station off that line breaks the tie.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·phys.4.1</span><span class="ph understand">understand</span>Why do two stations leave two possible places, and how are the two places related?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19phys5">
+  <h2 class="sthead"><span class="stno">19phys5</span>Where the Fix Moves When a Speed Is Wrong</h2>
+  <p data-pid="b13ba7">The speeds vary with the rock. Suppose the stations used 8 km per second of gap instead of 8.4: every circle shrinks by about 5%.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a 5% short rule">
+\text{radii } 47.6,\ 63.9,\ 61.0 @@ each 8/8.4 of before
+A - B:\ x \approx 40.9;\ \ A - C:\ y \approx 30.9 @@ the same subtraction
+40.9^2 + 30.9^2 \approx 51.3^2 \ne 47.6^2 @@ the point is off circle A
+\htmlClass{new}{\text{the three circles no longer meet at one point}} @@ a small triangle instead
+  </pre>
+  <p data-pid="6f44e0"><b>With a wrong speed the circles leave a small gap or overlap instead of meeting, and the size of that misfit tells the seismologist the speed is off.</b> Networks with many stations find the speed and the place together: they adjust both until the circles meet as nearly as they can. A seismic centre with dozens of stations places a quake to within a kilometre or two this way within minutes.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·phys.5.1</span><span class="ph understand">understand</span>What does a wrong wave speed do to the three circles, and how do seismologists use the misfit?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19phys6">
+  <h2 class="sthead"><span class="stno">19phys6</span>Moves to Watch Out For</h2>
+  <p data-pid="ed2023">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+d = \text{gap} \times 6\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the gap is the difference of two travel times: d = gap · ps/(p − s) (19phys2)
+\text{two stations fix the quake}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; two circles cross at two points (19phys4)
+\text{the station needs the quake’s time}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the gap between the two waves needs no start time (19phys1)
+\text{subtracting circles leaves a circle}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the squared terms cancel: a straight line (19phys3)
+\text{a wrong speed moves the circles but they still meet}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; shrunken circles leave a misfit (19phys5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·phys.6.1</span><span class="ph understand">understand</span>Which move above multiplies the gap by the push wave’s speed alone, and what is the right factor?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">19·phys.7.1</span><span class="tagq">do</span>Stations at (0, 0), (60, 0) and (0, 60) record gaps of 5 s, 5 s and 5 s. Find the quake, using 8.4 km per second of gap.</div>
+  <div class="chq"><span class="chid">19·phys.7.2</span><span class="tagq">make</span>Make up three stations and a quake for which two of the stations record the same gap.</div>
+  <div class="chq"><span class="chid">19·phys.7.3</span><span class="tagq">converse</span>Three circles that meet at one point gave the quake. Decide whether three circles must meet at a point when the gaps are measured exactly, and say what could make them miss.</div>
+  <div class="chq"><span class="chid">19·phys.7.4</span><span class="tagq">edge</span>Say what happens when all three stations lie on one straight line.</div>
+  <div class="chq"><span class="chid">19·phys.7.5</span><span class="tagq">open</span>Quakes happen at depth, not on the surface. Say how the method changes with depth, and how many stations it then needs.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r19comp.html">← 19·comp · how many ways can a puzzle cube be scrambled?</a><a href="r19logi.html">19·logi · why ship gas as a cold liquid? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="ec7b5c">The push wave is the <b>P wave</b> (primary) and the shake wave the <b>S wave</b> (secondary); the gap is the <b>S-P interval</b>. The point on the surface above the quake is its <b>epicentre</b>, the point at depth its <b>hypocentre</b>, and the three-circle method <b>trilateration</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="44d235">Richard Dixon Oldham told P and S waves apart on seismograph records in 1897 and 1900; locating quakes by S-P intervals at several stations became routine in the early twentieth century.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<!--gwjs 19phys3--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const S=[['A',0,0,'--teal'],['B',100,0,'--ember'],['C',0,80,'--gold']]; const Q={x:40,y:30}; let drag=false;
+const cv=$('w19v');
+const P=plane(cv,{x:[-40,160],y:[-40,130],grid:20,aspect:0.85,draw:P=>{ P.axes();
+  const g=[]; S.forEach(([n,x,y,c])=>{ const d=Math.hypot(Q.x-x,Q.y-y); P.circle(x,y,d,c,1.6); P.dot(x,y,c,4.5); P.text(n,x+7,y+6,'--ink','center',13); g.push(n+' '+f(d/8.4,2)+' s'); });
+  P.dot(Q.x,Q.y,'--ink',6); $('w19d').textContent='Quake at ('+f(Q.x,0)+', '+f(Q.y,0)+'). Gaps: '+g.join(', ')+'.'; }});
+const mv=e=>{ const p=P.point(e); Q.x=Math.max(-35,Math.min(155,p.x)); Q.y=Math.max(-35,Math.min(125,p.y)); P.redraw(); };
+cv.addEventListener('pointerdown',e=>{ drag=true; cv.setPointerCapture(e.pointerId); mv(e); });
+cv.addEventListener('pointermove',e=>{ if(drag) mv(e); }); cv.addEventListener('pointerup',()=>{ drag=false; });
+P.redraw();
+})();
+</script><!--/gwjs 19phys3-->
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

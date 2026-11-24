@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>15·eng3 · How Does a Charger Turn a High Voltage Into a Low One?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r15eng2.html">← 15·eng2 how does a cam lift a valve smoothly?</a><a href="r15phys.html">next: 15·phys where is the balance point of a shape? →</a></p>
+  <div class="tags"><span class="tag eng">15·eng3 · engineering</span></div>
+  <h1>How Does a Charger Turn a High Voltage Into a Low One?</h1>
+  <p data-pid="419564">How does a charger turn a high voltage into a low one? A laptop charger’s insides may hold 20 volts, and a phone wants 5. Wasting the difference as heat would make the charger hot and slow. Instead a switch flicks on and off hundreds of thousands of times a second, and a coil smooths the pulses. This page finds the output as the average of the switched voltage over one cycle, a 15 area over a width; finds the coil’s current as a running area of voltage; finds why faster switching smooths it; and turns the circuit around to step a voltage up.</p>
+  <p class="gesture" data-pid="8cd22b">Switch the input on for a share D of each cycle and off for the rest. The average voltage is D times the input: area over width. A coil’s current changes by the area of the voltage across it, over its size L; in steady running the current climbs and falls by equal amounts each cycle, a triangle.</p>
+</header>
+
+<section class="class step" data-step="15eng31">
+  <h2 class="sthead"><span class="stno">15eng31</span>A Switch Flicked On and Off Very Fast</h2>
+  <p data-pid="f09e8d">Mike is designing a charger that takes 20 V and must give a phone 5 V. A transistor switch connects the input for a short time, then disconnects it, over and over, 500,000 times a second. Each cycle lasts T = 2 microseconds (µs).</p>
+  <p data-pid="776470">From here on, on this page, the <i>duty</i> D is the share of each cycle the switch is on. The voltage after the switch is 20 V while on and 0 V while off: a train of rectangles.</p>
+<div class="eqline c6" data-tex="v(t) = \begin{cases} 20 \text{ V} &amp; \text{on, for } D\,T \\ 0 \text{ V} &amp; \text{off, for } (1 - D)\,T \end{cases}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·eng3.1.1</span><span class="ph understand">understand</span>What does the voltage after the switch look like, and what does the duty D measure?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15eng32">
+  <h2 class="sthead"><span class="stno">15eng32</span>The Duty Cycle: the Output Is the Average</h2>
+  <p data-pid="a3ea91">A coil and a large store of charge after the switch smooth the rectangles into a steady voltage. The steady voltage is the average over one cycle: the area under the rectangle train over one cycle, divided by the cycle’s width.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the average">
+\text{area over one cycle} = 20 \cdot D\,T + 0 \cdot (1 - D)\,T @@ areas add (15e)
+\text{average} = \dfrac{20\,D\,T}{T} = 20\,D @@ area over width
+\htmlClass{new}{V_{\text{out}} = D\,V_{\text{in}}:\ \ 5 = 20\,D \Rightarrow D = 0.25} @@ on a quarter of the time
+  </pre>
+  <p data-pid="5aa139">Duty-average technique: <b>a voltage switched on for the share D of each cycle averages to D times the input; smoothing passes the average and blocks the switching.</b> Nothing is burned off: the switch is either fully on (no voltage across it) or fully off (no current through it), so in principle it wastes nothing. Real chargers reach over 90% efficiency this way.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·eng3.2.1</span><span class="ph understand">understand</span>Why is the smoothed output D times the input, and why does a switch waste almost nothing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15eng33">
+  <h2 class="sthead"><span class="stno">15eng33</span>The Coil’s Current Rises and Falls in a Triangle</h2>
+  <p data-pid="ae5606">A coil resists changes in its current: the voltage across it sets how fast its current changes, rate = voltage ÷ L, where L is the coil’s size in henries. So the change in current over a time is the area under the voltage across the coil, divided by L.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one cycle, L = 10 µH">
+\text{on: across the coil } 20 - 5 = 15 \text{ V, for } 0.5\,\mu\text{s} @@ D·T = 0.25 · 2 µs
+\text{rise} = \dfrac{15 \cdot 0.5 \times 10^{-6}}{10 \times 10^{-6}} = 0.75 \text{ A} @@ area of voltage, over L
+\text{off: across the coil } 0 - 5 = -5 \text{ V, for } 1.5\,\mu\text{s} @@ 
+\text{fall} = \dfrac{5 \cdot 1.5 \times 10^{-6}}{10 \times 10^{-6}} = 0.75 \text{ A} @@ the same
+\htmlClass{new}{\text{rise} = \text{fall}:\ \text{the current repeats each cycle}} @@ a triangle wave
+  </pre>
+  <p data-pid="16835d">The equal rise and fall is no coincidence: in steady running the coil’s current must end each cycle where it began, so the area of coil voltage over one cycle is 0. That is another way to get V_out = D·V_in: (V_in − V_out)·D·T = V_out·(1 − D)·T.</p>
+  <!--gfig 15eng33--><div class="gfigs" data-gfig="15eng33" data-story="[[&quot;Above, the voltage after the switch: 20 V for 0.5 µs, then 0 V for 1.5 µs, every 2 µs.&quot;, [&quot;polyline+ink&quot;]], [&quot;Its average over a cycle is D × 20 = 0.25 × 20 = 5 V, the dashed line.&quot;, [&quot;teal&quot;, &quot;~average 5 V&quot;]], [&quot;Below, the coil’s current. While on, 15 V across the coil lifts it 0.75 A.&quot;, [&quot;ember&quot;, &quot;~up 0.75&quot;]], [&quot;While off, −5 V lowers it 0.75 A over 1.5 µs: the same amount, so each cycle ends where it began. The triangle is the ripple.&quot;, [&quot;ember&quot;, &quot;~down 0.75&quot;]]]"><svg class="gfig" viewBox="0 0 420 240" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="above, the switch voltage as rectangles 20 volts high for a quarter of each 2 microsecond cycle, averaging 5 volts; below, the coil current as a triangle wave rising 0.75 amps while on and falling 0.75 amps while off, measured from its lowest point"><polyline points="70.0,24.8 96.7,24.8 96.7,78.6 176.7,78.6 176.7,24.8 176.7,24.8 203.3,24.8 203.3,78.6 283.3,78.6 283.3,24.8 283.3,24.8 310.0,24.8 310.0,78.6 390.0,78.6" style="fill:none;stroke:var(--ink);stroke-width:1.8"/><line x1="70" x2="390" y1="65.2" y2="65.2" style="stroke:var(--teal);stroke-width:1;stroke-dasharray:5 3"/><text x="387.3" y="59.8" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">average 5 V</text><text x="62" y="54" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">switch</text><polyline points="70.0,185.0 96.7,128.8 176.7,185.0 203.3,128.8 283.3,185.0 310.0,128.8 390.0,185.0" style="fill:none;stroke:var(--ember);stroke-width:2"/><line x1="96.7" y1="185.0" x2="96.7" y2="128.8" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/><text x="102.0" y="121.2" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">up 0.75 A in 0.5 µs</text><text x="246.0" y="121.2" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">down 0.75 A in 1.5 µs</text><text x="62" y="158" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">coil</text><text x="62" y="172" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">current</text><text x="210.0" y="232" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">three cycles of 2 µs: 20 V for a quarter, 0 V for the rest</text></svg></div><!--/gfig 15eng33-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·eng3.3.1</span><span class="ph understand">understand</span>How much does the coil’s current rise and fall each cycle, and why must the two be equal?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15eng34">
+  <h2 class="sthead"><span class="stno">15eng34</span>Ripple Shrinks as Switching Gets Faster</h2>
+  <p data-pid="c8a073">The triangle’s height, 0.75 A here, is the <i>ripple</i>: the wobble on top of the steady current. It is the area of 15 V over the on-time, over L, and the on-time is D·T.</p>
+  <pre class="lines" data-k="ember" data-label="this page: ripple against switching speed">
+\text{ripple} = \dfrac{(V_{\text{in}} - V_{\text{out}})\,D\,T}{L} @@ 
+500 \text{ kHz}:\ T = 2\,\mu\text{s},\ \text{ripple } 0.75 \text{ A} @@ 
+\htmlClass{new}{1 \text{ MHz}:\ T = 1\,\mu\text{s},\ \text{ripple } 0.375 \text{ A}} @@ twice as fast, half the ripple
+  </pre>
+  <p data-pid="61444d"><b>Ripple shrinks in proportion to the cycle time, so faster switching allows a smaller coil for the same smoothness.</b> That is why small modern chargers switch at hundreds of thousands or millions of times a second. The price is a little loss each time the switch changes over, so designers balance size against heat.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·eng3.4.1</span><span class="ph understand">understand</span>How does ripple depend on the switching speed, and why do small chargers switch so fast?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15eng35">
+  <h2 class="sthead"><span class="stno">15eng35</span>Stepping Up Instead</h2>
+  <p data-pid="278f1d">Rearrange the same parts: the coil first, then the switch to ground, then a one-way valve for current to the output. While the switch is on, the input charges the coil; while it is off, the coil’s current is pushed into the output on top of the input.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the step-up, by equal rise and fall">
+\text{on: across the coil } V_{\text{in}} \text{ for } D\,T @@ the coil charges
+\text{off: across the coil } V_{\text{in}} - V_{\text{out}} \text{ for } (1 - D)\,T @@ negative: the coil discharges
+V_{\text{in}}\,D\,T + (V_{\text{in}} - V_{\text{out}})(1 - D)\,T = 0 @@ total area 0 each cycle
+\htmlClass{new}{V_{\text{out}} = \dfrac{V_{\text{in}}}{1 - D}} @@ always more than the input
+  </pre>
+  <p data-pid="f798b9"><b>The step-up gives the input divided by 1 − D, so a duty near 1 gives a large step.</b> A 5 V battery driving a 12 V light needs D = 1 − 5/12 ≈ 0.58. A power engineer measuring a real step-up at that duty, with good parts, reads close to 12 V; the small shortfall is the loss in the switch and valve.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·eng3.5.1</span><span class="ph understand">understand</span>How does the step-up circuit give V_in/(1 − D), and what duty takes 5 V to 12 V?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="15eng36">
+  <h2 class="sthead"><span class="stno">15eng36</span>Moves to Watch Out For</h2>
+  <p data-pid="652125">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+V_{\text{out}} = V_{\text{in}} / D\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; that is not the step-down; the average is D·V_in (15eng32)
+\text{the switch burns the extra 15 V as heat}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a switch fully on or fully off wastes almost nothing (15eng32)
+\text{rise} \ne \text{fall in steady running}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the current must end each cycle where it began (15eng33)
+\text{faster switching, more ripple}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; ripple is proportional to the cycle time: faster is smoother (15eng34)
+\text{step-up: } V_{\text{out}} = D\,V_{\text{in}}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the step-up gives V_in/(1 − D) (15eng35)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">15·eng3.6.1</span><span class="ph understand">understand</span>Which move above makes faster switching give more ripple, and what does the ripple formula say instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">15·eng3.7.1</span><span class="tagq">do</span>A step-down from 12 V to 3.3 V switches at 400 kHz with a 22 µH coil. Find the duty, the on-time and the ripple.</div>
+  <div class="chq"><span class="chid">15·eng3.7.2</span><span class="tagq">make</span>Make up a step-down and coil whose ripple is exactly 0.5 A at 1 MHz.</div>
+  <div class="chq"><span class="chid">15·eng3.7.3</span><span class="tagq">converse</span>Equal rise and fall gave V_out = D·V_in. Decide whether a circuit whose output is D·V_in must have a coil with equal rise and fall, and say why.</div>
+  <div class="chq"><span class="chid">15·eng3.7.4</span><span class="tagq">edge</span>Say what the step-up formula gives as D nears 1, and why real step-ups never get close.</div>
+  <div class="chq"><span class="chid">15·eng3.7.5</span><span class="tagq">open</span>If the phone draws very little current, the coil’s current can fall to 0 before the cycle ends. Say what happens to the equal-rise-and-fall argument then.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r15eng2.html">← 15·eng2 · how does a cam lift a valve smoothly?</a><a href="r15phys.html">15·phys · where is the balance point of a shape? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="fb11f5">The step-down is a <b>buck converter</b> and the step-up a <b>boost converter</b>; both are <b>switched-mode power supplies</b>. D is the <b>duty cycle</b>, the coil an <b>inductor</b> with <b>inductance</b> L, the store of charge a <b>capacitor</b>, and the one-way valve a <b>diode</b>. Zero average coil voltage is <b>volt-second balance</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="fed526">Switched-mode supplies grew from mid-twentieth-century work on transistor switching and spread with fast power transistors in the 1970s; the buck and boost formulas are standard in first courses on power electronics.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

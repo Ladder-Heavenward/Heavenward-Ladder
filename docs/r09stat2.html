@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9·stat2 · Can a Line’s Output Predict How Many Shifts Meet Quota?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09stat.html">← 9·stat what does a list of data look like?</a><a href="r09cb4.html">next: 9·cb4 recursion revisited →</a></p>
+  <div class="tags"><span class="tag stat">9·stat2 · statistics</span></div>
+  <h1>Can a Line’s Output Predict How Many Shifts Meet Quota?</h1>
+  <p data-pid="f46abb">Can a line’s output predict how many shifts meet quota? A factory line has a quota of 400 parts a shift. Over a month, some shifts make it and some fall short. A manager who knows only the line’s average output wants to know what share of shifts will meet quota. This page writes that share as a function of one number, the ratio of average output to quota, finds a function of rung 9 that fits it well, sees what it says about lucky and unlucky months, and finds why a steady line gains far more from a small rise in output than an unsteady one.</p>
+  <p class="gesture" data-pid="30f9a1">Let r be average output over quota. The share of shifts that meet quota is close to rᵏ/(rᵏ + 1), where k measures how steady the line is: big for a steady line, small for an unsteady one. At r = 1 the share is one half, whatever k is.</p>
+</header>
+
+<section class="class step" data-step="9stat21">
+  <h2 class="sthead"><span class="stno">9stat21</span>Each Shift’s Output Against Its Quota</h2>
+  <p data-pid="d197ce">Evita manages two lines, each with a quota of 400 parts a shift. Over a month of 40 shifts, line 1 made 404 parts a shift on average and met quota on 22 shifts. Line 2 averaged the same 404, but met quota on only 21.</p>
+  <p data-pid="c7ca9e">From here on, on this page, a line’s <i>ratio</i> r is its average output over its quota, and its <i>hit share</i> is the share of shifts that met quota.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one month, two lines">
+r = \tfrac{404}{400} = 1.01 @@ both lines
+\text{hit share, line 1: } \tfrac{22}{40} = 0.55 @@ 
+\htmlClass{new}{\text{hit share, line 2: } \tfrac{21}{40} = 0.525} @@ same ratio, fewer hits
+  </pre>
+  <p data-pid="2e80cc">The ratio alone does not settle the hit share: how much the output wanders from shift to shift matters too, as 8·stat’s spread would say.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·stat2.1.1</span><span class="ph understand">understand</span>What are a line’s ratio and hit share, and why can two lines with the same ratio have different hit shares?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9stat22">
+  <h2 class="sthead"><span class="stno">9stat22</span>The Hit Share as a Function of the Ratio</h2>
+  <p data-pid="9a95b9">Across many months and many lines, the hit share rises with the ratio: well below quota almost no shift makes it, well above almost every shift does, and at r = 1 about half do. So for a given line, the hit share is close to a function of r (9a).</p>
+  <pre class="lines" data-k="ember" data-label="this page: what the function must do">
+h(1) = \tfrac{1}{2} @@ average output at quota: half the shifts above
+h(r) \to 0 \text{ as } r \to 0 @@ far below quota, no hits
+h(r) \to 1 \text{ as } r \text{ grows} @@ far above, all hits
+\htmlClass{new}{h(1/r) = 1 - h(r)} @@ below quota by a ratio mirrors above by it
+  </pre>
+  <p data-pid="e9dc2f">The last line says a line averaging 400/1.05 parts misses as often as a line averaging 400 × 1.05 hits: the function treats “times 1.05” and “divided by 1.05” as mirror images.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·stat2.2.1</span><span class="ph understand">understand</span>Which four things must the hit-share function do, and what does the mirror line h(1/r) = 1 − h(r) say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9stat23">
+  <h2 class="sthead"><span class="stno">9stat23</span>The Ratio Technique</h2>
+  <p data-pid="2b6716">One family of rational functions in rᵏ (9g) does all four, for any positive k.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the ratio technique">
+h(r) = \dfrac{r^k}{r^k + 1} @@ k > 0, fitted to the line
+h(1) = \tfrac{1}{1 + 1} = \tfrac{1}{2} @@ the middle
+h(1/r) = \dfrac{r^{-k}}{r^{-k} + 1} = \dfrac{1}{1 + r^k} = 1 - h(r) @@ multiply top and bottom by rᵏ
+\htmlClass{new}{\text{line 1, } k = 20:\ \dfrac{1.01^{20}}{1.01^{20} + 1} \approx \dfrac{1.22}{2.22} \approx 0.55} @@ fits its 22 of 40
+  </pre>
+  <p data-pid="6dbfbc">Output-ratio technique: <b>a line’s share of shifts meeting quota is close to rᵏ/(rᵏ + 1), where r is average output over quota and k is fitted from the line’s past months.</b> The same shape was first used in sport, to predict a team’s share of wins from its points scored over points allowed. Here it is carried over to a factory, where it does the same job.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·stat2.3.1</span><span class="ph understand">understand</span>How does rᵏ/(rᵏ + 1) meet all four requirements, and how was k = 20 checked against line 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9stat24">
+  <h2 class="sthead"><span class="stno">9stat24</span>Lucky and Unlucky Lines</h2>
+  <p data-pid="22e088">A month is a small sample. Once k is fitted from many months, the technique gives what a line’s hit share should be for its ratio, and a month can come in above or below it by luck.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>month</th><th>ratio</th><th>technique, k = 20</th><th>shifts met (of 40)</th><th>reading</th></tr>
+    <tr><th>March</th><td>1.01</td><td>0.55, 22 shifts</td><td>27</td><td>5 lucky shifts</td></tr>
+    <tr><th>April</th><td>1.01</td><td>0.55, 22 shifts</td><td>18</td><td>4 unlucky shifts</td></tr>
+    <tr><th>May</th><td>1.03</td><td>0.64, 26 shifts</td><td>26</td><td>as expected</td></tr>
+  </table></div>
+  <p data-pid="9b9e86"><b>A month that beats the technique by a lot is more likely luck than a better line; the next month usually comes back toward the technique.</b> Evita does not reward March’s crew or punish April’s on hit share alone: the ratio, which counts every part, is the steadier measure.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·stat2.4.1</span><span class="ph understand">understand</span>How does the technique tell a lucky month from a better line, and which measure does Evita trust more?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9stat25">
+  <h2 class="sthead"><span class="stno">9stat25</span>Steady and Unsteady Lines</h2>
+  <p data-pid="fb3a75">k says how steady a line is. A steady line’s shifts all land close to its average, so a small rise in average output moves many shifts from just under quota to just over. An unsteady line’s shifts scatter widely, so the same rise moves few.</p>
+  <pre class="lines" data-k="ember" data-label="this page: raise r from 1 to 1.05">
+\text{steady, } k = 20:\ \dfrac{1.05^{20}}{1.05^{20} + 1} \approx \dfrac{2.65}{3.65} \approx 0.73 @@ from 0.50: 23 points
+\text{unsteady, } k = 4:\ \dfrac{1.05^{4}}{1.05^{4} + 1} \approx \dfrac{1.22}{2.22} \approx 0.55 @@ from 0.50: 5 points
+\htmlClass{new}{\text{big } k \text{: a steep step at } r = 1;\ \text{small } k \text{: a gentle slope}} @@ k sets the steepness
+  </pre>
+  <p data-pid="e442ba"><b>For a steady line, a few percent more output turns many missed quotas into met ones; for an unsteady line, it is better to cut the scatter first.</b> A plant engineer comparing two lines with the same ratio fits k to each from a year of shift records and spends the improvement budget where k is small.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·stat2.5.1</span><span class="ph understand">understand</span>Why does a 5% rise in output help a steady line so much more than an unsteady one, and what does k measure?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9stat26">
+  <h2 class="sthead"><span class="stno">9stat26</span>Moves to Watch Out For</h2>
+  <p data-pid="c3f959">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{same ratio, same hit share}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; two lines at 1.01 met quota 22 and 21 times; steadiness matters (9stat21)
+h(1) = 1\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; at average output equal to quota, about half the shifts meet it (9stat22)
+h(r) = r^k\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; rᵏ passes 1 above quota; the technique is rᵏ/(rᵏ + 1) (9stat23)
+\text{27 hits in March, so the line improved}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; one month above the technique is more likely luck (9stat24)
+\text{small } k \text{ means a better line}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; small k means scattered output; the hit share moves slowly (9stat25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·stat2.6.1</span><span class="ph understand">understand</span>Which move above takes rᵏ itself as the hit share, and what goes wrong above quota?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">9·stat2.7.1</span><span class="tagq">do</span>A line with k = 12 averages 412 parts against a quota of 400. Find its expected hit share over 30 shifts, and the ratio it needs for a hit share of 0.75.</div>
+  <div class="chq"><span class="chid">9·stat2.7.2</span><span class="tagq">make</span>Make up two lines with different k and different ratios that have the same expected hit share.</div>
+  <div class="chq"><span class="chid">9·stat2.7.3</span><span class="tagq">converse</span>The function satisfies h(1/r) = 1 − h(r). Decide whether every function that meets the four requirements of footing 2 must be of the form rᵏ/(rᵏ + 1), and give one that is not.</div>
+  <div class="chq"><span class="chid">9·stat2.7.4</span><span class="tagq">edge</span>Say what the technique gives as k grows without bound, and what kind of line that would be.</div>
+  <div class="chq"><span class="chid">9·stat2.7.5</span><span class="tagq">open</span>k was fitted from past months. Say how you would decide whether a line’s k has changed after a new machine is installed.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r09stat.html">← 9·stat · what does a list of data look like?</a><a href="r09cb4.html">9·cb4 · recursion revisited →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="c018a1">The ratio technique is the factory form of <b>Pythagorean expectation</b>, so called because its first form used squares. Fitting k from data is <b>calibration</b>, and a month’s hit share drifting back toward the technique is <b>regression to the mean</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="d3a0b6">The win-share formula was published by a sports writer in the early 1980s with k = 2, and analysts later fitted other values for other sports, near 14 for basketball. No published source applying it to shifts meeting quota has been found; this page carries the sports form over (not yet revisited).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

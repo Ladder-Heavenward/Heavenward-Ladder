@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14·eng · How Much of the Wind Can a Turbine Take?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r14econ2.html">← 14·econ2 what happens when two sellers share a market?</a><a href="r14logi.html">next: 14·logi should we order often or order big? →</a></p>
+  <div class="tags"><span class="tag eng">14·eng · engineering</span></div>
+  <h1>How Much of the Wind Can a Turbine Take?</h1>
+  <p data-pid="bfe97f">How much of the wind can a turbine take? A turbine takes energy from the wind by slowing it down. Stop the wind dead behind the blades and nothing more can flow through, so the turbine takes nothing; leave it at full speed and it takes nothing either. Somewhere between is a best amount of slowing. This page finds the wind’s power through the blades, writes the turbine’s share as a function of how much it slows the wind, finds the top of that function with 14h, and gets a limit no turbine of any design can pass: 16/27 of the wind’s power.</p>
+  <p class="gesture" data-pid="73b23b">Wind of speed V through a disc of area A carries power ½ρAV³. A turbine that slows the wind at the disc to V(1 − a) slows it far downstream to V(1 − 2a), and takes 4a(1 − a)² of the wind’s power. The slope of that is 0 at a = 1/3, where the share is 16/27, about 59%.</p>
+</header>
+
+<section class="class step" data-step="14eng1">
+  <h2 class="sthead"><span class="stno">14eng1</span>The Wind’s Power Grows as the Cube of Its Speed</h2>
+  <p data-pid="1a598c">Claire’s town is planning a wind turbine whose blades sweep a disc of area A. Wind at speed V carries air through that disc: each second, a column V metres long and A square metres across, of mass ρAV, where ρ, the air’s density, is about 1.2 kg per cubic metre.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the wind’s power through the disc">
+\text{mass per second} = \rho A V @@ a column V long, each second
+\text{energy of motion per kg} = \tfrac{1}{2}V^2 @@ 14·phys
+\htmlClass{new}{P_{\text{wind}} = \tfrac{1}{2}\rho A V^3} @@ power, the cube of the speed
+  </pre>
+  <p data-pid="228442">Twice the wind speed, eight times the power. A site with winds 10% stronger gives about a third more power, which is why turbines go on ridges and out at sea, and why their towers are tall, where the wind is faster.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·eng.1.1</span><span class="ph understand">understand</span>Why does the wind’s power through the disc grow as the cube of its speed?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14eng2">
+  <h2 class="sthead"><span class="stno">14eng2</span>A Turbine Takes Energy by Slowing the Wind</h2>
+  <p data-pid="f40681">The turbine takes energy by slowing the air. Say it slows the wind at the disc to V(1 − a), where a, the <i>slowing</i>, is a share between 0 and 1. Momentum (14·phys) and energy together fix what happens downstream: far behind the blades, the wind’s speed is V(1 − 2a), and the speed at the disc is the average of the speeds in front and far behind.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the power taken">
+\text{mass per second through the disc} = \rho A V(1 - a) @@ slower air, less of it
+\text{energy lost per kg} = \tfrac{1}{2}V^2 - \tfrac{1}{2}V^2(1 - 2a)^2 = 2V^2 a(1 - a) @@ 
+P = \rho A V(1 - a) \cdot 2V^2 a (1 - a) = \tfrac{1}{2}\rho A V^3 \cdot 4a(1 - a)^2 @@ mass per second times energy lost
+\htmlClass{new}{\text{share taken: } C(a) = 4a(1 - a)^2} @@ of the wind’s power
+  </pre>
+  <p data-pid="13dbf0">The share is a cubic in a, a function on the slowings from 0 to 1/2 (footing 3 says why it stops there).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·eng.2.1</span><span class="ph understand">understand</span>How does the share of the wind’s power taken depend on the slowing a?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14eng3">
+  <h2 class="sthead"><span class="stno">14eng3</span>Slow It Too Much and the Wind Goes Round</h2>
+  <p data-pid="5ec742">Taking more energy means slowing the air more. But slowed air piles up in front of the disc, and some of the oncoming wind goes round the turbine instead of through it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the two ends">
+a = 0:\ C = 0 @@ no slowing, nothing taken
+a = \tfrac{1}{2}:\ \text{wind far behind} = V(1 - 2a) = 0 @@ the air behind would stop
+C(\tfrac{1}{2}) = 4 \cdot \tfrac{1}{2} \cdot \tfrac{1}{4} = \tfrac{1}{2} @@ 
+\htmlClass{new}{a > \tfrac{1}{2}:\ \text{the formula gives backward wind, and fails}} @@ the model holds for 0 ≤ a ≤ 1/2
+  </pre>
+  <p data-pid="5a6761">Past a = 1/2, the air behind would have to blow back toward the turbine, which it doesn’t: the flow breaks up into churning eddies. The best slowing lies somewhere between 0 and 1/2.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·eng.3.1</span><span class="ph understand">understand</span>Why can the slowing not usefully pass a = 1/2, and what does the share give at the two ends?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14eng4">
+  <h2 class="sthead"><span class="stno">14eng4</span>The Best Slowing, and the Limit 16/27</h2>
+  <p data-pid="cd5744">C is a smooth function on a closed interval, so its greatest value is at an end or where its slope is 0 (14h).</p>
+  <pre class="lines" data-k="ember" data-label="this page: optimising the share">
+C(a) = 4a(1 - a)^2 @@ 
+C\prime(a) = 4(1 - a)^2 - 8a(1 - a) = 4(1 - a)(1 - 3a) @@ product technique (13c)
+C\prime(a) = 0:\ a = \tfrac{1}{3} @@ a = 1 is outside the interval
+C(\tfrac{1}{3}) = 4 \cdot \tfrac{1}{3} \cdot \tfrac{4}{9} = \tfrac{16}{27} \approx 0.593 @@ above both ends, 0 and 1/2
+\htmlClass{new}{\text{no turbine takes more than } \tfrac{16}{27} \text{ of the wind’s power}} @@ whatever its blades
+  </pre>
+  <p data-pid="497c2c">Best-slowing technique: <b>a turbine takes the most from the wind when it slows the air at its blades to two thirds of the wind’s speed, and then it takes 16/27 of the wind’s power; no design can take more.</b> The limit comes from mass, momentum and energy alone. Blade shape, number and material decide only how close a turbine gets.</p>
+  <!--gfig 14eng4--><div class="gfigs" data-gfig="14eng4" data-story="[[&quot;Across is a, how much the rotor slows the wind. Up is the share of the wind’s power it takes.&quot;, []], [&quot;Slow the wind too little and little is taken; stop it and nothing gets through.&quot;, [&quot;teal&quot;]], [&quot;The top is at a = 1/3: C = 4 × 1/3 × (2/3)² = 16/27 ≈ 0.593. No rotor can take more.&quot;, [&quot;gold&quot;, &quot;~a = 1/3&quot;]]]"><svg class="gfig" viewBox="0 0 400 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="the share of the wind’s power a turbine takes against how much it slows the air, a hump with its top at one third, 16 over 27"><defs><clipPath id="gc14fb0661"><rect x="42" y="12" width="324" height="174"/></clipPath></defs><line x1="44" x2="364" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="44.0" x2="44.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="44.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="108.0" x2="108.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="108.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.1</text><line x1="172.0" x2="172.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="172.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.2</text><line x1="236.0" x2="236.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="236.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.3</text><line x1="300.0" x2="300.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="300.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.4</text><line x1="364.0" x2="364.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="364.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="44" x2="364" y1="135.4" y2="135.4" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="139.4" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.2</text><line x1="44" x2="364" y1="86.9" y2="86.9" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="90.9" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.4</text><line x1="44" x2="364" y1="38.3" y2="38.3" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="42.3" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.6</text><polyline clip-path="url(#gc14fb0661)" points="44.0,184.0 45.3,182.0 46.7,180.0 48.0,178.0 49.3,176.0 50.7,174.1 52.0,172.2 53.3,170.2 54.7,168.3 56.0,166.5 57.3,164.6 58.7,162.7 60.0,160.9 61.3,159.1 62.7,157.3 64.0,155.5 65.3,153.7 66.7,152.0 68.0,150.3 69.3,148.5 70.7,146.8 72.0,145.1 73.3,143.5 74.7,141.8 76.0,140.2 77.3,138.5 78.7,136.9 80.0,135.3 81.3,133.8 82.7,132.2 84.0,130.6 85.3,129.1 86.7,127.6 88.0,126.1 89.3,124.6 90.7,123.1 92.0,121.7 93.3,120.2 94.7,118.8 96.0,117.4 97.3,116.0 98.7,114.6 100.0,113.2 101.3,111.9 102.7,110.5 104.0,109.2 105.3,107.9 106.7,106.6 108.0,105.3 109.3,104.0 110.7,102.8 112.0,101.6 113.3,100.3 114.7,99.1 116.0,97.9 117.3,96.7 118.7,95.6 120.0,94.4 121.3,93.3 122.7,92.1 124.0,91.0 125.3,89.9 126.7,88.8 128.0,87.8 129.3,86.7 130.7,85.7 132.0,84.6 133.3,83.6 134.7,82.6 136.0,81.6 137.3,80.6 138.7,79.7 140.0,78.7 141.3,77.8 142.7,76.9 144.0,75.9 145.3,75.0 146.7,74.2 148.0,73.3 149.3,72.4 150.7,71.6 152.0,70.7 153.3,69.9 154.7,69.1 156.0,68.3 157.3,67.5 158.7,66.7 160.0,66.0 161.3,65.2 162.7,64.5 164.0,63.8 165.3,63.0 166.7,62.3 168.0,61.7 169.3,61.0 170.7,60.3 172.0,59.7 173.3,59.0 174.7,58.4 176.0,57.8 177.3,57.2 178.7,56.6 180.0,56.0 181.3,55.4 182.7,54.8 184.0,54.3 185.3,53.8 186.7,53.2 188.0,52.7 189.3,52.2 190.7,51.7 192.0,51.2 193.3,50.8 194.7,50.3 196.0,49.9 197.3,49.4 198.7,49.0 200.0,48.6 201.3,48.2 202.7,47.8 204.0,47.4 205.3,47.0 206.7,46.7 208.0,46.3 209.3,46.0 210.7,45.6 212.0,45.3 213.3,45.0 214.7,44.7 216.0,44.4 217.3,44.1 218.7,43.8 220.0,43.6 221.3,43.3 222.7,43.1 224.0,42.9 225.3,42.6 226.7,42.4 228.0,42.2 229.3,42.0 230.7,41.8 232.0,41.7 233.3,41.5 234.7,41.3 236.0,41.2 237.3,41.1 238.7,40.9 240.0,40.8 241.3,40.7 242.7,40.6 244.0,40.5 245.3,40.4 246.7,40.4 248.0,40.3 249.3,40.2 250.7,40.2 252.0,40.2 253.3,40.1 254.7,40.1 256.0,40.1 257.3,40.1 258.7,40.1 260.0,40.1 261.3,40.1 262.7,40.2 264.0,40.2 265.3,40.2 266.7,40.3 268.0,40.3 269.3,40.4 270.7,40.5 272.0,40.6 273.3,40.7 274.7,40.8 276.0,40.9 277.3,41.0 278.7,41.1 280.0,41.3 281.3,41.4 282.7,41.5 284.0,41.7 285.3,41.9 286.7,42.0 288.0,42.2 289.3,42.4 290.7,42.6 292.0,42.8 293.3,43.0 294.7,43.2 296.0,43.4 297.3,43.6 298.7,43.9 300.0,44.1 301.3,44.4 302.7,44.6 304.0,44.9 305.3,45.1 306.7,45.4 308.0,45.7 309.3,46.0 310.7,46.3 312.0,46.6 313.3,46.9 314.7,47.2 316.0,47.5 317.3,47.8 318.7,48.2 320.0,48.5 321.3,48.8 322.7,49.2 324.0,49.5 325.3,49.9 326.7,50.3 328.0,50.6 329.3,51.0 330.7,51.4 332.0,51.8 333.3,52.2 334.7,52.6 336.0,53.0 337.3,53.4 338.7,53.8 340.0,54.2 341.3,54.6 342.7,55.1 344.0,55.5 345.3,55.9 346.7,56.4 348.0,56.8 349.3,57.3 350.7,57.7 352.0,58.2 353.3,58.7 354.7,59.1 356.0,59.6 357.3,60.1 358.7,60.6 360.0,61.1 361.3,61.6 362.7,62.1 364.0,62.6" style="fill:none;stroke:var(--teal);stroke-width:2.2"/><circle cx="257.3" cy="40.1" r="4.5" style="fill:var(--gold)"/><text x="257.3" y="27.4" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">a = 1/3: 16/27 ≈ 0.593</text><line x1="44" x2="364" y1="40.1" y2="40.1" style="stroke:var(--gold);stroke-width:1;stroke-dasharray:3 3"/><text x="357.6" y="176.7" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">slowing a</text><text x="200.0" y="222" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">share of the wind’s power taken, C(a) = 4a(1 − a)²</text></svg></div><!--/gfig 14eng4-->
+  <!--gwid 14eng4--><section class="pic gwid">
+    <div class="eyebrow">The picture · slow the wind, see what is taken</div>
+    <div class="panels">
+    <div class="panel"><canvas id="w14v"></canvas><div class="kn"><span class="m">a</span><input type="range" id="w14a" min="0" max="0.5" step="0.01" value="0.2"><output id="w14ao"></output></div><div class="cap">Teal: the share of the wind’s power taken, C(a) = 4a(1 − a)². The three bars on the right: the wind far ahead V, at the disc (1 − a)V, and far behind (1 − 2a)V.</div><div class="verdict" id="w14d"></div></div>
+  </div>
+  </section><!--/gwid 14eng4-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·eng.4.1</span><span class="ph understand">understand</span>What slowing gives the greatest share, and what is that share?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14eng5">
+  <h2 class="sthead"><span class="stno">14eng5</span>Real Turbines Against the Limit</h2>
+  <p data-pid="2628d5">Real blades lose some energy to drag, to the swirl they leave behind, and at their tips. The best large turbines reach shares of about 0.45 to 0.5 at their best wind speeds: four fifths of the way to the limit.</p>
+  <pre class="lines" data-k="ember" data-label="this page: Claire’s turbine">
+\text{blades } 50 \text{ m long: } A \approx 7\,850 \text{ m}^2 @@ the disc they sweep
+V = 10 \text{ m/s}:\ P_{\text{wind}} = \tfrac{1}{2} \cdot 1.2 \cdot 7\,850 \cdot 1000 \approx 4.7 \text{ MW} @@ 
+\text{limit: } \tfrac{16}{27} \cdot 4.7 \approx 2.8 \text{ MW} @@ 
+\htmlClass{new}{\text{at a share of } 0.45:\ \approx 2.1 \text{ MW}} @@ what a good turbine makes
+  </pre>
+  <p data-pid="6cc7df"><b>The limit tells an engineer how much room is left: a turbine at 0.45 has little to gain from better blades, and more from a windier site or a bigger disc.</b> When a wind-tunnel team tests a model rotor, a measured share above 16/27 means the test is wrong, usually because the tunnel walls are squeezing the flow.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·eng.5.1</span><span class="ph understand">understand</span>How close do real turbines come to the limit, and what does the limit tell an engineer about where to look for more power?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="14eng6">
+  <h2 class="sthead"><span class="stno">14eng6</span>Moves to Watch Out For</h2>
+  <p data-pid="776365">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{stop the wind completely for the most power}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; stopped air lets no more through; the best slowing is a = 1/3 (14eng4)
+\text{twice the wind, twice the power}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; power goes as the cube: eight times (14eng1)
+C\prime(a) = 4(1 - a)^2\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; use the product technique: the 4a factor also changes (14eng4)
+\text{a better blade can beat } 16/27\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the limit comes from mass, momentum and energy, whatever the blade (14eng4)
+\text{use the formula for } a > \tfrac{1}{2}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it gives backward wind behind the blades; the model fails there (14eng3)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">14·eng.6.1</span><span class="ph understand">understand</span>Which move above stops the wind completely to get the most power, and what slowing gives the most instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">14·eng.7.1</span><span class="tagq">do</span>A turbine with 40 m blades works in 8 m/s wind at a share of 0.42. Find its power, the limit, and the power at 12 m/s at the same share.</div>
+  <div class="chq"><span class="chid">14·eng.7.2</span><span class="tagq">make</span>Make up a turbine and wind speed for which the limit is exactly 1 MW.</div>
+  <div class="chq"><span class="chid">14·eng.7.3</span><span class="tagq">converse</span>A share of 16/27 needs a = 1/3. Decide whether a turbine at a = 1/3 must take 16/27 of the wind’s power, and say what the model leaves out.</div>
+  <div class="chq"><span class="chid">14·eng.7.4</span><span class="tagq">edge</span>Say what share the formula gives at a = 1/2, and why the wind far behind is 0 there.</div>
+  <div class="chq"><span class="chid">14·eng.7.5</span><span class="tagq">open</span>A row of turbines stands one behind another. Say what this page suggests about how much the second turbine can take, and why wind farms space their turbines apart.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r14econ2.html">← 14·econ2 · what happens when two sellers share a market?</a><a href="r14logi.html">14·logi · should we order often or order big? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="d9422a">The slowing a is the <b>axial induction factor</b>, the share C is the <b>power coefficient</b> C_P, and the disc model is <b>actuator disc</b> or <b>momentum theory</b>. The limit 16/27 is the <b>Betz limit</b>. The slowed wind behind the turbine is its <b>wake</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="e22fff">Albert Betz published the limit in 1920; Frederick Lanchester in 1915 and Nikolay Zhukovsky in 1920 reached it as well.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<!--gwjs 14eng4--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const P=plane($('w14v'),{x:[0,0.8],y:[0,1.05],grid:0.1,labels:false,aspect:0.62,draw:P=>{ P.axes(); [0,0.25,0.5].forEach(x=>P.text('a = '+x,x,0.02,'--muted',x===0?'left':'center',11)); const a=+$('w14a').value, C=4*a*(1-a)*(1-a);
+  P.fn(x=>x<=0.5?4*x*(1-x)*(1-x):NaN,'--teal',2.2); P.line(1/3,0,1/3,16/27,'--muted',1,[3,3]); P.dot(a,C,'--gold',5);
+  [[1,'ahead'],[1-a,'disc'],[1-2*a,'behind']].forEach(([v,t],i)=>{ const x=0.58+i*0.08; if(v>0) P.poly([[x-0.025,0],[x+0.025,0],[x+0.025,v],[x-0.025,v]],null,i===0?'--muted':'--ember'); P.text(t,x,v+0.03,'--muted','center',10); });
+  $('w14ao').textContent=f(a,2);
+  $('w14d').textContent='a = '+f(a,2)+': the wind is '+f(1-a,2)+'V at the disc and '+f(1-2*a,2)+'V far behind; the share taken is '+f(C,3)+(Math.abs(a-1/3)<0.006?', the top: 16/27.':'. The top is at a = 1/3, 16/27 ≈ 0.593.'); }});
+$('w14a').oninput=()=>P.redraw(); P.redraw();
+})();
+</script><!--/gwjs 14eng4-->
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

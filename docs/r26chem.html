@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>26·chem · Which Reactor Turns More Into Product?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26nav.html">← 26·nav how does radar tell how fast the rain is moving?</a><a href="r26bio.html">next: 26·bio why does more choice take longer? →</a></p>
+  <div class="tags"><span class="tag chem">26·chem · chemistry</span></div>
+  <h1>Which Reactor Turns More Into Product?</h1>
+  <p data-pid="94893e">Which reactor turns more into product? A chemical plant can run a reaction in a big stirred tank, with feed flowing in and product flowing out, or in a long pipe the feed flows through. Same volume, same flow, same reaction. They do not give the same product. This page balances what goes in against what comes out, solves the stirred tank, follows a slug of feed down the pipe with 24’s rate statements and 17’s exp, shows the pipe always wins at equal size, and shows tanks in a row closing in on the pipe as 17e’s limit.</p>
+  <p class="gesture" data-pid="b22909">In a stirred tank, the whole tank sits at the outlet’s low concentration, so the reaction runs slowly everywhere: C = C₀/(1 + kτ). In a pipe, each slug decays as e^(−kt) on the way, starting fast: C = C₀e^(−kτ). Since e^(kτ) > 1 + kτ, the pipe leaves less unreacted. N tanks in a row give (1 + kτ/N)^(−N), which closes in on e^(−kτ).</p>
+</header>
+
+<section class="class step" data-step="26chem1">
+  <h2 class="sthead"><span class="stno">26chem1</span>What Goes in Must Come Out</h2>
+  <p data-pid="cb255a">Sarah runs a reactor where a chemical A turns into a product, at a rate k times its concentration C: the more A there is, the faster it goes.</p>
+  <p data-pid="0d06ea">From here on, on this page, Q is the flow in cubic metres a second, V the reactor’s volume, and τ = V/Q the <i>holding time</i>: how long the feed spends inside on average. Take kτ = 2.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the balance, steady running">
+\text{A in} = \text{A out} + \text{A used} @@ nothing piles up
+\htmlClass{new}{Q\,C_0 = Q\,C + (\text{rate} \times \text{volume})} @@ 
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·chem.1.1</span><span class="ph understand">understand</span>What does the balance say for a reactor running steadily, and what is the holding time?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26chem2">
+  <h2 class="sthead"><span class="stno">26chem2</span>A Stirred Tank: One Concentration Everywhere</h2>
+  <p data-pid="ba475f">A stirrer mixes the tank so well that every part of it is the same as what flows out. So the reaction runs everywhere at the outlet’s concentration.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the stirred tank">
+Q\,C_0 = Q\,C + k\,C\,V @@ rate kC through the whole volume
+C = \dfrac{C_0}{1 + k\tau} @@ divided by Q
+\htmlClass{new}{k\tau = 2:\ \text{share turned to product} = \dfrac{2}{3} \approx 0.67} @@ 
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·chem.2.1</span><span class="ph understand">understand</span>Why does the whole stirred tank react at the outlet’s concentration, and what share does it turn to product?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26chem3">
+  <h2 class="sthead"><span class="stno">26chem3</span>A Pipe: the Concentration Falls Along It</h2>
+  <p data-pid="d8857c">In a pipe with no mixing along it, follow one slug of feed. It is a little closed reactor travelling down the pipe for time τ, its A falling at rate kC (24h).</p>
+  <pre class="lines" data-k="ember" data-label="this page: following a slug">
+\dfrac{dC}{dt} = -k\,C @@ a rate statement (24)
+C = C_0\,e^{-kt} @@ growth and decay (17j)
+\htmlClass{new}{\text{at the outlet: } C = C_0 e^{-k\tau},\ \ k\tau = 2:\ \text{share} = 1 - e^{-2} \approx 0.86} @@ 
+  </pre>
+  <p data-pid="89bc76">Residence-time technique: <b>for a reaction at rate kC, a stirred tank leaves C₀/(1 + kτ) unreacted and a pipe leaves C₀e^(−kτ), with τ the volume over the flow.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·chem.3.1</span><span class="ph understand">understand</span>Why does a slug in the pipe decay as e^(−kt), and what share does the pipe turn to product?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26chem4">
+  <h2 class="sthead"><span class="stno">26chem4</span>At Equal Size the Pipe Wins</h2>
+  <pre class="lines" data-k="ember" data-label="this page: why the pipe wins">
+e^{k\tau} = 1 + k\tau + \tfrac12 (k\tau)^2 + \cdots > 1 + k\tau @@ the power series (23a), every term positive
+\text{so } C_0 e^{-k\tau} < \dfrac{C_0}{1 + k\tau} @@ 
+\htmlClass{new}{90\% \text{ product: tank } k\tau = 9,\ \text{pipe } k\tau = \ln 10 \approx 2.3} @@ the tank must be about four times bigger
+  </pre>
+  <p data-pid="bf554f"><b>At the same size and flow, the pipe turns more into product, because its feed reacts at full strength first, while the tank dilutes the feed at once to the outlet’s weak strength.</b> Tanks are still used where the stirring helps: to hold a steady temperature, or to mix solids.</p>
+  <!--gfig 26chem4--><div class="gfigs" data-gfig="26chem4" data-story="[[&quot;Across is kτ, how fast the reaction runs times how long the stuff stays. Up is the share turned to product.&quot;, []], [&quot;The pipe: each bit stays exactly τ, so 1 − e^(−kτ).&quot;, [&quot;teal&quot;]], [&quot;The stirred tank: some leaves at once, some stays long, so kτ/(1 + kτ).&quot;, [&quot;ember&quot;]], [&quot;At kτ = 2 the pipe turns 0.86, the tank 0.67. The pipe is always ahead.&quot;, [&quot;~pipe 0.86&quot;, &quot;~tank 0.67&quot;]]]"><svg class="gfig" viewBox="0 0 400 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="share converted against k tau for a pipe and a stirred tank: the pipe always higher, 0.86 against 0.67 at k tau equals 2"><defs><clipPath id="gcfde5b8b3"><rect x="42" y="12" width="324" height="174"/></clipPath></defs><line x1="44" x2="364" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="44.0" x2="44.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="44.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="108.0" x2="108.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="108.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="172.0" x2="172.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="172.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">2</text><line x1="236.0" x2="236.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="236.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">3</text><line x1="300.0" x2="300.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="300.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">4</text><line x1="364.0" x2="364.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="364.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">5</text><line x1="44" x2="364" y1="141.5" y2="141.5" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="145.5" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.25</text><line x1="44" x2="364" y1="99.0" y2="99.0" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="103.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="44" x2="364" y1="56.5" y2="56.5" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="60.5" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.75</text><line x1="44" x2="364" y1="14.0" y2="14.0" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="18.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><polyline clip-path="url(#gcfde5b8b3)" points="44.0,184.0 45.3,180.5 46.7,177.1 48.0,173.7 49.3,170.4 50.7,167.2 52.0,164.0 53.3,160.9 54.7,157.9 56.0,154.9 57.3,152.0 58.7,149.2 60.0,146.4 61.3,143.7 62.7,141.0 64.0,138.4 65.3,135.8 66.7,133.3 68.0,130.8 69.3,128.4 70.7,126.1 72.0,123.8 73.3,121.5 74.7,119.3 76.0,117.1 77.3,115.0 78.7,112.9 80.0,110.9 81.3,108.9 82.7,106.9 84.0,105.0 85.3,103.1 86.7,101.3 88.0,99.5 89.3,97.7 90.7,96.0 92.0,94.3 93.3,92.6 94.7,91.0 96.0,89.4 97.3,87.9 98.7,86.4 100.0,84.9 101.3,83.4 102.7,82.0 104.0,80.6 105.3,79.2 106.7,77.9 108.0,76.5 109.3,75.3 110.7,74.0 112.0,72.8 113.3,71.5 114.7,70.4 116.0,69.2 117.3,68.1 118.7,66.9 120.0,65.8 121.3,64.8 122.7,63.7 124.0,62.7 125.3,61.7 126.7,60.7 128.0,59.8 129.3,58.8 130.7,57.9 132.0,57.0 133.3,56.1 134.7,55.2 136.0,54.4 137.3,53.5 138.7,52.7 140.0,51.9 141.3,51.2 142.7,50.4 144.0,49.6 145.3,48.9 146.7,48.2 148.0,47.5 149.3,46.8 150.7,46.1 152.0,45.4 153.3,44.8 154.7,44.2 156.0,43.5 157.3,42.9 158.7,42.3 160.0,41.8 161.3,41.2 162.7,40.6 164.0,40.1 165.3,39.5 166.7,39.0 168.0,38.5 169.3,38.0 170.7,37.5 172.0,37.0 173.3,36.5 174.7,36.1 176.0,35.6 177.3,35.2 178.7,34.7 180.0,34.3 181.3,33.9 182.7,33.5 184.0,33.1 185.3,32.7 186.7,32.3 188.0,31.9 189.3,31.5 190.7,31.2 192.0,30.8 193.3,30.5 194.7,30.1 196.0,29.8 197.3,29.5 198.7,29.2 200.0,28.9 201.3,28.5 202.7,28.2 204.0,28.0 205.3,27.7 206.7,27.4 208.0,27.1 209.3,26.8 210.7,26.6 212.0,26.3 213.3,26.1 214.7,25.8 216.0,25.6 217.3,25.3 218.7,25.1 220.0,24.9 221.3,24.6 222.7,24.4 224.0,24.2 225.3,24.0 226.7,23.8 228.0,23.6 229.3,23.4 230.7,23.2 232.0,23.0 233.3,22.8 234.7,22.6 236.0,22.5 237.3,22.3 238.7,22.1 240.0,22.0 241.3,21.8 242.7,21.6 244.0,21.5 245.3,21.3 246.7,21.2 248.0,21.0 249.3,20.9 250.7,20.7 252.0,20.6 253.3,20.5 254.7,20.3 256.0,20.2 257.3,20.1 258.7,19.9 260.0,19.8 261.3,19.7 262.7,19.6 264.0,19.5 265.3,19.4 266.7,19.2 268.0,19.1 269.3,19.0 270.7,18.9 272.0,18.8 273.3,18.7 274.7,18.6 276.0,18.5 277.3,18.4 278.7,18.3 280.0,18.3 281.3,18.2 282.7,18.1 284.0,18.0 285.3,17.9 286.7,17.8 288.0,17.8 289.3,17.7 290.7,17.6 292.0,17.5 293.3,17.5 294.7,17.4 296.0,17.3 297.3,17.2 298.7,17.2 300.0,17.1 301.3,17.0 302.7,17.0 304.0,16.9 305.3,16.9 306.7,16.8 308.0,16.7 309.3,16.7 310.7,16.6 312.0,16.6 313.3,16.5 314.7,16.5 316.0,16.4 317.3,16.4 318.7,16.3 320.0,16.3 321.3,16.2 322.7,16.2 324.0,16.1 325.3,16.1 326.7,16.1 328.0,16.0 329.3,16.0 330.7,15.9 332.0,15.9 333.3,15.8 334.7,15.8 336.0,15.8 337.3,15.7 338.7,15.7 340.0,15.7 341.3,15.6 342.7,15.6 344.0,15.6 345.3,15.5 346.7,15.5 348.0,15.5 349.3,15.4 350.7,15.4 352.0,15.4 353.3,15.4 354.7,15.3 356.0,15.3 357.3,15.3 358.7,15.2 360.0,15.2 361.3,15.2 362.7,15.2 364.0,15.1" style="fill:none;stroke:var(--teal);stroke-width:2.2"/><polyline clip-path="url(#gcfde5b8b3)" points="44.0,184.0 45.3,180.5 46.7,177.2 48.0,174.0 49.3,170.9 50.7,168.0 52.0,165.1 53.3,162.4 54.7,159.7 56.0,157.2 57.3,154.7 58.7,152.3 60.0,150.0 61.3,147.8 62.7,145.6 64.0,143.5 65.3,141.5 66.7,139.5 68.0,137.6 69.3,135.8 70.7,134.0 72.0,132.3 73.3,130.6 74.7,128.9 76.0,127.3 77.3,125.8 78.7,124.3 80.0,122.8 81.3,121.4 82.7,120.0 84.0,118.6 85.3,117.3 86.7,116.0 88.0,114.7 89.3,113.5 90.7,112.3 92.0,111.1 93.3,110.0 94.7,108.9 96.0,107.8 97.3,106.7 98.7,105.7 100.0,104.7 101.3,103.7 102.7,102.7 104.0,101.7 105.3,100.8 106.7,99.9 108.0,99.0 109.3,98.1 110.7,97.3 112.0,96.4 113.3,95.6 114.7,94.8 116.0,94.0 117.3,93.2 118.7,92.5 120.0,91.7 121.3,91.0 122.7,90.3 124.0,89.6 125.3,88.9 126.7,88.2 128.0,87.5 129.3,86.9 130.7,86.2 132.0,85.6 133.3,85.0 134.7,84.3 136.0,83.7 137.3,83.2 138.7,82.6 140.0,82.0 141.3,81.4 142.7,80.9 144.0,80.3 145.3,79.8 146.7,79.3 148.0,78.8 149.3,78.3 150.7,77.8 152.0,77.3 153.3,76.8 154.7,76.3 156.0,75.8 157.3,75.4 158.7,74.9 160.0,74.4 161.3,74.0 162.7,73.6 164.0,73.1 165.3,72.7 166.7,72.3 168.0,71.9 169.3,71.5 170.7,71.1 172.0,70.7 173.3,70.3 174.7,69.9 176.0,69.5 177.3,69.1 178.7,68.8 180.0,68.4 181.3,68.0 182.7,67.7 184.0,67.3 185.3,67.0 186.7,66.6 188.0,66.3 189.3,66.0 190.7,65.6 192.0,65.3 193.3,65.0 194.7,64.7 196.0,64.4 197.3,64.1 198.7,63.8 200.0,63.5 201.3,63.2 202.7,62.9 204.0,62.6 205.3,62.3 206.7,62.0 208.0,61.7 209.3,61.4 210.7,61.2 212.0,60.9 213.3,60.6 214.7,60.4 216.0,60.1 217.3,59.8 218.7,59.6 220.0,59.3 221.3,59.1 222.7,58.8 224.0,58.6 225.3,58.3 226.7,58.1 228.0,57.9 229.3,57.6 230.7,57.4 232.0,57.2 233.3,56.9 234.7,56.7 236.0,56.5 237.3,56.3 238.7,56.1 240.0,55.8 241.3,55.6 242.7,55.4 244.0,55.2 245.3,55.0 246.7,54.8 248.0,54.6 249.3,54.4 250.7,54.2 252.0,54.0 253.3,53.8 254.7,53.6 256.0,53.4 257.3,53.2 258.7,53.0 260.0,52.9 261.3,52.7 262.7,52.5 264.0,52.3 265.3,52.1 266.7,52.0 268.0,51.8 269.3,51.6 270.7,51.4 272.0,51.3 273.3,51.1 274.7,50.9 276.0,50.8 277.3,50.6 278.7,50.4 280.0,50.3 281.3,50.1 282.7,49.9 284.0,49.8 285.3,49.6 286.7,49.5 288.0,49.3 289.3,49.2 290.7,49.0 292.0,48.9 293.3,48.7 294.7,48.6 296.0,48.4 297.3,48.3 298.7,48.1 300.0,48.0 301.3,47.9 302.7,47.7 304.0,47.6 305.3,47.4 306.7,47.3 308.0,47.2 309.3,47.0 310.7,46.9 312.0,46.8 313.3,46.6 314.7,46.5 316.0,46.4 317.3,46.3 318.7,46.1 320.0,46.0 321.3,45.9 322.7,45.8 324.0,45.6 325.3,45.5 326.7,45.4 328.0,45.3 329.3,45.1 330.7,45.0 332.0,44.9 333.3,44.8 334.7,44.7 336.0,44.6 337.3,44.4 338.7,44.3 340.0,44.2 341.3,44.1 342.7,44.0 344.0,43.9 345.3,43.8 346.7,43.7 348.0,43.6 349.3,43.5 350.7,43.4 352.0,43.2 353.3,43.1 354.7,43.0 356.0,42.9 357.3,42.8 358.7,42.7 360.0,42.6 361.3,42.5 362.7,42.4 364.0,42.3" style="fill:none;stroke:var(--ember);stroke-width:2.2"/><line x1="172.0" x2="172.0" y1="184.0" y2="14.0" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/><circle cx="172.0" cy="36.9" r="4" style="fill:var(--teal)"/><circle cx="172.0" cy="70.6" r="4" style="fill:var(--ember)"/><text x="165.6" y="27.6" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">pipe 0.86</text><text x="178.4" y="82.0" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">tank 0.67</text><text x="360.8" y="175.5" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">kτ</text><text x="200.0" y="222" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">share turned to product: pipe 1 − e^(−kτ), stirred tank kτ/(1 + kτ)</text></svg></div><!--/gfig 26chem4-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·chem.4.1</span><span class="ph understand">understand</span>Why does the pipe always beat the stirred tank at equal size, and why are tanks still used?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26chem5">
+  <h2 class="sthead"><span class="stno">26chem5</span>Tanks in a Row Close in on the Pipe</h2>
+  <p data-pid="0240c4">Split the volume into N stirred tanks in a row, each with holding time τ/N. Each multiplies the A by 1/(1 + kτ/N), and the factors multiply.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>tanks in a row, N</th><th>A left, (1 + 2/N)^(−N)</th><th>share turned to product</th></tr>
+    <tr><th>1</th><td>0.333</td><td>0.67</td></tr>
+    <tr><th>2</th><td>0.250</td><td>0.75</td></tr>
+    <tr><th>5</th><td>0.186</td><td>0.81</td></tr>
+    <tr><th>10</th><td>0.162</td><td>0.84</td></tr>
+    <tr><th>pipe</th><td>e^(−2) ≈ 0.135</td><td>0.86</td></tr>
+  </table></div>
+  <p data-pid="6a238a"><b>(1 + kτ/N)^N rises toward e^(kτ) as N grows (17e), so a row of many small tanks behaves like a pipe; the pipe is a row of endlessly many thin tanks, each multiplying by its own factor (26b).</b> Sarah checks a real reactor by sending a quick pulse of dye in and timing how it comes out: a single tank spreads it into a long tail, a pipe passes it as a sharp pulse, and a row of tanks lands between, matching the count of tanks that fits.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·chem.5.1</span><span class="ph understand">understand</span>Why does a row of tanks close in on the pipe, and how does a dye pulse tell which a real reactor is like?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="26chem6">
+  <h2 class="sthead"><span class="stno">26chem6</span>Moves to Watch Out For</h2>
+  <p data-pid="62744b">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{same size and flow, same product}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the pipe wins: e^(kτ) > 1 + kτ (26chem4)
+\text{the tank reacts at the feed’s concentration}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; stirring dilutes it at once to the outlet’s (26chem2)
+C_{\text{pipe}} = C_0 (1 - k\tau)\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; that is only the matching line; the slug decays as e^(−kτ) (26chem3)
+\text{one big tank beats several small ones}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; tanks in a row close in on the pipe (26chem5)
+\text{always use a pipe}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it turns more, but a tank holds temperature and mixes solids better (26chem4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">26·chem.6.1</span><span class="ph understand">understand</span>Which move above lets the tank react at full strength, and what concentration does it really react at?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">26·chem.7.1</span><span class="tagq">do</span>For kτ = 1, find the share turned to product by one tank, three tanks in a row and a pipe.</div>
+  <div class="chq"><span class="chid">26·chem.7.2</span><span class="tagq">make</span>Make up a kτ for which one tank turns exactly 80% to product, and find what a pipe of the same size turns.</div>
+  <div class="chq"><span class="chid">26·chem.7.3</span><span class="tagq">converse</span>Every term of e^(kτ)’s series is positive, so the pipe wins. Decide whether the pipe would still win for a reaction that goes faster as A falls.</div>
+  <div class="chq"><span class="chid">26·chem.7.4</span><span class="tagq">edge</span>Say what each reactor gives as kτ nears 0, and as it grows without end.</div>
+  <div class="chq"><span class="chid">26·chem.7.5</span><span class="tagq">open</span>A reaction that makes its own helper speeds up as product builds. Say why a stirred tank might then beat a pipe.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r26nav.html">← 26·nav · how does radar tell how fast the rain is moving?</a><a href="r26bio.html">26·bio · why does more choice take longer? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="75c795">The stirred tank is a <b>continuous stirred-tank reactor</b>, CSTR; the pipe a <b>plug flow reactor</b>, PFR. τ is the <b>residence time</b>, kτ the <b>Damköhler number</b>, and the row of tanks the <b>tanks-in-series model</b>. The dye test measures the <b>residence time distribution</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="0f9554">Peter Danckwerts set out residence time distributions in 1953 (not yet revisited for the date); the comparison of tank and pipe is in every first course on reactors, as in Octave Levenspiel’s textbook.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

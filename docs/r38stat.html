@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>38·stat · How Do You Measure an Ability You Cannot See?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38chem2.html">← 38·chem2 why does rubber snap back?</a><a href="r38comp.html">next: 38·comp why do a few words do most of the work? →</a></p>
+  <div class="tags"><span class="tag stat">38·stat · statistics</span></div>
+  <h1>How Do You Measure an Ability You Cannot See?</h1>
+  <p data-pid="a72406">How do you measure an ability you cannot see? No one can look inside a head and read off how well someone reads, or reasons, or climbs a ladder of mathematics. A test gives only answers, right or wrong, and each answer depends on luck as well as ability. This page writes a score as ability plus noise, measures how much a test agrees with itself using 31n’s correlation, draws the chance of a right answer as a logistic curve in ability (17), finds ability as its most likely value with 30r, and finds a few abilities behind many tests with 31q.</p>
+  <p class="gesture" data-pid="dd5797">A score is a true ability plus noise. If the two halves of a test agree, the noise is small. Better: give each question a difficulty b, and let the chance of a right answer be 1/(1 + e^(−(θ − b))) for ability θ. Given someone’s answers, their ability is the θ that makes those answers most likely. Across many tests, a few hidden abilities explain most of the agreement.</p>
+</header>
+
+<section class="class step" data-step="38stat1">
+  <h2 class="sthead"><span class="stno">38stat1</span>A Score Is Ability Plus Noise</h2>
+  <p data-pid="d793f9">Evita writes tests. A person’s score on a test is their true ability, the score they would average over endless fair retakes, plus noise: the luck of which questions came up, a lapse, a guess.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a score">
+X = T + E @@ score, true ability, noise
+\text{spread}^2(X) = \text{spread}^2(T) + \text{spread}^2(E) @@ independent: squares add (30h)
+\htmlClass{new}{\text{a test is good when most of its spread is ability}} @@ 
+  </pre>
+  <p data-pid="0b5fb5">From here on, on this page, θ is a person’s hidden ability, on a scale with average 0.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.1.1</span><span class="ph understand">understand</span>How is a score split into ability and noise, and when is a test good?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat2">
+  <h2 class="sthead"><span class="stno">38stat2</span>Two Halves Agree: Reliability</h2>
+  <p data-pid="9dd246">Split the test into odd and even questions and score each half. If both halves measure the same ability with independent noise, how closely they agree across people shows how much of each half is ability.</p>
+  <pre class="lines" data-k="ember" data-label="this page: halves that correlate 0.7">
+r_{\text{halves}} = 0.7 @@ correlation (31n)
+\text{whole test} = \dfrac{2r}{1 + r} = \dfrac{1.4}{1.7} \approx 0.82 @@ twice as long, noise halved
+\htmlClass{new}{\text{82\% of the score’s spread is ability}} @@ 
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.2.1</span><span class="ph understand">understand</span>How does agreement between the two halves measure a test’s reliability?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat3">
+  <h2 class="sthead"><span class="stno">38stat3</span>The Item Curve: the Chance of a Right Answer as a Logistic in Ability</h2>
+  <p data-pid="82adcd">Look at one question at a time. Its chance of being answered right rises with ability, slowly at first, then steeply, then levelling off near certain.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one question of difficulty b">
+P(\text{right} \mid \theta) = \dfrac{1}{1 + e^{-(\theta - b)}} @@ a logistic curve (17)
+\theta = b:\ \ P = \tfrac12 @@ difficulty is the ability at which it is a coin toss
+\htmlClass{new}{\theta = b + 2:\ \ P \approx 0.88;\ \ \theta = b - 2:\ \ P \approx 0.12} @@ 
+  </pre>
+  <p data-pid="722703">Item-curve technique: <b>give each question a difficulty b and let the chance of a right answer be the logistic in θ − b; then people and questions sit on one scale, and a person’s ability can be read from any set of questions whose difficulties are known.</b></p>
+  <!--gfig 38stat3--><div class="gfigs" data-gfig="38stat3" data-story="[[&quot;Across is ability θ, up the chance of a right answer. Three items of three difficulties.&quot;, []], [&quot;The same S shape, shifted.&quot;, [&quot;teal&quot;, &quot;gold&quot;, &quot;ember&quot;]], [&quot;Each crosses one half where θ = b: a coin toss.&quot;, [&quot;~a coin toss&quot;]], [&quot;Easy, b = −1.5, crosses early; hard, b = 1.5, late.&quot;, [&quot;~easy&quot;, &quot;~hard&quot;]]]"><svg class="gfig" viewBox="0 0 400 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="three item curves of the chance of a right answer against ability, the same S shape shifted, each crossing one half at its own difficulty"><defs><clipPath id="gce2d085b0"><rect x="42" y="12" width="324" height="174"/></clipPath></defs><line x1="44" x2="364" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="44.0" x2="44.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="44.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-4</text><line x1="124.0" x2="124.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="124.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-2</text><line x1="204.0" x2="204.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="204.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="284.0" x2="284.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="284.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">2</text><line x1="364.0" x2="364.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="364.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">4</text><line x1="44" x2="364" y1="142.3" y2="142.3" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="146.3" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.25</text><line x1="44" x2="364" y1="100.7" y2="100.7" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="104.7" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="44" x2="364" y1="59.0" y2="59.0" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="63.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.75</text><line x1="44" x2="364" y1="17.3" y2="17.3" style="stroke:var(--grid);stroke-width:.7"/><text x="40" y="21.3" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><polyline clip-path="url(#gce2d085b0)" points="44.0,171.4 45.3,171.0 46.7,170.6 48.0,170.1 49.3,169.7 50.7,169.3 52.0,168.8 53.3,168.3 54.7,167.9 56.0,167.4 57.3,166.9 58.7,166.4 60.0,165.8 61.3,165.3 62.7,164.7 64.0,164.1 65.3,163.5 66.7,162.9 68.0,162.3 69.3,161.7 70.7,161.0 72.0,160.4 73.3,159.7 74.7,159.0 76.0,158.3 77.3,157.5 78.7,156.8 80.0,156.0 81.3,155.2 82.7,154.4 84.0,153.6 85.3,152.8 86.7,151.9 88.0,151.0 89.3,150.1 90.7,149.2 92.0,148.3 93.3,147.4 94.7,146.4 96.0,145.4 97.3,144.4 98.7,143.4 100.0,142.4 101.3,141.3 102.7,140.3 104.0,139.2 105.3,138.1 106.7,137.0 108.0,135.8 109.3,134.7 110.7,133.5 112.0,132.3 113.3,131.1 114.7,129.9 116.0,128.7 117.3,127.5 118.7,126.2 120.0,124.9 121.3,123.7 122.7,122.4 124.0,121.1 125.3,119.8 126.7,118.4 128.0,117.1 129.3,115.8 130.7,114.4 132.0,113.1 133.3,111.7 134.7,110.3 136.0,109.0 137.3,107.6 138.7,106.2 140.0,104.8 141.3,103.4 142.7,102.1 144.0,100.7 145.3,99.3 146.7,97.9 148.0,96.5 149.3,95.1 150.7,93.7 152.0,92.4 153.3,91.0 154.7,89.6 156.0,88.3 157.3,86.9 158.7,85.6 160.0,84.2 161.3,82.9 162.7,81.6 164.0,80.3 165.3,79.0 166.7,77.7 168.0,76.4 169.3,75.1 170.7,73.9 172.0,72.6 173.3,71.4 174.7,70.2 176.0,69.0 177.3,67.8 178.7,66.7 180.0,65.5 181.3,64.4 182.7,63.3 184.0,62.2 185.3,61.1 186.7,60.0 188.0,59.0 189.3,57.9 190.7,56.9 192.0,55.9 193.3,54.9 194.7,54.0 196.0,53.0 197.3,52.1 198.7,51.2 200.0,50.3 201.3,49.4 202.7,48.6 204.0,47.7 205.3,46.9 206.7,46.1 208.0,45.3 209.3,44.6 210.7,43.8 212.0,43.1 213.3,42.4 214.7,41.7 216.0,41.0 217.3,40.3 218.7,39.7 220.0,39.0 221.3,38.4 222.7,37.8 224.0,37.2 225.3,36.6 226.7,36.1 228.0,35.5 229.3,35.0 230.7,34.5 232.0,34.0 233.3,33.5 234.7,33.0 236.0,32.5 237.3,32.1 238.7,31.6 240.0,31.2 241.3,30.8 242.7,30.4 244.0,30.0 245.3,29.6 246.7,29.2 248.0,28.9 249.3,28.5 250.7,28.2 252.0,27.8 253.3,27.5 254.7,27.2 256.0,26.9 257.3,26.6 258.7,26.3 260.0,26.0 261.3,25.8 262.7,25.5 264.0,25.2 265.3,25.0 266.7,24.8 268.0,24.5 269.3,24.3 270.7,24.1 272.0,23.9 273.3,23.7 274.7,23.5 276.0,23.3 277.3,23.1 278.7,22.9 280.0,22.7 281.3,22.5 282.7,22.4 284.0,22.2 285.3,22.1 286.7,21.9 288.0,21.8 289.3,21.6 290.7,21.5 292.0,21.4 293.3,21.2 294.7,21.1 296.0,21.0 297.3,20.9 298.7,20.7 300.0,20.6 301.3,20.5 302.7,20.4 304.0,20.3 305.3,20.2 306.7,20.1 308.0,20.1 309.3,20.0 310.7,19.9 312.0,19.8 313.3,19.7 314.7,19.6 316.0,19.6 317.3,19.5 318.7,19.4 320.0,19.4 321.3,19.3 322.7,19.2 324.0,19.2 325.3,19.1 326.7,19.0 328.0,19.0 329.3,18.9 330.7,18.9 332.0,18.8 333.3,18.8 334.7,18.7 336.0,18.7 337.3,18.6 338.7,18.6 340.0,18.6 341.3,18.5 342.7,18.5 344.0,18.4 345.3,18.4 346.7,18.4 348.0,18.3 349.3,18.3 350.7,18.3 352.0,18.2 353.3,18.2 354.7,18.2 356.0,18.2 357.3,18.1 358.7,18.1 360.0,18.1 361.3,18.1 362.7,18.0 364.0,18.0" style="fill:none;stroke:var(--teal);stroke-width:2"/><circle cx="144.0" cy="100.7" r="3.6" style="fill:var(--teal)"/><polyline clip-path="url(#gce2d085b0)" points="44.0,181.0 45.3,180.9 46.7,180.8 48.0,180.7 49.3,180.6 50.7,180.5 52.0,180.4 53.3,180.2 54.7,180.1 56.0,180.0 57.3,179.8 58.7,179.7 60.0,179.6 61.3,179.4 62.7,179.3 64.0,179.1 65.3,179.0 66.7,178.8 68.0,178.6 69.3,178.4 70.7,178.3 72.0,178.1 73.3,177.9 74.7,177.7 76.0,177.5 77.3,177.3 78.7,177.0 80.0,176.8 81.3,176.6 82.7,176.3 84.0,176.1 85.3,175.8 86.7,175.6 88.0,175.3 89.3,175.0 90.7,174.7 92.0,174.4 93.3,174.1 94.7,173.8 96.0,173.5 97.3,173.2 98.7,172.8 100.0,172.5 101.3,172.1 102.7,171.7 104.0,171.4 105.3,171.0 106.7,170.6 108.0,170.1 109.3,169.7 110.7,169.3 112.0,168.8 113.3,168.3 114.7,167.9 116.0,167.4 117.3,166.9 118.7,166.4 120.0,165.8 121.3,165.3 122.7,164.7 124.0,164.1 125.3,163.5 126.7,162.9 128.0,162.3 129.3,161.7 130.7,161.0 132.0,160.4 133.3,159.7 134.7,159.0 136.0,158.3 137.3,157.5 138.7,156.8 140.0,156.0 141.3,155.2 142.7,154.4 144.0,153.6 145.3,152.8 146.7,151.9 148.0,151.0 149.3,150.1 150.7,149.2 152.0,148.3 153.3,147.4 154.7,146.4 156.0,145.4 157.3,144.4 158.7,143.4 160.0,142.4 161.3,141.3 162.7,140.3 164.0,139.2 165.3,138.1 166.7,137.0 168.0,135.8 169.3,134.7 170.7,133.5 172.0,132.3 173.3,131.1 174.7,129.9 176.0,128.7 177.3,127.5 178.7,126.2 180.0,124.9 181.3,123.7 182.7,122.4 184.0,121.1 185.3,119.8 186.7,118.4 188.0,117.1 189.3,115.8 190.7,114.4 192.0,113.1 193.3,111.7 194.7,110.3 196.0,109.0 197.3,107.6 198.7,106.2 200.0,104.8 201.3,103.4 202.7,102.1 204.0,100.7 205.3,99.3 206.7,97.9 208.0,96.5 209.3,95.1 210.7,93.7 212.0,92.4 213.3,91.0 214.7,89.6 216.0,88.3 217.3,86.9 218.7,85.6 220.0,84.2 221.3,82.9 222.7,81.6 224.0,80.3 225.3,79.0 226.7,77.7 228.0,76.4 229.3,75.1 230.7,73.9 232.0,72.6 233.3,71.4 234.7,70.2 236.0,69.0 237.3,67.8 238.7,66.7 240.0,65.5 241.3,64.4 242.7,63.3 244.0,62.2 245.3,61.1 246.7,60.0 248.0,59.0 249.3,57.9 250.7,56.9 252.0,55.9 253.3,54.9 254.7,54.0 256.0,53.0 257.3,52.1 258.7,51.2 260.0,50.3 261.3,49.4 262.7,48.6 264.0,47.7 265.3,46.9 266.7,46.1 268.0,45.3 269.3,44.6 270.7,43.8 272.0,43.1 273.3,42.4 274.7,41.7 276.0,41.0 277.3,40.3 278.7,39.7 280.0,39.0 281.3,38.4 282.7,37.8 284.0,37.2 285.3,36.6 286.7,36.1 288.0,35.5 289.3,35.0 290.7,34.5 292.0,34.0 293.3,33.5 294.7,33.0 296.0,32.5 297.3,32.1 298.7,31.6 300.0,31.2 301.3,30.8 302.7,30.4 304.0,30.0 305.3,29.6 306.7,29.2 308.0,28.9 309.3,28.5 310.7,28.2 312.0,27.8 313.3,27.5 314.7,27.2 316.0,26.9 317.3,26.6 318.7,26.3 320.0,26.0 321.3,25.8 322.7,25.5 324.0,25.2 325.3,25.0 326.7,24.8 328.0,24.5 329.3,24.3 330.7,24.1 332.0,23.9 333.3,23.7 334.7,23.5 336.0,23.3 337.3,23.1 338.7,22.9 340.0,22.7 341.3,22.5 342.7,22.4 344.0,22.2 345.3,22.1 346.7,21.9 348.0,21.8 349.3,21.6 350.7,21.5 352.0,21.4 353.3,21.2 354.7,21.1 356.0,21.0 357.3,20.9 358.7,20.7 360.0,20.6 361.3,20.5 362.7,20.4 364.0,20.3" style="fill:none;stroke:var(--gold);stroke-width:2"/><circle cx="204.0" cy="100.7" r="3.6" style="fill:var(--gold)"/><polyline clip-path="url(#gce2d085b0)" points="44.0,183.3 45.3,183.3 46.7,183.3 48.0,183.3 49.3,183.2 50.7,183.2 52.0,183.2 53.3,183.1 54.7,183.1 56.0,183.1 57.3,183.1 58.7,183.0 60.0,183.0 61.3,183.0 62.7,182.9 64.0,182.9 65.3,182.8 66.7,182.8 68.0,182.8 69.3,182.7 70.7,182.7 72.0,182.6 73.3,182.6 74.7,182.5 76.0,182.5 77.3,182.4 78.7,182.4 80.0,182.3 81.3,182.3 82.7,182.2 84.0,182.2 85.3,182.1 86.7,182.0 88.0,182.0 89.3,181.9 90.7,181.8 92.0,181.8 93.3,181.7 94.7,181.6 96.0,181.5 97.3,181.5 98.7,181.4 100.0,181.3 101.3,181.2 102.7,181.1 104.0,181.0 105.3,180.9 106.7,180.8 108.0,180.7 109.3,180.6 110.7,180.5 112.0,180.4 113.3,180.2 114.7,180.1 116.0,180.0 117.3,179.8 118.7,179.7 120.0,179.6 121.3,179.4 122.7,179.3 124.0,179.1 125.3,179.0 126.7,178.8 128.0,178.6 129.3,178.4 130.7,178.3 132.0,178.1 133.3,177.9 134.7,177.7 136.0,177.5 137.3,177.3 138.7,177.0 140.0,176.8 141.3,176.6 142.7,176.3 144.0,176.1 145.3,175.8 146.7,175.6 148.0,175.3 149.3,175.0 150.7,174.7 152.0,174.4 153.3,174.1 154.7,173.8 156.0,173.5 157.3,173.2 158.7,172.8 160.0,172.5 161.3,172.1 162.7,171.7 164.0,171.4 165.3,171.0 166.7,170.6 168.0,170.1 169.3,169.7 170.7,169.3 172.0,168.8 173.3,168.3 174.7,167.9 176.0,167.4 177.3,166.9 178.7,166.4 180.0,165.8 181.3,165.3 182.7,164.7 184.0,164.1 185.3,163.5 186.7,162.9 188.0,162.3 189.3,161.7 190.7,161.0 192.0,160.4 193.3,159.7 194.7,159.0 196.0,158.3 197.3,157.5 198.7,156.8 200.0,156.0 201.3,155.2 202.7,154.4 204.0,153.6 205.3,152.8 206.7,151.9 208.0,151.0 209.3,150.1 210.7,149.2 212.0,148.3 213.3,147.4 214.7,146.4 216.0,145.4 217.3,144.4 218.7,143.4 220.0,142.4 221.3,141.3 222.7,140.3 224.0,139.2 225.3,138.1 226.7,137.0 228.0,135.8 229.3,134.7 230.7,133.5 232.0,132.3 233.3,131.1 234.7,129.9 236.0,128.7 237.3,127.5 238.7,126.2 240.0,124.9 241.3,123.7 242.7,122.4 244.0,121.1 245.3,119.8 246.7,118.4 248.0,117.1 249.3,115.8 250.7,114.4 252.0,113.1 253.3,111.7 254.7,110.3 256.0,109.0 257.3,107.6 258.7,106.2 260.0,104.8 261.3,103.4 262.7,102.1 264.0,100.7 265.3,99.3 266.7,97.9 268.0,96.5 269.3,95.1 270.7,93.7 272.0,92.4 273.3,91.0 274.7,89.6 276.0,88.3 277.3,86.9 278.7,85.6 280.0,84.2 281.3,82.9 282.7,81.6 284.0,80.3 285.3,79.0 286.7,77.7 288.0,76.4 289.3,75.1 290.7,73.9 292.0,72.6 293.3,71.4 294.7,70.2 296.0,69.0 297.3,67.8 298.7,66.7 300.0,65.5 301.3,64.4 302.7,63.3 304.0,62.2 305.3,61.1 306.7,60.0 308.0,59.0 309.3,57.9 310.7,56.9 312.0,55.9 313.3,54.9 314.7,54.0 316.0,53.0 317.3,52.1 318.7,51.2 320.0,50.3 321.3,49.4 322.7,48.6 324.0,47.7 325.3,46.9 326.7,46.1 328.0,45.3 329.3,44.6 330.7,43.8 332.0,43.1 333.3,42.4 334.7,41.7 336.0,41.0 337.3,40.3 338.7,39.7 340.0,39.0 341.3,38.4 342.7,37.8 344.0,37.2 345.3,36.6 346.7,36.1 348.0,35.5 349.3,35.0 350.7,34.5 352.0,34.0 353.3,33.5 354.7,33.0 356.0,32.5 357.3,32.1 358.7,31.6 360.0,31.2 361.3,30.8 362.7,30.4 364.0,30.0" style="fill:none;stroke:var(--ember);stroke-width:2"/><circle cx="264.0" cy="100.7" r="3.6" style="fill:var(--ember)"/><line x1="44" x2="364" y1="100.7" y2="100.7" style="stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3"/><text x="48.0" y="94.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">a coin toss at θ = b</text><text x="140.0" y="42.3" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">easy, b = −1.5</text><text x="268.0" y="150.7" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">hard, b = 1.5</text><text x="360.0" y="177.3" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">ability θ</text><text x="200.0" y="222" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">P(right) = 1/(1 + e^(−(θ − b))) for three difficulties</text></svg></div><!--/gfig 38stat3-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.3.1</span><span class="ph understand">understand</span>What does the item curve say, and what does a question’s difficulty mean on it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat4">
+  <h2 class="sthead"><span class="stno">38stat4</span>Ability as the Most Likely Value</h2>
+  <p data-pid="174ccc">A climber answers three questions of difficulty −1, 0 and 1: right, right, wrong. Which θ makes that most likely? Take the log of the chance and set its slope to 0 (30r).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the most likely ability">
+\dfrac{d}{d\theta}\ln L = \sum (\text{answer} - P_i) = 0 @@ answer 1 if right, 0 if wrong
+P_{-1} + P_0 + P_1 = 2 @@ two right answers
+\theta = 0.8:\ 0.86 + 0.69 + 0.45 = 2.00 @@ 
+\htmlClass{new}{\theta \approx 0.8} @@ between the questions passed and the one missed
+  </pre>
+  <p data-pid="a71997"><b>A person’s ability is the value at which their actual answers are most likely; the more questions, and the closer their difficulties to the person, the sharper it is.</b> The Ladder’s own tests can measure a climber this way: each card dealt has a difficulty fitted from many climbers’ answers, and each answer nudges the climber’s estimate up or down.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.4.1</span><span class="ph understand">understand</span>How is ability found from a few answers, and how could the Ladder’s own tests use this?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat5">
+  <h2 class="sthead"><span class="stno">38stat5</span>Many Tests, Few Abilities</h2>
+  <p data-pid="c41a44">Give many people six tests: three of words, three of numbers. Their scores correlate: all positively, and words with words most of all. Find the principal directions of the grid of correlations (31q).</p>
+  <pre class="lines" data-k="ember" data-label="this page: six tests">
+\text{first direction: all six together} @@ a general ability, about half the spread
+\text{second direction: words against numbers} @@ about a fifth
+\htmlClass{new}{\text{two hidden abilities explain most of six tests}} @@ the rest is each test’s own
+  </pre>
+  <p data-pid="da4531"><b>When many tests correlate, a few hidden abilities often explain most of the agreement, read from the first principal directions of the correlations.</b> Evita uses this to keep a test short: questions that line up with the ability she wants measured are kept, and those that mostly measure something else are cut. A pilot study with a few hundred students shows the fitted difficulties holding steady on a second group, as the model requires.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.5.1</span><span class="ph understand">understand</span>How do principal directions reveal a few abilities behind many tests, and how does a test writer use them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat6">
+  <h2 class="sthead"><span class="stno">38stat6</span>Moves to Watch Out For</h2>
+  <p data-pid="d4c147">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the score is the ability}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the score is ability plus noise (38stat1)
+\text{reliability} = r_{\text{halves}}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the whole test is longer: 2r/(1 + r) (38stat2)
+\text{ability} = \text{share of questions right}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it depends on which questions; fit θ to their difficulties (38stat4)
+\text{a question of difficulty } b \text{ is always missed below } b\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the chance falls smoothly: one half at b (38stat3)
+\text{every test measures its own separate ability}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a few hidden abilities explain most of their agreement (38stat5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.6.1</span><span class="ph understand">understand</span>Which move above takes the share of questions right as the ability, and what does the item curve use instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">38·stat.7.1</span><span class="tagq">do</span>A person answers questions of difficulty −1, 0, 1 and 2 as right, right, right, wrong. Find their most likely ability.</div>
+  <div class="chq"><span class="chid">38·stat.7.2</span><span class="tagq">make</span>Make up three questions’ difficulties for which a person with θ = 0 is expected to get exactly 1.5 right.</div>
+  <div class="chq"><span class="chid">38·stat.7.3</span><span class="tagq">converse</span>Agreeing halves showed a reliable test. Decide whether a reliable test must measure the ability it claims to.</div>
+  <div class="chq"><span class="chid">38·stat.7.4</span><span class="tagq">edge</span>Say what the most likely ability is for someone who gets every question right, and why that is a problem.</div>
+  <div class="chq"><span class="chid">38·stat.7.5</span><span class="tagq">open</span>A computer test can choose each next question from the answers so far. Say how it should choose, using the item curve.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r38chem2.html">← 38·chem2 · why does rubber snap back?</a><a href="r38comp.html">38·comp · why do a few words do most of the work? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="23274a">Score as ability plus noise is <b>classical test theory</b>; agreement of halves is <b>split-half reliability</b>, and 2r/(1 + r) the <b>Spearman-Brown formula</b>. The item curve is <b>item response theory</b>, and the logistic form the <b>Rasch model</b>. Hidden abilities behind many tests are found by <b>factor analysis</b>; choosing questions as you go is <b>computerized adaptive testing</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="ae5af7">Charles Spearman found a general factor behind many tests in 1904; Georg Rasch set out his model in 1960 (not yet revisited for the dates).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

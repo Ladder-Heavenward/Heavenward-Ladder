@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8·bio · How Many Must Be Immune to Stop a Spread?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r08econ2.html">← 8·econ2 why does a group settle on the middle?</a><a href="r08comp.html">next: 8·comp why is 0.1 + 0.2 not 0.3 on a computer? →</a></p>
+  <div class="tags"><span class="tag bio">8·bio · biology</span></div>
+  <h1>How Many Must Be Immune to Stop a Spread?</h1>
+  <p data-pid="6f7b10">How many must be immune to stop a spread? An infection passes from person to person. If each case passes it to more than one new person, the cases grow generation by generation; if to fewer than one, they die away. Immune people break some of the links. This page counts cases by generations with 4g’s powers, finds how immunity cuts the number each case passes on, and solves an inequality of 8g for the share that must be immune to turn growth into decline. It ends with why measles needs nearly everyone immune and flu far fewer.</p>
+  <p class="gesture" data-pid="a8f578">Let each case, among people who can catch it, give it to R others. Generation n has Rⁿ times the first. If a share p of people are immune, each case reaches only R(1 − p) who can catch it. The cases die away when R(1 − p) < 1, that is when p > 1 − 1/R.</p>
+</header>
+
+<section class="class step" data-step="8bio1">
+  <h2 class="sthead"><span class="stno">8bio1</span>Each Case Makes R New Cases</h2>
+  <p data-pid="794ecf">A school has a cold going round. On average, each child who catches it passes it to 3 others before getting better, when nobody else has had it.</p>
+  <p data-pid="059d87">From here on, on this page, R is the number of people an average case passes the infection to, in a group where nobody is immune. A <i>generation</i> is one round of passing on: the first cases, the cases they cause, the cases those cause, and so on.</p>
+  <pre class="lines" data-k="ember" data-label="this page: generations with R = 3">
+\text{generation 0: } 1 @@ the first case
+\text{generation 1: } 3 @@ 
+\text{generation 2: } 3 \cdot 3 = 9 @@ 
+\htmlClass{new}{\text{generation } n:\ R^n} @@ powers (4g)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8·bio.1.1</span><span class="ph understand">understand</span>What does R stand for, and how many cases are in generation n?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8bio2">
+  <h2 class="sthead"><span class="stno">8bio2</span>The Generations Grow or Shrink</h2>
+  <p data-pid="a29ebe">Rⁿ behaves in one of two ways, depending on which side of 1 R lies (8g).</p>
+  <pre class="lines" data-k="ember" data-label="this page: two kinds of R">
+R > 1:\ R^n \text{ grows past any bound} @@ R = 3: 1, 3, 9, 27, 81, …
+R < 1:\ R^n \text{ shrinks toward } 0 @@ R = 1/2: 1, 1/2, 1/4, 1/8, …
+\htmlClass{new}{R = 1:\ \text{one case per generation, forever}} @@ the edge between them
+  </pre>
+  <p data-pid="c9c76f"><b>An infection whose R is above 1 spreads; one whose R is below 1 dies out.</b> What makes R is the infection, how people meet, and how long a case can pass it on. Hand-washing and staying home lower it; so does immunity.</p>
+  <!--gfig 8bio2--><div class="gfigs" data-gfig="8bio2" data-story="[[&quot;Across is the generation, up the cases in it, on log paper.&quot;, []], [&quot;R = 3: each case passes it to three. 1, 3, 9, 27, 81: a straight line climbing on log paper.&quot;, [&quot;ember&quot;, &quot;~R = 3&quot;]], [&quot;R = 1: one case each generation, level.&quot;, [&quot;~R = 1&quot;]], [&quot;R = 0.5: halving each time, it dies out.&quot;, [&quot;teal&quot;, &quot;~R = 0.5&quot;]]]"><svg class="gfig" viewBox="0 0 400 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="cases in each generation on a log scale: rising steeply for R equals 3, level for R equals 1, falling for R equals one half"><line x1="48" x2="368" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="48.0" x2="48.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="48.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="101.3" x2="101.3" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="101.3" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="154.7" x2="154.7" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="154.7" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">2</text><line x1="208.0" x2="208.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="208.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">3</text><line x1="261.3" x2="261.3" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="261.3" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">4</text><line x1="314.7" x2="314.7" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="314.7" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">5</text><line x1="368.0" x2="368.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="368.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">6</text><line x1="48" x2="368" y1="184.0" y2="184.0" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="188.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.01</text><line x1="48" x2="368" y1="150.0" y2="150.0" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="154.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.1</text><line x1="48" x2="368" y1="116.0" y2="116.0" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="120.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="48" x2="368" y1="82.0" y2="82.0" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="86.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">10</text><line x1="48" x2="368" y1="48.0" y2="48.0" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="52.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">100</text><line x1="48" x2="368" y1="14.0" y2="14.0" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="18.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1000</text><polyline points="48.0,116.0 101.3,99.8 154.7,83.6 208.0,67.3 261.3,51.1 314.7,34.9 368.0,18.7" style="fill:none;stroke:var(--ember);stroke-width:1.6"/><circle cx="48.0" cy="116.0" r="3.2" style="fill:var(--ember)"/><circle cx="101.3" cy="99.8" r="3.2" style="fill:var(--ember)"/><circle cx="154.7" cy="83.6" r="3.2" style="fill:var(--ember)"/><circle cx="208.0" cy="67.3" r="3.2" style="fill:var(--ember)"/><circle cx="261.3" cy="51.1" r="3.2" style="fill:var(--ember)"/><circle cx="314.7" cy="34.9" r="3.2" style="fill:var(--ember)"/><circle cx="368.0" cy="18.7" r="3.2" style="fill:var(--ember)"/><polyline points="48.0,116.0 101.3,116.0 154.7,116.0 208.0,116.0 261.3,116.0 314.7,116.0 368.0,116.0" style="fill:none;stroke:var(--muted);stroke-width:1.6"/><circle cx="48.0" cy="116.0" r="3.2" style="fill:var(--muted)"/><circle cx="101.3" cy="116.0" r="3.2" style="fill:var(--muted)"/><circle cx="154.7" cy="116.0" r="3.2" style="fill:var(--muted)"/><circle cx="208.0" cy="116.0" r="3.2" style="fill:var(--muted)"/><circle cx="261.3" cy="116.0" r="3.2" style="fill:var(--muted)"/><circle cx="314.7" cy="116.0" r="3.2" style="fill:var(--muted)"/><circle cx="368.0" cy="116.0" r="3.2" style="fill:var(--muted)"/><polyline points="48.0,116.0 101.3,126.2 154.7,136.5 208.0,146.7 261.3,156.9 314.7,167.2 368.0,177.4" style="fill:none;stroke:var(--teal);stroke-width:1.6"/><circle cx="48.0" cy="116.0" r="3.2" style="fill:var(--teal)"/><circle cx="101.3" cy="126.2" r="3.2" style="fill:var(--teal)"/><circle cx="154.7" cy="136.5" r="3.2" style="fill:var(--teal)"/><circle cx="208.0" cy="146.7" r="3.2" style="fill:var(--teal)"/><circle cx="261.3" cy="156.9" r="3.2" style="fill:var(--teal)"/><circle cx="314.7" cy="167.2" r="3.2" style="fill:var(--teal)"/><circle cx="368.0" cy="177.4" r="3.2" style="fill:var(--teal)"/><text x="314.7" y="17.4" text-anchor="end" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">R = 3: 1, 3, 9, 27, 81, …</text><text x="362.7" y="109.2" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">R = 1: steady</text><text x="64.0" y="161.9" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">R = 0.5: dies out</text><text x="288.0" y="180.3" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">generation n</text><text x="200.0" y="222" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">cases in generation n = Rⁿ, on log paper</text></svg></div><!--/gfig 8bio2-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8·bio.2.1</span><span class="ph understand">understand</span>What happens to the generations when R is above 1, below 1, and exactly 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8bio3">
+  <h2 class="sthead"><span class="stno">8bio3</span>Immunity Cuts R</h2>
+  <p data-pid="ee5b86">Now suppose a share p of the children are immune, from an earlier bout or a vaccine, and that the immune are mixed evenly among the rest. A case still meets R children it would have infected, but only the share 1 − p of them can catch it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the passing-on number with immunity">
+\text{met: } R @@ as before
+\text{can catch it: } 1 - p @@ the share not immune
+\htmlClass{new}{R_p = R\,(1 - p)} @@ the new passing-on number
+  </pre>
+  <p data-pid="c7d416">With R = 3 and half the school immune, each case passes it to 1.5 on average: still spreading, but slower.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8·bio.3.1</span><span class="ph understand">understand</span>How does a share p of immune people change the number each case passes the infection on to?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8bio4">
+  <h2 class="sthead"><span class="stno">8bio4</span>The Threshold</h2>
+  <p data-pid="3aeb43">The spread dies out when the new number is below 1. Solve that inequality for p, with 8g’s moves.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the threshold">
+R\,(1 - p) < 1 @@ die out
+1 - p < \tfrac{1}{R} @@ divide both sides by R > 0 (8g)
+\htmlClass{new}{p > 1 - \tfrac{1}{R}} @@ move p across, flip nothing
+  </pre>
+  <p data-pid="c55bc7">Threshold technique: <b>an infection that each case passes to R others dies out once more than the share 1 − 1/R of people are immune, mixed evenly among the rest.</b> For the cold with R = 3, that is 1 − 1/3: two children in three.</p>
+  <p data-pid="63c67d">Immune children shield the ones who are not, because a chain of cases that reaches an immune child stops there. Above the threshold, the few who cannot be immunised, such as babies, are protected by the people around them.</p>
+  <!--gwid 8bio4--><section class="pic gwid">
+    <div class="eyebrow">The picture · make some immune, watch the chains</div>
+    <div class="panels">
+    <div class="panel"><div class="chips" id="w8c"></div><canvas id="w8v"></canvas><div class="kn"><span class="m">p</span><input type="range" id="w8p" min="0" max="0.9" step="0.05" value="0"><output id="w8po"></output></div><div class="cap">Each case meets 3 children. Grey: immune, and the chain stops there; each immune child is one in p, mixed evenly. Ember: a new case. Four generations below the first case.</div><div class="verdict" id="w8d"></div></div>
+  </div>
+  </section><!--/gwid 8bio4-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8·bio.4.1</span><span class="ph understand">understand</span>How is the threshold p > 1 − 1/R found, and why does it protect people who are not themselves immune?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8bio5">
+  <h2 class="sthead"><span class="stno">8bio5</span>Why Measles Needs More Than Flu</h2>
+  <p data-pid="9c1552">Measles spreads through the air and lingers in a room; in a group with no immunity, each case passes it to about 12 to 18 others. Seasonal flu passes to far fewer, about 1.3 to 2 in most seasons.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>infection</th><th>R</th><th>share that must be immune, 1 − 1/R</th></tr>
+    <tr><th>measles</th><td>12 to 18</td><td>about 92% to 94%</td></tr>
+    <tr><th>seasonal flu</th><td>1.3 to 2</td><td>about 23% to 50%</td></tr>
+    <tr><th>the school cold</th><td>3</td><td>about 67%</td></tr>
+  </table></div>
+  <p data-pid="7d53e5"><b>The threshold climbs toward 1 as R grows, and it climbs slowly at the top: from R = 12 to R = 18 adds only two points.</b> That is why measles comes back where immunity falls even a few points below the mid-nineties, while flu can be held down with far less.</p>
+  <p data-pid="825bdf">A health department planning a measles campaign takes R from past outbreaks, works out 1 − 1/R, and sets its target a little above it, because the immune are never mixed perfectly evenly.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8·bio.5.1</span><span class="ph understand">understand</span>Why does measles need about 92% to 94% immune while flu needs far fewer, and why is the measles threshold so close to 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="8bio6">
+  <h2 class="sthead"><span class="stno">8bio6</span>Moves to Watch Out For</h2>
+  <p data-pid="1c1a81">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+R = 1 \text{ means the infection dies out}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; at R = 1 each generation is the same size: it neither grows nor dies (8bio2)
+p > \tfrac{1}{R}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; solving R(1 − p) < 1 gives p > 1 − 1/R (8bio4)
+\text{half immune halves the generations}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; half immune halves R; generation n is multiplied by (1/2)ⁿ (8bio3)
+R = 18 \text{ needs twice the immunity of } R = 9\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; 1 − 1/18 ≈ 94% against 1 − 1/9 ≈ 89% (8bio5)
+\text{above the threshold, nobody catches it}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; cases still happen; chains just die out instead of growing (8bio4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">8·bio.6.1</span><span class="ph understand">understand</span>Which move above solves the inequality to p > 1/R, and what does R(1 − p) < 1 give instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">8·bio.7.1</span><span class="tagq">do</span>An infection has R = 5. Find the share that must be immune, and the passing-on number when 70% are immune.</div>
+  <div class="chq"><span class="chid">8·bio.7.2</span><span class="tagq">make</span>Make up an infection and a share immune for which each generation is exactly half the one before.</div>
+  <div class="chq"><span class="chid">8·bio.7.3</span><span class="tagq">converse</span>Above the threshold the spread dies out. Decide whether a spread that dies out means more than 1 − 1/R were immune, and name another reason it could die out.</div>
+  <div class="chq"><span class="chid">8·bio.7.4</span><span class="tagq">edge</span>Say what the threshold is for R just above 1, and what it means for an infection with R below 1.</div>
+  <div class="chq"><span class="chid">8·bio.7.5</span><span class="tagq">open</span>The threshold assumed the immune are mixed evenly. Say what happens when the people who are not immune live and meet mostly with one another.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r08econ2.html">← 8·econ2 · why does a group settle on the middle?</a><a href="r08comp.html">8·comp · why is 0.1 + 0.2 not 0.3 on a computer? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="8dddb1">R in a group with no immunity is the <b>basic reproduction number</b>, written R₀; with immunity it is the <b>effective reproduction number</b>. Protection of the not-immune by the immune is <b>herd immunity</b>, and 1 − 1/R₀ is the <b>herd immunity threshold</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="d869db">The threshold 1 − 1/R₀ comes from the mathematical study of epidemics that grew from the work of Ronald Ross and of William Kermack and Anderson McKendrick in the early twentieth century. A 2017 review of 18 studies put measles’ R₀ mostly between 12 and 18.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<!--gwjs 8bio4--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const rng=s=>{ s=s>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return (s+0.5)/4294967296; }; };
+const bell=r=>Math.sqrt(-2*Math.log(r()))*Math.cos(2*Math.PI*r());
+let seed=8;
+const P=plane($('w8v'),{x:[0,1],y:[-0.5,4.5],grid:0,labels:false,aspect:0.62,draw:P=>{ const p=+$('w8p').value, R=rng(seed);
+  let gen=[{x:0.5,on:true}]; const cnt=[1]; P.dot(0.5,4,'--ember',5);
+  for(let g=1;g<=4;g++){ const nx=[], w=1/Math.pow(3,g); let c=0;
+    gen.forEach((n,i)=>{ if(!n.on) return; for(let k=0;k<3;k++){ const x=n.x+(k-1)*w, on=R()>=p; P.line(n.x,4-g+1,x,4-g,'--grid',1); nx.push({x,on}); if(on) c++; } });
+    nx.forEach(n=>P.dot(n.x,4-g,n.on?'--ember':'--muted',g<4?4:2.6)); cnt.push(c); gen=nx; }
+  const Re=3*(1-p); $('w8po').textContent=f(p,2);
+  $('w8d').textContent='Cases by generation: '+cnt.join(', ')+'. Each case now makes 3 × (1 − p) = '+f(Re,2)+' on average'+(Re<1?', below 1: chains die out. The threshold is p above 2/3.':Re===1?': just at the threshold, 2/3.':': chains grow until p passes 2/3.'); }});
+const b=document.createElement('button'); b.textContent='new outbreak'; b.onclick=()=>{ seed=(seed*7+11)%100003; P.redraw(); }; $('w8c').appendChild(b);
+$('w8p').oninput=()=>P.redraw(); P.redraw();
+})();
+</script><!--/gwjs 8bio4-->
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

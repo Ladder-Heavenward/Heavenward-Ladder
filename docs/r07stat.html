@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7·stat · Can a Positive Test Be Probably Wrong?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r07logi.html">← 7·logi can these meetings fit in three rooms?</a><a href="r07bio.html">next: 7·bio how many fish are in the lake? →</a></p>
+  <div class="tags"><span class="tag stat">7·stat · statistics</span></div>
+  <h1>Can a Positive Test Be Probably Wrong?</h1>
+  <p data-pid="c1ea8a">Can a positive test be probably wrong? A clinic screens for an illness that 1 person in 1,000 has. The test catches everyone who has it, and gives a false yes to 5 well people in 100. Claire tests positive. Most people, and many doctors, guess she almost surely has the illness. The count says she almost surely does not. This page counts ten thousand people through the test, using 2·stat’s groups and 5·stat’s chance of one thing given another, finds that a rare illness and a good test give mostly false yeses, and works out what a second test adds. Each result is a yes or a no, and, as 7g said, each is data for a better guess, not a verdict.</p>
+  <p class="gesture" data-pid="6a975b">Picture 10,000 people. Count the sick, and of them the ones who test positive; count the well, and of them the ones who test positive. Claire is one of the positives. Her chance of being sick is the sick positives over all the positives.</p>
+</header>
+
+<section class="class step" data-step="7stat1">
+  <h2 class="sthead"><span class="stno">7stat1</span>Ten Thousand People, Counted</h2>
+  <p data-pid="7682fe">Claire’s clinic screens for an illness that 1 person in 1,000 has. Rather than reason about chances, count people. Take 10,000 who come in.</p>
+  <pre class="lines" data-k="ember" data-label="this page: who is sick">
+10\,000 \times \tfrac{1}{1000} = 10 @@ sick
+\htmlClass{new}{10\,000 - 10 = 9\,990} @@ well
+  </pre>
+  <p data-pid="113649">From here on, on this page, the share of people who have the illness is its <i>base rate</i>: here 1 in 1,000. Every count below starts from it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·stat.1.1</span><span class="ph understand">understand</span>What is the base rate, and how many of 10,000 people are sick and well?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7stat2">
+  <h2 class="sthead"><span class="stno">7stat2</span>The Sick Who Test Positive, and the Well Who Do</h2>
+  <p data-pid="a0a35b">The test catches every sick person: all 10 test positive. It also says yes to 5 well people in 100. Split each group by its result, as 2·stat split a roster by two questions.</p>
+  <pre class="lines" data-k="ember" data-label="this page: four groups">
+\text{sick, positive: } 10 @@ the test catches all of them
+\text{sick, negative: } 0 @@ 
+\text{well, positive: } 9\,990 \times \tfrac{5}{100} \approx 500 @@ false yeses
+\htmlClass{new}{\text{well, negative: } 9\,990 - 500 = 9\,490} @@ 
+  </pre>
+  <div class="tablewrap"><table class="tt">
+    <tr><th></th><th>positive</th><th>negative</th><th>total</th></tr>
+    <tr><th>sick</th><td>10</td><td>0</td><td>10</td></tr>
+    <tr><th>well</th><td>500</td><td>9,490</td><td>9,990</td></tr>
+    <tr><th>total</th><td>510</td><td>9,490</td><td>10,000</td></tr>
+  </table></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·stat.2.1</span><span class="ph understand">understand</span>How do the 10,000 split into four groups by illness and test result?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7stat3">
+  <h2 class="sthead"><span class="stno">7stat3</span>Of the Positives, How Many Are Sick?</h2>
+  <p data-pid="c2381e">Claire tested positive, so she is one of the 510 in the positive column. Her chance of being sick is the chance of sick given positive, which 5·stat found as a count over a count: the cases with both, over the cases with the given.</p>
+  <pre class="lines" data-k="ember" data-label="this page: sick, given positive">
+\dfrac{\text{sick and positive}}{\text{positive}} = \dfrac{10}{510} @@ cases with both, over cases with the given (5·stat)
+\htmlClass{new}{\approx \tfrac{1}{51} \approx 2\%} @@ about 2 in 100
+  </pre>
+  <p data-pid="259f84">Count-the-positives technique: <b>to find the chance that a positive result is right, count a large group through the test and divide the sick positives by all the positives.</b> Claire’s chance of being sick rose from 1 in 1,000 to about 1 in 51. The test did its job; it did not make her probably sick.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·stat.3.1</span><span class="ph understand">understand</span>How is Claire’s chance of being sick found from the table, and how much did her positive result raise it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7stat4">
+  <h2 class="sthead"><span class="stno">7stat4</span>A Rare Illness and a Good Test</h2>
+  <p data-pid="422708">The well positives, 500, swamp the sick positives, 10, because the well are 999 in 1,000 of the people. A small share of a huge group beats all of a tiny one.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>base rate</th><th>sick positives</th><th>well positives</th><th>sick, given positive</th></tr>
+    <tr><th>1 in 1,000</th><td>10</td><td>500</td><td>about 2%</td></tr>
+    <tr><th>1 in 100</th><td>100</td><td>495</td><td>about 17%</td></tr>
+    <tr><th>1 in 10</th><td>1,000</td><td>450</td><td>about 69%</td></tr>
+  </table></div>
+  <p data-pid="6de294"><b>The same test, given to people more likely to be sick, gives positives that are far more likely right.</b> That is why doctors test people with symptoms before people without, and why a screening of everyone needs a second look at every positive.</p>
+  <p data-pid="d06cbb">This was put to a group of doctors and students at a teaching hospital in 1978, with these numbers. Nearly half of them answered 95%. A doctor who sketches the table above gets about 2%, with no more than multiplying and dividing.</p>
+  <!--gfig 7stat4--><div class="gfigs" data-gfig="7stat4" data-story="[[&quot;The same test each time: it finds the sick, and well people come out positive 5% of the time.&quot;, []], [&quot;When 1 in 1 000 is ill, only 2% of the positives are sick. The well are so many that their false positives swamp the rest.&quot;, [&quot;ember&quot;, &quot;~2%&quot;]], [&quot;At 1 in 100: 17%.&quot;, [&quot;~17%&quot;]], [&quot;At 1 in 10: 69%. The base rate decides what a positive means.&quot;, [&quot;~69%&quot;]]]"><svg class="gfig" viewBox="0 0 400 238" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="bars of the share of positive tests that are really sick, 2 percent when 1 in 1000 is ill, 17 percent at 1 in 100 and 69 percent at 1 in 10"><line x1="48" x2="368" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="48" x2="368" y1="141.5" y2="141.5" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="145.5" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">25</text><line x1="48" x2="368" y1="99.0" y2="99.0" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="103.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">50</text><line x1="48" x2="368" y1="56.5" y2="56.5" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="60.5" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">75</text><line x1="48" x2="368" y1="14.0" y2="14.0" style="stroke:var(--grid);stroke-width:.7"/><text x="44" y="18.0" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">100</text><rect x="69.3" y="180.6" width="64.0" height="3.4" style="fill:var(--ember);fill-opacity:0.55;stroke:var(--card);stroke-width:.6"/><text x="101.3" y="173.8" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">2%</text><text x="101.3" y="199.3" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1 in 1 000</text><rect x="176.0" y="155.1" width="64.0" height="28.9" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--card);stroke-width:.6"/><text x="208.0" y="148.3" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">17%</text><text x="208.0" y="199.3" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1 in 100</text><rect x="282.7" y="66.7" width="64.0" height="117.3" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--card);stroke-width:.6"/><text x="314.7" y="59.9" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">69%</text><text x="314.7" y="199.3" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1 in 10</text><text x="208.0" y="27.6" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">share of positives who are sick</text><text x="200.0" y="230" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">the same test at three base rates (well people positive 5% of the time)</text></svg></div><!--/gfig 7stat4-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·stat.4.1</span><span class="ph understand">understand</span>Why are most positives false when the illness is rare, and what happens to the table when the base rate rises?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7stat5">
+  <h2 class="sthead"><span class="stno">7stat5</span>Test Again: The Second Positive</h2>
+  <p data-pid="61ca14">Claire takes a second test of the same kind, whose errors do not follow the first. Count the 510 positives through it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the 510 retested">
+\text{sick: all } 10 \text{ positive again} @@ the test catches all of them
+\text{well: } 500 \times \tfrac{5}{100} = 25 \text{ positive again} @@ the false-yes share again
+\htmlClass{new}{\dfrac{10}{10 + 25} = \dfrac{10}{35} \approx 29\%} @@ sick, given two positives
+  </pre>
+  <p data-pid="9de417">After the first positive, the 510 positives are the new group, with a base rate of 10 in 510. The second test starts from there. <b>Each positive result moves the guess, and the next result starts from the moved guess.</b> A third positive would take Claire past 8 in 10. Each yes is data, as 7g said; none is a verdict on its own.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·stat.5.1</span><span class="ph understand">understand</span>Why does a second positive move Claire’s chance from about 2% to about 29%, and where does the second count start?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7stat6">
+  <h2 class="sthead"><span class="stno">7stat6</span>Moves to Watch Out For</h2>
+  <p data-pid="0600fc">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the test is 95\% right, so she is 95\% likely sick}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; count the positives: 10 sick of 510 (7stat3)
+\dfrac{\text{sick and positive}}{\text{sick}}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the given is the positive result: divide by the positives (7stat3)
+\text{the base rate does not matter for a good test}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; raise it from 1 in 1,000 to 1 in 10 and 2% becomes 69% (7stat4)
+\text{second test: start again from 1 in 1,000}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the second count starts from the 510 positives (7stat5)
+\text{positive, so sick}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a positive is data for a better guess, not a verdict (7stat5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·stat.6.1</span><span class="ph understand">understand</span>Which move above reads the test’s 95% as Claire’s chance of being sick, and what does the count give instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">7·stat.7.1</span><span class="tagq">do</span>An illness has a base rate of 1 in 200; a test catches 9 in 10 of the sick and says yes to 2 in 100 of the well. Count 20,000 people through it and find the chance a positive is sick.</div>
+  <div class="chq"><span class="chid">7·stat.7.2</span><span class="tagq">make</span>Make up a base rate and a test for which a positive result is right exactly half the time.</div>
+  <div class="chq"><span class="chid">7·stat.7.3</span><span class="tagq">converse</span>A rare illness made most positives false. Decide whether a rare illness also makes most negatives right, and show it with a count.</div>
+  <div class="chq"><span class="chid">7·stat.7.4</span><span class="tagq">edge</span>Say what happens to the chance that a positive is sick when the test gives no false yeses at all, and when the base rate is 0.</div>
+  <div class="chq"><span class="chid">7·stat.7.5</span><span class="tagq">open</span>The second test counted on its errors not following the first. Say what would change if the same well people tended to test positive twice, and how you would find out from data whether they do.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r07logi.html">← 7·logi · can these meetings fit in three rooms?</a><a href="r07bio.html">7·bio · how many fish are in the lake? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="817169">The chance that a sick person tests positive is the test’s <b>sensitivity</b>, and the chance that a well person tests negative is its <b>specificity</b> (here 95%). The chance that a positive is sick is the <b>positive predictive value</b>. Forgetting the base rate is the <b>base rate fallacy</b>, and the counting method is <b>Bayes’ rule</b> done with natural frequencies.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="519b70">Ward Casscells, Arno Schoenberger and Thomas Graboys put this question to staff and students at Harvard Medical School in 1978; about half answered 95%, and few gave the right answer of about 2%. Gerd Gigerenzer and others later showed that counting people, as this page does, makes the right answer easy to reach.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

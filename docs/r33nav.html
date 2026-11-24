@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>33·nav · How Is Tomorrow’s Weather Worked Out?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r33eng2.html">← 33·eng2 why does the wind make you colder?</a><a href="r33now.html">next: 33·now does water always flow smoothly? →</a></p>
+  <div class="tags"><span class="tag nav">33·nav · navigation</span></div>
+  <h1>How Is Tomorrow’s Weather Worked Out?</h1>
+  <p data-pid="6643d7">How is tomorrow’s weather worked out? Every few hours, the world’s weather centres feed millions of readings into computers, which step the whole atmosphere forward in time, a few minutes at a step, until they reach next week. Then they do it again, fifty times, from slightly different starts. This page lays the air on a grid as 33k did by hand, steps it forward as 24k stepped a slope field, finds how short each time step must be, finds why small errors grow as 24m warned, and turns fifty runs into a chance of rain with 30’s chances.</p>
+  <p class="gesture" data-pid="979dd5">Lay the air on a grid of points. Each step, each point’s new value comes from its old value and its neighbours’, moved along by the wind. The step must be shorter than the time the wind takes to cross one cell, or the sums blow up. Small errors in the start double every couple of days, so forecasters run many slightly different starts and count how many bring rain.</p>
+</header>
+
+<section class="class step" data-step="33nav1">
+  <h2 class="sthead"><span class="stno">33nav1</span>The Air on a Grid</h2>
+  <p data-pid="dbee28">Jean works at a weather centre. The atmosphere is too big to follow every bit of air, so it is sampled on a grid: points 10 km apart across the ground, in layers up through the air. At each point the computer holds a few numbers: temperature, pressure, moisture, and the wind’s three parts.</p>
+  <p data-pid="25bc9a">From here on, on this page, Δx is the spacing of the grid and Δt the time step. The rates in the weather’s statements, which are slopes in space and time, are replaced by differences between neighbouring points, as 33k did for heat.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a slope as a difference">
+\dfrac{\partial q}{\partial x} \approx \dfrac{q_i - q_{i-1}}{\Delta x} @@ q any quantity; i counts the points
+\htmlClass{new}{\text{a grid of 10 km over the earth: about 5 million points a layer}} @@ 
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·nav.1.1</span><span class="ph understand">understand</span>How is the atmosphere put on a grid, and what replaces the slopes in space?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33nav2">
+  <h2 class="sthead"><span class="stno">33nav2</span>Stepping Forward in Time</h2>
+  <p data-pid="24f6f5">Take the simplest piece of the weather’s statements: wind u carrying a quantity q along, so that q at a point changes as the upwind air arrives. Step it forward as 24k stepped a slope field: the new value is the old one plus the rate times Δt.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one step of carried air">
+\dfrac{\partial q}{\partial t} = -u\,\dfrac{\partial q}{\partial x} @@ q carried by the wind
+q_i^{\text{new}} = q_i - \dfrac{u\,\Delta t}{\Delta x}\,(q_i - q_{i-1}) @@ stepping forward (24k), upwind difference
+\htmlClass{new}{\text{each new value is a mix of the old value and its upwind neighbour}} @@ weights 1 − s and s, with s = uΔt/Δx
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·nav.2.1</span><span class="ph understand">understand</span>How is one step forward taken, and why is each new value a mix of two old ones?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33nav3">
+  <h2 class="sthead"><span class="stno">33nav3</span>The Time Step Must Be Shorter Than the Wind Takes to Cross a Cell</h2>
+  <p data-pid="bcae32">The mix has weights 1 − s and s. While s is at most 1, both weights are at least 0, and each new value lies between its two old ones: nothing can grow. If s passes 1, the weight 1 − s turns negative, small wiggles are magnified at every step, and in a few hundred steps the forecast fills with nonsense.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the longest safe step">
+s = \dfrac{u\,\Delta t}{\Delta x} \le 1 @@ 
+u = 50 \text{ m/s},\ \Delta x = 10 \text{ km}:\ \ \Delta t \le 200 \text{ s} @@ the fastest winds, high up
+\htmlClass{new}{\text{halving } \Delta x \text{ means 4 times the points a layer and twice the steps: 8 times the work}} @@ 
+  </pre>
+  <p data-pid="dfd8d2">Grid-step technique: <b>a forecast stepped on a grid stays sound only while the wind crosses at most one cell per step; a finer grid needs a shorter step, so each halving of the spacing costs about eight times the computing.</b> That is why a sharper forecast needed each new generation of computers.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·nav.3.1</span><span class="ph understand">understand</span>Why must the step be shorter than the wind takes to cross a cell, and what does a finer grid cost?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33nav4">
+  <h2 class="sthead"><span class="stno">33nav4</span>Small Errors Grow</h2>
+  <p data-pid="8b197b">The readings that start a forecast are never perfect: a tenth of a degree here, a gust missed there. The weather’s statements are of the kind that 24m found can magnify small differences. In the atmosphere, a small error roughly doubles every two days.</p>
+  <pre class="lines" data-k="ember" data-label="this page: an error doubling every two days">
+\text{error after } t \text{ days} \approx 0.1 \times 2^{t/2} \;°\text{C} @@ growth (17j)
+t = 10:\ 0.1 \times 32 = 3.2\;°\text{C} @@ 
+\htmlClass{new}{\text{by about two weeks the error is as big as the weather itself}} @@ a limit no computer removes
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·nav.4.1</span><span class="ph understand">understand</span>Why do small errors in the start grow, and what limit does that put on forecasts?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33nav5">
+  <h2 class="sthead"><span class="stno">33nav5</span>Many Runs, Not One: the Chance of Rain From an Ensemble</h2>
+  <p data-pid="b83dd1">Since the start is uncertain, run the forecast many times, each from a start nudged within the readings’ errors. Where the runs agree, the forecast is firm; where they spread, it is not.</p>
+  <pre class="lines" data-k="ember" data-label="this page: fifty runs for Saturday">
+\text{runs with rain over the city} = 30 \text{ of } 50 @@ 
+\htmlClass{new}{\text{chance of rain} \approx \dfrac{30}{50} = 60\%} @@ a share of equally likely runs (30)
+  </pre>
+  <p data-pid="ec348c"><b>A forecast of “60% chance of rain” means that in about 60% of the runs from starts the readings cannot tell apart, it rains.</b> Jean checks the centre’s forecasts against what happened: over a year, of all the days given 60%, it rained on close to 60%. A forecast that passes this check can be trusted at its word.</p>
+  <!--gwid 33nav5--><section class="pic gwid">
+    <div class="eyebrow">The picture · fifty runs from nearly the same start</div>
+    <div class="panels">
+    <div class="panel"><canvas id="w33v"></canvas><div class="kn"><span class="m">nudge</span><input type="range" id="w33n" min="-4" max="-1" step="0.5" value="-2"><output id="w33no"></output></div><div class="kn"><span class="m">time</span><input type="range" id="w33t" min="0" max="15" step="0.1" value="9"><output id="w33to"></output></div><div class="cap">A made-up weather of three numbers that magnifies small differences. Each line is one run, started within the nudge (10 to the power on the knob) of the same readings. Rain over the city when a line is above 0. At the dashed time, teal dots give rain and ember dots do not.</div><div class="verdict" id="w33d"></div></div>
+  </div>
+  </section><!--/gwid 33nav5-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·nav.5.1</span><span class="ph understand">understand</span>How do many runs give a chance of rain, and how is such a forecast checked?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33nav6">
+  <h2 class="sthead"><span class="stno">33nav6</span>Moves to Watch Out For</h2>
+  <p data-pid="fe3123">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a shorter step is always wasted effort}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; past one cell a step, the sums blow up (33nav3)
+\text{halve the spacing, double the work}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; four times the points and twice the steps: eight times (33nav3)
+\text{a big enough computer forecasts a month ahead}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; errors double about every two days; about two weeks is the limit (33nav4)
+\text{60\% means it rains over 60\% of the area}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it means 60% of the runs bring rain (33nav5)
+\text{one perfect run beats fifty}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; no start is perfect; the spread of runs measures the doubt (33nav5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33·nav.6.1</span><span class="ph understand">understand</span>Which move above says a big enough computer can forecast a month ahead, and what stops it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">33·nav.7.1</span><span class="tagq">do</span>A grid has 4 km spacing and the fastest wind is 60 m/s. Find the longest safe step, and the work compared with a 10 km grid.</div>
+  <div class="chq"><span class="chid">33·nav.7.2</span><span class="tagq">make</span>Make up a doubling time for errors that would let a forecast stay useful for exactly 20 days, starting from a 0.1 °C error and calling 3 °C useless.</div>
+  <div class="chq"><span class="chid">33·nav.7.3</span><span class="tagq">converse</span>A step with s ≤ 1 keeps each value between its old neighbours. Decide whether that makes the forecast right, or only sound.</div>
+  <div class="chq"><span class="chid">33·nav.7.4</span><span class="tagq">edge</span>Say what the stepping rule gives when s = 1 exactly, and why it is a perfect copy.</div>
+  <div class="chq"><span class="chid">33·nav.7.5</span><span class="tagq">open</span>Forecasts of next season’s average are made too, far past two weeks. Say what about a season’s average could be forecast when single days cannot.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r33eng2.html">← 33·eng2 · why does the wind make you colder?</a><a href="r33now.html">33·now · does water always flow smoothly? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="611e68">This is <b>numerical weather prediction</b>; the step limit is the <b>Courant-Friedrichs-Lewy condition</b>, s the <b>Courant number</b>, and the difference used here an <b>upwind scheme</b>. The growth of small errors is <b>chaos</b>, often called the <b>butterfly effect</b>, and the many runs an <b>ensemble forecast</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="df4f63">Lewis Fry Richardson worked out a forecast by hand in 1922; the step limit was found by Richard Courant, Kurt Friedrichs and Hans Lewy in 1928; the first computer forecast was run in 1950; Edward Lorenz found the growth of small errors in 1963 (not yet revisited for the dates or the doubling time).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<!--gwjs 33nav5--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const rng=s=>{ s=s>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return (s+0.5)/4294967296; }; };
+const bell=r=>Math.sqrt(-2*Math.log(r()))*Math.cos(2*Math.PI*r());
+let runs=[], lastN=null;
+function make(){ const n=Math.pow(10,+$('w33n').value), R=rng(33); runs=[];
+  for(let k=0;k<50;k++){ let x=1+n*bell(R), y=1+n*bell(R), z=20+n*bell(R); const out=[x]; const dt=0.005;
+    const F=(x,y,z)=>[10*(y-x),x*(28-z)-y,x*y-8/3*z];
+    for(let i=1;i<=3000;i++){ const a=F(x,y,z), b=F(x+dt/2*a[0],y+dt/2*a[1],z+dt/2*a[2]), c=F(x+dt/2*b[0],y+dt/2*b[1],z+dt/2*b[2]), d=F(x+dt*c[0],y+dt*c[1],z+dt*c[2]);
+      x+=dt*(a[0]+2*b[0]+2*c[0]+d[0])/6; y+=dt*(a[1]+2*b[1]+2*c[1]+d[1])/6; z+=dt*(a[2]+2*b[2]+2*c[2]+d[2])/6; if(i%10===0) out.push(x); }
+    runs.push(out); } }
+const P=plane($('w33v'),{x:[0,15],y:[-22,22],grid:0,labels:false,aspect:0.62,draw:P=>{ const nn=$('w33n').value; if(nn!==lastN){ make(); lastN=nn; }
+  const t=+$('w33t').value, i=Math.round(t/0.05);
+  P.line(0,0,15,0,'--muted',1); P.text('rain',14.9,1.2,'--muted','right',11); runs.forEach(r=>P.poly(r.map((x,j)=>[j*0.05,x]),'--muted',null,0.6,false)); runs.forEach(r=>P.dot(t,r[i],r[i]>0?'--teal':'--ember',3));
+  P.line(t,-22,t,22,'--ink',1.2,[4,3]); const k=runs.filter(r=>r[i]>0).length;
+  $('w33no').textContent='10^'+nn; $('w33to').textContent=f(t,1);
+  $('w33d').textContent='At time '+f(t,1)+': '+k+' of 50 runs give rain, a chance of '+(2*k)+'%'+(k===0||k===50?'. The runs agree: a firm forecast.':'.'); }});
+$('w33n').oninput=()=>P.redraw(); $('w33t').oninput=()=>P.redraw(); P.redraw();
+})();
+</script><!--/gwjs 33nav5-->
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

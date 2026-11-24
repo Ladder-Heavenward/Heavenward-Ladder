@@ -176,15 +176,32 @@ H(m_1)H(m_2) \ne H(m_1m_2) \text{ in general} @@ a fingerprint keeps no products
     </ol>
   </section>
 </section>
+<section class="class step" data-step="43comp7">
+  <h2 class="sthead"><span class="stno">43comp7</span>Salt, and Key Sizes</h2>
+  <p data-pid="be7ff9">A site should never keep passwords, only fingerprints of them (43comp3). But two users with the same password would have the same fingerprint, and a list of fingerprints of common passwords, worked out once, would match them all. So each user gets a random salt, kept beside the fingerprint and mixed in first. Then a guesser must start again for every user.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one password, two users">
+\text{Zoe: fingerprint(salt}_1 \,\|\, \text{password)} @@ 
+\text{Mike: fingerprint(salt}_2 \,\|\, \text{password)} @@ two unrelated results
+2^{128} \text{ keys at } 10^{18} \text{ tries a second} \approx 10^{13} \text{ years} @@ a 128-bit key
+\htmlClass{new}{\text{the same safety: 3072-bit products of primes, 256-bit curve points}} @@ the easy-one-way problems (43comp2) need longer keys
+  </pre>
+  <p data-pid="f1325b">Salt-and-size technique: <b>store each password as a slow fingerprint of a fresh random salt joined to it; choose a key long enough that trying every one takes longer than the secret must last, and longer still for keys built on the one-way problems.</b> Shown in a run: two users given the same password are stored with two fingerprints that share nothing, and the same password typed at login matches each one only with its own salt.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·comp.7.1</span><span class="ph understand">understand</span>Why does each stored password get its own salt, and how long must a key be?</li>
+    </ol>
+  </section>
+</section>
 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">43·comp.7.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p = 101:\ \ (20, 91),\ (35, t)"></span></span>The same key (37, 58) is used for a second message, 35. Build its tag, and then, as the forger, build the key from the two pairs. <br>Find the tag the forger would now give the message 50.</div>
-  <div class="chq"><span class="chid">43·comp.7.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 77,\ \ s \equiv 4"></span></span>Find all four roots of 4 on the clock of 77, and show which returned roots split 77. <br>What goes wrong in the root-gives-factor technique when n = p², and when x shares a factor with n?</div>
-  <div class="chq"><span class="chid">43·comp.7.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{split } n \Rightarrow \text{find roots}"></span></span>The root-gives-factor technique: roots split n. Turn it round: if you can split n = pq, can you find square roots of any square on the clock of n? <br>Prove it for p and q with p ≡ q ≡ 3 (mod 4), using the hour s^((p + 1)/4), and find the four roots of 23 on the clock of 77 this way.</div>
-  <div class="chq"><span class="chid">43·comp.7.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">43o: a lock whose safety stands on a belief</span></span>Almost every lock in use stands on a belief, that some job is slow, which no one has proved and which a quantum machine would break for several of them. <br>The one-time tag and the pad stand on proof, and are hardly used. What is a proof of safety worth when it needs a key as long as the message? Is a belief that has stood forty years of public attack a kind of evidence the ladder can accept, and what kind?</div>
+  <div class="chq"><span class="chid">43·comp.8.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p = 101:\ \ (20, 91),\ (35, t)"></span></span>The same key (37, 58) is used for a second message, 35. Build its tag, and then, as the forger, build the key from the two pairs. <br>Find the tag the forger would now give the message 50.</div>
+  <div class="chq"><span class="chid">43·comp.8.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="n = 77,\ \ s \equiv 4"></span></span>Find all four roots of 4 on the clock of 77, and show which returned roots split 77. <br>What goes wrong in the root-gives-factor technique when n = p², and when x shares a factor with n?</div>
+  <div class="chq"><span class="chid">43·comp.8.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{split } n \Rightarrow \text{find roots}"></span></span>The root-gives-factor technique: roots split n. Turn it round: if you can split n = pq, can you find square roots of any square on the clock of n? <br>Prove it for p and q with p ≡ q ≡ 3 (mod 4), using the hour s^((p + 1)/4), and find the four roots of 23 on the clock of 77 this way.</div>
+  <div class="chq"><span class="chid">43·comp.8.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">43o: a lock whose safety stands on a belief</span></span>Almost every lock in use stands on a belief, that some job is slow, which no one has proved and which a quantum machine would break for several of them. <br>The one-time tag and the pad stand on proof, and are hardly used. What is a proof of safety worth when it needs a key as long as the message? Is a belief that has stood forty years of public attack a kind of evidence the ladder can accept, and what kind?</div>
 </section>
 <div class="themecert themeend"></div>
 
