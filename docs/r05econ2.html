@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5·econ2 · How Are Seats Shared Out?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r05econ.html">← 5·econ should the faster worker do everything?</a><a href="r05k.html">next: 5k working with the gap →</a></p>
+  <div class="tags"><span class="tag econ">5·econ2 · economics</span></div>
+  <h1>How Are Seats Shared Out?</h1>
+  <p data-pid="26c328">How are seats shared out? A council of three towns has 8 seats, and each town should get seats in proportion to its people. The towns have 5,200, 3,000 and 1,800 people, and their fair shares come out as fractions of a seat. Somebody has to round, and every way of rounding favours someone. This page finds each town’s share with 5j’s ratios, rounds it two ways, breaks the claim “if the council grows, no town loses a seat” with one example, and meets a pair of fair-sounding claims that no way of rounding can make true together.</p>
+  <p class="gesture" data-pid="094f44">A town’s quota is its share of the people times the number of seats. Round every quota down, then hand the leftover seats to the biggest remainders; or divide every town by one number, chosen so the rounded-down results add to the seats. Test each with a claim written as an if, and look for the case where the if-part is true and the then-part false.</p>
+</header>
+
+<section class="class step" data-step="5econ21">
+  <h2 class="sthead"><span class="stno">5econ21</span>Each Town’s Quota</h2>
+  <p data-pid="c84aaa">The towns are A, B and C, with 5,200, 3,000 and 1,800 people: 10,000 in all. Each town’s share of the council should be its share of the people, as a ratio (5j).</p>
+  <p data-pid="3caf75">From here on, on this page, a town’s <i>quota</i> is its people over all the people, times the seats.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the quotas, 8 seats">
+q = \dfrac{\text{town’s people}}{\text{all the people}} \times \text{seats} @@ a ratio, scaled (5j)
+q_A = \tfrac{5200}{10000} \times 8 = 4.16 @@ 
+q_B = \tfrac{3000}{10000} \times 8 = 2.4 @@ 
+\htmlClass{new}{q_C = \tfrac{1800}{10000} \times 8 = 1.44} @@ the three add to 8
+  </pre>
+  <p data-pid="0f1b35">Seats come whole. Each town will get its quota rounded down or rounded up, and the question is which towns get which.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·econ2.1.1</span><span class="ph understand">understand</span>How is a town’s quota found, and why can it not simply be its number of seats?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5econ22">
+  <h2 class="sthead"><span class="stno">5econ22</span>Largest Remainders</h2>
+  <p data-pid="dcdcc4">One way: give each town its quota rounded down, then hand the seats left over to the towns with the biggest fractions left behind.</p>
+  <pre class="lines" data-k="ember" data-label="this page: largest remainders, 8 seats">
+\text{rounded down: } 4,\ 2,\ 1 \quad (7 \text{ seats}) @@ 1 seat left
+\text{left behind: } 0.16,\ 0.4,\ 0.44 @@ C’s is biggest
+\htmlClass{new}{A\ 4,\ B\ 2,\ C\ 2} @@ C gets the last seat
+  </pre>
+  <p data-pid="fd174e">Each town gets its quota rounded down or up, never further off. Call that <i>staying within quota</i>: every town’s seats are its quota rounded one way or the other.</p>
+<div class="eqline c6" data-tex="q \text{ rounded down} \le \text{seats} \le q \text{ rounded up}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·econ2.2.1</span><span class="ph understand">understand</span>How does the largest-remainders way share 8 seats, and what does staying within quota mean?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5econ23">
+  <h2 class="sthead"><span class="stno">5econ23</span>Dividing by One Number</h2>
+  <p data-pid="6f552e">Another way: pick a number d, divide each town’s people by d, and round down. Raise or lower d until the seats add up to 8.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one divisor, 8 seats">
+d = 1250:\ 4.16,\ 2.4,\ 1.44 \to 4,\ 2,\ 1 @@ 7 seats: d too big
+d = 1040:\ 5,\ 2.88,\ 1.73 \to 5,\ 2,\ 1 @@ 8 seats
+\htmlClass{new}{A\ 5,\ B\ 2,\ C\ 1} @@ a different answer
+  </pre>
+  <p data-pid="466198">The two ways disagree: largest remainders gives C its second seat, the divisor gives it to A. Rounding down by one divisor leans toward big towns, because each town loses less than a whole seat to rounding, and that loss is a smaller share of a big town’s seats.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>town</th><th>quota</th><th>largest remainders</th><th>one divisor</th></tr>
+    <tr><th>A</th><td>4.16</td><td>4</td><td>5</td></tr>
+    <tr><th>B</th><td>2.4</td><td>2</td><td>2</td></tr>
+    <tr><th>C</th><td>1.44</td><td>2</td><td>1</td></tr>
+  </table></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·econ2.3.1</span><span class="ph understand">understand</span>How does dividing by one number share the seats, and why does it lean toward the bigger town?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5econ24">
+  <h2 class="sthead"><span class="stno">5econ24</span>If the Council Grows, Can a Town Lose a Seat?</h2>
+  <p data-pid="ced7c3">It sounds safe to claim: if the council grows by one seat, no town loses a seat. Write it as an if: G is “the council grows from 8 to 9”, and L is “no town has fewer seats than before”. The claim is G ⇒ L.</p>
+  <pre class="lines" data-k="ember" data-label="this page: largest remainders, 9 seats">
+q:\ \tfrac{5200}{10000} \times 9 = 4.68,\ \ 2.7,\ \ 1.62 @@ the new quotas
+\text{rounded down: } 4,\ 2,\ 1 \quad (7 \text{ seats}) @@ 2 seats left
+\text{left behind: } 0.68,\ 0.7,\ 0.62 @@ B and A are biggest
+\htmlClass{new}{A\ 5,\ B\ 3,\ C\ 1} @@ C had 2 seats at 8
+  </pre>
+  <p data-pid="fa3c91">G is true and L is false, so G ⇒ L is false for largest remainders: one example breaks the claim. The divisor way never does this. With one more seat, d must fall to let the seats add up, and a smaller d makes every town’s people over d bigger, so no town’s rounded-down number can drop.</p>
+<div class="eqline c6" data-tex="G \land \lnot L \;\Rightarrow\; \lnot(G \Rightarrow L)"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·econ2.4.1</span><span class="ph understand">understand</span>How does the 9-seat council break the claim “if the council grows, no town loses a seat”, and why can the divisor way not break it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5econ25">
+  <h2 class="sthead"><span class="stno">5econ25</span>Two Claims That Cannot Both Hold</h2>
+  <p data-pid="2c1319">The divisor way passed footing 4’s test but can fail to stay within quota. Take towns of 8,600, 700 and 700 people and 10 seats: the quotas are 8.6, 0.7 and 0.7. Divide by d = 860: the results are 10, 0.81 and 0.81, rounded down to 10, 0, 0. A gets 10 seats, more than its quota rounded up.</p>
+  <p data-pid="567f42">Write Q for “the method always stays within quota” and P for “a town whose people grow, while another’s shrink, never loses a seat to it”. Largest remainders makes Q true and P false; the divisor way makes P true and Q false.</p>
+  <p data-pid="903012">Quota technique: <b>no way of sharing seats among three or more towns makes both Q and P true: every way gives one up, so ¬Q ∨ ¬P holds for every method.</b> Two researchers proved it in 1982, by showing that a method keeping both would be forced into a contradiction for some set of towns. The proof is long; the page uses its result.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what every method gives up">
+\lnot (Q \land P) @@ the result of 1982
+\lnot Q \lor \lnot P @@ push the not in (1f)
+\htmlClass{new}{\text{choose which to give up}} @@ the council’s choice, not the arithmetic’s
+  </pre>
+  <p data-pid="c32e7a">A clerk sharing out a council by hand works out both ways in a table like footing 3’s and shows the council where they disagree. The arithmetic cannot settle which to use; it can only show what each choice costs.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·econ2.5.1</span><span class="ph understand">understand</span>Which two claims can no method make true together, and what does each of the two ways on this page give up?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="5econ26">
+  <h2 class="sthead"><span class="stno">5econ26</span>Moves to Watch Out For</h2>
+  <p data-pid="113257">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{round each quota to the nearest whole}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the rounded quotas need not add to the seats: 4, 2, 1 adds to 7 (5econ22)
+\text{more seats, so every town gets at least as many}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; largest remainders took a seat from C when the council grew (5econ24)
+\text{the divisor way always stays within quota}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; with 8,600, 700 and 700 people it gives A 10 seats for a quota of 8.6 (5econ25)
+\text{one example fits, so } G \Rightarrow L \text{ holds}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; one example with G true and L false breaks it (5econ24)
+q_A = 5200/8\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the quota is the share of the people times the seats, not people over seats (5econ21)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">5·econ2.6.1</span><span class="ph understand">understand</span>Which move above trusts that more seats can never cost a town a seat, and which example breaks it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">5·econ2.7.1</span><span class="tagq">do</span>Share 10 seats among the three towns of this page by largest remainders and by one divisor, and say where the two ways disagree.</div>
+  <div class="chq"><span class="chid">5·econ2.7.2</span><span class="tagq">make</span>Make up four towns and a council size where largest remainders and the divisor way give the same answer.</div>
+  <div class="chq"><span class="chid">5·econ2.7.3</span><span class="tagq">converse</span>The divisor way never takes a seat away when the council grows. Decide whether a method that never takes a seat away when the council grows must be a divisor way, and give a reason or an example.</div>
+  <div class="chq"><span class="chid">5·econ2.7.4</span><span class="tagq">edge</span>Two towns have exactly equal remainders and one seat is left. Say what largest remainders does, and what a council would have to add to its rules.</div>
+  <div class="chq"><span class="chid">5·econ2.7.5</span><span class="tagq">open</span>Rounding to the nearest whole, with a divisor, sits between the two ways of this page. Say what you would test to decide whether it leans toward big towns or small ones.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r05econ.html">← 5·econ · should the faster worker do everything?</a><a href="r05k.html">5k · working with the gap →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="e3cc9d">Sharing seats in proportion is <b>apportionment</b>. Largest remainders is <b>Hamilton’s method</b>, and dividing by one number and rounding down is <b>Jefferson’s method</b>; rounding to the nearest is <b>Webster’s</b>. A town losing a seat when the council grows is the <b>Alabama paradox</b>, the failure of P is the <b>population paradox</b>, and the result of footing 5 is the <b>Balinski and Young impossibility theorem</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="0c7fec">Michel Balinski and H. Peyton Young proved the impossibility in 1982, in <i>Fair Representation</i>. The council-grows paradox was first noticed in 1880, when a clerk worked out the shares for every council size from 275 to 350.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7·eng · Why Do Two Pumps Beat One?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r07bio.html">← 7·bio how many fish are in the lake?</a><a href="r07g.html">next: 7g yes or no is data →</a></p>
+  <div class="tags"><span class="tag eng">7·eng · engineering</span></div>
+  <h1>Why Do Two Pumps Beat One?</h1>
+  <p data-pid="bce885">Why do two pumps beat one? A town’s water comes up from a well through a pump that fails one day in ten. Put a second pump beside it, so either can do the job, and the water fails far less often. Put the second pump after the first, so both must run, and it fails more. Rung 7 fixed truth: each part works or fails, nothing in between. This page writes a system as the and or the or of its parts, counts how often each works with 4k’s counting, builds a fault tree from its gates, and finds the one assumption that makes the counting hold, and what breaks it.</p>
+  <p class="gesture" data-pid="3f23db">A part either works or fails (7b). Parts in a row are joined by and: all must work. Parts side by side are joined by or: one is enough. Count equally likely days to get each chance; for parts that fail on their own, chances in a row multiply, and side by side the chances of failing multiply.</p>
+</header>
+
+<section class="class step" data-step="7eng1">
+  <h2 class="sthead"><span class="stno">7eng1</span>A System as the And or Or of Its Parts</h2>
+  <p data-pid="0443c7">Randy runs a small water works. Its pump lifts water from a well into a tank. Let P be “the pump works today”. By the either-way principle (7b), P is true or false each day, with nothing in between.</p>
+  <p data-pid="1275da">From here on, on this page, a <i>system</i> is a statement built from its parts’ statements with and and or (1c). Parts <i>in a row</i>, where water passes through each in turn, are joined by and. Parts <i>side by side</i>, where either one can do the job, are joined by or.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>layout</th><th>the system works when</th><th>statement</th></tr>
+    <tr><th>one pump</th><td>the pump works</td><td>P</td></tr>
+    <tr><th>two pumps in a row</th><td>both work</td><td>P₁ ∧ P₂</td></tr>
+    <tr><th>two pumps side by side</th><td>at least one works</td><td>P₁ ∨ P₂</td></tr>
+  </table></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·eng.1.1</span><span class="ph understand">understand</span>How is a system written as a statement, and which joining word goes with parts in a row and with parts side by side?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7eng2">
+  <h2 class="sthead"><span class="stno">7eng2</span>In a Row, All Must Work</h2>
+  <p data-pid="4ec767">Each pump fails one day in ten, and the two pumps fail on their own, neither causing nor sharing the other’s failures. Picture 10 equally likely days for pump 1 and 10 for pump 2: 100 equally likely pairs (4k). Pump 1 works on 9 of its days and pump 2 on 9 of its.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two pumps in a row">
+\text{pairs where both work: } 9 \times 9 = 81 @@ counting choices (4k)
+\text{chance both work: } \tfrac{81}{100} @@ a ratio of counts
+\htmlClass{new}{\tfrac{9}{10} \times \tfrac{9}{10} = 0.81} @@ in a row, the chances of working multiply
+  </pre>
+  <p data-pid="2ebcc0">Two pumps in a row work 81 days in 100, worse than one pump’s 90. Every part added in a row is one more thing that can stop the water.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·eng.2.1</span><span class="ph understand">understand</span>Why do two pumps in a row work only 81 days in 100, and how does the count of pairs show it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7eng3">
+  <h2 class="sthead"><span class="stno">7eng3</span>Side by Side, One Is Enough</h2>
+  <p data-pid="770271">Side by side, the water stops only when both pumps fail. Count the pairs where both fail, and take them away from all the pairs.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two pumps side by side">
+\text{pairs where both fail: } 1 \times 1 = 1 @@ each fails on 1 day in 10
+\text{chance both fail: } \tfrac{1}{100} @@ 
+\htmlClass{new}{\text{chance the water flows: } 1 - \tfrac{1}{100} = 0.99} @@ one minus the chance all fail
+  </pre>
+  <p data-pid="072608">Side by side, the water flows 99 days in 100, ten times fewer dry days than one pump. <b>Side by side, the chances of failing multiply; in a row, the chances of working multiply.</b> The second follows from the first by 1f’s pushing a not through: “not (P₁ or P₂)” is “not P₁ and not P₂”.</p>
+<div class="eqline c6" data-tex="\lnot(P_1 \lor P_2) \;\Leftrightarrow\; \lnot P_1 \land \lnot P_2"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·eng.3.1</span><span class="ph understand">understand</span>Why do two pumps side by side work 99 days in 100, and which rewrite of rung 1 turns the or into an and of failures?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7eng4">
+  <h2 class="sthead"><span class="stno">7eng4</span>A Fault Tree</h2>
+  <p data-pid="e3b767">Randy’s works has more than pumps. The tank stays dry if both pumps fail, or if the power fails (both pumps run on it), or if the pipe to the tank breaks. Write the failure at the top and work down through gates.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the fault tree">
+\text{dry} \;\Leftrightarrow\; (\lnot P_1 \land \lnot P_2) \lor \lnot E \lor \lnot L @@ E: power works, L: pipe works
+\text{chances of failing: pumps } \tfrac{1}{10} \text{ each, power } \tfrac{1}{50},\ \text{pipe } \tfrac{1}{200} @@ from Randy’s records
+\text{both pumps fail: } \tfrac{1}{100} @@ the and gate
+\text{nothing fails: } \tfrac{99}{100} \cdot \tfrac{49}{50} \cdot \tfrac{199}{200} \approx 0.965 @@ every input of the or gate works
+\htmlClass{new}{\text{dry: about } 1 - 0.965 = 0.035} @@ about 1 day in 29
+  </pre>
+  <p data-pid="db20b8">Fault-tree technique: <b>write the failure as the top statement, join its causes by and gates (all needed) and or gates (any one is enough), and work the chances up from the bottom, for parts that fail on their own.</b> The tree shows where the risk is: the two pumps now give 1 dry day in 100, while the single power line gives 1 in 50. A second pump was worth it; a second power line would be worth more.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·eng.4.1</span><span class="ph understand">understand</span>How does the fault tree work out the chance the tank is dry, and which part does it show is now the weakest?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7eng5">
+  <h2 class="sthead"><span class="stno">7eng5</span>A Shared Cause Breaks the Product</h2>
+  <p data-pid="5afb2e">Every count above assumed the parts fail on their own: knowing one pump failed tells you nothing about the other. That is what made the 100 pairs equally likely.</p>
+  <p data-pid="3a21b8">Suppose the two pumps were bought together and share a fault that stops both in the same summer heat. Then the days pump 1 fails are mostly the days pump 2 fails. If they always failed together, “both fail” would happen 1 day in 10, not 1 in 100: the second pump would buy nothing.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>the two pumps</th><th>both fail</th><th>water flows</th></tr>
+    <tr><th>fail on their own</th><td>1 day in 100</td><td>99 in 100</td></tr>
+    <tr><th>always fail together</th><td>1 day in 10</td><td>90 in 100</td></tr>
+    <tr><th>in between</th><td>between the two</td><td>between the two</td></tr>
+  </table></div>
+  <p data-pid="f252a5"><b>Multiplying chances holds only for parts that fail on their own; a shared cause, such as the same power line, the same heat or the same maker’s fault, puts its own box in the tree, under an or gate above the parts it shares.</b> That is why the power line got its own box in footing 4. Engineers make spare parts different on purpose: another maker, another power line, another room.</p>
+  <p data-pid="34a0b2">A reliability engineer reviewing Randy’s works, with a year of his failure records, finds the pumps failed together on 3 days and apart on 17, and puts a shared-cause box under the top gate with chance about 3 in 365.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·eng.5.1</span><span class="ph understand">understand</span>What must be true for chances to multiply, and how does a shared cause change the fault tree?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="7eng6">
+  <h2 class="sthead"><span class="stno">7eng6</span>Moves to Watch Out For</h2>
+  <p data-pid="adc060">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{two pumps in a row are safer}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; in a row both must work: 0.81, worse than one (7eng2)
+\text{side by side: } 0.9 + 0.9\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; chances do not add past 1; side by side, multiply the chances of failing (7eng3)
+\lnot(P_1 \lor P_2) \;\Leftrightarrow\; \lnot P_1 \lor \lnot P_2\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the not turns or into and (7eng3)
+\text{bought together, still } \tfrac{1}{100}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a shared fault breaks the product (7eng5)
+\text{work the tree from the top down}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the chances are worked up from the parts at the bottom (7eng4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">7·eng.6.1</span><span class="ph understand">understand</span>Which move above adds the chances of two pumps side by side, and what does counting the pairs where both fail give instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">7·eng.7.1</span><span class="tagq">do</span>Three pumps side by side each fail 1 day in 10, on their own. Find the chance the water flows, and compare it with two pumps.</div>
+  <div class="chq"><span class="chid">7·eng.7.2</span><span class="tagq">make</span>Make up a system of four parts, some in a row and some side by side, that works more often than any one of its parts.</div>
+  <div class="chq"><span class="chid">7·eng.7.3</span><span class="tagq">converse</span>Parts that fail on their own give a product. Decide whether a fault tree whose numbers match the product must have parts that fail on their own, and give a reason or a case.</div>
+  <div class="chq"><span class="chid">7·eng.7.4</span><span class="tagq">edge</span>Find the chance the tank is dry if the power line never fails, and if the pipe always fails. Say what each says about the tree.</div>
+  <div class="chq"><span class="chid">7·eng.7.5</span><span class="tagq">open</span>Randy’s records cover one year. Say how he could tell, from the records, whether the two pumps fail on their own, and how sure a year makes him.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r07bio.html">← 7·bio · how many fish are in the lake?</a><a href="r07g.html">7g · yes or no is data →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="6ad4c0">Parts in a row are in <b>series</b>, side by side in <b>parallel</b>, and adding spare parts side by side is <b>redundancy</b>. The tree is a <b>fault tree</b>, its top statement the <b>top event</b>, its gates <b>AND</b> and <b>OR gates</b>. Parts that fail on their own are <b>independent</b>, and a shared cause is a <b>common-cause failure</b>. The chance a system works is its <b>reliability</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="7f367e">H. A. Watson of Bell Telephone Laboratories developed fault tree analysis in 1961 and 1962, for the US Air Force’s Minuteman missile launch control system.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
