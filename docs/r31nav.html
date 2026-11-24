@@ -153,16 +153,33 @@ K = R/(P + R)\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; 
     </ol>
   </section>
 </section>
+<section class="class step" data-step="31nav7">
+  <h2 class="sthead"><span class="stno">31nav7</span>Setting the Noise Values</h2>
+  <p data-pid="46cbf9">The gain that blends guess and fix (31nav2) is set by two numbers: R, how noisy a fix is, and Q, how far the boat can wander between fixes. R comes from the sensor: its fixes scatter by a known spread. Q comes from the craft: how hard it can turn or speed up in one step. Then the surprises, each fix less its forecast, check both.</p>
+  <pre class="lines" data-k="ember" data-label="this page: fixes with spread 5 m, wander 2 m a step">
+R = 5^2 = 25,\ \ Q = 2^2 = 4 @@ squared spreads
+P^- = \tfrac{Q + \sqrt{Q^2 + 4QR}}{2} = 12.2 @@ where the forecast doubt settles (31nav4)
+K = \tfrac{12.2}{12.2 + 25} \approx 0.33 @@ a third of each surprise taken
+\htmlClass{new}{\text{surprises wider than } \sqrt{P^- + R} \approx 6.1:\ Q \text{ is too small}} @@ raise it
+  </pre>
+  <p data-pid="be68f3">Noise-setting technique: <b>set R from the sensor’s measured spread and Q from how far the craft can wander in a step; then check that the surprises scatter about as widely as √(P⁻ + R) says, raising Q if they are wider and lowering it if they are narrower.</b> Shown in a run: a filter with R = 25 and Q = 4 tracks a boat whose surprises scatter with spread close to 6.1 m, and its blended track lies closer to the true path than any fix alone.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">31·nav.7.1</span><span class="ph understand">understand</span>Where do the two noise values come from, and how do the surprises check them?</li>
+    </ol>
+  </section>
+</section>
 
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
-  <div class="chq"><span class="chid">31·nav.7.1</span><span class="tagq">do</span>A guess of 50 with spread 4 meets a fix of 56 with spread 3. Find the gain, the blend and its spread.</div>
-  <div class="chq"><span class="chid">31·nav.7.2</span><span class="tagq">make</span>Make up Q and R for which the steady gain is ½.</div>
-  <div class="chq"><span class="chid">31·nav.7.3</span><span class="tagq">converse</span>The blend’s spread² is less than either’s. Decide whether a blend of two estimates can ever be worse than the better one, if the weights are chosen badly.</div>
-  <div class="chq"><span class="chid">31·nav.7.4</span><span class="tagq">edge</span>Let R head to 0, a perfect fix, and then let R grow without bound. Say what the gain does in each case and what the update means.</div>
-  <div class="chq"><span class="chid">31·nav.7.5</span><span class="tagq">open</span>Two fixes in a row are both off in the same way, because of one mistake. Say which assumption of the blend breaks, and what happens to its spread.</div>
+  <div class="chq"><span class="chid">31·nav.8.1</span><span class="tagq">do</span>A guess of 50 with spread 4 meets a fix of 56 with spread 3. Find the gain, the blend and its spread.</div>
+  <div class="chq"><span class="chid">31·nav.8.2</span><span class="tagq">make</span>Make up Q and R for which the steady gain is ½.</div>
+  <div class="chq"><span class="chid">31·nav.8.3</span><span class="tagq">converse</span>The blend’s spread² is less than either’s. Decide whether a blend of two estimates can ever be worse than the better one, if the weights are chosen badly.</div>
+  <div class="chq"><span class="chid">31·nav.8.4</span><span class="tagq">edge</span>Let R head to 0, a perfect fix, and then let R grow without bound. Say what the gain does in each case and what the update means.</div>
+  <div class="chq"><span class="chid">31·nav.8.5</span><span class="tagq">open</span>Two fixes in a row are both off in the same way, because of one mistake. Say which assumption of the blend breaks, and what happens to its spread.</div>
 </section>
 <div class="themecert themeend"></div>
 <nav class="nextrung"><a href="r31logi.html">← 31·logi · should every counter have its own line?</a><a href="r31phys.html">31·phys · how do polarized sunglasses cut glare? →</a></nav>
