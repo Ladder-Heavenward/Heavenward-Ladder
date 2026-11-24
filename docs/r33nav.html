@@ -117,6 +117,12 @@ t = 10:\ 0.1 \times 32 = 3.2\;°\text{C} @@
 \htmlClass{new}{\text{chance of rain} \approx \dfrac{30}{50} = 60\%} @@ a share of equally likely runs (30)
   </pre>
   <p data-pid="ec348c"><b>A forecast of “60% chance of rain” means that in about 60% of the runs from starts the readings cannot tell apart, it rains.</b> Jean checks the centre’s forecasts against what happened: over a year, of all the days given 60%, it rained on close to 60%. A forecast that passes this check can be trusted at its word.</p>
+  <!--gwid 33nav5--><section class="pic gwid">
+    <div class="eyebrow">The picture · fifty runs from nearly the same start</div>
+    <div class="panels">
+    <div class="panel"><canvas id="w33v"></canvas><div class="kn"><span class="m">nudge</span><input type="range" id="w33n" min="-4" max="-1" step="0.5" value="-2"><output id="w33no"></output></div><div class="kn"><span class="m">time</span><input type="range" id="w33t" min="0" max="15" step="0.1" value="9"><output id="w33to"></output></div><div class="cap">A made-up weather of three numbers that magnifies small differences. Each line is one run, started within the nudge (10 to the power on the knob) of the same readings. Rain over the city when a line is above 0. At the dashed time, teal dots give rain and ember dots do not.</div><div class="verdict" id="w33d"></div></div>
+  </div>
+  </section><!--/gwid 33nav5-->
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -166,5 +172,25 @@ t = 10:\ 0.1 \times 32 = 3.2\;°\text{C} @@
 
 </div>
 <script src="rung.js"></script>
+<!--gwjs 33nav5--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const rng=s=>{ s=s>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return (s+0.5)/4294967296; }; };
+const bell=r=>Math.sqrt(-2*Math.log(r()))*Math.cos(2*Math.PI*r());
+let runs=[], lastN=null;
+function make(){ const n=Math.pow(10,+$('w33n').value), R=rng(33); runs=[];
+  for(let k=0;k<50;k++){ let x=1+n*bell(R), y=1+n*bell(R), z=20+n*bell(R); const out=[x]; const dt=0.005;
+    const F=(x,y,z)=>[10*(y-x),x*(28-z)-y,x*y-8/3*z];
+    for(let i=1;i<=3000;i++){ const a=F(x,y,z), b=F(x+dt/2*a[0],y+dt/2*a[1],z+dt/2*a[2]), c=F(x+dt/2*b[0],y+dt/2*b[1],z+dt/2*b[2]), d=F(x+dt*c[0],y+dt*c[1],z+dt*c[2]);
+      x+=dt*(a[0]+2*b[0]+2*c[0]+d[0])/6; y+=dt*(a[1]+2*b[1]+2*c[1]+d[1])/6; z+=dt*(a[2]+2*b[2]+2*c[2]+d[2])/6; if(i%10===0) out.push(x); }
+    runs.push(out); } }
+const P=plane($('w33v'),{x:[0,15],y:[-22,22],grid:0,labels:false,aspect:0.62,draw:P=>{ const nn=$('w33n').value; if(nn!==lastN){ make(); lastN=nn; }
+  const t=+$('w33t').value, i=Math.round(t/0.05);
+  P.line(0,0,15,0,'--muted',1); P.text('rain',14.9,1.2,'--muted','right',11); runs.forEach(r=>P.poly(r.map((x,j)=>[j*0.05,x]),'--muted',null,0.6,false)); runs.forEach(r=>P.dot(t,r[i],r[i]>0?'--teal':'--ember',3));
+  P.line(t,-22,t,22,'--ink',1.2,[4,3]); const k=runs.filter(r=>r[i]>0).length;
+  $('w33no').textContent='10^'+nn; $('w33to').textContent=f(t,1);
+  $('w33d').textContent='At time '+f(t,1)+': '+k+' of 50 runs give rain, a chance of '+(2*k)+'%'+(k===0||k===50?'. The runs agree: a firm forecast.':'.'); }});
+$('w33n').oninput=()=>P.redraw(); $('w33t').oninput=()=>P.redraw(); P.redraw();
+})();
+</script><!--/gwjs 33nav5-->
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

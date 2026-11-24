@@ -84,6 +84,12 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \htmlClass{new}{N = \dfrac{M \cdot C}{R} = \dfrac{100 \cdot 80}{10} = 800} @@ about 800 trout
   </pre>
   <p data-pid="3f3295">Mark-share technique: <b>mark M fish, catch C later, and count R marked; if the marked fish have mixed in evenly, the lake holds about M × C ÷ R fish.</b> The answer is a guess from a sample, so a second survey would give a nearby number, not the same one.</p>
+  <!--gwid 7bio3--><section class="pic gwid">
+    <div class="eyebrow">The picture · survey a made-up lake again and again</div>
+    <div class="panels">
+    <div class="panel"><div class="chips" id="w7bc"></div><canvas id="w7bv"></canvas><div class="kn"><span class="m">C</span><input type="range" id="w7bC" min="20" max="300" step="10" value="80"><output id="w7bCo"></output></div><div class="cap">A made-up lake of 800 trout, 100 of them marked and mixed in evenly. Each survey nets C and counts the marked, R. Bars: the estimates 100 × C ÷ R so far, in steps of 100. Gold line: the true 800.</div><div class="verdict" id="w7bd"></div></div>
+  </div>
+  </section><!--/gwid 7bio3-->
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -170,5 +176,23 @@ R = 0,\ \text{so } N = 0\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/
 
 </div>
 <script src="rung.js"></script>
+<!--gwjs 7bio3--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const rng=s=>{ s=s>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return (s+0.5)/4294967296; }; };
+const bell=r=>Math.sqrt(-2*Math.log(r()))*Math.cos(2*Math.PI*r());
+const N=800, M=100; let R=rng(7), est=[], last='', lastC=null;
+function survey(){ const C=+$('w7bC').value; let m=M, n=N, r=0; for(let i=0;i<C;i++){ if(R()<m/n){ r++; m--; } n--; }
+  if(r>0){ est.push(M*C/r); last='Last survey: '+r+' marked of '+C+', so about '+Math.round(M*C/r)+' trout.'; } else last='Last survey: no marked fish in '+C+'. No estimate (dividing by 0).'; }
+const P=plane($('w7bv'),{x:[0,2000],y:[-0.12,1],grid:0,labels:false,aspect:0.55,draw:P=>{ const C=$('w7bC').value; if(C!==lastC){ est=[]; last='C changed: surveys start again.'; lastC=C; }
+  const bins=new Array(20).fill(0); est.forEach(e=>{ bins[Math.min(19,Math.floor(e/100))]++; }); const mx=Math.max(1,...bins);
+  bins.forEach((v,i)=>{ if(v) P.poly([[i*100+8,0],[i*100+92,0],[i*100+92,0.85*v/mx],[i*100+8,0.85*v/mx]],null,'--teal'); });
+  P.line(0,0,2000,0,'--muted',1); P.line(800,0,800,0.95,'--gold',2); [0,500,1000,1500,2000].forEach(x=>P.text(String(x),x,-0.1,'--muted',x===0?'left':x===2000?'right':'center',11));
+  const s=[...est].sort((a,b)=>a-b), md=s.length?s[Math.floor(s.length/2)]:0;
+  $('w7bCo').textContent=C; $('w7bd').textContent=last+(s.length>1?' Middle of '+s.length+' estimates: '+Math.round(md)+'.':''); }});
+const mk=(lab,k)=>{ const b=document.createElement('button'); b.textContent=lab; b.onclick=()=>{ for(let i=0;i<k;i++) survey(); P.redraw(); }; $('w7bc').appendChild(b); };
+mk('one survey',1); mk('twenty surveys',20);
+$('w7bC').oninput=()=>P.redraw(); P.redraw();
+})();
+</script><!--/gwjs 7bio3-->
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

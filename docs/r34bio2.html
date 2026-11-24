@@ -100,6 +100,12 @@ a = b = 1.5:\ \text{crossing at } 40, 40;\ -0.4\begin{pmatrix} 1 & 1.5 \\ 1.5 & 
 \htmlClass{new}{\text{both live when } a < K_1/K_2 \text{ and } b < K_2/K_1} @@ each crowds itself more than the other
   </pre>
   <p data-pid="eb50f9"><b>Two species share one food only when each holds itself back more than it holds back the other; otherwise the crossing is a pass, and whichever gets ahead pushes the other out.</b> In nature, species that share a food usually differ in some way, feeding at different depths or hours, which makes a and b small.</p>
+  <!--gwid 34bio24--><section class="pic gwid">
+    <div class="eyebrow">The picture · choose how hard each crowds the other</div>
+    <div class="panels">
+    <div class="panel"><canvas id="w34v"></canvas><div class="kn"><span class="m">a</span><input type="range" id="w34a" min="0" max="2" step="0.05" value="0.5"><output id="w34ao"></output></div><div class="kn"><span class="m">b</span><input type="range" id="w34b" min="0" max="2" step="0.05" value="0.5"><output id="w34bo"></output></div><div class="cap">Across: the first species N₁; up: the second N₂; each with room 100 alone. Teal: where N₁ stops growing, N₁ + aN₂ = 100. Ember: where N₂ stops, N₂ + bN₁ = 100. Grey: paths from eight starts.</div><div class="verdict" id="w34d"></div></div>
+  </div>
+  </section><!--/gwid 34bio24-->
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -168,5 +174,23 @@ N_1 = K_1 \text{ when they rest together}\,? @@ &lt;span class="vd vd-c"&gt;outs
 
 </div>
 <script src="rung.js"></script>
+<!--gwjs 34bio24--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const K=100;
+const P=plane($('w34v'),{x:[0,130],y:[0,130],grid:20,aspect:0.9,draw:P=>{ P.axes(); const a=+$('w34a').value, b=+$('w34b').value;
+  const F=(x,y)=>[x*(K-x-a*y)/K, y*(K-y-b*x)/K];
+  [[5,120],[20,120],[120,5],[120,20],[5,5],[60,125],[125,60],[2,40]].forEach(([x,y])=>{ const pts=[[x,y]]; for(let i=0;i<900;i++){ const d=F(x,y); x+=0.05*d[0]; y+=0.05*d[1]; pts.push([x,y]); } P.poly(pts,'--muted',null,1,false); P.dot(pts[pts.length-1][0],pts[pts.length-1][1],'--muted',2.5); });
+  if(a>0) P.line(0,K/a,K,0,'--teal',2); else P.line(K,0,K,130,'--teal',2);
+  if(b>0) P.line(K/b,0,0,K,'--ember',2); else P.line(0,K,130,K,'--ember',2);
+  const D=1-a*b; let s;
+  if(a<1&&b<1){ const x=(K-a*K)/D, y=(K-b*K)/D; P.dot(x,y,'--gold',5.5); s='a and b both below 1: both live, at N₁ = '+f(x,0)+', N₂ = '+f(y,0)+'.'; }
+  else if(a>1&&b>1){ const x=(K-a*K)/D, y=(K-b*K)/D; P.dot(x,y,'--gold',5.5); s='Both above 1: the crossing at ('+f(x,0)+', '+f(y,0)+') is a pass. Whichever gets ahead pushes the other out.'; }
+  else if(a<1) s='The first holds back the second hard (b above 1): the first wins and fills its room, 100.';
+  else if(b<1) s='The second holds back the first hard (a above 1): the second wins and fills its room, 100.';
+  else s='a or b exactly 1: the lines meet only at the edge.';
+  $('w34ao').textContent=f(a,2); $('w34bo').textContent=f(b,2); $('w34d').textContent=s; }});
+$('w34a').oninput=()=>P.redraw(); $('w34b').oninput=()=>P.redraw(); P.redraw();
+})();
+</script><!--/gwjs 34bio24-->
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

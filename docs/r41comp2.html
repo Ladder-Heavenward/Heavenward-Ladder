@@ -117,6 +117,12 @@ n = 10^6:\ k = 785:\ P \approx 1;\ \ k = 1\,570:\ P \approx 0 @@ twice as many r
 \htmlClass{new}{\text{stop at the right round, or the gain swings away}} @@ 
   </pre>
   <p data-pid="f32c47"><b>Quantum search must be stopped at the right count; more rounds swing the state past the marked box and lose what was gained.</b> And the square root is the best any quantum search can do: no method finds an unmarked box in fewer than about √n tries, so quantum computers speed up blind search, but do not make it free.</p>
+  <!--gwid 41comp25--><section class="pic gwid">
+    <div class="eyebrow">The picture · step the search, round by round</div>
+    <div class="panels">
+    <div class="panel"><div class="chips" id="w41c"></div><canvas id="w41v"></canvas><div class="kn"><span class="m">log₁₀ n</span><input type="range" id="w41n" min="1" max="6" step="1" value="2"><output id="w41no"></output></div><div class="cap">The state as an arrow in one plane: across, the even mix of the unmarked boxes; up, the marked box. Each round turns it by 2θ, with sin θ = 1/√n. Grey: earlier rounds.</div><div class="verdict" id="w41d"></div></div>
+  </div>
+  </section><!--/gwid 41comp25-->
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -166,5 +172,20 @@ n = 10^6:\ k = 785:\ P \approx 1;\ \ k = 1\,570:\ P \approx 0 @@ twice as many r
 
 </div>
 <script src="rung.js"></script>
+<!--gwjs 41comp25--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+let k=0;
+const th=()=>Math.asin(1/Math.sqrt(Math.pow(10,+$('w41n').value)));
+const P=plane($('w41v'),{x:[-1.15,1.15],y:[-1.15,1.15],grid:0,labels:false,aspect:1,draw:P=>{ const t=th(), n=Math.pow(10,+$('w41n').value), best=Math.max(0,Math.round(Math.PI/(4*t)-0.5));
+  P.circle(0,0,1,'--grid',1.2); P.line(-1.1,0,1.1,0,'--muted',1); P.line(0,-1.1,0,1.1,'--muted',1); P.text('marked',0.05,1.03,'--muted','left',11); P.text('unmarked mix',1.1,0.05,'--muted','right',11);
+  const shown=Math.min(k,60); for(let j=Math.max(0,k-shown);j<k;j++){ const a=(2*j+1)*t; P.line(0,0,Math.cos(a),Math.sin(a),'--grid',1); }
+  const a=(2*k+1)*t, Pk=Math.pow(Math.sin(a),2); P.line(0,0,Math.cos(a),Math.sin(a),'--ember',3); P.dot(Math.cos(a),Math.sin(a),'--ember',4.5);
+  $('w41no').textContent=n.toLocaleString('en');
+  $('w41d').textContent='n = '+n.toLocaleString('en')+', after '+k+(k===1?' round':' rounds')+': the chance of reading the marked box is '+f(Pk,3)+'. Best at '+best+' rounds'+(k>best?'; past it, the gain swings away.':'.'); }});
+const mk=(lab,fn)=>{ const b=document.createElement('button'); b.textContent=lab; b.onclick=()=>{ fn(); P.redraw(); }; $('w41c').appendChild(b); };
+mk('one round',()=>{ k++; }); mk('to the best',()=>{ k=Math.max(0,Math.round(Math.PI/(4*th())-0.5)); }); mk('start again',()=>{ k=0; });
+$('w41n').oninput=()=>{ k=0; P.redraw(); }; P.redraw();
+})();
+</script><!--/gwjs 41comp25-->
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

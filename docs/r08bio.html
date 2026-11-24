@@ -107,6 +107,12 @@ R\,(1 - p) < 1 @@ die out
   </pre>
   <p data-pid="c55bc7">Threshold technique: <b>an infection that each case passes to R others dies out once more than the share 1 − 1/R of people are immune, mixed evenly among the rest.</b> For the cold with R = 3, that is 1 − 1/3: two children in three.</p>
   <p data-pid="63c67d">Immune children shield the ones who are not, because a chain of cases that reaches an immune child stops there. Above the threshold, the few who cannot be immunised, such as babies, are protected by the people around them.</p>
+  <!--gwid 8bio4--><section class="pic gwid">
+    <div class="eyebrow">The picture · make some immune, watch the chains</div>
+    <div class="panels">
+    <div class="panel"><div class="chips" id="w8c"></div><canvas id="w8v"></canvas><div class="kn"><span class="m">p</span><input type="range" id="w8p" min="0" max="0.9" step="0.05" value="0"><output id="w8po"></output></div><div class="cap">Each case meets 3 children. Grey: immune, and the chain stops there; each immune child is one in p, mixed evenly. Ember: a new case. Four generations below the first case.</div><div class="verdict" id="w8d"></div></div>
+  </div>
+  </section><!--/gwid 8bio4-->
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
@@ -175,5 +181,21 @@ R = 18 \text{ needs twice the immunity of } R = 9\,? @@ &lt;span class="vd vd-p"
 
 </div>
 <script src="rung.js"></script>
+<!--gwjs 8bio4--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const rng=s=>{ s=s>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return (s+0.5)/4294967296; }; };
+const bell=r=>Math.sqrt(-2*Math.log(r()))*Math.cos(2*Math.PI*r());
+let seed=8;
+const P=plane($('w8v'),{x:[0,1],y:[-0.5,4.5],grid:0,labels:false,aspect:0.62,draw:P=>{ const p=+$('w8p').value, R=rng(seed);
+  let gen=[{x:0.5,on:true}]; const cnt=[1]; P.dot(0.5,4,'--ember',5);
+  for(let g=1;g<=4;g++){ const nx=[], w=1/Math.pow(3,g); let c=0;
+    gen.forEach((n,i)=>{ if(!n.on) return; for(let k=0;k<3;k++){ const x=n.x+(k-1)*w, on=R()>=p; P.line(n.x,4-g+1,x,4-g,'--grid',1); nx.push({x,on}); if(on) c++; } });
+    nx.forEach(n=>P.dot(n.x,4-g,n.on?'--ember':'--muted',g<4?4:2.6)); cnt.push(c); gen=nx; }
+  const Re=3*(1-p); $('w8po').textContent=f(p,2);
+  $('w8d').textContent='Cases by generation: '+cnt.join(', ')+'. Each case now makes 3 × (1 − p) = '+f(Re,2)+' on average'+(Re<1?', below 1: chains die out. The threshold is p above 2/3.':Re===1?': just at the threshold, 2/3.':': chains grow until p passes 2/3.'); }});
+const b=document.createElement('button'); b.textContent='new outbreak'; b.onclick=()=>{ seed=(seed*7+11)%100003; P.redraw(); }; $('w8c').appendChild(b);
+$('w8p').oninput=()=>P.redraw(); P.redraw();
+})();
+</script><!--/gwjs 8bio4-->
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>
