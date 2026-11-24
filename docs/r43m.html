@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>43m · Points on a Cubic Over a Clock</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43l.html">← 43l rational points on a cubic</a><a href="r43n.html">next: 43n clock arithmetic by hand →</a></p>
+  <div class="tags"><span class="tag tech">43m · technique</span></div>
+  <h1>Points on a Cubic Over a Clock</h1>
+  <p data-pid="744dd6">The chord technique uses only adding, multiplying and undoing, so it works on a prime clock as well as on fractions. There the curve has finitely many points, and counting them is a question about squares: for each x, the curve has two points if x³ + ax + b is a nonzero square, one if it is 0, none otherwise (43f). The count is always near p + 1, within 2√p. This step counts the points of a curve on the clock of 17, bounds the count, and finds a curve whose points are a group of prime size.</p>
+  <p class="gesture" data-pid="01acc7">N = 1 + Σₓ (1 + (f(x) ∕ p)), with f(x) = x³ + ax + b and the far point counted once. Half the values are squares (43f1), so N is near p + 1; the bound is |N − (p + 1)| ≤ 2√p. On the clock of 17, y² = x³ + 2x + 2 has 19 points, a prime, so every point but O reaches all of them.</p>
+</header>
+
+<section class="class step" data-step="43m1">
+  <h2 class="sthead"><span class="stno">43m1</span>Counting by Squares</h2>
+  <pre class="lines" data-k="ember" data-label="this step: y² = x³ + 2x + 2 on the clock of 17">
+\text{nonzero squares on 17: } 1, 2, 4, 8, 9, 13, 15, 16 @@ eight of sixteen (43f1)
+x = 0:\ f = 2,\ \text{a square: } (0, 6), (0, 11) @@ two points
+\text{nine } x \text{ give squares, eight do not, none give } 0 @@ check each of 0 to 16
+\htmlClass{new}{N = 1 + 2\cdot 9 = 19} @@ with the far point
+  </pre>
+  <p data-pid="881b81">Point-count technique: <b>on the clock of p, the number of points of y² = f(x), with the far point, is p + 1 + Σₓ (f(x) ∕ p);</b> each nonzero square gives two points, 0 gives one.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43m1.1</span><span class="ph understand">understand</span>How do the squares on the clock of 17 count the points of the curve?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43m2">
+  <h2 class="sthead"><span class="stno">43m2</span>Near p + 1</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the size of the sum of signs">
+\textstyle\sum_x (f(x) \,/\, p) \text{ adds } p \text{ signs } \pm 1 \text{ or } 0 @@ half the units are squares
+\text{if the signs were coin tosses: about } \sqrt p @@ root-n (30n1)
+|N - (p + 1)| \le 2\sqrt p @@ proved, not a guess
+\htmlClass{new}{p = 17:\ 19 - 18 = 1 \le 2\sqrt{17} \approx 8.2} @@ well inside
+  </pre>
+  <p data-pid="43b0be">Near-count technique: <b>a curve y² = x³ + ax + b with no repeated zero on the clock of p has between p + 1 − 2√p and p + 1 + 2√p points.</b> The signs behave like coin tosses, and the bound is exactly root-n with a factor 2.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43m2.1</span><span class="ph understand">understand</span>Why is the number of points always near p + 1?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43m3">
+  <h2 class="sthead"><span class="stno">43m3</span>A Group of Prime Size</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the 19 points">
+\text{the chord technique on the clock: a group of 19 points} @@ as on fractions (43l2)
+19 \text{ is prime: every part-group has size } 1 \text{ or } 19 @@ a part’s size divides the whole’s (19d)
+P = (5, 1):\ P, 2P, \ldots, 19P = O \text{ reach every point} @@ any point but O
+\htmlClass{new}{\text{from } kP \text{, finding } k \text{ is believed slow for big } p} @@ the secret of 44·crypt
+  </pre>
+  <p data-pid="f3c4db"><b>The points of a cubic over a prime clock form a group of size near p; when that size is prime, every point but O reaches all the others by adding itself.</b> Counting points on such curves, prime by prime, is how the open question of 43l is tested.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43m3.1</span><span class="ph understand">understand</span>Why does every point but O reach all 19 points?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43m4">
+  <h2 class="sthead"><span class="stno">43m4</span>Moves to Watch Out For</h2>
+  <p data-pid="984b74">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{each } x \text{ gives one point}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; two for a nonzero square, one for 0, none otherwise (43m1)
+N = p\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; N is near p + 1, within 2√p (43m2)
+N = 2\cdot 9 = 18\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; add the far point: 19 (43m1)
+\text{19 points: a part-group of size } 3\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; sizes divide 19: only 1 and 19 (43m3)
+\text{the bound is a guess from coin tosses}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it is proved; the coins only explain it (43m2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43m4.1</span><span class="ph understand">understand</span>Which move above forgets the far point, and what does it add?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">43m.5.1</span><span class="tagq">do</span>Count the points of y² = x³ + x + 1 on the clock of 13.</div>
+  <div class="chq"><span class="chid">43m.5.2</span><span class="tagq">make</span>Make up a curve on the clock of 7 and count its points.</div>
+  <div class="chq"><span class="chid">43m.5.3</span><span class="tagq">converse</span>Every curve has between p + 1 − 2√p and p + 1 + 2√p points. Decide whether every number in that range is the count of some curve.</div>
+  <div class="chq"><span class="chid">43m.5.4</span><span class="tagq">edge</span>Let f have a repeated zero. Say what goes wrong with the chord technique.</div>
+  <div class="chq"><span class="chid">43m.5.5</span><span class="tagq">open</span>Say why curves of prime size are chosen for secrets.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r43l.html">← 43l · rational points on a cubic</a><a href="r43n.html">43n · clock arithmetic by hand →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="9b1108">The bound is <b>Hasse’s theorem</b>; the sum of signs uses the <b>Legendre symbol</b>; the group is E(𝔽_p). Every count in the range occurs, by <b>Deuring’s theorem</b>. Finding k from kP is the <b>elliptic curve discrete logarithm problem</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="f0e17b">Emil Artin guessed the bound in his thesis of 1924; Helmut Hasse proved it in 1933; Max Deuring settled which counts occur in 1941.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

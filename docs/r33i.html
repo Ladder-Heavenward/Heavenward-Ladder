@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Solving on a Grid by Hand</title>
+<title>Round Drums</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,112 +48,96 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r33h.html">← 33h separation of variables by hand</a><a href="r33j.html">next: 33j potentials by hand →</a></p>
-  <div class="tags"><span class="tag tech">33i · technique</span></div>
-  <h1>Solving on a Grid by Hand</h1>
-  <p data-pid="a5cbe6">Most rods are not uniform, most plates are not rectangles, and most starts have no tidy series. Then the statement is solved on a grid. Lay marks along the rod a fixed gap apart, and tick the clock in fixed steps. At each mark, replace the second slope by what three neighbouring heights say about it, and step forward: the new temperature is the old one plus a little of what the neighbours say. It is arithmetic, and a hand can do the first few steps. The danger is in the size of the clock’s tick. Too long a tick and the arithmetic does something no rod could do: a wobble from mark to mark, too small to see, doubles and triples at every step until the numbers fill the page. The step finds the exact tick at which that starts, for heat and for a string, and the reason for each. The string’s condition was found first, in the paper that named the problem, and it says something plain: the grid must be able to hear everything the string can.</p>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\Box(\text{safe} \Leftrightarrow \text{new value an average of old})\\ &amp;\qquad\text{(3b2)}\end{aligned}"></div>
-  <p class="gesture" data-pid="6d63d6">Three neighbouring heights give the second slope with an error that shrinks like the square of the gap. Stepping heat forward is safe exactly when the new value is an average of old ones, which needs the tick to be at most half the gap squared over κ. A string’s grid must reach at least as far each tick as the wave does, and a still plate on a grid is the average of its four neighbours.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r33h.html">← 33h boundary value problems</a><a href="r33j.html">next: 33j separation of variables by hand →</a></p>
+  <div class="tags"><span class="tag proof">33i · proof</span></div>
+  <h1>Round Drums</h1>
+  <p data-pid="a6d858">Rung 24 met the statement of a beaten drum without saying where it came from, and found that the drum’s pitches are not whole multiples of each other. This step derives the statement, from the string’s statement spread over a round sheet. First the sum of the two second slopes has to be rewritten for a round shape, in reach and turn instead of east and north. Then the drum separates into a turn, a reach and a time, and the reach obeys the statement of rung 24, now with a whole family of members, one for each number of times the shape winds round. Then the claim that a drum’s tones are not harmonics, which rung 24 read off a computer’s numbers, is proved, with bounds that the alternating sums of rung 22 give exactly. Last, the same work is done for a ball, where the round statement turns out to be the rod’s statement in disguise. A ball the size of the earth, cooling as a whole, would need far longer than the earth has existed.</p>
+  <p class="gesture" data-pid="0a30c9">In reach and turn, the sum of second slopes picks up a term from the reach. A round drum separates into whole windings, the drum functions of rung 24, and a swing, and its pitches are the zeros of those functions, which are provably not whole multiples. A ball that depends only on distance from its centre obeys the rod’s statement for r times u.</p>
 </header>
 
 <section class="class step" data-step="33i1">
-  <h2 class="sthead"><span class="stno">33i1</span>The Second Slope From Three Heights</h2>
-  <p data-pid="59a9f8">Lay marks a gap h apart. What do three heights y(x − h), y(x), y(x + h) say about y″(x)?</p>
-  <p data-pid="5cfbad">Second-quotient technique: <b>if |y⁗| ≤ M near x, then (y(x + h) − 2y(x) + y(x − h))/h² differs from y″(x) by at most Mh²/12.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the second-quotient technique">
-y(x \pm h) = y \pm h y^{\prime} + \tfrac{h^2}{2}y^{\prime\prime} \pm \tfrac{h^3}{6}y^{\prime\prime\prime} + \tfrac{h^4}{24}y^{\prime\prime\prime\prime}(\xi_\pm) @@ the matching polynomial of degree 3 and its remainder (23b), at x + h and at x − h
-y(x + h) + y(x - h) = 2y + h^2y^{\prime\prime} + \tfrac{h^4}{24}\big(y^{\prime\prime\prime\prime}(\xi_+) + y^{\prime\prime\prime\prime}(\xi_-)\big) @@ add: the odd slopes cancel
-\tfrac{y(x + h) - 2y(x) + y(x - h)}{h^2} - y^{\prime\prime}(x) = \tfrac{h^2}{24}\big(y^{\prime\prime\prime\prime}(\xi_+) + y^{\prime\prime\prime\prime}(\xi_-)\big) @@ take away 2y, divide by h²
-\htmlClass{new}{\Big|\tfrac{y(x + h) - 2y(x) + y(x - h)}{h^2} - y^{\prime\prime}(x)\Big| \le \tfrac{Mh^2}{12}} \quad \blacksquare @@ each of the two is at most M
+  <h2 class="sthead"><span class="stno">33i1</span>The Round Sum of Slopes</h2>
+  <p data-pid="88aa63">A drumhead is a sheet, and its statement is the string’s statement spread over the plane: u_tt = c²Δu, with Δu = u_xx + u_yy, by the books of 33e1 kept on a small square instead of a short piece. A round drum asks for reach r and turn θ, with x = r cos θ and y = r sin θ (21r).</p>
+  <p data-pid="f76355">Round-rate technique: <b>for r &gt; 0, Δu = u_rr + u_r/r + u_θθ/r².</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the round-rate technique">
+u_r = u_x\cos\theta + u_y\sin\theta @@ roads add (28c): x_r = cos θ, y_r = sin θ
+u_{rr} = u_{xx}\cos^2\theta + 2u_{xy}\sin\theta\cos\theta + u_{yy}\sin^2\theta @@ roads add again on u_x and u_y; swap knobs (28d)
+u_\theta = -u_x\,r\sin\theta + u_y\,r\cos\theta @@ x_θ = −r sin θ, y_θ = r cos θ
+u_{\theta\theta} = r^2\big(u_{xx}\sin^2\theta - 2u_{xy}\sin\theta\cos\theta + u_{yy}\cos^2\theta\big) - r\,u_r @@ the product technique; the last term is −r(u_x cos θ + u_y sin θ)
+u_{rr} + \tfrac{1}{r^2}u_{\theta\theta} = u_{xx} + u_{yy} - \tfrac{1}{r}u_r @@ add, with sin² + cos² = 1 (21c)
+\htmlClass{new}{\Delta u = u_{rr} + \tfrac1r u_r + \tfrac{1}{r^2}u_{\theta\theta}} \quad \blacksquare @@ move the last term across
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: sin at 1, gap 0.1">
-\tfrac{\sin 1.1 - 2\sin 1 + \sin 0.9}{0.01} = -0.840770 @@ three heights
--\sin 1 = -0.841471 @@ the true second slope (21g)
-\htmlClass{new}{\text{error } 0.000701 \le \tfrac{1 \times 0.01}{12} = 0.000833} \quad \blacksquare @@ |sin⁗| ≤ 1; near x it is about sin 1, and the error is close to (sin 1)h²/12
-  </pre>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · three heights · ← → keys work</div></section>
+  <p data-pid="5f054a">The middle term is new. Along a reach, the circles grow as r grows, so a slope along the reach is spread over more and more room. That term is why a drum is not a string.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · round rate · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">33i1.1</span><span class="ph understand">understand</span>What does the second-quotient technique say? <br>Why do the odd slopes cancel?</li>
+      <li><span class="qid">33i1.1</span><span class="ph understand">understand</span>What does the round-rate technique say? <br>Where does the middle term u_r/r come from, in words?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="33i2">
-  <h2 class="sthead"><span class="stno">33i2</span>Stepping Heat, and the Tick That Breaks It</h2>
-  <p data-pid="21db25">Put marks x_j = jh along a rod and ticks t_n = nk. Write U_j^n for the grid’s temperature at mark j and tick n. Replace u_t by (U_j^(n+1) − U_j^n)/k, as 24i stepped forward, and u_xx by the three-point quotient. With r = κk/h²:</p>
-  <p class="eqline" data-pid="d7e977"><span data-tex="U_j^{n+1} = rU_{j-1}^n + (1 - 2r)\,U_j^n + rU_{j+1}^n."></span></p>
-  <p data-pid="22a367">Grid-average technique: <b>if r ≤ ½, each new value is an average of three old ones, so the grid’s greatest value never grows and its least never falls.</b> Zigzag technique: <b>if r &gt; ½, the start U_j = (−1)ʲε is multiplied by 1 − 4r at every tick, and since |1 − 4r| &gt; 1 it passes every bound, however small ε is.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the grid-average and zigzag techniques">
-r \le \tfrac12 \Rightarrow r \ge 0,\ 1 - 2r \ge 0,\ r + (1 - 2r) + r = 1 @@ three weights, none below 0, adding to 1
-\htmlClass{new}{\min U^n \le U_j^{n+1} \le \max U^n} @@ an average lies between its least and greatest part: 33b1’s technique, on the grid
-U_j^n = (-1)^j\varepsilon \Rightarrow U_j^{n+1} = \big(r(-1) + (1 - 2r) + r(-1)\big)(-1)^j\varepsilon @@ both neighbours have the other sign
-U_j^{n+1} = (1 - 4r)\,U_j^n @@ the zigzag keeps its shape and changes size
-\htmlClass{new}{r > \tfrac12 \Rightarrow |1 - 4r| > 1 \Rightarrow |U^n| = |1 - 4r|^n\varepsilon \to \infty} \quad \blacksquare @@ powers of a number past 1 pass every bound
+  <h2 class="sthead"><span class="stno">33i2</span>The Drum’s Shapes</h2>
+  <p data-pid="84a13c">Tie a drumhead of radius R round its rim: u = 0 at r = R. Look for shapes that keep their form: u = P(r) Θ(θ) T(t).</p>
+  <p data-pid="678dfc">Drum-shape technique: <b>the drum’s answers of this form are J_m(kr) cos(mθ − θ₀) times a swing cos(ckt − t₀), for a whole number m ≥ 0 and a k with J_m(kR) = 0, where J_m(x) = Σ (−1)ʲ (x/2)^(2j + m) / (j! (j + m)!).</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the drum-shape technique">
+\tfrac{T^{\prime\prime}}{c^2T} = \tfrac{P^{\prime\prime} + P^{\prime}/r}{P} + \tfrac{1}{r^2}\tfrac{\Theta^{\prime\prime}}{\Theta} = -k^2 @@ put PΘT into u_tt = c²Δu with the round-rate technique; the left side moves only with t
+\tfrac{\Theta^{\prime\prime}}{\Theta} = -m^2,\ \ \Theta = \cos(m\theta - \theta_0) @@ multiply by r²: the turn part moves only with θ; the steady swing (24h)
+m \text{ is a whole number} @@ θ and θ + 2π are the same point of the drum, and a swing with m repeats every 2π/m
+r^2P^{\prime\prime} + rP^{\prime} + (k^2r^2 - m^2)P = 0 @@ what is left, multiplied by r²P
+x^2y^{\prime\prime} + xy^{\prime} + (x^2 - m^2)y = 0,\ \ x = kr @@ the drum’s statement of 24n3, with a term for the winding
+s^2 = m^2,\ \ u_j = -\tfrac{u_{j-2}}{j(j + 2m)} @@ the starting-power technique (24n); only s = m stays finite at the centre
+\htmlClass{new}{P = J_m(kr),\ \ J_m(kR) = 0} \quad \blacksquare @@ the recipe, from u₀ = 1/(2ᵐm!); the rim is tied
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: two runs on one rod">
-U^0 = (0,\ 0,\ 0,\ 100,\ 0,\ 0,\ 0) @@ a hot mark in the middle, ends at 0
-r = \tfrac12:\ \ U^1 = (0, 0, 50, 0, 50, 0, 0),\ \ U^2 = (0, 25, 0, 50, 0, 25, 0) @@ each value is the average of its two neighbours
-r = 1:\ \ U^1 = (0, 0, 100, -100, 100, 0, 0) @@ the middle mark falls 100 below freezing
-\htmlClass{new}{r = 1:\ \ U^2 = (0, 100, -200, 300, -200, 100, 0)} \quad \blacksquare @@ a zigzag; its middle triples in size from the first tick to the second
-  </pre>
-  <p data-pid="a2f478">For a copper rod with marks a centimetre apart, the tick must be at most h²/(2κ) = 0.0001/(2 × 0.000116) ≈ 0.43 seconds. Halve the gap and the tick must quarter. Fine grids for heat are slow, which is 24i’s stiffness again: the zigzag is the fastest-fading shape of the rod, and it sets the tick for all of them.</p>
-  <!--gfig 33i2--><div class="gfigs" data-gfig="33i2" data-story="[[&quot;The start is a zigzag on the grid: up ε at one mark, down ε at the next. Each row of bars shows it one tick later, rows 0 to 3.&quot;, []], [&quot;Left, r = 0.4: each tick multiplies the zigzag by −0.6. It turns over and shrinks.&quot;, [&quot;teal&quot;, &quot;#44&quot;]], [&quot;Right, r = 0.6: each tick multiplies it by −1.4. It turns over and grows, and goes on growing.&quot;, [&quot;ember&quot;, &quot;#89&quot;]]]"><svg class="gfig" viewBox="0 0 460 220" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="a zigzag start shrinking on the grid for r below one half and growing above"><line x1="34" x2="34" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="54" x2="54" y1="50" y2="62.0" style="stroke:var(--teal);stroke-width:5"/><line x1="74" x2="74" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="94" x2="94" y1="50" y2="62.0" style="stroke:var(--teal);stroke-width:5"/><line x1="114" x2="114" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="134" x2="134" y1="50" y2="62.0" style="stroke:var(--teal);stroke-width:5"/><line x1="154" x2="154" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="174" x2="174" y1="50" y2="62.0" style="stroke:var(--teal);stroke-width:5"/><line x1="194" x2="194" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="26" x2="210" y1="50" y2="50" style="stroke:var(--grid);stroke-width:1"/><text x="22" y="54" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="34" x2="34" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="54" x2="54" y1="90" y2="82.8" style="stroke:var(--teal);stroke-width:5"/><line x1="74" x2="74" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="94" x2="94" y1="90" y2="82.8" style="stroke:var(--teal);stroke-width:5"/><line x1="114" x2="114" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="134" x2="134" y1="90" y2="82.8" style="stroke:var(--teal);stroke-width:5"/><line x1="154" x2="154" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="174" x2="174" y1="90" y2="82.8" style="stroke:var(--teal);stroke-width:5"/><line x1="194" x2="194" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="26" x2="210" y1="90" y2="90" style="stroke:var(--grid);stroke-width:1"/><text x="22" y="94" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="34" x2="34" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="54" x2="54" y1="130" y2="134.3" style="stroke:var(--teal);stroke-width:5"/><line x1="74" x2="74" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="94" x2="94" y1="130" y2="134.3" style="stroke:var(--teal);stroke-width:5"/><line x1="114" x2="114" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="134" x2="134" y1="130" y2="134.3" style="stroke:var(--teal);stroke-width:5"/><line x1="154" x2="154" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="174" x2="174" y1="130" y2="134.3" style="stroke:var(--teal);stroke-width:5"/><line x1="194" x2="194" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="26" x2="210" y1="130" y2="130" style="stroke:var(--grid);stroke-width:1"/><text x="22" y="134" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">2</text><line x1="34" x2="34" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="54" x2="54" y1="170" y2="167.4" style="stroke:var(--teal);stroke-width:5"/><line x1="74" x2="74" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="94" x2="94" y1="170" y2="167.4" style="stroke:var(--teal);stroke-width:5"/><line x1="114" x2="114" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="134" x2="134" y1="170" y2="167.4" style="stroke:var(--teal);stroke-width:5"/><line x1="154" x2="154" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="174" x2="174" y1="170" y2="167.4" style="stroke:var(--teal);stroke-width:5"/><line x1="194" x2="194" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="26" x2="210" y1="170" y2="170" style="stroke:var(--grid);stroke-width:1"/><text x="22" y="174" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">3</text><text x="118" y="20" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">r = 0.4: shrinks (× −0.6 a tick)</text><line x1="260" x2="260" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="280" x2="280" y1="50" y2="62.0" style="stroke:var(--ember);stroke-width:5"/><line x1="300" x2="300" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="320" x2="320" y1="50" y2="62.0" style="stroke:var(--ember);stroke-width:5"/><line x1="340" x2="340" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="360" x2="360" y1="50" y2="62.0" style="stroke:var(--ember);stroke-width:5"/><line x1="380" x2="380" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="400" x2="400" y1="50" y2="62.0" style="stroke:var(--ember);stroke-width:5"/><line x1="420" x2="420" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="252" x2="436" y1="50" y2="50" style="stroke:var(--grid);stroke-width:1"/><text x="248" y="54" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="260" x2="260" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="280" x2="280" y1="90" y2="73.2" style="stroke:var(--ember);stroke-width:5"/><line x1="300" x2="300" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="320" x2="320" y1="90" y2="73.2" style="stroke:var(--ember);stroke-width:5"/><line x1="340" x2="340" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="360" x2="360" y1="90" y2="73.2" style="stroke:var(--ember);stroke-width:5"/><line x1="380" x2="380" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="400" x2="400" y1="90" y2="73.2" style="stroke:var(--ember);stroke-width:5"/><line x1="420" x2="420" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="252" x2="436" y1="90" y2="90" style="stroke:var(--grid);stroke-width:1"/><text x="248" y="94" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="260" x2="260" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="280" x2="280" y1="130" y2="153.5" style="stroke:var(--ember);stroke-width:5"/><line x1="300" x2="300" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="320" x2="320" y1="130" y2="153.5" style="stroke:var(--ember);stroke-width:5"/><line x1="340" x2="340" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="360" x2="360" y1="130" y2="153.5" style="stroke:var(--ember);stroke-width:5"/><line x1="380" x2="380" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="400" x2="400" y1="130" y2="153.5" style="stroke:var(--ember);stroke-width:5"/><line x1="420" x2="420" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="252" x2="436" y1="130" y2="130" style="stroke:var(--grid);stroke-width:1"/><text x="248" y="134" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">2</text><line x1="260" x2="260" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="280" x2="280" y1="170" y2="137.1" style="stroke:var(--ember);stroke-width:5"/><line x1="300" x2="300" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="320" x2="320" y1="170" y2="137.1" style="stroke:var(--ember);stroke-width:5"/><line x1="340" x2="340" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="360" x2="360" y1="170" y2="137.1" style="stroke:var(--ember);stroke-width:5"/><line x1="380" x2="380" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="400" x2="400" y1="170" y2="137.1" style="stroke:var(--ember);stroke-width:5"/><line x1="420" x2="420" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="252" x2="436" y1="170" y2="170" style="stroke:var(--grid);stroke-width:1"/><text x="248" y="174" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">3</text><text x="344" y="20" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">r = 0.6: grows (× −1.4 a tick)</text><text x="230.0" y="214" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">the zigzag start (−1)ʲε, tick by tick (rows 0 to 3)</text></svg></div><!--/gfig 33i2-->
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · heat on a grid · ← → keys work</div></section>
+  <p data-pid="9a94e6">So each shape is fixed by m, the number of times it winds, and by which zero of J_m sits at the rim. A shape with m = 1 has a line across the drum that never moves. Its frequency is c k/(2π) = c j/(2πR), where j is the zero. Rung 24’s drum was the shape with m = 0.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · drum shapes · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">33i2.1</span><span class="ph understand">understand</span>What do the grid-average and zigzag techniques say? <br>Why does r ≤ ½ make each new value an average?</li>
+      <li><span class="qid">33i2.1</span><span class="ph understand">understand</span>What does the drum-shape technique say? <br>Why must m be a whole number, and what does the rim decide?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="33i3">
-  <h2 class="sthead"><span class="stno">33i3</span>A String on a Grid Must Hear the Wave</h2>
-  <p data-pid="6ccfca">Do the same for the string. Replace y_tt by the three-point quotient in time too. With σ = ck/h (on this page σ is c times the tick over the step, a new job for the letter),</p>
-  <p class="eqline" data-pid="a49594"><span data-tex="Y_j^{n+1} = 2Y_j^n - Y_j^{n-1} + \sigma^2\big(Y_{j+1}^n - 2Y_j^n + Y_{j-1}^n\big)."></span></p>
-  <p data-pid="6cc1e1">Grid-reach technique: <b>if σ &gt; 1, the grid’s answers cannot head to the string’s answer for every start, however fine the grid; and the zigzag grows.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the grid-reach technique">
-Y_j^n \text{ uses only the start at marks } j - n, \ldots, j + n @@ each tick reaches one mark further each way
-\text{the grid at } (x, t) \text{ uses the start within } \tfrac{t}{k}h = \tfrac{ct}{\sigma} \text{ of } x @@ n = t/k ticks, each reaching h
-\text{the string at } (x, t) \text{ uses the start within } ct \text{ of } x @@ the two-waves technique (33c2)
-\sigma > 1:\ \text{change the start only where } \tfrac{ct}{\sigma} < |s - x| < ct @@ the string’s answer at (x, t) changes; the grid’s does not
-\htmlClass{new}{\text{the grid cannot follow both starts}} \quad \blacksquare @@ a list that heads to one value cannot head to two
+  <h2 class="sthead"><span class="stno">33i3</span>Tones That Are Not Harmonics</h2>
+  <p data-pid="b88233">24n3 read the first zeros of J₀ off its sum, as 2.405 and 5.520, and took their ratio. A drum’s tones are not whole multiples. Is that a fact, or a rounding?</p>
+  <p data-pid="420da3">Unharmonic-drum technique: <b>the first two round tones of a drum, with m = 0, have a ratio between 2.28 and 2.31, so the second is not a whole multiple of the first.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the unharmonic-drum technique">
+J_0(x) = 1 - \tfrac{x^2}{4} + \tfrac{x^4}{64} - \tfrac{x^6}{2304} + \cdots @@ the recipe with m = 0
+\text{for } x \le 6, \text{ the terms shrink in size from } j = 3 \text{ on} @@ the jth term is the one before times −(x/2)²/j², and 9/j² &lt; 1 once j ≥ 4
+J_0(2.40) \in [0.00249,\ 0.00293],\ \ J_0(2.41) \in [-0.00998,\ -0.00225] @@ two running totals in a row bracket the total (22g), worked in exact fractions
+J_0(5.51) \in [-0.00962,\ -0.00284],\ \ J_0(5.53) \in [0.00332,\ 0.00401] @@ the same, with more terms
+\text{a zero in } (2.40, 2.41) \text{ and one in } (5.51, 5.53) @@ no gaps (12e): J₀ is continuous and changes sign
+\htmlClass{new}{2.28 < \tfrac{5.51}{2.41} < \tfrac{j_2}{j_1} < \tfrac{5.53}{2.40} < 2.31} \quad \blacksquare @@ and no whole number lies between 2.28 and 2.31
   </pre>
-<div class="eqline c6 lsyn" data-was="1f3670" data-tex="\begin{aligned}&amp;Y_j^n = g^n(-1)^j:\quad g + 1/g = 2 - 4\sigma^2\\ &amp;\sigma \le 1:\ \text{in } [-2, 2],\ g \text{ turns without growing}\\ &amp;\sigma &gt; 1:\ \text{below } -2,\ \text{one root } g &lt; -1\\ &amp;\qquad\text{the zigzag grows}\\ &amp;\text{so } \sigma = ck/h \le 1\\ &amp;\text{one tick}:\ \text{the wave travels } ck\\ &amp;\qquad\text{the grid&#x27;s news travels } h\\ &amp;\text{the grid must hear all the string can}\end{aligned}"></div>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · string grid · ← → keys work</div></section>
+  <p data-pid="62d25d">That the two zeros found are the first two takes one more look: J₀ is positive from 0 to 2.40 and has one sign between them. The step leaves that check to its standing questions. The same bounds for J₁ put its first zero between 3.83 and 3.84. So a drum of radius R sounds, against its lowest tone, at about 1.59, 2.14, 2.30, 2.65 and 2.92 times it. A string sounds at 2, 3, 4. A snare drum 36 cm across, with c = 100 m/s in its head, has its lowest tone at 100 × 2.405 / (2π × 0.178) ≈ 215 swings a second, and the rest sit at no whole multiple of it.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · not harmonics · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">33i3.1</span><span class="ph understand">understand</span>What does the grid-reach technique say? <br>How far does the grid’s news travel in one tick, and how far does the wave?</li>
+      <li><span class="qid">33i3.1</span><span class="ph understand">understand</span>What does the unharmonic-drum technique say? <br>Which technique of rung 22 turns the drum’s sum into exact bounds?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="33i4">
-  <h2 class="sthead"><span class="stno">33i4</span>A Still Plate on a Grid</h2>
-<div class="eqline c6 lsyn" data-was="e75eb5" data-tex="\begin{aligned}&amp;\text{marks } h \text{ apart both ways},\ \Delta u \approx 0:\\ &amp;\qquad\text{each inside value} =\\ &amp;\qquad\text{the average of its four neighbours}\\ &amp;\text{the circle-average, on the grid&#x27;s smallest circle}\end{aligned}"></div>
-  <p data-pid="1ec0c3">Four-neighbour technique: <b>the grid still state on a plate takes its greatest and least values on the edge, and is fixed by the edge.</b> An inside mark at the grid’s greatest value is the average of four values none greater, so all four equal it; walking outward from there, mark by mark, the greatest value reaches an edge mark.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the square plate of 33h3, on a grid">
-h = \tfrac13:\ \ \text{inside marks } (\tfrac13, \tfrac23),\ (\tfrac23, \tfrac23),\ (\tfrac13, \tfrac13),\ (\tfrac23, \tfrac13) @@ the top edge at 100, the others at 0
-\text{top marks } P,\ \text{bottom marks } Q @@ the plate is the same flipped left to right, and so is the edge
-4P = 100 + P + Q + 0,\ \ 4Q = P + Q + 0 + 0 @@ each is the average of its four neighbours
-Q = \tfrac{P}{3},\ \ \tfrac83P = 100 @@ from the second line, then the first
-\htmlClass{new}{P = 37.5,\ \ Q = 12.5} \quad \blacksquare @@ the warm-edge series gives 38.07 and 11.93
+  <h2 class="sthead"><span class="stno">33i4</span>A Ball, by the Rod’s Statement</h2>
+  <p data-pid="7338ba">In space, Δu = u_xx + u_yy + u_zz. Let u depend only on the distance r from the centre: u = U(r), with r = √(x² + y² + z²).</p>
+  <p data-pid="b6496a">Round-ball technique: <b>if u depends only on the distance r from the centre, then Δu = (1/r)(rU)″ for r &gt; 0.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the round-ball technique">
+u_x = U^{\prime}(r)\,\tfrac{x}{r} @@ the chain technique: r_x = x/r
+u_{xx} = U^{\prime\prime}\tfrac{x^2}{r^2} + U^{\prime}\big(\tfrac1r - \tfrac{x^2}{r^3}\big) @@ the product technique
+\Delta u = U^{\prime\prime} + U^{\prime}\big(\tfrac3r - \tfrac1r\big) = U^{\prime\prime} + \tfrac2r U^{\prime} @@ add the three, with x² + y² + z² = r²
+\htmlClass{new}{\Delta u = \tfrac1r\,(rU)^{\prime\prime}} \quad \blacksquare @@ (rU)″ = rU″ + 2U′
   </pre>
-  <aside class="nature">
-    <div class="eyebrow">Anexact, yet rigorous · the cloud, on a grid</div>
-    <p data-pid="fb3241">21a gave every value that uses π a width, because no decimal holds π. A grid answer has a width too, set by its gap. The second-quotient technique says the error in each quotient is about h² times a fourth slope. For the plate at h = 1/3, the grid is off by 0.57 at the marks. Halve the gap and the error falls to about a quarter.</p>
-    <p data-pid="8b3570"><b>A grid answer is a dot inside a width, and the width is found by halving the gap.</b></p>
-    <p data-pid="10ef4b">So a grid answer is reported with its width, and the width is found by running the grid twice. Two runs at h and h/2 that agree to the first figure say the first figure is earned. Two runs that do not agree say the grid is too coarse, however many figures it prints.</p>
-    <p class="bait" data-pid="b397ac">A forecast of the soil’s temperature at the Puyallup research farm is run on a grid with marks every 5 cm and again with marks every 2.5 cm. The two forecasts for 30 cm down differ by 0.8 °C. How wide a width would you report, and which run would you print?</p>
-  </aside>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · plate grid · ← → keys work</div></section>
+  <p data-pid="f458bc">So for a ball, w = rU obeys the rod’s statement. A ball of radius R, started evenly warm and held at 0 on its skin, cools in the shapes sin(nπr/R)/r, each fading like e^(−κn²π²t/R²) by 33a2’s lines for w, with w = 0 at the centre and at the skin. The slowest loses a factor of e every R²/(κπ²). A steel ball 2 cm across, with κ = 1.2 × 10⁻⁵ m²/s, takes under a second. A ball of rock the size of the earth, with κ about 10⁻⁶ m²/s, would take some 130 billion years, about ten times the age of everything. A body that large has cooled only in its outer skin.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · ball · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">33i4.1</span><span class="ph understand">understand</span>What does the four-neighbour technique say? <br>How is the width of a grid answer found?</li>
+      <li><span class="qid">33i4.1</span><span class="ph understand">understand</span>What does the round-ball technique say? <br>What statement does w = rU obey, and what are the cooling shapes of a ball?</li>
     </ol>
   </section>
 </section>
@@ -161,15 +145,15 @@ Q = \tfrac{P}{3},\ \ \tfrac83P = 100 @@ from the second line, then the first
 <section class="class step" data-step="33i5">
   <h2 class="sthead"><span class="stno">33i5</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{halve the gap and keep the tick, and the heat grid gets better}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; r = κk/h² quadruples; past ½ the zigzag grows
-\text{the zigzag starts at } \varepsilon = 10^{-12}, \text{ so it can be ignored}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a factor of |1 − 4r| per tick passes 10¹² in a few dozen ticks; rounding alone starts it
-\text{a finer grid for the string is always safer}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only if the tick shrinks with it: σ = ck/h must stay at most 1
-\text{the grid prints } 37.5000, \text{ so the plate is } 37.5000\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the grid’s width at h = 1/3 is about half a degree; the printed figures past it are not measured
+\Delta u = u_{rr} + u_{\theta\theta} \text{ in reach and turn}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the turn is an angle, not a length: it needs 1/r², and the reach leaves the term u_r/r
+m = \tfrac12 \text{ gives a shape that winds half a time}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a swing with m = ½ does not come back to itself after one turn of θ, so the drum would tear along a line
+\text{24n3 printed } 5.520/2.405 = 2.295, \text{ so the ratio is proved not whole}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a printed number is a rounding; bounds from the alternating bracket make it a proof
+\text{a ball cools like a rod of length } R\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; rU does, and only with rU = 0 at the centre as well as at the skin
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">33i5.1</span><span class="ph understand">understand</span>Why is “halve the gap and keep the tick, and the heat grid gets better” a move to watch out for?</li>
+      <li><span class="qid">33i5.1</span><span class="ph understand">understand</span>Why is “24n3 printed 5.520/2.405 = 2.295, so the ratio is proved not whole” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -178,20 +162,22 @@ Q = \tfrac{P}{3},\ \ \tfrac83P = 100 @@ from the second line, then the first
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">33i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="U^0 = (0,\ 0,\ 0,\ 100,\ 0,\ 0,\ 0),\ \ r = \tfrac14"></span></span>Build three ticks of the heat grid by hand. Check that the greatest value never grows and the total heat on the marks is kept until heat reaches the ends. <br>Find the share of the start left in the middle after three ticks, and compare with the spreading bell of 33b3 at the same time.</div>
-  <div class="chq"><span class="chid">33i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="r = \tfrac12"></span></span>At r = ½ the middle weight 1 − 2r is 0. Find what the zigzag does, and whether the grid-average technique still holds. <br>Run the start (0, 0, 0, 100, 0, 0, 0) for four ticks: why does every other mark sit at 0?</div>
-  <div class="chq"><span class="chid">33i.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="h = \tfrac14 \text{ on the square plate of 33h3}"></span></span>The grid has nine inside marks. Find the centre mark without solving, by the quarter turns of 33h3 applied to the grid. <br>Then solve for the other marks, using the plate’s left-right symmetry.</div>
-  <div class="chq"><span class="chid">33i.4.4</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="g + \tfrac1g = 2 - 4\sigma^2"></span></span>The grid-reach technique showed that σ &gt; 1 fails. Turn it round: does σ ≤ 1 make the zigzag safe? <br>Find |g| for σ = 1 and σ = 0.8 when Y_j^n = gⁿ(−1)ʲ, and what σ = 1 does to the grid’s answer for a start that is one bump.</div>
+  <div class="chq"><span class="chid">33i.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="J_1(x) = \tfrac{x}{2} - \tfrac{x^3}{16} + \tfrac{x^5}{384} - \cdots"></span></span>Build bounds that put the first zero of J₁ between 3.83 and 3.84, as the unharmonic-drum technique did for J₀. <br>Find the line across the drum that never moves in the shape J₁(kr) cos θ, and the ratio of its tone to the lowest.</div>
+  <div class="chq"><span class="chid">33i.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a square drum, side } 1,\ \ u = \sin(m\pi x)\sin(n\pi y)"></span></span>Find the tones of a square drum tied round its edge, against the lowest. <br>Is a square drum harmonic? Find two different shapes with the same tone, and whether the perpendicular-shapes technique says anything about them.</div>
+  <div class="chq"><span class="chid">33i.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="P = 1 - (r/R)^2"></span></span>The perpendicular-shapes technique wrote a shape’s number as a total over the shape itself. For the round drum with m = 0, that number is k² = ∫ P′² r dr / ∫ P² r dr over [0, R]. <br>Find the ratio for this P, which is 0 at the rim but is not a shape. Compare √(ratio) × R with 2.405. Which is larger, and can you prove it must be?</div>
+  <div class="chq"><span class="chid">33i.4.4</span><span class="tagq">converse</span>The unharmonic-drum technique found sign changes. Turn it round: prove that J₀ has no zero in [0, 2.40], so that the zero in (2.40, 2.41) is the first. <br>Use the alternating bracket: the running total through x²/4 covers [0, 2). Find how many more terms it takes to cover [2, 2.40].</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r33h.html">← 33h · separation of variables by hand</a><a href="r33j.html">33j · potentials by hand →</a></nav>
+<nav class="nextrung"><a href="r33h.html">← 33h · boundary value problems</a><a href="r33j.html">33j · separation of variables by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The three-point quotient is the central second difference, and the method is finite differences. The heat step is the explicit (forward Euler, FTCS) scheme, r is the mesh ratio, and r ≤ ½ is its stability condition; testing with zigzags and other waves on the grid is von Neumann stability analysis. σ = ck/h is the Courant number, and σ ≤ 1 is the Courant–Friedrichs–Lewy (CFL) condition. The four-neighbour average is the five-point Laplacian. Halving the gap to find the width is a convergence study; using the two runs to cancel the h² error is Richardson extrapolation.</p>
+  <p>u_tt = c²Δu on a disc is the wave equation for a circular membrane; Δu in reach and turn is the Laplacian in polar coordinates. J_m is the Bessel function of the first kind of order m, x²y″ + xy′ + (x² − m²)y = 0 is Bessel’s equation, and its zeros are written j_{m,n}. The shapes are the normal modes of the membrane, and the lines that never move are nodal lines. The number of the reroute is the Rayleigh quotient, and the fact that it is never below the lowest number is the Rayleigh principle.</p>
   <h3>Who said it first</h3>
-  <p>Lewis Fry Richardson solved Laplace’s equation on a grid by hand in 1910, and in 1922 forecast the weather over central Europe by hand, with a grid and a clock, getting a pressure change a hundred times too large. Richard Courant, Kurt Friedrichs and Hans Lewy proved in 1928 that the grid must reach as far as the wave, in a paper meant for proofs, not computers. John von Neumann tested stability with waves on the grid at Los Alamos in the 1940s, and Phyllis Nicolson and John Crank built a heat step with no tick limit in 1947.</p>
+  <p>Leonhard Euler studied a round drum in 1764 and found the drum’s statement. Daniel Bernoulli had met J₀ in a hanging chain in 1732. Friedrich Bessel studied the functions in 1824 for the motion of planets. Siméon Denis Poisson cooled a ball by the rod’s statement for rU in the 1820s. William Thomson (Lord Kelvin) estimated the earth’s age from its cooling skin in 1862, and Lord Rayleigh’s Theory of Sound (1877) set out the drum’s tones and his quotient. Mark Kac asked in 1966 whether the tones of a drum fix its shape; Carolyn Gordon, David Webb and Scott Wolpert found two different drums with the same tones in 1992.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The drum’s statement has two solutions, so each shape is a mix of J₀ and the second one, and the rim fixes the mix.” Not allowed: the second solution passes every bound at the centre (24n3), and a drumhead is finite at its centre, so the mix has none of it. The rim then fixes k, not the mix.</p>
 </section>
 
 </div>
@@ -206,25 +192,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'match',t:R`y(x \pm h) = y \pm hy^{\prime} + \tfrac{h^2}{2}y^{\prime\prime} \pm \cdots`,n:`23b, twice.`},
-  {k:'ember',kl:'add',t:R`\text{odd slopes cancel}`,n:`Even ones stay.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{error} \le Mh^2/12}`,n:`Halve h, quarter the error.`}
-],{title:'The slides · three heights · ← → keys work'});
+  {k:'ember',kl:'reach',t:R`u_{rr} = u_{xx}\cos^2 + \cdots`,n:`Roads add, twice.`},
+  {k:'ember',kl:'turn',t:R`u_{\theta\theta} = r^2(\cdots) - r\,u_r`,n:`A leftover.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta u = u_{rr} + \tfrac1r u_r + \tfrac{1}{r^2}u_{\theta\theta}}`,n:`Room grows with r.`}
+],{title:'The slides · round rate · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'step',t:R`U_j^{n+1} = rU_{j-1} + (1 - 2r)U_j + rU_{j+1}`,n:`r = κk/h².`},
-  {k:'ember',kl:'safe',t:R`\htmlClass{new}{r \le \tfrac12}`,n:`An average.`},
-  {k:'ember',kl:'breaks',t:R`r > \tfrac12:\ \times(1 - 4r)`,n:`The zigzag grows.`}
-],{title:'The slides · heat on a grid · ← → keys work'});
+  {k:'ember',kl:'turn',t:R`\Theta = \cos(m\theta - \theta_0)`,n:`Winds m times.`},
+  {k:'ember',kl:'reach',t:R`x^2y^{\prime\prime} + xy^{\prime} + (x^2 - m^2)y = 0`,n:`The drum’s statement.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{J_m(kR) = 0}`,n:`Tied at the rim.`}
+],{title:'The slides · drum shapes · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'grid reach',t:R`\tfrac{ct}{\sigma}`,n:`Marks j − n to j + n.`},
-  {k:'ember',kl:'string reach',t:R`ct`,n:`Two waves.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sigma = ck/h \le 1}`,n:`Hear the whole wave.`}
-],{title:'The slides · string grid · ← → keys work'});
+  {k:'ember',kl:'bracket',t:R`J_0(2.40) > 0 > J_0(2.41)`,n:`Running totals, exactly.`},
+  {k:'ember',kl:'again',t:R`J_0(5.51) < 0 < J_0(5.53)`,n:`More terms.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2.28 < j_2/j_1 < 2.31}`,n:`No whole number.`}
+],{title:'The slides · not harmonics · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'average',t:R`U = \tfrac14(\text{four neighbours})`,n:`The smallest circle.`},
-  {k:'ember',kl:'hand',t:R`4P = 100 + P + Q,\ 4Q = P + Q`,n:`Two marks by symmetry.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{P = 37.5,\ Q = 12.5}`,n:`Against 38.07, 11.93.`}
-],{title:'The slides · plate grid · ← → keys work'});
+  {k:'ember',kl:'chain',t:R`u_x = U^{\prime}\,x/r`,n:`r_x = x/r.`},
+  {k:'ember',kl:'add',t:R`U^{\prime\prime} + \tfrac2r U^{\prime}`,n:`Three directions.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Delta u = \tfrac1r(rU)^{\prime\prime}}`,n:`The rod’s statement for rU.`}
+],{title:'The slides · ball · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

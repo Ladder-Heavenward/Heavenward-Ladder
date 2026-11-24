@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>46·crypt · How Does a Browser Know It Is Talking to Its Bank?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r46comp.html">← 46·comp how did the numbers run out, and the network keep running?</a><a href="r46econ.html">next: 46·econ why do strangers keep the chain honest? →</a></p>
+  <div class="tags"><span class="tag crypt">46·crypt · cryptography</span></div>
+  <h1>How Does a Browser Know It Is Talking to Its Bank?</h1>
+  <p data-pid="126894">How does a browser know it is talking to its bank? 43·comp let two strangers agree a secret in public, and 44·crypt found the flaw: a device in the middle can agree one secret with each side and pass messages between them, reading all. Earbuds beat it with a six-digit check read by a person. A browser has no person to ask. The fix is a chain of signatures: the bank signs its half of the exchange, a company the browser already trusts vouches for the bank’s signing key, and the browser checks the chain before sending a byte. This page builds the chain, runs the handshake that sets up every padlocked web page in one round trip, and shows why a stolen key years later cannot open today’s talk.</p>
+  <p class="gesture" data-pid="62ec87">Plain key exchange is open to a device in the middle. The server signs its half; a certificate binds its name to its signing key, signed by an authority whose key the browser ships with. The browser checks the chain up to a root it holds, then both derive the session keys from the shared secret. Fresh halves every time mean old talk stays locked even if the long-term key leaks.</p>
+</header>
+
+<section class="class step" data-step="45crypt1">
+  <h2 class="sthead"><span class="stno">45crypt1</span>A Stranger in the Middle</h2>
+  <p data-pid="b36eb8">Claire’s browser and her bank run 43·comp’s exchange: each picks a secret power and sends g to that power. Mike sits on the café’s wifi.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the attack again">
+\text{Claire sends } g^a;\ \text{Mike keeps it, sends } g^m @@ to the bank
+\text{bank sends } g^b;\ \text{Mike keeps it, sends } g^m @@ to Claire
+\text{Claire shares } g^{am} \text{ with Mike; the bank } g^{bm} @@ two secrets, both his
+\htmlClass{new}{\text{the exchange says nothing about who is at the other end}} @@ 44·crypt’s device in the middle
+  </pre>
+  <p data-pid="186907">From here on, on this page, to <i>authenticate</i> a message is to give proof of who sent it that no one else could forge.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46·crypt.1.1</span><span class="ph understand">understand</span>Why does a plain key exchange not protect Claire from Mike in the middle?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45crypt2">
+  <h2 class="sthead"><span class="stno">45crypt2</span>Signing the Half</h2>
+  <pre class="lines" data-k="ember" data-label="this page: a signed half">
+\text{the bank has a signing key } s \text{ and a checking key } v @@ like 43o’s RSA pair
+\text{bank sends } g^b \text{ and } \text{Sig}_s(g^a, g^b) @@ a signature over both halves
+\text{Claire checks it with } v @@ only the holder of s could make it
+\htmlClass{new}{\text{Mike cannot sign } g^m \text{ as the bank}} @@ his swap is caught
+  </pre>
+  <p data-pid="5168cd">Signed-exchange technique: <b>the server signs the key-exchange messages with a long-term key, so a stranger who swaps in its own half cannot produce a valid signature.</b> But how does Claire know v is the bank’s checking key, and not Mike’s?</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46·crypt.2.1</span><span class="ph understand">understand</span>How does signing the exchange stop Mike, and what question does it leave?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45crypt3">
+  <h2 class="sthead"><span class="stno">45crypt3</span>Who Vouches for the Key</h2>
+  <pre class="lines" data-k="ember" data-label="this page: a chain of certificates">
+\text{certificate: “} v \text{ belongs to mybank.example”, signed by an authority} @@ a signed statement
+\text{the authority’s key, vouched for by a root} @@ one more link
+\text{root keys ship with the browser} @@ trusted in advance
+\htmlClass{new}{\text{check each signature up the chain to a root}} @@ a path in 42’s graph of who vouches for whom
+  </pre>
+  <p data-pid="8a44a5">An authority checks that whoever asks for a certificate really controls the name, often by asking them to put a given word on the site. <b>Trust is carried down a chain of signatures from a few root keys the browser holds.</b> Certificates expire, and a revoked one is listed, because keys get stolen.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46·crypt.3.1</span><span class="ph understand">understand</span>How does Claire’s browser decide that a checking key really belongs to the bank?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45crypt4">
+  <h2 class="sthead"><span class="stno">45crypt4</span>The Handshake</h2>
+  <p data-pid="ed78ad">The current version of the web’s padlock, TLS 1.3 from 2018, does all of this in one round trip.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one round trip">
+\text{browser} \to \text{server: } g^a, \text{ ciphers it knows} @@ guessing the server’s group
+\text{server} \to \text{browser: } g^b, \text{ certificate chain, signature, check} @@ all but its half locked under keys from the shared secret
+\text{both: keys from } g^{ab} \text{ and all messages so far} @@ a fingerprint of the whole talk
+\htmlClass{new}{\text{data flows after one round trip}} @@ earlier versions took two
+  </pre>
+  <p data-pid="e1c6c1"><b>The handshake agrees a fresh secret, proves who the server is, and binds both to a fingerprint of every message exchanged, so no step can be quietly changed.</b> After it, 27·crypt2’s locks with message tags carry the data.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46·crypt.4.1</span><span class="ph understand">understand</span>What does each side send in the handshake, and why is the whole transcript fingerprinted?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45crypt5">
+  <h2 class="sthead"><span class="stno">45crypt5</span>Old Talk Stays Locked</h2>
+  <pre class="lines" data-k="ember" data-label="this page: fresh halves">
+a, b \text{ fresh each time, forgotten after} @@ never stored
+\text{the long-term key only signs} @@ it never locks the secret
+\text{steal it in five years: } g^{ab} \text{ still needs } a \text{ or } b @@ 43·comp’s hard problem
+\htmlClass{new}{\text{recorded talk from today stays locked}} @@ the signing key cannot open it
+  </pre>
+  <p data-pid="3a66dd">Older versions could lock the session secret under the server’s long-term key, so one stolen key opened years of recorded talk. TLS 1.3 removed that option. <b>Fresh halves forgotten after each talk keep past talk safe even when the long-term key is lost.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46·crypt.5.1</span><span class="ph understand">understand</span>Why does a key stolen years later not open talk recorded today?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45crypt6">
+  <h2 class="sthead"><span class="stno">45crypt6</span>Moves to Watch Out For</h2>
+  <p data-pid="6e8a92">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{lock the exchange, then it is safe from Mike}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the exchange itself must be signed, or Mike swaps in his half (45crypt2)
+\text{trust any checking key the server sends}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; Mike sends his own; it must chain to a root (45crypt3)
+\text{check the certificate after sending the password}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; check the chain before sending a byte (45crypt4)
+\text{the root vouches for the bank, so the bank vouches for the root}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; trust runs down the chain from the root (45crypt3)
+\text{one long-term key for both signing and locking}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; fresh halves keep old talk locked; the long-term key only signs (45crypt5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">46·crypt.6.1</span><span class="ph understand">understand</span>Which move above trusts a key without a chain, and what must it chain to?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">46·crypt.7.1</span><span class="tagq">do</span>A certificate for a site is signed by an authority whose own certificate is signed by a root the browser holds. Count the signatures the browser checks.</div>
+  <div class="chq"><span class="chid">46·crypt.7.2</span><span class="tagq">make</span>Make up a way Mike could get a browser to accept his key if it trusted one extra root.</div>
+  <div class="chq"><span class="chid">46·crypt.7.3</span><span class="tagq">converse</span>A valid chain to a root proves the key belongs to the name. Decide whether a valid chain proves the site is honest.</div>
+  <div class="chq"><span class="chid">46·crypt.7.4</span><span class="tagq">edge</span>Let the browser hold no root keys at all. Say what it can and cannot check.</div>
+  <div class="chq"><span class="chid">46·crypt.7.5</span><span class="tagq">open</span>Say why the handshake fingerprints every message, not just the key-exchange halves.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r46comp.html">← 46·comp · how did the numbers run out, and the network keep running?</a><a href="r46econ.html">46·econ · why do strangers keep the chain honest? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="6cbc91">The padlock is <b>TLS</b> (Transport Layer Security, successor to SSL); the signed exchange is <b>authenticated key exchange</b>, the attack a <b>man-in-the-middle attack</b>. Certificates follow <b>X.509</b>; the authorities are <b>certificate authorities</b> and the chain a <b>public key infrastructure</b> (PKI). Fresh halves give <b>forward secrecy</b>; the halves are <b>ephemeral Diffie-Hellman</b> keys.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="5fd3e0">Netscape released SSL 2.0 in 1995; TLS 1.0 followed in 1999, and TLS 1.3 was published as RFC 8446 in August 2018. Diffie and Hellman, who gave the exchange in 1976, already noted that its halves must be authenticated.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

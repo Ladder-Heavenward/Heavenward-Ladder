@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>24·logi · Why Does a Small Change in Sales Shake the Factory?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24econ.html">← 24·econ why do booms end?</a><a href="r24nav.html">next: 24·nav can a submarine know where it is without looking out? →</a></p>
+  <div class="tags"><span class="tag logi">24·logi · logistics</span></div>
+  <h1>Why Does a Small Change in Sales Shake the Factory?</h1>
+  <p data-pid="47c1ed">Why does a small change in sales shake the factory? A shop sells a few more bottles of juice one week. A month later the factory that makes them is running overtime, and a month after that it is laying people off. Nobody made a mistake: each link in the chain followed a sensible rule. This page follows one small rise in sales up a chain of shop, wholesaler and factory, watches it grow at every link, writes a smoothed forecast as a rate statement of rung 24 to measure the swing, and finds what calms it.</p>
+  <p class="gesture" data-pid="4688fd">Each link keeps a stock of so many weeks of its forecast, and orders what it sold plus the change in that stock target. A rise in the forecast raises the target at once, so the order jumps by more than the sales. The next link forecasts from these orders, and jumps again. A smoothed forecast F′ = (D − F)/τ makes the jump 1/τ as steep; sharing the shop’s sales and shortening the stock target calm it too.</p>
+</header>
+
+<section class="class step" data-step="24logi1">
+  <h2 class="sthead"><span class="stno">24logi1</span>A Chain and a Rule</h2>
+  <p data-pid="01356d">Claire’s shop sells juice and orders it from Randy’s warehouse, which orders from Mike’s factory. Each link follows the same rule: forecast next week’s demand as this week’s, keep a stock of two weeks of forecast, and order what was sold plus whatever the stock target rose by.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one link’s rule">
+F = \text{this week’s demand} @@ the simplest forecast, 17·logi’s a = 1
+\text{target} = 2F @@ two weeks of stock
+\htmlClass{new}{\text{order} = \text{demand} + \Delta\text{target}} @@ replace what was sold, and move the stock to the target
+  </pre>
+  <p data-pid="20b8d8">From here on, on this page, a link’s <i>demand</i> is what the link below asked it for that week: for the shop, its sales; for the warehouse, the shop’s orders; for the factory, the warehouse’s orders.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·logi.1.1</span><span class="ph understand">understand</span>What rule does each link of the chain follow, and what counts as each link’s demand?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24logi2">
+  <h2 class="sthead"><span class="stno">24logi2</span>A Rise of 2 at the Shop</h2>
+  <p data-pid="bfb6bf">For weeks the shop sold 10 a week, and every link ordered 10. In week 3 sales rise to 12, and stay there.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the shop’s orders">
+\text{week 3: } F = 12,\ \text{target } 20 \to 24 @@ the target rises by 4
+\text{order} = 12 + 4 = 16 @@ the stock must be filled
+\text{week 4: target stays } 24:\ \text{order } 12 @@ only replacement
+\htmlClass{new}{\text{the shop’s orders: } 10,\ 10,\ 16,\ 12,\ 12} @@ a rise of 2 became a jump of 6
+  </pre>
+  <p data-pid="8c8766">The jump is not waste: the shop really does want more stock now that it sells more. But the warehouse sees only the orders, and cannot tell a jump that will last from one that will not.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·logi.2.1</span><span class="ph understand">understand</span>Why does a lasting rise of 2 in sales make the shop order 16 for one week?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24logi3">
+  <h2 class="sthead"><span class="stno">24logi3</span>Up the Chain</h2>
+  <p data-pid="094821">Randy’s warehouse uses the same rule on the shop’s orders.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the warehouse’s orders">
+\text{week 3: demand } 16,\ \text{target } 20 \to 32 @@ the forecast is 16
+\text{order} = 16 + 12 = 28 @@ its own rise of 12 on top
+\text{week 4: demand } 12,\ \text{target } 32 \to 24:\ \text{order} = 12 - 8 = 4 @@ the stock is cut back
+\htmlClass{new}{\text{the factory sees } 10,\ 28,\ 4,\ 12} @@ a rise of 2 at the shop, a swing from 28 to 4 at the factory
+  </pre>
+  <p data-pid="58fc7c">Chain technique: <b>when each link orders its demand plus the change in a stock target set from its own forecast, every swing grows as it climbs the chain.</b> Each link adds its own jump to the jump it was sent, and the far end of the chain sees the largest swing of all.</p>
+<div class="eqline c6" data-tex="\text{rise at the shop } 2 \to \text{shop jump } 6 \to \text{warehouse jump } 18"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·logi.3.1</span><span class="ph understand">understand</span>Why does the warehouse order 28 and then 4, and why does each link make the swing larger?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24logi4">
+  <h2 class="sthead"><span class="stno">24logi4</span>A Smoother Forecast as a Rate Statement</h2>
+  <p data-pid="becb44">Forecasting from this week alone is jumpy. Let the shop smooth instead, moving its forecast toward demand at a rate that is the gap divided by a time τ: 17·logi’s nudge, made into a rate statement.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the smoothed jump">
+F\prime = (D - F)/\tau,\ \ F(0) = 10,\ D = 12 @@ the forecast heads for the demand
+F = 12 - 2e^{-t/\tau} @@ the shift-to-rest technique (24h)
+\text{order} = D + 2F\prime = 12 + \tfrac{4}{\tau} e^{-t/\tau} @@ demand plus the target’s rate
+\htmlClass{new}{\text{largest order} = 12 + 4/\tau} @@ at the moment of the rise
+  </pre>
+  <p data-pid="0f7915">Smoothing technique: <b>a forecast smoothed over a time τ makes the jump in orders 1/τ as tall, and spreads it over a time near τ.</b> With τ of four weeks the shop orders at most 13, not 16. The price is 17·logi’s: on a steady rise, a smoother forecast trails further behind.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·logi.4.1</span><span class="ph understand">understand</span>How does writing the smoothed forecast as a rate statement measure the jump in orders, and what does smoothing cost?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24logi5">
+  <h2 class="sthead"><span class="stno">24logi5</span>What Calms the Chain</h2>
+  <p data-pid="4e30a7">Say the shop shares its sales with the warehouse each week, and the warehouse sets its stock target from the shop’s sales instead of from the shop’s orders.</p>
+  <pre class="lines" data-k="ember" data-label="this page: with the sales shared">
+\text{week 3: target from sales: } 20 \to 24 @@ not 20 → 32
+\text{order} = 16 + 4 = 20 @@ the shop’s 16, plus its own rise
+\text{week 4: order } 12 @@ nothing to cut back
+\htmlClass{new}{\text{the factory sees } 10,\ 20,\ 12} @@ not 10, 28, 4
+  </pre>
+  <p data-pid="a76a87"><b>The chain calms when every link forecasts from the true sales, keeps fewer weeks of stock, and smooths its forecast.</b> A stock target of k weeks makes the shop’s jump 2k, so each week cut from the delivery time cuts the jump. None of the cures is free: shared data needs trust, short deliveries cost more, and smoothing lags.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·logi.5.1</span><span class="ph understand">understand</span>How does sharing the shop’s sales change what the factory sees, and what else calms the chain?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24logi6">
+  <h2 class="sthead"><span class="stno">24logi6</span>Moves to Watch Out For</h2>
+  <p data-pid="c76c66">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the factory’s swings mean demand swings}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the shop’s sales rose once, by 2 (24logi3)
+\text{order exactly what was sold, always}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; calm upstream, but the stock never follows a lasting rise (24logi2)
+\text{largest order} = 12 + 4\tau\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the jump is 4/τ: a longer τ makes it smaller (24logi4)
+\text{smooth more: no cost}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; a smoother forecast trails a rise further (24logi4)
+\text{set the target, then forecast}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the target comes from the forecast (24logi1)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24·logi.6.1</span><span class="ph understand">understand</span>Which move above multiplies by τ where the rate statement divides, and what does that get wrong about smoothing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">24·logi.7.1</span><span class="tagq">do</span>Keep three weeks of stock instead of two at every link. Follow the rise of 2 at the shop up to the factory, and compare the swing with 24logi3’s.</div>
+  <div class="chq"><span class="chid">24·logi.7.2</span><span class="tagq">make</span>Make up a week-by-week pattern of shop sales that, under the rule of 24logi1, makes the warehouse order 0 some week.</div>
+  <div class="chq"><span class="chid">24·logi.7.3</span><span class="tagq">converse</span>Sharing the shop’s sales calms the factory’s orders. Decide whether a calm factory means the links share their sales.</div>
+  <div class="chq"><span class="chid">24·logi.7.4</span><span class="tagq">edge</span>Sales fall from 10 to 8 instead of rising. Follow the fall up the chain, and say what the warehouse’s order would be if it cannot order less than 0.</div>
+  <div class="chq"><span class="chid">24·logi.7.5</span><span class="tagq">open</span>In 24logi4, let the shop’s sales rise steadily by g a week, not in one step. Say what the smoothed forecast does, using 17·logi’s steady miss, and how the orders behave.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r24econ.html">← 24·econ · why do booms end?</a><a href="r24nav.html">24·nav · can a submarine know where it is without looking out? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="738c75">Swings growing up a supply chain are the <b>bullwhip effect</b>, or the <b>Forrester effect</b>. The rule of 24logi1 is an <b>order-up-to policy</b>, the stock target the <b>order-up-to level</b>, and the weeks of stock are set by the <b>lead time</b>. Sharing the shop’s sales is <b>information sharing</b> or <b>point-of-sale data sharing</b>. A classroom game that makes players feel the effect is the <b>beer distribution game</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="898d4a">Jay Forrester showed the swings growing up a chain in <i>Industrial Dynamics</i>, 1961. Hau Lee, V. Padmanabhan and Seungjin Whang named the bullwhip effect and its causes in Management Science, 1997.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

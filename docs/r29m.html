@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Perspective</title>
+<title>Spherical Triangles by Hand</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,93 +48,102 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r29l.html">← 29l the best path, by hand</a><a href="r29then.html">next: 29·then does nature take the laziest path? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r29l.html">← 29l the bracket of a group</a><a href="r29n.html">next: 29n hyperbolic geometry by hand →</a></p>
   <div class="tags"><span class="tag tech">29m · technique</span></div>
-  <h1>Perspective</h1>
-  <p data-pid="1b1b41">Stand between the rails of a straight railway and look along it. The rails never meet, yet in your eye, and in any photograph, they run together at one point on the horizon. Painters in Florence worked out the technique six hundred years ago by looking through a window and tracing what they saw on the glass. This step does the same with vectors. Every straight line in the world is painted as a straight line, and lines that run the same way are painted running into one point. Taking those meeting points seriously gives a plane with extra points far off, one for each direction, where any two lines meet, much as on the sphere. Then the moves of a painter are found, and one number made from four points on a line that every such move keeps, so that a photograph can be measured.</p>
-  <p class="gesture" data-pid="d987c7">A window in front of the eye paints each straight line as a straight line, and lines with the same direction as lines through one vanishing point. Adding a point far off for each direction gives a plane where any two lines meet in one point, found by a cross product. The painter’s moves keep one ratio of four points on a line.</p>
+  <h1>Spherical Triangles by Hand</h1>
+  <p data-pid="3a56c0">A navigator on a ship, a pilot over the Pacific and a phone that shows the distance to another city all solve the same small problem. Three points on a globe, joined by great circles, make a triangle, and some of its sides and angles are known while others are wanted. On a flat page the third side of a triangle comes from two sides and the angle between them. On a globe the same question has a new answer, and this step proves it from the dot product of vectors of length one drawn from the centre. Then the north pole becomes a corner of every triangle. With it, the distance between two cities comes straight from their latitudes and longitudes, together with the direction a plane must point as it leaves. A technique for sines follows, and with it the farthest north a great circle route ever climbs.</p>
+  <p class="gesture" data-pid="d92e8b">On a sphere of radius one the third side of a triangle comes from two sides and the angle between them, by a cosine technique with sines and cosines of the sides. With the pole as a corner, it gives the distance and the starting heading between two places from their latitudes and longitudes. A sine technique gives the farthest north a route climbs.</p>
 </header>
 
 <section class="class step" data-step="29m1">
-  <h2 class="sthead"><span class="stno">29m1</span>The Painter’s Window</h2>
-  <p data-pid="3d78ff">Put the eye at O and a window, the plane z = 1, in front of it. A point X = (x, y, z) with z &gt; 0 is painted where the line from the eye to X crosses the window, at the picture point (x/z, y/z). Write the window’s two places as u across and w up. A line of the world runs X(t) = P + tv, with P on it and v its direction.</p>
-  <p data-pid="9a8899">Vanishing-point technique: <b>let a line X(t) = P + tv miss the eye, with v₃ &gt; 0. Its picture lies on one line of the window, and as t grows the picture heads to (v₁/v₃, v₂/v₃), which depends on v alone. So lines of the world that run the same way are painted running into one point, their vanishing point.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the vanishing-point technique">
-n = P \times v \ne 0 @@ the line misses O, so P and v are not along one line (27i3)
-n\cdot X(t) = n\cdot P + t\,n\cdot v = 0 @@ the cross is at right angles to P and to v (27i3)
-n\cdot\big(\tfrac{x}{z},\ \tfrac{y}{z},\ 1\big) = \tfrac{1}{z}\,n\cdot X = 0 @@ divide by z &gt; 0: every picture point has n₁u + n₂w + n₃ = 0
-n_1, n_2 \text{ not both } 0 @@ otherwise n₃ ≠ 0 and n · v = n₃v₃ = 0, against v₃ &gt; 0
-\Big(\tfrac{P_1 + tv_1}{P_3 + tv_3},\ \tfrac{P_2 + tv_2}{P_3 + tv_3}\Big) \to \Big(\tfrac{v_1}{v_3},\ \tfrac{v_2}{v_3}\Big) @@ divide top and bottom by t, and let t grow (rung 10)
-\htmlClass{new}{\text{the picture is part of a line, running to } (v_1/v_3,\ v_2/v_3)} \quad \blacksquare @@ the lines above; the end point depends on v alone
+  <h2 class="sthead"><span class="stno">29m1</span>The Cosine Technique on a Sphere</h2>
+  <p data-pid="38ee27">Work on the sphere of radius 1 about O. A point of it is a vector A from O of length 1. Take a triangle ABC whose sides are arcs of great circles, each shorter than π. Its side a is the arc from B to C, its length the angle at O between B and C; likewise b from A to C and c from A to B. Its angle at A, written A as well, is the angle between the planes of the two great circles through A, which is the angle between their normals (29b1). On a sphere of radius R, multiply each side by R; the angles do not change.</p>
+  <p data-pid="5e2cb6">Sphere-cosine technique: <b>in a triangle on the sphere of radius 1, cos a = cos b cos c + sin b sin c cos A.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sphere-cosine technique">
+\cos a = B\cdot C,\ \ \cos b = A\cdot C,\ \ \cos c = A\cdot B @@ the angle-between technique (27k1), with |A| = |B| = |C| = 1
+B = \cos c\,A + \sin c\,u,\ \ C = \cos b\,A + \sin b\,w @@ u = (B − cos c A)/sin c has u · A = 0 and |u|² = (1 − cos² c)/sin² c = 1; w likewise
+A\times B = \sin c\,(A\times u),\ \ A\times C = \sin b\,(A\times w) @@ the cross is straight in each slot, and A × A = 0 (27k3)
+\cos A = (A\times u)\cdot(A\times w) = u\cdot w @@ the normals of the two planes (29b1); x ↦ A × x is the quarter turn about A on vectors at right angles to A (27o3), and a turn keeps dots (27o1)
+B\cdot C = \cos b\cos c + \sin b\sin c\,(u\cdot w) @@ multiply out, with A · A = 1 and A · u = A · w = 0
+\htmlClass{new}{\cos a = \cos b\cos c + \sin b\sin c\cos A} \quad \blacksquare @@ the lines above
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: a railway">
-\text{ground } y = -1.6,\ \ \text{rails } x = \pm 0.7175,\ \ v = (0, 0, 1) @@ an eye 1.6 m up; standard gauge is 1.435 m between the rails
-\text{rail at } z:\ \ \big(\pm\tfrac{0.7175}{z},\ -\tfrac{1.6}{z}\big) \to (0, 0) @@ the vanishing-point technique: both rails run to one point
-\text{sleepers at } z = 2, 4, 6, 8:\ \ w = -0.8,\ -0.4,\ -0.267,\ -0.2 @@ equal steps on the ground, shrinking steps in the picture
-v = (v_1, 0, v_3) \text{ on level ground}:\ \ \text{vanishing point } (v_1/v_3,\ 0) @@ every level direction
-\htmlClass{new}{\text{every level line vanishes on the horizon } w = 0,\ \text{at eye height}} \quad \blacksquare @@ the lines above
+  <pre class="lines" data-k="ember" data-label="this step: a right angle at a corner">
+b = c = \tfrac{\pi}{3},\ \ A = \tfrac{\pi}{2} @@ two sides of one sixth of a great circle, square to each other
+\cos a = \tfrac12\cdot\tfrac12 + \tfrac{\sqrt3}{2}\cdot\tfrac{\sqrt3}{2}\cdot 0 = \tfrac14 @@ the sphere-cosine technique
+a = \arccos\tfrac14 \approx 1.318 @@ the arc-is-arccos technique (21m)
+\text{flat: } a^2 = b^2 + c^2 = \tfrac{2\pi^2}{9},\ \ a \approx 1.481 @@ the cosine-side technique (21h2) with a right angle
+\htmlClass{new}{\text{on the sphere the third side is shorter: } 1.318 < 1.481} \quad \blacksquare @@ the sides bow outward from the centre, and the third side cuts across
   </pre>
-  <p data-pid="e0d24a">A line with v₃ = 0 runs across the window, square to the line of sight. Its picture never ends at a point, and two such lines that run the same way stay running the same way in the picture. So the upright corners of a building stay upright in a photograph taken level, and they lean together when the camera is tipped up.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · the window · ← → keys work</div></section>
+  <p data-pid="47b2f6">For small sides the sphere-cosine technique turns back into the flat one. With cos x close to 1 − x²/2 and sin x close to x (23b), it reads 1 − a²/2 ≈ (1 − b²/2)(1 − c²/2) + bc cos A, and dropping the terms of fourth order leaves a² ≈ b² + c² − 2bc cos A, the cosine-side technique of 21h2. A small triangle on a globe is nearly flat, as 29b4 found from its area.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · the cosine technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">29m1.1</span><span class="ph understand">understand</span>What does the vanishing-point technique say? <br>Why does every level line vanish on the horizon?</li>
+      <li><span class="qid">29m1.1</span><span class="ph understand">understand</span>What does the sphere-cosine technique say? <br>How does it turn back into the flat cosine-side technique for small sides?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="29m2">
-  <h2 class="sthead"><span class="stno">29m2</span>Points at Infinity</h2>
-  <p data-pid="99e0af">The window point (u, w) is seen along the line through the eye and (u, w, 1). Take that line through O as the point itself. Then every vector p ≠ 0 names a point, written [p₁ : p₂ : p₃], and p and every multiple sp, s ≠ 0, name the same one. The window points are the [u : w : 1]. The points [p₁ : p₂ : 0] are new: the <i>points at infinity</i>, one for each direction of the window, with a direction and its reverse counted as one. The vanishing point of a direction v is the point [v₁ : v₂ : v₃].</p>
-  <p data-pid="f64be5">A line becomes a plane through O, a · X = 0, written by its normal as [a₁ : a₂ : a₃]. The window line a₁u + a₂w + a₃ = 0 is [a₁ : a₂ : a₃], and it holds the point at infinity [−a₂ : a₁ : 0] of its own direction. The plane z = 0 gives one more line, [0 : 0 : 1], the <i>line at infinity</i>, which holds every point at infinity.</p>
-  <p data-pid="a658f9">Meet-by-cross technique: <b>in the plane with its points at infinity, two different lines [a] and [b] meet in exactly one point, [a × b]; and two different points [p] and [q] lie on exactly one line, [p × q].</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the meet-by-cross technique">
-a, b \text{ not multiples, so } a\times b \ne 0 @@ the cross technique (27i3)
-a\cdot(a\times b) = 0,\ \ b\cdot(a\times b) = 0 @@ the cross is at right angles to each of its vectors: [a × b] is on both lines
-a\cdot x = 0,\ b\cdot x = 0 \ \Rightarrow\ x = t\,(a\times b) @@ two planes through O meet in one line through O, as in the lines-always-meet technique (29b1)
-\text{the point } [p] \text{ is on the line } [a] \iff p\cdot a = 0 @@ the same condition read the other way round
-\htmlClass{new}{\text{one meeting point } [a\times b];\ \ \text{one joining line } [p\times q]} \quad \blacksquare @@ the same lines, with points and lines swapped
+  <h2 class="sthead"><span class="stno">29m2</span>Distance and Heading From Latitude and Longitude</h2>
+  <p data-pid="34fb04">Give a place its latitude φ, north of the equator (south counts as less than 0), and its longitude λ, east of Greenwich (west counts as less than 0). The north pole N, a place P = (φ₁, λ₁) and a place Q = (φ₂, λ₂) make a triangle. Its side NP is π/2 − φ₁, its side NQ is π/2 − φ₂, and its angle at N is the gap in longitude Δλ = λ₂ − λ₁, because the planes of the two half great circles from N, the meridians, meet at that angle along the earth’s axis. The heading of a route at P is its angle with the meridian toward N, measured toward the east or the west.</p>
+  <p data-pid="30c727">Great-circle technique: <b>the great circle distance from P to Q on a sphere of radius R is Rδ, where cos δ = sin φ₁ sin φ₂ + cos φ₁ cos φ₂ cos Δλ; and the route leaves P at the heading h, from north toward Q’s side, with sin φ₂ = sin φ₁ cos δ + cos φ₁ sin δ cos h.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the great-circle technique">
+NP = \tfrac{\pi}{2} - \varphi_1,\ \ NQ = \tfrac{\pi}{2} - \varphi_2,\ \ \angle N = \Delta\lambda @@ the triangle NPQ on the sphere of radius 1
+\cos\delta = \cos NP\,\cos NQ + \sin NP\,\sin NQ\,\cos\Delta\lambda @@ the sphere-cosine technique (29m1), side PQ facing N
+\cos(\tfrac{\pi}{2} - \varphi) = \sin\varphi,\ \ \sin(\tfrac{\pi}{2} - \varphi) = \cos\varphi @@ the complement technique (21e)
+\cos\delta = \sin\varphi_1\sin\varphi_2 + \cos\varphi_1\cos\varphi_2\cos\Delta\lambda @@ put them in
+\cos NQ = \cos NP\,\cos\delta + \sin NP\,\sin\delta\,\cos h @@ the sphere-cosine technique again, side NQ facing P, whose angle is h
+\htmlClass{new}{\sin\varphi_2 = \sin\varphi_1\cos\delta + \cos\varphi_1\sin\delta\cos h} \quad \blacksquare @@ the complement technique; then multiply by R for distance
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: two parallels meet">
-u - w = 0:\ [1 : -1 : 0],\ \ u - w + 1 = 0:\ [1 : -1 : 1] @@ two parallel lines of the window (18c)
-(1, -1, 0)\times(1, -1, 1) = (-1, -1, 0) @@ the cross technique
-[-1 : -1 : 0] = [1 : 1 : 0] @@ multiply by −1: the same point
-u + w = 2:\ [1 : 1 : -2];\ \ (1, 1, -2)\times(1, -1, 0) = (-2, -2, -2) @@ an ordinary pair, for comparison
-\htmlClass{new}{\text{the parallels meet at infinity along } (1, 1);\ \text{the other pair at } [1 : 1 : 1] = (1, 1)} \quad \blacksquare @@ every pair of different lines meets once
+  <pre class="lines" data-k="ember" data-label="this step: Vancouver to Tokyo">
+P = (49.19^\circ,\ -123.18^\circ),\ \ Q = (35.76^\circ,\ 140.39^\circ) @@ Vancouver airport and Tokyo’s Narita airport
+\Delta\lambda = 263.57^\circ,\ \ \cos\Delta\lambda = \cos 96.43^\circ \approx -0.1120 @@ the whole-turns technique (21b): 360° − 263.57° = 96.43°, westward
+\cos\delta \approx 0.4423 - 0.0594 \approx 0.3829,\ \ \delta \approx 1.1778 @@ the great-circle technique: sin φ₁ sin φ₂ ≈ 0.4423, cos φ₁ cos φ₂ ≈ 0.5303
+R\delta \approx 6371 \times 1.1778 \approx 7504\ \text{km} @@ the earth taken as a sphere of radius 6371 km
+\cos h = \tfrac{\sin\varphi_2 - \sin\varphi_1\cos\delta}{\cos\varphi_1\sin\delta} \approx 0.4879,\ \ h \approx 60.8^\circ @@ the second half of the technique, solved for cos h
+\htmlClass{new}{\text{about 7500 km, leaving on a heading } 60.8^\circ \text{ west of north}} \quad \blacksquare @@ Tokyo lies south of Vancouver, yet the route sets off to the north west
   </pre>
-  <p data-pid="e3ea84">Each line through O meets the sphere of radius 1 in two opposite points. So this plane is the sphere of 29b with each pair of opposite points taken as one point, and its lines are the great circles. The lines-always-meet technique of 29b1 met in two opposite points; here those two are one. The parallel statement of 18c, proved for ℝ², fails in the larger plane, because its parallels meet at infinity.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · points at infinity · ← → keys work</div></section>
+  <p data-pid="5b8eff">Tokyo is south of Vancouver, and still the plane turns north as it leaves. A path that kept to one heading would be longer, and a path along a circle of latitude is not a line of the sphere at all (29b5). 29·nav asks why so many routes to Asia pass so far north.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · the pole as a corner · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">29m2.1</span><span class="ph understand">understand</span>What is a point at infinity, and what is the line at infinity? <br>What does the meet-by-cross technique say?</li>
+      <li><span class="qid">29m2.1</span><span class="ph understand">understand</span>What does the great-circle technique say, and from which triangle does it come?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="29m3">
-  <h2 class="sthead"><span class="stno">29m3</span>The Painter’s Moves, and the Four-Point Ratio</h2>
-  <p data-pid="f3cbc4">A <i>painter’s move</i> sends [p] to [Mp], for a 3 × 3 grid M with det M ≠ 0. It sends lines to lines: if a · p = 0, then b · (Mp) = 0 for b = (M⁻¹)ᵀa, since b · Mp = a · M⁻¹Mp = a · p. Moving the window, tipping the head, and photographing a photograph are all painter’s moves. On one line, with its points written [t : 1] and the point at infinity [1 : 0], a painter’s move onto another line is t ↦ (at + b)/(ct + d) with ad − bc ≠ 0, the four-number maps of 25f4. Lengths are not kept, and neither are ratios of lengths. One number is.</p>
-  <p data-pid="d3900c">Four-point-ratio technique: <b>for four different numbers t₁, t₂, t₃, t₄, the ratio (t₁ − t₃)(t₂ − t₄) / ((t₂ − t₃)(t₁ − t₄)) is kept by every four-number map that sends none of them to infinity.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the four-point-ratio technique">
-f(s) - f(t) = \tfrac{(as + b)(ct + d) - (at + b)(cs + d)}{(cs + d)(ct + d)} @@ f(t) = (at + b)/(ct + d), over one bottom
-f(s) - f(t) = \tfrac{(ad - bc)(s - t)}{(cs + d)(ct + d)} @@ multiply out: the terms acst and bd cancel
-\tfrac{(f_1 - f_3)(f_2 - f_4)}{(f_2 - f_3)(f_1 - f_4)} = \tfrac{(ad - bc)^2 (t_1 - t_3)(t_2 - t_4)\,/\,B}{(ad - bc)^2 (t_2 - t_3)(t_1 - t_4)\,/\,B} @@ fᵢ = f(tᵢ); top and bottom each carry B = (ct₁ + d)(ct₂ + d)(ct₃ + d)(ct₄ + d)
-\htmlClass{new}{\text{the ratio of the } f_i \text{ equals the ratio of the } t_i} \quad \blacksquare @@ cancel (ad − bc)² and B, none of them 0
+  <h2 class="sthead"><span class="stno">29m3</span>The Sine Technique, and How Far North a Route Climbs</h2>
+  <p data-pid="e806ba">The flat sine technique (21h3) says each side over the sine of the angle it faces is the same for all three. On a sphere the sides are arcs, and they take sines too.</p>
+  <p data-pid="dc6b41">Sphere-sine technique: <b>in a triangle on the sphere of radius 1, sin A / sin a = sin B / sin b = sin C / sin c.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sphere-sine technique">
+B\times C = \cos c\sin b\,(A\times w) + \sin c\cos b\,(u\times A) + \sin b\sin c\,(u\times w) @@ B and C split as in 29m1; the cross is straight in each slot, and A × A = 0
+A\cdot(B\times C) = \sin b\sin c\;A\cdot(u\times w) @@ the cross is at right angles to each of its vectors (27k3), so the first two terms dot A to 0
+u\times w = \pm\sin A\;A @@ u and w are at right angles to A, at the angle A to each other; their cross is at right angles to both, so along A, of size sin A (27k3)
+|\det[A\ B\ C]| = |A\cdot(B\times C)| = \sin A\,\sin b\,\sin c @@ expand det along its first column (27m2): the stand-ins are the places of B × C
+\tfrac{\sin A}{\sin a} = \tfrac{|\det[A\ B\ C]|}{\sin a\,\sin b\,\sin c} @@ divide by sin a sin b sin c
+\htmlClass{new}{\tfrac{\sin A}{\sin a} = \tfrac{\sin B}{\sin b} = \tfrac{\sin C}{\sin c}} \quad \blacksquare @@ the same lines from B or from C give the same right side: swapping columns only flips the sign of det (27e1)
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: measuring the railway photograph">
-w = -\tfrac{1.6}{z}:\ \ a = 0,\ b = -1.6,\ c = 1,\ d = 0,\ \ ad - bc = 1.6 @@ along the ground between the rails, the window is a four-number map of the distance z (29m1)
-\text{ground } 2, 4, 6, 8:\ \ \tfrac{(2 - 6)(4 - 8)}{(4 - 6)(2 - 8)} = \tfrac{16}{12} = \tfrac43 @@ sleepers 2 m apart
-\text{picture } -0.8, -0.4, -0.267, -0.2:\ \ \tfrac{(-0.533)(-0.2)}{(-0.133)(-0.6)} = \tfrac43 @@ the four-point-ratio technique, checked
-\htmlClass{new}{\text{from three pictured sleepers and } \tfrac43,\ \text{the fourth is found}} \quad \blacksquare @@ one unknown in one sameness
+  <p data-pid="da9300">Farthest-north technique: <b>a great circle route that leaves latitude φ₁ at heading h, not due north or due south, reaches its highest latitude φₘ where cos φₘ = cos φ₁ sin h; there it heads due east or due west.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the farthest-north technique">
+V \text{ the highest point of the whole great circle} @@ its latitude is continuous on a closed loop, so it has a greatest value (12c, once round the loop)
+\text{at } V \text{ the route crosses the meridian at a right angle} @@ at a greatest value the latitude stops rising (14a): the route has no northward part there
+\text{triangle } NPV:\ \ NP = \tfrac{\pi}{2} - \varphi_1,\ \ NV = \tfrac{\pi}{2} - \varphi_m,\ \ \angle P = h,\ \ \angle V = \tfrac{\pi}{2} @@ N the pole, P the start
+\tfrac{\sin(\pi/2)}{\sin NP} = \tfrac{\sin h}{\sin NV} @@ the sphere-sine technique: each angle against the side it faces
+\htmlClass{new}{\cos\varphi_m = \cos\varphi_1\sin h} \quad \blacksquare @@ the complement technique (21e)
   </pre>
-  <p data-pid="fc1dcf">So a photograph can be measured. A surveyor who knows that four posts stand equally spaced, or that one stands halfway, reads the ratio 4/3, or another known ratio, off the picture, and finds where an unseen fifth must stand.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the four-point ratio · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: how far north Vancouver to Tokyo climbs">
+\varphi_1 = 49.19^\circ,\ \ h \approx 60.8^\circ,\ \ \sin h \approx 0.8729 @@ from 29m2
+\cos\varphi_m \approx 0.6534 \times 0.8729 \approx 0.5704 @@ the farthest-north technique
+\htmlClass{new}{\varphi_m \approx 55.2^\circ\ \text{N}} \quad \blacksquare @@ the arc-is-arccos technique (21m): the route crosses the coast of south east Alaska
+  </pre>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · the sine technique · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">29m3.1</span><span class="ph understand">understand</span>What is a painter’s move? <br>What does the four-point-ratio technique say?</li>
+      <li><span class="qid">29m3.1</span><span class="ph understand">understand</span>What does the sphere-sine technique say? <br>Why does a great circle route cross the meridian at a right angle at its farthest-north point?</li>
     </ol>
   </section>
 </section>
@@ -142,15 +151,15 @@ w = -\tfrac{1.6}{z}:\ \ a = 0,\ b = -1.6,\ c = 1,\ d = 0,\ \ ad - bc = 1.6 @@ al
 <section class="class step" data-step="29m4">
   <h2 class="sthead"><span class="stno">29m4</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{lines that run the same way in the world run the same way in the picture}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only when they run square to the line of sight; the rails meet at (0, 0)
-\text{the picture of a midpoint is the midpoint of the picture}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the sleeper at 4 m is pictured at −0.4, not halfway between −0.8 and −0.267
-\tfrac{t_1 - t_2}{t_2 - t_3} \text{ is kept by a painter’s move}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; three points are not enough: four are needed
-[1 : -1 : 0] \text{ and } [-1 : 1 : 0] \text{ are two points at infinity, one at each end}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; they are multiples, so one point
+\text{the angles of } NPQ \text{ for Vancouver and Tokyo add to } \pi\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; they add to π plus the excess (29b3), about 0.38 more
+\delta^2 = NP^2 + NQ^2 - 2\,NP\cdot NQ\cos\Delta\lambda\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the flat cosine-side technique only holds nearly, for small triangles
+\text{between two places on one latitude, the circle of latitude is the shortest way}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it is not a great circle (29b5); at 45° N, half way round, it is 14 153 km against 10 008 km
+\tfrac{\sin A}{a} = \tfrac{\sin B}{b} \text{ with sides in km}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; the sphere-sine technique takes the sines of the sides, as angles at O
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">29m4.1</span><span class="ph understand">understand</span>Why is “the picture of a midpoint is the midpoint of the picture” a move to watch out for?</li>
+      <li><span class="qid">29m4.1</span><span class="ph understand">understand</span>Why is “sin A/a = sin B/b, with sides in km” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -159,20 +168,20 @@ w = -\tfrac{1.6}{z}:\ \ a = 0,\ b = -1.6,\ c = 1,\ d = 0,\ \ ad - bc = 1.6 @@ al
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">29m.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="p_1 = [4 : 0 : 1],\ \ p_2 = [-2 : 0 : 1],\ \ p_3 = [0 : -1 : 1],\ \ p_4 = [0.5 : -0.5 : 1]"></span></span>A photograph of a floor of square tiles: the tile edges of one way vanish at (4, 0), those of the other way at (−2, 0), one corner of a tile is pictured at (0, −1) and the opposite corner of the same tile at (0.5, −0.5). Build a grid M sending [1 : 0 : 0], [0 : 1 : 0], [0 : 0 : 1] and [1 : 1 : 1] to [p₁], [p₂], [p₃] and [p₄], with columns λ₁p₁, λ₂p₂, λ₃p₃, and find where the corner (2, 3) of the tiling is pictured.</div>
-  <div class="chq"><span class="chid">29m.4.2</span><span class="tagq">edge</span>The vanishing-point technique asks that the line miss the eye and that v₃ > 0. Find the picture of a line through the eye; find what happens, as t grows, to the picture of a line with v₃ = 0 and of one with v₃ < 0, and where each of those two meets the line at infinity.</div>
-  <div class="chq"><span class="chid">29m.4.3</span><span class="tagq">converse</span>Turn the four-point-ratio technique round: let g send the line with its point at infinity to itself, one to one, keeping the four-point ratio of every four different points. Prove that g is a four-number map: take the four-number map h with h(g(0)) = 0, h(g(1)) = 1 and h(g(∞)) = ∞ (25f4), and show that h after g leaves every t where it is.</div>
-  <div class="chq"><span class="chid">29m.4.4</span><span class="tagq">reroute</span>Reroute 18c’s parallel-through-a-point technique by the meet-by-cross technique: the parallel to Ax + By = C through P = (p₁, p₂) is the line through [p₁ : p₂ : 1] and the first line’s point at infinity, [A : B : C] × [0 : 0 : 1]. Find the line, compare with 18c, and find why there is exactly one.</div>
+  <div class="chq"><span class="chid">29m.4.1</span><span class="tagq">build</span>Build a triangle on the sphere of radius 1 with three right angles. Find its sides by the sphere-cosine technique and its area by the excess-area technique, and check the area against the whole skin (21o).</div>
+  <div class="chq"><span class="chid">29m.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="P = (49.19^\circ,\ -123.18^\circ)"></span></span>Find the place Q exactly opposite Vancouver on the globe, and δ from the great-circle technique. <br>Why does the heading formula fail there, and how many great circle routes run from P to Q?</div>
+  <div class="chq"><span class="chid">29m.4.3</span><span class="tagq">converse</span>Turn the sphere-cosine technique round: given a, b, c between 0 and π, is there a triangle on the sphere with these sides? Prove that there is when each is less than the sum of the other two and a + b + c < 2π, with A at the pole and B on the meridian of longitude 0.</div>
+  <div class="chq"><span class="chid">29m.4.4</span><span class="tagq">reroute</span>Reroute the distance half of the great-circle technique without the triangle: write each place as the vector (cos φ cos λ, cos φ sin λ, sin φ) of 29d1, and find the angle between two such vectors by 27k1.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r29l.html">← 29l · the best path, by hand</a><a href="r29then.html">29·then · does nature take the laziest path? →</a></nav>
+<nav class="nextrung"><a href="r29l.html">← 29l · the bracket of a group</a><a href="r29n.html">29n · hyperbolic geometry by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Painting through the window is central (or linear) perspective, and the picture map is a perspective projection. The vanishing point and the horizon line keep their names; a picture with one vanishing point for its main lines is in one-point perspective. The plane with its points at infinity is the projective plane, ℝP², and [p₁ : p₂ : p₃] are homogeneous coordinates. The points at infinity are also called ideal points, and they lie on the line at infinity. That points and lines can swap roles in every technique is the principle of duality. A painter’s move is a projective transformation (a homography, or collineation). The four-point ratio is the cross-ratio, and the four-number maps on a line are its projective (or Möbius, or linear fractional) maps.</p>
+  <p>The sphere-cosine technique is the spherical law of cosines (for sides), and the sphere-sine technique the spherical law of sines. Working with the sides and angles of triangles on a sphere is spherical trigonometry. The great-circle technique gives the great-circle distance and the initial bearing (or initial course) of the route; the triangle of the pole and two places is the navigational triangle, and with a star in place of the second place it is the astronomical triangle. The farthest-north technique is a case of Clairaut’s relation, cos φ sin h stays the same all along a great circle. The highest point is the vertex of the great circle. A route that keeps one compass heading is a rhumb line (or loxodrome). Navigators long used half of 1 − cos δ, the haversine, because it keeps its digits when δ is small.</p>
   <h3>Who said it first</h3>
-  <p>Filippo Brunelleschi showed a painted panel of the Baptistery of Florence, around 1415 to 1420, that matched the building seen through a hole in the panel. Leon Battista Alberti set out the rules for painters in On Painting in 1435, with the window and the point where the lines meet. Girard Desargues wrote in 1639 that parallel lines meet at a point infinitely far away, and treated the conic sections as pictures of a circle. Jean-Victor Poncelet built projective geometry in his Treatise of 1822, begun as a prisoner of war in Saratov in 1813. August Möbius in 1827 and Julius Plücker in 1830 brought in the coordinates that name a point by a whole line of vectors. Pappus of Alexandria knew around 320 CE that a ratio of four points on a line survives the drawing of lines from a point. Poncelet and Joseph Gergonne quarrelled in the 1820s over who first saw duality.</p>
+  <p>Menelaus of Alexandria worked with spherical triangles around 100 CE. Abu al-Wafa al-Buzjani and his contemporaries in Baghdad gave the spherical sine rule in the tenth century. Regiomontanus wrote the cosine rule for sides in On Triangles of All Kinds, finished about 1464 and printed in 1533. Alexis Clairaut found his relation in 1743 for paths on surfaces made by turning a curve about an axis. Pedro Nunes showed in 1537 that a fixed compass heading is not a great circle. James Inman published tables of haversines for seamen in 1835.</p>
 </section>
 
 </div>
@@ -187,20 +196,20 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'the plane',t:R`n = P\times v`,n:`Through the eye and the whole line.`},
-  {k:'ember',kl:'the picture',t:R`n_1 u + n_2 w + n_3 = 0`,n:`A line of the window.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\to (v_1/v_3,\ v_2/v_3)}`,n:`One vanishing point per direction.`}
-],{title:'The slides · the window · ← → keys work'});
+  {k:'ember',kl:'sides as dots',t:R`\cos a = B\cdot C`,n:`Vectors of length 1 from the centre.`},
+  {k:'ember',kl:'split off A',t:R`B = \cos c\,A + \sin c\,u`,n:`u leaves A along the side.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\cos a = \cos b\cos c + \sin b\sin c\cos A}`,n:`Two sides and the angle give the third.`}
+],{title:'The slides · the cosine technique · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'points',t:R`[p_1 : p_2 : p_3]`,n:`A line through the eye.`},
-  {k:'ember',kl:'lines',t:R`[a_1 : a_2 : a_3]`,n:`A plane through the eye.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{[a]\cap[b] = [a\times b]}`,n:`Any two lines meet once.`}
-],{title:'The slides · points at infinity · ← → keys work'});
+  {k:'ember',kl:'the triangle',t:R`NP = \tfrac{\pi}{2} - \varphi_1,\ \ \angle N = \Delta\lambda`,n:`Latitude gives the side, longitude the angle.`},
+  {k:'ember',kl:'the technique',t:R`\cos\delta = \sin\varphi_1\sin\varphi_2 + \cos\varphi_1\cos\varphi_2\cos\Delta\lambda`,n:`The sphere-cosine technique.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{distance } R\delta,\ \text{heading from the technique again}}`,n:`Two uses of one technique.`}
+],{title:'The slides · the pole as a corner · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'differences',t:R`f(s) - f(t) = \tfrac{(ad - bc)(s - t)}{(cs + d)(ct + d)}`,n:`One bottom.`},
-  {k:'ember',kl:'cancel',t:R`(ad - bc)^2,\ B`,n:`Top and bottom.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{(t_1 - t_3)(t_2 - t_4)}{(t_2 - t_3)(t_1 - t_4)}\ \text{kept}}`,n:`A photograph can be measured.`}
-],{title:'The slides · the four-point ratio · ← → keys work'});
+  {k:'ember',kl:'the box',t:R`|\det[A\ B\ C]| = \sin A\sin b\sin c`,n:`The same from every corner.`},
+  {k:'ember',kl:'divide',t:R`\tfrac{\sin A}{\sin a}`,n:`By the three sines of the sides.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\cos\varphi_m = \cos\varphi_1\sin h}`,n:`The pole, the start and the top.`}
+],{title:'The slides · the sine technique · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

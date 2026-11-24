@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Factorial Past the Counting Numbers</title>
+<title>Why 1/(1 + x²) Has Radius 1</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,171 +48,109 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r26k.html">← 26k real integrals by residues</a><a href="r26cb24.html">next: 26·cb24 the damped oscillator →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r26k.html">← 26k e to the iθ by hand</a><a href="r26m.html">next: 26m real integrals by residues →</a></p>
   <div class="tags"><span class="tag tech">26l · technique</span></div>
-  <h1>The Factorial Past the Counting Numbers</h1>
-  <p data-pid="74abc7">The factorial multiplies the counting numbers up to a point: one times two times three, and so on. It makes sense only at whole numbers. What would half a factorial be? There is no list of numbers to multiply. But there is an area. The area under x to a power times the shrinking growth function, from zero out to forever, comes out to exactly the factorial of that power whenever the power is a whole number, and it makes sense for every positive power at all. This step builds that area, proves it is the factorial at the whole numbers, and finds its value at one half: the square root of pi, a turn hiding inside a factorial. Then it carries the new function below zero, past the place where its area stops making sense, by the one technique the factorial obeys at every step. That is the first taste of an idea: a function can outlive the formula that first defined it.</p>
-  <p class="gesture" data-pid="c9b5f3">An area from zero out to forever gives the factorial at every whole number and a value at every positive number in between. At one half the value is the square root of pi. The step from each value to the next carries the function below zero, everywhere but the negative whole numbers and zero.</p>
+  <h1>Why 1/(1 + x²) Has Radius 1</h1>
+  <p data-pid="9d8105">Rung twenty three found that the endless sum for one over one plus x squared, one minus x squared plus x to the fourth and so on, settles only between minus one and one. That is strange. The function itself is smooth on the whole line. It never climbs, never breaks, never even comes close to trouble. So why does its sum stop at one? The line cannot answer, because the trouble is not on the line. In the plane, one plus z squared is zero at i and at minus i, and both sit at distance one from the centre. A power sum settles on discs, not on stretches of the line, and its disc can grow only until it meets a point where the function fails. This step proves that, and turns it into a way to read off how far a sum reaches without writing a single piece of it.</p>
+  <p class="gesture" data-pid="850130">A power sum about a point settles on a disc in the plane. Where the function has a complex slope, the disc reaches at least that far. Where the function has a pole, the disc must stop. So the reach is the distance to the nearest trouble in the plane, even when the line shows none.</p>
 </header>
 
 <section class="class step" data-step="26l1">
-  <h2 class="sthead"><span class="stno">26l1</span>An Area for the Factorial</h2>
-  <p data-pid="74356a">Two-ends technique: <b>for every real s &gt; 0, ∫ from 0 to ∞ of x^(s − 1) e^(−x) dx converges, at the end that runs off and at the end where the power may climb.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the two-ends technique">
-e^x \ge \tfrac{x^m}{m!} \text{ for } x \ge 0 \text{ and whole } m @@ exp as a sum (22j3): every piece is ≥ 0
-x \ge 1:\ \ x^{s-1}e^{-x} \le m!\,x^{s-1-m} \le \tfrac{m!}{x^2} @@ a whole m ≥ s + 1; then x^(s + 1 − m) ≤ 1 for x ≥ 1 (17g)
-\textstyle\int_1^\infty x^{s-1}e^{-x}\,dx \text{ converges} @@ comparison for areas (16i3) with out-to-forever, p = 2 (16i2)
-0 < x \le 1:\ \ x^{s-1}e^{-x} \le x^{s-1} @@ e^(−x) ≤ 1
-\textstyle\int_0^1 x^{s-1}e^{-x}\,dx \text{ converges} @@ in-to-0 with p = 1 − s &lt; 1 (16i2; its proof runs for real p with 17g’s real powers); comparison, run at the bad end
-\htmlClass{new}{\textstyle\int_0^\infty x^{s-1}e^{-x}\,dx \text{ converges for every } s > 0} \quad \blacksquare @@ both pieces converge
+  <h2 class="sthead"><span class="stno">26l1</span>The Plane’s Sum Is the Line’s Sum</h2>
+  <p data-pid="93a5d9">23c measured how far a power sum reaches along the line: its reach R, with the sum settling in size where |x − w| &lt; R and wandering where |x − w| &gt; R. 26a1 noted that the same holds in the plane: a power sum settles in size on a disc |z − w| &lt; R and wanders outside it. The reach on the line and the radius of the disc are one number, since the sizes |uₖ||z − w|ᵏ depend only on |z − w|.</p>
+  <p data-pid="4c646e">Plane-reach technique: <b>let w be real, and let f have a complex slope at every z with |z − w| &lt; R, with f real on the floor; then rung 23’s power sum of f about w reaches at least R, and equals f on that whole disc.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the plane-reach technique">
+f(z) = \textstyle\sum u_k (z - w)^k \text{ for } |z - w| < R @@ the rebuilt-in-the-plane technique (26g2)
+f(x) = \textstyle\sum u_k (x - w)^k \text{ for real } x,\ |x - w| < R @@ the part of the disc that lies on the floor
+u_k = \tfrac{f^{(k)}(w)}{k!},\ \text{slopes taken along the floor} @@ the smooth-sum technique (23e3) for the sum on the floor
+\text{so } \textstyle\sum u_k(x - w)^k \text{ is rung 23's sum of } f \text{ about } w @@ the same pieces, one by one
+\htmlClass{new}{\text{its reach is at least } R} \quad \blacksquare @@ it settles at every z of the disc (26g2), so at every real x with |x − w| &lt; R
   </pre>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\Gamma(s) := \int_0^\infty x^{s-1}e^{-x}\,dx,\quad s &gt; 0\end{aligned}"></div>
-  <p class="eqline" data-pid="c261b4">From here on, for real s &gt; 0, Γ(s) = ∫ from 0 to ∞ of x^(s − 1) e^(−x) dx. Γ is a capital gamma. Accepted name: the gamma function.</p>
-  <p data-pid="3842a6">At s = 1 the power is gone: Γ(1) = ∫ from 0 to ∞ of e^(−x) dx = the limit of 1 − e^(−b), which is 1. The shrinking growth function beats every power out to forever, and that is what makes the area finite there.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · two ends · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: 1/(1 + x²) about 0">
+1 + z^2 = 0 \iff z = i \text{ or } z = -i @@ (z − i)(z + i) = z² + 1; a product is 0 only if a factor is
+\tfrac{1}{1+z^2} \text{ has a complex slope at every } z \ne \pm i @@ the plane-slope technique (26d1): a quotient
+|z| < 1 \Rightarrow z \ne \pm i @@ |±i| = 1
+\htmlClass{new}{\text{the sum } 1 - x^2 + x^4 - \cdots \text{ reaches at least } 1} \quad \blacksquare @@ the plane-reach technique with w = 0, R = 1
+  </pre>
+  <p data-pid="c7bce1">Nothing on the floor stops the disc. The disc is stopped by i and −i, which the floor never sees.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · plane reach · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26l1.1</span><span class="ph understand">understand</span>What does the two-ends technique say? <br>What is Γ(s)?</li>
+      <li><span class="qid">26l1.1</span><span class="ph understand">understand</span>What does the plane-reach technique say? <br>Why does the sum of 1/(1 + x²) about 0 reach at least 1?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="26l2">
-  <h2 class="sthead"><span class="stno">26l2</span>The Factorial at the Whole Numbers</h2>
-  <p data-pid="c44515">Factorial-step technique: <b>for every real s &gt; 0, Γ(s + 1) = s Γ(s); so Γ(n + 1) = n! for every whole n ≥ 0.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the factorial-step technique">
-\int_c^b x^s e^{-x}\,dx = \Big[-x^s e^{-x}\Big]_c^b + s\int_c^b x^{s-1}e^{-x}\,dx @@ parts (16e): x^s against the slope of −e^(−x); 0 &lt; c &lt; b
-b^s e^{-b} \le \tfrac{m!\,b^s}{b^m} \to 0 \text{ as } b \to \infty @@ e^b ≥ b^m/m! with a whole m &gt; s (22j3)
-c^s e^{-c} \to 0 \text{ as } c \to 0^+ @@ s &gt; 0 (17g), and e^(−c) ≤ 1
-\Gamma(s+1) = s\,\Gamma(s) @@ the limits at both ends (16i1); both integrals converge (26l1)
-\Gamma(1) = 1 @@ 26l1
-\htmlClass{new}{\Gamma(n+1) = n\,\Gamma(n) = n\cdot(n-1)! = n!} \quad \blacksquare @@ induction on n (4c), from Γ(1) = 1 = 0!
+  <h2 class="sthead"><span class="stno">26l2</span>A Pole Stops the Sum</h2>
+  <p data-pid="c7b58a">The plane-reach technique gives a floor for the reach. A pole gives a ceiling.</p>
+  <p data-pid="06fd67">Pole-wall technique: <b>if the power sum S(z) = Σ uₖ(z − w)ᵏ equals f at every z with |z − w| &lt; d, and f has a pole at a point p with |p − w| = d, then the reach of S is at most d.</b> No power sum can be continued past a pole.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the pole-wall technique">
+\text{suppose the reach } R' > d @@ for contradiction
+S \text{ has a complex slope, so is continuous, on } |z - w| < R' @@ term by term (23e3, in the plane); the slope-means-no-gap technique (13b)
+z_n = w + (1 - \tfrac1n)(p - w):\ |z_n - w| < d,\ z_n \to p @@ points on the segment from w to p, inside the smaller disc
+S(z_n) = f(z_n) \to S(p) @@ S equals f there; S is continuous at p, since |p − w| = d &lt; R′
+f(z) = \tfrac{g(z)}{(z - p)^m},\ g(p) \ne 0 \Rightarrow |f(z_n)| \text{ passes every ceiling} @@ a pole of order m (26h1): |g(zₙ)| heads to |g(p)| &gt; 0, and |zₙ − p|ᵐ to 0
+\htmlClass{new}{\text{the reach of } S \text{ is at most } d} \quad \blacksquare @@ a list that heads to S(p) cannot pass every ceiling
   </pre>
-  <p data-pid="9c15b3">So Γ(5) = 4! = 24 and Γ(6) = 5! = 120. The step technique also links values that are not whole. Γ(7/2) = (5/2)(3/2)(1/2) Γ(1/2) = (15/8) Γ(1/2), so every Γ at a half is fixed by the one value Γ(1/2).</p>
-  <p data-pid="ce01b8">The shift by one is a nuisance kept for history: Γ at n + 1 is n factorial.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · step by step · ← → keys work</div></section>
+  <p data-pid="a88383">So when f has a complex slope on the disc of radius d and a pole on its rim, the reach is exactly d: the plane-reach technique gives at least d, the pole-wall technique at most d.</p>
+  <pre class="lines" data-k="ember" data-label="this step: tan about 0">
+\cos z = 0 \iff z = \tfrac{\pi}{2} + \pi k @@ e^(2iz) = −1 (26k3) and the whole-turn technique (26b3)
+\tan z = \tfrac{\sin z}{\cos z} \text{ has a complex slope on } |z| < \tfrac{\pi}{2} @@ the plane-slope technique (26d1)
+\sin\tfrac{\pi}{2} = 1 \ne 0,\ \cos' \tfrac{\pi}{2} = -1 \ne 0 @@ a pole of order 1 at π/2 (26h1): (z − π/2) tan z heads to −1
+\htmlClass{new}{\text{the sum of } \tan \text{ about } 0 \text{ reaches exactly } \tfrac{\pi}{2}} \quad \blacksquare @@ plane-reach and pole-wall
+  </pre>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · pole wall · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26l2.1</span><span class="ph understand">understand</span>What does the factorial-step technique say, and which move proves Γ(s + 1) = sΓ(s)?</li>
+      <li><span class="qid">26l2.1</span><span class="ph understand">understand</span>What does the pole-wall technique say, and what clash does its proof reach?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="26l3">
-  <h2 class="sthead"><span class="stno">26l3</span>Half a Factorial</h2>
-  <p data-pid="c01fdb">Γ(1/2) = ∫ from 0 to ∞ of x^(−1/2) e^(−x) dx. Put x = y², and it becomes twice the area under the bell e^(−y²) from 0 to ∞. That area has no antiderivative in any table. It is found by squeezing the bell between two powers whose areas rung 23 already knows.</p>
-  <p data-pid="97e18a">Bell-area technique: <b>∫ from 0 to ∞ of e^(−y²) dy = √π/2; so Γ(1/2) = √π.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the bell-area technique">
-1 + t \le e^t \text{ for every real } t @@ ln u ≤ u − 1 (17a), with u = e^t
-(1 - x^2)^n \le e^{-nx^2} \text{ on } [0, 1],\ \ e^{-nx^2} \le (1 + x^2)^{-n} \text{ for } x \ge 0 @@ t = −x² and t = x²; powers of numbers ≥ 0 keep order; (e^t)ⁿ = e^(nt) (17e)
-\int_0^1 (1 - x^2)^n\,dx = I_{2n+1},\ \ \int_0^\infty \tfrac{dx}{(1 + x^2)^n} = I_{2n-2} @@ x = cos t; x = tan t with 1 + tan² = sec² (21n), then the limit; Iₘ = ∫₀^(π/2) sinᵐ (23k4), the same area for cos by the complement (21e3)
-\sqrt n\,I_{2n+1} \le G \le \sqrt n\,I_{2n-2},\ \ G = \int_0^\infty e^{-y^2}\,dy @@ smaller function, smaller area (15e); y = √n x (16d); G converges by comparison with e^(−y) beyond 1 (16i3)
-m\,I_m I_{m-1} = (m-1)\,I_{m-1}I_{m-2} = \cdots = 1\cdot I_1 I_0 = \tfrac{\pi}{2} @@ Iₘ = ((m − 1)/m) Iₘ₋₂ (23k4)
-n I_{2n+1}^2 = \tfrac{n\pi}{2(2n+1)}\cdot\tfrac{I_{2n+1}}{I_{2n}} \to \tfrac{\pi}{4},\ \ n I_{2n-2}^2 = \tfrac{n\pi}{2(2n-1)}\cdot\tfrac{I_{2n-2}}{I_{2n-1}} \to \tfrac{\pi}{4} @@ the line above with m = 2n + 1 and m = 2n − 1; the ratios head to 1 (23k4)
-\htmlClass{new}{G = \int_0^\infty e^{-y^2}\,dy = \tfrac{\sqrt\pi}{2}} \quad \blacksquare @@ G² is squeezed between the two (10d1)
-\Gamma(\tfrac12) = \int_0^\infty x^{-1/2}e^{-x}\,dx = 2\int_0^\infty e^{-y^2}\,dy = \sqrt\pi @@ x = y², dx = 2y dy (16d) on [c, b], then the limits
+  <h2 class="sthead"><span class="stno">26l3</span>The Nearest Trouble</h2>
+  <p data-pid="7982ad">For a quotient of polynomials the two techniques meet, and the reach can be read off from the roots of the bottom.</p>
+  <p data-pid="e4c95c">Nearest-trouble technique: <b>let f = p/q with p and q real polynomials sharing no root in ℂ, and w real with q(w) ≠ 0; then the power sum of f about w reaches exactly to the nearest root of q in the plane.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the nearest-trouble technique">
+q \text{ has finitely many roots in } \mathbb{C};\ d = \text{the least } |r - w| @@ the root technique (25d4); q(w) ≠ 0, so d &gt; 0
+f \text{ has a complex slope at every } z \text{ with } |z - w| < d @@ the plane-slope technique (26d1): q(z) ≠ 0 there
+\text{reach} \ge d @@ the plane-reach technique (26l1)
+q = (z - r)^m q_1,\ q_1(r) \ne 0,\ p(r) \ne 0 @@ r a nearest root, repeated m times (25d4); p and q share no root
+f = \tfrac{p/q_1}{(z - r)^m}:\ \text{a pole of order } m \text{ at } r @@ p/q₁ has a slope at r and is not 0 there (26h1)
+\htmlClass{new}{\text{reach} = d} \quad \blacksquare @@ the pole-wall technique (26l2), with S equal to f on |z − w| &lt; d (26l1)
   </pre>
-  <p data-pid="8184c1">So Γ(1/2) = √π ≈ 1.7725, and Γ(3/2) = (1/2)√π, Γ(5/2) = (3/4)√π, and on. Half a factorial is a turn in disguise: π came in through the areas under powers of sin, the same road 23k took to the √(2π) in the size of n!.</p>
-  <p data-pid="ba04e2">The bell is even, so its area over the whole line is √π. Stretched, ∫ over the line of e^(−y²/2) dy = √(2π). That number will matter on every rung that touches chance.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · the bell · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: 1/(1 + x²) and its cousins">
+\tfrac{1}{1+x^2} \text{ about } 1:\ |1 - i| = |1 + i| = \sqrt2 @@ roots ±i
+\tfrac{1}{1 - x^2} \text{ about } 0:\ |1| = |-1| = 1 @@ roots ±1, on the floor
+\tfrac{1}{1 - x + x^2} \text{ about } 0:\ \big|\tfrac{1 \pm i\sqrt3}{2}\big| = 1 @@ the quadratic formula in ℂ; no root on the floor
+\htmlClass{new}{\text{reaches: } \sqrt2,\ 1,\ 1} \quad \blacksquare @@ the nearest-trouble technique
+  </pre>
+  <p data-pid="3a7059">1/(1 + x²) and 1/(1 − x²) both have sums reaching 1 about 0. On the line the second blows up at ±1 and the first is calm everywhere. In the plane they look alike: each has two troubles at distance 1. The line sees only the troubles that happen to sit on it. A sum, which lives on discs, sees them all.</p>
+  <p data-pid="8f0baf">Moving the centre moves the disc. About w = 3, the sum of 1/(1 + x²) reaches √10, because √(3² + 1²) is the distance from 3 to ±i. No centre on the floor ever gets a reach less than 1.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · nearest trouble · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26l3.1</span><span class="ph understand">understand</span>What does the bell-area technique say, and how is the area under the bell squeezed?</li>
+      <li><span class="qid">26l3.1</span><span class="ph understand">understand</span>What does the nearest-trouble technique say? <br>Why do 1/(1 + x²) and 1/(1 − x²) have sums of the same reach about 0?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="26l4">
-  <h2 class="sthead"><span class="stno">26l4</span>Past the Formula</h2>
-  <p data-pid="885d3e">The area defines Γ(s) only for s &gt; 0. Below 0 the power x^(s − 1) climbs too fast near 0, and the area is not finite. The step technique does not care. Run it backwards: Γ(s) = Γ(s + 1)/s.</p>
-  <p data-pid="739b62">Step-down technique: <b>for every real s other than 0, −1, −2, …, the value Γ(s + n)/(s(s + 1)⋯(s + n − 1)) is the same for every whole n with s + n &gt; 0; for s &gt; 0 it is the area Γ(s); and with it Γ(s + 1) = s Γ(s) holds for every such s.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the step-down technique">
-\frac{\Gamma(s+n+1)}{s(s+1)\cdots(s+n)} = \frac{(s+n)\,\Gamma(s+n)}{s(s+1)\cdots(s+n)} = \frac{\Gamma(s+n)}{s(s+1)\cdots(s+n-1)} @@ the factorial-step technique (26l2) at s + n &gt; 0
-\text{one value, whichever whole } n \text{ with } s + n > 0 @@ the line above, from each n to the next
-s > 0:\ n = 0 \text{ gives } \Gamma(s) @@ the empty product is 1
-s = 0, -1, -2, \ldots:\ \text{one factor of the bottom is } 0 @@ no value there
-\htmlClass{new}{\Gamma(s) = \tfrac{\Gamma(s+n)}{s(s+1)\cdots(s+n-1)} \text{ for } s \ne 0, -1, -2, \ldots} \quad \blacksquare @@ and Γ(s + 1) = sΓ(s) by the first line
-  </pre>
-  <pre class="lines" data-k="ember" data-label="this step: Γ(−1/2)">
-\Gamma(-\tfrac12) = \frac{\Gamma(\tfrac12)}{-\tfrac12} @@ the step-down technique with n = 1
-\htmlClass{new}{\Gamma(-\tfrac12) = -2\sqrt\pi \approx -3.5449} \quad \blacksquare @@ the bell-area technique (26l3)
-  </pre>
-  <p data-pid="3e14d6">That is continuing a function past its formula. The area was a formula that worked only for s &gt; 0. The step technique carried its values past the edge. The geometric sum did the same without a name: 1 + z + z² + ⋯ is 1/(1 − z) only for |z| &lt; 1, but 1/(1 − z) goes on everywhere but 1.</p>
-  <p data-pid="2e6dd0">In the plane such a continuation is not a free choice. If two functions have complex slopes on a disc |z − w| &lt; R and agree on a smaller disc round w, they have the same slopes at w, so the same pieces uₖ = f⁽ᵏ⁾(w)/k! (23e3), and each is its own sum on the whole disc (26g2): they agree on all of it. A function with a complex slope cannot be changed in one place without changing everywhere. The integral for Γ(s) also makes sense for complex s with floor part above 0, since |x^(s − 1)| = x^(floor part − 1) (26b2). Following Γ through the plane is work the Ladder does not do.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · past the formula · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">26l4.1</span><span class="ph understand">understand</span>What does the step-down technique say? <br>Why is continuing a function past its formula not a free choice in the plane?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="26l5">
-  <h2 class="sthead"><span class="stno">26l5</span>Between the Factorials</h2>
-  <p data-pid="cc4b5d">Γ(n + 1) is n!, and Γ(n + 2) is (n + 1)!, larger by the factor n + 1. What does Γ do between? Write the input as n + θ + 1 with 0 ≤ θ ≤ 1. The guess: it has gained the share θ of that factor, counted as a power, about n<sup>θ</sup>.</p>
-  <p data-pid="155fa1">Between-factorials technique: <b>for whole n ≥ 1 and 0 ≤ θ ≤ 1, Γ(n + θ + 1) = n! · n<sup>θ</sup> · c, with 1 − 2/n ≤ c ≤ 1 + 1/n.</b></p>
-  <p data-pid="ba8a5d">The proof needs two fences for powers. For u > 0, the curve u<sup>θ</sup> bends down and u<sup>θ − 1</sup> bends up, so one lies under and one over its tangent line at u = 1 (14g).</p>
-  <pre class="lines" data-k="ember" data-label="this step: the between-factorials technique">
-u^{\theta} \le 1 + \theta(u - 1),\ \ u^{\theta - 1} \ge 1 + (\theta - 1)(u - 1) @@ the two tangent lines at 1 (14g); equal when θ is 0 or 1
-x^{n+\theta} \le n^{\theta}x^{n}\big(1 - \theta + \theta\tfrac{x}{n}\big) @@ the first fence with u = x/n, times n^θ xⁿ
-\Gamma(n + \theta + 1) \le n^{\theta}\big((1 - \theta)\,n! + \theta\tfrac{(n+1)!}{n}\big) @@ times e^(−x), and the areas from 0 to ∞ (15e, 26l2)
-= n!\,n^{\theta}\big(1 + \tfrac{\theta}{n}\big) @@ gather
-x^{n+\theta} \ge n^{\theta-1}x^{n+1}\big(2 - \theta - (1 - \theta)\tfrac{x}{n}\big) @@ the second fence with u = x/n, times n^(θ − 1) xⁿ⁺¹
-\begin{aligned}\Gamma(n + \theta + 1) &\ge n^{\theta-1}(n+1)!\,\big(1 - \tfrac{2(1-\theta)}{n}\big)\\ &= n!\,n^{\theta}\big(1 + \tfrac1n\big)\big(1 - \tfrac{2(1-\theta)}{n}\big)\end{aligned} @@ the areas again: (2 − θ)(n + 1)! − (1 − θ)(n + 2)!/n, gathered
-\htmlClass{new}{1 - \tfrac2n \le \tfrac{\Gamma(n + \theta + 1)}{n!\,n^{\theta}} \le 1 + \tfrac1n} \quad \blacksquare @@ 0 ≤ θ ≤ 1
-  </pre>
-  <p data-pid="b34c67">Try it at a half. Γ(11/2) = (9/2)(7/2)(5/2)(3/2)(1/2)√π ≈ 52.34, and 4! · √4 = 48: the ratio is 1.09, inside the fences ½ and 1¼. At n = 100 the fences are 0.98 and 1.01.</p>
-  <p data-pid="b9d0fe">So far out, Γ between two factorials is the lower one times a power of n, as nearly as you like. Put the size of factorials (23k) in for n!, and s for n + θ. Then (s/e)<sup>s</sup> is (n/e)ⁿ · (1 + θ/n)ⁿ · (s/e)<sup>θ</sup>, and (1 + θ/n)ⁿ lies between e<sup>θ − 1/n</sup> and e<sup>θ</sup> by the log-bounds technique (17a). The e<sup>θ</sup> cancels, and what is left is this: <b>Γ(s + 1) ~ √(2πs) (s/e)<sup>s</sup> for real s, as s grows.</b> The size of factorials holds between the whole numbers too.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">26l5.1</span><span class="ph understand">understand</span>What does the between-factorials technique say Γ(n + θ + 1) is close to? <br>Where do its two fences come from?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="26l6">
-  <h2 class="sthead"><span class="stno">26l6</span>The Area Under a Narrowing Hill</h2>
-  <p data-pid="6b2fb3">On [−1, 1] the curve (1 − x²)ⁿ is a hill of height 1 at 0. As n grows the hill narrows, and its area heads to 0. How fast? The bell-area proof (26l3) met this hill and fenced it. The between-factorials technique (26l5) measures it.</p>
-  <p data-pid="33d921">Narrowing-hill technique: <b>√n times ∫ from −1 to 1 of (1 − x²)ⁿ dx heads to √π as n grows.</b></p>
-  <p data-pid="3a171b">Write Iₘ for ∫ from 0 to π/2 of sinᵐ, as in 23k4. Then ∫ from 0 to 1 of (1 − x²)ⁿ dx is I₂ₙ₊₁ (26l3).</p>
-  <pre class="lines" data-k="ember" data-label="this step: the narrowing-hill technique">
-I_{2n+1} = \tfrac{2n}{2n+1}\cdot\tfrac{2n-2}{2n-1}\cdots\tfrac{2}{3} @@ Iₘ = ((m − 1)/m) Iₘ₋₂ (23k4), down to I₁ = 1
-= \tfrac{n\,(n-1)\cdots 1}{(n+\frac12)(n-\frac12)\cdots\frac32} @@ halve each of the n factors, top and bottom
-= \tfrac{n!\ \Gamma(\frac32)}{\Gamma(n+\frac32)} @@ the factorial-step technique (26l2), n times: Γ(n + 3/2) = (n + ½)⋯(3/2) Γ(3/2)
-\Gamma(\tfrac32) = \tfrac{\sqrt\pi}{2} @@ half of Γ(1/2) (26l2, 26l3)
-\textstyle\sqrt n\int_{-1}^{1}(1 - x^2)^n\,dx = \sqrt\pi\cdot\tfrac{n!\,\sqrt n}{\Gamma(n+\frac32)} @@ the hill is even: twice I₂ₙ₊₁
-\htmlClass{new}{\textstyle\sqrt n\int_{-1}^{1}(1 - x^2)^n\,dx \to \sqrt\pi} \quad \blacksquare @@ between-factorials (26l5) with θ = ½: the fraction is between 1/(1 + 1/n) and 1/(1 − 2/n)
-  </pre>
-  <p data-pid="0e6e82">So the area of the hill is about √π/√n: a hill of height 1 and width about 1.77/√n. At n = 100 the area is 0.1766, and √π/√100 = 0.1772.</p>
-  <p data-pid="c23f5c">Divide the hill by its own area and you have a curve of area 1 that piles up at 0 as n grows. It is a polynomial, and that is its use: averaging a function against such a hill gives a polynomial close to the function. And it is the bell again: (1 − x²)ⁿ ≤ e<sup>−nx²</sup> (26l3), and √n times the area under e<sup>−nx²</sup> over the whole line is √π exactly.</p>
-  <!--gfig 26l6--><div class="gfigs" data-gfig="26l6" data-story="[[&quot;The hill (1 − x²)ⁿ for n = 1. Its height at 0 is 1.&quot;, [&quot;gold&quot;, &quot;~n = 1&quot;]], [&quot;For n = 4 it is narrower, and still 1 high at 0.&quot;, [&quot;teal&quot;, &quot;~n = 4&quot;]], [&quot;For n = 16 it is narrower again.&quot;, [&quot;ember&quot;, &quot;~n = 16&quot;]], [&quot;For n = 64 it is a thin spike. The area under the hill is near √(π/n): four times the n, half the area.&quot;, [&quot;plum&quot;, &quot;~n = 64&quot;, &quot;~(1 − x²)ⁿ&quot;]]]"><svg class="gfig" viewBox="0 0 400 200" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="the hills one minus x squared to the n for n equal 1, 4, 16, 64, narrowing"><defs><clipPath id="gceaa446e0"><rect x="22" y="12" width="360" height="154"/></clipPath></defs><line x1="24" x2="380" y1="164.0" y2="164.0" style="stroke:var(--ink);stroke-width:1"/><line x1="24.0" x2="24.0" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="24.0" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-1</text><line x1="113.0" x2="113.0" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="113.0" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-0.5</text><line x1="202.0" x2="202.0" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="202.0" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="291.0" x2="291.0" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="291.0" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="380.0" x2="380.0" y1="164.0" y2="168.0" style="stroke:var(--ink);stroke-width:1"/><text x="380.0" y="179.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><polyline clip-path="url(#gceaa446e0)" points="24.0,164.0 25.5,161.7 27.0,159.4 28.5,157.1 29.9,154.9 31.4,152.7 32.9,150.5 34.4,148.3 35.9,146.1 37.3,143.9 38.8,141.8 40.3,139.7 41.8,137.6 43.3,135.5 44.8,133.5 46.2,131.4 47.7,129.4 49.2,127.4 50.7,125.5 52.2,123.5 53.7,121.6 55.2,119.6 56.6,117.7 58.1,115.9 59.6,114.0 61.1,112.2 62.6,110.3 64.0,108.5 65.5,106.7 67.0,105.0 68.5,103.2 70.0,101.5 71.5,99.8 73.0,98.1 74.4,96.4 75.9,94.8 77.4,93.2 78.9,91.6 80.4,90.0 81.8,88.4 83.3,86.8 84.8,85.3 86.3,83.8 87.8,82.3 89.3,80.8 90.8,79.4 92.2,77.9 93.7,76.5 95.2,75.1 96.7,73.7 98.2,72.4 99.7,71.0 101.1,69.7 102.6,68.4 104.1,67.1 105.6,65.9 107.1,64.6 108.5,63.4 110.0,62.2 111.5,61.0 113.0,59.8 114.5,58.7 116.0,57.6 117.5,56.4 118.9,55.4 120.4,54.3 121.9,53.2 123.4,52.2 124.9,51.2 126.3,50.2 127.8,49.2 129.3,48.3 130.8,47.3 132.3,46.4 133.8,45.5 135.2,44.6 136.7,43.8 138.2,42.9 139.7,42.1 141.2,41.3 142.7,40.5 144.2,39.8 145.6,39.0 147.1,38.3 148.6,37.6 150.1,36.9 151.6,36.3 153.0,35.6 154.5,35.0 156.0,34.4 157.5,33.8 159.0,33.2 160.5,32.7 162.0,32.1 163.4,31.6 164.9,31.1 166.4,30.7 167.9,30.2 169.4,29.8 170.8,29.4 172.3,29.0 173.8,28.6 175.3,28.2 176.8,27.9 178.3,27.6 179.8,27.3 181.2,27.0 182.7,26.7 184.2,26.5 185.7,26.3 187.2,26.1 188.7,25.9 190.1,25.7 191.6,25.6 193.1,25.5 194.6,25.4 196.1,25.3 197.5,25.2 199.0,25.1 200.5,25.1 202.0,25.1 203.5,25.1 205.0,25.1 206.4,25.2 207.9,25.3 209.4,25.4 210.9,25.5 212.4,25.6 213.9,25.7 215.3,25.9 216.8,26.1 218.3,26.3 219.8,26.5 221.3,26.7 222.8,27.0 224.2,27.3 225.7,27.6 227.2,27.9 228.7,28.2 230.2,28.6 231.7,29.0 233.2,29.4 234.6,29.8 236.1,30.2 237.6,30.7 239.1,31.1 240.6,31.6 242.1,32.1 243.5,32.7 245.0,33.2 246.5,33.8 248.0,34.4 249.5,35.0 250.9,35.6 252.4,36.3 253.9,36.9 255.4,37.6 256.9,38.3 258.4,39.0 259.9,39.8 261.3,40.5 262.8,41.3 264.3,42.1 265.8,42.9 267.3,43.8 268.8,44.6 270.2,45.5 271.7,46.4 273.2,47.3 274.7,48.3 276.2,49.2 277.6,50.2 279.1,51.2 280.6,52.2 282.1,53.2 283.6,54.3 285.1,55.4 286.6,56.4 288.0,57.6 289.5,58.7 291.0,59.8 292.5,61.0 294.0,62.2 295.4,63.4 296.9,64.6 298.4,65.9 299.9,67.1 301.4,68.4 302.9,69.7 304.3,71.0 305.8,72.4 307.3,73.7 308.8,75.1 310.3,76.5 311.8,77.9 313.2,79.4 314.7,80.8 316.2,82.3 317.7,83.8 319.2,85.3 320.7,86.8 322.2,88.4 323.6,90.0 325.1,91.6 326.6,93.2 328.1,94.8 329.6,96.4 331.1,98.1 332.5,99.8 334.0,101.5 335.5,103.2 337.0,105.0 338.5,106.7 339.9,108.5 341.4,110.3 342.9,112.2 344.4,114.0 345.9,115.9 347.4,117.7 348.8,119.6 350.3,121.6 351.8,123.5 353.3,125.5 354.8,127.4 356.3,129.4 357.8,131.4 359.2,133.5 360.7,135.5 362.2,137.6 363.7,139.7 365.2,141.8 366.7,143.9 368.1,146.1 369.6,148.3 371.1,150.5 372.6,152.7 374.1,154.9 375.6,157.1 377.0,159.4 378.5,161.7 380.0,164.0" style="fill:none;stroke:var(--gold);stroke-width:1.6"/><polyline clip-path="url(#gceaa446e0)" points="24.0,164.0 25.5,164.0 27.0,164.0 28.5,164.0 29.9,164.0 31.4,164.0 32.9,164.0 34.4,164.0 35.9,164.0 37.3,163.9 38.8,163.9 40.3,163.9 41.8,163.8 43.3,163.8 44.8,163.7 46.2,163.6 47.7,163.5 49.2,163.3 50.7,163.2 52.2,163.0 53.7,162.8 55.2,162.6 56.6,162.3 58.1,162.0 59.6,161.7 61.1,161.3 62.6,160.9 64.0,160.5 65.5,160.0 67.0,159.5 68.5,158.9 70.0,158.3 71.5,157.7 73.0,157.0 74.4,156.2 75.9,155.4 77.4,154.6 78.9,153.7 80.4,152.8 81.8,151.8 83.3,150.8 84.8,149.7 86.3,148.6 87.8,147.4 89.3,146.1 90.8,144.8 92.2,143.5 93.7,142.1 95.2,140.7 96.7,139.2 98.2,137.7 99.7,136.1 101.1,134.5 102.6,132.8 104.1,131.1 105.6,129.4 107.1,127.6 108.5,125.8 110.0,123.9 111.5,122.0 113.0,120.1 114.5,118.1 116.0,116.1 117.5,114.1 118.9,112.0 120.4,109.9 121.9,107.8 123.4,105.7 124.9,103.6 126.3,101.4 127.8,99.2 129.3,97.0 130.8,94.9 132.3,92.7 133.8,90.5 135.2,88.2 136.7,86.0 138.2,83.8 139.7,81.7 141.2,79.5 142.7,77.3 144.2,75.1 145.6,73.0 147.1,70.9 148.6,68.8 150.1,66.7 151.6,64.6 153.0,62.6 154.5,60.6 156.0,58.6 157.5,56.7 159.0,54.8 160.5,53.0 162.0,51.2 163.4,49.4 164.9,47.7 166.4,46.0 167.9,44.4 169.4,42.9 170.8,41.4 172.3,39.9 173.8,38.5 175.3,37.2 176.8,35.9 178.3,34.7 179.8,33.6 181.2,32.5 182.7,31.5 184.2,30.6 185.7,29.7 187.2,28.9 188.7,28.2 190.1,27.6 191.6,27.0 193.1,26.5 194.6,26.1 196.1,25.7 197.5,25.5 199.0,25.3 200.5,25.1 202.0,25.1 203.5,25.1 205.0,25.3 206.4,25.5 207.9,25.7 209.4,26.1 210.9,26.5 212.4,27.0 213.9,27.6 215.3,28.2 216.8,28.9 218.3,29.7 219.8,30.6 221.3,31.5 222.8,32.5 224.2,33.6 225.7,34.7 227.2,35.9 228.7,37.2 230.2,38.5 231.7,39.9 233.2,41.4 234.6,42.9 236.1,44.4 237.6,46.0 239.1,47.7 240.6,49.4 242.1,51.2 243.5,53.0 245.0,54.8 246.5,56.7 248.0,58.6 249.5,60.6 250.9,62.6 252.4,64.6 253.9,66.7 255.4,68.8 256.9,70.9 258.4,73.0 259.9,75.1 261.3,77.3 262.8,79.5 264.3,81.7 265.8,83.8 267.3,86.0 268.8,88.2 270.2,90.5 271.7,92.7 273.2,94.9 274.7,97.0 276.2,99.2 277.6,101.4 279.1,103.6 280.6,105.7 282.1,107.8 283.6,109.9 285.1,112.0 286.6,114.1 288.0,116.1 289.5,118.1 291.0,120.1 292.5,122.0 294.0,123.9 295.4,125.8 296.9,127.6 298.4,129.4 299.9,131.1 301.4,132.8 302.9,134.5 304.3,136.1 305.8,137.7 307.3,139.2 308.8,140.7 310.3,142.1 311.8,143.5 313.2,144.8 314.7,146.1 316.2,147.4 317.7,148.6 319.2,149.7 320.7,150.8 322.2,151.8 323.6,152.8 325.1,153.7 326.6,154.6 328.1,155.4 329.6,156.2 331.1,157.0 332.5,157.7 334.0,158.3 335.5,158.9 337.0,159.5 338.5,160.0 339.9,160.5 341.4,160.9 342.9,161.3 344.4,161.7 345.9,162.0 347.4,162.3 348.8,162.6 350.3,162.8 351.8,163.0 353.3,163.2 354.8,163.3 356.3,163.5 357.8,163.6 359.2,163.7 360.7,163.8 362.2,163.8 363.7,163.9 365.2,163.9 366.7,163.9 368.1,164.0 369.6,164.0 371.1,164.0 372.6,164.0 374.1,164.0 375.6,164.0 377.0,164.0 378.5,164.0 380.0,164.0" style="fill:none;stroke:var(--teal);stroke-width:1.6"/><polyline clip-path="url(#gceaa446e0)" points="24.0,164.0 25.5,164.0 27.0,164.0 28.5,164.0 29.9,164.0 31.4,164.0 32.9,164.0 34.4,164.0 35.9,164.0 37.3,164.0 38.8,164.0 40.3,164.0 41.8,164.0 43.3,164.0 44.8,164.0 46.2,164.0 47.7,164.0 49.2,164.0 50.7,164.0 52.2,164.0 53.7,164.0 55.2,164.0 56.6,164.0 58.1,164.0 59.6,164.0 61.1,164.0 62.6,164.0 64.0,164.0 65.5,164.0 67.0,164.0 68.5,164.0 70.0,164.0 71.5,164.0 73.0,164.0 74.4,164.0 75.9,164.0 77.4,164.0 78.9,164.0 80.4,164.0 81.8,164.0 83.3,164.0 84.8,164.0 86.3,164.0 87.8,164.0 89.3,164.0 90.8,163.9 92.2,163.9 93.7,163.9 95.2,163.9 96.7,163.9 98.2,163.8 99.7,163.8 101.1,163.7 102.6,163.6 104.1,163.6 105.6,163.5 107.1,163.3 108.5,163.2 110.0,163.0 111.5,162.8 113.0,162.6 114.5,162.3 116.0,162.0 117.5,161.7 118.9,161.3 120.4,160.8 121.9,160.3 123.4,159.7 124.9,159.0 126.3,158.3 127.8,157.4 129.3,156.5 130.8,155.5 132.3,154.3 133.8,153.1 135.2,151.7 136.7,150.2 138.2,148.6 139.7,146.8 141.2,144.9 142.7,142.9 144.2,140.7 145.6,138.4 147.1,135.9 148.6,133.3 150.1,130.5 151.6,127.6 153.0,124.5 154.5,121.3 156.0,118.0 157.5,114.5 159.0,111.0 160.5,107.3 162.0,103.5 163.4,99.6 164.9,95.7 166.4,91.7 167.9,87.7 169.4,83.6 170.8,79.6 172.3,75.5 173.8,71.5 175.3,67.5 176.8,63.6 178.3,59.8 179.8,56.0 181.2,52.5 182.7,49.0 184.2,45.7 185.7,42.7 187.2,39.8 188.7,37.1 190.1,34.7 191.6,32.5 193.1,30.6 194.6,28.9 196.1,27.6 197.5,26.5 199.0,25.7 200.5,25.3 202.0,25.1 203.5,25.3 205.0,25.7 206.4,26.5 207.9,27.6 209.4,28.9 210.9,30.6 212.4,32.5 213.9,34.7 215.3,37.1 216.8,39.8 218.3,42.7 219.8,45.7 221.3,49.0 222.8,52.5 224.2,56.0 225.7,59.8 227.2,63.6 228.7,67.5 230.2,71.5 231.7,75.5 233.2,79.6 234.6,83.6 236.1,87.7 237.6,91.7 239.1,95.7 240.6,99.6 242.1,103.5 243.5,107.3 245.0,111.0 246.5,114.5 248.0,118.0 249.5,121.3 250.9,124.5 252.4,127.6 253.9,130.5 255.4,133.3 256.9,135.9 258.4,138.4 259.9,140.7 261.3,142.9 262.8,144.9 264.3,146.8 265.8,148.6 267.3,150.2 268.8,151.7 270.2,153.1 271.7,154.3 273.2,155.5 274.7,156.5 276.2,157.4 277.6,158.3 279.1,159.0 280.6,159.7 282.1,160.3 283.6,160.8 285.1,161.3 286.6,161.7 288.0,162.0 289.5,162.3 291.0,162.6 292.5,162.8 294.0,163.0 295.4,163.2 296.9,163.3 298.4,163.5 299.9,163.6 301.4,163.6 302.9,163.7 304.3,163.8 305.8,163.8 307.3,163.9 308.8,163.9 310.3,163.9 311.8,163.9 313.2,163.9 314.7,164.0 316.2,164.0 317.7,164.0 319.2,164.0 320.7,164.0 322.2,164.0 323.6,164.0 325.1,164.0 326.6,164.0 328.1,164.0 329.6,164.0 331.1,164.0 332.5,164.0 334.0,164.0 335.5,164.0 337.0,164.0 338.5,164.0 339.9,164.0 341.4,164.0 342.9,164.0 344.4,164.0 345.9,164.0 347.4,164.0 348.8,164.0 350.3,164.0 351.8,164.0 353.3,164.0 354.8,164.0 356.3,164.0 357.8,164.0 359.2,164.0 360.7,164.0 362.2,164.0 363.7,164.0 365.2,164.0 366.7,164.0 368.1,164.0 369.6,164.0 371.1,164.0 372.6,164.0 374.1,164.0 375.6,164.0 377.0,164.0 378.5,164.0 380.0,164.0" style="fill:none;stroke:var(--ember);stroke-width:1.6"/><polyline clip-path="url(#gceaa446e0)" points="24.0,164.0 25.5,164.0 27.0,164.0 28.5,164.0 29.9,164.0 31.4,164.0 32.9,164.0 34.4,164.0 35.9,164.0 37.3,164.0 38.8,164.0 40.3,164.0 41.8,164.0 43.3,164.0 44.8,164.0 46.2,164.0 47.7,164.0 49.2,164.0 50.7,164.0 52.2,164.0 53.7,164.0 55.2,164.0 56.6,164.0 58.1,164.0 59.6,164.0 61.1,164.0 62.6,164.0 64.0,164.0 65.5,164.0 67.0,164.0 68.5,164.0 70.0,164.0 71.5,164.0 73.0,164.0 74.4,164.0 75.9,164.0 77.4,164.0 78.9,164.0 80.4,164.0 81.8,164.0 83.3,164.0 84.8,164.0 86.3,164.0 87.8,164.0 89.3,164.0 90.8,164.0 92.2,164.0 93.7,164.0 95.2,164.0 96.7,164.0 98.2,164.0 99.7,164.0 101.1,164.0 102.6,164.0 104.1,164.0 105.6,164.0 107.1,164.0 108.5,164.0 110.0,164.0 111.5,164.0 113.0,164.0 114.5,164.0 116.0,164.0 117.5,164.0 118.9,164.0 120.4,164.0 121.9,164.0 123.4,164.0 124.9,164.0 126.3,164.0 127.8,164.0 129.3,164.0 130.8,164.0 132.3,164.0 133.8,164.0 135.2,164.0 136.7,164.0 138.2,164.0 139.7,164.0 141.2,164.0 142.7,163.9 144.2,163.9 145.6,163.8 147.1,163.8 148.6,163.7 150.1,163.5 151.6,163.3 153.0,163.1 154.5,162.8 156.0,162.3 157.5,161.8 159.0,161.0 160.5,160.1 162.0,159.0 163.4,157.6 164.9,155.9 166.4,153.8 167.9,151.3 169.4,148.4 170.8,145.0 172.3,141.1 173.8,136.6 175.3,131.6 176.8,126.1 178.3,119.9 179.8,113.3 181.2,106.2 182.7,98.8 184.2,91.0 185.7,83.1 187.2,75.1 188.7,67.2 190.1,59.6 191.6,52.3 193.1,45.7 194.6,39.7 196.1,34.6 197.5,30.6 199.0,27.6 200.5,25.7 202.0,25.1 203.5,25.7 205.0,27.6 206.4,30.6 207.9,34.6 209.4,39.7 210.9,45.7 212.4,52.3 213.9,59.6 215.3,67.2 216.8,75.1 218.3,83.1 219.8,91.0 221.3,98.8 222.8,106.2 224.2,113.3 225.7,119.9 227.2,126.1 228.7,131.6 230.2,136.6 231.7,141.1 233.2,145.0 234.6,148.4 236.1,151.3 237.6,153.8 239.1,155.9 240.6,157.6 242.1,159.0 243.5,160.1 245.0,161.0 246.5,161.8 248.0,162.3 249.5,162.8 250.9,163.1 252.4,163.3 253.9,163.5 255.4,163.7 256.9,163.8 258.4,163.8 259.9,163.9 261.3,163.9 262.8,164.0 264.3,164.0 265.8,164.0 267.3,164.0 268.8,164.0 270.2,164.0 271.7,164.0 273.2,164.0 274.7,164.0 276.2,164.0 277.6,164.0 279.1,164.0 280.6,164.0 282.1,164.0 283.6,164.0 285.1,164.0 286.6,164.0 288.0,164.0 289.5,164.0 291.0,164.0 292.5,164.0 294.0,164.0 295.4,164.0 296.9,164.0 298.4,164.0 299.9,164.0 301.4,164.0 302.9,164.0 304.3,164.0 305.8,164.0 307.3,164.0 308.8,164.0 310.3,164.0 311.8,164.0 313.2,164.0 314.7,164.0 316.2,164.0 317.7,164.0 319.2,164.0 320.7,164.0 322.2,164.0 323.6,164.0 325.1,164.0 326.6,164.0 328.1,164.0 329.6,164.0 331.1,164.0 332.5,164.0 334.0,164.0 335.5,164.0 337.0,164.0 338.5,164.0 339.9,164.0 341.4,164.0 342.9,164.0 344.4,164.0 345.9,164.0 347.4,164.0 348.8,164.0 350.3,164.0 351.8,164.0 353.3,164.0 354.8,164.0 356.3,164.0 357.8,164.0 359.2,164.0 360.7,164.0 362.2,164.0 363.7,164.0 365.2,164.0 366.7,164.0 368.1,164.0 369.6,164.0 371.1,164.0 372.6,164.0 374.1,164.0 375.6,164.0 377.0,164.0 378.5,164.0 380.0,164.0" style="fill:none;stroke:var(--plum);stroke-width:1.6"/><line x1="30" x2="48" y1="26" y2="26" style="stroke:var(--gold);stroke-width:2"/><text x="54" y="30" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">n = 1</text><line x1="30" x2="48" y1="40" y2="40" style="stroke:var(--teal);stroke-width:2"/><text x="54" y="44" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">n = 4</text><line x1="30" x2="48" y1="54" y2="54" style="stroke:var(--ember);stroke-width:2"/><text x="54" y="58" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">n = 16</text><line x1="30" x2="48" y1="68" y2="68" style="stroke:var(--plum);stroke-width:2"/><text x="54" y="72" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">n = 64</text><text x="386" y="194" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">(1 − x²)ⁿ: height 1 at 0, its area near √(π/n)</text></svg></div><!--/gfig 26l6-->
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">26l6.1</span><span class="ph understand">understand</span>How fast does the area under (1 − x²)ⁿ on [−1, 1] head to 0? <br>How does Γ come into the proof?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="26l7">
-  <h2 class="sthead"><span class="stno">26l7</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">26l4</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\Gamma(n) = n!\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; Γ(n + 1) = n!: Γ(5) = 4! = 24, not 120 (26l2)
-\Gamma(0) = 0! = 1\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; Γ(1) = 0! = 1; Γ(0) has no value: the area diverges at 0, and the step technique divides by 0
-\Gamma(-\tfrac12) = \int_0^\infty x^{-3/2}e^{-x}\,dx\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; that area diverges at 0 (16i2: p = 3/2 ≥ 1); below 0, Γ is the step-down value, not the area
-\Gamma(s+1) \text{ is the only smooth function equal to } n! \text{ at every whole } n\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; Γ(s + 1) + sin πs agrees with it at every whole number; more must be asked than the whole numbers
-\Gamma(n + \tfrac32) = \tfrac12\big(n! + (n+1)!\big)\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; between factorials the gain is a power, not a share: Γ(n + 3/2) is near n!·√n
-\text{the height stays } 1 \text{, so the area stays}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the hill narrows like 1/√n: its area is near √π/√n and heads to 0
+\tfrac{1}{1+x^2} \text{ is smooth on the whole line, so its sum about } 0 \text{ reaches everywhere}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the reach is set by the nearest trouble in the plane: ±i, at distance 1
+\text{the reach is the distance to the nearest root of the bottom on the floor}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; in the plane: x² − 2x + 5 has no root on the floor, yet its roots 1 ± 2i stop the sum
+\text{smooth on } (-1, 1) \Rightarrow \text{a sum about } 0 \text{ reaching } 1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; e^(−1/x²) (23f) is smooth and not its sum at all: it has no complex slope near 0, so the plane-reach technique does not apply
+1 \ne \pm i, \text{ so } 1 - x^2 + x^4 - \cdots \text{ settles at } x = 1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; at the reach itself anything can happen (23c); here the pieces are ±1 and do not head to 0 (22d)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">26l7.1</span><span class="ph understand">understand</span>Why is “Γ(n) = n!” a move to watch out for?</li>
+      <li><span class="qid">26l4.1</span><span class="ph understand">understand</span>Why is “1/(1 + x²) is smooth on the whole line, so its sum about 0 reaches everywhere” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -221,21 +159,21 @@ I_{2n+1} = \tfrac{2n}{2n+1}\cdot\tfrac{2n-2}{2n-1}\cdots\tfrac{2}{3} @@ Iₘ = (
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">26l.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\displaystyle\int_0^1 \big(\ln\tfrac1x\big)^n\,dx"></span></span>Build it from Γ with u = ln(1/x), and find it for n = 3. <br>Find ∫ from 0 to 1 of √(ln(1/x)) dx the same way.</div>
-  <div class="chq"><span class="chid">26l.4.2</span><span class="tagq">edge</span>Prove that s Γ(s) heads to 1 as s heads to 0 from the right. <br>Find what Γ(s) does just to the right of 0 and just to the left of 0.</div>
-  <div class="chq"><span class="chid">26l.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="f(s) = \Gamma(s)\,(1 + \sin 2\pi s)"></span></span>Is Γ the only function on s > 0 with f(s + 1) = s f(s) and f(1) = 1? Test the given, and prove your answer.</div>
-  <div class="chq"><span class="chid">26l.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\displaystyle\int_0^1 x^m(1 - x)^n\,dx = \frac{m!\,n!}{(m + n + 1)!}"></span></span>Write it with Γ and read it at m = n = −1/2. Find ∫ from 0 to 1 of x^(−1/2)(1 − x)^(−1/2) dx with x = sin²t. <br>Do the two agree, and is this a proof that Γ(1/2) = √π?</div>
-  <div class="chq"><span class="chid">26l.4.5</span><span class="tagq">seam</span>In 1729 two mathematicians, writing letters about the factorial, each found a way to give it values between the whole numbers. Many smooth curves pass through every point (n, n!). <br>Who decides which of them is the factorial past the counting numbers? <br>Is such a function found, or chosen?</div>
+  <div class="chq"><span class="chid">26l.4.1</span><span class="tagq">build</span>Build a quotient of real polynomials whose bottom has no root on the floor and whose sum about 0 reaches exactly ½. <br>Prove the reach, and find the reach of the same sum about 1.</div>
+  <div class="chq"><span class="chid">26l.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\ln(1 + x)"></span></span>Its sum about 0 reaches 1, yet it has no pole. What goes wrong at −1 in the plane, and why can the pole-wall technique not be used there? <br>Prove the reach is exactly 1 another way.</div>
+  <div class="chq"><span class="chid">26l.4.3</span><span class="tagq">converse</span>If rung 23’s sum of f about a real w reaches R, is there a function with a complex slope on the disc |z − w| < R that equals f on the floor? Prove it or refute it.</div>
+  <div class="chq"><span class="chid">26l.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\dfrac{1}{1 + x^2} = \dfrac{1}{2i}\Big(\dfrac{1}{x - i} - \dfrac{1}{x + i}\Big)"></span></span>Reroute the reach of the sum of 1/(1 + x²) about 1: expand each piece as a geometric sum in h = x − 1, and find the reach by the reach-by-ratio technique (23c).</div>
+  <div class="chq"><span class="chid">26l.4.5</span><span class="tagq">seam</span><span class="givens"><span data-tex-inline="\dfrac{x}{e^x - 1}"></span></span>The pieces of this sum were first studied in 1713, to add up the powers of the counting numbers: a question about whole numbers, asked long before anyone drew numbers in a plane. Its sum reaches exactly 2π, because of a point 2π up the upright. <br>Is the plane a tool brought in from outside, or is it where this function has always lived?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r26k.html">← 26k · real integrals by residues</a><a href="r26cb24.html">26·cb24 · the damped oscillator →</a></nav>
+<nav class="nextrung"><a href="r26k.html">← 26k · e to the iθ by hand</a><a href="r26m.html">26m · real integrals by residues →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Γ is the gamma function, and the two-ends technique says its defining integral, Euler’s integral of the second kind, converges for s &gt; 0. The factorial-step technique is the functional equation Γ(s + 1) = sΓ(s). The bell-area technique is the Gaussian integral, ∫ e^(−x²) dx = √π over the line; its proof here is a squeeze through Wallis’s integrals. The step-down technique is the continuation of Γ to the negative non-integers, where it has poles at 0, −1, −2, …. Continuing a function past its formula is analytic continuation, and the fact that two functions with complex slopes agreeing near a point agree on a whole disc is the start of the identity theorem. The integral in 26l.4.4 is the beta function, B(m, n) = Γ(m)Γ(n)/Γ(m + n). Γ(s + 1) ~ √(2πs)(s/e)^s for real s is Stirling’s formula for the gamma function.</p>
+  <p>The reach is the radius of convergence. The plane-reach and pole-wall techniques together say that the radius of convergence of the Taylor series of a function holomorphic near w is the distance from w to the nearest singularity, when the function cannot be continued past it. The nearest-trouble technique is that statement for rational functions. The pieces of the sum of x/(eˣ − 1) are Bₖ/k!, where the Bₖ are the Bernoulli numbers.</p>
   <h3>Who said it first</h3>
-  <p>Leonhard Euler, in letters to Christian Goldbach of 1729 and 1730, gave the factorial values between the whole numbers, first as an endless product and then as an integral; Daniel Bernoulli found a product of his own in a letter of 1729. Adrien-Marie Legendre named it Γ in 1811 and shifted it by one. Pierre-Simon Laplace found ∫ e^(−x²) = √π in 1774, in his work on chance. Harald Bohr and Johannes Mollerup proved in 1922 that Γ is the only function with f(1) = 1, f(s + 1) = s f(s), and ln f bending up, which answers 26l.4.3 and 26l.4.5 one way.</p>
+  <p>Augustin-Louis Cauchy found in 1831 that a power series converges in the largest disc in which its function stays holomorphic. Jacob Bernoulli’s Ars conjectandi, printed in 1713, introduced the Bernoulli numbers for the sums of powers 1ᵏ + 2ᵏ + ⋯ + nᵏ.</p>
 </section>
 
 </div>
@@ -250,26 +188,22 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'far out',t:R`x^{s-1}e^{-x} \le m!/x^2`,n:`Growth beats every power.`},
-  {k:'ember',kl:'near 0',t:R`x^{s-1}e^{-x} \le x^{s-1}`,n:`In to 0 with p = 1 − s &lt; 1.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Gamma(s) = \int_0^\infty x^{s-1}e^{-x}\,dx}`,n:`For every s &gt; 0.`}
-],{title:'The slides · two ends · ← → keys work'});
+  {k:'ember',kl:'rebuilt',t:R`f(z) = \textstyle\sum u_k(z - w)^k,\ |z - w| < R`,n:`A complex slope on the disc.`},
+  {k:'ember',kl:'on the floor',t:R`u_k = f^{(k)}(w)/k!`,n:`The same pieces as rung 23’s sum.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reach} \ge R}`,n:`The disc carries the line.`}
+],{title:'The slides · plane reach · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'parts',t:R`\int x^s e^{-x} = \big[-x^s e^{-x}\big] + s\int x^{s-1}e^{-x}`,n:`The ends vanish.`},
-  {k:'ember',kl:'the step',t:R`\Gamma(s+1) = s\,\Gamma(s)`,n:`For every s &gt; 0.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Gamma(n+1) = n!}`,n:`From Γ(1) = 1.`}
-],{title:'The slides · step by step · ← → keys work'});
+  {k:'ember',kl:'suppose more',t:R`R' > d`,n:`For contradiction.`},
+  {k:'ember',kl:'walk to the pole',t:R`S(z_n) = f(z_n) \to S(p)`,n:`S is continuous there.`},
+  {k:'ember',kl:'but',t:R`|f(z_n)| \to \text{every ceiling}`,n:`A pole.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reach} \le d}`,n:`The disc stops at the pole.`}
+],{title:'The slides · pole wall · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'squeeze',t:R`(1 - x^2)^n \le e^{-nx^2} \le (1 + x^2)^{-n}`,n:`From 1 + t ≤ eᵗ.`},
-  {k:'ember',kl:'areas',t:R`\sqrt n\,I_{2n+1} \le G \le \sqrt n\,I_{2n-2}`,n:`Powers of sin.`},
-  {k:'ember',kl:'both ends',t:R`n I_m^2 \to \pi/4`,n:`The squeeze 23k used for n!.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Gamma(\tfrac12) = \sqrt\pi}`,n:`Half a factorial.`}
-],{title:'The slides · the bell · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'step down',t:R`\Gamma(s) = \tfrac{\Gamma(s+1)}{s}`,n:`The step technique, run backwards.`},
-  {k:'ember',kl:'one value',t:R`\tfrac{\Gamma(s+n)}{s(s+1)\cdots(s+n-1)}`,n:`Any n with s + n &gt; 0.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\Gamma(-\tfrac12) = -2\sqrt\pi}`,n:`Every s but 0, −1, −2, …`}
-],{title:'The slides · past the formula · ← → keys work'});
+  {k:'ember',kl:'roots of the bottom',t:R`q(r) = 0,\ d = \min|r - w|`,n:`In the plane, not just on the floor.`},
+  {k:'ember',kl:'at least',t:R`\text{plane-reach: reach} \ge d`,n:`A slope on the disc.`},
+  {k:'ember',kl:'at most',t:R`\text{pole-wall: reach} \le d`,n:`A pole on the rim.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{reach} = d}`,n:`For 1/(1 + x²) about 0: 1.`}
+],{title:'The slides · nearest trouble · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

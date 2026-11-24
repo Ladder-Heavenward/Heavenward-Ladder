@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fixed Points, Stability and the Start of Chaos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+.kn{font-size:.88rem}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r24l.html">← 24l the logistic equation solved</a><a href="r24n.html">next: 24n solutions as power series →</a></p>
+  <div class="tags"><span class="tag tech">24m · technique</span></div>
+  <h1>Fixed Points, Stability and the Start of Chaos</h1>
+  <p data-pid="f5fb24">A statement that gives the rate from the present state alone, and never looks at the clock, has resting places: states where the rate is zero, so that a quantity put there stays there. A cup at room temperature, a population at its ceiling, a ball at the bottom of a bowl. Some of these resting places hold. Nudge the quantity off, and it comes back. Others fall apart at the smallest nudge, like a ball balanced on the top of a hill. This step shows that one number decides which: the slope of the statement at the resting place. Then it turns a knob in the statement and watches resting places appear, merge and vanish. Last it goes back to the yearly logistic function of the last step and turns its knob up. The single resting place splits into a swing between two values, then four, then eight, faster and faster, until the run never repeats at all. The doublings come at a pace that seems to be the same for every statement of this shape, a number found by computing, not by proof.</p>
+  <p class="gesture" data-pid="0a5b24">A resting place of a statement holds when the statement's slope there is negative and falls apart when it is positive. Turning a knob in the statement can make resting places appear in pairs, meet, and vanish. The yearly logistic function, turned up, swings between two values, then four, then eight, and then never repeats, though every step is fixed. The doublings crowd together at a pace that looks the same for many statements.</p>
+</header>
+
+<section class="class step" data-step="24m1">
+  <h2 class="sthead"><span class="stno">24m1</span>Resting Places That Hold</h2>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;y^* \text{ a resting place} :\Leftrightarrow F(y^*) = 0\\ &amp;y^* \text{ holds} :\Leftrightarrow \exists \delta &gt; 0\ \forall y_0\\ &amp;\qquad \big(|y_0 - y^*| &lt; \delta \Rightarrow y(x) \to y^*\big)\end{aligned}"></div>
+  <p class="eqline" data-pid="d33d04">From here on, a statement y′ = F(y) that does not involve x <i>looks only at the state</i>. A <i>resting place</i> of it is a y* with F(y*) = 0; the constant y = y* is then a solution, 24f3's resting line. It <i>holds</i> when every solution that starts near enough to y* stays near it and heads to it, and <i>falls apart</i> when solutions starting near it, but not at it, leave. Accepted name: an autonomous equation, an equilibrium, stable and unstable.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;F(y^*) = 0 \Rightarrow y^* \text{ holds}\,?\\ &amp;\quad y&#x27; = y:\ F(0) = 0,\ \text{and } y = y_0e^x \text{ leaves } 0\\ &amp;\quad\text{rests, and falls apart}\end{aligned}" data-sim="1"></div>
+  <p data-pid="eaf2d8">Sign-of-slope technique: <b>let F have a continuous slope near a resting place y*. If F′(y*) &lt; 0, the place holds: some window around y* and some m &gt; 0 give |y(t) − y*| ≤ |y(0) − y*|·e^(−mt) for every solution starting in the window and every t ≥ 0. If F′(y*) &gt; 0, the place falls apart.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the sign-of-slope technique">
+F'(y^*) < 0:\ \ F' \le -m \text{ on } W = [y^* - \delta,\ y^* + \delta],\ \ m = -\tfrac12 F'(y^*) @@ the sign is kept near an input (12a3), for F′ + m
+F(y) = F'(c)\,(y - y^*) \text{ for } y \in W @@ the mean value technique (14c), with F(y*) = 0
+u = y - y^*:\ \ (u^2)' = 2u\,F(y) = 2F'(c)\,u^2 \le -2m\,u^2 \text{ while } y \in W @@ the chain rule (13e)
+\big(u^2e^{2mt}\big)' = \big((u^2)' + 2m\,u^2\big)e^{2mt} \le 0 @@ the product rule, as in 24a3
+u(t)^2 \le u(0)^2e^{-2mt}, \text{ so } y \text{ never leaves } W @@ a slope at most 0 never climbs (14c)
+\htmlClass{new}{|y(t) - y^*| \le |y(0) - y^*|\,e^{-mt} \text{ for every } t \ge 0} \quad \blacksquare @@ it stays bounded, so it never runs off (24e); with F′(y*) &gt; 0 the same lines, turned, give |u| ≥ |u(0)|e^(mt) while y is in W
+  </pre>
+  <p data-pid="ac5eea">Near a holding place the departure shrinks roughly like e^(F′(y*)t), so 1/|F′(y*)| is its time scale. The logistic statement has F′(P) = r(1 − 2P/K): F′(0) = r &gt; 0, so the empty state P = 0 falls apart, and F′(K) = −r &lt; 0, so the ceiling holds, with time scale 1/r. Between two neighbouring resting places F keeps one sign (12a5), so a solution there climbs or falls the whole way to one of them. The resting places and the signs between them tell the whole story, without a formula.</p>
+  <p data-pid="1133e0">When F′(y*) = 0 the technique is silent. y′ = −y³ holds at 0, y′ = y³ falls apart there, and y′ = y² does both: from below it climbs to 0, from above it runs off.</p>
+  <!--gfig 24m1--><div class="gfigs" data-gfig="24m1" data-story="[[&quot;The curve is F(y) = y − y³ against y. Where it crosses the axis, y′ = 0: a resting place. There are three.&quot;, [&quot;polyline&quot;, &quot;circle&quot;, &quot;#23&quot;]], [&quot;Where F is above the axis, y′ is positive and y moves right. Where it is below, y moves left. The ember arrows show which.&quot;, [&quot;ember&quot;, &quot;polyline&quot;]], [&quot;At the two outer resting places the arrows point in from both sides. They hold. F slopes down through each.&quot;, [&quot;#16&quot;, &quot;#17&quot;, &quot;#20&quot;, &quot;#21&quot;, &quot;#8-15&quot;, &quot;polyline&quot;]], [&quot;At the middle one the arrows point away on both sides. It falls apart. F slopes up through it.&quot;, [&quot;#18&quot;, &quot;#19&quot;, &quot;#22&quot;, &quot;#10-13&quot;, &quot;polyline&quot;]]]"><svg class="gfig" viewBox="0 0 420 220" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="a phase line for y prime equals y minus y cubed, with two rests that hold and one that falls apart"><defs><clipPath id="gc1bb59123"><rect x="28" y="12" width="374" height="154"/></clipPath></defs><line x1="30" x2="400" y1="89.0" y2="89.0" style="stroke:var(--ink);stroke-width:1"/><line x1="99.4" x2="99.4" y1="89.0" y2="93.0" style="stroke:var(--ink);stroke-width:1"/><text x="99.4" y="104.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">-1</text><line x1="215.0" x2="215.0" y1="89.0" y2="93.0" style="stroke:var(--ink);stroke-width:1"/><text x="215.0" y="104.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="330.6" x2="330.6" y1="89.0" y2="93.0" style="stroke:var(--ink);stroke-width:1"/><text x="330.6" y="104.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><polyline clip-path="url(#gc1bb59123)" points="30.0,-67.0 31.5,-61.5 33.1,-56.1 34.6,-50.8 36.2,-45.6 37.7,-40.5 39.3,-35.5 40.8,-30.6 42.3,-25.8 43.9,-21.1 45.4,-16.5 47.0,-12.0 48.5,-7.6 50.0,-3.3 51.6,0.9 53.1,5.0 54.7,9.0 56.2,12.9 57.8,16.8 59.3,20.5 60.8,24.2 62.4,27.8 63.9,31.2 65.5,34.6 67.0,37.9 68.5,41.1 70.1,44.3 71.6,47.3 73.2,50.3 74.7,53.2 76.2,56.0 77.8,58.7 79.3,61.4 80.9,63.9 82.4,66.4 84.0,68.9 85.5,71.2 87.0,73.5 88.6,75.6 90.1,77.8 91.7,79.8 93.2,81.8 94.8,83.7 96.3,85.5 97.8,87.3 99.4,89.0 100.9,90.6 102.5,92.2 104.0,93.7 105.5,95.1 107.1,96.5 108.6,97.8 110.2,99.1 111.7,100.3 113.2,101.4 114.8,102.5 116.3,103.5 117.9,104.5 119.4,105.4 121.0,106.2 122.5,107.0 124.0,107.7 125.6,108.4 127.1,109.1 128.7,109.6 130.2,110.2 131.8,110.7 133.3,111.1 134.8,111.5 136.4,111.8 137.9,112.1 139.5,112.4 141.0,112.6 142.5,112.8 144.1,112.9 145.6,113.0 147.2,113.0 148.7,113.1 150.2,113.0 151.8,113.0 153.3,112.9 154.9,112.7 156.4,112.5 158.0,112.3 159.5,112.1 161.0,111.8 162.6,111.5 164.1,111.2 165.7,110.8 167.2,110.4 168.7,110.0 170.3,109.6 171.8,109.1 173.4,108.6 174.9,108.1 176.5,107.5 178.0,107.0 179.5,106.4 181.1,105.8 182.6,105.1 184.2,104.5 185.7,103.8 187.2,103.1 188.8,102.4 190.3,101.7 191.9,101.0 193.4,100.3 195.0,99.5 196.5,98.7 198.0,98.0 199.6,97.2 201.1,96.4 202.7,95.6 204.2,94.8 205.8,94.0 207.3,93.1 208.8,92.3 210.4,91.5 211.9,90.7 213.5,89.8 215.0,89.0 216.5,88.2 218.1,87.3 219.6,86.5 221.2,85.7 222.7,84.9 224.2,84.0 225.8,83.2 227.3,82.4 228.9,81.6 230.4,80.8 232.0,80.0 233.5,79.3 235.0,78.5 236.6,77.7 238.1,77.0 239.7,76.3 241.2,75.6 242.7,74.9 244.3,74.2 245.8,73.5 247.4,72.9 248.9,72.2 250.5,71.6 252.0,71.0 253.5,70.5 255.1,69.9 256.6,69.4 258.2,68.9 259.7,68.4 261.2,68.0 262.8,67.6 264.3,67.2 265.9,66.8 267.4,66.5 269.0,66.2 270.5,65.9 272.0,65.7 273.6,65.5 275.1,65.3 276.7,65.1 278.2,65.0 279.7,65.0 281.3,64.9 282.8,65.0 284.4,65.0 285.9,65.1 287.5,65.2 289.0,65.4 290.5,65.6 292.1,65.9 293.6,66.2 295.2,66.5 296.7,66.9 298.3,67.3 299.8,67.8 301.3,68.4 302.9,68.9 304.4,69.6 306.0,70.3 307.5,71.0 309.0,71.8 310.6,72.6 312.1,73.5 313.7,74.5 315.2,75.5 316.7,76.6 318.3,77.7 319.8,78.9 321.4,80.2 322.9,81.5 324.5,82.9 326.0,84.3 327.5,85.8 329.1,87.4 330.6,89.0 332.2,90.7 333.7,92.5 335.2,94.3 336.8,96.2 338.3,98.2 339.9,100.2 341.4,102.4 343.0,104.5 344.5,106.8 346.0,109.1 347.6,111.6 349.1,114.1 350.7,116.6 352.2,119.3 353.7,122.0 355.3,124.8 356.8,127.7 358.4,130.7 359.9,133.7 361.5,136.9 363.0,140.1 364.5,143.4 366.1,146.8 367.6,150.2 369.2,153.8 370.7,157.5 372.2,161.2 373.8,165.1 375.3,169.0 376.9,173.0 378.4,177.1 380.0,181.3 381.5,185.6 383.0,190.0 384.6,194.5 386.1,199.1 387.7,203.8 389.2,208.6 390.8,213.5 392.3,218.5 393.8,223.6 395.4,228.8 396.9,234.1 398.5,239.5 400.0,245.0" style="fill:none;stroke:var(--ink);stroke-width:1.8"/><line x1="35.8" y1="148.4" x2="85.5" y2="148.4" style="stroke:var(--ember);stroke-width:1.6"/><polygon points="85.5,148.4 78.5,144.9 78.5,151.9" style="fill:var(--ember)"/><line x1="201.1" y1="148.4" x2="113.2" y2="148.4" style="stroke:var(--ember);stroke-width:1.6"/><polygon points="113.2,148.4 120.2,151.9 120.2,144.9" style="fill:var(--ember)"/><line x1="228.9" y1="148.4" x2="316.7" y2="148.4" style="stroke:var(--ember);stroke-width:1.6"/><polygon points="316.7,148.4 309.7,144.9 309.7,151.9" style="fill:var(--ember)"/><line x1="394.2" y1="148.4" x2="344.5" y2="148.4" style="stroke:var(--ember);stroke-width:1.6"/><polygon points="344.5,148.4 351.5,151.9 351.5,144.9" style="fill:var(--ember)"/><circle cx="99.4" cy="89.0" r="4.5" style="fill:var(--teal)"/><circle cx="330.6" cy="89.0" r="4.5" style="fill:var(--teal)"/><circle cx="215.0" cy="89.0" r="4.5" style="fill:var(--card)"/><circle cx="215.0" cy="89.0" r="4.5" style="fill:none;stroke:var(--ember);stroke-width:1.6"/><text x="99.4" y="79.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">holds</text><text x="330.6" y="79.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">holds</text><text x="215.0" y="79.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">falls apart</text><text x="406" y="214" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">F(y) = y − y³ against y; arrows on the line below: where y′ = F(y) carries y</text></svg></div><!--/gfig 24m1-->
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · holding · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24m1.1</span><span class="ph understand">understand</span>What is a resting place of y′ = F(y), and when does it hold? <br>What does the sign-of-slope technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24m2">
+  <h2 class="sthead"><span class="stno">24m2</span>Turning a Knob</h2>
+  <p data-pid="62d173">Most statements carry a number that can be turned: a growth rate, a catch, a temperature. Turn it, and the resting places move. Mostly they move smoothly, and keep holding or falling apart. But where a resting place's slope passes through 0, something new can happen.</p>
+  <p data-pid="695830">Fold technique: <b>for y′ = μ − y², when μ &gt; 0 there are two resting places, √μ holding and −√μ falling apart; at μ = 0 they meet; and when μ &lt; 0 there is none, and every solution falls past every floor.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the fold technique">
+\mu - y^2 = 0 \iff y^2 = \mu @@ the resting places
+\mu > 0:\ y^* = \pm\sqrt \mu,\ \ F'(\pm\sqrt \mu) = \mp 2\sqrt \mu @@ the slope of μ − y² is −2y
+\sqrt \mu \text{ holds},\ -\sqrt \mu \text{ falls apart} @@ the sign-of-slope technique (24m1)
+\mu = 0:\ y^* = 0,\ F'(0) = 0 @@ the two have met; the technique is silent there
+\mu < 0:\ y' = \mu - y^2 \le \mu < 0,\ \ y(t) \le y(0) + \mu t @@ the mean value technique (14c)
+\htmlClass{new}{\text{as } \mu \text{ falls through } 0, \text{ a holding place and a falling-apart place meet and vanish}} \quad \blacksquare @@ the lines above
+  </pre>
+  <p data-pid="75fe5f">A fish stock that grows by the logistic statement and loses a steady catch H a year obeys P′ = rP(1 − P/K) − H. Its resting places are the two roots of a quadratic, and they meet when H = rK/4. A catch a little below that leaves a stock that holds. A catch a little above leaves none, and the stock falls to nothing, however large it started. A small turn of the knob, a sudden change in what happens: 24·then reads this as a fishery.</p>
+  <p data-pid="8212f7">Two other shapes come up again and again. In y′ = μy − y², the resting places 0 and μ cross at μ = 0 and swap which one holds. In y′ = μy − y³, the one resting place 0 holds for μ &lt; 0; for μ &gt; 0 it falls apart and two new holding places ±√μ appear beside it, like the prongs of a fork. A ruler pressed end to end does this: past a certain push, straight falls apart, and it bows to one side or the other.</p>
+  <!--gfig 24m2--><div class="gfigs" data-gfig="24m2" data-story="[[&quot;Three pictures of μ − y² against y, as μ is turned down.&quot;, []], [&quot;μ = 1: two resting places. √μ, in teal, holds. −√μ, the ember ring, falls apart.&quot;, [&quot;#0-6&quot;]], [&quot;μ = 0: the two have met in one resting place.&quot;, [&quot;#7-12&quot;]], [&quot;μ = −1: the curve is below the axis everywhere. There is no resting place, and every solution falls for ever.&quot;, [&quot;#13-17&quot;]]]"><svg class="gfig" viewBox="0 0 440 220" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="the fold: mu minus y squared for mu equal 1, 0 and minus 1"><defs><clipPath id="gc80b28175"><rect x="12" y="28" width="130" height="114"/></clipPath></defs><line x1="14" x2="140" y1="68.3" y2="68.3" style="stroke:var(--ink);stroke-width:1"/><line x1="77.0" x2="77.0" y1="68.3" y2="72.3" style="stroke:var(--ink);stroke-width:1"/><text x="77.0" y="83.3" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><polyline clip-path="url(#gc80b28175)" points="14.0,140.0 14.5,138.4 15.1,136.8 15.6,135.3 16.1,133.7 16.6,132.2 17.2,130.7 17.7,129.2 18.2,127.7 18.7,126.2 19.3,124.7 19.8,123.3 20.3,121.8 20.8,120.4 21.4,119.0 21.9,117.6 22.4,116.2 22.9,114.8 23.5,113.5 24.0,112.1 24.5,110.8 25.0,109.5 25.6,108.1 26.1,106.8 26.6,105.6 27.1,104.3 27.6,103.0 28.2,101.8 28.7,100.6 29.2,99.4 29.8,98.2 30.3,97.0 30.8,95.8 31.3,94.6 31.8,93.5 32.4,92.3 32.9,91.2 33.4,90.1 34.0,89.0 34.5,87.9 35.0,86.9 35.5,85.8 36.0,84.8 36.6,83.7 37.1,82.7 37.6,81.7 38.1,80.7 38.7,79.7 39.2,78.8 39.7,77.8 40.2,76.9 40.8,76.0 41.3,75.1 41.8,74.2 42.3,73.3 42.9,72.4 43.4,71.6 43.9,70.7 44.5,69.9 45.0,69.1 45.5,68.3 46.0,67.5 46.6,66.7 47.1,65.9 47.6,65.2 48.1,64.4 48.7,63.7 49.2,63.0 49.7,62.3 50.2,61.6 50.8,61.0 51.3,60.3 51.8,59.7 52.3,59.0 52.9,58.4 53.4,57.8 53.9,57.2 54.4,56.6 55.0,56.1 55.5,55.5 56.0,55.0 56.5,54.5 57.1,53.9 57.6,53.4 58.1,53.0 58.6,52.5 59.1,52.0 59.7,51.6 60.2,51.1 60.7,50.7 61.2,50.3 61.8,49.9 62.3,49.6 62.8,49.2 63.4,48.8 63.9,48.5 64.4,48.2 64.9,47.9 65.4,47.6 66.0,47.3 66.5,47.0 67.0,46.7 67.5,46.5 68.1,46.3 68.6,46.0 69.1,45.8 69.7,45.6 70.2,45.5 70.7,45.3 71.2,45.2 71.8,45.0 72.3,44.9 72.8,44.8 73.3,44.7 73.8,44.6 74.4,44.5 74.9,44.5 75.4,44.4 75.9,44.4 76.5,44.4 77.0,44.3 77.5,44.4 78.0,44.4 78.6,44.4 79.1,44.5 79.6,44.5 80.2,44.6 80.7,44.7 81.2,44.8 81.7,44.9 82.2,45.0 82.8,45.2 83.3,45.3 83.8,45.5 84.4,45.6 84.9,45.8 85.4,46.0 85.9,46.3 86.4,46.5 87.0,46.7 87.5,47.0 88.0,47.3 88.5,47.6 89.1,47.9 89.6,48.2 90.1,48.5 90.6,48.8 91.2,49.2 91.7,49.6 92.2,49.9 92.8,50.3 93.3,50.7 93.8,51.1 94.3,51.6 94.9,52.0 95.4,52.5 95.9,53.0 96.4,53.4 97.0,53.9 97.5,54.5 98.0,55.0 98.5,55.5 99.1,56.1 99.6,56.6 100.1,57.2 100.6,57.8 101.1,58.4 101.7,59.0 102.2,59.7 102.7,60.3 103.2,61.0 103.8,61.6 104.3,62.3 104.8,63.0 105.3,63.7 105.9,64.4 106.4,65.2 106.9,65.9 107.5,66.7 108.0,67.5 108.5,68.3 109.0,69.1 109.5,69.9 110.1,70.7 110.6,71.6 111.1,72.4 111.7,73.3 112.2,74.2 112.7,75.1 113.2,76.0 113.8,76.9 114.3,77.8 114.8,78.8 115.3,79.7 115.9,80.7 116.4,81.7 116.9,82.7 117.4,83.7 117.9,84.8 118.5,85.8 119.0,86.9 119.5,87.9 120.0,89.0 120.6,90.1 121.1,91.2 121.6,92.3 122.1,93.5 122.7,94.6 123.2,95.8 123.7,97.0 124.2,98.2 124.8,99.4 125.3,100.6 125.8,101.8 126.4,103.0 126.9,104.3 127.4,105.6 127.9,106.8 128.4,108.1 129.0,109.5 129.5,110.8 130.0,112.1 130.6,113.5 131.1,114.8 131.6,116.2 132.1,117.6 132.6,119.0 133.2,120.4 133.7,121.8 134.2,123.3 134.8,124.7 135.3,126.2 135.8,127.7 136.3,129.2 136.8,130.7 137.4,132.2 137.9,133.7 138.4,135.3 138.9,136.8 139.5,138.4 140.0,140.0" style="fill:none;stroke:var(--ink);stroke-width:1.6"/><circle cx="108.5" cy="68.3" r="4" style="fill:var(--teal)"/><circle cx="45.5" cy="68.3" r="4" style="fill:none;stroke:var(--ember);stroke-width:1.6"/><text x="77" y="22" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">μ = 1</text><defs><clipPath id="gcaa507475"><rect x="156" y="28" width="130" height="114"/></clipPath></defs><line x1="158" x2="284" y1="68.3" y2="68.3" style="stroke:var(--ink);stroke-width:1"/><line x1="221.0" x2="221.0" y1="68.3" y2="72.3" style="stroke:var(--ink);stroke-width:1"/><text x="221.0" y="83.3" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><polyline clip-path="url(#gcaa507475)" points="158.0,163.9 158.5,162.3 159.1,160.8 159.6,159.2 160.1,157.6 160.6,156.1 161.2,154.6 161.7,153.1 162.2,151.6 162.7,150.1 163.2,148.6 163.8,147.2 164.3,145.7 164.8,144.3 165.3,142.9 165.9,141.5 166.4,140.1 166.9,138.7 167.4,137.4 168.0,136.0 168.5,134.7 169.0,133.4 169.6,132.1 170.1,130.8 170.6,129.5 171.1,128.2 171.7,127.0 172.2,125.7 172.7,124.5 173.2,123.3 173.8,122.1 174.3,120.9 174.8,119.7 175.3,118.5 175.8,117.4 176.4,116.3 176.9,115.1 177.4,114.0 177.9,112.9 178.5,111.8 179.0,110.8 179.5,109.7 180.1,108.7 180.6,107.6 181.1,106.6 181.6,105.6 182.2,104.6 182.7,103.7 183.2,102.7 183.7,101.7 184.2,100.8 184.8,99.9 185.3,99.0 185.8,98.1 186.3,97.2 186.9,96.3 187.4,95.5 187.9,94.6 188.4,93.8 189.0,93.0 189.5,92.2 190.0,91.4 190.6,90.6 191.1,89.8 191.6,89.1 192.1,88.4 192.7,87.6 193.2,86.9 193.7,86.2 194.2,85.5 194.8,84.9 195.3,84.2 195.8,83.6 196.3,82.9 196.8,82.3 197.4,81.7 197.9,81.1 198.4,80.5 198.9,80.0 199.5,79.4 200.0,78.9 200.5,78.4 201.1,77.9 201.6,77.4 202.1,76.9 202.6,76.4 203.2,75.9 203.7,75.5 204.2,75.1 204.7,74.6 205.2,74.2 205.8,73.8 206.3,73.5 206.8,73.1 207.3,72.8 207.9,72.4 208.4,72.1 208.9,71.8 209.4,71.5 210.0,71.2 210.5,70.9 211.0,70.7 211.6,70.4 212.1,70.2 212.6,70.0 213.1,69.8 213.7,69.6 214.2,69.4 214.7,69.2 215.2,69.1 215.8,68.9 216.3,68.8 216.8,68.7 217.3,68.6 217.8,68.5 218.4,68.4 218.9,68.4 219.4,68.3 219.9,68.3 220.5,68.3 221.0,68.3 221.5,68.3 222.1,68.3 222.6,68.3 223.1,68.4 223.6,68.4 224.2,68.5 224.7,68.6 225.2,68.7 225.7,68.8 226.2,68.9 226.8,69.1 227.3,69.2 227.8,69.4 228.4,69.6 228.9,69.8 229.4,70.0 229.9,70.2 230.4,70.4 231.0,70.7 231.5,70.9 232.0,71.2 232.6,71.5 233.1,71.8 233.6,72.1 234.1,72.4 234.6,72.8 235.2,73.1 235.7,73.5 236.2,73.8 236.8,74.2 237.3,74.6 237.8,75.1 238.3,75.5 238.9,75.9 239.4,76.4 239.9,76.9 240.4,77.4 240.9,77.9 241.5,78.4 242.0,78.9 242.5,79.4 243.1,80.0 243.6,80.5 244.1,81.1 244.6,81.7 245.1,82.3 245.7,82.9 246.2,83.6 246.7,84.2 247.2,84.9 247.8,85.5 248.3,86.2 248.8,86.9 249.3,87.6 249.9,88.4 250.4,89.1 250.9,89.8 251.4,90.6 252.0,91.4 252.5,92.2 253.0,93.0 253.6,93.8 254.1,94.6 254.6,95.5 255.1,96.3 255.7,97.2 256.2,98.1 256.7,99.0 257.2,99.9 257.8,100.8 258.3,101.7 258.8,102.7 259.3,103.7 259.9,104.6 260.4,105.6 260.9,106.6 261.4,107.6 261.9,108.7 262.5,109.7 263.0,110.8 263.5,111.8 264.1,112.9 264.6,114.0 265.1,115.1 265.6,116.3 266.1,117.4 266.7,118.5 267.2,119.7 267.7,120.9 268.2,122.1 268.8,123.3 269.3,124.5 269.8,125.7 270.4,127.0 270.9,128.2 271.4,129.5 271.9,130.8 272.4,132.1 273.0,133.4 273.5,134.7 274.0,136.0 274.6,137.4 275.1,138.7 275.6,140.1 276.1,141.5 276.6,142.9 277.2,144.3 277.7,145.7 278.2,147.2 278.8,148.6 279.3,150.1 279.8,151.6 280.3,153.1 280.9,154.6 281.4,156.1 281.9,157.6 282.4,159.2 282.9,160.8 283.5,162.3 284.0,163.9" style="fill:none;stroke:var(--ink);stroke-width:1.6"/><circle cx="221.0" cy="68.3" r="4" style="fill:var(--gold)"/><text x="221" y="22" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">μ = 0</text><defs><clipPath id="gcb7533c07"><rect x="300" y="28" width="130" height="114"/></clipPath></defs><line x1="302" x2="428" y1="68.3" y2="68.3" style="stroke:var(--ink);stroke-width:1"/><line x1="365.0" x2="365.0" y1="68.3" y2="72.3" style="stroke:var(--ink);stroke-width:1"/><text x="365.0" y="83.3" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><polyline clip-path="url(#gcb7533c07)" points="302.0,187.8 302.5,186.2 303.1,184.7 303.6,183.1 304.1,181.6 304.6,180.0 305.1,178.5 305.7,177.0 306.2,175.5 306.7,174.0 307.2,172.5 307.8,171.1 308.3,169.7 308.8,168.2 309.4,166.8 309.9,165.4 310.4,164.0 310.9,162.6 311.4,161.3 312.0,159.9 312.5,158.6 313.0,157.3 313.6,156.0 314.1,154.7 314.6,153.4 315.1,152.1 315.6,150.9 316.2,149.6 316.7,148.4 317.2,147.2 317.8,146.0 318.3,144.8 318.8,143.6 319.3,142.5 319.9,141.3 320.4,140.2 320.9,139.0 321.4,137.9 321.9,136.8 322.5,135.8 323.0,134.7 323.5,133.6 324.1,132.6 324.6,131.6 325.1,130.5 325.6,129.5 326.1,128.5 326.7,127.6 327.2,126.6 327.7,125.7 328.2,124.7 328.8,123.8 329.3,122.9 329.8,122.0 330.4,121.1 330.9,120.2 331.4,119.4 331.9,118.5 332.4,117.7 333.0,116.9 333.5,116.1 334.0,115.3 334.6,114.5 335.1,113.8 335.6,113.0 336.1,112.3 336.6,111.5 337.2,110.8 337.7,110.1 338.2,109.5 338.8,108.8 339.3,108.1 339.8,107.5 340.3,106.8 340.9,106.2 341.4,105.6 341.9,105.0 342.4,104.5 342.9,103.9 343.5,103.3 344.0,102.8 344.5,102.3 345.1,101.8 345.6,101.3 346.1,100.8 346.6,100.3 347.1,99.9 347.7,99.4 348.2,99.0 348.7,98.6 349.2,98.2 349.8,97.8 350.3,97.4 350.8,97.0 351.4,96.7 351.9,96.3 352.4,96.0 352.9,95.7 353.4,95.4 354.0,95.1 354.5,94.8 355.0,94.6 355.6,94.3 356.1,94.1 356.6,93.9 357.1,93.7 357.6,93.5 358.2,93.3 358.7,93.1 359.2,93.0 359.8,92.8 360.3,92.7 360.8,92.6 361.3,92.5 361.9,92.4 362.4,92.3 362.9,92.3 363.4,92.2 363.9,92.2 364.5,92.2 365.0,92.2 365.5,92.2 366.1,92.2 366.6,92.2 367.1,92.3 367.6,92.3 368.1,92.4 368.7,92.5 369.2,92.6 369.7,92.7 370.2,92.8 370.8,93.0 371.3,93.1 371.8,93.3 372.4,93.5 372.9,93.7 373.4,93.9 373.9,94.1 374.4,94.3 375.0,94.6 375.5,94.8 376.0,95.1 376.6,95.4 377.1,95.7 377.6,96.0 378.1,96.3 378.6,96.7 379.2,97.0 379.7,97.4 380.2,97.8 380.8,98.2 381.3,98.6 381.8,99.0 382.3,99.4 382.9,99.9 383.4,100.3 383.9,100.8 384.4,101.3 384.9,101.8 385.5,102.3 386.0,102.8 386.5,103.3 387.1,103.9 387.6,104.5 388.1,105.0 388.6,105.6 389.1,106.2 389.7,106.8 390.2,107.5 390.7,108.1 391.2,108.8 391.8,109.5 392.3,110.1 392.8,110.8 393.4,111.5 393.9,112.3 394.4,113.0 394.9,113.8 395.4,114.5 396.0,115.3 396.5,116.1 397.0,116.9 397.6,117.7 398.1,118.5 398.6,119.4 399.1,120.2 399.6,121.1 400.2,122.0 400.7,122.9 401.2,123.8 401.8,124.7 402.3,125.7 402.8,126.6 403.3,127.6 403.9,128.5 404.4,129.5 404.9,130.5 405.4,131.6 405.9,132.6 406.5,133.6 407.0,134.7 407.5,135.8 408.1,136.8 408.6,137.9 409.1,139.0 409.6,140.2 410.1,141.3 410.7,142.5 411.2,143.6 411.7,144.8 412.2,146.0 412.8,147.2 413.3,148.4 413.8,149.6 414.4,150.9 414.9,152.1 415.4,153.4 415.9,154.7 416.4,156.0 417.0,157.3 417.5,158.6 418.0,159.9 418.6,161.3 419.1,162.6 419.6,164.0 420.1,165.4 420.6,166.8 421.2,168.2 421.7,169.7 422.2,171.1 422.8,172.5 423.3,174.0 423.8,175.5 424.3,177.0 424.9,178.5 425.4,180.0 425.9,181.6 426.4,183.1 426.9,184.7 427.5,186.2 428.0,187.8" style="fill:none;stroke:var(--ink);stroke-width:1.6"/><text x="365" y="22" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">μ = -1</text><text x="220" y="212" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">μ − y² against y; teal: √μ, which holds; ember ring: −√μ, which falls apart</text></svg></div><!--/gfig 24m2-->
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24m2.1</span><span class="ph understand">understand</span>What does the fold technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24m3">
+  <h2 class="sthead"><span class="stno">24m3</span>The Yearly Function Doubles</h2>
+  <p data-pid="a1fc0a">From here on g(x) = μx(1 − x), with 0 &lt; μ ≤ 4, which sends [0, 1] into itself, since its largest value is μ/4. It is 24l4's yearly logistic function, written in x. A point g leaves alone is a <i>fixed point</i>, and two points p ≠ q with g(p) = q and g(q) = p make a <i>cycle of two</i>. A cycle of two is a pair of fixed points of g∘g, so 22h4 decides whether it pulls: by the slope of g∘g there.</p>
+  <p data-pid="812a85">Two-cycle technique: <b>for 1 &lt; μ &lt; 3 the fixed point 1 − 1/μ pulls nearby starts in; past μ = 3 it pushes, and a cycle of two appears, at p, q = ((μ + 1) ± √((μ + 1)(μ − 3)))/(2μ); the cycle pulls nearby starts in for 3 &lt; μ &lt; 1 + √6 ≈ 3.449, and pushes past it.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the two-cycle technique">
+g(L) = L \iff L = 0 \text{ or } L = 1 - \tfrac1\mu;\ \ g'(1 - \tfrac1\mu) = \mu\big(1 - 2 + \tfrac2\mu\big) = 2 - \mu @@ g′(x) = μ(1 − 2x)
+|2 - \mu| < 1 \iff 1 < \mu < 3 @@ 22h4: below 1 in size pulls, above 1 pushes
+g(g(x)) - x = -x\,(\mu x - \mu + 1)\,\big(\mu^2x^2 - \mu(\mu + 1)x + (\mu + 1)\big) @@ multiply out; the fixed points are factors, since they are left alone by g∘g too
+p + q = \tfrac{\mu + 1}{\mu},\ \ pq = \tfrac{\mu + 1}{\mu^2},\ \ p, q \text{ real and different} \iff (\mu + 1)(\mu - 3) > 0 @@ the quadratic formula (8i) on the last factor
+(g \circ g)'(p) = g'(q)\,g'(p) = \mu^2\big(1 - 2(p + q) + 4pq\big) = -\mu^2 + 2\mu + 4 @@ the chain technique (13e); g(p) = q
+\htmlClass{new}{|-\mu^2 + 2\mu + 4| < 1 \iff 3 < \mu < 1 + \sqrt6} \quad \blacksquare @@ the value is 1 at μ = 3 and falls to −1 where μ² − 2μ − 5 = 0
+  </pre>
+  <p data-pid="5116f7">At μ = 3.2 this gives p = 0.7995 and q = 0.5130, the two threads 22h4 found by running the statement, and the slope of g∘g there is 0.16: the cycle pulls hard. The step where a fixed point stops pulling, with its slope passing −1, and a cycle of twice the length appears beside it, is a doubling. Past 1 + √6 the cycle of two does the same: it pushes, and a cycle of four appears.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · doubling · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24m3.1</span><span class="ph understand">understand</span>What is a cycle of two, and how is it decided whether it pulls? <br>What does the two-cycle technique say?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24m4">
+  <h2 class="sthead"><span class="stno">24m4</span>Doubling Without End, and Then Chaos</h2>
+  <p data-pid="bec097">Turn μ past 1 + √6 and the cycle of four appears, then eight at about 3.5441, sixteen at 3.5644, then 3.5688, 3.5697, each doubling closer to the last. They crowd at about 3.5699, and past it most runs never repeat. At μ = 4 the run can be written down, and it shows what never repeating means.</p>
+  <p data-pid="4c1ad0">Angle-doubling technique: <b>for g(x) = 4x(1 − x) and x₀ = sin²θ₀, the run is xₙ = sin²(2ⁿθ₀).</b> Every x₀ in [0, 1] is sin²θ₀ for some θ₀ in [0, π/2], since sin² climbs from 0 to 1 there without a break.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the angle-doubling technique">
+4\sin^2\theta\,(1 - \sin^2\theta) = 4\sin^2\theta\cos^2\theta = (2\sin\theta\cos\theta)^2 @@ cos² + sin² = 1, the circle technique (21)
+= \sin^2 2\theta @@ the double technique (21d4)
+\htmlClass{new}{x_n = \sin^2(2^n\theta_0)} \quad \blacksquare @@ induction (4h): each step doubles the angle
+\theta_0 \text{ and } \theta_0 + \varepsilon \text{ give angles } 2^n\varepsilon \text{ apart after } n \text{ steps} @@ the line above, twice
+  </pre>
+  <p data-pid="a80b75">So the statement is fixed, and every run is fixed by its start, and still the run cannot be foreseen. Know x₀ to ten places, so θ₀ to about 10⁻¹⁰. After n steps the angle is known to about 2ⁿ·10⁻¹⁰, and 2³³ is about 8.6 × 10⁹: after some thirty-three steps the angle is not known at all. Starts at 0.3 and 0.3 + 10⁻¹⁰ are more than 0.1 apart by step 31. The map is tame, |g(x) − g(y)| ≤ 4|x − y|, so a gap can grow at most fourfold a step, as the drift technique bounds the drift of a tame statement; the angle shows the gap really does grow, about doubling each step. And the run hides cycles of every length: from sin²(π/7) it returns after three steps (0.1883, 0.6113, 0.9505, 0.1883), since eight times π/7 is a half turn more than π/7.</p>
+  <p data-pid="72ebea">Now the number the doublings share. Write uₖ for the k-th doubling: 3, 3.4495, 3.5441, 3.5644, 3.5688, 3.5697. The ratios of neighbouring gaps, (uₖ − uₖ₋₁)/(uₖ₊₁ − uₖ), come out 4.751, 4.656, 4.668, 4.6687, 4.6691, and computed further they agree to more and more places, near 4.6692. Do the same for the function x ↦ μ·sin(πx), or for any statement with one smooth hump, and the same number appears.</p>
+  <p data-pid="94787f">That this number is shared, and that the ratios settle at it, is not proved on this ladder. It is a guess, and its basis is stated: the doublings of a handful of statements, computed to many places, and one ratio that every one of them approaches. Many cases, one statement, and the variation from case to case is the kind a statement predicts: it is a guess by induction under the case with predictable variation. It is used, and it is labelled.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · chaos · ← → keys work</div></section>
+  <section class="pic" id="pic">
+    <div class="eyebrow">The picture · where the yearly function x ↦ μ·x(1 − x) ends up, for each μ</div>
+    <div id="pl"></div>
+    <div class="kn"><span class="m">μ</span><input type="range" id="kn" min="280" max="400" step="1" value="320"><output id="okn"></output></div>
+    <div id="pr"></div>
+    <div class="cap">Top: for each μ from 2.8 to 4, the values the run visits after it has settled into its pattern (ink dots), and the knob's μ (ember line). Bottom: the run itself for the knob's μ, x₀ = 0.5, forty steps.</div>
+    <div class="verdict" id="vd"></div>
+  </section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24m4.1</span><span class="ph understand">understand</span>What does the angle-doubling technique say? <br>Why does a fixed statement with a fixed start still give a run that cannot be foreseen?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="24m5">
+  <h2 class="sthead"><span class="stno">24m5</span>Moves to Watch Out For</h2>
+  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
+F(y^*) = 0, \text{ so solutions near } y^* \text{ head to it}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only if F′(y*) &lt; 0; with F′(y*) &gt; 0 they leave
+F'(y^*) = 0, \text{ so the resting place holds}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the sign-of-slope technique is silent; y′ = y³ falls apart there, y′ = −y³ holds
+\text{the statement is fixed, so the run can be forecast as far as wanted}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a fixed run from a start known to ten places is lost after some 33 steps at μ = 4
+\text{the doubling ratios settle at } 4.6692, \text{ proved}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; computed and seen across many statements: a labelled guess here
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">24m5.1</span><span class="ph understand">understand</span>Why is “F(y*) = 0, so solutions near y* head to it” a move to watch out for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">24m.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="g(x) = 4x(1 - x)"></span></span>Build a cycle of three from an angle: find θ₀ with 8θ₀ a half turn less than θ₀, or more. <br>Find the three points, and check them by the statement.</div>
+  <div class="chq"><span class="chid">24m.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="g(x) = 3x(1 - x)"></span></span>Find the run from x₀ = 0.5 and its gap to 2/3 after 10, 100, 1000 and 10 000 steps. <br>Does the fixed point, whose slope is −1, pull, and how slowly?</div>
+  <div class="chq"><span class="chid">24m.4.3</span><span class="tagq">converse</span>If a resting place holds, must the slope there be negative? <br>Find an example either way.</div>
+  <div class="chq"><span class="chid">24m.4.4</span><span class="tagq">reroute</span>Find the cycle of two without multiplying out g(g(x)). Write g(p) = q and g(q) = p, subtract, and divide by p − q to find p + q; then add to find pq.</div>
+  <div class="chq"><span class="chid">24m.4.5</span><span class="tagq">seam</span>In 1814 a mathematician imagined an intellect that knew every force in nature and the position of every thing at one instant. For it, nothing would be uncertain, and the future, like the past, would be present to its eyes. 24d says a tame rate fixes the future. This step shows a tame statement whose future, though fixed, is lost from any start known to finitely many places. <br>Did the intellect need anything that this step shows cannot be had? Is a future that is fixed the same as a future that can be known?</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r24l.html">← 24l · the logistic equation solved</a><a href="r24n.html">24n · solutions as power series →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>A resting place is an equilibrium, or steady state; holding is (asymptotic) stability, and the sign-of-slope technique is linear stability analysis in one dimension. The picture of resting places and arrows on a line is a phase line. A change in the resting places as a knob turns is a bifurcation: the fold is a saddle-node bifurcation, the swap a transcritical bifurcation, the fork a pitchfork bifurcation, and a doubling a period-doubling (flip) bifurcation. The ratio near 4.6692 is the Feigenbaum constant δ = 4.669201609…; the crowding point near 3.5699 is the onset of chaos. Losing the start's digits at a fixed rate is sensitive dependence on initial conditions, and the rate (here ln 2 a step) is a Lyapunov exponent.</p>
+  <h3>Who said it first</h3>
+  <p>Henri Poincaré studied how solutions change as a knob turns in the 1880s, and gave bifurcation its name. Robert May urged in 1976 that the logistic map's wildness be taught to every student. Mitchell Feigenbaum, computing the doublings on a hand calculator in 1975, found the ratio, and then found the same number for the sine map; Pierre Coullet and Charles Tresser found it at the same time. Oscar Lanford proved in 1982, with a computer whose every step was boxed, that the shared constant exists. Edward Lorenz found in 1961 that rounding a weather model's start to three places changed its forecast completely. Pierre-Simon Laplace described the all-knowing intellect in his Essai philosophique sur les probabilités (1814).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+/* sequence and sum plots for rungs 22 on: plot({xlo,xhi,ylo,yhi,series:[{pts,c,dots,open,w}],h:[{y,c,dash,t}]}) */
+const V=c=>'var('+c+')';
+function plot(o){ const W=320,H=220,P=26, X=x=>P+(x-o.xlo)/(o.xhi-o.xlo)*(W-P-6), Y=y=>H-P-(y-o.ylo)/(o.yhi-o.ylo)*(H-P-8);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:380px;display:block;margin:auto;background:'+V('--card')+';border:1px solid '+V('--grid')+';border-radius:4px">';
+  s+='<line x1="'+P+'" y1="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" x2="'+W+'" y2="'+Y(Math.max(o.ylo,Math.min(o.yhi,0)))+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  s+='<line x1="'+P+'" y1="0" x2="'+P+'" y2="'+(H-P)+'" style="stroke:'+V('--grid')+';stroke-width:1.4"/>';
+  (o.ticks||[]).forEach(t=>{ s+='<text x="2" y="'+(Y(t)+4)+'" style="font-size:10px;fill:'+V('--ink')+'">'+t+'</text>'; });
+  (o.h||[]).forEach(l=>{ s+='<line x1="'+P+'" y1="'+Y(l.y)+'" x2="'+W+'" y2="'+Y(l.y)+'" style="stroke:'+V(l.c||'--teal')+';stroke-width:1.4;stroke-dasharray:'+(l.dash||'5 4')+'"/>'; if(l.t) s+='<text x="'+(W-4)+'" y="'+(Y(l.y)-4)+'" text-anchor="end" style="font-size:10px;fill:'+V(l.c||'--teal')+'">'+l.t+'</text>'; });
+  (o.series||[]).forEach(q=>{ const pts=q.pts.filter(p=>isFinite(p[1])&&p[1]>=o.ylo-1e9);
+    if(q.open) s+='<polyline points="'+pts.map(p=>X(p[0])+','+Y(Math.max(o.ylo,Math.min(o.yhi,p[1])))).join(' ')+'" style="fill:none;stroke:'+V(q.c||'--ink')+';stroke-width:'+(q.w||1.6)+'"/>';
+    if(q.dots!==false) pts.forEach(p=>{ if(p[1]>=o.ylo&&p[1]<=o.yhi) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="'+(q.r||2.4)+'" style="fill:'+V(q.c||'--ink')+'"/>'; }); });
+  return s+'</svg>'; }
+
+let ak=320; const e=$('kn'); e.addEventListener('input',()=>{ ak=+e.value; draw(); });
+const dia=[]; for(let i=0;i<=240;i++){ const a=2.8+1.2*i/240; let x=0.5; for(let k=0;k<400;k++) x=a*x*(1-x); for(let k=0;k<48;k++){ x=a*x*(1-x); dia.push([a,x]); } }
+function draw(){ const a=ak/100;
+  $('pl').innerHTML=plot({xlo:2.8,xhi:4,ylo:0,yhi:1,ticks:[0,0.5,1],series:[{pts:dia,c:'--ink',r:0.55},{pts:[[a,0],[a,1]],c:'--ember',open:true,dots:false,w:1.4}]});
+  const run=[]; let x=0.5; for(let n=0;n<=40;n++){ run.push([n,x]); x=a*x*(1-x); }
+  $('pr').innerHTML=plot({xlo:0,xhi:40,ylo:0,yhi:1,ticks:[0,0.5,1],series:[{pts:run,c:'--teal',open:true,w:1.2,r:1.8}]});
+  $('okn').textContent=a.toFixed(2);
+  let y=0.5; for(let k=0;k<4000;k++) y=a*y*(1-y); const o=[y]; for(let k=0;k<64;k++){ y=a*y*(1-y); o.push(y); }
+  let p=0; for(const q of [1,2,4,8,16,32,64]){ if(Math.abs(o[q]-o[0])<1e-6){ p=q; break; } }
+  const v=$('vd'); v.className='verdict'; v.textContent='μ = '+a.toFixed(2)+': '+(p===1?'the run settles at '+o[0].toFixed(4)+'.':p?'the run settles into a cycle of '+p+'.':'no cycle of length up to 64: the run does not repeat.'); }
+draw();
+window.__pic={set:j=>{ ak=j; draw(); return $('vd').textContent; }};
+
+stepper('#sl1',[
+  {k:'ember',kl:'resting place',t:R`F(y^*) = 0`,n:`A constant solution.`},
+  {k:'ember',kl:'the slope decides',t:R`\htmlClass{new}{F^{\prime}(y^*) < 0 \Rightarrow |y - y^*| \le |y_0 - y^*|e^{-mt}}`,n:`It holds.`},
+  {k:'ember',kl:'or not',t:R`F^{\prime}(y^*) > 0`,n:`It falls apart.`}
+],{title:'The slides · holding · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'the fixed point',t:R`g^{\prime}\big(1 - \tfrac1\mu\big) = 2 - \mu`,n:`Pulls for 1 < μ < 3.`},
+  {k:'ember',kl:'the cycle',t:R`p, q = \tfrac{(\mu + 1) \pm \sqrt{(\mu + 1)(\mu - 3)}}{2\mu}`,n:`Born at μ = 3.`},
+  {k:'ember',kl:'it pulls',t:R`\htmlClass{new}{|{-\mu^2} + 2\mu + 4| < 1 \iff 3 < \mu < 1 + \sqrt6}`,n:`Then it doubles again.`}
+],{title:'The slides · doubling · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'a = 4',t:R`\htmlClass{new}{x_n = \sin^2(2^n\theta_0)}`,n:`The angle doubles.`},
+  {k:'ember',kl:'forgetting',t:R`\varepsilon \mapsto 2^n\varepsilon`,n:`Ten places last some 33 steps.`},
+  {k:'ember',kl:'the shared ratio',t:R`\tfrac{a_k - a_{k-1}}{a_{k+1} - a_k} \to 4.6692\ldots\ ?`,n:`Seen, not proved.`}
+],{title:'The slides · chaos · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

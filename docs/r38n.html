@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Natural Deduction by Hand</title>
+<title>Quantifying Over Sets</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,87 +48,93 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r38m.html">← 38m numbering formulas by hand</a><a href="r38cb29.html">next: 38·cb29 a true sentence arithmetic cannot reach →</a></p>
-  <div class="tags"><span class="tag tech">38n · technique</span></div>
-  <h1>Natural Deduction by Hand</h1>
-  <p data-pid="53429a">A column is one way to write a proof. A tree is another. Put the foot at the bottom, and above each line put the lines it leans on, so the givens and suppositions are the leaves at the top and every move is a bar with its inputs above and its output below. A supposition that a move drops is marked with a number, and the move that drops it carries the same number. Trees show at a glance which lines lean on which, and they make one thing easy to see that columns hide: a detour, where a mark is made and used at once. Cutting detours out leaves a proof that never makes a mark only to take it apart again. Then the step looks hard at two moves that have always been allowed. Prove an if may drop a supposition the proof never used, and from the totally false anything may be written. Both make sense of the tables of rung one. Both have been argued against for as long as there have been tables, and the trees show exactly where each one enters.</p>
-  <p class="gesture" data-pid="dd4b10">A tree has the foot at the root, the givens and suppositions at the leaves, and one bar for each move. A mark made and used at once is a detour, and can be cut out. Dropping an unused supposition, and writing anything from the totally false, are where the if of the tables and its critics part.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38m.html">← 38m truth cannot be defined inside</a><a href="r38o.html">next: 38o numbering formulas by hand →</a></p>
+  <div class="tags"><span class="tag support">38n · support</span></div>
+  <h1>Quantifying Over Sets</h1>
+  <p data-pid="995586">Rung four did not say that induction holds for every formula. It said something stronger: the numbers are what is in every inductive set, so any set that holds zero and is closed under next holds every number. Rung eight did not say that every bounded formula has a least upper bound. It said every bounded set does. Both principles speak of every set, and the language of this rung speaks only of members. That is why its worlds can be strange, with numbers past every numeral and lines with holes. So let the language speak of sets too. Add placeholders for parts of the world, and let every and some run over all of them. Then induction is one statement, and its worlds are all copies of the numbers: the strange worlds are gone. The price is high. The new language has no calculus that reaches all its truths, the finite-parts technique fails for it, and what “every part” means is handed back to the theory of sets, with all its open questions.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\neg\Diamond(\text{a recipe listing the second-order truths})\\ &amp;\qquad\text{(3b3)}\end{aligned}"></div>
+  <p class="gesture" data-pid="6082ab">With placeholders for sets, induction and the least upper bound are single statements, and their worlds are all matched with the numbers and the line. The price is that no recipe can list what is true in every such world, and the meaning of “every set” comes from the theory of sets.</p>
 </header>
 
 <section class="class step" data-step="38n1">
-  <h2 class="sthead"><span class="stno">38n1</span>Proofs as Trees</h2>
-  <p data-pid="37109d">A <i>tree</i> writes a proof upside down from a column. Each move is a bar: the lines it leans on above, the line it writes below, the move named at its side. The foot is at the bottom. The leaves are givens and suppositions. A supposition dropped by a move is written in square brackets with a number, and the move carries the same number.</p>
-  <p data-pid="063f5d">Tree-column technique: <b>every column of 38b’s calculus can be drawn as a tree with the same foot and the same givens, and every tree can be written as a column.</b> Read the column from the foot up, putting above each line the lines it leans on; read the tree from the leaves down, writing each bar’s output after its inputs.</p>
-  <pre class="lines" data-k="ember" data-label="this step: a tree, and its column">
-\dfrac{\dfrac{\dfrac{[P \land Q]^1}{P} \quad P \Rightarrow (Q \Rightarrow R)}{Q \Rightarrow R} \qquad \dfrac{[P \land Q]^1}{Q}}{\dfrac{R}{(P \land Q) \Rightarrow R}\ 1} @@ keep left, carry through; keep right; carry through; prove an if, dropping 1
-P \Rightarrow (Q \Rightarrow R) @@ the column: given
-\qquad \text{assume } P \land Q;\ \ P;\ \ Q \Rightarrow R;\ \ Q;\ \ R @@ supposed; keep left; carry through; keep right; carry through
-\htmlClass{new}{(P \land Q) \Rightarrow R} \quad \blacksquare @@ prove an if: the supposition leaves
+  <h2 class="sthead"><span class="stno">38n1</span>Placeholders for Sets</h2>
+  <p data-pid="1be8d8">Add to a language a second kind of placeholder, X₀, X₁, …, and the formulas X(t): “t is in X”. Let every and some bind these too. In a world M, ∀X φ is true when φ is true for every part of |M|, every member of 2g’s set of all subsets. Its accepted name is second-order logic; the logic of 38a is first-order.</p>
+  <p data-pid="da93e5">Then 4b’s principle is one statement, and so is 8c’s:</p>
+  <pre class="lines" data-k="ember" data-label="this step: two principles, each one statement">
+\forall X\,\big((X(0) \land \forall x\,(X(x) \Rightarrow X(S(x)))) \Rightarrow \forall x\,X(x)\big) @@ induction: every part that holds 0 and is closed under next holds everything (4b)
+\htmlClass{new}{\forall X\,\big((\exists x\,X(x) \land \exists u\,\forall x\,(X(x) \Rightarrow x \le u)) \Rightarrow \exists v\,(v \text{ is a least upper bound of } X)\big)} \quad \blacksquare @@ the least upper bound: every bounded part that has a member (8c)
   </pre>
-  <p data-pid="ec4f16">The supposition P ∧ Q appears twice in the tree, once for each use. In the column it is written once and cited twice. The tree pays for its clarity in copies.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · trees · ← → keys work</div></section>
+  <p data-pid="73ad64">Call PA₂ the two next lines of PA with second-order induction in place of the endless list of first-order inductions.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · second order · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38n1.1</span><span class="ph understand">understand</span>How is a proof drawn as a tree, and how is a dropped supposition marked? <br>What does the tree-column technique say?</li>
+      <li><span class="qid">38n1.1</span><span class="ph understand">understand</span>What does a set placeholder add to a language, and over what does ∀X run in a world? <br>How are induction and the least upper bound written as single statements?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38n2">
-  <h2 class="sthead"><span class="stno">38n2</span>Every and Some in a Tree</h2>
-  <p data-pid="b9c981">The fresh-name conditions of 38b2 are checked at the bar: when speak of everything writes ∀x φ(x) from φ(y), look up every branch above it for a leaf still open in which y is free. When use a some drops φ(y), look for y anywhere outside the bracketed leaves.</p>
-  <p data-pid="145992">Swapped-order technique: <b>if something stands in R to everything, then everything has something standing in R to it.</b> In marks: ∃x ∀y R(x, y) ⊢ ∀y ∃x R(x, y). It is 2b’s licensed-swap technique, here a tree.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the swapped-order technique">
-\dfrac{\exists x\,\forall y\,R(x, y) \qquad \dfrac{\dfrac{\dfrac{[\forall y\,R(u, y)]^1}{R(u, v)}}{\exists x\,R(x, v)}}{\forall y\,\exists x\,R(x, y)}}{\forall y\,\exists x\,R(x, y)}\ 1 @@ use an every with v; show an example with u; speak of everything on v; use a some, dropping 1
-v \text{ is free in no open leaf above the speak-of-everything bar} @@ the only open leaf is [∀y R(u, y)], with no v
-\htmlClass{new}{u \text{ is free in neither the foot nor } \exists x\,\forall y\,R(x, y)} \quad \blacksquare @@ the use-a-some condition
+  <h2 class="sthead"><span class="stno">38n2</span>One World, up to Matching</h2>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\Box(M, M\prime \models \mathrm{PA}_2 \Rightarrow M \cong M\prime) \quad\text{(3b2)}\end{aligned}"></div>
+  <p data-pid="219760">Only-the-numbers technique: <b>any two worlds of PA₂ are matched by a matching that carries 0 and next.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the only-the-numbers technique">
+M, M' \models PA_2 @@ given
+h = \text{the smallest set of pairs holding } (0^M, 0^{M'}) \text{ and closed under } (x, y) \mapsto (S(x), S'(y)) @@ the smallest-closed-set technique (4d), in |M| × |M′|
+\{x : \text{exactly one } y \text{ has } (x, y) \in h\} \text{ holds } 0^M \text{ and is closed under } S @@ 0 is nobody’s next and next is one-to-one, in M′ and in M; where-each-pair-comes-from (4d)
+h \text{ is a function on all of } |M| @@ second-order induction in M, on that part
+\text{the outputs of } h \text{ hold } 0^{M'} \text{ and are closed under } S' @@ h is closed
+h \text{ is onto } |M'| @@ second-order induction in M′, on the outputs
+\{x : h(x) = h(x') \Rightarrow x = x' \text{ for every } x'\} \text{ holds } 0^M \text{ and is closed under } S @@ next one-to-one, 0 nobody’s next, both worlds
+\htmlClass{new}{h \text{ is a matching that carries } 0 \text{ and next}} \quad \blacksquare @@ second-order induction in M, once more
   </pre>
-  <p data-pid="53f1ce">The other way, from ∀y ∃x R(x, y) to ∃x ∀y R(x, y), fails at the speak-of-everything bar: the example found for v depends on v, so the name it gets is free in an open leaf. 38c.5.1 built the world that shows no other tree can do it.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · every and some · ← → keys work</div></section>
+  <p data-pid="76d502">Adding and multiplying are fixed by their lines, by induction, so h carries them too. So every world of PA₂ is a copy of N. The worlds of 38h, with members past every numeral, are not worlds of PA₂. The same can be done for the line: the field techniques, the order, and the single statement of the least upper bound have only R as a world, up to matching. 38n.6.3 asks for the outline.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · one world · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38n2.1</span><span class="ph understand">understand</span>Where in a tree are the fresh-name conditions checked? <br>What does the swapped-order technique say, and at which bar does the other direction fail?</li>
+      <li><span class="qid">38n2.1</span><span class="ph understand">understand</span>What does the only-the-numbers technique say? <br>At which three lines does its proof use second-order induction, and in which world each time?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38n3">
-  <h2 class="sthead"><span class="stno">38n3</span>Detours</h2>
-  <p data-pid="ebf666">A <i>detour</i> is a bar that makes a mark, followed at once by a bar that uses the same mark: join and then keep left; prove an if and then carry it through; show an example and then use a some.</p>
-  <p data-pid="394a80">Detour-cut technique: <b>a detour can be cut out of a tree, and the tree that is left reaches the same foot from the same givens.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the detour-cut technique, for the if">
-\dfrac{\dfrac{\dfrac{[P]^1\ \vdots}{Q}}{P \Rightarrow Q}\,1 \qquad \dfrac{\vdots}{P}}{Q} @@ prove an if, then at once carry it through on a tree for P
-\text{put the tree for } P \text{ in the place of every leaf } [P]^1 @@ each leaf was waiting for a P, and now has one
-\text{the fresh-name conditions still hold} @@ rename any placeholder of the inserted tree that would be caught (38b2)
-\htmlClass{new}{\dfrac{\vdots\ \dfrac{\vdots}{P}\ \vdots}{Q}\text{: the same foot, no if made or used}} \quad \blacksquare @@ the same for join, add an option, show an example
+  <h2 class="sthead"><span class="stno">38n3</span>Why the First-Order List Is Not Enough</h2>
+  <p data-pid="ba6c45">38h built a world M where every first-order induction is true and some member is past every numeral. Why is second-order induction false there? Because the part of |M| holding the values of the numerals holds 0, is closed under next, and is not all of |M|. 38h3 showed no formula picks out that part. First-order induction speaks only of the parts some formula picks out.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the parts a formula can reach">
+\text{the formulas of arithmetic can be listed} @@ the proof-listing technique’s listing of strings (38b3)
+\text{each formula, with members for its other placeholders, picks out one part} @@ in a listed world, countably many parts in all
+\text{the parts of an endless listed world cannot be listed} @@ more parts than members (35c)
+\htmlClass{new}{\text{first-order induction covers few parts; second-order covers all}} \quad \blacksquare @@ the numerals’ part in 38h’s world is one it misses
   </pre>
-  <p data-pid="fdcd72">Cutting one detour can make others, where the inserted tree meets the bars below it. Cutting them all does stop, and leaves a tree in which every formula is a part of the foot or of a given. That fact is proved, though not on the Ladder. Its proof is a falling count of the kind 38·cb29 uses.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · detours · ← → keys work</div></section>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · few parts · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38n3.1</span><span class="ph understand">understand</span>What is a detour in a tree? <br>What does the detour-cut technique say, and how is the detour of an if cut out?</li>
+      <li><span class="qid">38n3.1</span><span class="ph understand">understand</span>Why is second-order induction false in 38h’s world, while every first-order induction is true there? <br>Why can first-order induction speak of only some of the parts of a world?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38n4">
-  <h2 class="sthead"><span class="stno">38n4</span>Where Relevance and the If Enter</h2>
-  <p data-pid="a97a2b">Two moves let a tree reach a foot that has nothing to do with its leaves. Prove an if may drop a supposition that no bar above it used. And everything permitted writes any formula at all from ⊥.</p>
-  <pre class="lines" data-k="ember" data-label="this step: two trees that ignore their leaves">
-\dfrac{Q}{P \Rightarrow Q}\ 1 \quad \text{(no leaf } [P]^1\text{)} @@ the free-if technique (3a): the supposition was never used
-\dfrac{\dfrac{P \quad \neg P}{\bot}}{R} @@ clash, then everything permitted: R may be anything
-\dfrac{\dfrac{P}{P \lor R} \qquad \neg P}{R} @@ add an option, then the remaining option (1c): R again, with no ⊥ written
-\htmlClass{new}{\text{the third tree reaches the second’s foot with no } \bot \text{ written}} \quad \blacksquare @@ the remaining option, laid down by 1c as a move of its own, writes no ⊥; this calculus derives it through cases and everything permitted
+  <h2 class="sthead"><span class="stno">38n4</span>The Price</h2>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\neg\Diamond(\text{a recipe listing } \{\varphi : \models_2 \varphi\}) \quad\text{(3b3)}\end{aligned}"></div>
+  <p data-pid="e2672f">No-full-calculus technique: <b>no recipe lists exactly the second-order statements true in every world.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the no-full-calculus technique">
+\varphi \text{ a first-order statement of arithmetic} @@ given
+N \models \varphi \iff (PA_2 \Rightarrow \varphi) \text{ is true in every world} @@ every world of PA₂ is matched with N (38n2), and matched worlds share statements (38a4)
+\text{if a recipe listed the statements true in every world, it would list the truths of } N @@ list them, and keep those of the form PA₂ ⇒ φ
+\text{the truths of } N \text{ cannot be listed by a recipe} @@ 38k3
+\htmlClass{new}{\text{no such recipe}} \quad \blacksquare @@ refute
   </pre>
-  <p data-pid="1473ed">1e’s table for ⇒ is true in every row where P is false. The first tree is that row, as a move. A logic that refuses it, and refuses everything permitted, must also refuse one of add an option, the remaining option, or chaining two proofs together: the third tree uses only those. Such logics exist, and are worked on. Their accepted name is relevance logic. The calculus of this rung keeps both moves, and so keeps 1e’s tables and the true-everywhere technique of 38c.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · relevance · ← → keys work</div></section>
+  <p data-pid="e026c4">So second-order logic has no calculus of 38b’s kind that reaches all its truths: the way back of 38d fails. The finite-parts technique fails too. Every finite part of PA₂ together with all the demands n̄ &lt; c has a world, N with c large; the whole has none, since every world of PA₂ is N.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{CH as } \models_2 \psi\text{, which the axioms of sets} \quad\text{(35f)}\\ &amp;\qquad\text{do not decide}\end{aligned}"></div>
+  <p data-pid="74cadc">And “every part” must come from somewhere. It means every member of 𝒫(|M|), as the theory of sets supplies it. Whether 35f’s in-between size exists can be written as a question about which second-order statements are true in every world, and 35f reported that the axioms of sets cannot settle it. Categoricity was bought by handing the hard questions to the theory of sets.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · the price · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38n4.1</span><span class="ph understand">understand</span>Which two moves let a tree reach a foot unrelated to its leaves? <br>What must a logic refuse, if it refuses both and still wants to block the third tree?</li>
+      <li><span class="qid">38n4.1</span><span class="ph understand">understand</span>What does the no-full-calculus technique say, and which earlier technique does its proof turn against second-order logic? <br>Why does the finite-parts technique fail for second-order statements?</li>
     </ol>
   </section>
 </section>
@@ -136,15 +142,15 @@ v \text{ is free in no open leaf above the speak-of-everything bar} @@ the only 
 <section class="class step" data-step="38n5">
   <h2 class="sthead"><span class="stno">38n5</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{a leaf } [P]^1 \text{ may stay open after the bar marked } 1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the bar drops every leaf with its number; the foot must stand on no open supposition
-\dfrac{\exists x\,R(x, v)}{\forall y\,\exists x\,R(x, y)} \text{ with } [R(v, v)] \text{ still open above}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; v is free in an open leaf: the fresh-name condition fails
-\text{cutting a detour may change the foot}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the cut keeps the foot and the givens; only the inside changes
-\text{a tree with no } \bot \text{ cannot reach an unrelated foot}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; add an option and the remaining option do it (38n4)
+\text{PA}_2 \text{ has only } N \text{, so it reaches every truth of arithmetic}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only one world, yet no calculus reaches all its truths (38n4)
+\text{first-order induction for every formula is the same as second-order induction}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; formulas pick out countably many parts; 38h’s world tells them apart
+\forall X \text{ runs over the parts a formula picks out}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; over every part in 2g’s set of all subsets
+\text{the finite-parts technique holds for every logic}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it rests on 38d’s calculus; PA₂ with the demands n̄ &lt; c breaks it
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38n5.1</span><span class="ph understand">understand</span>Why may a leaf [P]¹ not stay open below the bar marked 1? <br>Why can a tree with no ⊥ in it still reach an unrelated foot?</li>
+      <li><span class="qid">38n5.1</span><span class="ph understand">understand</span>Why does having only one world not make PA₂ reach every truth of arithmetic? <br>Why is first-order induction for every formula weaker than second-order induction?</li>
     </ol>
   </section>
 </section>
@@ -153,22 +159,22 @@ v \text{ is free in no open leaf above the speak-of-everything bar} @@ the only 
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">38n.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\neg(P \lor Q) \vdash \neg P \land \neg Q"></span> <span data-tex-inline="(P \Rightarrow Q) \land (Q \Rightarrow R) \vdash P \Rightarrow R"></span></span>Build a tree for each. Mark every dropped supposition with its number. <br>Count the leaves of each tree and the lines of the matching column.</div>
-  <div class="chq"><span class="chid">38n.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\dfrac{\dfrac{\dfrac{[P]^1}{P \lor Q}}{P \Rightarrow P \lor Q}\,1 \qquad P}{P \lor Q}"></span></span>Find the detour in this tree and cut it. <br>Is the tree left over the shortest tree for P ⊢ P ∨ Q? Is there a tree with no bar at all?</div>
-  <div class="chq"><span class="chid">38n.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\forall y\,\exists x\,R(x, y) \vdash \exists x\,\forall y\,R(x, y)\ ?"></span></span>Try to build a tree for this. Find the bar where it breaks, and name the leaf that blocks it. <br>Why does the failure of this one try not prove that no tree exists, and what does?</div>
-  <div class="chq"><span class="chid">38n.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">1c.4.4 and 1f.4.2: when nothing is true, everything is permitted; 1g.4.4: the if of the tables</span></span>Rung 1 laid down that from the totally false anything may be written, and gave the if its table: true in every row where its hypothesis is false. <br>One side holds that “if the moon is cheese, then 2 + 2 = 4” is true, because the tables say so and the calculus reaches it. The other side holds that an if must connect what it joins, and that a proof should use what it supposes. <br>Which bars of 38n4 does each side keep? What does the second side lose of 38c and 38d? Is the if of the tables a discovery about reasoning, or a choice?</div>
+  <div class="chq"><span class="chid">38n.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{“the world is finite”}"></span></span>Build a second-order statement true in exactly the worlds with finitely many members. Hint, not a recipe: a world is endless when some one-to-one function from it to itself is not onto (3d), and a function is a set of pairs. <br>Which first-order fact of 38d4 does the statement break?</div>
+  <div class="chq"><span class="chid">38n.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\forall X \text{ over only the parts a formula picks out}"></span></span>Read ∀X in a world as running only over the parts some formula picks out. Which technique of this step fails, and which of 38d’s come back?</div>
+  <div class="chq"><span class="chid">38n.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{the field techniques},\ &lt;,\ \text{the least upper bound as one statement}"></span></span>Outline why any two worlds of these are matched: send fractions to fractions, then each member to the least upper bound of the fractions below it. <br>Turn it round: if two worlds of the field techniques and the order are matched, must both satisfy the least upper bound?</div>
+  <div class="chq"><span class="chid">38n.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">4b.4.4: induction a proved technique, an axiom, or needing no proof?</span></span>Rung 4 asked whether induction is a proved technique, an axiom, or needs no proof, and proved it from sets. <br>In PA it is an endless list of given lines. In PA₂ it is one given line that only a world of sets can read. On the ladder it was a technique. Which of the three is the induction you trust, and what does each one hand the trust to?</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r38m.html">← 38m · numbering formulas by hand</a><a href="r38cb29.html">38·cb29 · a true sentence arithmetic cannot reach →</a></nav>
+<nav class="nextrung"><a href="r38m.html">← 38m · truth cannot be defined inside</a><a href="r38o.html">38o · numbering formulas by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Trees are Gentzen-style natural deduction, or Prawitz-style proof trees; brackets with a number mark a discharged assumption. The tree-column technique says that Fitch-style and Gentzen-style presentations prove the same things. A detour is a maximal formula, or a cut; the detour-cut technique is a reduction step, and the fact held for later is the normalization theorem, with its corollary, the subformula property. That making and using moves undo each other is harmony. Dropping an unused supposition is vacuous discharge; the free-if facts are the paradoxes of material implication; everything permitted is ex falso quodlibet. The third tree of 38n4 is C. I. Lewis’s proof. Relevance (or relevant) logic refuses such moves.</p>
+  <p>Set placeholders are second-order variables, and reading ∀X over all subsets is the full, or standard, semantics of second-order logic; reading it over a chosen family of parts is Henkin semantics, under which completeness and compactness return. A theory with only one model up to isomorphism is categorical, and the only-the-numbers technique is Dedekind’s categoricity theorem for second-order Peano arithmetic; the line’s is the categoricity of the complete ordered field. The no-full-calculus technique says second-order validity is not recursively enumerable.</p>
   <h3>Who said it first</h3>
-  <p>Gerhard Gentzen drew proofs as trees in 1934 and proved the subformula property for his sequent calculus; Dag Prawitz proved normalization for natural deduction in 1965. Clarence Irving Lewis gave the argument of 38n4 in Symbolic Logic (1932), with C. H. Langford, against those who would refuse ex falso. Alan Ross Anderson and Nuel Belnap built relevance logic in Entailment (1975).</p>
+  <p>Richard Dedekind proved categoricity for the numbers in “What are numbers and what should they be?” (1888). Gottlob Frege’s logic of 1879 was already second-order. Thoralf Skolem argued from 1922 that first-order logic is the right frame for set theory, and Ernst Zermelo argued against him in 1929 and 1930; Leon Henkin gave second-order logic its general semantics in 1950. Stewart Shapiro’s Foundations without Foundationalism (1991) is the modern case for the full semantics.</p>
   <h3>A proof that is not allowed</h3>
-  <p>“From ∀y ∃x R(x, y): use an every with v, giving ∃x R(x, v). Use a some with u, supposing R(u, v). Speak of everything on v: ∀y R(u, y). Show an example: ∃x ∀y R(x, y).” Not allowed: at speak of everything, the leaf R(u, v) is still open and v is free in it. In the world of 38c.5.1 the foot is false and the given is true.</p>
+  <p>“PA₂ has one world. A collection with one world is complete. So the calculus of 38b, with second-order moves added, reaches every truth of PA₂.” Not allowed: completeness on this rung is the reached-if-true-everywhere technique, and it was proved for first-order languages only. For second-order statements, the no-full-calculus technique shows no recipe can do it.</p>
 </section>
 
 </div>
@@ -183,25 +189,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'a bar',t:R`\dfrac{P \quad P \Rightarrow Q}{Q}`,n:`Inputs above, output below.`},
-  {k:'ember',kl:'dropped',t:R`[P]^1 \ \cdots\ \dfrac{Q}{P \Rightarrow Q}\,1`,n:`One number, two places.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{foot at the root}}`,n:`Leaves at the top.`}
-],{title:'The slides · trees · ← → keys work'});
+  {k:'ember',kl:'new placeholders',t:R`X(t)`,n:`“t is in X”.`},
+  {k:'ember',kl:'every part',t:R`\forall X\,\varphi`,n:`Over all of 2g’s subsets.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{induction is one statement}}`,n:`As 4b said it.`}
+],{title:'The slides · second order · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'use',t:R`\dfrac{\forall y\,R(u, y)}{R(u, v)}`,n:`Any v.`},
-  {k:'ember',kl:'speak',t:R`\dfrac{\exists x\,R(x, v)}{\forall y\,\exists x\,R(x, y)}`,n:`v free in no open leaf.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\exists x\,\forall y \vdash \forall y\,\exists x}`,n:`One way only.`}
-],{title:'The slides · every and some · ← → keys work'});
+  {k:'ember',kl:'pairs',t:R`(0, 0'),\ (S x, S' y)`,n:`The smallest closed set.`},
+  {k:'ember',kl:'induction',t:R`\forall X \text{ in } M \text{ and in } M'`,n:`Function, onto, one-to-one.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{M,\ M' \text{ matched}}`,n:`Only the numbers.`}
+],{title:'The slides · one world · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'make then use',t:R`\dfrac{\dfrac{P \quad Q}{P \land Q}}{P}`,n:`A mark for nothing.`},
-  {k:'ember',kl:'cut',t:R`P`,n:`Keep what was there.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{same foot, shorter tree}}`,n:`The making and using agree.`}
-],{title:'The slides · detours · ← → keys work'});
+  {k:'ember',kl:'formulas',t:R`\varphi_0, \varphi_1, \ldots`,n:`They can be listed.`},
+  {k:'ember',kl:'parts',t:R`\mathcal P(|M|)`,n:`They cannot.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{the numerals’ part is missed}}`,n:`First order is blind to it.`}
+],{title:'The slides · few parts · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'unused',t:R`\dfrac{Q}{P \Rightarrow Q}`,n:`P never used.`},
-  {k:'ember',kl:'from nothing',t:R`\dfrac{\bot}{R}`,n:`Anything at all.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\dfrac{P \lor R \quad \neg P}{R}}`,n:`The same, without ⊥.`}
-],{title:'The slides · relevance · ← → keys work'});
+  {k:'ember',kl:'categorical',t:R`PA_2 \text{ has only } N`,n:`Strange worlds gone.`},
+  {k:'ember',kl:'no calculus',t:R`\text{validity not listable}`,n:`Or the truths of N would be.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{sets decide what “every part” means}}`,n:`The hard questions move.`}
+],{title:'The slides · the price · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

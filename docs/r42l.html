@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Best From Best Pieces</title>
+<title>42l · Counting Up to Turning</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,113 +37,78 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r42k.html">← 42k shortest paths and greedy choices</a><a href="r42m.html">next: 42m keeping things findable →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r42k.html">← 42k counting shapes with stored lists</a><a href="r42m.html">next: 42m shortest paths and greedy choices →</a></p>
   <div class="tags"><span class="tag tech">42l · technique</span></div>
-  <h1>Best From Best Pieces</h1>
-  <p data-pid="79b62c">Rung 39 solved hard questions by remembering the answers to smaller ones and building up, and aligned two strings of letters that way. On a graph that idea has a plain form: every piece of a shortest route is itself a shortest route between its ends. So the distances can be built from the distances of fewer links, or of fewer stops, one layer at a time. This step does it three ways. On one-way links with no cycle, put the dots in an order where every link goes forward, and one pass along the order gives every best route, shortest or longest. When some lengths are negative, the nearest first of the last step fails, but rounds of improvement, each allowing one more link, still work, and one extra round tells whether a cycle of negative total exists, which in money is a way to get rich by trading in a circle. And allowing the stops one at a time gives the distance between every two dots at once. Last, rung 39’s alignment of two strings turns out to be a best route through a grid, and its table is the forward pass.</p>
-  <p class="gesture" data-pid="1cbfa5">A piece of a best route is a best route between its ends. With one-way links and no cycle, an order with every link forward exists, and one pass along it finds every best route. With negative lengths, n − 1 rounds of improvement find every distance, and one more round finds a cycle of negative total if there is one. Allowing the stops one at a time finds every distance at once. An alignment is a best route through a grid.</p>
+  <h1>Counting Up to Turning</h1>
+  <p data-pid="283f35">A necklace of four beads, each black or white, can be strung in 16 ways, but turning the necklace makes some of them the same. Counting what is left by listing is easy for four beads and hopeless for forty. The symmetries form a group (19f). Count, for each symmetry, the colourings it leaves alone, and average: the average is the number of different necklaces. This step proves the averaging count, counts necklaces, and counts the ways to paint a cube.</p>
+  <p class="gesture" data-pid="57b137">Let a group G act on a set of colourings. Each family of colourings that turn into one another counts once. Then the number of families is (1/|G|) Σ_g (colourings g leaves alone). Four-bead necklaces: (16 + 2 + 4 + 2)/4 = 6. Cubes with faces black or white: 240/24 = 10.</p>
 </header>
 
 <section class="class step" data-step="42l1">
-  <h2 class="sthead"><span class="stno">42l1</span>Pieces of a Best Route</h2>
-  <p data-pid="e1733c">Links are one-way here, each (u, w) with a length ℓ(u, w), which may be negative. A path’s length is the sum along it.</p>
-  <p data-pid="9ef2bd">Best-pieces technique: <b>if a path from r to w is shortest, each of its pieces, from a dot u on it to a later dot x on it, is a shortest path from u to x, as long as no cycle has negative total.</b> A shorter path from u to x, put in place of the piece, would give a shorter walk from r to w; if it met the rest of the path, cutting out the loop would shorten it again, as long as no cycle has negative total.</p>
-  <p data-pid="730af5">A one-way graph with no cycle can be put in <i>forward order</i>: a list of its dots in which every link goes from an earlier dot to a later one. Forward-order technique: <b>every finite one-way graph with no cycle has a forward order.</b> Some dot has no link coming in, since walking backwards along links from any dot must stop, or it would repeat a dot and close a cycle. Put that dot first, take it away, and go on by induction.</p>
-  <pre class="lines" data-k="ember" data-label="this page: one pass in forward order">
-\text{dist}(r) = 0;\ \text{for each later } w \text{ in order: } \text{dist}(w) = \min_{(u, w)} \big(\text{dist}(u) + \ell(u, w)\big) @@ every u with a link into w comes earlier
-\text{each } \text{dist}(u) \text{ used is already final} @@ induction along the order
-\text{a shortest path to } w \text{ ends with a link } (u, w) \text{ after a shortest path to } u @@ the best-pieces technique
-\htmlClass{new}{\text{every distance from } r \text{, each link looked at once}} \quad \blacksquare @@ and longest paths the same way, with max for min
+  <h2 class="sthead"><span class="stno">42l1</span>Reach Times Keepers</h2>
+  <pre class="lines" data-k="ember" data-label="this step: one colouring x">
+\text{keepers of } x:\ K_x = \{g : gx = x\},\ \text{a part-group} @@ closed under products and undoing
+gx = hx \iff h^{-1}g \in K_x @@ same place, same coset
+|\text{places } x \text{ reaches}| = \text{number of cosets of } K_x @@ one place per coset (19d)
+\htmlClass{new}{|\text{reach of } x| \cdot |K_x| = |G|} @@ place-then-count, for any action (19f)
   </pre>
-  <!--gfig 42l1--><div class="gfigs" data-gfig="42l1" data-story="[[&quot;Left: five dots with one-way links and no cycle.&quot;, [&quot;#0-22&quot;]], [&quot;Right: the same graph with its dots in a row: b, d, a, e, c.&quot;, [&quot;#23-33&quot;]], [&quot;Every arrow now points right. Each link goes from an earlier dot to a later one: a forward order.&quot;, [&quot;#34-46&quot;]]]"><svg class="gfig" viewBox="0 0 440 200" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="a one-way graph with no cycle, redrawn with its dots in forward order"><circle cx="60" cy="120" r="12" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="60" y="124" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">a</text><circle cx="150" cy="40" r="12" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="150" y="44" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">b</text><circle cx="40" cy="40" r="12" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="40" y="44" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">c</text><circle cx="170" cy="140" r="12" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="170" y="144" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">d</text><circle cx="110" cy="90" r="12" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="110" y="94" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">e</text><path d="M140.3,48.6 Q105.0,80.0 69.7,111.4" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="69.7,111.4 78.4,109.0 73.0,103.1" style="fill:var(--ink)"/><path d="M152.5,52.7 Q160.0,90.0 167.5,127.3" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="167.5,127.3 169.8,118.6 162.0,120.2" style="fill:var(--ink)"/><path d="M157.2,137.7 Q115.0,130.0 72.8,122.3" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="72.8,122.3 79.9,127.7 81.4,119.8" style="fill:var(--ink)"/><path d="M56.8,107.4 Q50.0,80.0 43.2,52.6" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="43.2,52.6 41.2,61.3 49.0,59.4" style="fill:var(--ink)"/><path d="M160.0,131.7 Q140.0,115.0 120.0,98.3" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="120.0,98.3 123.6,106.5 128.7,100.4" style="fill:var(--ink)"/><path d="M99.4,82.4 Q75.0,65.0 50.6,47.6" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="50.6,47.6 54.8,55.5 59.4,49.0" style="fill:var(--ink)"/><text x="105" y="186" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">a one-way graph with no cycle</text><line x1="215" y1="20" x2="215" y2="190" style="stroke:var(--grid);stroke-width:1"/><circle cx="240" cy="110" r="12" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="240" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">b</text><circle cx="286" cy="110" r="12" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="286" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">d</text><circle cx="332" cy="110" r="12" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="332" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">a</text><circle cx="378" cy="110" r="12" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="378" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">e</text><circle cx="424" cy="110" r="12" style="fill:var(--card);stroke:var(--teal);stroke-width:1.5"/><text x="424" y="114" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">c</text><path d="M251.3,103.6 Q286.0,84.0 320.7,103.6" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="320.7,103.6 315.7,96.2 311.7,103.1" style="fill:var(--ink)"/><path d="M253.0,110.0 Q263.0,110.0 273.0,110.0" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="273.0,110.0 265.0,106.0 265.0,114.0" style="fill:var(--ink)"/><path d="M299.0,110.0 Q309.0,110.0 319.0,110.0" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="319.0,110.0 311.0,106.0 311.0,114.0" style="fill:var(--ink)"/><path d="M343.3,103.6 Q378.0,84.0 412.7,103.6" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="412.7,103.6 407.7,96.2 403.7,103.1" style="fill:var(--ink)"/><path d="M297.3,116.4 Q332.0,136.0 366.7,116.4" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="366.7,116.4 357.7,116.9 361.7,123.8" style="fill:var(--ink)"/><path d="M391.0,110.0 Q401.0,110.0 411.0,110.0" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="411.0,110.0 403.0,106.0 403.0,114.0" style="fill:var(--ink)"/><text x="329" y="186" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">forward order: every arrow points right</text></svg></div><!--/gfig 42l1-->
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · pieces · ← → keys work</div></section>
+  <p data-pid="d38db3">Reach-keepers technique: <b>for every x, the number of places the group sends x to, times the number of symmetries that keep x, is the size of the group.</b></p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42l1.1</span><span class="ph understand">understand</span>What does the best-pieces technique say? <br>Why does a one-way graph with no cycle always have a dot with no link coming in?</li>
+      <li><span class="qid">42l1.1</span><span class="ph understand">understand</span>Why does the reach of x times its keepers give the size of the group?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42l2">
-  <h2 class="sthead"><span class="stno">42l2</span>Rounds of Improvement</h2>
-  <p data-pid="90268a">With cycles and negative lengths, let dₖ(w) be the least length of a walk from r to w with at most k links. Then d₀(r) = 0, and d₀ has no value elsewhere.</p>
-  <p data-pid="820d09">Rounds technique: <b>dₖ(w) is the least of dₖ₋₁(w) and dₖ₋₁(u) + ℓ(u, w) over the links (u, w); if no cycle has negative total, dₙ₋₁ is the distance; and some cycle has negative total exactly when a further round still lowers some value.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: the rounds technique">
-\text{a best walk of at most } k \text{ links has at most } k - 1 \text{, or ends with a link } (u, w) @@ the best-pieces technique on its last link
-\text{no negative cycle: a shortest walk is a path, of at most } n - 1 \text{ links} @@ cutting a loop does not lengthen it
-d_{n-1} = d_n = d_{n+1} = \cdots @@ no more links help
-\text{a negative cycle: walking round it again and again lowers some } d_k \text{ for ever} @@ so round n lowers something
-\htmlClass{new}{n - 1 \text{ rounds of } |E| \text{ looks, and one more to test}} \quad \blacksquare @@ cost about n|E|
+  <h2 class="sthead"><span class="stno">42l2</span>Average What Each Symmetry Keeps</h2>
+  <pre class="lines" data-k="ember" data-label="this step: count pairs (g, x) with gx = x">
+\textstyle\sum_g |\{x : gx = x\}| = \sum_x |K_x| @@ the same pairs, counted two ways (4k)
+= \textstyle\sum_x \dfrac{|G|}{|\text{reach of } x|} @@ reach-keepers
+\text{each family adds } |G| \text{ in all} @@ its members share one reach
+\htmlClass{new}{\text{families} = \dfrac{1}{|G|}\textstyle\sum_g |\{x : gx = x\}|} @@ the averaging count
   </pre>
-  <pre class="lines" data-k="ember" data-label="this page: trading in a circle">
-1\ \text{US dollar} \to 1.36\ \text{Canadian};\ 1\ \text{Canadian} \to 0.68\ \text{euro};\ 1\ \text{euro} \to 1.09\ \text{US} @@ rates of the kind quoted in a day’s trading
-\ell = -\ln(\text{rate}):\ \text{a cycle’s total is } -\ln(1.36 \cdot 0.68 \cdot 1.09) @@ logs turn the product into a sum (17c)
-1.36 \cdot 0.68 \cdot 1.09 \approx 1.008 > 1 @@ so the total is below 0
-\htmlClass{new}{\text{a negative cycle: } 0.8\% \text{ for one trip round, before fees}} \quad \blacksquare @@ the rounds technique finds it
-  </pre>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · rounds · ← → keys work</div></section>
+  <p data-pid="cfa7c4">Averaging technique: <b>the number of families of colourings is the average, over the symmetries, of the number of colourings each symmetry leaves alone.</b></p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42l2.1</span><span class="ph understand">understand</span>What does the rounds technique say? <br>Why do n − 1 rounds suffice when no cycle has negative total, and how does trading in a circle become a cycle of negative total?</li>
+      <li><span class="qid">42l2.1</span><span class="ph understand">understand</span>Why does counting pairs two ways give the number of families?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42l3">
-  <h2 class="sthead"><span class="stno">42l3</span>Every Pair at Once</h2>
-  <p data-pid="1019b8">Name the dots 1 to n. Let Dₖ(i, j) be the least length of a path from i to j whose stops, the dots strictly between its ends, are all among 1 to k. D₀(i, j) is ℓ(i, j) if there is a link, 0 if i = j, and no value otherwise.</p>
-  <p data-pid="8aaaaf">Stops-allowed technique: <b>Dₖ(i, j) is the least of Dₖ₋₁(i, j) and Dₖ₋₁(i, k) + Dₖ₋₁(k, j); so with no negative cycle, Dₙ gives every distance after n³ steps.</b> A best path with stops among 1 to k either avoids k, or passes it once, and its two pieces, before and after k, have stops among 1 to k − 1 (the best-pieces technique).</p>
-  <pre class="lines" data-k="ember" data-label="this page: three dots, worked">
-\ell(1,2) = 4,\ \ell(2,3) = -2,\ \ell(1,3) = 5,\ \ell(3,1) = 1 @@ one-way links
-D_2(1, 3) = \min(D_1(1, 3),\ D_1(1, 2) + D_1(2, 3)) = \min(5,\ 4 - 2) = 2 @@ stop 2 allowed
-D_3(2, 1) = \min(D_2(2, 1),\ D_2(2, 3) + D_2(3, 1)) = \min(\text{none},\ -2 + 1) = -1 @@ stop 3 allowed
-\htmlClass{new}{\text{cycles: } 1 \to 2 \to 3 \to 1 \text{ has total } 3 \ge 0,\ \text{so these are distances}} \quad \blacksquare @@ D₃(i, i) = 0 for each i
+  <h2 class="sthead"><span class="stno">42l3</span>Necklaces and Cubes</h2>
+  <pre class="lines" data-k="ember" data-label="this step: two counts">
+\text{4 beads, turns by } 0, 1, 2, 3:\ 16, 2, 4, 2 @@ a turn by 1 keeps only all-black and all-white
+\tfrac14(16 + 2 + 4 + 2) = 6 @@ 0000, 0001, 0011, 0101, 0111, 1111
+\text{cube, 24 turns: } 64 + 6\cdot 8 + 3\cdot 16 + 8\cdot 4 + 6\cdot 8 = 240 @@ by the axes: none, faces 90°, faces 180°, corners, edges
+\htmlClass{new}{240/24 = 10 \text{ different cubes}} @@ from 64 paintings
   </pre>
-  <!--gfig 42l3--><div class="gfigs" data-gfig="42l3" data-story="[[&quot;Three dots with one-way links, each with a length. A length may be negative.&quot;, [&quot;circle&quot;, &quot;path&quot;, &quot;polygon&quot;, &quot;#1&quot;, &quot;#3&quot;, &quot;#5&quot;]], [&quot;From 1 to 3 by the stop 2: 4 and then −2, a total of 2. That is D₂(1, 3).&quot;, [&quot;teal&quot;, &quot;#1&quot;, &quot;#3&quot;, &quot;#5&quot;]], [&quot;The cycle 1 → 2 → 3 → 1 totals 3, above 0. With no negative cycle, going round again never helps.&quot;, [&quot;#18&quot;, &quot;path&quot;, &quot;polygon&quot;]]]"><svg class="gfig" viewBox="0 0 340 210" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="three dots with one way links, the best path from 1 to 3 through 2 shown"><circle cx="60" cy="150" r="14" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="60" y="154" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">1</text><circle cx="170" cy="40" r="14" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="170" y="44" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">2</text><circle cx="280" cy="150" r="14" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="280" y="154" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">3</text><path d="M70.6,139.4 Q115.0,95.0 159.4,50.6" style="fill:none;stroke:var(--teal);stroke-width:2"/><polygon points="159.4,50.6 150.9,53.4 156.6,59.1" style="fill:var(--teal)"/><text x="122.1" y="106.1" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">4</text><path d="M180.6,50.6 Q225.0,95.0 269.4,139.4" style="fill:none;stroke:var(--teal);stroke-width:2"/><polygon points="269.4,139.4 266.6,130.9 260.9,136.6" style="fill:var(--teal)"/><text x="217.9" y="106.1" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">−2</text><path d="M74.8,147.6 Q170.0,132.0 265.2,147.6" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="265.2,147.6 257.9,142.3 256.7,150.2" style="fill:var(--ink)"/><text x="170.0" y="133.8" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">5</text><path d="M265.2,152.4 Q170.0,168.0 74.8,152.4" style="fill:none;stroke:var(--ink);stroke-width:1.4"/><polygon points="74.8,152.4 82.1,157.7 83.3,149.8" style="fill:var(--ink)"/><text x="170.0" y="174.2" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><text x="170.0" y="204" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">teal: D₂(1, 3) = 4 − 2 = 2, by stop 2; the cycle 1 → 2 → 3 → 1 totals 3</text></svg></div><!--/gfig 42l3-->
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · all pairs · ← → keys work</div></section>
+  <p data-pid="8d59ec"><b>Counting up to symmetry is an average of what each symmetry keeps; a symmetry keeps a colouring when it is one colour along each cycle the symmetry moves round.</b> Chemists count molecules this way, the different ways to place atoms on a frame.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42l3.1</span><span class="ph understand">understand</span>What does the stops-allowed technique say? <br>Why does a best path with stops among 1 to k pass dot k at most once?</li>
+      <li><span class="qid">42l3.1</span><span class="ph understand">understand</span>How many four-bead necklaces and how many painted cubes are there, up to turning?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="42l4">
-  <h2 class="sthead"><span class="stno">42l4</span>An Alignment Is a Route</h2>
-  <p data-pid="b788ea">39o aligned two strings by a table: an entry for each pair of starting pieces, built from three neighbours. Read the table as a graph. Its dots are the places (i, j), i letters of the first string used and j of the second. A one-way link goes right (a letter of the second against a gap), down (a letter of the first against a gap), or down and right (two letters against each other), with the score of that step as its length. Every link goes forward in the order row by row, and an alignment is a path from (0, 0) to the far corner.</p>
-  <p data-pid="c5da55">Alignment-route technique: <b>the best alignment of two strings is a longest route through their grid, and 39o’s table is the forward pass of the forward-order technique.</b></p>
-  <pre class="lines" data-k="ember" data-label="this page: ACGT against AGT">
-\text{score: } +1 \text{ a match},\ -1 \text{ a mismatch},\ -1 \text{ a gap} @@ a score to make large; with 0, −1, −1 instead, the longest route is minus 39o’s count of changes
-\text{grid } 5 \times 4 \text{ places; three kinds of link} @@ (i, j) with i ≤ 4, j ≤ 3
-\text{route: } \mathrm{A/A},\ \mathrm{C}/{-},\ \mathrm{G/G},\ \mathrm{T/T} @@ down-right, down, down-right, down-right
-\htmlClass{new}{1 - 1 + 1 + 1 = 2,\ \text{the longest route}} \quad \blacksquare @@ the forward pass gives 2 at the corner; with 0, −1, −1 the same route gives −1, and 39o found D(4, 3) = 1
-  </pre>
-  <p data-pid="7ed84a">So alignment is not a new idea but a graph in disguise, and every trick for routes applies: the layers of 42k to bound how far off the diagonal a good route strays, the cost of n times m for the pass. 42·bio aligns proteins this way before it builds a tree.</p>
-  <!--gfig 42l4--><div class="gfigs" data-gfig="42l4" data-story="[[&quot;ACGT down the side and AGT across the top. A place (i, j) in the grid means i letters of the first string used and j of the second.&quot;, [&quot;#67-73&quot;, &quot;grid&quot;, &quot;circle&quot;]], [&quot;A step down and across pairs two letters. A/A scores +1.&quot;, [&quot;#74&quot;, &quot;#43&quot;]], [&quot;A step straight down uses a letter of the first string against a gap. C/− scores −1.&quot;, [&quot;#75&quot;, &quot;#44&quot;]], [&quot;G/G and T/T score +1 each.&quot;, [&quot;#76&quot;, &quot;#77&quot;, &quot;#45&quot;, &quot;#46&quot;]], [&quot;The best alignment is the longest route from corner to corner: total 2.&quot;, [&quot;teal&quot;, &quot;#78&quot;]]]"><svg class="gfig" viewBox="0 0 340 260" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="the alignment grid of ACGT against AGT with the best alignment as a route"><line x1="85.0" y1="40.0" x2="135.0" y2="40.0" style="stroke:var(--grid);stroke-width:1"/><line x1="80.0" y1="45.0" x2="80.0" y2="79.0" style="stroke:var(--grid);stroke-width:1"/><line x1="84.0" y1="44.0" x2="136.0" y2="80.0" style="stroke:var(--grid);stroke-width:1"/><line x1="145.0" y1="40.0" x2="195.0" y2="40.0" style="stroke:var(--grid);stroke-width:1"/><line x1="140.0" y1="45.0" x2="140.0" y2="79.0" style="stroke:var(--grid);stroke-width:1"/><line x1="144.0" y1="44.0" x2="196.0" y2="80.0" style="stroke:var(--grid);stroke-width:1"/><line x1="205.0" y1="40.0" x2="255.0" y2="40.0" style="stroke:var(--grid);stroke-width:1"/><line x1="200.0" y1="45.0" x2="200.0" y2="79.0" style="stroke:var(--grid);stroke-width:1"/><line x1="204.0" y1="44.0" x2="256.0" y2="80.0" style="stroke:var(--grid);stroke-width:1"/><line x1="260.0" y1="45.0" x2="260.0" y2="79.0" style="stroke:var(--grid);stroke-width:1"/><line x1="85.0" y1="84.0" x2="135.0" y2="84.0" style="stroke:var(--grid);stroke-width:1"/><line x1="80.0" y1="89.0" x2="80.0" y2="123.0" style="stroke:var(--grid);stroke-width:1"/><line x1="84.0" y1="88.0" x2="136.0" y2="124.0" style="stroke:var(--grid);stroke-width:1"/><line x1="145.0" y1="84.0" x2="195.0" y2="84.0" style="stroke:var(--grid);stroke-width:1"/><line x1="140.0" y1="89.0" x2="140.0" y2="123.0" style="stroke:var(--grid);stroke-width:1"/><line x1="144.0" y1="88.0" x2="196.0" y2="124.0" style="stroke:var(--grid);stroke-width:1"/><line x1="205.0" y1="84.0" x2="255.0" y2="84.0" style="stroke:var(--grid);stroke-width:1"/><line x1="200.0" y1="89.0" x2="200.0" y2="123.0" style="stroke:var(--grid);stroke-width:1"/><line x1="204.0" y1="88.0" x2="256.0" y2="124.0" style="stroke:var(--grid);stroke-width:1"/><line x1="260.0" y1="89.0" x2="260.0" y2="123.0" style="stroke:var(--grid);stroke-width:1"/><line x1="85.0" y1="128.0" x2="135.0" y2="128.0" style="stroke:var(--grid);stroke-width:1"/><line x1="80.0" y1="133.0" x2="80.0" y2="167.0" style="stroke:var(--grid);stroke-width:1"/><line x1="84.0" y1="132.0" x2="136.0" y2="168.0" style="stroke:var(--grid);stroke-width:1"/><line x1="145.0" y1="128.0" x2="195.0" y2="128.0" style="stroke:var(--grid);stroke-width:1"/><line x1="140.0" y1="133.0" x2="140.0" y2="167.0" style="stroke:var(--grid);stroke-width:1"/><line x1="144.0" y1="132.0" x2="196.0" y2="168.0" style="stroke:var(--grid);stroke-width:1"/><line x1="205.0" y1="128.0" x2="255.0" y2="128.0" style="stroke:var(--grid);stroke-width:1"/><line x1="200.0" y1="133.0" x2="200.0" y2="167.0" style="stroke:var(--grid);stroke-width:1"/><line x1="204.0" y1="132.0" x2="256.0" y2="168.0" style="stroke:var(--grid);stroke-width:1"/><line x1="260.0" y1="133.0" x2="260.0" y2="167.0" style="stroke:var(--grid);stroke-width:1"/><line x1="85.0" y1="172.0" x2="135.0" y2="172.0" style="stroke:var(--grid);stroke-width:1"/><line x1="80.0" y1="177.0" x2="80.0" y2="211.0" style="stroke:var(--grid);stroke-width:1"/><line x1="84.0" y1="176.0" x2="136.0" y2="212.0" style="stroke:var(--grid);stroke-width:1"/><line x1="145.0" y1="172.0" x2="195.0" y2="172.0" style="stroke:var(--grid);stroke-width:1"/><line x1="140.0" y1="177.0" x2="140.0" y2="211.0" style="stroke:var(--grid);stroke-width:1"/><line x1="144.0" y1="176.0" x2="196.0" y2="212.0" style="stroke:var(--grid);stroke-width:1"/><line x1="205.0" y1="172.0" x2="255.0" y2="172.0" style="stroke:var(--grid);stroke-width:1"/><line x1="200.0" y1="177.0" x2="200.0" y2="211.0" style="stroke:var(--grid);stroke-width:1"/><line x1="204.0" y1="176.0" x2="256.0" y2="212.0" style="stroke:var(--grid);stroke-width:1"/><line x1="260.0" y1="177.0" x2="260.0" y2="211.0" style="stroke:var(--grid);stroke-width:1"/><line x1="85.0" y1="216.0" x2="135.0" y2="216.0" style="stroke:var(--grid);stroke-width:1"/><line x1="145.0" y1="216.0" x2="195.0" y2="216.0" style="stroke:var(--grid);stroke-width:1"/><line x1="205.0" y1="216.0" x2="255.0" y2="216.0" style="stroke:var(--grid);stroke-width:1"/><line x1="80.0" y1="40.0" x2="140.0" y2="84.0" style="stroke:var(--teal);stroke-width:2.6"/><line x1="140.0" y1="84.0" x2="140.0" y2="128.0" style="stroke:var(--teal);stroke-width:2.6"/><line x1="140.0" y1="128.0" x2="200.0" y2="172.0" style="stroke:var(--teal);stroke-width:2.6"/><line x1="200.0" y1="172.0" x2="260.0" y2="216.0" style="stroke:var(--teal);stroke-width:2.6"/><circle cx="80.0" cy="40.0" r="3.5" style="fill:var(--teal)"/><circle cx="140.0" cy="40.0" r="3.5" style="fill:var(--ink)"/><circle cx="200.0" cy="40.0" r="3.5" style="fill:var(--ink)"/><circle cx="260.0" cy="40.0" r="3.5" style="fill:var(--ink)"/><circle cx="80.0" cy="84.0" r="3.5" style="fill:var(--ink)"/><circle cx="140.0" cy="84.0" r="3.5" style="fill:var(--teal)"/><circle cx="200.0" cy="84.0" r="3.5" style="fill:var(--ink)"/><circle cx="260.0" cy="84.0" r="3.5" style="fill:var(--ink)"/><circle cx="80.0" cy="128.0" r="3.5" style="fill:var(--ink)"/><circle cx="140.0" cy="128.0" r="3.5" style="fill:var(--teal)"/><circle cx="200.0" cy="128.0" r="3.5" style="fill:var(--ink)"/><circle cx="260.0" cy="128.0" r="3.5" style="fill:var(--ink)"/><circle cx="80.0" cy="172.0" r="3.5" style="fill:var(--ink)"/><circle cx="140.0" cy="172.0" r="3.5" style="fill:var(--ink)"/><circle cx="200.0" cy="172.0" r="3.5" style="fill:var(--teal)"/><circle cx="260.0" cy="172.0" r="3.5" style="fill:var(--ink)"/><circle cx="80.0" cy="216.0" r="3.5" style="fill:var(--ink)"/><circle cx="140.0" cy="216.0" r="3.5" style="fill:var(--ink)"/><circle cx="200.0" cy="216.0" r="3.5" style="fill:var(--ink)"/><circle cx="260.0" cy="216.0" r="3.5" style="fill:var(--teal)"/><text x="110.0" y="24.0" text-anchor="middle" style="font:500 12px IBM Plex Mono,monospace;fill:var(--ink)">A</text><text x="170.0" y="24.0" text-anchor="middle" style="font:500 12px IBM Plex Mono,monospace;fill:var(--ink)">G</text><text x="230.0" y="24.0" text-anchor="middle" style="font:500 12px IBM Plex Mono,monospace;fill:var(--ink)">T</text><text x="56.0" y="66.0" text-anchor="middle" style="font:500 12px IBM Plex Mono,monospace;fill:var(--ink)">A</text><text x="56.0" y="110.0" text-anchor="middle" style="font:500 12px IBM Plex Mono,monospace;fill:var(--ink)">C</text><text x="56.0" y="154.0" text-anchor="middle" style="font:500 12px IBM Plex Mono,monospace;fill:var(--ink)">G</text><text x="56.0" y="198.0" text-anchor="middle" style="font:500 12px IBM Plex Mono,monospace;fill:var(--ink)">T</text><text x="118.0" y="62.0" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">A/A +1</text><text x="148.0" y="106.0" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">C/− −1</text><text x="178.0" y="150.0" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">G/G +1</text><text x="238.0" y="194.0" text-anchor="start" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--teal)">T/T +1</text><text x="170.0" y="254" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">places (i, j); the best alignment is the longest route, total 2</text></svg></div><!--/gfig 42l4-->
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · alignment · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">42l4.1</span><span class="ph understand">understand</span>What does the alignment-route technique say? <br>What do the three kinds of link in the grid stand for, and why do they all go forward?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="42l5">
-  <h2 class="sthead"><span class="stno">42l5</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">42l4</span>Moves to Watch Out For</h2>
+  <p data-pid="d5762c">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
   <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
-\text{the pieces of a longest path are longest paths, in any graph}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; in a graph with cycles a longest path must avoid repeats, and its pieces need not be longest; with no cycle it holds
-\text{after } n - 1 \text{ rounds every distance is right}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only with no negative cycle; with one, there is no shortest walk
-\text{the nearest first works if every length is raised by the same amount}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a path with more links gains more; the best path can change
-D_k(i, j) \text{ uses at most } k \text{ links}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it uses stops among 1 to k, and a path with k stops has k + 1 links
+\text{necklaces} = 16/4 = 4\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; some colourings are kept by turns; average what is kept: 6 (42l3)
+|\text{reach}| + |K_x| = |G|\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; reach times keepers (42l1)
+\text{a turn by 2 keeps 2 colourings}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it keeps 4: beads 1 = 3 and 2 = 4 (42l3)
+\text{average over colourings, not symmetries}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; sum over symmetries, divide by |G| (42l2)
+\text{cubes: } 64/24\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; not whole; average what each turn keeps: 10 (42l3)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">42l5.1</span><span class="ph understand">understand</span>Why does adding the same amount to every length not let the nearest first handle negative lengths? <br>Why do the pieces of a longest path in a graph with cycles not have to be longest?</li>
+      <li><span class="qid">42l4.1</span><span class="ph understand">understand</span>Which move above divides 16 by 4, and why is that too few?</li>
     </ol>
   </section>
 </section>
@@ -162,57 +116,25 @@ D_k(i, j) \text{ uses at most } k \text{ links}\,? @@ &lt;span class="vd vd-p"&g
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">42l.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\text{tasks: } A\,3,\ B\,2,\ C\,4,\ D\,1,\ E\,2;\ \ A, B \text{ before } C;\ \ B \text{ before } D;\ \ C, D \text{ before } E"></span></span>Each task takes the days given, and some must wait for others. Put the tasks in forward order and find the least number of days for all of them, as a longest route. <br>Which tasks can be late by a day without delaying the end?</div>
-  <div class="chq"><span class="chid">42l.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\ell(1,2) = 1,\ \ell(2,3) = -3,\ \ell(3,1) = 1"></span></span>Run the rounds technique from dot 1 for four rounds. What happens in round 3, and what does it mean? <br>Is there a shortest path from 1 to 3 that meets no dot twice? Is that question easy?</div>
-  <div class="chq"><span class="chid">42l.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="\text{longest paths that meet no dot twice}"></span></span>The best-pieces technique fails for longest paths in graphs with cycles. Show that a recipe for longest paths with no repeated dot would decide whether a graph has a round of the dots (42c). <br>What does 41h then suggest about such a recipe?</div>
-  <div class="chq"><span class="chid">42l.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">29g: the equation of the best path</span></span>Rung 29 found the best path on a curved surface from an equation, and called a best path between two of its points a geodesic. <br>Is every piece of a geodesic a geodesic? Is a geodesic always a shortest path? Find the rung 29 example where it is not, and match it with the failure of the best-pieces technique you have seen here.</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">42l.5.1</span><span class="tagq">do</span>Count necklaces of 5 beads in 2 colours, up to turning.</div>
+  <div class="chq"><span class="chid">42l.5.2</span><span class="tagq">make</span>Make up a colouring problem where a flip as well as turns must be counted.</div>
+  <div class="chq"><span class="chid">42l.5.3</span><span class="tagq">converse</span>Families equal the average kept. Decide whether, if every symmetry but the identity keeps nothing, families are colourings over |G|.</div>
+  <div class="chq"><span class="chid">42l.5.4</span><span class="tagq">edge</span>Let the group hold only the identity. Say what the count gives.</div>
+  <div class="chq"><span class="chid">42l.5.5</span><span class="tagq">open</span>Say how to count necklaces of n beads in k colours with one formula.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r42k.html">← 42k · counting shapes with stored lists</a><a href="r42m.html">42m · shortest paths and greedy choices →</a></nav>
 
-<nav class="nextrung"><a href="r42k.html">← 42k · shortest paths and greedy choices</a><a href="r42m.html">42m · keeping things findable →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>Building best answers from best pieces is dynamic programming, and the best-pieces technique is Bellman's principle of optimality, or optimal substructure. A one-way graph with no cycle is a directed acyclic graph, and a forward order is a topological sort. The rounds technique is the Bellman–Ford algorithm; the stops-allowed technique is the Floyd–Warshall algorithm. The best alignment is the Needleman–Wunsch alignment (1970), and the longest chain of tasks in 42l.6.1 is the critical path.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="8241f0">Families are <b>orbits</b>, keepers the <b>stabiliser</b>; reach times keepers is the <b>orbit-stabiliser theorem</b>; the averaging count is <b>Burnside’s lemma</b>, also the <b>Cauchy-Frobenius lemma</b>. Counting by cycles is <b>Pólya enumeration</b>.</p>
   <h3>Who said it first</h3>
-  <p>Richard Bellman named dynamic programming in the early 1950s, choosing a name, he wrote, that a congressman could not object to. Alfonso Shimbel (1955), Lester Ford (1956), Edward Moore (1957) and Bellman (1958) found the rounds. Bernard Roy (1959), Robert Floyd (1962) and Stephen Warshall (1962) found the stops-allowed recipe. Saul Needleman and Christian Wunsch aligned proteins this way in 1970. The critical path method was developed at DuPont in 1957.</p>
-  <h3>A proof that is not allowed</h3>
-  <p>“A shortest path to w ends with a link (u, w). The path to u is shortest, by the best-pieces technique. So take the nearest u, and the distance to w is that u’s distance plus ℓ(u, w).” Not allowed: the best u is the one with the least dist(u) + ℓ(u, w), not the least dist(u). A far u with a short link can beat a near u with a long one.</p>
+  <p data-pid="561fdd">Augustin Cauchy (1845) and Georg Frobenius (1887) knew the averaging count; William Burnside printed it in 1897. George Pólya built counting by cycles in 1937, for chemistry.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'cut and paste',t:R`\text{a shorter piece} \Rightarrow \text{a shorter whole}`,n:`Best pieces.`},
-  {k:'ember',kl:'order',t:R`\text{every link forward}`,n:`No cycle.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one pass}}`,n:`Every distance.`}
-],{title:'The slides · pieces · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'one more link',t:R`d_k = \min(d_{k-1}, d_{k-1}(u) + \ell)`,n:`Each round.`},
-  {k:'ember',kl:'settle',t:R`d_{n-1}`,n:`Paths have at most n − 1 links.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{round } n \text{ tests}}`,n:`A negative cycle.`}
-],{title:'The slides · rounds · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'allow',t:R`D_k(i,j)`,n:`Stops among 1 to k.`},
-  {k:'ember',kl:'split at k',t:R`D_{k-1}(i,k) + D_{k-1}(k,j)`,n:`Two pieces.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{n^3 \text{ steps}}`,n:`Every distance.`}
-],{title:'The slides · all pairs · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'grid',t:R`(i, j)`,n:`Letters used.`},
-  {k:'ember',kl:'links',t:R`\rightarrow,\ \downarrow,\ \searrow`,n:`Gap, gap, pair.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{best alignment} = \text{longest route}}`,n:`The forward pass.`}
-],{title:'The slides · alignment · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

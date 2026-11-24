@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>True and Unprovable</title>
+<title>Formulas as Numbers</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,97 +48,112 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r38h.html">← 38h a sentence about itself</a><a href="r38j.html">next: 38j consistency from within →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38h.html">← 38h numbers past every numeral</a><a href="r38j.html">next: 38j a sentence about itself →</a></p>
   <div class="tags"><span class="tag proof">38i · proof</span></div>
-  <h1>True and Unprovable</h1>
-  <p data-pid="49eb68">The last step built a statement of arithmetic that is reached as equivalent to “I am not reached”. Call it the unreached statement. Suppose the axioms of arithmetic reached it. Then they would also reach that it is reached, since every proof is a number they can check, and they would reach that it is not, since that is what it says. That is a clash, and the axioms have a world, the numbers themselves, so they do not clash. So the statement is not reached. But that is exactly what it says, so it is true. Here is a statement about numbers, as ordinary in its form as any statement about adding and multiplying, that is true and that the axioms never reach, and its denial is not reached either. Adding it as a new axiom does not help: the longer list has its own unreached statement, by the same argument. No list that a recipe can check, and that is true of the numbers, reaches every truth about them.</p>
-  <p class="gesture" data-pid="e5d522">The unreached statement is not reached by the axioms of arithmetic, and so it is true, and its denial is not reached either. The same holds for every collection that holds those axioms, that a recipe can check, and that is true of the numbers.</p>
+  <h1>Formulas as Numbers</h1>
+  <p data-pid="9e9e53">A formula is a finite string of marks, and a proof is a finite list of formulas. Rung four proved that every number other than zero has exactly one list of primes. So give each mark a number, and turn a string into one number by raising the primes in order to the numbers of its marks. Different strings get different numbers, and factoring a number gives its string back. A statement about formulas becomes a statement about numbers, and the language of arithmetic, which only speaks of numbers, can now speak of formulas without knowing it. Two things are needed for that to be useful. First, the axioms of arithmetic must be written down as a list of statements, so that proofs from them are objects too. Second, arithmetic, with nothing but adding and multiplying, must be able to say things like “the number in the third place of this list”. A trick with remainders does that. Then one technique says that every true statement of a certain simple shape, a some in front of a search that stops, is reached by the axioms. The next step points this machinery at the axioms themselves.</p>
+  <p class="gesture" data-pid="44f870">Each string of marks gets a number by prime powers, and factoring reads it back. The axioms of arithmetic are a list of statements. One number can hold a whole list, by remainders, so arithmetic can speak of codes, and every true statement made of a some in front of a bounded condition is reached by the axioms.</p>
 </header>
 
 <section class="class step" data-step="38i1">
-  <h2 class="sthead"><span class="stno">38i1</span>Not Reached</h2>
-  <p data-pid="3350d3">Let U be the diagonal statement δ₃ of 38h3, the <i>unreached statement</i>: PA ⊢ U ⇔ ¬Prov(⌜U⌝).</p>
-  <pre class="lines" data-k="ember" data-label="this step: U is not reached">
-PA \vdash U @@ suppose, aiming to refute
-PA \vdash \text{Prov}(\ulcorner U \urcorner) @@ the provable-mark technique (38h1)
-PA \vdash \neg\text{Prov}(\ulcorner U \urcorner) @@ carry an if through, on the left-to-right half of U’s ⇔
-PA \vdash \bot @@ clash
-PA \text{ is clash-free} @@ N is a world of PA (38g2); the world-means-clash-free technique (38c2)
-\htmlClass{new}{PA \nvdash U} \quad \blacksquare @@ refute
+  <h2 class="sthead"><span class="stno">38i1</span>A Number for Each String</h2>
+  <p data-pid="1b087f">Number the marks of the language of arithmetic: 0 is 1, S is 2, + is 3, · is 4, = is 5, ¬ is 6, ∧ is 7, ∨ is 8, ⇒ is 9, ∀ is 10, ∃ is 11, the left bracket is 12, the right bracket is 13, ⊥ is 14, and the placeholder xₖ is 15 + k. Write S t with no brackets, as S0, since S has one place, and write + and · between brackets: (t + s). The <i>code</i> of a string m₁ m₂ ⋯ mₖ is ⌜m₁ ⋯ mₖ⌝ = 2 to the number of m₁, times 3 to the number of m₂, and so on, with the kth prime to the number of mₖ.</p>
+  <p data-pid="611d64">Prime-code technique: <b>different strings get different codes, and a string can be read back from its code.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the prime-code technique">
+\ulcorner m_1 \cdots m_k \urcorner = \ulcorner n_1 \cdots n_j \urcorner @@ suppose two strings share a code
+\text{both are prime lists of one number} @@ a product of primes in order, each power at least 1
+k = j \text{ and each prime has the same power on both sides} @@ the one-prime-list technique (4j)
+\htmlClass{new}{m_i = n_i \text{ for every } i} \quad \blacksquare @@ each mark has its own number
   </pre>
-  <p data-pid="45dea9">Nothing in the proof looked at what U is about. It used only that U and ¬Prov(⌜U⌝) are reached as equivalent, and that a proof can be checked inside arithmetic.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · not reached · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: two codes, worked">
+\ulcorner 0 = 0 \urcorner = 2^1 \cdot 3^5 \cdot 5^1 = 2430 @@ marks 0, =, 0: numbers 1, 5, 1
+\htmlClass{new}{\ulcorner S0 = S0 \urcorner = 2^2 \cdot 3^1 \cdot 5^5 \cdot 7^2 \cdot 11^1 = 20\,212\,500} \quad \blacksquare @@ marks S, 0, =, S, 0
+  </pre>
+  <p data-pid="15b466">A list of strings gets a code the same way, one level up: the list σ₁, …, σₖ has code 2 to the ⌜σ₁⌝, times 3 to the ⌜σ₂⌝, and so on. A line (S, R) is the list of S’s formulas followed by R, and a proof is a list of lines. So every proof has a code. The proof-check technique (38b3) reads the code back and checks it: whether a number is the code of a proof can be settled by a recipe that always stops.</p>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · codes · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38i1.1</span><span class="ph understand">understand</span>What is the unreached statement U? <br>Why does PA not reach it, and which fact about PA does the last line spend?</li>
+      <li><span class="qid">38i1.1</span><span class="ph understand">understand</span>How is the code of a string of marks made? <br>What does the prime-code technique say, and which technique of rung 4 does its proof rest on?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38i2">
-  <h2 class="sthead"><span class="stno">38i2</span>True, and Its Denial Not Reached</h2>
-  <p data-pid="2ce462">Unreached-truth technique: <b>the unreached statement is true in N, and PA reaches neither it nor its denial.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the unreached-truth technique">
-\text{no number codes a proof of } U \text{ from } PA @@ PA ⊬ U (38i1)
-N \models \neg\text{Prov}(\ulcorner U \urcorner) @@ Prov says that some number codes such a proof
-N \models U \Leftrightarrow \neg\text{Prov}(\ulcorner U \urcorner) @@ PA reaches it, and N is a world of PA (38c2)
-N \models U @@ carry an if through, the right-to-left half, in N
-PA \vdash \neg U \Rightarrow N \models \neg U @@ PA reaches only statements true in N (38g2)
-\htmlClass{new}{N \models U,\ \ PA \nvdash U,\ \ PA \nvdash \neg U} \quad \blacksquare @@ ¬U is false in N, so it is not reached
+  <h2 class="sthead"><span class="stno">38i2</span>The Axioms of Arithmetic</h2>
+  <p data-pid="2f4193">Rung 4 proved its facts from sets. Here a few of them are written as the givens of a collection, PA, in the language of arithmetic:</p>
+  <ul>
+    <li data-pid="832603">∀x ¬(S(x) = 0): 0 is nobody’s next (4b).</li>
+    <li data-pid="02b187">∀x ∀y (S(x) = S(y) ⇒ x = y): different numbers have different nexts (4b).</li>
+    <li data-pid="3a8984">∀x (x + 0 = x) and ∀x ∀y (x + S(y) = S(x + y)): adding (4f).</li>
+    <li data-pid="7647e2">∀x (x · 0 = 0) and ∀x ∀y (x · S(y) = (x · y) + x): multiplying (4g).</li>
+    <li data-pid="e85b3c">For each formula φ(x), with perhaps other free placeholders: if φ(0), and ∀x (φ(x) ⇒ φ(S(x))), then ∀x φ(x). Induction (4c), one statement for each φ, each with an every in front for its other placeholders.</li>
+  </ul>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\mathbb N \models \mathrm{PA} \Rightarrow (\mathrm{PA} \vdash \varphi \Rightarrow \mathbb N \models \varphi) \quad\text{(38c)}\end{aligned}"></div>
+  <p data-pid="4d0450">Each member is true in N, by rung 4, so N is a world of PA, and by the true-everywhere technique PA reaches only statements true in N. The list is endless, but whether a number codes a member of it is settled by a recipe: read the string back and compare it with the six lines and the pattern of the seventh.</p>
+  <p data-pid="f7bc52">Why is induction among the givens? Without it the collection stops short. Take the numbers with two extra members, ⋆ and ⋆′, each its own next, as 38c.5.4 asks. Let a number plus ⋆ be ⋆′, and fill in the rest to fit the six lines. That world makes the first six true and 0 + ⋆ = ⋆′, so ∀x (0 + x = x) is false there, and the first six alone never reach it. With induction, φ(x) = (0 + x = x) gives it in four lines.</p>
+  <pre class="lines" data-k="ember" data-label="this step: 0 + x = x from PA">
+0 + 0 = 0 @@ use an every, x + 0 = x with 0
+0 + S(x) = S(0 + x) @@ use an every, the second adding line
+\qquad \text{assume } 0 + x = x;\ \ 0 + S(x) = S(x) @@ swap, on the line above
+\htmlClass{new}{\forall x\,(0 + x = x)} \quad \blacksquare @@ prove an if; speak of everything; induction for φ(x) = (0 + x = x)
   </pre>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\mathbb N \models \mathrm{PA}\text{: used, and } \mathrm{PA} \nvdash \text{it of itself}\end{aligned}"></div>
-  <p data-pid="bcb81c">U is true, and the reason given is a proof. It is a proof from more than PA: it used the fact that N is a world of PA, which PA cannot state about itself. That is the subject of 38j.</p>
-  <p data-pid="57b3c3">Arrangement against series again. A proof answers a question about the arrangement: does this list of givens reach this statement? Truth in N answers a question about the series: does every number behave so? Here the two answers come apart, for a statement about adding and multiplying.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · true · ← → keys work</div></section>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · PA · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38i2.1</span><span class="ph understand">understand</span>What does the unreached-truth technique say? <br>Why is U true, and why is its denial not reached?</li>
+      <li><span class="qid">38i2.1</span><span class="ph understand">understand</span>What are the axioms of arithmetic, PA, and why does PA reach only statements true in N? <br>What breaks without the induction line?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38i3">
-  <h2 class="sthead"><span class="stno">38i3</span>Every List Falls Short</h2>
-  <p data-pid="cf6505">Nothing in 38i1 and 38i2 was special to PA except three facts: PA holds the axioms of arithmetic, so the search-reached technique holds for it; whether a number codes a member of PA is settled by a recipe, so Proof can be written; and PA is true in N.</p>
-  <p data-pid="77090f">Every-list technique: <b>if a collection T holds PA, membership in T is settled by a recipe, and every member of T is true in N, then some statement true in N is not reached by T.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the every-list technique">
-\text{Proof}_T(y, x) \text{ and } \text{Prov}_T(x) \text{ written as in 38h1} @@ the recipe for T in place of the one for PA
-T \vdash U_T \Leftrightarrow \neg\text{Prov}_T(\ulcorner U_T \urcorner) @@ the self-statement technique; T holds PA
-T \nvdash U_T,\ \ N \models U_T @@ 38i1 and 38i2, word for word, with T in place of PA
-\htmlClass{new}{T + U_T \text{ is again such a collection, with its own } U_{T + U_T}} \quad \blacksquare @@ adding one true axiom keeps all three facts
+  <h2 class="sthead"><span class="stno">38i3</span>A List in One Number</h2>
+  <p data-pid="725697">A code is a product of prime powers, and the language of arithmetic has no mark for powers. It has + and ·. With them, “r is the remainder of u on division by d” is a formula: ∃q (q ≤ u ∧ u = q · d + r ∧ r &lt; d), with every some kept below u. The trick is to store a whole list in two numbers through remainders.</p>
+  <p data-pid="35f699">List-in-one-number technique: <b>for every finite list of numbers there are two numbers u and v such that the entry in place i of the list is the remainder of u on division by 1 + (i + 1) · v.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the list-in-one-number technique">
+\text{list } t_0, \ldots, t_{n-1};\ \ m = 1 + \text{the largest of } n, t_0, \ldots, t_{n-1};\ \ v = m! @@ given; 4k’s factorial
+d_i = 1 + (i + 1)v \text{ for } i < n;\ \ t_i < m \le v < d_i @@ each entry is small enough to be a remainder
+p \text{ prime},\ p \mid d_i,\ p \mid d_j,\ i < j \Rightarrow p \mid (j - i)v @@ the divides-the-rest technique (4j), on dⱼ − dᵢ
+\Rightarrow p \mid v @@ prime-divides-a-factor (4j); j − i is at most m, so it divides m!
+\Rightarrow p \mid 1 @@ divides-the-rest, on dᵢ = 1 + (i + 1)v
+\text{so no two of the } d_i \text{ share a prime} @@ refute: no prime divides 1
+u, u' < D = d_0 \cdots d_{n-1} \text{ with the same remainders} \Rightarrow D \mid u - u' \Rightarrow u = u' @@ each dᵢ divides the difference; prime lists (4j); the difference is below D
+\htmlClass{new}{\text{some } u < D \text{ has the remainders } t_0, \ldots, t_{n-1}} \quad \blacksquare @@ D numbers, D lists of remainders, no two numbers alike: every list is met (4k)
   </pre>
-  <p data-pid="ae8b0c">So the true statements of arithmetic can never be listed by a recipe. If they could, take T to be all of them: whether φ is in T would be settled by listing until φ or ¬φ turns up, as one of them must. T would hold PA and be true in N, and it would reach every truth, against the technique.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · every list · ← → keys work</div></section>
+  <pre class="lines" data-k="ember" data-label="this step: the list 2, 0, 3 in one number">
+n = 3,\ \ m = 4,\ \ v = 4! = 24,\ \ d_0, d_1, d_2 = 25,\ 49,\ 73 @@ the recipe of the technique
+u = 64\,827 @@ found by search below D = 89 425
+\htmlClass{new}{64\,827 = 25 \cdot 2593 + 2 = 49 \cdot 1323 + 0 = 73 \cdot 888 + 3} \quad \blacksquare @@ the remainders are the list
+  </pre>
+  <p data-pid="a53429">So “y is 2 to the power x” is a formula: some u and v store the list 1, 2, 4, …, y, each entry twice the one before, with x + 1 entries. Every some after the first two is kept below a term. The same trick writes “x is the code of a formula” and “y is the code of a proof of the formula with code x”.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · one number · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38i3.1</span><span class="ph understand">understand</span>What does the every-list technique say, and which three facts about PA does it need of T? <br>Why can the true statements of arithmetic not be listed by a recipe?</li>
+      <li><span class="qid">38i3.1</span><span class="ph understand">understand</span>What does the list-in-one-number technique say? <br>Why does arithmetic need it, and how does it make “y is 2 to the power x” a formula?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="38i4">
-  <h2 class="sthead"><span class="stno">38i4</span>A World Where U Is False</h2>
-<div class="eqline c6 lsyn" data-was="436a4f" data-tex="\begin{aligned}&amp;\text{PA} \nvdash U \Rightarrow \text{PA with } \neg U \text{ is clash-free}\\ &amp;\qquad\Rightarrow \text{a world } M\\ &amp;\qquad\text{(full-growth and term-world, 38d)}\\ &amp;M:\ \neg U \text{ true, so } \text{Prov}(\ulcorner U\urcorner) \text{ true}\\ &amp;\qquad\text{some member of } M \text{ codes a proof of } U\\ &amp;\text{no number does}:\\ &amp;\qquad\text{that member is past every numeral (38f)}\end{aligned}"></div>
-  <pre class="lines" data-k="ember" data-label="this step: the false side of U">
-PA \cup \{\neg U\} \text{ is clash-free} @@ PA ⊬ ¬¬U, since PA ⊬ U and not-not out would give it (7e)
-M \models PA,\ \ M \models \neg U @@ the full-growth and term-world techniques (38d)
-M \models \text{Proof}(e, \ulcorner U \urcorner) \text{ for some member } e @@ ¬U is reached as equivalent to Prov(⌜U⌝); Prov is a some
-e \text{ is not the value of any numeral } \bar k @@ else Proof(k̄, ⌜U⌝) would be true in N, a true bounded statement in both worlds
-\htmlClass{new}{e \text{ is past every numeral: a “proof” in } M \text{ that no list of lines is}} \quad \blacksquare @@ the numerals come first in M (38f2)
+  <h2 class="sthead"><span class="stno">38i4</span>True Searches Are Reached</h2>
+  <p data-pid="a38e71">Call a formula <i>bounded</i> when each of its everys and somes is kept below a term: ∀x (x &lt; t ⇒ ⋯) or ∃x (x &lt; t ∧ ⋯). 4j’s bounded-some technique showed that such a statement is settled, by a search that stops. A <i>search statement</i> is a bounded formula with somes in front: ∃y θ(y), θ bounded. “Some number is the code of a proof of φ” has that shape.</p>
+  <p data-pid="cc91db">Search-reached technique: <b>every search statement true in N is reached by PA.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the search-reached technique">
+N \models \exists y\,\theta(y) \text{, so } N \models \theta(\bar k) \text{ for some number } k @@ the clause for some (38a3)
+\text{each term } t \text{ with no placeholder: } PA \vdash t = \bar n \text{, with } n \text{ its value} @@ induction on the term; the adding and multiplying lines, one step at a time
+PA \vdash \neg(\bar m = \bar n) \text{ for } m \ne n @@ the two next lines, run min(m, n) times, then 0 is nobody’s next
+PA \vdash \forall x\,(x < \bar n \Rightarrow x = \bar 0 \lor \cdots \lor x = \overline{n - 1}) @@ induction in PA, on n, from outside: one proof for each n
+\text{a true bounded statement is reached} @@ induction on its building: each bounded every is n cases, each true bounded some names its example
+\htmlClass{new}{PA \vdash \exists y\,\theta(y)} \quad \blacksquare @@ show an example, with k̄
   </pre>
-  <p data-pid="2a8630">So U is not reached because it is true in N and false in M, and both are worlds of PA. When someone says U “is true”, they mean true in N. That meaning is clear, and PA cannot see which world it is in.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · false side · ← → keys work</div></section>
-  <aside class="nature">
-    <div class="eyebrow">Anexact, yet rigorous · two sizes of truth</div>
-    <p data-pid="cd2a4e">U is true of the numbers and not reached by PA; true in N and false in M. The ladder’s “true” (1a6, earned) and its “necessary” (3b2, every box reaches it) come apart here: U is true in the world the axioms were written for, and not necessary under them. That gap is the whole content of the technique. A proof reaches what holds in every world; truth in one world, even the intended one, is more than any proof from PA can deliver.</p>
-  </aside>
+  <p data-pid="8e06f8">The proof leans on N twice and on PA throughout: a true search has an example, and the example is a numeral that PA can work with. A false search statement is another matter. To reach its denial, PA would have to check every number, and the technique says nothing about that. 38k shows what goes wrong there.</p>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · searches · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38i4.1</span><span class="ph understand">understand</span>In a world of PA where U is false, what does the member e do? <br>Why must e be past every numeral?</li>
+      <li><span class="qid">38i4.1</span><span class="ph understand">understand</span>What is a bounded formula, and what is a search statement? <br>What does the search-reached technique say, and why does it say nothing about false search statements?</li>
     </ol>
   </section>
 </section>
@@ -146,15 +161,15 @@ e \text{ is not the value of any numeral } \bar k @@ else Proof(k̄, ⌜U⌝) wo
 <section class="class step" data-step="38i5">
   <h2 class="sthead"><span class="stno">38i5</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-PA \nvdash U \text{, so } U \text{ is false}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; U is true in N; not reached is not false
-U \text{ cannot be proved}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; by PA; PA + U reaches it in one line, and 38i2 is a proof of it from more than PA
-PA + U \text{ reaches every truth of arithmetic}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the every-list technique gives it its own unreached statement
-U \text{ says “I am false”}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; U says it is not reached; 38k is where “not true” is tried
+\ulcorner 0 = 0 \urcorner = 2430 \text{, so } 0 = 0 \text{ is a statement about } 2430\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the statement is about 0; its code is a number that stands for it, as a name stands for a thing (0b)
+\text{arithmetic has no power mark, so it cannot say } y = 2^x\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the list-in-one-number technique says it with + and · alone
+\text{every true statement of arithmetic is reached by PA, since true searches are}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only search statements; an every in front is another matter (38k)
+\text{induction is among the givens, so it is no longer a technique}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; in PA it is a given line; on the ladder it was proved from sets (4c), and PA is a collection the ladder studies
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">38i5.1</span><span class="ph understand">understand</span>Why does PA ⊬ U not make U false? <br>Why does adding U to PA not reach every truth of arithmetic?</li>
+      <li><span class="qid">38i5.1</span><span class="ph understand">understand</span>Why is 0 = 0 not a statement about 2430? <br>Why does the search-reached technique not give every true statement of arithmetic?</li>
     </ol>
   </section>
 </section>
@@ -163,26 +178,22 @@ U \text{ says “I am false”}\,? @@ &lt;span class="vd vd-p"&gt;outside the pl
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">38i.6.1</span><span class="tagq">build</span><span class="givens"><span class="gtx">the denial of U, reached from PA without using that PA is true in N</span></span>The proof that PA ⊬ ¬U spent the fact that PA reaches only truths. Build the other road: suppose PA ⊢ ¬U, so PA ⊢ Prov(⌜U⌝), and find what that says about the numbers 0, 1, 2, … that are not codes of a proof of U. <br>Which weaker fact than “PA is true in N” is enough?</div>
-  <div class="chq"><span class="chid">38i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="T = \text{every statement true in } N"></span></span>This T holds PA and is true in N. Which of the every-list technique’s three facts fails for it? <br>Does T reach U_T, whatever that would be?</div>
-  <div class="chq"><span class="chid">38i.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="N \models \varphi,\ \ PA \nvdash \varphi"></span></span>U is true in N and not reached. Turn it round: is every statement true in N and not reached by PA a statement about proofs? <br>Look at 38·cb29’s row in the ladder and 29·cb3.5’s game: what kind of statement is that one?</div>
-  <div class="chq"><span class="chid">38i.6.4</span><span class="tagq">seam</span><span class="givens"><span class="gtx">15g.4.6: induction by cases against the demand for proof</span></span>Rung 15 asked whether checking a technique on many cases can stand in for a proof, and found a technique that held for the first cases checked and failed at the next. <br>U is a statement “for every number, this number is not the code of a proof of U”. Every case can be checked, and each check passes. Is that evidence that U is true? Is it a proof? Which guess is 38i2’s argument: over the arrangement, over the series, or under a case?</div>
+  <div class="chq"><span class="chid">38i.6.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="\ulcorner \neg 0 = S0 \urcorner"></span></span>Find this code from the table of marks, and factor it back. <br>Build u and v for the list 1, 2, 4 by the recipe of the list-in-one-number technique, and check the three remainders.</div>
+  <div class="chq"><span class="chid">38i.6.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{the empty string},\ \ \text{the number } 1"></span></span>Which string has the code 1? Which numbers are codes of no string at all, and why is 2 to the power 0 never a factor of a code? <br>What would go wrong if a mark were given the number 0?</div>
+  <div class="chq"><span class="chid">38i.6.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="PA \vdash \exists y\,\theta(y)"></span></span>The search-reached technique runs from true to reached. Turn it round: if PA reaches a search statement, is it true in N? <br>Prove it from 38c, and find which fact about N the proof needs.</div>
+  <div class="chq"><span class="chid">38i.6.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="m = 4,\ \ v = 24"></span></span>Reroute the list-in-one-number technique for the list 2, 0, 3 without searching below D: find u from the dividers 25, 49 and 73 by 4j’s oldest algorithm, building a number with remainder 1 on one divider and 0 on the others, three times.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r38h.html">← 38h · a sentence about itself</a><a href="r38j.html">38j · consistency from within →</a></nav>
+<nav class="nextrung"><a href="r38h.html">← 38h · numbers past every numeral</a><a href="r38j.html">38j · a sentence about itself →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>The unreached-truth technique and the every-list technique are Gödel’s first incompleteness theorem: a consistent, recursively axiomatized theory that contains enough arithmetic is incomplete. The unreached statement is the Gödel sentence. A collection whose membership is settled by a recipe is recursive, or recursively axiomatizable. That the truths of arithmetic are not recursively enumerable follows. 38i.6.1’s weaker fact is ω-consistency; John Barkley Rosser’s trick of 1936 replaces it with plain consistency, by a sentence that says “for every proof of me there is a shorter proof of my denial”.</p>
+  <p>The codes are Gödel numbers, and coding is Gödel numbering; ⌜φ⌝ is the Gödel number of φ. PA is Peano arithmetic, here in its first-order form, with induction as an axiom schema; without the schema the first six lines are close to Robinson arithmetic, Q, which has one more line, every number is 0 or a next. The list-in-one-number technique is Gödel’s β-function lemma, and its middle lines are the Chinese remainder theorem. Bounded formulas are Δ₀ formulas, search statements are Σ₁ sentences, and the search-reached technique is Σ₁-completeness.</p>
   <h3>Who said it first</h3>
-  <p>Kurt Gödel announced the result at a meeting in Königsberg in September 1930, where David Hilbert gave his address ending “We must know. We will know.” the next day. The paper appeared in 1931. Gödel assumed ω-consistency; Rosser removed it in 1936. The proof by the diagonal lemma, as on this page, is a later tidying of Gödel’s own argument.</p>
+  <p>Kurt Gödel numbered formulas by prime powers, and used the β-function to express sequences, in his paper of 1931, “On formally undecidable propositions of Principia Mathematica and related systems I”. Giuseppe Peano wrote the axioms of arithmetic in 1889, after Richard Dedekind’s analysis of 1888. Raphael Robinson isolated the weaker system Q in 1950. The remainder theorem is in the Chinese mathematical text of Sunzi, around the 4th century.</p>
   <h3>A proof that is not allowed</h3>
-  <pre class="lines" data-k="check" data-label="37i: a worked “proof”, not allowed">
-PA \nvdash U @@ fine: 38i1
-\text{so } PA \vdash \neg\text{Prov}(\ulcorner U \urcorner) @@ not allowed: that no proof exists is true in N, not reached by PA; it is a statement with an every in front, not a search
-\text{so } PA \vdash U @@ would follow, and would clash with the first line
-  </pre>
+  <p>“The code of 0 = 0 is 2430, and 2430 is even. So 0 = 0 says that something is even.” Not allowed: the code is a name for the formula, chosen by a table. A different table gives a different number. What 0 = 0 says is fixed by 38a’s truth, and it is about 0. What the code makes possible is the other direction: a formula about numbers that is true of 2430 exactly when it is true of the formula 0 = 0.</p>
 </section>
 
 </div>
@@ -197,25 +208,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'U',t:R`PA \vdash U \Leftrightarrow \neg\text{Prov}(\ulcorner U \urcorner)`,n:`From the diagonal.`},
-  {k:'ember',kl:'if reached',t:R`\text{Prov}(\ulcorner U\urcorner) \text{ and its denial}`,n:`A clash.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{PA \nvdash U}`,n:`PA is clash-free.`}
-],{title:'The slides · not reached · ← → keys work'});
+  {k:'ember',kl:'marks',t:R`0 \mapsto 1,\ \ S \mapsto 2,\ \ = \ \mapsto 5`,n:`A number for each mark.`},
+  {k:'ember',kl:'string',t:R`\ulcorner 0 = 0 \urcorner = 2^1 3^5 5^1`,n:`Primes in order.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{2430 \text{ is } 0 = 0}`,n:`Factor to read it back.`}
+],{title:'The slides · codes · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'no proof',t:R`N \models \neg\text{Prov}(\ulcorner U \urcorner)`,n:`Since PA ⊬ U.`},
-  {k:'ember',kl:'so',t:R`N \models U`,n:`That is what U says.`},
-  {k:'ember',kl:'and',t:R`\htmlClass{new}{PA \nvdash \neg U}`,n:`PA reaches only truths.`}
-],{title:'The slides · true · ← → keys work'});
+  {k:'ember',kl:'next',t:R`\neg(S(x) = 0),\ \ S(x) = S(y) \Rightarrow x = y`,n:`From 4b.`},
+  {k:'ember',kl:'adding, multiplying',t:R`x + S(y) = S(x + y),\ \ x \cdot S(y) = x \cdot y + x`,n:`From 4f and 4g.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\varphi(0) \land \forall x\,(\varphi(x) \Rightarrow \varphi(Sx)) \Rightarrow \forall x\,\varphi(x)}`,n:`Induction, one line per formula.`}
+],{title:'The slides · PA · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'T',t:R`T \supseteq PA,\ \text{settled},\ N \models T`,n:`The three facts.`},
-  {k:'ember',kl:'its own',t:R`U_T`,n:`A new unreached statement.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{no recipe lists all truths}}`,n:`Adding axioms never ends it.`}
-],{title:'The slides · every list · ← → keys work'});
+  {k:'ember',kl:'dividers',t:R`d_i = 1 + (i+1)\,v`,n:`No two share a prime.`},
+  {k:'ember',kl:'remainders',t:R`u = q_i d_i + t_i`,n:`Each entry a remainder.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{(u, v) \text{ holds the list}}`,n:`Powers without a power mark.`}
+],{title:'The slides · one number · ← → keys work'});
 stepper('#sl4',[
-  {k:'ember',kl:'a world',t:R`M \models PA + \neg U`,n:`Clash-free, so a world.`},
-  {k:'ember',kl:'in M',t:R`M \models \text{Prov}(\ulcorner U\urcorner)`,n:`Some member “proves” U.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{e \text{ past every numeral}}`,n:`A proof of no length.`}
-],{title:'The slides · false side · ← → keys work'});
+  {k:'ember',kl:'bounded',t:R`\forall x < t,\ \ \exists x < t`,n:`Settled by a search that stops.`},
+  {k:'ember',kl:'search',t:R`\exists y\,\theta(y)`,n:`A some in front.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{N \models \exists y\,\theta \Rightarrow PA \vdash \exists y\,\theta}`,n:`True searches are reached.`}
+],{title:'The slides · searches · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Separation of Variables by Hand</title>
+<title>Boundary Value Problems</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
@@ -48,100 +48,114 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r33g.html">← 33g round drums</a><a href="r33i.html">next: 33i solving on a grid by hand →</a></p>
-  <div class="tags"><span class="tag tech">33h · technique</span></div>
-  <h1>Separation of Variables by Hand</h1>
-  <p data-pid="08b245">The proof steps separated one statement with one kind of end: a rod held at 0 at both ends. Real rods are not so obliging. A pipe wrapped in lagging lets no heat out of its ends at all. A bar laid between a furnace and a cold wall has one end hot and the other cold. A plate has four edges, and only one of them is warm. Each asks for the same three moves, done by hand: find the still state that the ends want, take it away so that the ends become 0, then separate what is left into shapes and fade or grow each one. Which shapes come out depends on the ends. Ends held at a temperature give sines, ends sealed against heat give cosines, and a plate gives a shape that grows from one edge to the other instead of fading in time. The worked runs here are checked twice, once by the series and once by a symmetry that needs no series at all.</p>
-  <p class="gesture" data-pid="e2f9fd">Sealed ends give cosine shapes, with the average kept forever. Ends at two temperatures are handled by taking away the straight line between them. A plate warm on one edge is a sum of sines along that edge, each growing toward it from the opposite edge.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r33g.html">← 33g characteristics and shocks</a><a href="r33i.html">next: 33i round drums →</a></p>
+  <div class="tags"><span class="tag proof">33h · proof</span></div>
+  <h1>Boundary Value Problems</h1>
+  <p data-pid="e094f7">Every statement on this rung so far met its sine shapes by luck. The rod, the string and the round plate each turned out to have shapes that only fade or only swing, and those shapes turned out to be perpendicular, so the series of the rung before could be used. This step shows it was not luck. A statement of second slopes on a stretch, with its ends held at 0, is a map on functions, and moving one slope across by parts, twice, shows that the map is symmetric. Rung 31 proved that a symmetric map has perpendicular square axes. Among functions, the square axes are the shapes, and so the shapes of every such statement are perpendicular, whatever the rod is made of and however it varies along its length. Then the step answers a different question about the same statements: how does a string tied at both ends sag under a load? Load it at one point with one kick. The answer to that one kick, slid along and added up, answers every load. And the kick’s answer, written in shapes, gives a sum of rung 32 for free.</p>
+  <p class="gesture" data-pid="11339c">A second-slope statement with its ends at 0 is a symmetric map on functions, so its shapes are perpendicular and, when nothing pulls the other way, have positive numbers. The answer to a single kick at one point builds the answer to every load, and written in shapes it is each shape divided by its number.</p>
 </header>
 
 <section class="class step" data-step="33h1">
-  <h2 class="sthead"><span class="stno">33h1</span>Sealed Ends</h2>
-  <p data-pid="d0a1bc">A rod of length L wrapped so that no heat crosses its ends has u_x(0, t) = u_x(L, t) = 0: the flow −Ku_x is 0 there. The lines of the cooling-shape technique (33a2) run again with X′(0) = X′(L) = 0. Now λ = 0 is allowed, with X = 1, and λ &gt; 0 needs X = cos(√λ x) with sin(√λ L) = 0.</p>
-  <p data-pid="5f9a7f">Sealed-rod technique: <b>on a rod with both ends sealed, u = a₀/2 + Σ a_n e^(−κ(nπ/L)²t) cos(nπx/L), with a_n = (2/L)∫₀ᴸ f cos(nπx/L); and the average temperature a₀/2 never changes.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the sealed-rod technique">
-X^{\prime}(0) = 0 \Rightarrow X = A\cos(\sqrt\lambda\,x) @@ the steady swing (24h): the sine part has slope √λ at 0
-X^{\prime}(L) = 0 \Rightarrow \sqrt\lambda = \tfrac{n\pi}{L},\ \ n = 0, 1, 2, \ldots @@ sin(√λ L) = 0; n = 0 is the constant shape
-\text{the cosines are perpendicular, with numbers } (n\pi/L)^2 \ge 0 @@ the swap-by-parts technique holds with sealed ends too: the end terms −p y′z vanish (33f)
-\tfrac{d}{dt}\textstyle\int_0^L u\,dx = \kappa\big(u_x(L, t) - u_x(0, t)\big) = 0 @@ the slope under the total, the statement, then 16c
-\htmlClass{new}{\tfrac1L\textstyle\int_0^L u\,dx = \tfrac{a_0}{2} \text{ for every } t} \quad \blacksquare @@ the books are closed at both ends
+  <h2 class="sthead"><span class="stno">33h1</span>A Map on Functions That Swaps by Parts</h2>
+  <p data-pid="ef9722">Let p have a continuous slope and p &gt; 0 on [α, β], and let q be continuous there. For y with continuous second slopes, write</p>
+  <p class="eqline" data-pid="ecbdac"><span data-tex="Ly = -(p\,y^{\prime})^{\prime} + q\,y."></span></p>
+  <p data-pid="91a94d">L takes functions to functions, and it is straight: L(y + z) = Ly + Lz and L(cy) = cLy. A rod whose stiffness p and loss q vary along it gives such an L; the rod of 33a is p = 1, q = 0, and Ly = −y″. Hold y and z at 0 at both ends, and use 31a’s product of two functions, ⟨y, z⟩ = ∫ y z.</p>
+  <p data-pid="3d1a2e">Swap-by-parts technique: <b>if y and z are 0 at both ends, then ⟨Ly, z⟩ = ⟨y, Lz⟩.</b> So L is symmetric for the product.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the swap-by-parts technique">
+\textstyle\int_\alpha^\beta -(p\,y^{\prime})^{\prime} z = \big[-p\,y^{\prime}z\big]_\alpha^\beta + \int_\alpha^\beta p\,y^{\prime}z^{\prime} @@ parts (16e)
+\big[-p\,y^{\prime}z\big]_\alpha^\beta = 0 @@ z = 0 at α and at β
+\langle Ly, z\rangle = \textstyle\int_\alpha^\beta \big(p\,y^{\prime}z^{\prime} + q\,yz\big) @@ add the q term
+\text{the right side does not change when } y \text{ and } z \text{ swap} @@ each product is the same either way round
+\htmlClass{new}{\langle Ly, z\rangle = \langle y, Lz\rangle} \quad \blacksquare @@ the same lines with y and z swapped
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: half hot, half cold, sealed">
-f = 100 \text{ on } [0, L/2),\ \ 0 \text{ on } (L/2, L] @@ two copper half-rods at 100 °C and 0 °C pressed together and wrapped
-a_0 = \tfrac{2}{L}\textstyle\int_0^{L/2} 100\,dx = 100 @@ the average is 50
-a_n = \tfrac{2}{L}\textstyle\int_0^{L/2} 100\cos\tfrac{n\pi x}{L}\,dx = \tfrac{200}{n\pi}\sin\tfrac{n\pi}{2} @@ 0 for even n
-\htmlClass{new}{u = 50 + \tfrac{200}{\pi}\Big(e^{-\kappa\pi^2t/L^2}\cos\tfrac{\pi x}{L} - \tfrac13 e^{-9\kappa\pi^2t/L^2}\cos\tfrac{3\pi x}{L} + \cdots\Big)} \quad \blacksquare @@ the sealed-rod technique
-  </pre>
-  <p data-pid="ab97ff">The rod settles at 50 °C, the average, and it reaches it as a single cosine sinking into the level: hotter at one end, cooler at the other, by less every second.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · sealed · ← → keys work</div></section>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · swap · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">33h1.1</span><span class="ph understand">understand</span>What does the sealed-rod technique say? <br>Why does the average temperature of a sealed rod never change?</li>
+      <li><span class="qid">33h1.1</span><span class="ph understand">understand</span>What is the map L, and what does the swap-by-parts technique say? <br>Why do the end terms vanish?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="33h2">
-  <h2 class="sthead"><span class="stno">33h2</span>Ends at Two Temperatures</h2>
-  <p data-pid="9d4c00">A bar has u(0, t) = A and u(L, t) = B for every t. The straight line s(x) = A + (B − A)x/L meets both ends and has s″ = 0, so it is a still answer.</p>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\Box(u \text{ answers with ends } A, B \Leftrightarrow\\ &amp;\qquad u - s \text{ with ends } 0)\\ &amp;\qquad\text{(3b2)}\end{aligned}"></div>
-  <p data-pid="e49552">Shift-to-the-line technique: <b>u is the answer with ends A and B and start f exactly when w = u − s is the answer with ends 0 and start f − s; so u = s + Σ b_n e^(−κ(nπ/L)²t) sin(nπx/L), with b_n the sine coefficients of f − s.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the shift-to-the-line technique">
-w_t = u_t,\ \ w_{xx} = u_{xx} - s^{\prime\prime} = u_{xx} @@ s does not move with t, and s″ = 0
-w(0, t) = A - A = 0,\ \ w(L, t) = B - B = 0 @@ the line meets both ends
-w(x, 0) = f(x) - s(x) @@ the start, shifted
-\htmlClass{new}{u = s + \textstyle\sum b_n e^{-\kappa(n\pi/L)^2t}\sin\tfrac{n\pi x}{L}} \quad \blacksquare @@ the fading-series technique for w; the one-future technique says there is no other u
+  <h2 class="sthead"><span class="stno">33h2</span>The Shapes Are Perpendicular</h2>
+  <p data-pid="48a661">A <i>shape</i> of L is a function y, not always 0, with y = 0 at both ends and Ly = λy for some number λ, its number. This is 27f’s vector that a map only stretches, among functions. Its accepted name is an <i>eigenfunction</i>.</p>
+  <p data-pid="725330">Perpendicular-shapes technique: <b>two shapes of L with different numbers are perpendicular. If q ≥ 0, every number is positive.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the perpendicular-shapes technique">
+Ly = \lambda y,\ \ Lz = \mu z,\ \ \lambda \ne \mu @@ two shapes, both 0 at the ends
+\lambda\langle y, z\rangle = \langle Ly, z\rangle = \langle y, Lz\rangle = \mu\langle y, z\rangle @@ the swap-by-parts technique
+(\lambda - \mu)\langle y, z\rangle = 0,\ \ \htmlClass{new}{\langle y, z\rangle = 0} @@ λ − μ is not 0: the argument of 31d, among functions
+\lambda\langle y, y\rangle = \langle Ly, y\rangle = \textstyle\int\big(p\,y^{\prime 2} + q\,y^2\big) @@ the third line of 33h1, with z = y
+\htmlClass{new}{\lambda > 0 \text{ when } q \ge 0} \quad \blacksquare @@ ⟨y, y⟩ &gt; 0; and y′ is not always 0, else y would be constant, so 0
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: a bar between a furnace and a wall">
-f = 20,\ \ A = 100,\ \ B = 0 @@ a bar at room temperature has one end put to 100 °C and the other to 0 °C
-f - s = -80 + 100\tfrac{x}{L} @@ 20 − (100 − 100x/L)
-b_n = \tfrac{2}{L}\textstyle\int_0^L \big(-80 + 100\tfrac{x}{L}\big)\sin\tfrac{n\pi x}{L}\,dx = \tfrac{40\,((-1)^{n+1} - 4)}{n\pi} @@ parts once for the x term
-\htmlClass{new}{b_1 = -\tfrac{120}{\pi},\ \ b_2 = -\tfrac{100}{\pi},\ \ b_3 = -\tfrac{40}{\pi}} \quad \blacksquare @@ −120/(nπ) for odd n, −200/(nπ) for even n
-  </pre>
-  <p data-pid="07d117">After a time much longer than L²/(κπ²), the bar is the straight line from 100 to 0, and the gap below it is one sine arch of depth (120/π)e^(−κπ²t/L²), sinking.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · two ends · ← → keys work</div></section>
+  <p data-pid="c83bbf">For Ly = −y″ on [0, L], the shapes are sin(nπx/L) with numbers (nπ/L)², as 33a2 found. That they are perpendicular was 32a’s computation; now it is forced by the symmetry, and it holds just as well for a rod of copper welded to a rod of steel, where no one can write the shapes down. And the numbers are positive, so every cooling shape cools, and none grows.</p>
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · perpendicular · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">33h2.1</span><span class="ph understand">understand</span>What does the shift-to-the-line technique say? <br>Why does the straight line s solve the heat statement?</li>
+      <li><span class="qid">33h2.1</span><span class="ph understand">understand</span>What is a shape of L? <br>What does the perpendicular-shapes technique say, and what does it tell you about every cooling shape?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="33h3">
-  <h2 class="sthead"><span class="stno">33h3</span>A Plate Warm on One Edge</h2>
-  <p data-pid="bc16a4">A still rectangular plate, 0 ≤ x ≤ W and 0 ≤ y ≤ H, is held at 0 on three edges and at g(x) on the top edge y = H. Separate a still state: u = X(x)Y(y) with Δu = 0 gives X″/X = −Y″/Y = −λ. The sides x = 0 and x = W at 0 give X = sin(nπx/W), as on 33a2. Then Y″ = (nπ/W)²Y with Y(0) = 0, so Y = sinh(nπy/W), with sinh z = (e^z − e^(−z))/2 as on 29j.</p>
-  <p data-pid="91e966">Warm-edge technique: <b>if g has sine coefficients b_n with Σ|b_n| settling, the one still state is u = Σ b_n sin(nπx/W) sinh(nπy/W) / sinh(nπH/W).</b> Each term is balanced, is 0 on three edges, and on the top edge is b_n sin(nπx/W). The one-still-state technique (33d3) says there is no other.</p>
-  <pre class="lines" data-k="ember" data-label="this step: a square plate, one edge at 100">
-W = H = 1,\ \ g = 100 @@ a square plate, its top edge held at 100 °C, the others at 0 °C
-b_n = \tfrac{400}{n\pi} \text{ for odd } n,\ \ 0 \text{ for even } n @@ the sine coefficients of 100 on [0, 1]
-u(\tfrac12, \tfrac12) = \textstyle\sum_{\text{odd } n} \tfrac{400}{n\pi}\,\tfrac{\sinh(n\pi/2)}{\sinh(n\pi)}\,\sin\tfrac{n\pi}{2} @@ the warm-edge technique at the centre
-= 25.37 - 0.38 + 0.01 - \cdots @@ the terms shrink like e^(−nπ/2)/n
-\htmlClass{new}{u(\tfrac12, \tfrac12) = 25} \quad \blacksquare @@ checked without the series, below
+  <h2 class="sthead"><span class="stno">33h3</span>The Answer to a Single Kick</h2>
+  <p data-pid="67426d">A string of tension 1 is tied at x = 0 and x = 1 and loaded with a force h(x) per metre. When it is still, the string’s statement of 33e1 with y_tt = 0 says −y″ = h. For 0 ≤ s ≤ 1, let</p>
+  <p class="eqline" data-pid="3624b8"><span data-tex="\begin{aligned}&amp;G(x, s) = x(1 - s) \text{ for } x \le s,\\ &amp;G(x, s) = s(1 - x) \text{ for } x \ge s.\end{aligned}"></span></p>
+  <p data-pid="b20d87">For a fixed s, G is a tent: two straight pieces from 0 up to the peak s(1 − s) at x = s and back to 0. It is the shape of the string pushed by one unit of force at the single point s.</p>
+  <p data-pid="dd4928">Single-kick technique: <b>for every continuous load h, the one answer of −y″ = h with y(0) = y(1) = 0 is y(x) = ∫₀¹ G(x, s) h(s) ds.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the single-kick technique">
+y(x) = (1 - x)\textstyle\int_0^x s\,h(s)\,ds + x\int_x^1 (1 - s)\,h(s)\,ds @@ split the total at s = x
+y^{\prime}(x) = -\textstyle\int_0^x s\,h + (1 - x)x\,h(x) + \int_x^1 (1 - s)\,h - x(1 - x)\,h(x) @@ the product technique and the moving-end technique (16b)
+y^{\prime}(x) = -\textstyle\int_0^x s\,h(s)\,ds + \int_x^1 (1 - s)\,h(s)\,ds @@ the two middle terms cancel
+y^{\prime\prime}(x) = -x\,h(x) - (1 - x)\,h(x) = -h(x) @@ 16b again
+y(0) = 0 + 0,\ \ y(1) = 0 + 0 @@ each piece has a factor or a total that is 0 there
+\htmlClass{new}{y = \textstyle\int_0^1 G(\cdot, s)\,h(s)\,ds \text{ is the one answer}} \quad \blacksquare @@ two answers differ by a straight line that is 0 at both ends, which is 0 (14e)
   </pre>
-<div class="eqline c6 lsyn" data-was="7e4458" data-tex="\begin{aligned}&amp;\text{four plates, one edge at } 100 \text{ each}:\\ &amp;\qquad\text{their sum} = 100 \text{ everywhere}\\ &amp;\text{quarter turns}:\ \text{one value at the centre}\\ &amp;\qquad\Rightarrow 25 \text{ each; the series agrees}\\ &amp;\text{corners}:\ \textstyle\sum|b_n| \text{ does not settle}\\ &amp;\qquad\text{inside, } \tfrac{\sinh(n\pi y/W)}{\sinh(n\pi H/W)} \text{ shrinks fast enough}\end{aligned}"></div>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · warm edge · ← → keys work</div></section>
+  <p data-pid="41e31f">So the response to every load is the sum of responses to kicks, each kick weighted by the load at its point. And G(x, s) = G(s, x): a kick at s seen at x is a kick at x seen at s. That is the swap-by-parts technique in another form. A clothesline 10 m long under a tension of 200 N has a 20 N jacket hung 3 m from one end. Scaled to this string, the sag under the jacket is 20 × 3 × 7 / (200 × 10) = 0.21 m.</p>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · single kick · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">33h3.1</span><span class="ph understand">understand</span>What does the warm-edge technique say? <br>How do four quarter-turned plates give the centre value 25 without the series?</li>
+      <li><span class="qid">33h3.1</span><span class="ph understand">understand</span>What is G(·, s), drawn as a string? <br>What does the single-kick technique say?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="33h4">
-  <h2 class="sthead"><span class="stno">33h4</span>Moves to Watch Out For</h2>
+  <h2 class="sthead"><span class="stno">33h4</span>The Kick, Written in Shapes</h2>
+  <p data-pid="10fce5">Kick-in-shapes technique: <b>G(x, s) = Σ 2 sin(nπx) sin(nπs) / (n²π²), the sum over n = 1, 2, 3, …: each shape of −y″ on [0, 1], times its value at the kick, divided by its number.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the kick-in-shapes technique">
+b_n(s) = 2\textstyle\int_0^1 G(x, s)\sin(n\pi x)\,dx @@ the sine coefficients of the tent (32a, as on 33a3)
+\textstyle\int_0^1 G\,(n\pi)^2\sin(n\pi x)\,dx = \big(G^{\prime}(s^-) - G^{\prime}(s^+)\big)\sin(n\pi s) = \sin(n\pi s) @@ (nπ)² sin = −(sin)″; parts twice on [0, s] and on [s, 1]: G″ = 0 on each, G and sin are 0 at the ends, and G′ is 1 − s left of s and −s right of it
+b_n(s) = \tfrac{2\sin(n\pi s)}{n^2\pi^2} @@ divide by (nπ)²
+\textstyle\sum |b_n(s)| \le \tfrac{2}{\pi^2}\sum \tfrac{1}{n^2} \text{ settles} @@ the p-sums (22f); so the series settles at once and is continuous (23d)
+\htmlClass{new}{G(x, s) = \textstyle\sum_n \tfrac{2\sin(n\pi x)\sin(n\pi s)}{n^2\pi^2}} \quad \blacksquare @@ 32c returns G at every x ≠ s, where it has a slope; both sides are continuous, so they agree at s too
+  </pre>
+  <p data-pid="e7ddda">Read it as 31d would. To undo a symmetric map, undo it along each square axis: divide by the number. The kick is every shape at once, and the string answers each shape by dividing it by (nπ)². Now set x = s = ½. The left side is ¼. On the right, sin²(nπ/2) is 1 for odd n and 0 for even n. So</p>
+  <p class="eqline" data-pid="42554d"><span data-tex="\begin{aligned}&amp;\tfrac14 = \tfrac{2}{\pi^2}\Big(1 + \tfrac19 + \tfrac1{25} + \tfrac1{49} + \cdots\Big),\\ &amp;1 + \tfrac19 + \tfrac1{25} + \cdots = \tfrac{\pi^2}{8}.\end{aligned}"></span></p>
+<div class="eqline c6 lsyn" data-was="52932c" data-tex="\begin{aligned}&amp;1 + \tfrac14 + \tfrac19 + \cdots = \tfrac{\pi^2}{6} \quad\text{(32b)}\\ &amp;\text{even terms} = \tfrac14 \text{ of the whole}\\ &amp;\text{odd terms} = \tfrac34 \cdot \tfrac{\pi^2}{6} = \tfrac{\pi^2}{8}\\ &amp;\text{the string, kicked at its middle, knew}\end{aligned}"></div>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · in shapes · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33h4.1</span><span class="ph understand">understand</span>What does the kick-in-shapes technique say? <br>How does it undo the map −y″ along each shape?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33h5">
+  <h2 class="sthead"><span class="stno">33h5</span>Moves to Watch Out For</h2>
   <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{with ends at } 100 \text{ and } 0, \text{ separate } u \text{ directly into sines}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; sines are 0 at the ends; take away the line first, so that the ends of w are 0
-\text{a sealed rod cools to } 0\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; no heat leaves; it settles at its average, a₀/2
-\text{for the plate, } Y = \sin\tfrac{n\pi y}{W}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; Y″ = +(nπ/W)²Y: the still state grows toward the warm edge, it does not swing
-\text{the plate’s centre is } 100/2 = 50, \text{ halfway between the warm edge and the cold one}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; three edges are cold, one warm; the quarter turns give 25
+\langle Ly, z\rangle = \langle y, Lz\rangle \text{ for every } y, z, \text{ whatever their ends}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the end terms −p y′z and −p z′y must vanish; for y = x², z = 1 on [0, 1] with Ly = −y″, ⟨Ly, z⟩ = −2 and ⟨y, Lz⟩ = 0
+\text{two shapes with the same number are perpendicular}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the proof divides by λ − μ; with one number it says nothing
+G(x, s) \text{ has a second slope at } x = s\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the tent has a corner there; G′ drops by 1, which is the kick
+\text{the shapes’ numbers can be negative, so some cooling shapes grow}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; with q ≥ 0 the technique makes every number positive
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">33h4.1</span><span class="ph understand">understand</span>Why is “with ends at 100 and 0, separate u directly into sines” a move to watch out for?</li>
+      <li><span class="qid">33h5.1</span><span class="ph understand">understand</span>Why is “⟨Ly, z⟩ = ⟨y, Lz⟩ for every y, z, whatever their ends” a move to watch out for?</li>
     </ol>
   </section>
 </section>
@@ -150,20 +164,22 @@ u(\tfrac12, \tfrac12) = \textstyle\sum_{\text{odd } n} \tfrac{400}{n\pi}\,\tfrac
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
   <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">33h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="u_t = \kappa u_{xx} + q,\ \ u(0, t) = u(L, t) = 0"></span></span>A rod carries an electric current that makes heat q in every part, and its ends are held at 0. Build its still state, and the answer from a start at 0, by taking the still state away first. <br>Find where the rod is hottest once it has settled.</div>
-  <div class="chq"><span class="chid">33h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="u_x(0, t) = 0,\ \ u(L, t) = 0"></span></span>One end sealed, one end held at 0. Find the shapes and their numbers. <br>Find which is the slowest, and whether a sealed end makes the rod cool faster or slower than two ends at 0.</div>
-  <div class="chq"><span class="chid">33h.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="W = 2,\ H = 1,\ g = 100"></span></span>For a plate twice as wide as it is tall, with its long top edge at 100, find the value at the centre from the first two terms of the warm-edge series. <br>The quarter turns no longer give it. Find what the symmetry does still say, about the plate with the two long edges at 100 and the two short ones at 0.</div>
-  <div class="chq"><span class="chid">33h.4.4</span><span class="tagq">converse</span>The sealed-rod technique kept the average because no heat crossed the ends. Turn it round: if the average temperature of a rod stays the same for every start, must both ends be sealed? <br>Test a rod with one end at 0, the other sealed, started at the shape cos(πx/(2L)).</div>
+  <div class="chq"><span class="chid">33h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="-y^{\prime\prime} = h \text{ on } [0, L],\ \ y(0) = y(L) = 0"></span></span>Build the kick answer G for a string of length L, and check that it is a tent with peak s(L − s)/L. <br>Find the sag of a string of length L, tension 1, under an even load h = 1, two ways: from G, and from y″ = −1 directly.</div>
+  <div class="chq"><span class="chid">33h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="-y^{\prime\prime} = h,\ \ y^{\prime}(0) = y^{\prime}(1) = 0"></span></span>Now the ends are free to slide: the slopes are 0 there, not the heights. Prove that the swap-by-parts technique still holds. <br>Find the shape with number 0. Prove that the load h has an answer only if ∫₀¹ h = 0, and find why no kick answer G can exist.</div>
+  <div class="chq"><span class="chid">33h.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="\int_0^1\!\!\int_0^1 G(x, s)^2\,dx\,ds = \tfrac{1}{90}"></span></span>Check the total by 28j. Then find it again from the kick-in-shapes technique and the energy equality of the sine series (32b), and find 1 + 1/16 + 1/81 + 1/256 + ⋯.</div>
+  <div class="chq"><span class="chid">33h.4.4</span><span class="tagq">converse</span>The perpendicular-shapes technique went from symmetric to perpendicular. Turn it round on a space of vectors of finite dimension: if a map has a basis of perpendicular vectors that it only stretches, is it symmetric? <br>Find whether the same holds for the map L, using the kick-in-shapes technique.</div>
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r33g.html">← 33g · round drums</a><a href="r33i.html">33i · solving on a grid by hand →</a></nav>
+<nav class="nextrung"><a href="r33g.html">← 33g · characteristics and shocks</a><a href="r33i.html">33i · round drums →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>
-  <p>Sealed ends are Neumann (or insulated) boundary conditions, and held ends are Dirichlet conditions; the cosine series is the Fourier cosine series. The straight line s is the steady-state solution, and taking it away is homogenising the boundary conditions. The plate problem is the Dirichlet problem for Laplace’s equation on a rectangle; the quarter-turn argument is superposition with symmetry. sinh is the hyperbolic sine.</p>
+  <p>L is a Sturm–Liouville operator, and a shape with its number is an eigenfunction with its eigenvalue. The swap-by-parts technique says L is self-adjoint (symmetric) on functions vanishing at the ends. G is the Green’s function of −d²/dx² with Dirichlet conditions, and the single kick is a point load, written with the delta function δ(x − s), which is not a function. G(x, s) = G(s, x) is the reciprocity of Maxwell and Betti. The kick-in-shapes technique is the eigenfunction expansion of the Green’s function. The edge standing question is the Fredholm alternative.</p>
   <h3>Who said it first</h3>
-  <p>Joseph Fourier worked the sealed ring and the bar with fixed end temperatures in his Théorie analytique de la chaleur (1822), and the plate warm on one edge is his rectangular lamina, solved by the same sum. The symmetry check for the square is old folklore of the subject, set as an exercise in many textbooks.</p>
+  <p>Charles-François Sturm and Joseph Liouville worked out the theory of these statements in a series of papers of 1836 and 1837. George Green, a miller of Nottingham, used the kick answer for electricity in an essay he printed himself in 1828. James Clerk Maxwell (1864) and Enrico Betti (1872) found the reciprocity of loads in structures. Paul Dirac wrote the kick as δ in 1927, and Laurent Schwartz made it rigorous as a distribution in 1945.</p>
+  <h3>A proof that is not allowed</h3>
+  <p>“The kick is a load that is 0 except at s and totals 1. So y = ∫G h with that h gives y(x) = G(x, s) × 0 everywhere but s, and the total is 0.” Not allowed: no function is 0 except at one point and totals 1; a single point has size 0 (30a). The kick is the end of a list of loads, each spread over a smaller stretch about s, each totalling 1, and their answers head to G.</p>
 </section>
 
 </div>
@@ -178,20 +194,25 @@ const mm=(v,d)=>fm(v,d).replace('-','−');
 const Nw='\\htmlClass{new}';
 
 stepper('#sl1',[
-  {k:'ember',kl:'ends',t:R`X^{\prime}(0) = X^{\prime}(L) = 0`,n:`No flow out.`},
-  {k:'ember',kl:'shapes',t:R`\cos\tfrac{n\pi x}{L},\ n \ge 0`,n:`The constant is allowed.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\tfrac{a_0}{2} \text{ kept}}`,n:`The average stays.`}
-],{title:'The slides · sealed · ← → keys work'});
+  {k:'ember',kl:'map',t:R`Ly = -(p y^{\prime})^{\prime} + q y`,n:`Straight in y.`},
+  {k:'ember',kl:'parts',t:R`\langle Ly, z\rangle = \textstyle\int(p y^{\prime}z^{\prime} + q yz)`,n:`Ends drop.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle Ly, z\rangle = \langle y, Lz\rangle}`,n:`Symmetric.`}
+],{title:'The slides · swap · ← → keys work'});
 stepper('#sl2',[
-  {k:'ember',kl:'line',t:R`s = A + (B - A)\tfrac{x}{L}`,n:`Still, and meets both ends.`},
-  {k:'ember',kl:'shift',t:R`w = u - s`,n:`Ends now 0.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{u = s + \textstyle\sum b_n e^{-\kappa(n\pi/L)^2t}\sin\tfrac{n\pi x}{L}}`,n:`Fade to the line.`}
-],{title:'The slides · two ends · ← → keys work'});
+  {k:'ember',kl:'two shapes',t:R`Ly = \lambda y,\ Lz = \mu z`,n:`Different numbers.`},
+  {k:'ember',kl:'swap',t:R`\lambda\langle y, z\rangle = \mu\langle y, z\rangle`,n:`By parts.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\langle y, z\rangle = 0}`,n:`As in 31d.`}
+],{title:'The slides · perpendicular · ← → keys work'});
 stepper('#sl3',[
-  {k:'ember',kl:'along',t:R`X = \sin\tfrac{n\pi x}{W}`,n:`Sides at 0.`},
-  {k:'ember',kl:'up',t:R`Y = \sinh\tfrac{n\pi y}{W}`,n:`Grows toward the warm edge.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{u = \textstyle\sum b_n\sin\tfrac{n\pi x}{W}\tfrac{\sinh(n\pi y/W)}{\sinh(n\pi H/W)}}`,n:`One still state.`}
-],{title:'The slides · warm edge · ← → keys work'});
+  {k:'ember',kl:'tent',t:R`G(x, s) = x(1 - s),\ s(1 - x)`,n:`One unit at s.`},
+  {k:'ember',kl:'check',t:R`y^{\prime\prime} = -h`,n:`By moving ends.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{y = \textstyle\int G\,h}`,n:`Kicks add up.`}
+],{title:'The slides · single kick · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'coefficients',t:R`b_n(s) = \tfrac{2\sin n\pi s}{n^2\pi^2}`,n:`Parts twice.`},
+  {k:'ember',kl:'sum',t:R`\htmlClass{new}{G = \textstyle\sum \tfrac{2\sin n\pi x\,\sin n\pi s}{n^2\pi^2}}`,n:`Divide by the number.`},
+  {k:'ember',kl:'middle',t:R`\textstyle\sum_{\text{odd}} \tfrac{1}{n^2} = \tfrac{\pi^2}{8}`,n:`At x = s = ½.`}
+],{title:'The slides · in shapes · ← → keys work'});
 })();
 </script>
 <script src="tray.js"></script>

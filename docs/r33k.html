@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Solving on a Grid by Hand</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+.pic .panels{grid-template-columns:1fr 1fr}
+@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
+.panel{align-content:start;min-width:0}
+.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
+@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
+.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
+@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
+.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
+.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
+.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
+.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
+.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
+table.tt td.l{text-align:left}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r33j.html">← 33j separation of variables by hand</a><a href="r33l.html">next: 33l potentials by hand →</a></p>
+  <div class="tags"><span class="tag tech">33k · technique</span></div>
+  <h1>Solving on a Grid by Hand</h1>
+  <p data-pid="a5cbe6">Most rods are not uniform, most plates are not rectangles, and most starts have no tidy series. Then the statement is solved on a grid. Lay marks along the rod a fixed gap apart, and tick the clock in fixed steps. At each mark, replace the second slope by what three neighbouring heights say about it, and step forward: the new temperature is the old one plus a little of what the neighbours say. It is arithmetic, and a hand can do the first few steps. The danger is in the size of the clock’s tick. Too long a tick and the arithmetic does something no rod could do: a wobble from mark to mark, too small to see, doubles and triples at every step until the numbers fill the page. The step finds the exact tick at which that starts, for heat and for a string, and the reason for each. The string’s condition was found first, in the paper that named the problem, and it says something plain: the grid must be able to hear everything the string can.</p>
+  <div class="eqline c6" data-tex="\begin{aligned}&amp;\Box(\text{safe} \Leftrightarrow \text{new value an average of old})\\ &amp;\qquad\text{(3b2)}\end{aligned}"></div>
+  <p class="gesture" data-pid="6d63d6">Three neighbouring heights give the second slope with an error that shrinks like the square of the gap. Stepping heat forward is safe exactly when the new value is an average of old ones, which needs the tick to be at most half the gap squared over κ. A string’s grid must reach at least as far each tick as the wave does, and a still plate on a grid is the average of its four neighbours.</p>
+</header>
+
+<section class="class step" data-step="33k1">
+  <h2 class="sthead"><span class="stno">33k1</span>The Second Slope From Three Heights</h2>
+  <p data-pid="59a9f8">Lay marks a gap h apart. What do three heights y(x − h), y(x), y(x + h) say about y″(x)?</p>
+  <p data-pid="5cfbad">Second-quotient technique: <b>if |y⁗| ≤ M near x, then (y(x + h) − 2y(x) + y(x − h))/h² differs from y″(x) by at most Mh²/12.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the second-quotient technique">
+y(x \pm h) = y \pm h y^{\prime} + \tfrac{h^2}{2}y^{\prime\prime} \pm \tfrac{h^3}{6}y^{\prime\prime\prime} + \tfrac{h^4}{24}y^{\prime\prime\prime\prime}(\xi_\pm) @@ the matching polynomial of degree 3 and its remainder (23b), at x + h and at x − h
+y(x + h) + y(x - h) = 2y + h^2y^{\prime\prime} + \tfrac{h^4}{24}\big(y^{\prime\prime\prime\prime}(\xi_+) + y^{\prime\prime\prime\prime}(\xi_-)\big) @@ add: the odd slopes cancel
+\tfrac{y(x + h) - 2y(x) + y(x - h)}{h^2} - y^{\prime\prime}(x) = \tfrac{h^2}{24}\big(y^{\prime\prime\prime\prime}(\xi_+) + y^{\prime\prime\prime\prime}(\xi_-)\big) @@ take away 2y, divide by h²
+\htmlClass{new}{\Big|\tfrac{y(x + h) - 2y(x) + y(x - h)}{h^2} - y^{\prime\prime}(x)\Big| \le \tfrac{Mh^2}{12}} \quad \blacksquare @@ each of the two is at most M
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: sin at 1, gap 0.1">
+\tfrac{\sin 1.1 - 2\sin 1 + \sin 0.9}{0.01} = -0.840770 @@ three heights
+-\sin 1 = -0.841471 @@ the true second slope (21g)
+\htmlClass{new}{\text{error } 0.000701 \le \tfrac{1 \times 0.01}{12} = 0.000833} \quad \blacksquare @@ |sin⁗| ≤ 1; near x it is about sin 1, and the error is close to (sin 1)h²/12
+  </pre>
+  <section class="slides" id="sl1"><div class="eyebrow">The slides · three heights · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33k1.1</span><span class="ph understand">understand</span>What does the second-quotient technique say? <br>Why do the odd slopes cancel?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33k2">
+  <h2 class="sthead"><span class="stno">33k2</span>Stepping Heat, and the Tick That Breaks It</h2>
+  <p data-pid="21db25">Put marks x_j = jh along a rod and ticks t_n = nk. Write U_j^n for the grid’s temperature at mark j and tick n. Replace u_t by (U_j^(n+1) − U_j^n)/k, as 24k stepped forward, and u_xx by the three-point quotient. With r = κk/h²:</p>
+  <p class="eqline" data-pid="d7e977"><span data-tex="U_j^{n+1} = rU_{j-1}^n + (1 - 2r)\,U_j^n + rU_{j+1}^n."></span></p>
+  <p data-pid="22a367">Grid-average technique: <b>if r ≤ ½, each new value is an average of three old ones, so the grid’s greatest value never grows and its least never falls.</b> Zigzag technique: <b>if r &gt; ½, the start U_j = (−1)ʲε is multiplied by 1 − 4r at every tick, and since |1 − 4r| &gt; 1 it passes every bound, however small ε is.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the grid-average and zigzag techniques">
+r \le \tfrac12 \Rightarrow r \ge 0,\ 1 - 2r \ge 0,\ r + (1 - 2r) + r = 1 @@ three weights, none below 0, adding to 1
+\htmlClass{new}{\min U^n \le U_j^{n+1} \le \max U^n} @@ an average lies between its least and greatest part: 33b1’s technique, on the grid
+U_j^n = (-1)^j\varepsilon \Rightarrow U_j^{n+1} = \big(r(-1) + (1 - 2r) + r(-1)\big)(-1)^j\varepsilon @@ both neighbours have the other sign
+U_j^{n+1} = (1 - 4r)\,U_j^n @@ the zigzag keeps its shape and changes size
+\htmlClass{new}{r > \tfrac12 \Rightarrow |1 - 4r| > 1 \Rightarrow |U^n| = |1 - 4r|^n\varepsilon \to \infty} \quad \blacksquare @@ powers of a number past 1 pass every bound
+  </pre>
+  <pre class="lines" data-k="ember" data-label="this step: two runs on one rod">
+U^0 = (0,\ 0,\ 0,\ 100,\ 0,\ 0,\ 0) @@ a hot mark in the middle, ends at 0
+r = \tfrac12:\ \ U^1 = (0, 0, 50, 0, 50, 0, 0),\ \ U^2 = (0, 25, 0, 50, 0, 25, 0) @@ each value is the average of its two neighbours
+r = 1:\ \ U^1 = (0, 0, 100, -100, 100, 0, 0) @@ the middle mark falls 100 below freezing
+\htmlClass{new}{r = 1:\ \ U^2 = (0, 100, -200, 300, -200, 100, 0)} \quad \blacksquare @@ a zigzag; its middle triples in size from the first tick to the second
+  </pre>
+  <p data-pid="a2f478">For a copper rod with marks a centimetre apart, the tick must be at most h²/(2κ) = 0.0001/(2 × 0.000116) ≈ 0.43 seconds. Halve the gap and the tick must quarter. Fine grids for heat are slow, which is 24k’s stiffness again: the zigzag is the fastest-fading shape of the rod, and it sets the tick for all of them.</p>
+  <!--gfig 33k2--><div class="gfigs" data-gfig="33k2" data-story="[[&quot;The start is a zigzag on the grid: up ε at one mark, down ε at the next. Each row of bars shows it one tick later, rows 0 to 3.&quot;, []], [&quot;Left, r = 0.4: each tick multiplies the zigzag by −0.6. It turns over and shrinks.&quot;, [&quot;teal&quot;, &quot;#44&quot;]], [&quot;Right, r = 0.6: each tick multiplies it by −1.4. It turns over and grows, and goes on growing.&quot;, [&quot;ember&quot;, &quot;#89&quot;]]]"><svg class="gfig" viewBox="0 0 460 220" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="a zigzag start shrinking on the grid for r below one half and growing above"><line x1="34" x2="34" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="54" x2="54" y1="50" y2="62.0" style="stroke:var(--teal);stroke-width:5"/><line x1="74" x2="74" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="94" x2="94" y1="50" y2="62.0" style="stroke:var(--teal);stroke-width:5"/><line x1="114" x2="114" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="134" x2="134" y1="50" y2="62.0" style="stroke:var(--teal);stroke-width:5"/><line x1="154" x2="154" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="174" x2="174" y1="50" y2="62.0" style="stroke:var(--teal);stroke-width:5"/><line x1="194" x2="194" y1="50" y2="38.0" style="stroke:var(--teal);stroke-width:5"/><line x1="26" x2="210" y1="50" y2="50" style="stroke:var(--grid);stroke-width:1"/><text x="22" y="54" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="34" x2="34" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="54" x2="54" y1="90" y2="82.8" style="stroke:var(--teal);stroke-width:5"/><line x1="74" x2="74" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="94" x2="94" y1="90" y2="82.8" style="stroke:var(--teal);stroke-width:5"/><line x1="114" x2="114" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="134" x2="134" y1="90" y2="82.8" style="stroke:var(--teal);stroke-width:5"/><line x1="154" x2="154" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="174" x2="174" y1="90" y2="82.8" style="stroke:var(--teal);stroke-width:5"/><line x1="194" x2="194" y1="90" y2="97.2" style="stroke:var(--teal);stroke-width:5"/><line x1="26" x2="210" y1="90" y2="90" style="stroke:var(--grid);stroke-width:1"/><text x="22" y="94" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="34" x2="34" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="54" x2="54" y1="130" y2="134.3" style="stroke:var(--teal);stroke-width:5"/><line x1="74" x2="74" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="94" x2="94" y1="130" y2="134.3" style="stroke:var(--teal);stroke-width:5"/><line x1="114" x2="114" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="134" x2="134" y1="130" y2="134.3" style="stroke:var(--teal);stroke-width:5"/><line x1="154" x2="154" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="174" x2="174" y1="130" y2="134.3" style="stroke:var(--teal);stroke-width:5"/><line x1="194" x2="194" y1="130" y2="125.7" style="stroke:var(--teal);stroke-width:5"/><line x1="26" x2="210" y1="130" y2="130" style="stroke:var(--grid);stroke-width:1"/><text x="22" y="134" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">2</text><line x1="34" x2="34" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="54" x2="54" y1="170" y2="167.4" style="stroke:var(--teal);stroke-width:5"/><line x1="74" x2="74" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="94" x2="94" y1="170" y2="167.4" style="stroke:var(--teal);stroke-width:5"/><line x1="114" x2="114" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="134" x2="134" y1="170" y2="167.4" style="stroke:var(--teal);stroke-width:5"/><line x1="154" x2="154" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="174" x2="174" y1="170" y2="167.4" style="stroke:var(--teal);stroke-width:5"/><line x1="194" x2="194" y1="170" y2="172.6" style="stroke:var(--teal);stroke-width:5"/><line x1="26" x2="210" y1="170" y2="170" style="stroke:var(--grid);stroke-width:1"/><text x="22" y="174" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">3</text><text x="118" y="20" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">r = 0.4: shrinks (× −0.6 a tick)</text><line x1="260" x2="260" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="280" x2="280" y1="50" y2="62.0" style="stroke:var(--ember);stroke-width:5"/><line x1="300" x2="300" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="320" x2="320" y1="50" y2="62.0" style="stroke:var(--ember);stroke-width:5"/><line x1="340" x2="340" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="360" x2="360" y1="50" y2="62.0" style="stroke:var(--ember);stroke-width:5"/><line x1="380" x2="380" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="400" x2="400" y1="50" y2="62.0" style="stroke:var(--ember);stroke-width:5"/><line x1="420" x2="420" y1="50" y2="38.0" style="stroke:var(--ember);stroke-width:5"/><line x1="252" x2="436" y1="50" y2="50" style="stroke:var(--grid);stroke-width:1"/><text x="248" y="54" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="260" x2="260" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="280" x2="280" y1="90" y2="73.2" style="stroke:var(--ember);stroke-width:5"/><line x1="300" x2="300" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="320" x2="320" y1="90" y2="73.2" style="stroke:var(--ember);stroke-width:5"/><line x1="340" x2="340" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="360" x2="360" y1="90" y2="73.2" style="stroke:var(--ember);stroke-width:5"/><line x1="380" x2="380" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="400" x2="400" y1="90" y2="73.2" style="stroke:var(--ember);stroke-width:5"/><line x1="420" x2="420" y1="90" y2="106.8" style="stroke:var(--ember);stroke-width:5"/><line x1="252" x2="436" y1="90" y2="90" style="stroke:var(--grid);stroke-width:1"/><text x="248" y="94" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="260" x2="260" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="280" x2="280" y1="130" y2="153.5" style="stroke:var(--ember);stroke-width:5"/><line x1="300" x2="300" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="320" x2="320" y1="130" y2="153.5" style="stroke:var(--ember);stroke-width:5"/><line x1="340" x2="340" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="360" x2="360" y1="130" y2="153.5" style="stroke:var(--ember);stroke-width:5"/><line x1="380" x2="380" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="400" x2="400" y1="130" y2="153.5" style="stroke:var(--ember);stroke-width:5"/><line x1="420" x2="420" y1="130" y2="106.5" style="stroke:var(--ember);stroke-width:5"/><line x1="252" x2="436" y1="130" y2="130" style="stroke:var(--grid);stroke-width:1"/><text x="248" y="134" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">2</text><line x1="260" x2="260" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="280" x2="280" y1="170" y2="137.1" style="stroke:var(--ember);stroke-width:5"/><line x1="300" x2="300" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="320" x2="320" y1="170" y2="137.1" style="stroke:var(--ember);stroke-width:5"/><line x1="340" x2="340" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="360" x2="360" y1="170" y2="137.1" style="stroke:var(--ember);stroke-width:5"/><line x1="380" x2="380" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="400" x2="400" y1="170" y2="137.1" style="stroke:var(--ember);stroke-width:5"/><line x1="420" x2="420" y1="170" y2="202.9" style="stroke:var(--ember);stroke-width:5"/><line x1="252" x2="436" y1="170" y2="170" style="stroke:var(--grid);stroke-width:1"/><text x="248" y="174" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">3</text><text x="344" y="20" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">r = 0.6: grows (× −1.4 a tick)</text><text x="230.0" y="214" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">the zigzag start (−1)ʲε, tick by tick (rows 0 to 3)</text></svg></div><!--/gfig 33k2-->
+  <section class="slides" id="sl2"><div class="eyebrow">The slides · heat on a grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33k2.1</span><span class="ph understand">understand</span>What do the grid-average and zigzag techniques say? <br>Why does r ≤ ½ make each new value an average?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33k3">
+  <h2 class="sthead"><span class="stno">33k3</span>A String on a Grid Must Hear the Wave</h2>
+  <p data-pid="6ccfca">Do the same for the string. Replace y_tt by the three-point quotient in time too. With σ = ck/h (on this page σ is c times the tick over the step, a new job for the letter),</p>
+  <p class="eqline" data-pid="a49594"><span data-tex="Y_j^{n+1} = 2Y_j^n - Y_j^{n-1} + \sigma^2\big(Y_{j+1}^n - 2Y_j^n + Y_{j-1}^n\big)."></span></p>
+  <p data-pid="6cc1e1">Grid-reach technique: <b>if σ &gt; 1, the grid’s answers cannot head to the string’s answer for every start, however fine the grid; and the zigzag grows.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the grid-reach technique">
+Y_j^n \text{ uses only the start at marks } j - n, \ldots, j + n @@ each tick reaches one mark further each way
+\text{the grid at } (x, t) \text{ uses the start within } \tfrac{t}{k}h = \tfrac{ct}{\sigma} \text{ of } x @@ n = t/k ticks, each reaching h
+\text{the string at } (x, t) \text{ uses the start within } ct \text{ of } x @@ the two-waves technique (33e2)
+\sigma > 1:\ \text{change the start only where } \tfrac{ct}{\sigma} < |s - x| < ct @@ the string’s answer at (x, t) changes; the grid’s does not
+\htmlClass{new}{\text{the grid cannot follow both starts}} \quad \blacksquare @@ a list that heads to one value cannot head to two
+  </pre>
+<div class="eqline c6 lsyn" data-was="1f3670" data-tex="\begin{aligned}&amp;Y_j^n = g^n(-1)^j:\quad g + 1/g = 2 - 4\sigma^2\\ &amp;\sigma \le 1:\ \text{in } [-2, 2],\ g \text{ turns without growing}\\ &amp;\sigma &gt; 1:\ \text{below } -2,\ \text{one root } g &lt; -1\\ &amp;\qquad\text{the zigzag grows}\\ &amp;\text{so } \sigma = ck/h \le 1\\ &amp;\text{one tick}:\ \text{the wave travels } ck\\ &amp;\qquad\text{the grid&#x27;s news travels } h\\ &amp;\text{the grid must hear all the string can}\end{aligned}"></div>
+  <section class="slides" id="sl3"><div class="eyebrow">The slides · string grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33k3.1</span><span class="ph understand">understand</span>What does the grid-reach technique say? <br>How far does the grid’s news travel in one tick, and how far does the wave?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33k4">
+  <h2 class="sthead"><span class="stno">33k4</span>A Still Plate on a Grid</h2>
+<div class="eqline c6 lsyn" data-was="e75eb5" data-tex="\begin{aligned}&amp;\text{marks } h \text{ apart both ways},\ \Delta u \approx 0:\\ &amp;\qquad\text{each inside value} =\\ &amp;\qquad\text{the average of its four neighbours}\\ &amp;\text{the circle-average, on the grid&#x27;s smallest circle}\end{aligned}"></div>
+  <p data-pid="1ec0c3">Four-neighbour technique: <b>the grid still state on a plate takes its greatest and least values on the edge, and is fixed by the edge.</b> An inside mark at the grid’s greatest value is the average of four values none greater, so all four equal it; walking outward from there, mark by mark, the greatest value reaches an edge mark.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the square plate of 33j3, on a grid">
+h = \tfrac13:\ \ \text{inside marks } (\tfrac13, \tfrac23),\ (\tfrac23, \tfrac23),\ (\tfrac13, \tfrac13),\ (\tfrac23, \tfrac13) @@ the top edge at 100, the others at 0
+\text{top marks } P,\ \text{bottom marks } Q @@ the plate is the same flipped left to right, and so is the edge
+4P = 100 + P + Q + 0,\ \ 4Q = P + Q + 0 + 0 @@ each is the average of its four neighbours
+Q = \tfrac{P}{3},\ \ \tfrac83P = 100 @@ from the second line, then the first
+\htmlClass{new}{P = 37.5,\ \ Q = 12.5} \quad \blacksquare @@ the warm-edge series gives 38.07 and 11.93
+  </pre>
+  <aside class="nature">
+    <div class="eyebrow">Anexact, yet rigorous · the cloud, on a grid</div>
+    <p data-pid="fb3241">21a gave every value that uses π a width, because no decimal holds π. A grid answer has a width too, set by its gap. The second-quotient technique says the error in each quotient is about h² times a fourth slope. For the plate at h = 1/3, the grid is off by 0.57 at the marks. Halve the gap and the error falls to about a quarter.</p>
+    <p data-pid="8b3570"><b>A grid answer is a dot inside a width, and the width is found by halving the gap.</b></p>
+    <p data-pid="10ef4b">So a grid answer is reported with its width, and the width is found by running the grid twice. Two runs at h and h/2 that agree to the first figure say the first figure is earned. Two runs that do not agree say the grid is too coarse, however many figures it prints.</p>
+    <p class="bait" data-pid="b397ac">A forecast of the soil’s temperature at the Puyallup research farm is run on a grid with marks every 5 cm and again with marks every 2.5 cm. The two forecasts for 30 cm down differ by 0.8 °C. How wide a width would you report, and which run would you print?</p>
+  </aside>
+  <section class="slides" id="sl4"><div class="eyebrow">The slides · plate grid · ← → keys work</div></section>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33k4.1</span><span class="ph understand">understand</span>What does the four-neighbour technique say? <br>How is the width of a grid answer found?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="33k5">
+  <h2 class="sthead"><span class="stno">33k5</span>Moves to Watch Out For</h2>
+  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
+\text{halve the gap and keep the tick, and the heat grid gets better}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; r = κk/h² quadruples; past ½ the zigzag grows
+\text{the zigzag starts at } \varepsilon = 10^{-12}, \text{ so it can be ignored}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a factor of |1 − 4r| per tick passes 10¹² in a few dozen ticks; rounding alone starts it
+\text{a finer grid for the string is always safer}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only if the tick shrinks with it: σ = ck/h must stay at most 1
+\text{the grid prints } 37.5000, \text{ so the plate is } 37.5000\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the grid’s width at h = 1/3 is about half a degree; the printed figures past it are not measured
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">33k5.1</span><span class="ph understand">understand</span>Why is “halve the gap and keep the tick, and the heat grid gets better” a move to watch out for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
+  <div class="chq"><span class="chid">33k.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="U^0 = (0,\ 0,\ 0,\ 100,\ 0,\ 0,\ 0),\ \ r = \tfrac14"></span></span>Build three ticks of the heat grid by hand. Check that the greatest value never grows and the total heat on the marks is kept until heat reaches the ends. <br>Find the share of the start left in the middle after three ticks, and compare with the spreading bell of 33b3 at the same time.</div>
+  <div class="chq"><span class="chid">33k.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="r = \tfrac12"></span></span>At r = ½ the middle weight 1 − 2r is 0. Find what the zigzag does, and whether the grid-average technique still holds. <br>Run the start (0, 0, 0, 100, 0, 0, 0) for four ticks: why does every other mark sit at 0?</div>
+  <div class="chq"><span class="chid">33k.4.3</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="h = \tfrac14 \text{ on the square plate of 33j3}"></span></span>The grid has nine inside marks. Find the centre mark without solving, by the quarter turns of 33j3 applied to the grid. <br>Then solve for the other marks, using the plate’s left-right symmetry.</div>
+  <div class="chq"><span class="chid">33k.4.4</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="g + \tfrac1g = 2 - 4\sigma^2"></span></span>The grid-reach technique showed that σ &gt; 1 fails. Turn it round: does σ ≤ 1 make the zigzag safe? <br>Find |g| for σ = 1 and σ = 0.8 when Y_j^n = gⁿ(−1)ʲ, and what σ = 1 does to the grid’s answer for a start that is one bump.</div>
+</section>
+<div class="themecert themeend"></div>
+
+<nav class="nextrung"><a href="r33j.html">← 33j · separation of variables by hand</a><a href="r33l.html">33l · potentials by hand →</a></nav>
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>The accepted names</h3>
+  <p>The three-point quotient is the central second difference, and the method is finite differences. The heat step is the explicit (forward Euler, FTCS) scheme, r is the mesh ratio, and r ≤ ½ is its stability condition; testing with zigzags and other waves on the grid is von Neumann stability analysis. σ = ck/h is the Courant number, and σ ≤ 1 is the Courant–Friedrichs–Lewy (CFL) condition. The four-neighbour average is the five-point Laplacian. Halving the gap to find the width is a convergence study; using the two runs to cancel the h² error is Richardson extrapolation.</p>
+  <h3>Who said it first</h3>
+  <p>Lewis Fry Richardson solved Laplace’s equation on a grid by hand in 1910, and in 1922 forecast the weather over central Europe by hand, with a grid and a clock, getting a pressure change a hundred times too large. Richard Courant, Kurt Friedrichs and Hans Lewy proved in 1928 that the grid must reach as far as the wave, in a paper meant for proofs, not computers. John von Neumann tested stability with waves on the grid at Los Alamos in the 1940s, and Phyllis Nicolson and John Crank built a heat step with no tick limit in 1947.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script>
+(function(){
+const {tex,col,stepper,plane}=Rung;
+const R=String.raw;
+const $=id=>document.getElementById(id);
+const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
+const mm=(v,d)=>fm(v,d).replace('-','−');
+const Nw='\\htmlClass{new}';
+
+stepper('#sl1',[
+  {k:'ember',kl:'match',t:R`y(x \pm h) = y \pm hy^{\prime} + \tfrac{h^2}{2}y^{\prime\prime} \pm \cdots`,n:`23b, twice.`},
+  {k:'ember',kl:'add',t:R`\text{odd slopes cancel}`,n:`Even ones stay.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{error} \le Mh^2/12}`,n:`Halve h, quarter the error.`}
+],{title:'The slides · three heights · ← → keys work'});
+stepper('#sl2',[
+  {k:'ember',kl:'step',t:R`U_j^{n+1} = rU_{j-1} + (1 - 2r)U_j + rU_{j+1}`,n:`r = κk/h².`},
+  {k:'ember',kl:'safe',t:R`\htmlClass{new}{r \le \tfrac12}`,n:`An average.`},
+  {k:'ember',kl:'breaks',t:R`r > \tfrac12:\ \times(1 - 4r)`,n:`The zigzag grows.`}
+],{title:'The slides · heat on a grid · ← → keys work'});
+stepper('#sl3',[
+  {k:'ember',kl:'grid reach',t:R`\tfrac{ct}{\sigma}`,n:`Marks j − n to j + n.`},
+  {k:'ember',kl:'string reach',t:R`ct`,n:`Two waves.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sigma = ck/h \le 1}`,n:`Hear the whole wave.`}
+],{title:'The slides · string grid · ← → keys work'});
+stepper('#sl4',[
+  {k:'ember',kl:'average',t:R`U = \tfrac14(\text{four neighbours})`,n:`The smallest circle.`},
+  {k:'ember',kl:'hand',t:R`4P = 100 + P + Q,\ 4Q = P + Q`,n:`Two marks by symmetry.`},
+  {k:'ember',kl:'so',t:R`\htmlClass{new}{P = 37.5,\ Q = 12.5}`,n:`Against 38.07, 11.93.`}
+],{title:'The slides · plate grid · ← → keys work'});
+})();
+</script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

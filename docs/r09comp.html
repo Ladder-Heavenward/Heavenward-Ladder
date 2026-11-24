@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9·comp · How Does a Shop Find One Order Among Millions?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r09crypt.html">← 9·crypt can a code be truly unbreakable?</a><a href="r09chem.html">next: 9·chem does every gas follow the same law? →</a></p>
+  <div class="tags"><span class="tag comp">9·comp · computing</span></div>
+  <h1>How Does a Shop Find One Order Among Millions?</h1>
+  <p data-pid="b4e69a">How does a shop find one order among millions? A bakery that takes orders online keeps every order, every customer and every cake in tables, and answers questions like “which orders go to Fernwood on Friday?” in a blink. The tables look like spreadsheets, but under them is the mathematics of rungs 2 and 9: a row is a function, a table is a set of rows, a key is a one-to-one function, and a question is a sift. This page builds those four ideas, joins two tables through a key, and shows why each fact should be stored in one place only.</p>
+  <p class="gesture" data-pid="c914ca">A row gives each column name a value, so it is a function from the column names. A table is a set of rows, so equal rows are one row. A key is a column whose map from rows to values is one-to-one, so it runs backwards to a single row. Ask by sifting rows and restricting each row to the columns you want. Join two tables by sifting their product for matching keys, and store each fact once, reaching it by composing.</p>
+</header>
+
+<section class="class step" data-step="9comp1">
+  <h2 class="sthead"><span class="stno">9comp1</span>A Row Is a Function, a Table Is a Set</h2>
+  <p data-pid="2083da">Here is part of the bakery’s table of customers.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>id</th><th>name</th><th>street</th></tr>
+    <tr><td>17</td><td>Claire</td><td>Fernwood</td></tr>
+    <tr><td>23</td><td>Randy</td><td>Hill Road</td></tr>
+    <tr><td>31</td><td>Zoe</td><td>Fernwood</td></tr>
+  </table></div>
+  <p data-pid="f1aa7f">From here on, on this page, a <i>row</i> is a function from the table’s column names to values, as in 9: the first row sends id to 17, name to Claire and street to Fernwood. A <i>table</i> is a set of rows.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;r : \{\text{id}, \text{name}, \text{street}\} \to \text{values}\\ &amp;r(\text{name}) = \text{Claire}\\ &amp;\text{table} = \{r_1, r_2, r_3\}\end{aligned}"></div>
+  <p data-pid="0d9ebb">Because a table is a set, the same-members axiom (2d) says that writing a row twice adds nothing: two rows that give every column the same value are one row. And a set has no order, so the order the rows are printed in says nothing.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;r = s \iff r(c) = s(c) \text{ for every column } c\\ &amp;\{r_1, r_2\} = \{r_2, r_1\}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·comp.1.1</span><span class="ph understand">understand</span>Why is a row a function, and what does the same-members axiom say about a row written twice?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9comp2">
+  <h2 class="sthead"><span class="stno">9comp2</span>A Key Picks Out One Row</h2>
+  <p data-pid="4f321f">Two customers can share a name, and two share a street. The id column is different in every row. From here on, on this page, the <i>column map</i> of a column c sends each row r to r(c). A <i>key</i> is a column whose column map is one-to-one (9c): different rows always have different values there.</p>
+  <pre class="lines" data-k="ember" data-label="this page: why a key finds one row">
+\text{id} : \text{rows} \to \text{values},\ r \mapsto r(\text{id}) @@ the column map
+r(\text{id}) = s(\text{id}) \Rightarrow r = s @@ id is a key: the map is one-to-one
+\text{restrict to the values it takes} @@ 9d’s restriction makes it onto them
+\htmlClass{new}{\text{id}^{-1}(23) = \text{Randy’s row}} @@ 9d: a one-to-one onto map runs backwards
+  </pre>
+  <p data-pid="461f64">Street is not a key: Claire’s row and Zoe’s row both give Fernwood, so the street map sends two rows to one value and cannot run backwards. <b>A key is a column you can run backwards: one value, one row.</b></p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{street}(r_1) = \text{street}(r_3),\ r_1 \ne r_3\\ &amp;\text{so street is not a key}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·comp.2.1</span><span class="ph understand">understand</span>What makes a column a key, and why does a key run backwards to exactly one row?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9comp3">
+  <h2 class="sthead"><span class="stno">9comp3</span>Asking a Table a Question</h2>
+  <p data-pid="bdf18a">A question picks some rows and some columns. “Who lives on Fernwood?” keeps the rows whose street is Fernwood, then keeps only their names. The first part is a sift (2e): the set of rows of the table for which the condition holds.</p>
+  <pre class="lines" data-k="ember" data-label="this page: who lives on Fernwood">
+\{r \in \text{customers} : r(\text{street}) = \text{Fernwood}\} @@ the sift axiom (2e)
+= \{r_1, r_3\} @@ Claire’s row and Zoe’s
+r \mapsto r \text{ restricted to } \{\text{name}\} @@ keep one column: 9d’s restriction, row by row
+\htmlClass{new}{\{\text{Claire}, \text{Zoe}\}} @@ the answer
+  </pre>
+  <p data-pid="e6b09e">Restricting can make two rows equal. Ask “which streets have customers?” and Claire’s row and Zoe’s both restrict to Fernwood. As a set, the answer lists Fernwood once. <b>An answer is a set too, so cutting columns can merge rows.</b></p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{streets} = \{\text{Fernwood}, \text{Hill Road}\}\\ &amp;3 \text{ rows in, } 2 \text{ out}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·comp.3.1</span><span class="ph understand">understand</span>What does a question do to the rows and to the columns, and why can its answer have fewer rows than it started with?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9comp4">
+  <h2 class="sthead"><span class="stno">9comp4</span>Joining Two Tables</h2>
+  <p data-pid="907768">Orders are kept in a second table. Each order names its customer by id, not by name.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>order</th><th>cake</th><th>day</th><th>customer</th></tr>
+    <tr><td>501</td><td>lemon</td><td>Friday</td><td>17</td></tr>
+    <tr><td>502</td><td>carrot</td><td>Friday</td><td>23</td></tr>
+    <tr><td>503</td><td>lemon</td><td>Saturday</td><td>31</td></tr>
+  </table></div>
+  <p data-pid="fe674d">To ask “which orders go to Fernwood on Friday?”, pair every order with every customer, a product as in 2h, and sift for the pairs where the order’s customer is the customer’s id. That sift is the <i>join</i>. Then sift again for Fernwood and Friday.</p>
+  <pre class="lines" data-k="ember" data-label="this page: Fernwood on Friday">
+\text{orders} \times \text{customers}:\ 3 \cdot 3 = 9 \text{ pairs} @@ the products-exist technique (2h); stages-multiply (4k)
+\{(o, r) : o(\text{customer}) = r(\text{id})\} @@ the join: one customer for each order, since id is a key
+= \{(501, 17), (502, 23), (503, 31)\} @@ 3 of the 9 pairs
+\ldots : r(\text{street}) = \text{Fernwood},\ o(\text{day}) = \text{Friday} @@ sift again
+\htmlClass{new}{\text{order } 501} @@ Claire’s lemon cake
+  </pre>
+  <p data-pid="300d29">The customer column of the orders is a function from orders to ids, and id runs backwards to rows. Composed (9b), they send each order to its customer’s row, and then to the street: <b>following a key from one table into another is composing functions.</b></p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{order} \xrightarrow{\ \text{customer}\ } \text{id} \xrightarrow{\ \text{id}^{-1}\ } \text{row} \xrightarrow{\ \text{street}\ } \text{street}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·comp.4.1</span><span class="ph understand">understand</span>What is a join, as a sift of a product, and why is following a key the same as composing functions?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9comp5">
+  <h2 class="sthead"><span class="stno">9comp5</span>Store Each Fact Once</h2>
+  <p data-pid="b44761">Why not write the street in every order row and skip the join? Because then the street is stored many times, and the copies can disagree. If Zoe moves and one of her orders is changed while another is not, the table now says she lives in two places. No join can tell which is right.</p>
+  <p data-pid="9c0fb8">Stored once, in the customer table, the street is reached from any order by the composition of 9comp4. Change it in one place and every order follows. <b>A fact stored once cannot disagree with itself.</b> Designers of databases split tables until every fact that depends on a key is stored only in the table where that key is the key.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{street in each order: copies can differ}\\ &amp;\text{street once, reached by composing: one answer}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·comp.5.1</span><span class="ph understand">understand</span>What goes wrong when one fact is stored in many rows, and how does composing through a key prevent it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="9comp6">
+  <h2 class="sthead"><span class="stno">9comp6</span>Moves to Watch Out For</h2>
+  <p data-pid="c94291">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{name is a key: every customer has one}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a key needs different values in different rows; two customers can share a name (9comp2)
+\text{the answer has 3 rows, since 3 went in}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; restricting can merge rows, and the answer is a set (9comp3)
+\text{join} = \text{orders} \times \text{customers}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the join is the product sifted for matching keys (9comp4)
+\text{row 2 comes before row 3}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; a table is a set; the order of printing says nothing (9comp1)
+\text{copy the street into each order, to save a join}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it works until the copies disagree (9comp5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">9·comp.6.1</span><span class="ph understand">understand</span>Which move above treats the join as the whole product, and what has to be done to the product to make it a join?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">9·comp.7.1</span><span class="tagq">do</span>Using the two tables of this page, write as a sift and a restriction the question “which cakes did customers on Hill Road order?”, and find the answer.</div>
+  <div class="chq"><span class="chid">9·comp.7.2</span><span class="tagq">make</span>Make a table of five rows with three columns in which no single column is a key, but the pair of two columns is: no two rows agree on both.</div>
+  <div class="chq"><span class="chid">9·comp.7.3</span><span class="tagq">converse</span>Every key has different values in different rows. Decide whether a column whose values are all different in today’s table must be a key for the bakery, and say what could change tomorrow.</div>
+  <div class="chq"><span class="chid">9·comp.7.4</span><span class="tagq">edge</span>An order names customer 40, and no customer has id 40. Say what the join of 9comp4 does with that order, and why the composition breaks there.</div>
+  <div class="chq"><span class="chid">9·comp.7.5</span><span class="tagq">open</span>A table of orders and a table of cakes are joined, then joined with customers. Say whether the order of the two joins can change the answer, using what 9b says about composing.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r09crypt.html">← 9·crypt · can a code be truly unbreakable?</a><a href="r09chem.html">9·chem · does every gas follow the same law? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="52d9c9">A table is a <b>relation</b>, a row is a <b>tuple</b> and a column name is an <b>attribute</b>. A key is a <b>primary key</b> or a <b>candidate key</b>; a column that holds another table’s key is a <b>foreign key</b>. Sifting rows is <b>selection</b>, restricting to columns is <b>projection</b>, and the sifted product is a <b>join</b>. Storing each fact once is <b>normalisation</b>, and the trouble with copies is an <b>update anomaly</b>. Most databases are asked their questions in a language called <b>SQL</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="b3a0b0">Edgar F. Codd set out tables as sets of rows, and questions as operations on them, in “A Relational Model of Data for Large Shared Data Banks”, 1970.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

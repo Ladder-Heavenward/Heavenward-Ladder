@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Double Integrals</title>
+<title>28h · Bowls, and the Price of a Constraint</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,115 +37,80 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r28g.html">← 28g the best point on a constraint</a><a href="r28i.html">next: 28i changing the variables →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28g.html">← 28g the best point on a constraint</a><a href="r28i.html">next: 28i stretching and folding →</a></p>
   <div class="tags"><span class="tag proof">28h · proof</span></div>
-  <h1>Double Integrals</h1>
-  <p data-pid="48212f">Rung 15 measured the area under a curve by trapping it between thin boxes from below and from above. A function of two inputs stands over a patch of ground, like snow lying on a field, and the question is how much there is in total. The same trap works with columns instead of strips. This step builds the total over a rectangle, proves that every continuous function has one, and then proves something rung 15 never needed: you can add up row by row or column by column and get the same total.</p>
-  <p class="gesture" data-pid="88652e">A continuous function on a rectangle has exactly one total between every lower and every upper column sum. It equals the total taken in strips along y and then along x, and also in the other order.</p>
+  <h1>Bowls, and the Price of a Constraint</h1>
+  <p data-pid="681958">28g found the best point on a constraint by a multiplier. But a level point may be a top, a bottom or a pass, and a bottom may be only the lowest nearby. For one great family, functions shaped like bowls, every level point is the lowest point of all, and the multiplier gains a meaning: it is the price of loosening the constraint. This step defines bowls, proves that their level points are the lowest, and proves that every price gives a floor under the best value, the floor that is reached exactly in the bowl case.</p>
+  <p class="gesture" data-pid="9d2978">f is a bowl if every chord lies on or above its graph; then its graph lies above every flat map touching it, so a point with zero uphill vector is the lowest anywhere. For the least f(x) with g(x) ≤ 0, every price λ ≥ 0 gives a floor: min over x of f + λg is at most the best value. For bowls the best floor equals it.</p>
 </header>
 
 <section class="class step" data-step="28h1">
-  <h2 class="sthead"><span class="stno">28h1</span>Columns From Below and Above</h2>
-  <p data-pid="9ed0d0">Let R be the rectangle a ≤ x ≤ b, c ≤ y ≤ d, and f bounded on R. Cut [a, b] at a = x₀ &lt; … &lt; x<sub>p</sub> = b and [c, d] at c = y₀ &lt; … &lt; y<sub>q</sub> = d. This cuts R into small boxes R<sub>ij</sub> of area (x<sub>i</sub> − x<sub>i−1</sub>)(y<sub>j</sub> − y<sub>j−1</sub>). On each box take m<sub>ij</sub>, the inf of f there, and M<sub>ij</sub>, the sup.</p>
-  <p class="eqline" data-pid="3b5395"><span data-tex="\begin{aligned}&amp;L(f, P) = \sum_{i,j} m_{ij}\,|R_{ij}|,\\ &amp;U(f, P) = \sum_{i,j} M_{ij}\,|R_{ij}|.\end{aligned}"></span></p>
-  <p data-pid="5724c1">Every lower column sum is below every upper one: 15b’s proof runs word for word, since adding a cut only splits boxes. f is <i>integrable</i> on R when exactly one number A lies between every L and every U, and A is written ∬<sub>R</sub> f. With f ≥ 0, it is the volume under the graph.</p>
-  <p data-pid="6bcb71">Rectangle-total technique: <b>if f is continuous on R, then f is integrable on R.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the rectangle-total technique">
-\text{for every } \varepsilon > 0 \text{ some } \delta: |x - x'| < \delta \Rightarrow |f(x) - f(x')| < \varepsilon @@ the evenly-continuous technique (15f), whose proof by halving traps (12e) runs on R with quarters
-\text{boxes of width less than } \delta/2 \text{ each way} \Rightarrow M_{ij} - m_{ij} \le \varepsilon @@ two points of one box are less than δ apart; the highest-and-lowest technique (12c), carried the same way
-U(f,P) - L(f,P) \le \varepsilon \textstyle\sum |R_{ij}| = \varepsilon\,|R| @@ add over the boxes
-\htmlClass{new}{f \text{ is integrable on } R} \quad \blacksquare @@ the gap between some L and U is as small as we like, so at most one number fits; one does, by the no-gaps property (15c)
+  <h2 class="sthead"><span class="stno">28h1</span>Bowls</h2>
+  <p data-pid="5e2006">From here on, f is a <i>bowl</i> if f(tx + (1 − t)y) ≤ t f(x) + (1 − t) f(y) for all x, y and 0 ≤ t ≤ 1: every chord on or above the graph.</p>
+  <p data-pid="bfae51">Bowl technique: <b>if f is a bowl with an uphill vector, then f(y) ≥ f(x) + ∇f(x)·(y − x) for all x, y; so a point where ∇f = 0 is the lowest of all.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the bowl technique">
+f(x + t(y - x)) \le f(x) + t\big(f(y) - f(x)\big) @@ the chord, at share t
+\dfrac{f(x + t(y-x)) - f(x)}{t} \le f(y) - f(x) @@ take f(x) away, divide by t > 0
+t \to 0:\ \nabla f(x)\cdot(y - x) \le f(y) - f(x) @@ the slope along y − x (28c)
+\htmlClass{new}{\nabla f(x) = 0 \Rightarrow f(y) \ge f(x) \text{ for every } y} \quad \blacksquare @@ no lower point anywhere
   </pre>
-  <!--gfig 28h1--><div class="gfigs" data-gfig="28h1" data-story="[[&quot;A rectangle R, cut 4 by 4 into boxes, under the surface f = 1 + x/2 + 0.4xy.&quot;, [&quot;#0&quot;, &quot;#97&quot;, &quot;#98&quot;, &quot;#103&quot;]], [&quot;On each box stands a teal column whose height is the least f takes on that box. Together they are the lower columns, L.&quot;, [&quot;teal&quot;, &quot;#100&quot;]], [&quot;On top of each sits an ember piece reaching up to the most f takes on that box. Teal and ember together are the upper columns, U.&quot;, [&quot;ember&quot;, &quot;#102&quot;]], [&quot;The volume under the surface lies between L and U. As the cut gets finer the ember pieces get thinner.&quot;, [&quot;teal&quot;, &quot;ember&quot;]]]"><svg class="gfig" viewBox="0 0 400 262" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="lower and upper columns on a four by four cut of a rectangle under a rising surface"><polygon points="70.0,220.0 194.0,220.0 262.0,184.0 138.0,184.0" style="fill:var(--sand);fill-opacity:0.35;stroke:var(--grid);stroke-width:0.8"/><polygon points="121.0,193.0 152.0,193.0 152.0,159.0 121.0,159.0" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="152.0,193.0 169.0,184.0 169.0,150.0 152.0,159.0" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="121.0,159.0 152.0,159.0 169.0,150.0 138.0,150.0" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="121.0,193.0 152.0,193.0 152.0,136.9 121.0,136.9" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="152.0,193.0 169.0,184.0 169.0,127.9 152.0,136.9" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="121.0,136.9 152.0,136.9 169.0,127.9 138.0,127.9" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="152.0,193.0 183.0,193.0 183.0,140.3 152.0,140.3" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="183.0,193.0 200.0,184.0 200.0,131.3 183.0,140.3" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="152.0,140.3 183.0,140.3 200.0,131.3 169.0,131.3" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="152.0,193.0 183.0,193.0 183.0,114.8 152.0,114.8" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="183.0,193.0 200.0,184.0 200.0,105.8 183.0,114.8" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="152.0,114.8 183.0,114.8 200.0,105.8 169.0,105.8" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="183.0,193.0 214.0,193.0 214.0,121.6 183.0,121.6" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="214.0,193.0 231.0,184.0 231.0,112.6 214.0,121.6" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="183.0,121.6 214.0,121.6 231.0,112.6 200.0,112.6" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="183.0,193.0 214.0,193.0 214.0,92.7 183.0,92.7" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="214.0,193.0 231.0,184.0 231.0,83.7 214.0,92.7" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="183.0,92.7 214.0,92.7 231.0,83.7 200.0,83.7" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="214.0,193.0 245.0,193.0 245.0,102.9 214.0,102.9" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="245.0,193.0 262.0,184.0 262.0,93.9 245.0,102.9" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="214.0,102.9 245.0,102.9 262.0,93.9 231.0,93.9" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="214.0,193.0 245.0,193.0 245.0,70.6 214.0,70.6" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="245.0,193.0 262.0,184.0 262.0,61.6 245.0,70.6" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="214.0,70.6 245.0,70.6 262.0,61.6 231.0,61.6" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="104.0,202.0 135.0,202.0 135.0,168.0 104.0,168.0" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="135.0,202.0 152.0,193.0 152.0,159.0 135.0,168.0" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="104.0,168.0 135.0,168.0 152.0,159.0 121.0,159.0" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="104.0,202.0 135.0,202.0 135.0,149.3 104.0,149.3" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="135.0,202.0 152.0,193.0 152.0,140.3 135.0,149.3" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="104.0,149.3 135.0,149.3 152.0,140.3 121.0,140.3" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="135.0,202.0 166.0,202.0 166.0,152.7 135.0,152.7" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="166.0,202.0 183.0,193.0 183.0,143.7 166.0,152.7" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="135.0,152.7 166.0,152.7 183.0,143.7 152.0,143.7" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="135.0,202.0 166.0,202.0 166.0,130.6 135.0,130.6" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="166.0,202.0 183.0,193.0 183.0,121.6 166.0,130.6" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="135.0,130.6 166.0,130.6 183.0,121.6 152.0,121.6" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="166.0,202.0 197.0,202.0 197.0,137.4 166.0,137.4" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="197.0,202.0 214.0,193.0 214.0,128.4 197.0,137.4" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="166.0,137.4 197.0,137.4 214.0,128.4 183.0,128.4" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="166.0,202.0 197.0,202.0 197.0,111.9 166.0,111.9" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="197.0,202.0 214.0,193.0 214.0,102.9 197.0,111.9" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="166.0,111.9 197.0,111.9 214.0,102.9 183.0,102.9" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="197.0,202.0 228.0,202.0 228.0,122.1 197.0,122.1" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="228.0,202.0 245.0,193.0 245.0,113.1 228.0,122.1" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="197.0,122.1 228.0,122.1 245.0,113.1 214.0,113.1" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="197.0,202.0 228.0,202.0 228.0,93.2 197.0,93.2" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="228.0,202.0 245.0,193.0 245.0,84.2 228.0,93.2" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="197.0,93.2 228.0,93.2 245.0,84.2 214.0,84.2" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="87.0,211.0 118.0,211.0 118.0,177.0 87.0,177.0" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="118.0,211.0 135.0,202.0 135.0,168.0 118.0,177.0" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="87.0,177.0 118.0,177.0 135.0,168.0 104.0,168.0" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="87.0,211.0 118.0,211.0 118.0,161.7 87.0,161.7" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="118.0,211.0 135.0,202.0 135.0,152.7 118.0,161.7" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="87.0,161.7 118.0,161.7 135.0,152.7 104.0,152.7" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="118.0,211.0 149.0,211.0 149.0,165.1 118.0,165.1" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="149.0,211.0 166.0,202.0 166.0,156.1 149.0,165.1" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="118.0,165.1 149.0,165.1 166.0,156.1 135.0,156.1" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="118.0,211.0 149.0,211.0 149.0,146.4 118.0,146.4" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="149.0,211.0 166.0,202.0 166.0,137.4 149.0,146.4" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="118.0,146.4 149.0,146.4 166.0,137.4 135.0,137.4" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="149.0,211.0 180.0,211.0 180.0,153.2 149.0,153.2" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="180.0,211.0 197.0,202.0 197.0,144.2 180.0,153.2" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="149.0,153.2 180.0,153.2 197.0,144.2 166.0,144.2" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="149.0,211.0 180.0,211.0 180.0,131.1 149.0,131.1" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="180.0,211.0 197.0,202.0 197.0,122.1 180.0,131.1" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="149.0,131.1 180.0,131.1 197.0,122.1 166.0,122.1" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="180.0,211.0 211.0,211.0 211.0,141.3 180.0,141.3" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="211.0,211.0 228.0,202.0 228.0,132.3 211.0,141.3" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="180.0,141.3 211.0,141.3 228.0,132.3 197.0,132.3" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="180.0,211.0 211.0,211.0 211.0,115.8 180.0,115.8" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="211.0,211.0 228.0,202.0 228.0,106.8 211.0,115.8" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="180.0,115.8 211.0,115.8 228.0,106.8 197.0,106.8" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="70.0,220.0 101.0,220.0 101.0,186.0 70.0,186.0" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="101.0,220.0 118.0,211.0 118.0,177.0 101.0,186.0" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="70.0,186.0 101.0,186.0 118.0,177.0 87.0,177.0" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="70.0,220.0 101.0,220.0 101.0,174.1 70.0,174.1" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="101.0,220.0 118.0,211.0 118.0,165.1 101.0,174.1" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="70.0,174.1 101.0,174.1 118.0,165.1 87.0,165.1" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="101.0,220.0 132.0,220.0 132.0,177.5 101.0,177.5" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="132.0,220.0 149.0,211.0 149.0,168.5 132.0,177.5" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="101.0,177.5 132.0,177.5 149.0,168.5 118.0,168.5" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="101.0,220.0 132.0,220.0 132.0,162.2 101.0,162.2" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="132.0,220.0 149.0,211.0 149.0,153.2 132.0,162.2" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="101.0,162.2 132.0,162.2 149.0,153.2 118.0,153.2" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="132.0,220.0 163.0,220.0 163.0,169.0 132.0,169.0" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="163.0,220.0 180.0,211.0 180.0,160.0 163.0,169.0" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="132.0,169.0 163.0,169.0 180.0,160.0 149.0,160.0" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="132.0,220.0 163.0,220.0 163.0,150.3 132.0,150.3" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="163.0,220.0 180.0,211.0 180.0,141.3 163.0,150.3" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="132.0,150.3 163.0,150.3 180.0,141.3 149.0,141.3" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><polygon points="163.0,220.0 194.0,220.0 194.0,160.5 163.0,160.5" style="fill:var(--teal);fill-opacity:0.55;stroke:var(--ink);stroke-width:0.8"/><polygon points="194.0,220.0 211.0,211.0 211.0,151.5 194.0,160.5" style="fill:var(--teal);fill-opacity:0.44000000000000006;stroke:var(--ink);stroke-width:0.8"/><polygon points="163.0,160.5 194.0,160.5 211.0,151.5 180.0,151.5" style="fill:var(--teal);fill-opacity:0.6050000000000001;stroke:var(--ink);stroke-width:0.8"/><polygon points="163.0,220.0 194.0,220.0 194.0,138.4 163.0,138.4" style="fill:var(--ember);fill-opacity:0.12;stroke:var(--ink);stroke-width:0.8"/><polygon points="194.0,220.0 211.0,211.0 211.0,129.4 194.0,138.4" style="fill:var(--ember);fill-opacity:0.096;stroke:var(--ink);stroke-width:0.8"/><polygon points="163.0,138.4 194.0,138.4 211.0,129.4 180.0,129.4" style="fill:var(--ember);fill-opacity:0.132;stroke:var(--ink);stroke-width:0.8"/><text x="132.0" y="238.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">x from 0 to 2</text><text x="238.0" y="214.0" text-anchor="start" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">y</text><rect x="150" y="12" width="18" height="10" rx="2" style="fill:var(--teal);fill-opacity:.5"/><text x="174" y="22" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">inf on each box: lower columns, L</text><rect x="150" y="28" width="18" height="10" rx="2" style="fill:var(--ember);fill-opacity:.5"/><text x="174" y="38" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">sup on each box: upper columns, U</text><text x="386" y="256" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">an example f = 1 + x/2 + 0.4xy on a 4 × 4 cut of R</text></svg></div><!--/gfig 28h1-->
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · column sums · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">28h1.1</span><span class="ph understand">understand</span>What are L(f, P) and U(f, P) on a rectangle, and when is f integrable on R? <br>What does the rectangle-total technique say?</li>
+      <li><span class="qid">28h1.1</span><span class="ph understand">understand</span>Why is every level point of a bowl its lowest point of all?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="28h2">
-  <h2 class="sthead"><span class="stno">28h2</span>Either Order</h2>
-  <p data-pid="e88236">Hold x still and total along y: F(x) = ∫<sub>c</sub><sup>d</sup> f(x, y) dy. That is a function of x, and its total along x is a total of totals.</p>
-  <p data-pid="5da819">Either-order technique: <b>if f is continuous on R, then ∬<sub>R</sub> f = ∫<sub>a</sub><sup>b</sup> (∫<sub>c</sub><sup>d</sup> f(x, y) dy) dx = ∫<sub>c</sub><sup>d</sup> (∫<sub>a</sub><sup>b</sup> f(x, y) dx) dy.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the either-order technique">
-F(x) = \textstyle\int_c^d f(x,y)\,dy \text{ exists for each } x @@ y ↦ f(x, y) is continuous (28a1), so integrable (15f)
-|F(x) - F(x')| \le \varepsilon\,(d - c) \text{ when } |x - x'| < \delta @@ evenly continuous f (28h1), and the smaller-function-smaller-area technique (15e)
-F \text{ is continuous, so } \textstyle\int_a^b F \text{ exists} @@ the line above; 15f
-m_{ij}(y_j - y_{j-1}) \le \textstyle\int_{y_{j-1}}^{y_j} f(x,y)\,dy \le M_{ij}(y_j - y_{j-1}) \text{ for } x \text{ in } [x_{i-1}, x_i] @@ 15e, on one box
-\textstyle\sum_j m_{ij}\Delta y_j \le F(x) \le \sum_j M_{ij}\Delta y_j \text{ there} @@ the interval-cut-in-two technique (15e), over the j’s
-L(f,P) \le \textstyle\int_a^b F \le U(f,P) @@ 15e again, over the i’s
-\htmlClass{new}{\textstyle\int_a^b F = \iint_R f} \quad \blacksquare @@ exactly one number lies between every L and U (28h1); the other order runs the same lines with x and y swapped
+  <h2 class="sthead"><span class="stno">28h2</span>Every Price Gives a Floor</h2>
+  <p data-pid="a686eb">Make f(x) least among x with g(x) ≤ 0; call the best value p*. For a price λ ≥ 0, let d(λ) be the least value of f(x) + λg(x) over all x, constraint or not.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the floor technique">
+x \text{ allowed} \Rightarrow g(x) \le 0 \Rightarrow f(x) + \lambda g(x) \le f(x) @@ λ ≥ 0
+d(\lambda) \le f(x) + \lambda g(x) \le f(x) @@ d is the least over all x
+d(\lambda) \le p^* \text{ for every } \lambda \ge 0 @@ least over allowed x
+\htmlClass{new}{\max_{\lambda \ge 0} d(\lambda) \le p^*} \quad \blacksquare @@ the best floor is still a floor
   </pre>
-  <p data-pid="8f3647">Worked once: ∬ over [0, 2] × [0, 1] of xy² is ∫₀² x (∫₀¹ y² dy) dx = ∫₀² x/3 dx = 2/3. In the other order, ∫₀¹ y² (∫₀² x dx) dy = ∫₀¹ 2y² dy = 2/3.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · either order · ← → keys work</div></section>
+  <p data-pid="04f1af">Floor technique: <b>for every price λ ≥ 0, the unconstrained least of f + λg is a floor under the constrained best.</b> It holds for any f and g, bowls or not.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">28h2.1</span><span class="ph understand">understand</span>What does the either-order technique say, and why is F(x) = ∫_c^d f(x, y) dy continuous?</li>
+      <li><span class="qid">28h2.1</span><span class="ph understand">understand</span>Why does every price λ ≥ 0 give a floor under the constrained best value?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="28h3">
-  <h2 class="sthead"><span class="stno">28h3</span>The Swing of a Function at a Point</h2>
-  <p data-pid="a0b8f6">A break may be a jump, or endless, or neither (11f). One number measures them all. Let f be bounded near a, a point of the line or of the plane. For δ > 0, let s(δ) be the sup of f less the inf of f, over the points of the domain within δ of a. As δ shrinks, s(δ) cannot grow.</p>
-  <p data-pid="05bacd">From here on, the <b>swing</b> of f at a is the inf of all the s(δ). Zero-swing technique: <b>f is continuous at a exactly when its swing at a is 0.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the zero-swing technique">
-|f(x) - f(a)| \lt \varepsilon \text{ within } \delta \text{ of } a @@ suppose f is continuous at a
-s(\delta) \le 2\varepsilon @@ any two values within δ of a are within 2ε of each other
-\text{the swing is at most } 2\varepsilon \text{, for every } \varepsilon @@ so it is 0
-s(\delta) \lt \varepsilon \text{ for some } \delta @@ now suppose the swing is 0: an inf of 0 (8c)
-\htmlClass{new}{|f(x) - f(a)| \le s(\delta) \lt \varepsilon \text{ within } \delta} \quad \blacksquare @@ f(a) is one of the values within δ
+  <h2 class="sthead"><span class="stno">28h3</span>In a Bowl the Floor Is Reached</h2>
+  <pre class="lines" data-k="ember" data-label="this step: least x² with x ≥ 1">
+f = x^2,\ g = 1 - x \le 0 @@ p* = 1, at x = 1
+f + \lambda g = x^2 + \lambda(1 - x):\ \text{least at } x = \tfrac{\lambda}{2} @@ slope zero; a bowl
+d(\lambda) = \lambda - \tfrac{\lambda^2}{4}:\ \text{largest at } \lambda = 2,\ d(2) = 1 @@ the best floor
+\htmlClass{new}{\max d = p^* = 1} @@ no gap
   </pre>
-  <p data-pid="b1415f">The step that is 0 below 0 and 1 from 0 on has swing 1 at 0: the size of its jump. Give sin(1/x) the value 0 at 0, and its swing at 0 is 2. It has no jump there, since neither one-sided limit exists, yet its break has a size. The function that is 1 on the fractions and 0 elsewhere has swing 1 at every point.</p>
-  <p data-pid="14916a">So "how badly does f break at a" has an answer in one number, and "f breaks by at least ε" picks out a set of points. Those are the points a total has to be kept away from.</p>
+  <p data-pid="fcb838"><b>When f and g are bowls and some point satisfies g < 0 strictly, the best floor equals the best value, and the best price λ is 28g’s multiplier.</b> The proof is held in trust for a later rung. The price has a meaning: loosen the constraint to x ≥ 1 − ε and the best value falls by about λε = 2ε. Factories, networks and machine learning all solve their problems by finding these prices.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">28h3.1</span><span class="ph understand">understand</span>What is the swing of f at a? <br>What is the swing of sin(1/x) at 0, and why is that not a jump?</li>
+      <li><span class="qid">28h3.1</span><span class="ph understand">understand</span>How does the best floor reach the best value for x² with x ≥ 1, and what does the price λ = 2 mean?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="28h4">
-  <h2 class="sthead"><span class="stno">28h4</span>Breaks Too Thin to Matter</h2>
-  <p data-pid="92da70">The rectangle-total technique (28h1) asked f to be continuous on all of R. A wall of jumps along one curve does no harm. Say a set in the plane <b>has no area</b> when, for every ε > 0, finitely many rectangles cover it with areas that add to less than ε.</p>
-  <p data-pid="eadabf">The graph of a continuous function on [a, b] has no area. One width δ serves ε on the whole interval (15f). Cut [a, b] into pieces shorter than δ, and over each piece one rectangle of height 2ε holds the graph. The areas add to 2ε(b − a).</p>
-  <p data-pid="da8291">Thin-breaks technique: <b>if f is bounded on R, and continuous at every point of R outside a set with no area, then f is integrable on R.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the thin-breaks technique">
-|f| \le K;\ \ Q_1, \ldots, Q_m \text{ cover the breaks} @@ rectangles of total area below ε; widen each a little, so that the breaks are strictly inside them, and still below ε
-\text{cut } R \text{ along every side of every } Q_i @@ each box of the cut lies in some Qᵢ, or holds no break
-\text{boxes in the } Q_i:\ \ \textstyle\sum (M - m)\cdot\text{area} \le 2K\varepsilon @@ M − m ≤ 2K on any box
-\text{each other box: cut it until its } U - L \lt \varepsilon/N @@ f is continuous on it: rectangle-total (28h1); N is the number of such boxes
-\htmlClass{new}{U - L \lt 2K\varepsilon + \varepsilon \text{ for the whole cut}} \quad \blacksquare @@ so exactly one number lies between the lower and the upper sums (28h1)
-  </pre>
-  <p data-pid="3ffe61">Now a total over a disc makes sense. Put the disc in a square and let f be 0 outside the disc. The new breaks lie on the circle, which is two graphs of continuous functions, so it has no area. The same goes for any region fenced by finitely many such graphs.</p>
-  <p data-pid="f7a660">The word finitely is doing work. On the line, the fractions between 0 and 1 are not covered by finitely many intervals with lengths adding to less than 1: finitely many intervals that hold every fraction of [0, 1] leave no gap between them. And the function that is 1 on the fractions and 0 elsewhere has no total. Rung 30 lets the cover be endless, and asks what changes.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">28h4.1</span><span class="ph understand">understand</span>When does a set in the plane have no area? <br>Why can a function be 0 outside a disc and still have a total over a square?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="28h5">
-  <h2 class="sthead"><span class="stno">28h5</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\textstyle\int_a^b\!\int_c^d f\,dy\,dx = \int_c^d\!\int_a^b f\,dy\,dx\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; when the order of the totals swaps, so must the order of the limits: the inner total is along y, from c to d
-\iint_R f g = (\iint_R f)(\iint_R g)\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; totals add, they do not multiply; only f(x)g(y) splits this way
-\text{either order, for every bounded } f\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the technique needs continuity; for wild f the two inner totals can fail to exist
-\iint_R 1 = b - a\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the total of 1 over R is its area, (b − a)(d − c)
-\text{the swing at } a \text{ is the size of the jump}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; only at a jump: sin(1/x) has swing 2 at 0 and no one-sided limits to compare
-f \text{ bounded on } R \Rightarrow f \text{ integrable on } R\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the breaks must have no area: 1 where both places are fractions and 0 elsewhere breaks at every point
+  <h2 class="sthead"><span class="stno">28h4</span>Moves to Watch Out For</h2>
+  <p data-pid="659afb">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{every level point is the lowest point}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; only for bowls; x³ is level at 0 and has no lowest point (28h1)
+d(\lambda) \ge p^*\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; every price gives a floor: d(λ) ≤ p* (28h2)
+\text{the floor needs bowls}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; the floor holds for any f and g; only reaching it needs bowls (28h2)
+\text{use a negative price}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; λ ≥ 0, or λg can be positive on allowed points (28h2)
+\text{find } p^* \text{ first, then the prices}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; the prices give floors without knowing p* (28h3)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">28h5.1</span><span class="ph understand">understand</span>Why is “∫_a^b ∫_c^d f dy dx = ∫_c^d ∫_a^b f dy dx” a move to watch out for? <br>Why is “∬_R fg = (∬_R f)(∬_R g)” one?</li>
+      <li><span class="qid">28h4.1</span><span class="ph understand">understand</span>Which move above turns the floor into a ceiling, and which way does the inequality go?</li>
     </ol>
   </section>
 </section>
@@ -164,45 +118,25 @@ f \text{ bounded on } R \Rightarrow f \text{ integrable on } R\,? @@ &lt;span cl
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">28h.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="d(x,y) = 0.5 + 0.002x - 0.001y"></span> <span data-tex-inline="R = [0,200] \times [0,100]"></span></span>Find the total snow in cubic metres by the either-order technique, and the water it melts to, in litres, at about a tenth of its volume. <br>Find ∬ y eˣʸ over [0, 1] × [0, 1], in the order that makes the inner total easy.</div>
-  <div class="chq"><span class="chid">28h.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="s(x,y) = 1 \text{ if } y \le x,\ 0 \text{ if } y &gt; x;\ \ R = [0,1]\times[0,1]"></span></span>Does the either-order technique apply to s? Find both totals of totals. <br>With p × p equal boxes, bound U − L by the boxes the line y = x touches: is s integrable?</div>
-  <div class="chq"><span class="chid">28h.4.3</span><span class="tagq">converse</span>If f = 0 on R, its total is 0. Turn it round: if f is continuous on R and ∬_R f = 0, must f be 0? Test f = x − 1 on [0, 2] × [0, 1]. <br>Prove that if also f ≥ 0, then f = 0 everywhere on R.</div>
-  <div class="chq"><span class="chid">28h.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="f(x,y) = x + y,\ \ R = [0,2]\times[0,1]"></span></span>Prove that f is integrable on R without the evenly-continuous technique: cut R into p × q equal boxes, find M − m on each box exactly, and what U − L heads to.</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">28h.5.1</span><span class="tagq">do</span>Find d(λ) and its largest value for the least x² + y² with x + y ≥ 2.</div>
+  <div class="chq"><span class="chid">28h.5.2</span><span class="tagq">make</span>Make up a function that has a level point that is not its lowest.</div>
+  <div class="chq"><span class="chid">28h.5.3</span><span class="tagq">converse</span>In a bowl, a level point is lowest. Decide whether a function whose every level point is lowest must be a bowl.</div>
+  <div class="chq"><span class="chid">28h.5.4</span><span class="tagq">edge</span>Let the constraint never bind: the unconstrained least already satisfies g < 0. Say what the best price is.</div>
+  <div class="chq"><span class="chid">28h.5.5</span><span class="tagq">open</span>Say why the price λ measures how fast the best value falls as the constraint is loosened.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r28g.html">← 28g · the best point on a constraint</a><a href="r28i.html">28i · stretching and folding →</a></nav>
 
-<nav class="nextrung"><a href="r28g.html">← 28g · the best point on a constraint</a><a href="r28i.html">28i · changing the variables →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>The total over a rectangle is the double integral, ∬<sub>R</sub> f dA, built here from Darboux sums. A total of totals is an iterated integral. The either-order technique is Fubini’s theorem, in the form for continuous functions. The swing of f at a is the oscillation of f at a. A set with no area has content 0. Measure 0 allows a cover by countably many rectangles.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="191cb4">A bowl is a <b>convex function</b>; d(λ) is the <b>dual function</b>; the floor technique is <b>weak duality</b>, its equality <b>strong duality</b> under <b>Slater’s condition</b>; the price is a <b>shadow price</b> or <b>Lagrange multiplier</b>, and the conditions together are the <b>Karush-Kuhn-Tucker conditions</b>.</p>
   <h3>Who said it first</h3>
-  <p>Euler computed double integrals as iterated integrals in 1769. Cauchy noticed in 1814 that the two orders can give different answers for badly behaved functions. Camille Jordan built the double integral on rectangles carefully in 1892. Guido Fubini proved the general theorem for Lebesgue integrals in 1907, and Leonida Tonelli the companion for positive functions in 1909.</p>
+  <p data-pid="6f8bdc">William Karush (1939) and Harold Kuhn and Albert Tucker (1951) gave the conditions with inequality constraints; Morton Slater gave his condition in 1950. John von Neumann saw duality in linear programming in 1947.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'boxes',t:R`R_{ij},\ \ |R_{ij}| = \Delta x_i\,\Delta y_j`,n:`Cut both ways.`},
-  {k:'ember',kl:'trap',t:R`L(f,P) \le A \le U(f,P)`,n:`From below and above.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{continuous} \Rightarrow \iint_R f \text{ exists}}`,n:`The gap closes.`}
-],{title:'The slides · column sums · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'inner',t:R`F(x) = \int_c^d f(x,y)\,dy`,n:`A total along y.`},
-  {k:'ember',kl:'trap',t:R`L \le \int_a^b F \le U`,n:`Box by box.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\iint_R f = \int\!\!\int f\,dy\,dx = \int\!\!\int f\,dx\,dy}`,n:`Rows or columns.`}
-],{title:'The slides · either order · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

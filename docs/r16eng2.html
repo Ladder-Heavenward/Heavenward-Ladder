@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>16·eng2 · Why Does a Pipe Split Along Its Length?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16eng.html">← 16·eng where will a loaded beam crack?</a><a href="r16econ.html">next: 16·econ who gains from a trade, and how much? →</a></p>
+  <div class="tags"><span class="tag eng">16·eng2 · engineering</span></div>
+  <h1>Why Does a Pipe Split Along Its Length?</h1>
+  <p data-pid="3921da">Why does a pipe split along its length? A frozen water pipe bursts in a long slit, never in a ring, and a sausage on the grill splits the same way. Air tanks for divers, the hull of a deep submarine, a space station module and a space suit are all the same problem: a thin wall holding back a difference in pressure. 16·cb12 found pressure is force per area, and 15·eng added up a pressure over a wall by strips. This page cuts a pipe in half on paper and balances the halves, finds that the wall is pulled twice as hard round the pipe as along it, finds why deep hulls are spheres, and says why tanks are tested with water, not air.</p>
+  <p class="gesture" data-pid="f6b440">Cut the pipe lengthwise. The pressure pushing one half away is the pressure times the flat cut, 2r per unit length; two strips of wall hold it. So the pull round the wall is pr/t. Along the pipe, the end cap’s push pr² π is held by a ring of wall 2πr t: pr/2t, half as much. A sphere is pulled pr/2t every way, the best a wall can do. A gas stores far more energy than water at the same pressure, so tanks are tested full of water.</p>
+</header>
+
+<section class="class step" data-step="16eng21">
+  <h2 class="sthead"><span class="stno">16eng21</span>Cutting the Pipe in Half</h2>
+  <p data-pid="6431f3">Terry’s pipe has radius r and a thin wall of thickness t, with pressure p inside more than outside. Imagine it cut lengthwise through its middle, a length L of it.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the push on one half">
+\text{fill the cut with a flat lid: the water in the half pipe is still} @@ so its pushes balance (16·cb12)
+\text{push on the curved half} = \text{push on the lid} = p \cdot 2r \cdot L @@ pressure times the flat area
+\text{held by two strips of wall, each } t \cdot L @@ one at each edge of the cut
+\htmlClass{new}{\sigma_{\text{round}} \cdot 2tL = p \cdot 2rL \Rightarrow \sigma_{\text{round}} = \dfrac{pr}{t}} @@ σ, the pull per area of wall
+  </pre>
+  <p data-pid="0e3140">From here on, on this page, the <i>stress</i> σ in a wall is the pull across it per area of wall, as pressure is push per area.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·eng2.1.1</span><span class="ph understand">understand</span>How does balancing one half of the pipe give the pull round its wall?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16eng22">
+  <h2 class="sthead"><span class="stno">16eng22</span>Along the Pipe</h2>
+  <pre class="lines" data-k="ember" data-label="this page: the end cap">
+\text{push on the end cap} = p \cdot \pi r^2 @@ pressure times its area
+\text{held by a ring of wall, area } 2\pi r \cdot t @@ thin wall: circumference times thickness
+\sigma_{\text{along}} = \dfrac{p \pi r^2}{2 \pi r t} = \dfrac{pr}{2t} @@ cancel π r
+\htmlClass{new}{\sigma_{\text{round}} = 2\,\sigma_{\text{along}}} @@ the wall is pulled twice as hard round
+  </pre>
+  <p data-pid="2cd7aa">Thin-wall technique: <b>in a pipe of radius r and wall t under pressure p, the wall is pulled pr/t round the pipe and pr/2t along it.</b> So a pipe tears along a line running its length, which is a slit: the frozen pipe and the sausage agree.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·eng2.2.1</span><span class="ph understand">understand</span>Why is the wall pulled twice as hard round the pipe as along it, and which way does it tear?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16eng23">
+  <h2 class="sthead"><span class="stno">16eng23</span>A Ball Is Best</h2>
+  <p data-pid="87bed6">Cut a sphere through its middle: the push p πr² on the flat cut is held by a ring of wall 2πr t, in every direction.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a deep hull">
+\sigma_{\text{sphere}} = \dfrac{pr}{2t} @@ half the pipe’s worst
+1000 \text{ m down: } p = \rho g d \approx 1025 \cdot 9.8 \cdot 1000 \approx 10^7 \text{ Pa} @@ about 100 times the air’s
+r = 1 \text{ m},\ \sigma \le 1.75 \times 10^8 \text{ Pa}:\ t \ge \dfrac{pr}{2\sigma} \approx 2.9 \text{ cm} @@ steel, with a margin of two
+\htmlClass{new}{\text{the deepest trench: about } 1.1 \times 10^8 \text{ Pa}} @@ over a thousand times the air’s
+  </pre>
+  <p data-pid="2efdea"><b>For a given wall, a sphere holds twice the pressure of a pipe of the same radius,</b> which is why deep diving craft carry their crew in a ball. A hull squeezed from outside can also fold inward before the steel gives, and its walls are made thicker for that.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·eng2.3.1</span><span class="ph understand">understand</span>Why are hulls for the deepest dives spheres?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16eng24">
+  <h2 class="sthead"><span class="stno">16eng24</span>Holding Air in Space</h2>
+  <pre class="lines" data-k="ember" data-label="this page: pressure inside, nothing outside">
+\text{station cabin: } p \approx 1.0 \times 10^5 \text{ Pa} @@ sea-level air, vacuum outside
+r = 2.1 \text{ m},\ \sigma \le 10^8 \text{ Pa}:\ t \ge \dfrac{pr}{\sigma} \approx 2 \text{ mm} @@ aluminium, round the pipe
+\text{suit: } p \approx 3 \times 10^4 \text{ Pa, pure oxygen} @@ a third of the air’s
+\htmlClass{new}{\text{lower pressure, softer suit: the hands can bend it}} @@ σ falls with p
+  </pre>
+  <p data-pid="2cfbb8">A space station needs only millimetres of metal to hold its air; its walls are thicker to stop flying debris. A suit at a third of an atmosphere stays soft enough to work in, but the wearer must first breathe pure oxygen for hours to clear nitrogen from the blood, the same danger a diver meets coming up.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·eng2.4.1</span><span class="ph understand">understand</span>Why do a station and a suit need so little wall, and why does a suit run at low pressure?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16eng25">
+  <h2 class="sthead"><span class="stno">16eng25</span>Test With Water, Not Air</h2>
+  <p data-pid="9c1fa1">A new tank is filled and pumped to one and a half times its working pressure. If it bursts, what is let loose is the energy stored in what fills it: 15·chem’s area under pressure against volume.</p>
+  <pre class="lines" data-k="ember" data-label="this page: stored energy">
+\text{gas: } p \text{ falls as } \tfrac1V \text{ while it expands} @@ 15·chem
+\text{area under } \tfrac1V \text{ from } V \text{ to } 200V @@ a 200-fold drop to the air, large
+\text{water: shrinks under } 2 \times 10^7 \text{ Pa by about } 1\% @@ it barely stores anything
+\htmlClass{new}{\text{a burst under water test: a split and a splash}} @@ under gas: a blast
+  </pre>
+  <p data-pid="ccbbaf"><b>A wall holding a gas holds back far more energy than one holding a liquid at the same pressure,</b> so pressure vessels are proved full of water. Divers’ tanks are tested this way every few years.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·eng2.5.1</span><span class="ph understand">understand</span>Why are tanks tested full of water instead of air?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="16eng26">
+  <h2 class="sthead"><span class="stno">16eng26</span>Moves to Watch Out For</h2>
+  <p data-pid="91fb75">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the push on the half pipe is } p \text{ times the curved area}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; sideways parts cancel; it is p times the flat cut, 2rL (16eng21)
+\sigma_{\text{along}} = \dfrac{pr}{t},\ \sigma_{\text{round}} = \dfrac{pr}{2t}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; round is pr/t, along is pr/2t (16eng22)
+\text{a frozen pipe should split in a ring}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the round pull is larger, so it splits lengthwise (16eng22)
+\text{make deep hulls long tubes, like a submarine}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a sphere holds twice the pressure for the same wall (16eng23)
+\text{test a tank with air, then switch to water if it holds}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; water first: a gas stores far more energy (16eng25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">16·eng2.6.1</span><span class="ph understand">understand</span>Which move above swaps the two stresses, and which is larger?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">16·eng2.7.1</span><span class="tagq">do</span>A diving tank of radius 9 cm holds 2 × 10⁷ Pa with a wall of 1 cm. Find the stress round it and along it.</div>
+  <div class="chq"><span class="chid">16·eng2.7.2</span><span class="tagq">make</span>Make up a pipe and pressure for which the round stress is 10⁸ Pa.</div>
+  <div class="chq"><span class="chid">16·eng2.7.3</span><span class="tagq">converse</span>A wall pulled harder round than along splits lengthwise. Decide whether a pipe that split lengthwise must have been pulled harder round.</div>
+  <div class="chq"><span class="chid">16·eng2.7.4</span><span class="tagq">edge</span>Let the pressure inside equal the pressure outside. Say what the wall carries.</div>
+  <div class="chq"><span class="chid">16·eng2.7.5</span><span class="tagq">open</span>Say why the thin-wall result needs t much smaller than r.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r16eng.html">← 16·eng · where will a loaded beam crack?</a><a href="r16econ.html">16·econ · who gains from a trade, and how much? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="608b48">The round stress is the <b>hoop stress</b>, the along stress the <b>longitudinal</b> or <b>axial stress</b>; pr/t and pr/2t are the <b>thin-walled pressure vessel</b> results. Folding inward under outside pressure is <b>buckling</b>. Proving with water is a <b>hydrostatic test</b>; the deep sphere a <b>pressure hull</b>; the oxygen breathing before a spacewalk a <b>prebreathe</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="66f81b">The thin-wall rule goes back to Edme Mariotte in the 1680s, who tested pipes for the fountains of Versailles. The bathyscaphe Trieste carried Jacques Piccard and Don Walsh in a steel sphere to the bottom of the Challenger Deep, about 10.9 km down, in 1960.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

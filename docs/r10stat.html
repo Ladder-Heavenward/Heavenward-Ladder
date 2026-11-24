@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10·stat · Why Sort the People Before You Pick Them?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r10g.html">← 10g playing the challenge game</a><a href="r10bio.html">next: 10·bio how fast can an enzyme go? →</a></p>
+  <div class="tags"><span class="tag stat">10·stat · statistics</span></div>
+  <h1>Why Sort the People Before You Pick Them?</h1>
+  <p data-pid="e8b40e">Why sort the people before you pick them? A baker wants to know how many loaves a household buys in a week, and can ask only two households out of six. Three live in town and buy few; three live on farms and buy many. A fair pick of two might land both in town, or both on farms, and miss badly. Picking one from town and one from the farms cannot miss that way. This page lists every sample both ways and measures their spread exactly, finds the weights needed when the groups are not the same size, and shows how picking whole streets at once can make the spread worse.</p>
+  <p class="gesture" data-pid="e36529">List every sample a design can draw, and its mean. If the means average to the true mean, the design is right on average; their standard deviation (8·stat) says how far one sample tends to miss. Sort the people into groups that differ from each other and are alike inside, and pick from each group: the spread shrinks. Weight each group by its share of the whole. Picking whole groups at once does the opposite when the groups are alike inside.</p>
+</header>
+
+<section class="class step" data-step="10stat1">
+  <h2 class="sthead"><span class="stno">10stat1</span>Every Sample of Two</h2>
+  <p data-pid="10e9a3">The six households buy these numbers of loaves a week. In town: 2, 3 and 4. On farms: 8, 9 and 10. The true mean is 36/6 = 6. A fair sample of two, in 6·stat’s sense, makes every pair equally likely. There are 6 choose 2 = 15 pairs.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>pairs</th><th>how many</th><th>their means</th></tr>
+    <tr><th>both in town</th><td>3</td><td>2.5, 3, 3.5</td></tr>
+    <tr><th>both on farms</th><td>3</td><td>8.5, 9, 9.5</td></tr>
+    <tr><th>one of each</th><td>9</td><td>5, 5.5, 5.5, 6, 6, 6, 6.5, 6.5, 7</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: the fair sample of two">
+9 + 27 + 54 = 90 @@ the 15 means, added in three groups
+90/15 = 6 @@ right on average, as 6stat3 promises
+\text{squared misses from } 6:\ 27.5 + 27.5 + 3 = 58 @@ 8·stat’s variance, one mean at a time
+\htmlClass{new}{\sqrt{58/15} \approx 1.97} @@ the standard deviation of a sample’s mean
+  </pre>
+  <p data-pid="e62f33">Right on average, and yet a single sample can land at 2.5 or 9.5. The six worst samples are the ones with both households from the same place.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\Diamond(\text{both in town}): \text{ 3 of the 15 pairs}\\ &amp;\text{mean } 6,\ \text{spread} \approx 1.97\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat.1.1</span><span class="ph understand">understand</span>How many samples of two are there, what do their means average to, and which samples miss worst?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10stat2">
+  <h2 class="sthead"><span class="stno">10stat2</span>Sort First, Then Pick</h2>
+  <p data-pid="c47c6f">Now the baker sorts first: pick one household fairly from town, and one fairly from the farms. Every sample has one of each, so the design can draw only the 9 pairs of the last row, each equally likely.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one from each group">
+\text{means: } 5, 5.5, 5.5, 6, 6, 6, 6.5, 6.5, 7 @@ the 9 pairs, one of each
+54/9 = 6 @@ still right on average
+\text{squared misses: } 1 + 0.25 \cdot 4 + 1 = 3 @@ from 6
+\htmlClass{new}{\sqrt{3/9} \approx 0.58} @@ a third of the spread of the fair pick
+  </pre>
+  <p data-pid="778312">Sorted-pick technique: <b>when the groups differ from each other and are alike inside, picking from every group keeps the sample right on average and shrinks its spread.</b> The 6 worst samples were removed by the design, not by luck. A pair from one place is no longer possible.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\lnot\Diamond(\text{both in town})\\ &amp;\text{spread } 1.97 \to 0.58\end{aligned}"></div>
+  <p data-pid="a2d77c">The groups must be made before anyone is asked, from something known about every household in advance, such as where it is. Sorting by the answers would be 6stat5’s mistake again.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat.2.1</span><span class="ph understand">understand</span>What does the sorted-pick technique say, and why must the groups be made before any answers are known?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10stat3">
+  <h2 class="sthead"><span class="stno">10stat3</span>Groups of Different Sizes Need Weights</h2>
+  <p data-pid="8de931">A different town: four households in town buy 2, 3, 4 and 3 loaves, and two farms buy 8 and 10. The true mean is 30/6 = 5. Pick one from town and one from the farms, and average the two. The town pick is right on average at 3, and the farm pick at 9, so the plain average of the two is right on average at 6, not 5.</p>
+  <p data-pid="9e50e6">The town is two thirds of the households and the farms one third. Weight each pick by its group’s share.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the weighted mean">
+\tfrac46 \cdot \text{town pick} + \tfrac26 \cdot \text{farm pick} @@ each group by its share of the six
+\text{right on average at } \tfrac46 \cdot 3 + \tfrac26 \cdot 9 @@ each pick right on average within its group (6stat3)
+= 2 + 3 @@ fractions (5h)
+\htmlClass{new}{= 5} @@ the true mean
+  </pre>
+  <p data-pid="8ab942">Weights technique: <b>with groups of different sizes, weight each group’s mean by the group’s share of the whole, and the result is right on average.</b> Without the weights, a small group counts as much as a large one.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\textstyle\sum_g \frac{N_g}{N} \cdot \bar x_g\\ &amp;N_g \text{ in group } g,\ N \text{ in all}\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat.3.1</span><span class="ph understand">understand</span>Why is the plain average of one pick from each group wrong when the groups differ in size, and what fixes it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10stat4">
+  <h2 class="sthead"><span class="stno">10stat4</span>Picking Whole Streets</h2>
+  <p data-pid="48aef1">Visiting houses far apart is slow, so a survey often picks whole streets and asks everyone on them. Say the six households live two to a street: one street buys 2 and 3, one buys 4 and 8, one buys 9 and 10. Pick one street fairly and ask both households.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one whole street">
+\text{street means: } 2.5,\ 6,\ 9.5 @@ three samples, equally likely
+(2.5 + 6 + 9.5)/3 = 6 @@ right on average
+\text{squared misses: } 12.25 + 0 + 12.25 = 24.5 @@ from 6
+\htmlClass{new}{\sqrt{24.5/3} \approx 2.86} @@ more spread than the fair pick of two, 1.97
+  </pre>
+  <p data-pid="499162">Two households on the same street are alike, so asking the second tells the baker little the first did not. <b>Picking whole groups that are alike inside spreads the answer more than picking the same number of people one by one.</b> Sorted picks want groups alike inside; whole-group picks want groups as mixed as the whole.</p>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;\text{one by one: } 1.97\\ &amp;\text{one from each group: } 0.58\\ &amp;\text{one whole street: } 2.86\end{aligned}"></div>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat.4.1</span><span class="ph understand">understand</span>Why does picking a whole street of two spread the answer more than picking two households one by one?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="10stat5">
+  <h2 class="sthead"><span class="stno">10stat5</span>Moves to Watch Out For</h2>
+  <p data-pid="6601fc">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{right on average, so this sample is right}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; right on average says nothing about one sample: measure the spread (10stat1)
+\text{sort by who answered “many”, then pick}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; groups are made before any answer is seen (10stat2)
+\text{one from each group, then the plain average}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; groups of different sizes need weights by their share (10stat3)
+\text{whole streets are as good, and cheaper}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; cheaper, and the spread can be larger when streets are alike inside (10stat4)
+\text{sorting removed bad luck}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the design made some samples impossible; nothing about luck changed (10stat2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">10·stat.5.1</span><span class="ph understand">understand</span>Which move above forms the groups after seeing the answers, and why does that break the design?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">10·stat.6.1</span><span class="tagq">do</span>Four households buy 1, 2, 7 and 8 loaves. List every fair sample of two and the spread of their means, then do the same for one household from {1, 2} and one from {7, 8}.</div>
+  <div class="chq"><span class="chid">10·stat.6.2</span><span class="tagq">make</span>Make six households and three streets of two so that picking one whole street has less spread than a fair pick of two households.</div>
+  <div class="chq"><span class="chid">10·stat.6.3</span><span class="tagq">converse</span>Sorting into groups that differ shrinks the spread. Decide whether sorting into groups that do not differ at all can make the spread larger, with an example or a reason.</div>
+  <div class="chq"><span class="chid">10·stat.6.4</span><span class="tagq">edge</span>In 10stat3, the baker picks two households from town and one farm. Find weights that make the mean right on average, and say what changes.</div>
+  <div class="chq"><span class="chid">10·stat.6.5</span><span class="tagq">open</span>A survey of a country picks provinces, then towns in each picked province, then households in each picked town. Say where it sorts, where it picks whole groups, and what each choice does to the spread and the cost.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r10g.html">← 10g · playing the challenge game</a><a href="r10bio.html">10·bio · how fast can an enzyme go? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="3042d3">Sorting first and picking from every group is <b>stratified sampling</b>, and the groups are <b>strata</b>; the weights are <b>stratum weights</b>. Picking whole groups is <b>cluster sampling</b>, and a design that picks groups and then people inside them is <b>multistage sampling</b>. The spread of a sample’s mean is its <b>standard error</b>, and how much a design changes it compared with a fair pick of the same size is its <b>design effect</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="6e6eed">Jerzy Neyman showed in 1934 that sorting into strata, with the sample shared out by the size and spread of each stratum, gives a more precise answer than picking whole groups chosen to look typical.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>38r · A Falling Run Proves Arithmetic Safe</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38q.html">← 38q proofs with no detours at all</a><a href="r38cb29.html">next: 38·cb29 a true sentence arithmetic cannot reach →</a></p>
+  <div class="tags"><span class="tag tech">38r · technique</span></div>
+  <h1>A Falling Run Proves Arithmetic Safe</h1>
+  <p data-pid="366b88">Arithmetic cannot prove itself clash-free (38l). It can be proved clash-free from outside, by something it cannot reach: a falling run of points up to ε₀ (35g). Give each proof of a clash in arithmetic a point below ε₀. Show how to turn it into another proof of a clash with a smaller point. Since a run of points cannot fall for ever (29·cb3), there was no proof of a clash. This step labels proofs with points, lowers the label, and finds where the outside strength lies.</p>
+  <p class="gesture" data-pid="a85b4e">Cut-free fails in arithmetic, because induction is a hidden cut. Gentzen gave each proof a point below ε₀ and a rewrite that lowers it while keeping a clash at the foot. So a proof of a clash gives an endless falling run: impossible. Arithmetic proves the falling run for each point below ε₀, but not for all of them at once.</p>
+</header>
+
+<section class="class step" data-step="38r1">
+  <h2 class="sthead"><span class="stno">38r1</span>Induction Is a Hidden Cut</h2>
+  <pre class="lines" data-k="ember" data-label="this step: arithmetic in the claim calculus">
+\dfrac{F(a), G \Rightarrow D, F(a + 1)}{F(0), G \Rightarrow D, F(t)} @@ the induction move
+\text{its marks } F \text{ need not be parts of the foot} @@ like a cut
+\text{cuts on these marks cannot all be pushed out} @@ cut-free fails (38q)
+\htmlClass{new}{\text{cuts can still be lowered, at the price of a bigger label}} @@ the label is a point, not a number
+  </pre>
+  <p data-pid="d24f14"><b>In arithmetic induction behaves like a cut that cannot be removed, so cut-free proofs are not available; what can be done is to trade cuts for a lower point.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38r1.1</span><span class="ph understand">understand</span>Why does induction stop cut-free proofs in arithmetic?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38r2">
+  <h2 class="sthead"><span class="stno">38r2</span>Labels Below ε₀</h2>
+  <pre class="lines" data-k="ember" data-label="this step: a proof of the clash ⇒">
+\text{each line gets a point below } \varepsilon_0 @@ built from the labels above it in base ω (35g3)
+\text{a cut stacks labels as } \omega^{\alpha} @@ cuts cost a power of ω
+\text{a rewrite of a proof of } \Rightarrow \text{ gives a proof of } \Rightarrow \text{ with a smaller label} @@ Gentzen’s reduction
+\htmlClass{new}{\text{a proof of a clash would start an endless falling run of points}} @@ impossible (29·cb3)
+  </pre>
+  <p data-pid="9afd06">Falling-label technique: <b>if every run of points below ε₀ falling at each step must stop, then arithmetic is clash-free;</b> the proof uses only finite rewriting of finite proofs, plus that one fact about points.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38r2.1</span><span class="ph understand">understand</span>How does a lowering label rule out a proof of a clash?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38r3">
+  <h2 class="sthead"><span class="stno">38r3</span>Where the Strength Lies</h2>
+  <pre class="lines" data-k="ember" data-label="this step: what arithmetic can prove">
+\text{for each } \alpha < \varepsilon_0:\ \text{arithmetic proves runs below } \alpha \text{ stop} @@ by induction, nested
+\text{runs below } \varepsilon_0 \text{ stop: not provable in arithmetic} @@ else it proves itself clash-free (38l)
+\text{the base-bump game ends: true, by the labels of 29·cb3} @@ its labels fall below ε₀
+\htmlClass{new}{\text{the base-bump game ends: not provable in arithmetic}} @@ a statement about numbers alone
+  </pre>
+  <p data-pid="441349"><b>Arithmetic is clash-free if falling runs below ε₀ stop; arithmetic proves this for every smaller point but not for ε₀ itself, and so cannot prove that the base-bump game always ends.</b> ε₀ measures exactly how strong arithmetic is.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38r3.1</span><span class="ph understand">understand</span>Why can arithmetic prove that runs stop below each smaller point but not below ε₀?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38r4">
+  <h2 class="sthead"><span class="stno">38r4</span>Moves to Watch Out For</h2>
+  <p data-pid="cae10d">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{this proves arithmetic clash-free from within}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it uses runs below ε₀, which arithmetic cannot prove stop (38r3)
+\text{the rewrite raises the label}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; it lowers it; that is what makes the run fall (38r2)
+\text{cut-free proofs exist in arithmetic}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; induction is a cut that cannot be removed (38r1)
+\text{the base-bump game is unprovable because it is false}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it is true, but not provable in arithmetic (38r3)
+\text{labels are counting numbers}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; they are points below ε₀ (38r2)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38r4.1</span><span class="ph understand">understand</span>Which move above claims the proof is from within, and what does it use from outside?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">38r.5.1</span><span class="tagq">do</span>Write a falling run of points starting at ω² + ω·2 and count how long it can be made, given each next point.</div>
+  <div class="chq"><span class="chid">38r.5.2</span><span class="tagq">make</span>Make up a proof whose label would be ω·2, and say what it is made of.</div>
+  <div class="chq"><span class="chid">38r.5.3</span><span class="tagq">converse</span>Falling runs below ε₀ stopping proves arithmetic clash-free. Decide whether arithmetic being clash-free proves falling runs below ε₀ stop.</div>
+  <div class="chq"><span class="chid">38r.5.4</span><span class="tagq">edge</span>Let the proof have no cuts and no induction. Say what its label is.</div>
+  <div class="chq"><span class="chid">38r.5.5</span><span class="tagq">open</span>Say why a proof of safety from outside is still worth having, when arithmetic cannot prove itself safe.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r38q.html">← 38q · proofs with no detours at all</a><a href="r38cb29.html">38·cb29 · a true sentence arithmetic cannot reach →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="018398">This is <b>Gentzen’s consistency proof</b> for <b>Peano arithmetic</b> (PA), by <b>transfinite induction up to ε₀</b>; ε₀ is the <b>proof-theoretic ordinal</b> of PA. The base-bump game is the <b>Goodstein sequence</b>; its unprovability is the <b>Kirby-Paris theorem</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="0b4127">Gerhard Gentzen proved arithmetic clash-free in 1936 and showed in 1943 that arithmetic cannot prove induction up to ε₀. Reuben Goodstein’s game is from 1944; Laurie Kirby and Jeff Paris proved it unprovable in 1982.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

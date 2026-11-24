@@ -48,7 +48,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r28logi.html">← 28·logi where should the warehouse go?</a><a href="r28concl.html">next: 28·∎ the derivative is a flat map in every direction →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28nav.html">← 28·nav which way is “up” for a plane over Paris?</a><a href="r28concl.html">next: 28·∎ the derivative is a flat map in every direction →</a></p>
   <div class="tags"><span class="tag now">28·now · research front</span></div>
   <h1>How Does a Machine Learn From Its Mistakes?</h1>
   <p data-pid="f60dc6">How does a machine learn from its mistakes? A program that reads handwritten digits, or turns speech into text, is not written line by line by anyone. It starts as a machine with millions of knobs set at random, and it is shown examples with their right answers. Each time it is wrong, every knob is turned a little, in the direction that would have made it less wrong. After enough examples it is right most of the time. People have tried to build such machines since the 1950s. The first could learn only what a single straight line can separate, and in 1969 a short proof showed how little that is. What makes the question hard is the knobs. To know which way to turn each of millions of them, you need the slope of the error in each of millions of directions, and finding each slope by trying the knob costs a whole run of the machine. In 1986 a paper showed that every one of those slopes comes out of one run backwards through the machine, by the chain technique of rung twenty-eight. Training is then a walk downhill in a space with millions of directions. This page proves the first machine’s mistake count, why one unit cannot learn either-but-not-both, how the backward run gets every slope at once, and what a walk downhill is sure to find. It ends with what is proved, and with what is still open: why the huge machines of today work as well as they do.</p>
@@ -62,7 +62,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 |w^*| = 1,\ \ y\,(w^* \cdot x) \ge \gamma \gt 0,\ \ |x| \le R \text{ for every example} @@ some weights w* get every example right, with room γ
 w_{k+1} \cdot w^* = w_k \cdot w^* + y\,(x \cdot w^*) \ge w_k \cdot w^* + \gamma @@ the (k + 1)th mistake adds yx
 |w_{k+1}|^2 = |w_k|^2 + 2y\,(w_k \cdot x) + |x|^2 \le |w_k|^2 + R^2 @@ on a mistake y(w_k · x) ≤ 0
-k\gamma \le w_k \cdot w^* \le |w_k| \le \sqrt{k}\,R @@ induction (4c) from w₀ = 0; the angle-between technique (27i): w · w* ≤ |w||w*|
+k\gamma \le w_k \cdot w^* \le |w_k| \le \sqrt{k}\,R @@ induction (4c) from w₀ = 0; the angle-between technique (27k): w · w* ≤ |w||w*|
 \htmlClass{new}{k \le (R/\gamma)^2} \quad \blacksquare @@ square, and divide by kγ²
   </pre>
   <div class="eqline c6" data-tex="\begin{aligned}&amp;\exists w^*\ \forall \text{examples}\ (\text{room} \ge \gamma) \land |x| \le R\\ &amp;\qquad\Rightarrow \text{mistakes} \le (R/\gamma)^2\end{aligned}"></div>
@@ -126,7 +126,7 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
 
 <section class="class step" data-step="28now4">
   <h2 class="sthead"><span class="stno">28now4</span>Training Is Walking Downhill</h2>
-  <p data-pid="84cbeb">Add the errors over every example: that is the total error, a function of all the knobs. Its uphill vector comes from the backward pass, one example at a time. Training steps the knobs p ↦ p − η∇ℓ(p), as 28o walks downhill. The total error of a network is no bowl: it has many hollows, and saddles between them. What can a walk downhill be sure of?</p>
+  <p data-pid="84cbeb">Add the errors over every example: that is the total error, a function of all the knobs. Its uphill vector comes from the backward pass, one example at a time. Training steps the knobs p ↦ p − η∇ℓ(p), as 28q walks downhill. The total error of a network is no bowl: it has many hollows, and saddles between them. What can a walk downhill be sure of?</p>
   <pre class="lines" data-k="ember" data-label="this page: the small-slope technique">
 \varphi(t) = \ell(p - t\,g),\ \ g = \nabla\ell(p),\ \ \varphi'(0) = -|g|^2 @@ the roads-add technique (28c) along the step
 \varphi''(t) \le L\,|g|^2 @@ given: along any line, the second slope of ℓ is at most L times the square of the speed
@@ -134,7 +134,7 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
 |g_0|^2 + \cdots + |g_{K-1}|^2 \le 2L\,\big(\ell(p_0) - \ell(p_K)\big) \le 2L\,\big(\ell(p_0) - \ell_{\min}\big) @@ add K steps of size η = 1/L; the error never falls below ℓ_min
 \htmlClass{new}{\text{some } k \lt K \text{ has } |g_k|^2 \le \tfrac{2L\,(\ell(p_0) - \ell_{\min})}{K}} \quad \blacksquare @@ the least of K numbers is at most their average
   </pre>
-  <p data-pid="821d1b">Small-slope technique: <b>if the error never bends more sharply than L, steps of size 1/L never raise it, and after K steps some step was taken where the uphill vector was small, its square at most 2L(ℓ₀ − ℓ_min)/K.</b> That is all. A place with a small uphill vector can be a bottom, a poor hollow, or a saddle (28l). The technique does not say which.</p>
+  <p data-pid="821d1b">Small-slope technique: <b>if the error never bends more sharply than L, steps of size 1/L never raise it, and after K steps some step was taken where the uphill vector was small, its square at most 2L(ℓ₀ − ℓ_min)/K.</b> That is all. A place with a small uphill vector can be a bottom, a poor hollow, or a saddle (28n). The technique does not say which.</p>
   <p data-pid="d8cd1f">On the four examples of either-but-not-both, from the knobs above, the total error starts at 0.337. With step size 0.5 it is 0.166 after 100 steps and 0.009 after 1000. With step size 2 it is 0.030 after 100. With step size 8 it first jumps up, to 0.67 after 10 steps, and then falls fast, to 0.003 after 100. With step size 20 it sits near 0.50 for hundreds of steps, a flat place that is not the bottom, before it finds its way down.</p>
   <aside class="nature">
     <div class="eyebrow">Anexact, yet rigorous · laws with an exception rate</div>
@@ -190,7 +190,7 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
 \text{a sharp yes or no can be trained by slopes}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; its slope is 0 wherever it has one
 \text{start every knob at the same value}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the two hidden units then get the same slopes, and stay twins for ever
 \text{a larger step size reaches the bottom sooner}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; past 2/L the steps can grow, or stall on a flat stretch
-\text{a small uphill vector means a bottom}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it can be a saddle or a poor hollow (28l)
+\text{a small uphill vector means a bottom}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it can be a saddle or a poor hollow (28n)
   </pre>
   <section class="slides" id="sl6"><div class="eyebrow">The slides · a move to watch out for · ← → keys work</div></section>
   <section class="sayback">
@@ -213,7 +213,7 @@ g_{k-1} = g_k\,\Sigma_k\,W_k @@ the chain-of-flat-maps technique (28c): slope gr
 </section>
 <div class="themecert themeend"></div>
 
-<nav class="nextrung"><a href="r28logi.html">← 28·logi · where should the warehouse go?</a><a href="r28concl.html">28·∎ · the derivative is a flat map in every direction →</a></nav>
+<nav class="nextrung"><a href="r28nav.html">← 28·nav · which way is “up” for a plane over Paris?</a><a href="r28concl.html">28·∎ · the derivative is a flat map in every direction →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
   <h3>The accepted names</h3>

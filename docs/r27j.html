@@ -1,25 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Solving Systems by Elimination</title>
+<title>27j · When Small Errors Grow Large</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
-
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -48,188 +37,79 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r27i.html">← 27i vectors by hand</a><a href="r27k.html">next: 27k determinants by hand →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r27i.html">← 27i pictures of two changing quantities</a><a href="r27k.html">next: 27k vectors by hand →</a></p>
   <div class="tags"><span class="tag tech">27j · technique</span></div>
-  <h1>Solving Systems by Elimination</h1>
-  <p data-pid="08b1c4">Many samenesses in many unknowns, all at once, are one grid times one unknown vector equal to a known vector. The oldest way to solve them is still the best by hand and by machine. Use one sameness to clear one unknown out of all the others. Then do it again with the next unknown, and the next, until the grid is a staircase. Three moves on the rows are all it takes, and none of them changes the answers. Carried all the way, the moves leave the grid in lowest terms, and like a fraction it has only one lowest form. From that form the answers can be read straight off: one answer, none, or a whole family of them, with exactly as many free choices as the grid loses directions. The same moves undo a grid. And the work can be counted. It grows like the cube of the number of unknowns, which is why a laptop solves a thousand samenesses in a moment.</p>
-  <p class="gesture" data-pid="b19b8d">Three moves on the rows of a system never change its answers. Used to clear one unknown at a time, they bring any grid to one lowest form, and the answers are read off from it. The same moves undo a grid, and the work grows like the cube of the number of unknowns.</p>
+  <h1>When Small Errors Grow Large</h1>
+  <p data-pid="2e4d46">A machine solving Ax = b works with numbers rounded to sixteen places, and data measured to three. Usually that is plenty. But some systems turn a tiny change in b into a huge change in x: their rows point almost the same way, and the solution is where two nearly parallel lines cross. This step measures how much a matrix can magnify errors, by the most and least it stretches, proves the fence on the error, and shows a system where four digits of data give no digits of answer.</p>
+  <p class="gesture" data-pid="e70a24">The stretch of A is the most it lengthens any vector, ‖A‖. If Ax = b and A(x + δx) = b + δb, then ‖δx‖/‖x‖ ≤ ‖A‖‖A⁻¹‖ · ‖δb‖/‖b‖. The number ‖A‖‖A⁻¹‖ is the magnifier: near 1 is safe, 10ᵏ loses k digits.</p>
 </header>
 
 <section class="class step" data-step="27j1">
-  <h2 class="sthead"><span class="stno">27j1</span>Three Moves That Keep the Answers</h2>
-  <p data-pid="f6bfe0">m samenesses in n unknowns, aᵢ₁x₁ + ⋯ + aᵢₙxₙ = bᵢ, are one sameness of vectors, Ax = b, with A the grid of the numbers in front (27d1). Write the rows of A with bᵢ at the end of each; that grid is [A | b]. Three <i>row moves</i> change it: swap two rows; stretch a row by a number that is not 0; add a stretch of one row to another.</p>
-  <p data-pid="aa50bc">Row-move technique: <b>each row move is multiplying on the left by an undoable grid E; so a row move on [A | b] keeps exactly the same answers x, and each row move is undone by another row move.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the row-move technique">
-E = I \text{ with the same move done to its rows} @@ swap: rows i, k of I swapped; stretch: c in place i, i; add: t in place i, k
-\text{row } i \text{ of } EA = \textstyle\sum_l e_{il}\,(\text{row } l \text{ of } A) @@ the product-is-doing technique (27d2)
-EA = A \text{ with the move done} @@ each kind of E picks out the rows the move asks for
-\text{undo: swap again; stretch by } 1/c;\ \text{add } -t \text{ times the row} @@ each undo is a row move of the same kind, so E is undoable (27d3)
-Ax = b \Rightarrow EAx = Eb;\ \ EAx = Eb \Rightarrow Ax = E^{-1}EAx = E^{-1}Eb = b @@ multiply on the left by E, then by E⁻¹
-\htmlClass{new}{\text{the same answers before and after}} \quad \blacksquare
+  <h2 class="sthead"><span class="stno">27j1</span>Two Nearly Parallel Lines</h2>
+  <pre class="lines" data-k="ember" data-label="this step: a tiny change in b">
+x + y = 2,\ \ x + 1.001y = 2.001:\ x = 1,\ y = 1 @@ two lines that nearly coincide
+\text{change } 2.001 \text{ to } 2.002 @@ a change of one part in 2000
+x = 0,\ \ y = 2 @@ the crossing slides far
+\htmlClass{new}{\text{a } 0.05\% \text{ change in } b \text{ gives a } 100\% \text{ change in } x} @@ a magnification of about 2000
   </pre>
-  <pre class="lines" data-k="ember" data-label="this step: three samenesses, cleared one unknown at a time">
-x + y + z = 6,\ \ 2x + y - z = 1,\ \ x - y + 2z = 5 @@ given
--y - 3z = -11,\ \ -2y + z = -1 @@ add −2 times row 1 to row 2, and −1 times row 1 to row 3: x is cleared
-7z = 21 @@ add −2 times the new row 2 to the new row 3: y is cleared
-z = 3,\ \ y = 11 - 3z = 2,\ \ x = 6 - y - z = 1 @@ back up the stairs, one unknown at a time
-\htmlClass{new}{(x, y, z) = (1, 2, 3)} \quad \blacksquare @@ check: 1 + 2 + 3 = 6, 2 + 2 − 3 = 1, 1 − 2 + 6 = 5
-  </pre>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · row moves · ← → keys work</div></section>
+  <p data-pid="356353">From here on, the <i>stretch</i> of a matrix, ‖A‖, is the largest value of ‖Av‖/‖v‖ over nonzero v, measured with 27h’s length.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27j1.1</span><span class="ph understand">understand</span>What are the three row moves? <br>Why does a row move on [A | b] keep exactly the same answers?</li>
+      <li><span class="qid">27j1.1</span><span class="ph understand">understand</span>How can a change of one part in 2000 in b move the solution all the way from (1, 1) to (0, 2)?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="27j2">
-  <h2 class="sthead"><span class="stno">27j2</span>One Lowest Form</h2>
-  <p data-pid="e59367">In each row that is not all 0, the first entry that is not 0 is its <i>lead</i>. A grid is in <i>lowest terms</i> when each lead is 1, each lead sits to the right of the lead in the row above, rows of zeros are at the bottom, and each lead is the only entry that is not 0 in its column. Elimination gets there column by column: find a row at or below the current one with a number that is not 0 in this column, swap it up, stretch it to make its lead 1, and clear the rest of the column by adding stretches of it to the other rows.</p>
-  <p data-pid="bf7665">Grid-lowest-terms technique: <b>row moves bring every grid to a grid in lowest terms, and to only one.</b> As each fraction has one form in lowest terms (5h), each grid has one.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the grid-lowest-terms technique">
-\text{elimination ends in lowest terms} @@ each column is finished once, and later moves leave it as it is
-R,\ R' \text{ lowest forms of } A \Rightarrow Rx = 0 \text{ and } R'x = 0 \text{ have the same answers} @@ both have the answers of Ax = 0 (the row-move technique, 27j1)
-\text{column } j \text{ is a lead column} \iff \text{it is not a mix of the columns before it} @@ a lead’s 1 sits where every column before it has 0; any other column is a mix of the lead columns before it
-\text{a mix } c_1(\text{col } 1) + \cdots = \text{col } j \iff x = (c_1, \ldots, -1, 0, \ldots, 0) \text{ is an answer} @@ Ax is the mix of the columns with the numbers of x (27d1)
-R \text{ and } R' \text{ have the same lead columns, and the same mixes for the others} @@ the same answers; the lead columns are free, so each mix is the only one
-\htmlClass{new}{R = R'} \quad \blacksquare @@ a lead column is e₁, e₂, … in order; every other column is fixed by its mix
+  <h2 class="sthead"><span class="stno">27j2</span>The Magnifier</h2>
+  <p data-pid="38ec95">Magnifier technique: <b>if A is undoable, Ax = b with b ≠ 0, and A(x + δx) = b + δb, then ‖δx‖/‖x‖ ≤ ‖A‖ ‖A⁻¹‖ ‖δb‖/‖b‖.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the magnifier technique">
+A\,\delta x = \delta b \Rightarrow \|\delta x\| = \|A^{-1}\delta b\| \le \|A^{-1}\|\,\|\delta b\| @@ subtract; the stretch of A⁻¹
+\|b\| = \|Ax\| \le \|A\|\,\|x\| \Rightarrow \dfrac{1}{\|x\|} \le \dfrac{\|A\|}{\|b\|} @@ the stretch of A
+\dfrac{\|\delta x\|}{\|x\|} \le \|A\|\,\|A^{-1}\|\,\dfrac{\|\delta b\|}{\|b\|} @@ multiply
+\htmlClass{new}{\kappa(A) = \|A\|\,\|A^{-1}\| \ge 1} \quad \blacksquare @@ 1 = ‖I‖ ≤ ‖A‖‖A⁻¹‖
   </pre>
-  <p data-pid="ddd469">Bring [A | b] to lowest terms and read the answers. If a row says 0 = 1, there are none. Otherwise each unknown at a lead is its right side less the other unknowns in its row, and the unknowns with no lead are free: any numbers will do. The free unknowns are as many as the columns less the leads, and that is the dimension of what A loses, by the lost-plus-reached technique (27c2): the lead columns are a basis of what A reaches.</p>
-  <pre class="lines" data-k="ember" data-label="this step: a family of answers">
-x + 2y + z = 4,\ \ 2x + 4y + 3z = 9,\ \ 3x + 6y + 4z = 13 @@ given
-\begin{pmatrix}1&2&0&3\\0&0&1&1\\0&0&0&0\end{pmatrix} @@ lowest terms of [A | b]: −2 row 1 to row 2, −3 row 1 to row 3, −1 row 2 to row 3, −1 row 2 to row 1
-x = 3 - 2y,\ \ z = 1,\ \ y \text{ free} @@ leads in the x and z columns; no lead for y
-\htmlClass{new}{(x, y, z) = (3, 0, 1) + y\,(-2, 1, 0)} \quad \blacksquare @@ one free choice: A loses a line, of dimension 1
-  </pre>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · lowest terms · ← → keys work</div></section>
+  <p data-pid="ebbe33">κ(A) is at least 1, and for the nearly parallel lines it is about 4000. <b>A system with magnifier 10ᵏ can lose k of the digits in its data.</b> It is a fact about the problem, not the method: no cleverness of solving can recover digits the problem destroys.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27j2.1</span><span class="ph understand">understand</span>When is a grid in lowest terms? <br>What does the grid-lowest-terms technique say?</li>
+      <li><span class="qid">27j2.1</span><span class="ph understand">understand</span>Why does the error in x stay within κ(A) times the error in b, and what does κ mean in digits?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="27j3">
-  <h2 class="sthead"><span class="stno">27j3</span>Undoing a Grid, and What It Costs</h2>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\Box(A \text{ can be undone} \Leftrightarrow \text{row moves reach } I)\\ &amp;\qquad\text{(3b2)}\end{aligned}"></div>
-  <p data-pid="09393a">Undo-by-rows technique: <b>a square grid A can be undone exactly when row moves bring it to I; and the same row moves, done to I, give A⁻¹.</b> So write [A | I], and bring it to lowest terms.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the undo-by-rows technique">
-E_k\cdots E_1A = I @@ the row moves that bring A to I, as grids (27j1)
-A = (E_k\cdots E_1)^{-1},\ \ A^{-1} = E_k\cdots E_1 = E_k\cdots E_1\,I @@ each Eᵢ is undoable, so their product is (27d3); multiply on the left by its undo
-A \text{ undoable} \Rightarrow R = E_k\cdots E_1A \text{ undoable} @@ products of undoable grids are undoable (27d3)
-R \text{ has no row of zeros} \Rightarrow n \text{ leads in } n \text{ columns} @@ a row of zeros in R stays one in RB, so RB ≠ I
-\htmlClass{new}{R = I} \quad \blacksquare @@ the only square grid in lowest terms with n leads
+  <h2 class="sthead"><span class="stno">27j3</span>Good Methods and Bad Problems</h2>
+  <pre class="lines" data-k="ember" data-label="this step: two different failures">
+\text{a bad problem: large } \kappa @@ any method loses digits
+\text{a bad method: elimination without swapping rows} @@ can lose digits on a good problem
+10^{-20}x + y = 1,\ x + y = 2:\ \text{divide by } 10^{-20} \text{ and the 2 is rounded away} @@ a tiny pivot
+\htmlClass{new}{\text{swap the rows first: the answer } x \approx 1,\ y \approx 1 \text{ is found}} @@ the largest pivot first (27l’s elimination by hand)
   </pre>
-  <p data-pid="28cfe3">Elimination-cost technique: <b>for n samenesses in n unknowns, when no lead is 0 on the way, clearing down the stairs and solving back up takes n³/3 + n² − n/3 multiplications and divisions. So the work is ~ n³/3, and doubling n multiplies it by about 8.</b> Swaps cost no multiplying.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the elimination-cost technique">
-\text{column } k:\ n - k \text{ rows to clear} @@ the rows below the lead, k = 1, …, n − 1
-\text{each: one division, then } n - k + 1 \text{ multiplications} @@ the multiplier, then the rest of the row and its right side
-\textstyle\sum_{k=1}^{n-1}(n-k)(n-k+2) = \sum_{j=1}^{n-1}(j^2 + 2j) = \tfrac{(n-1)n(2n-1)}{6} + (n-1)n @@ j = n − k; sum of squares and doubled sum (15g)
-\text{back up: row } k \text{ takes } n - k \text{ multiplications and one division} @@ put in the unknowns already found
-\textstyle\sum_{k=1}^{n}(n-k+1) = \tfrac{n(n+1)}{2} @@ doubled sum (15g)
-\htmlClass{new}{\tfrac{n^3}{3} + n^2 - \tfrac{n}{3} \sim \tfrac{n^3}{3}} \quad \blacksquare @@ multiply out and add; the n³ term wins (22k)
-  </pre>
-  <p data-pid="4a8521">At n = 3 that is 17. At n = 1000 it is 334 333 000, under a second on a laptop. Weather forecasts, the strength of a bridge, the pages of a search engine: each is a system of samenesses. Many have millions of unknowns. Each grid is mostly zeros, and careful elimination never has to touch them.</p>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · undo and cost · ← → keys work</div></section>
+  <p data-pid="66f9d2"><b>A problem with a small magnifier can still be ruined by a method that divides by a tiny number;</b> taking the largest entry of each column as the pivot avoids that. Good methods lose no more than the problem’s own magnifier.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27j3.1</span><span class="ph understand">understand</span>What does the undo-by-rows technique say? <br>What does the elimination-cost technique say?</li>
+      <li><span class="qid">27j3.1</span><span class="ph understand">understand</span>What is the difference between a badly posed problem and a bad method, and how does swapping rows help?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="27j4">
-  <h2 class="sthead"><span class="stno">27j4</span>The Lowest Form From the Answers</h2>
-  <p data-pid="7cc888">One grid has one lowest form (27j2). Now take two grids A and B with the same number of columns, and suppose Ax = 0 and Bx = 0 have exactly the same answers. The grids may even have different numbers of rows.</p>
-  <p data-pid="2894a4">Same-lowest-form technique: <b>Ax = 0 and Bx = 0 have the same answers exactly when A and B have the same lowest form, rows of zeros aside. And then each row of B is a mix of the rows of A, and each row of A is a mix of the rows of B.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the same-lowest-form technique">
-Rx = 0,\ R'x = 0 \text{ have the same answers} @@ R, R′ are the lowest forms of A, B; the row-move technique (27j1), for each
-\text{same lead columns, same mixes} @@ both are read from the answers alone: the proof of 27j2
-R = R' \text{, rows of zeros aside} @@ a lead column is e₁, e₂, …, and every other column is its mix of them
-R = EA,\ \ B = E'^{-1}R' @@ E, E′ are the products of the row-move grids, each undoable (27j1)
-\htmlClass{new}{\text{each row of } B \text{ is a mix of rows of } A} \quad \blacksquare @@ a row of a product is a mix of the rows of its right-hand grid (27j1), twice
-  </pre>
-  <p data-pid="1dbd78">The other way round is the row-move technique itself: grids with one lowest form have the answers of that form. Take A with rows (1, 1, 1), (1, 2, 3) and B with rows (2, 3, 4), (0, 1, 2), (1, 0, −1). Both come down to the rows (1, 0, −1), (0, 1, 2), with a row of zeros left over in B. So both have the answers z · (1, −2, 1), and (2, 3, 4) is the first row of A plus the second.</p>
-  <p data-pid="9f5f97">With right sides that are not 0, an answer x of Ax = b is an answer (x, −1) of the grid [A | b] with right sides 0. So two systems that each have an answer have the same answers exactly when [A | b] and [B | c] have the same lowest form.</p>
-  <p data-pid="e32366">The three row moves are more than are needed. A swap is four of the other two: add row 2 to row 1, take the new row 1 from row 2, add the new row 2 to row 1, and stretch row 2 by −1. The rows (r₁, r₂) become (r₁ + r₂, r₂), then (r₁ + r₂, −r₁), then (r₂, −r₁), then (r₂, r₁).</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">27j4.1</span><span class="ph understand">understand</span>When do Ax = 0 and Bx = 0 have the same answers? <br>What does that say about the rows of B?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="27j5">
-  <h2 class="sthead"><span class="stno">27j5</span>What the Rows Build, and What Can Be Reached</h2>
-  <p data-pid="9dce4c">The rows of a grid are vectors too, and their mixes are a space. Row moves change the rows. Do they change what the rows build?</p>
-  <p data-pid="c05974">Row-space technique: <b>row moves keep what the rows build, and the rows of the lowest form that are not 0 are a basis of it. So the rows of a grid build a space of the same dimension as its columns do: the number of leads.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the row-space technique">
-\text{row } i \text{ of } EA = \textstyle\sum_l e_{il}\,(\text{row } l \text{ of } A) @@ the second line of 27j1: each new row is a mix of the old rows
-A = E^{-1}(EA) @@ and each old row is a mix of the new: the same space
-c_1(\text{lead row } 1) + \cdots + c_r(\text{lead row } r) = 0 @@ suppose a mix of the lead rows of R is 0
-\text{in the column of lead } i \text{ the mix has } c_i @@ a lead is 1 and the only entry of its column that is not 0
-c_1 = \cdots = c_r = 0 @@ so the lead rows are free
-\htmlClass{new}{\text{the lead rows are a basis; dimension } r} \quad \blacksquare @@ the lead columns of A are a basis of what A reaches (27j2): r again
-  </pre>
-  <p data-pid="0eea78">The readings gave the same count by another road (27h3). Here it comes with a basis in hand, and that answers a question about spaces by row moves: is (1, 4, 7) a mix of (1, 1, 1) and (1, 2, 3)? The lowest form of those two rows is (1, 0, −1), (0, 1, 2), and (1, 4, 7) = (1, 0, −1) + 4 · (0, 1, 2). It is.</p>
-  <p data-pid="15cd63">Zero-rows technique: <b>bring [A | b] to [R | c] by the row moves that bring A to its lowest form R. Then Ax = b has an answer exactly when c is 0 in every row where R is all 0; that is, when [A | b] has no more leads than A.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the zero-rows technique">
-[A \mid b] \to [R \mid c],\ \ c = Eb @@ the same moves done to b; the answers are kept (27j1)
-\text{a row of zeros in } R \text{ with } c_i \neq 0 @@ that row says 0 = cᵢ: no answer
-\text{every such } c_i = 0 @@ give each free unknown 0 and read the lead unknowns from c (27j2): an answer
-\htmlClass{new}{\text{an answer} \iff [A \mid b] \text{ gains no lead}} \quad \blacksquare @@ the first entry not 0 of a row 0 … 0 | cᵢ is cᵢ itself
-  </pre>
-  <p data-pid="1455ed">With letters for the right sides the technique says which right sides can be reached. Take A with rows (1, 1), (1, 2), (2, 3). Take row 1 from row 2, twice row 1 from row 3, then the new row 2 from the new row 3. The last row reads 0 0 | b₃ − b₁ − b₂. So Ax = b has an answer exactly when b₃ = b₁ + b₂, and what A reaches is that plane.</p>
-  <p data-pid="ea046f">The same work cuts a system to fit a space. To find samenesses whose answers are exactly the mixes of (1, 0, 1) and (0, 1, 1), put the two vectors down as rows and solve for what they lose: z · (−1, −1, 1). The one sameness −x − y + z = 0 has both vectors as answers, and its answers have dimension 3 − 1 = 2 (27c2). So its answers are their mixes and nothing else.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">27j5.1</span><span class="ph understand">understand</span>Why do row moves keep what the rows build? <br>When does Ax = b have an answer, read from the lowest form?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="27j6">
-  <h2 class="sthead"><span class="stno">27j6</span>Row and Column Moves Together</h2>
-  <p data-pid="18184d">A column move changes what the unknowns are (27j7), so it is no help in solving. It still asks a fair question: how simple can a grid be made when both kinds of move are allowed? Write Dᵣ for the grid, of the same shape as A, with 1 in places 1, 1 to r, r and 0 everywhere else.</p>
-  <p data-pid="025406">Row-and-column technique: <b>row and column moves bring every grid A to Dᵣ, where r is the dimension of what A reaches. So PAQ = Dᵣ for an undoable P and an undoable Q. Two grids of one shape come to each other by such moves exactly when they reach the same dimension.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the row-and-column technique">
-\text{column } j \text{ of } AE = A\,(\text{column } j \text{ of } E) @@ the product-is-doing technique (27d2)
-AE = A \text{ with the column move done} @@ E is I with that move done to its columns; undoable, as in 27j1
-A \to R \text{ in lowest terms, } r \text{ leads} @@ row moves (27j2)
-R \to \begin{pmatrix}I & C\\ 0 & 0\end{pmatrix} @@ column swaps bring the r lead columns to the front
-\to \begin{pmatrix}I & 0\\ 0 & 0\end{pmatrix} = D_r @@ take stretches of the first r columns from the later ones: each clears one entry of C
-\htmlClass{new}{PAQ = D_r} \quad \blacksquare @@ P is the product of the row-move grids, Q of the column-move grids
-  </pre>
-  <p data-pid="c0950f">The number r cannot come out two ways. An undoable Q reaches every list, so AQ reaches what A reaches. An undoable P loses nothing, so it matches what AQ reaches with what PAQ reaches, and matched spaces have one dimension (27d5). And Dᵣ reaches a space of dimension r.</p>
-  <p data-pid="022b3e">So if A and B both reach dimension r, then P₁AQ₁ = Dᵣ = P₂BQ₂, and B = P₂⁻¹P₁AQ₁Q₂⁻¹. The grid with rows (1, 2, 3), (2, 4, 6) and the grid with rows (0, 0, 5), (0, 0, 0) each reach a line. Both come to the grid with rows (1, 0, 0), (0, 0, 0). Seen this way a grid has only one number worth keeping. The answers of Ax = b are not kept: the unknowns were changed to x = Qx′ on the way.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">27j6.1</span><span class="ph understand">understand</span>What is the simplest grid that row and column moves together can reach from A? <br>Why are the answers of Ax = b not kept on the way?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="27j7">
-  <h2 class="sthead"><span class="stno">27j7</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-\text{stretch a row by } 0\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it cannot be undone: x + y = 2, x − y = 0 becomes x + y = 2, 0 = 0, with new answers
-\text{add a stretch of one column to another}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; columns hold the unknowns; mixing them changes what the unknowns are, and the answers
-n \text{ samenesses in } n \text{ unknowns have exactly one answer}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only when A can be undone: x + y = 1, 2x + 2y = 2 has a whole line of answers
-\text{more unknowns than samenesses} \Rightarrow \text{many answers}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; there may be none: x + y + z = 1, x + y + z = 2
-\text{same answers} \Rightarrow \text{same rows}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; the same lowest form, not the same rows: x + y = 0 and 2x + 2y = 0
-\text{row moves keep what the columns reach}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; they keep what the rows build: rows (1, 1), (1, 1) reach the line of (1, 1), and after one move the line of (1, 0)
-PAQ = D_r \text{ keeps the answers}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;outside the plan&lt;/span&gt; Q changes what the unknowns are: x = Qx′
+  <h2 class="sthead"><span class="stno">27j4</span>Moves to Watch Out For</h2>
+  <p data-pid="b2ddcb">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{rounding to 16 places is always enough}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a magnifier of 10¹⁶ leaves nothing (27j2)
+\kappa(A) \text{ can be below } 1\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it is at least ‖I‖ = 1 (27j2)
+\text{a large determinant means a safe system}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; scaling changes the determinant, not κ; nearly parallel rows matter (27j1)
+\text{solve, then check the magnifier}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; check κ first: it says how many digits can be trusted (27j2)
+\text{a bad answer always means a bad method}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it can be a bad problem with large κ (27j3)
   </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">27j7.1</span><span class="ph understand">understand</span>Why is stretching a row by 0 a move to watch out for? <br>Why is adding a stretch of one column to another one?</li>
+      <li><span class="qid">27j4.1</span><span class="ph understand">understand</span>Which move above judges safety by the determinant, and what measures it instead?</li>
     </ol>
   </section>
 </section>
@@ -237,50 +117,25 @@ PAQ = D_r \text{ keeps the answers}\,? @@ &lt;span class=&quot;vd vd-p&quot;&gt;
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">27j.4.1</span><span class="tagq">build</span><span class="givens"><span data-tex-inline="(x, y, z) = (1, 0, 2) + t\,(1, 1, -1)"></span></span>Build a system of three samenesses in three unknowns, no row a stretch of another, whose answers are exactly these. Check it in lowest terms.</div>
-  <div class="chq"><span class="chid">27j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="0.0001x + y = 1,\ \ x + y = 2"></span></span>Solve it exactly, then by elimination keeping three digits after each step, with the rows as given and then swapped. <br>Which order goes wrong, and why is a small lead dangerous?</div>
-  <div class="chq"><span class="chid">27j.4.3</span><span class="tagq">converse</span>Row moves keep the answers. Turn it round: do two systems in the same unknowns with exactly the same answers have the same [A | b] in lowest terms, rows of zeros dropped? Prove it when there is an answer, and find two systems with no answers whose lowest forms differ.</div>
-  <div class="chq"><span class="chid">27j.4.4</span><span class="tagq">reroute</span><span class="givens"><span data-tex-inline="A = \begin{pmatrix}2&amp;1\\1&amp;1\end{pmatrix}"></span></span>Undo this grid by bringing [A | I] to lowest terms, naming each move. <br>Undo the grid with rows (a, b), (c, d), a ≠ 0, the same way, and find where ad − bc appears.</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">27j.5.1</span><span class="tagq">do</span>Find the solution of x + y = 2, x + 1.0001y = 2.0001, then change the last number by 0.0001 and solve again.</div>
+  <div class="chq"><span class="chid">27j.5.2</span><span class="tagq">make</span>Make up a 2 × 2 matrix with κ = 1 that is not the identity.</div>
+  <div class="chq"><span class="chid">27j.5.3</span><span class="tagq">converse</span>Large κ makes small changes in b grow. Decide whether small κ guarantees a small error whatever the method.</div>
+  <div class="chq"><span class="chid">27j.5.4</span><span class="tagq">edge</span>Let A be undoable but with two nearly equal rows. Say what κ does as they become equal.</div>
+  <div class="chq"><span class="chid">27j.5.5</span><span class="tagq">open</span>Say how κ could be estimated without finding A⁻¹.</div>
 </section>
 <div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r27i.html">← 27i · pictures of two changing quantities</a><a href="r27k.html">27k · vectors by hand →</a></nav>
 
-<nav class="nextrung"><a href="r27i.html">← 27i · vectors by hand</a><a href="r27k.html">27k · determinants by hand →</a></nav>
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>Solving by clearing one unknown at a time is Gaussian elimination; carried to lowest terms it is Gauss–Jordan elimination. Row moves are elementary row operations, and their grids E are elementary matrices. The staircase is row echelon form, and lowest terms is reduced row echelon form, with the leads as pivots. A system with no answer is inconsistent. The number of leads is the rank of A, and the unknowns with no lead are free variables. Swapping the largest entry up to be the lead, as 27j.4.2 suggests, is partial pivoting. Grids that are mostly zeros are sparse. Two systems with the same answers are equivalent systems, and their grids are row-equivalent. What the rows build is the row space, and the number of leads is the rank. A system with an answer is consistent. Grids with B = PAQ for undoable P and Q are equivalent, and Dᵣ is the rank normal form.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="5e7bfa">The magnifier is the <b>condition number</b>; a problem with large κ is <b>ill-conditioned</b>; the stretch is the <b>operator norm</b>; choosing the largest pivot is <b>partial pivoting</b>, and a method losing no more than the problem is <b>backward stable</b>.</p>
   <h3>Who said it first</h3>
-  <p>The Nine Chapters on the Mathematical Art, compiled in China by about the first century, solves systems of up to six samenesses by this method, with counting rods on a board, column by column. Carl Friedrich Gauss used it around 1809 to find the orbit of the asteroid Pallas from many observations, and Wilhelm Jordan described the full reduction in 1888 for surveying. John von Neumann and Herman Goldstine, and Alan Turing, studied its rounding errors on the first computers in 1947 and 1948.</p>
+  <p data-pid="a8deff">Alan Turing named the condition number in 1948; John von Neumann and Herman Goldstine studied rounding in elimination in 1947, and James Wilkinson built the theory of backward error in the 1960s.</p>
 </section>
 
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-const Nw='\\htmlClass{new}';
-
-stepper('#sl1',[
-  {k:'ember',kl:'one sameness',t:R`Ax = b`,n:`Many samenesses, one grid.`},
-  {k:'ember',kl:'three moves',t:R`\text{swap, stretch by } c \ne 0,\ \text{add a stretch of a row}`,n:`Each is a grid E that can be undone.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{EAx = Eb \iff Ax = b}`,n:`The answers never change.`}
-],{title:'The slides · row moves · ← → keys work'});
-stepper('#sl2',[
-  {k:'ember',kl:'clear',t:R`\text{one column at a time}`,n:`Swap up, stretch the lead to 1, clear the column.`},
-  {k:'ember',kl:'read',t:R`\text{lead unknowns} = \text{right side} - \text{free ones}`,n:`A row 0 = 1 means none.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\text{one lowest form; free unknowns} = \dim(\text{lost})}`,n:`As many free choices as directions lost.`}
-],{title:'The slides · lowest terms · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'side by side',t:R`[A \mid I] \to [I \mid A^{-1}]`,n:`The moves that clear A build its undo.`},
-  {k:'ember',kl:'count',t:R`\textstyle\sum (n-k)(n-k+2) + \tfrac{n(n+1)}{2}`,n:`Down the stairs, then back up.`},
-  {k:'ember',kl:'so',t:R`\htmlClass{new}{\sim n^3/3}`,n:`Twice the unknowns, eight times the work.`}
-],{title:'The slides · undo and cost · ← → keys work'});
-})();
-</script>
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

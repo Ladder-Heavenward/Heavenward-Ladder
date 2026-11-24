@@ -1,10 +1,15 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Numbers for Every Machine</title>
+<title>45a · Rings Whose Ideals Are Finitely Made</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
    then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
@@ -32,74 +37,78 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r45.html">← 45 many machines, one answer</a><a href="r45b.html">next: 45b machines that only talk →</a></p>
-  <div class="tags"><span class="tag proof">45a · proof</span></div>
-  <h1>Numbers for Every Machine</h1>
-  <p data-pid="89b3c6">Before machines can agree they must find each other, and before a message can be lost it must be addressed. This step sets down the one protocol every later step rides on: a number of fixed width for every machine, a cut in that number that names its network, and a packet that each router passes one hop onward by the longest prefix it knows. What the protocol promises is little, and the little is exact.</p>
-  <p class="gesture" data-pid="7ab5d8">Every machine carries a number of fixed width. A router reads the destination, finds the longest prefix it matches, and passes the packet one hop on. Nothing else is promised.</p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45.html">← 45 shapes are read in their rings</a><a href="r45b.html">next: 45b polynomials in several letters →</a></p>
+  <div class="tags"><span class="tag tech">45a · technique</span></div>
+  <h1>Rings Whose Ideals Are Finitely Made</h1>
+  <p data-pid="3f37ff">In the whole numbers and in polynomials of one letter, every ideal has one maker (44c). With two letters that fails: the polynomials with no constant term in x and y need both x and y. What survives is weaker and enough: every ideal is made by finitely many members. This step shows that finitely made ideals and rising chains that stop are the same condition, and finds a ring where both fail.</p>
+  <p class="gesture" data-pid="eabdd0">A ring has finitely made ideals exactly when every rising chain of ideals I₁ ⊆ I₂ ⊆ ⋯ stops rising. One letter: one maker. Endlessly many letters x₁, x₂, …: the chain (x₁) ⊆ (x₁, x₂) ⊆ ⋯ rises for ever.</p>
 </header>
 
 <section class="class step" data-step="45a1">
-  <h2 class="sthead"><span class="stno">45a1</span>A Number of Fixed Width</h2>
-  <p data-pid="4b19a8">The internet is a network of networks. Every machine on it, or every link a machine has, carries one number, and the whole design rests on the number having a fixed width: 32 bits in the older protocol, 128 in the newer. A 32-bit number has 2³² values, which is 4,294,967,296; a 128-bit number has 2¹²⁸, about 3.4 × 10³⁸.</p>
-  <p data-pid="464bf3">People do not read 32 bits at a glance, so the number is written in groups. The 32-bit form is four groups of 8 bits, each written in decimal and separated by dots: 192.0.2.17. The 128-bit form is eight groups of 16 bits, each written in hexadecimal and separated by colons: 2001:0db8:0000:0000:0000:0000:0000:0001. The grouping is for the eye. The machine sees one number.</p>
-  <p data-pid="171d57">Fixed-width technique: <b>a written number of fixed width can be read back whatever is left out of it, as long as what is left out can be counted from the width.</b> The next footing spends this.</p>
+  <h2 class="sthead"><span class="stno">45a1</span>Finitely Made</h2>
+  <pre class="lines" data-k="ember" data-label="this step: ideals made by a few members">
+(a_1, \ldots, a_k) = \{r_1a_1 + \cdots + r_ka_k\} @@ the smallest ideal holding them (44b)
+\text{in } F[x]:\ (x^2 - 1,\ x^3 - 1) = (x - 1) @@ one maker, the highest common divisor (44c)
+\text{in } F[x, y]:\ (x, y) \ne (g) \text{ for any } g @@ g would divide x and y, so g is a constant
+\htmlClass{new}{(x, y) \text{ is finitely made, by two}} @@ two letters, two makers
+  </pre>
+  <p data-pid="a2e686"><b>An ideal is finitely made when finitely many of its members make it; in polynomials of two letters, one maker is not enough, but finitely many can be.</b></p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45a1.1</span><span class="ph understand">understand</span>How many values does a 32-bit number take? <br>What is the grouping for?</li>
+      <li><span class="qid">45a1.1</span><span class="ph understand">understand</span>Why does the ideal (x, y) need two makers?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45a2">
-  <h2 class="sthead"><span class="stno">45a2</span>Why Two Colons Can Stand for Zeros</h2>
-  <p data-pid="d4f8c9">Most 128-bit addresses hold a long run of zero groups, and writing eight groups out is tiresome. The technique is this. Leading zeros in a group may be dropped, because a group is a number and 0db8 is db8. One run of consecutive all-zero groups may be replaced by a double colon. So the address above is 2001:db8::1.</p>
-  <p data-pid="1f2bbf">Here is why the double colon can be read back. There are always eight groups. The written form shows some of them, say s. Then the double colon stands for exactly 8 − s groups of zeros, and nothing is lost. In 2001:db8::1 three groups show, so the colon stands for five.</p>
-  <p data-pid="8d1cd6">And here is why it may appear only once. Suppose two double colons stood for k missing groups between them. The k could be split as 1 and k − 1, or 2 and k − 2, and so on: k − 1 ways, every one a different address. One double colon has one reading; two have many. So appearing once is proved from the fixed width, and is not a convention.</p>
-  <p data-pid="42c342">The accepted written form adds three choices so that every address has one spelling: the double colon stands for the longest run, the first if two are equal, and never for a single zero group, which is written 0. Letters are lower case. The 32-bit form has no such technique, since 192.0.2.0 is short already.</p>
+  <h2 class="sthead"><span class="stno">45a2</span>Rising Chains Stop</h2>
+  <pre class="lines" data-k="ember" data-label="this step: I₁ ⊆ I₂ ⊆ I₃ ⊆ ⋯">
+U = I_1 \cup I_2 \cup \cdots \text{ is an ideal} @@ any two members lie in one Iₙ
+U = (a_1, \ldots, a_k),\ \text{each } a_j \in I_{n_j} @@ if every ideal is finitely made
+U \subseteq I_N,\ N = \max n_j \Rightarrow I_N = I_{N+1} = \cdots @@ the chain stops
+\htmlClass{new}{\text{conversely: an ideal not finitely made gives a chain that never stops}} @@ add one member at a time
+  </pre>
+  <p data-pid="c32cf0">Finite-maker technique: <b>every ideal of R is finitely made exactly when every rising chain of ideals in R stops rising after finitely many steps.</b></p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45a2.1</span><span class="ph understand">understand</span>How many zero groups does :: stand for in 2001:db8::1? <br>Why may it not appear twice?</li>
+      <li><span class="qid">45a2.1</span><span class="ph understand">understand</span>Why does every ideal being finitely made make rising chains stop?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45a3">
-  <h2 class="sthead"><span class="stno">45a3</span>The Cut: Prefix and Host</h2>
-  <p data-pid="16a78e">A router cannot hold a line for every machine in the world. So the number is cut at a chosen bit. The first p bits are the prefix, which names a network; the rest name a machine within it. The cut is written after a slash: 192.0.2.0/24 is every address whose first 24 bits are those of 192.0.2.0, which is 256 addresses, 192.0.2.0 to 192.0.2.255. A prefix of length p covers 2³²⁻ᵖ addresses, or 2¹²⁸⁻ᵖ in the longer form.</p>
-  <p data-pid="124371">The cut gives the number a shape that counting alone does not. Every machine on one network shares one prefix, so a router far away needs one line for all of them: where to send anything beginning 192.0.2. A network can be cut again at a deeper bit, so that one prefix holds many smaller ones, each a prefix in its own right. The lines a router holds are prefixes, never single machines, unless a prefix is all 128 or all 32 bits long.</p>
-  <p data-pid="e1e70f">Two prefixes either nest or are disjoint. If one address lies in both, the shorter is a beginning of the longer, so the longer lies wholly within the shorter. That is the fact that makes the next footing's technique well defined.</p>
+  <h2 class="sthead"><span class="stno">45a3</span>A Ring Where Chains Rise for Ever</h2>
+  <pre class="lines" data-k="ember" data-label="this step: polynomials in x₁, x₂, x₃, …">
+(x_1) \subsetneq (x_1, x_2) \subsetneq (x_1, x_2, x_3) \subsetneq \cdots @@ each new letter is outside
+x_{n+1} \notin (x_1, \ldots, x_n) @@ set x₁ = ⋯ = xₙ = 0: x_{n+1} is not 0
+(x_1, x_2, \ldots) \text{ is not finitely made} @@ by the technique
+\htmlClass{new}{\text{finitely many letters will be needed}} @@ the next step
+  </pre>
+  <p data-pid="e0c325"><b>With endlessly many letters an ideal can need endlessly many makers;</b> with finitely many, it never does, which is the next step.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45a3.1</span><span class="ph understand">understand</span>How many addresses does a /20 cover? <br>Why can two prefixes that share an address not overlap partly?</li>
+      <li><span class="qid">45a3.1</span><span class="ph understand">understand</span>Why does the chain (x₁) ⊆ (x₁, x₂) ⊆ ⋯ never stop?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="45a4">
-  <h2 class="sthead"><span class="stno">45a4</span>Best Effort, One Hop at a Time</h2>
-  <p data-pid="f12a2d">A message is cut into packets. Each packet carries a header and a load. The header holds the source number, the destination number, the length, a hop count, and a few marks; the load is whatever the layer above wrote. Each router reads only the destination. It looks through its lines for the prefixes the destination matches and chooses the longest, which is the most specific; it passes the packet to the next hop that line names; and it lowers the hop count by one. A packet whose count reaches 0 is thrown away, so that a loop between routers cannot carry a packet for ever.</p>
-  <p data-pid="78fab0">Longest-prefix technique: <b>send toward the next hop of the longest prefix the destination matches; a more specific line beats a shorter one.</b> The prefix of length 0 matches everything and is the default route, used when nothing longer matches. By 45a3 the matching prefixes nest, so the longest is unique, and the technique always names one hop.</p>
-  <p data-pid="0567be">Notice what no router knows: the path. Each knows a next hop, and the path is the sum of choices no one sees whole. And notice what the protocol promises: that each router will try. A packet may be lost, delayed, delivered twice, or delivered after one sent later. This is best effort, and it is exactly the model of 45b. Everything a machine can rely on beyond it is built above, in 45d's handshakes and 45e's counters.</p>
+  <h2 class="sthead"><span class="stno">45a4</span>Moves to Watch Out For</h2>
+  <p data-pid="794946">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{every ideal of } F[x, y] \text{ has one maker}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; (x, y) needs two (45a1)
+\text{a union of ideals is never an ideal}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; a rising union is one (45a2)
+\text{chains stopping means ideals have one maker}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; finitely many makers, not one (45a2)
+x_{n+1} \in (x_1, \ldots, x_n)\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; setting the first n letters to 0 leaves x_{n+1} (45a3)
+\text{the condition fails in } \mathbb Z\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; ℤ has one maker for every ideal (45a1)
+  </pre>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">45a4.1</span><span class="ph understand">understand</span>Which line does a router use when several prefixes match? <br>What does best effort promise, and what does it not?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="45a5">
-  <h2 class="sthead"><span class="stno">45a5</span>What the Number Does Not Say</h2>
-  <p data-pid="43ecee">The number says where, not who. It belongs to a place in the network, so it changes when a machine moves, a machine with two links has two, and many machines may stand behind one, as 45·comp tells. Nothing in the header proves the source number is true, since any machine may write any number there; that is the door 45h's liars come through. And since no router keeps the packet, nothing in the network remembers that a packet passed. Whatever is to be sure, the ends must make sure of, by messages of their own.</p>
-  <p data-pid="01c4f5">So the protocol is small on purpose. It names, it cuts, it forwards, and it drops. Every certainty the rest of the rung wins is won on top of a floor that promises nothing but a try, and the proofs that follow are sharp because the floor is.</p>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">45a5.1</span><span class="ph understand">understand</span>Does the number name a machine or a place? <br>Where must certainty be made?</li>
+      <li><span class="qid">45a4.1</span><span class="ph understand">understand</span>Which move above asks for one maker where finitely many are meant?</li>
     </ol>
   </section>
 </section>
@@ -107,18 +116,22 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them.</p>
-  <div class="chq"><span class="chid">45a.6.1</span><span class="tagq">seam</span><span class="givens"><span class="gtx">two lines, one packet</span></span>A router holds a line for 10.24.0.0/13 toward one neighbour and a line for 10.24.12.0/22 toward another. A packet arrives for 10.24.13.1. Which way does it go, and why must a router that announces the shorter prefix also hold a line that drops what matches it and nothing longer?</div>
-  <div class="chq"><span class="chid">45a.6.2</span><span class="tagq">build</span><span class="givens"><span class="gtx">a spelling with one reading</span></span>Write a technique for leaving groups out of the 32-bit dotted form, and either prove that every address keeps one reading under it or show the address that gets two.</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">45a.5.1</span><span class="tagq">do</span>Find one maker for the ideal (12, 18, 30) of ℤ.</div>
+  <div class="chq"><span class="chid">45a.5.2</span><span class="tagq">make</span>Make up a rising chain of ideals in ℤ and say where it stops.</div>
+  <div class="chq"><span class="chid">45a.5.3</span><span class="tagq">converse</span>Finitely made ideals give stopping chains. Decide whether a ring in which every chain of ideals falling downward stops must also have finitely made ideals.</div>
+  <div class="chq"><span class="chid">45a.5.4</span><span class="tagq">edge</span>Let R be a field. Say what its ideals and chains are.</div>
+  <div class="chq"><span class="chid">45a.5.5</span><span class="tagq">open</span>Say why the continuous functions on [0, 1] do not have finitely made ideals.</div>
 </section>
 <div class="themecert themeend"></div>
-
-<nav class="nextrung"><a href="r45.html">← 45 · many machines, one answer</a><a href="r45b.html">45b · machines that only talk →</a></nav>
+<nav class="nextrung"><a href="r45.html">← 45 · shapes are read in their rings</a><a href="r45b.html">45b · polynomials in several letters →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>The accepted names</h3>
-  <p>The protocol is the Internet Protocol, IP, specified for 32-bit addresses in RFC 791 (1981) and for 128-bit addresses in RFC 2460 (1998), now RFC 8200 (2017). The 32-bit written form is dotted decimal; the 16-bit groups of the 128-bit form are hextets, and their one spelling is laid down in RFC 5952 (2010). The cut is the prefix length, and the slash form is CIDR notation; the older form of the same cut was the subnet mask. A packet is a datagram, the hop count is the time to live in the older protocol and the hop limit in the newer, and the rule of 45a4 is longest-prefix match. The promise of a try is best effort, and the claim of 45a5 that certainty lives at the ends is the end-to-end argument.</p>
+  <h3>Accepted names</h3>
+  <p data-pid="f91497">A ring whose ideals are finitely made is <b>Noetherian</b>; rising chains stopping is the <b>ascending chain condition</b>. (a₁, …, aₖ) is the ideal <b>generated</b> by them.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="2466bb">Emmy Noether made the chain condition the centre of ring theory in her paper on ideal theory of 1921.</p>
 </section>
 
 </div>

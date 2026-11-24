@@ -1,24 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Volumes by Cross Sections</title>
+<title>16j · How Close Is a Strip Sum?</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <link rel="stylesheet" href="rung.css">
 <style>
-.pic .panels{grid-template-columns:1fr 1fr}
-@media (max-width:760px){.pic .panels{grid-template-columns:1fr}}
-.panel{align-content:start;min-width:0}
-.pic .eqbox{font-size:.92rem;white-space:normal;overflow-x:auto}
-@media (max-width:520px){.pic .eqbox{font-size:.8rem}}
-.rows .row.wide{grid-template-columns:minmax(0,1fr)} .rows .row.wide .n{max-width:none;padding-left:10px;border-left:2px solid var(--grid)}
-@media (max-width:520px){.rows .row .m{font-size:.9rem}.eqline{font-size:.9rem}}
-.kn{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:.88rem}
-.kn input{width:100%} .kn output{font-family:var(--mono);font-size:.82rem;min-width:4.2em;text-align:right}
-.verdict{font-size:.95rem;padding:6px 10px;border-left:3px solid var(--grid);background:var(--sand);border-radius:0 4px 4px 0}
-.verdict.win{border-left-color:var(--teal)} .verdict.lose{border-left-color:var(--ember)}
-.lbl{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:4px 0 -4px}
 table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
 /* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
@@ -47,161 +37,103 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 <div class="wrap">
 
 <header class="top">
-  <p class="home"><a href="index.html">← the ladder</a><a href="r16i.html">← 16i improper integrals</a><a href="r16phys.html">next: 16·phys how far did it go, if you only know how fast? →</a></p>
+  <p class="home"><a href="index.html">← the ladder</a><a href="r16i.html">← 16i improper integrals</a><a href="r16k.html">next: 16k volumes by cross sections →</a></p>
   <div class="tags"><span class="tag tech">16j · technique</span></div>
-  <h1>Volumes by Cross Sections</h1>
-  <p data-pid="f2667d">Rung 15 laid down three axioms for area and squeezed every other area out of boxes. Volume is built the same way, with solid boxes in place of flat ones. Three axioms for volume, and one squeeze between stacks of thin slabs, prove that a solid's volume is the integral of the areas of its cross sections. From that come the prism’s volume, base times height, and the pyramid’s, a third of that, from the area under the square. Then comes the technique that solids with matching slices have the same volume. Then the volumes of solids built on a flat region with square or rectangular slices. And last, the mass of a solid whose density changes from slice to slice.</p>
-  <p class="gesture" data-pid="b67d37">Slice the solid by parallel planes. The volume is the integral of the slices’ areas along the line that crosses them. A prism: base times height. A pyramid: a third of base times height. Matching slices, matching volumes. Mass is the integral of each slice’s area times its heaviness for its size.</p>
+  <h1>How Close Is a Strip Sum?</h1>
+  <p data-pid="308d1d">Most areas cannot be found by running the table backwards: e^(−x²) has no antiderivative among the functions of this ladder. A machine adds strips instead. Topping each strip with a slanted line, not a flat one, makes the sum far better, and how much better can be proved: the error is fenced by the bend of the curve and the square of the strip width. This step proves the fence for one strip by 16e’s parts, adds it over all strips, and checks it on x², where the fence is met exactly.</p>
+  <p class="gesture" data-pid="cda45c">On one strip of width h, the slanted top misses the area by exactly the integral of t(h − t)/2 times f″, so by at most M h³/12, where |f″| ≤ M. Over n strips across [a, b], at most (b − a) M h²/12: halve the width and the error falls to a quarter.</p>
 </header>
 
 <section class="class step" data-step="16j1">
-  <h2 class="sthead"><span class="stno">16j1</span>Three Axioms for Volume</h2>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{slice of } S \text{ at } x = k\ :=\ \{(y, z) : (k, y, z) \in S\}\end{aligned}"></div>
-  <p class="eqline" data-pid="4630de">From here on, a point of space is a triple (x, y, z) of reals, as a point of the plane is a pair (9e). For a set S of points of space and a real k, the slice of S at x = k is the set of pairs (y, z) with (k, y, z) in S.</p>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;[p, q] \times [c, d] \times [e, f] :=\\ &amp;\qquad \{(x, y, z) : p \le x \le q\ \land\\ &amp;\qquad\quad c \le y \le d \land e \le z \le f\}\end{aligned}"></div>
-  <p class="eqline" data-pid="a7cdbe">From here on, for p &lt; q, c &lt; d and e &lt; f, the box [p, q] × [c, d] × [e, f] is the set of points (x, y, z) with p ≤ x ≤ q, c ≤ y ≤ d and e ≤ z ≤ f. Its accepted name is a rectangular box, or cuboid.</p>
-  <p data-pid="87f7cc">Box-volume axiom: <b>the box [p, q] × [c, d] × [e, f] has volume (q − p)(d − c)(f − e).</b> Inside-no-more axiom for volume: <b>if one solid lies inside another, and both have volumes, the first volume is no more than the second.</b> Side-by-side axiom for volume: <b>if two solids with volumes share no points except some on a single flat wall x = k, y = k or z = k, then the two together have the sum of the two volumes.</b> Each is earned as the area axioms were: without one of them, a box has no size, a part could outweigh the whole, or two halves need not make it.</p>
-  <p data-pid="14d4a9">These are rung 15's three axioms, one dimension up. Nothing else is assumed. In particular, nothing yet says that a ball has a volume at all. The next footing squeezes one out.</p>
-  <p data-pid="d51f49">In this step the names prism and pyramid are given by slices alone. A prism's slices all have one area. A pyramid's slices shrink evenly, in every direction, toward a point. Nothing more about them is used here than their slices.</p>
-  <section class="slides" id="sl1"><div class="eyebrow">The slides · three axioms · ← → keys work</div></section>
+  <h2 class="sthead"><span class="stno">16j1</span>Slanted Tops</h2>
+  <p data-pid="0935a8">Split [a, b] into n strips of width h = (b − a)/n. Top each strip with the straight line joining the curve at its two ends: each strip is then a trapezium.</p>
+  <pre class="lines" data-k="ember" data-label="this step: the slanted-top sum">
+\text{one strip: } \tfrac{h}{2}\big(f(x_{i}) + f(x_{i+1})\big) @@ average height times width
+T_n = h\Big(\tfrac12 f(a) + f(x_1) + \cdots + f(x_{n-1}) + \tfrac12 f(b)\Big) @@ inside ends counted twice, halved
+\int_0^1 x^2\,dx,\ n = 4:\ T_4 = \tfrac14\big(\tfrac12 \cdot 0 + \tfrac1{16} + \tfrac4{16} + \tfrac9{16} + \tfrac12 \cdot 1\big) = 0.34375 @@ against 1/3
+\htmlClass{new}{\text{error} = 0.34375 - 0.33333 = \tfrac{1}{96}} @@ the curve bends up, so the tops sit above
+  </pre>
+  <p data-pid="baf268">From here on, T<sub>n</sub> is the slanted-top sum with n strips.</p>
+  <!--gfig 16j1--><div class="gfigs" data-gfig="16j1" data-story="[[&quot;Across is x from 0 to 1. Up is the height of y = x².&quot;, []], [&quot;The curve is y = x². The area under it from 0 to 1 is 1/3.&quot;, [&quot;polyline+ink&quot;, &quot;~area = 1/3&quot;]], [&quot;Four strips of width ¼, each topped by the straight line joining the curve at its two ends. Their areas add to T₄ = 0.34375.&quot;, [&quot;gold&quot;, &quot;~T₄&quot;]], [&quot;The curve bends up, so each slanted top sits a little above it. The thin slivers between them are the error: 0.34375 − 1/3 = 1/96.&quot;, [&quot;ember&quot;, &quot;~error 1/96&quot;, &quot;~(the thin&quot;]]]"><svg class="gfig" viewBox="0 0 400 230" style="width:100%;max-width:440px;display:block;margin:12px auto;background:var(--card);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="the curve y equals x squared on 0 to 1 under four slanted-top strips, the thin slivers between chord and curve shaded as the error"><defs><clipPath id="gcdfba0cec"><rect x="38" y="12" width="334" height="174"/></clipPath></defs><line x1="40" x2="370" y1="184.0" y2="184.0" style="stroke:var(--ink);stroke-width:1"/><line x1="40.0" x2="40.0" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="40.0" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0</text><line x1="116.4" x2="116.4" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="116.4" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.25</text><line x1="192.8" x2="192.8" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="192.8" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="269.2" x2="269.2" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="269.2" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.75</text><line x1="345.6" x2="345.6" y1="184.0" y2="188.0" style="stroke:var(--ink);stroke-width:1"/><text x="345.6" y="199.0" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><line x1="40" x2="370" y1="146.1" y2="146.1" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="150.1" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.25</text><line x1="40" x2="370" y1="108.1" y2="108.1" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="112.1" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.5</text><line x1="40" x2="370" y1="70.2" y2="70.2" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="74.2" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">0.75</text><line x1="40" x2="370" y1="32.2" y2="32.2" style="stroke:var(--grid);stroke-width:.7"/><text x="36" y="36.2" text-anchor="end" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">1</text><polygon points="40.0,184.0 40.0,184.0 116.4,174.5 116.4,184.0" style="fill:var(--gold);fill-opacity:.35;stroke:var(--gold);stroke-width:1"/><polygon points="40.0,184.0 40.6,183.9 41.3,183.8 41.9,183.8 42.5,183.7 43.2,183.6 43.8,183.5 44.5,183.4 45.1,183.4 45.7,183.3 46.4,183.2 47.0,183.1 47.6,183.1 48.3,183.0 48.9,182.9 49.5,182.8 50.2,182.7 50.8,182.7 51.5,182.6 52.1,182.5 52.7,182.4 53.4,182.3 54.0,182.3 54.6,182.2 55.3,182.1 55.9,182.0 56.6,181.9 57.2,181.9 57.8,181.8 58.5,181.7 59.1,181.6 59.7,181.5 60.4,181.5 61.0,181.4 61.6,181.3 62.3,181.2 62.9,181.2 63.6,181.1 64.2,181.0 64.8,180.9 65.5,180.8 66.1,180.8 66.7,180.7 67.4,180.6 68.0,180.5 68.6,180.4 69.3,180.4 69.9,180.3 70.6,180.2 71.2,180.1 71.8,180.0 72.5,180.0 73.1,179.9 73.7,179.8 74.4,179.7 75.0,179.7 75.6,179.6 76.3,179.5 76.9,179.4 77.6,179.3 78.2,179.3 78.8,179.2 79.5,179.1 80.1,179.0 80.7,178.9 81.4,178.9 82.0,178.8 82.7,178.7 83.3,178.6 83.9,178.5 84.6,178.5 85.2,178.4 85.8,178.3 86.5,178.2 87.1,178.1 87.7,178.1 88.4,178.0 89.0,177.9 89.7,177.8 90.3,177.8 90.9,177.7 91.6,177.6 92.2,177.5 92.8,177.4 93.5,177.4 94.1,177.3 94.7,177.2 95.4,177.1 96.0,177.0 96.7,177.0 97.3,176.9 97.9,176.8 98.6,176.7 99.2,176.6 99.8,176.6 100.5,176.5 101.1,176.4 101.7,176.3 102.4,176.3 103.0,176.2 103.7,176.1 104.3,176.0 104.9,175.9 105.6,175.9 106.2,175.8 106.8,175.7 107.5,175.6 108.1,175.5 108.8,175.5 109.4,175.4 110.0,175.3 110.7,175.2 111.3,175.1 111.9,175.1 112.6,175.0 113.2,174.9 113.8,174.8 114.5,174.8 115.1,174.7 115.8,174.6 116.4,174.5 116.4,174.5 115.8,174.7 115.1,174.8 114.5,175.0 113.8,175.1 113.2,175.3 112.6,175.4 111.9,175.6 111.3,175.7 110.7,175.9 110.0,176.0 109.4,176.2 108.8,176.3 108.1,176.5 107.5,176.6 106.8,176.7 106.2,176.9 105.6,177.0 104.9,177.1 104.3,177.3 103.7,177.4 103.0,177.5 102.4,177.7 101.7,177.8 101.1,177.9 100.5,178.1 99.8,178.2 99.2,178.3 98.6,178.4 97.9,178.5 97.3,178.7 96.7,178.8 96.0,178.9 95.4,179.0 94.7,179.1 94.1,179.2 93.5,179.4 92.8,179.5 92.2,179.6 91.6,179.7 90.9,179.8 90.3,179.9 89.7,180.0 89.0,180.1 88.4,180.2 87.7,180.3 87.1,180.4 86.5,180.5 85.8,180.6 85.2,180.7 84.6,180.8 83.9,180.9 83.3,181.0 82.7,181.0 82.0,181.1 81.4,181.2 80.7,181.3 80.1,181.4 79.5,181.5 78.8,181.5 78.2,181.6 77.6,181.7 76.9,181.8 76.3,181.9 75.6,181.9 75.0,182.0 74.4,182.1 73.7,182.1 73.1,182.2 72.5,182.3 71.8,182.4 71.2,182.4 70.6,182.5 69.9,182.5 69.3,182.6 68.6,182.7 68.0,182.7 67.4,182.8 66.7,182.8 66.1,182.9 65.5,182.9 64.8,183.0 64.2,183.0 63.6,183.1 62.9,183.1 62.3,183.2 61.6,183.2 61.0,183.3 60.4,183.3 59.7,183.4 59.1,183.4 58.5,183.4 57.8,183.5 57.2,183.5 56.6,183.6 55.9,183.6 55.3,183.6 54.6,183.7 54.0,183.7 53.4,183.7 52.7,183.7 52.1,183.8 51.5,183.8 50.8,183.8 50.2,183.8 49.5,183.9 48.9,183.9 48.3,183.9 47.6,183.9 47.0,183.9 46.4,183.9 45.7,183.9 45.1,184.0 44.5,184.0 43.8,184.0 43.2,184.0 42.5,184.0 41.9,184.0 41.3,184.0 40.6,184.0 40.0,184.0" style="fill:var(--ember);fill-opacity:0.55;stroke:none"/><polygon points="116.4,184.0 116.4,174.5 192.8,146.1 192.8,184.0" style="fill:var(--gold);fill-opacity:.35;stroke:var(--gold);stroke-width:1"/><polygon points="116.4,174.5 117.0,174.3 117.7,174.0 118.3,173.8 118.9,173.6 119.6,173.3 120.2,173.1 120.8,172.9 121.5,172.6 122.1,172.4 122.8,172.1 123.4,171.9 124.0,171.7 124.7,171.4 125.3,171.2 125.9,171.0 126.6,170.7 127.2,170.5 127.8,170.2 128.5,170.0 129.1,169.8 129.8,169.5 130.4,169.3 131.0,169.1 131.7,168.8 132.3,168.6 132.9,168.3 133.6,168.1 134.2,167.9 134.8,167.6 135.5,167.4 136.1,167.2 136.8,166.9 137.4,166.7 138.0,166.4 138.7,166.2 139.3,166.0 139.9,165.7 140.6,165.5 141.2,165.3 141.9,165.0 142.5,164.8 143.1,164.6 143.8,164.3 144.4,164.1 145.0,163.8 145.7,163.6 146.3,163.4 146.9,163.1 147.6,162.9 148.2,162.7 148.9,162.4 149.5,162.2 150.1,161.9 150.8,161.7 151.4,161.5 152.0,161.2 152.7,161.0 153.3,160.8 153.9,160.5 154.6,160.3 155.2,160.0 155.9,159.8 156.5,159.6 157.1,159.3 157.8,159.1 158.4,158.9 159.0,158.6 159.7,158.4 160.3,158.1 160.9,157.9 161.6,157.7 162.2,157.4 162.9,157.2 163.5,157.0 164.1,156.7 164.8,156.5 165.4,156.3 166.0,156.0 166.7,155.8 167.3,155.5 168.0,155.3 168.6,155.1 169.2,154.8 169.9,154.6 170.5,154.4 171.1,154.1 171.8,153.9 172.4,153.6 173.0,153.4 173.7,153.2 174.3,152.9 175.0,152.7 175.6,152.5 176.2,152.2 176.9,152.0 177.5,151.7 178.1,151.5 178.8,151.3 179.4,151.0 180.0,150.8 180.7,150.6 181.3,150.3 182.0,150.1 182.6,149.8 183.2,149.6 183.9,149.4 184.5,149.1 185.1,148.9 185.8,148.7 186.4,148.4 187.0,148.2 187.7,148.0 188.3,147.7 189.0,147.5 189.6,147.2 190.2,147.0 190.9,146.8 191.5,146.5 192.1,146.3 192.8,146.1 192.8,146.1 192.1,146.4 191.5,146.7 190.9,147.0 190.2,147.3 189.6,147.6 189.0,147.9 188.3,148.2 187.7,148.5 187.0,148.8 186.4,149.1 185.8,149.5 185.1,149.8 184.5,150.1 183.9,150.4 183.2,150.6 182.6,150.9 182.0,151.2 181.3,151.5 180.7,151.8 180.0,152.1 179.4,152.4 178.8,152.7 178.1,153.0 177.5,153.3 176.9,153.5 176.2,153.8 175.6,154.1 175.0,154.4 174.3,154.7 173.7,154.9 173.0,155.2 172.4,155.5 171.8,155.8 171.1,156.0 170.5,156.3 169.9,156.6 169.2,156.9 168.6,157.1 168.0,157.4 167.3,157.6 166.7,157.9 166.0,158.2 165.4,158.4 164.8,158.7 164.1,158.9 163.5,159.2 162.9,159.5 162.2,159.7 161.6,160.0 160.9,160.2 160.3,160.5 159.7,160.7 159.0,161.0 158.4,161.2 157.8,161.5 157.1,161.7 156.5,161.9 155.9,162.2 155.2,162.4 154.6,162.7 153.9,162.9 153.3,163.1 152.7,163.4 152.0,163.6 151.4,163.8 150.8,164.1 150.1,164.3 149.5,164.5 148.9,164.7 148.2,165.0 147.6,165.2 146.9,165.4 146.3,165.6 145.7,165.8 145.0,166.1 144.4,166.3 143.8,166.5 143.1,166.7 142.5,166.9 141.9,167.1 141.2,167.3 140.6,167.6 139.9,167.8 139.3,168.0 138.7,168.2 138.0,168.4 137.4,168.6 136.8,168.8 136.1,169.0 135.5,169.2 134.8,169.4 134.2,169.6 133.6,169.8 132.9,170.0 132.3,170.1 131.7,170.3 131.0,170.5 130.4,170.7 129.8,170.9 129.1,171.1 128.5,171.3 127.8,171.5 127.2,171.6 126.6,171.8 125.9,172.0 125.3,172.2 124.7,172.3 124.0,172.5 123.4,172.7 122.8,172.9 122.1,173.0 121.5,173.2 120.8,173.4 120.2,173.5 119.6,173.7 118.9,173.9 118.3,174.0 117.7,174.2 117.0,174.4 116.4,174.5" style="fill:var(--ember);fill-opacity:0.55;stroke:none"/><polygon points="192.8,184.0 192.8,146.1 269.2,98.6 269.2,184.0" style="fill:var(--gold);fill-opacity:.35;stroke:var(--gold);stroke-width:1"/><polygon points="192.8,146.1 193.4,145.7 194.1,145.3 194.7,144.9 195.3,144.5 196.0,144.1 196.6,143.7 197.2,143.3 197.9,142.9 198.5,142.5 199.1,142.1 199.8,141.7 200.4,141.3 201.1,140.9 201.7,140.5 202.3,140.1 203.0,139.7 203.6,139.3 204.2,138.9 204.9,138.5 205.5,138.1 206.1,137.8 206.8,137.4 207.4,137.0 208.1,136.6 208.7,136.2 209.3,135.8 210.0,135.4 210.6,135.0 211.2,134.6 211.9,134.2 212.5,133.8 213.1,133.4 213.8,133.0 214.4,132.6 215.1,132.2 215.7,131.8 216.3,131.4 217.0,131.0 217.6,130.6 218.2,130.2 218.9,129.8 219.5,129.5 220.2,129.1 220.8,128.7 221.4,128.3 222.1,127.9 222.7,127.5 223.3,127.1 224.0,126.7 224.6,126.3 225.2,125.9 225.9,125.5 226.5,125.1 227.2,124.7 227.8,124.3 228.4,123.9 229.1,123.5 229.7,123.1 230.3,122.7 231.0,122.3 231.6,121.9 232.2,121.5 232.9,121.2 233.5,120.8 234.2,120.4 234.8,120.0 235.4,119.6 236.1,119.2 236.7,118.8 237.3,118.4 238.0,118.0 238.6,117.6 239.2,117.2 239.9,116.8 240.5,116.4 241.2,116.0 241.8,115.6 242.4,115.2 243.1,114.8 243.7,114.4 244.3,114.0 245.0,113.6 245.6,113.2 246.2,112.9 246.9,112.5 247.5,112.1 248.2,111.7 248.8,111.3 249.4,110.9 250.1,110.5 250.7,110.1 251.3,109.7 252.0,109.3 252.6,108.9 253.3,108.5 253.9,108.1 254.5,107.7 255.2,107.3 255.8,106.9 256.4,106.5 257.1,106.1 257.7,105.7 258.3,105.3 259.0,104.9 259.6,104.5 260.3,104.2 260.9,103.8 261.5,103.4 262.2,103.0 262.8,102.6 263.4,102.2 264.1,101.8 264.7,101.4 265.3,101.0 266.0,100.6 266.6,100.2 267.3,99.8 267.9,99.4 268.5,99.0 269.2,98.6 269.2,98.6 268.5,99.1 267.9,99.6 267.3,100.0 266.6,100.5 266.0,101.0 265.3,101.4 264.7,101.9 264.1,102.4 263.4,102.8 262.8,103.3 262.2,103.8 261.5,104.2 260.9,104.7 260.3,105.1 259.6,105.6 259.0,106.0 258.3,106.5 257.7,106.9 257.1,107.4 256.4,107.8 255.8,108.3 255.2,108.7 254.5,109.2 253.9,109.6 253.3,110.1 252.6,110.5 252.0,110.9 251.3,111.4 250.7,111.8 250.1,112.3 249.4,112.7 248.8,113.1 248.2,113.6 247.5,114.0 246.9,114.4 246.2,114.8 245.6,115.3 245.0,115.7 244.3,116.1 243.7,116.5 243.1,117.0 242.4,117.4 241.8,117.8 241.2,118.2 240.5,118.6 239.9,119.0 239.2,119.5 238.6,119.9 238.0,120.3 237.3,120.7 236.7,121.1 236.1,121.5 235.4,121.9 234.8,122.3 234.2,122.7 233.5,123.1 232.9,123.5 232.2,123.9 231.6,124.3 231.0,124.7 230.3,125.1 229.7,125.5 229.1,125.9 228.4,126.3 227.8,126.7 227.2,127.1 226.5,127.4 225.9,127.8 225.2,128.2 224.6,128.6 224.0,129.0 223.3,129.4 222.7,129.7 222.1,130.1 221.4,130.5 220.8,130.9 220.2,131.2 219.5,131.6 218.9,132.0 218.2,132.4 217.6,132.7 217.0,133.1 216.3,133.5 215.7,133.8 215.1,134.2 214.4,134.5 213.8,134.9 213.1,135.3 212.5,135.6 211.9,136.0 211.2,136.3 210.6,136.7 210.0,137.0 209.3,137.4 208.7,137.7 208.1,138.1 207.4,138.4 206.8,138.8 206.1,139.1 205.5,139.5 204.9,139.8 204.2,140.1 203.6,140.5 203.0,140.8 202.3,141.2 201.7,141.5 201.1,141.8 200.4,142.2 199.8,142.5 199.1,142.8 198.5,143.2 197.9,143.5 197.2,143.8 196.6,144.1 196.0,144.5 195.3,144.8 194.7,145.1 194.1,145.4 193.4,145.7 192.8,146.1" style="fill:var(--ember);fill-opacity:0.55;stroke:none"/><polygon points="269.2,184.0 269.2,98.6 345.6,32.2 345.6,184.0" style="fill:var(--gold);fill-opacity:.35;stroke:var(--gold);stroke-width:1"/><polygon points="269.2,98.6 269.8,98.1 270.4,97.5 271.1,97.0 271.7,96.4 272.3,95.9 273.0,95.3 273.6,94.7 274.3,94.2 274.9,93.6 275.5,93.1 276.2,92.5 276.8,92.0 277.4,91.4 278.1,90.9 278.7,90.3 279.4,89.8 280.0,89.2 280.6,88.7 281.3,88.1 281.9,87.6 282.5,87.0 283.2,86.4 283.8,85.9 284.4,85.3 285.1,84.8 285.7,84.2 286.4,83.7 287.0,83.1 287.6,82.6 288.3,82.0 288.9,81.5 289.5,80.9 290.2,80.4 290.8,79.8 291.4,79.3 292.1,78.7 292.7,78.1 293.4,77.6 294.0,77.0 294.6,76.5 295.3,75.9 295.9,75.4 296.5,74.8 297.2,74.3 297.8,73.7 298.4,73.2 299.1,72.6 299.7,72.1 300.4,71.5 301.0,71.0 301.6,70.4 302.3,69.8 302.9,69.3 303.5,68.7 304.2,68.2 304.8,67.6 305.5,67.1 306.1,66.5 306.7,66.0 307.4,65.4 308.0,64.9 308.6,64.3 309.3,63.8 309.9,63.2 310.5,62.7 311.2,62.1 311.8,61.5 312.5,61.0 313.1,60.4 313.7,59.9 314.4,59.3 315.0,58.8 315.6,58.2 316.3,57.7 316.9,57.1 317.5,56.6 318.2,56.0 318.8,55.5 319.5,54.9 320.1,54.3 320.7,53.8 321.4,53.2 322.0,52.7 322.6,52.1 323.3,51.6 323.9,51.0 324.5,50.5 325.2,49.9 325.8,49.4 326.5,48.8 327.1,48.3 327.7,47.7 328.4,47.2 329.0,46.6 329.6,46.0 330.3,45.5 330.9,44.9 331.6,44.4 332.2,43.8 332.8,43.3 333.5,42.7 334.1,42.2 334.7,41.6 335.4,41.1 336.0,40.5 336.6,40.0 337.3,39.4 337.9,38.9 338.6,38.3 339.2,37.7 339.8,37.2 340.5,36.6 341.1,36.1 341.7,35.5 342.4,35.0 343.0,34.4 343.6,33.9 344.3,33.3 344.9,32.8 345.6,32.2 345.6,32.2 344.9,32.8 344.3,33.5 343.6,34.1 343.0,34.7 342.4,35.4 341.7,36.0 341.1,36.6 340.5,37.2 339.8,37.9 339.2,38.5 338.6,39.1 337.9,39.7 337.3,40.3 336.6,40.9 336.0,41.6 335.4,42.2 334.7,42.8 334.1,43.4 333.5,44.0 332.8,44.6 332.2,45.2 331.6,45.8 330.9,46.4 330.3,47.0 329.6,47.6 329.0,48.2 328.4,48.8 327.7,49.4 327.1,50.0 326.5,50.6 325.8,51.2 325.2,51.8 324.5,52.4 323.9,53.0 323.3,53.5 322.6,54.1 322.0,54.7 321.4,55.3 320.7,55.9 320.1,56.5 319.5,57.0 318.8,57.6 318.2,58.2 317.5,58.8 316.9,59.3 316.3,59.9 315.6,60.5 315.0,61.1 314.4,61.6 313.7,62.2 313.1,62.8 312.5,63.3 311.8,63.9 311.2,64.4 310.5,65.0 309.9,65.6 309.3,66.1 308.6,66.7 308.0,67.2 307.4,67.8 306.7,68.3 306.1,68.9 305.5,69.4 304.8,70.0 304.2,70.5 303.5,71.1 302.9,71.6 302.3,72.2 301.6,72.7 301.0,73.3 300.4,73.8 299.7,74.3 299.1,74.9 298.4,75.4 297.8,75.9 297.2,76.5 296.5,77.0 295.9,77.5 295.3,78.1 294.6,78.6 294.0,79.1 293.4,79.6 292.7,80.2 292.1,80.7 291.4,81.2 290.8,81.7 290.2,82.3 289.5,82.8 288.9,83.3 288.3,83.8 287.6,84.3 287.0,84.8 286.4,85.3 285.7,85.8 285.1,86.4 284.4,86.9 283.8,87.4 283.2,87.9 282.5,88.4 281.9,88.9 281.3,89.4 280.6,89.9 280.0,90.4 279.4,90.9 278.7,91.4 278.1,91.9 277.4,92.3 276.8,92.8 276.2,93.3 275.5,93.8 274.9,94.3 274.3,94.8 273.6,95.3 273.0,95.8 272.3,96.2 271.7,96.7 271.1,97.2 270.4,97.7 269.8,98.1 269.2,98.6" style="fill:var(--ember);fill-opacity:0.55;stroke:none"/><polyline clip-path="url(#gcdfba0cec)" points="40.0,184.0 41.3,184.0 42.6,184.0 44.0,184.0 45.3,184.0 46.6,183.9 47.9,183.9 49.3,183.9 50.6,183.8 51.9,183.8 53.2,183.7 54.6,183.7 55.9,183.6 57.2,183.5 58.5,183.4 59.9,183.4 61.2,183.3 62.5,183.2 63.8,183.1 65.2,183.0 66.5,182.9 67.8,182.7 69.1,182.6 70.5,182.5 71.8,182.4 73.1,182.2 74.4,182.1 75.8,181.9 77.1,181.8 78.4,181.6 79.7,181.4 81.0,181.3 82.4,181.1 83.7,180.9 85.0,180.7 86.3,180.5 87.7,180.3 89.0,180.1 90.3,179.9 91.6,179.7 93.0,179.4 94.3,179.2 95.6,179.0 96.9,178.7 98.3,178.5 99.6,178.2 100.9,178.0 102.2,177.7 103.6,177.4 104.9,177.2 106.2,176.9 107.5,176.6 108.9,176.3 110.2,176.0 111.5,175.7 112.8,175.4 114.1,175.1 115.5,174.7 116.8,174.4 118.1,174.1 119.4,173.7 120.8,173.4 122.1,173.0 123.4,172.7 124.7,172.3 126.1,172.0 127.4,171.6 128.7,171.2 130.0,170.8 131.4,170.4 132.7,170.0 134.0,169.6 135.3,169.2 136.7,168.8 138.0,168.4 139.3,168.0 140.6,167.5 142.0,167.1 143.3,166.7 144.6,166.2 145.9,165.8 147.2,165.3 148.6,164.8 149.9,164.4 151.2,163.9 152.5,163.4 153.9,162.9 155.2,162.4 156.5,161.9 157.8,161.4 159.2,160.9 160.5,160.4 161.8,159.9 163.1,159.3 164.5,158.8 165.8,158.3 167.1,157.7 168.4,157.2 169.8,156.6 171.1,156.1 172.4,155.5 173.7,154.9 175.1,154.3 176.4,153.8 177.7,153.2 179.0,152.6 180.4,152.0 181.7,151.4 183.0,150.8 184.3,150.1 185.6,149.5 187.0,148.9 188.3,148.2 189.6,147.6 190.9,147.0 192.3,146.3 193.6,145.6 194.9,145.0 196.2,144.3 197.6,143.6 198.9,143.0 200.2,142.3 201.5,141.6 202.9,140.9 204.2,140.2 205.5,139.5 206.8,138.8 208.2,138.0 209.5,137.3 210.8,136.6 212.1,135.8 213.5,135.1 214.8,134.3 216.1,133.6 217.4,132.8 218.8,132.1 220.1,131.3 221.4,130.5 222.7,129.7 224.0,128.9 225.4,128.1 226.7,127.3 228.0,126.5 229.3,125.7 230.7,124.9 232.0,124.1 233.3,123.2 234.6,122.4 236.0,121.6 237.3,120.7 238.6,119.9 239.9,119.0 241.3,118.1 242.6,117.3 243.9,116.4 245.2,115.5 246.6,114.6 247.9,113.7 249.2,112.8 250.5,111.9 251.9,111.0 253.2,110.1 254.5,109.2 255.8,108.3 257.1,107.3 258.5,106.4 259.8,105.5 261.1,104.5 262.4,103.6 263.8,102.6 265.1,101.6 266.4,100.7 267.7,99.7 269.1,98.7 270.4,97.7 271.7,96.7 273.0,95.7 274.4,94.7 275.7,93.7 277.0,92.7 278.3,91.7 279.7,90.6 281.0,89.6 282.3,88.5 283.6,87.5 285.0,86.5 286.3,85.4 287.6,84.3 288.9,83.3 290.2,82.2 291.6,81.1 292.9,80.0 294.2,78.9 295.5,77.8 296.9,76.7 298.2,75.6 299.5,74.5 300.8,73.4 302.2,72.3 303.5,71.1 304.8,70.0 306.1,68.8 307.5,67.7 308.8,66.5 310.1,65.4 311.4,64.2 312.8,63.0 314.1,61.9 315.4,60.7 316.7,59.5 318.1,58.3 319.4,57.1 320.7,55.9 322.0,54.7 323.4,53.5 324.7,52.2 326.0,51.0 327.3,49.8 328.6,48.5 330.0,47.3 331.3,46.1 332.6,44.8 333.9,43.5 335.3,42.3 336.6,41.0 337.9,39.7 339.2,38.4 340.6,37.1 341.9,35.8 343.2,34.5 344.5,33.2 345.9,31.9 347.2,30.6 348.5,29.3 349.8,27.9 351.2,26.6 352.5,25.3 353.8,23.9 355.1,22.6 356.5,21.2 357.8,19.8" style="fill:none;stroke:var(--ink);stroke-width:2"/><text x="137.8" y="55.0" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">T₄ = 0.34375</text><text x="137.8" y="71.7" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">area = 1/3</text><text x="302.8" y="115.7" text-anchor="middle" style="font:600 12px Nunito,system-ui,sans-serif;fill:var(--ink)">error 1/96</text><text x="302.8" y="129.4" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">(the thin slivers)</text><text x="200.0" y="222" text-anchor="middle" style="font:11px Nunito,system-ui,sans-serif;fill:var(--muted)">y = x²: each top sits above the curve, which bends up</text></svg></div><!--/gfig 16j1-->
+  <!--gwid 16j1--><section class="pic gwid">
+    <div class="eyebrow">The picture · slanted tops, as many strips as you like</div>
+    <div class="panels">
+    <div class="panel"><div class="chips" id="g16c"></div><canvas id="g16v"></canvas><div class="kn"><span class="m">n</span><input type="range" id="g16n" min="1" max="16" step="1" value="4"><output id="g16no"></output></div><div class="cap">Gold: the n slanted-top strips. Ink: the curve. The verdict sets the true error beside the fence (b − a)M h²/12, with M the largest |f″| on [0, 1].</div><div class="verdict" id="g16d"></div></div>
+  </div>
+  </section><!--/gwid 16j1-->
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">16j1.1</span><span class="ph understand">understand</span>What are the three volume axioms? <br>What is the slice of S at x = k?</li>
+      <li><span class="qid">16j1.1</span><span class="ph understand">understand</span>How is the slanted-top sum built, and why does it overshoot for x²?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="16j2">
-  <h2 class="sthead"><span class="stno">16j2</span>Cross Sections Squeeze the Volume</h2>
-  <p data-pid="74a905">Slab technique: <b>if a flat region R has area A, and the solid [p, q] × R has a volume obeying the three volume axioms, that volume is A(q − p).</b> Here R lies in the (y, z) plane, like a slice.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the slab technique">
-\text{boxes inside } R \text{ total } L,\ \ \text{boxes over } R \text{ total } U @@ R’s area is squeezed by boxes (15c, 16g): L ≤ A ≤ U, and U − L as small as you like
-[p, q] \times \text{each box} \text{ is a solid box} @@ the box-volume axiom: its volume is (q − p) times the box’s area
-(q - p)L \le V \le (q - p)U @@ side by side, the walls y = k between them; inside-no-more for volume
-\htmlClass{new}{V = A(q - p)} \quad \blacksquare @@ squeezed between two totals that close on A(q − p)
+  <h2 class="sthead"><span class="stno">16j2</span>One Strip, Exactly</h2>
+  <p data-pid="38a5e0">One-strip technique: <b>if f″ is continuous on [0, h], then ∫₀ʰ f − (h/2)(f(0) + f(h)) = −∫₀ʰ w f″, where w(t) = t(h − t)/2.</b></p>
+  <pre class="lines" data-k="ember" data-label="this step: the one-strip technique">
+w(0) = w(h) = 0,\ \ w^{\prime} = \tfrac h2 - t,\ \ w^{\prime\prime} = -1 @@ a bump on the strip
+\int_0^h w f^{\prime\prime} = \big[w f^{\prime}\big]_0^h - \int_0^h w^{\prime} f^{\prime} = -\int_0^h (\tfrac h2 - t) f^{\prime} @@ parts (16e); the bracket is 0
+= -\big[(\tfrac h2 - t) f\big]_0^h - \int_0^h f = \tfrac h2\big(f(0) + f(h)\big) - \int_0^h f @@ parts again
+\htmlClass{new}{\int_0^h f - \tfrac h2\big(f(0)+f(h)\big) = -\int_0^h w f^{\prime\prime}} \quad \blacksquare @@ turn the line round
   </pre>
-  <p class="eqline" data-pid="9864db">From here on, the slices of a solid S between the planes x = u and x = v are tight when, for partitions of [u, v] as fine as you like, each piece has two flat regions with areas: an inner one, inside every slice over the piece, and an outer one, holding every slice over the piece. And the total, over the pieces, of (outer area − inner area) times the width can be made as small as you like.</p>
-  <p data-pid="90b6aa">Cross-sections technique: <b>a solid’s volume is the integral of the areas of its cross sections.</b> Let S lie between the planes x = u and x = v. Let its slices be tight. Let the slice at x have area A(x), with A integrable on [u, v]. If S has a volume obeying the three volume axioms, it is ∫ᵤᵛ A(x) dx.</p>
-  <pre class="lines" data-k="ember" data-label="this step: the cross-sections technique">
-[x_{k-1}, x_k] \times I_k \subseteq S \cap \text{slab}_k \subseteq [x_{k-1}, x_k] \times O_k @@ the slices are tight: I_k, of area a_k, inside every slice over the piece; O_k, of area b_k, holding them all
-\textstyle\sum m_k \Delta x_k \le V \le \sum M_k \Delta x_k @@ the slab technique for each; side by side, the walls x = x_k between them; inside-no-more for volume
-\textstyle\sum m_k \Delta x_k \le \int_u^v A \le \sum M_k \Delta x_k @@ m_k ≤ A(x) ≤ M_k on the piece (inside-no-more, 15a), so the sums sit outside L(A, P) and U(A, P)
-\textstyle\sum (M_k - m_k)\Delta x_k \text{ as small as you like} @@ tight
-\htmlClass{new}{V = \textstyle\int_u^v A(x)\,dx} \quad \blacksquare @@ two numbers between the same two totals, which close together, are equal
-  </pre>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\text{volume} := \textstyle\int_u^v A(x)\,dx\end{aligned}"></div>
-  <p class="eqline" data-pid="857b23">From here on, a solid whose slices are tight, with integrable areas A(x), has volume ∫ᵤᵛ A(x) dx.</p>
-  <p data-pid="cf9509">Nesting slices are tight. If on each piece of a partition the slices grow, each inside the next, or shrink, each inside the one before, take the smallest slice for I and the largest for O. Then the total of (Mₖ − mₖ)Δxₖ is U(A, P) − L(A, P), which the test for integrable (15c) makes as small as you like. Every solid in this step has nesting slices.</p>
-  <section class="slides" id="sl7"><div class="eyebrow">The slides · cross sections · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">16j2.1</span><span class="ph understand">understand</span>What does the cross-sections technique say, and what does it mean for slices to be tight?</li>
+      <li><span class="qid">16j2.1</span><span class="ph understand">understand</span>How does parts, used twice, give the exact error on one strip?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="16j3">
-  <h2 class="sthead"><span class="stno">16j3</span>Prisms and Pyramids</h2>
-  <p data-pid="39cd76">Prism technique: <b>if every slice of S for 0 ≤ x ≤ h has the same area B, then S has volume Bh. A box p × q × r has volume pqr.</b> ∫₀ʰ B dx = Bh; for the box, B = qr (box-area).</p>
-  <p data-pid="558d1f">Pyramid technique: <b>if the slice at x, for 0 ≤ x ≤ h, is the base slice shrunk by the factor x/h in each direction, so that A(x) = B(x/h)², then the volume is Bh/3.</b></p>
-  <pre class="lines" data-k="ember" data-label="this step: the pyramid technique">
-A(x) = B\,\tfrac{x^2}{h^2} @@ a set shrunk by a factor c each way has c² times the area (boxes first, then squeezed: 15a, 15c)
-V = \textstyle\int_0^h \tfrac{B}{h^2}x^2\,dx = \tfrac{B}{h^2}\cdot\tfrac{h^3}{3} @@ cross-sections; the table (16f)
-\htmlClass{new}{V = \tfrac13 Bh} \quad \blacksquare @@ a third of the prism on the same base
+  <h2 class="sthead"><span class="stno">16j3</span>The Fence</h2>
+  <pre class="lines" data-k="ember" data-label="this step: the slanted-top technique">
+|f^{\prime\prime}| \le M \text{ on } [a, b] @@ a bound on the bend
+\Big|\int_0^h w f^{\prime\prime}\Big| \le M \int_0^h \tfrac{t(h-t)}{2}\,dt = \dfrac{M h^3}{12} @@ w ≥ 0; ∫ t(h − t) = h³/6
+n \text{ strips: } |T_n - \textstyle\int_a^b f| \le n \cdot \dfrac{M h^3}{12} = \dfrac{(b-a) M h^2}{12} @@ nh = b − a
+\htmlClass{new}{x^2 \text{ on } [0,1],\ n = 4:\ \tfrac{1 \cdot 2 \cdot (1/4)^2}{12} = \tfrac{1}{96}} \quad \blacksquare @@ met exactly: f″ is the constant 2
   </pre>
-  <div class="eqline c6" data-tex="\begin{aligned}&amp;\forall x \in [u, v]\ (A_1(x) = A_2(x)) \Rightarrow\\ &amp;\qquad \textstyle\int_u^v A_1 = \int_u^v A_2\end{aligned}"></div>
-  <p data-pid="1b6a61">Matching-slices technique: <b>if two solids lie between x = u and x = v and their slices at each x have the same area, they have the same volume.</b> When both have tight slices, both are ∫ᵤᵛ A by the cross-sections technique. A pile of coins pushed into a slant has the same volume as the straight pile.</p>
-  <p data-pid="0ce894">One of the first to slice solids this way compared a flat figure to a cloth woven of parallel threads, and a solid to a book made of parallel pages. He argued that two solids are to each other as the totals of their pages, compared page by page.</p>
-  <section class="slides" id="sl2"><div class="eyebrow">The slides · prisms and pyramids · ← → keys work</div></section>
-  <section class="pic" id="pic">
-    <div class="eyebrow">The picture · slice areas, and slabs that add to a volume</div>
-    <div class="panels">
-    <div class="panel">
-      <div class="lbl">slice area A(x), with n slabs</div>
-      <canvas id="cvF"></canvas>
-      <div class="chips" id="fch"></div>
-      <div class="kn"><span class="m">n</span><input type="range" id="kn" min="1" max="40" step="1" value="8"><output id="on"></output></div>
-      <div class="cap">Ink: A(x). Teal: slabs of width (v − u)/n, each as tall as the slice at its middle. Their total is a volume estimate; the integral is the volume.</div>
-    </div>
-    <div class="panel">
-      <div class="lbl">the flat base, and the slice at x</div>
-      <canvas id="cvL"></canvas>
-      <div class="kn"><span class="m">x</span><input type="range" id="kx" min="0" max="1" step="0.005" value="0.4"><output id="ox"></output></div>
-      <div class="cap">For the square-slice solid: the base between y = x² and y = √x, and in ember the gap at the knob's x, the side of the square slice standing there.</div>
-      <div class="verdict" id="vdF"></div>
-      <div class="eqbox" id="eqF"></div>
-    </div>
-  </div>
-  </section>
+  <p data-pid="8e7e8f">Slanted-top technique: <b>with |f″| ≤ M on [a, b], the slanted-top sum with strips of width h is within (b − a)M h²/12 of the area.</b> The error goes as h²: ten times the strips, a hundredth of the error. Flat tops do only as well as h.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">16j3.1</span><span class="ph understand">understand</span>What do the prism, pyramid and matching-slices techniques say?</li>
+      <li><span class="qid">16j3.1</span><span class="ph understand">understand</span>What fences the error of the slanted-top sum, and why does halving the width quarter it?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="16j4">
-  <h2 class="sthead"><span class="stno">16j4</span>Known Slices</h2>
-  <pre class="lines" data-k="ember" data-label="this step: solids on a flat region">
-\text{base between } y = x^2 \text{ and } y = \sqrt x,\ 0 \le x \le 1;\ \text{slices are squares on the gap} @@ the side at x is √x − x² (16g)
-A(x) = (\sqrt x - x^2)^2 = x - 2x^{5/2} + x^4 @@ 5i's square of a difference
-V = \tfrac12 - \tfrac47 + \tfrac15 = \tfrac{9}{70} \approx 0.1286 @@ cross-sections; the table for x^(5/2)
-\text{base } 0 \le y \le 4 - x^2;\ \text{square slices}:\ \ V = \textstyle\int_{-2}^{2}(4 - x^2)^2\,dx = \tfrac{512}{15} @@ odd-and-even-areas (16d) doubles ∫₀²
-\text{base } 0 \le y \le \sqrt x,\ 0 \le x \le 4;\ \text{rectangles of height } 2:\ \ V = 2 \cdot \tfrac{16}{3} = \tfrac{32}{3} @@ A(x) = 2√x
+  <h2 class="sthead"><span class="stno">16j4</span>A Curve With No Antiderivative</h2>
+  <pre class="lines" data-k="ember" data-label="this step: ∫₀¹ e^(−x²) dx to five places">
+f^{\prime\prime} = (4x^2 - 2)e^{-x^2},\ \ |f^{\prime\prime}| \le 2 \text{ on } [0,1] @@ largest at x = 0
+\dfrac{1 \cdot 2 \cdot h^2}{12} \le 5 \times 10^{-6} \iff h \le 0.0055 @@ solve the fence
+n = 183 \text{ strips suffice} @@ h = 1/183
+\htmlClass{new}{T_{183} \approx 0.74682} @@ good to the fifth place, guaranteed
   </pre>
-  <section class="slides" id="sl3"><div class="eyebrow">The slides · known slices · ← → keys work</div></section>
+  <p data-pid="41631d"><b>The fence says in advance how many strips buy a given accuracy,</b> which is what a machine needs: it cannot look at the answer to see whether it is good enough. Bending the tops into pieces of parabola, three heights per pair of strips, raises the power from h² to h⁴.</p>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">16j4.1</span><span class="ph understand">understand</span>How is the slice area found when a solid stands on the region between two graphs with square slices?</li>
+      <li><span class="qid">16j4.1</span><span class="ph understand">understand</span>How does the fence decide in advance how many strips are enough?</li>
     </ol>
   </section>
 </section>
 
 <section class="class step" data-step="16j5">
-  <h2 class="sthead"><span class="stno">16j5</span>Density</h2>
-  <p class="eqline" data-pid="8a2932">A solid's density is its mass per unit volume, ρ = m/V when it is the same throughout; its accepted name is density, in kg/m³.</p>
-  <section class="slides" id="sl4"><div class="eyebrow">The slides · density · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">16j5.1</span><span class="ph understand">understand</span>What is density?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="16j6">
-  <h2 class="sthead"><span class="stno">16j6</span>Mass by Slices</h2>
-  <p data-pid="b6a26b">Density technique: <b>if the density depends only on x, as ρ(x), and the slice at x has area A(x), the mass is ∫ᵤᵛ ρ(x)A(x) dx.</b> On a thin slab from x to x + Δx the mass lies between the least and greatest of ρA times Δx; the sums squeeze to the integral (15h).</p>
-  <pre class="lines" data-k="ember" data-label="this step: a soil column">
-A = 2 \text{ m}^2,\ \rho(x) = 1200 + 300x \text{ kg/m}^3,\ 0 \le x \le 3 \text{ m} @@ a core from a field near Manteca; x is depth
-m = \textstyle\int_0^3 2(1200 + 300x)\,dx = 2(3600 + 1350) = 9900 \text{ kg} @@ density; area-is-a-change
+  <h2 class="sthead"><span class="stno">16j5</span>Moves to Watch Out For</h2>
+  <p data-pid="7d2ac4">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{error} \le \dfrac{M h^3}{12} \text{ for the whole sum}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; that is one strip; n strips give (b − a)Mh²/12 (16j3)
+\text{double the strips, halve the error}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; the error goes as h²: a quarter (16j3)
+\text{the slanted tops always overshoot}\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; only where the curve bends up; where f″ < 0 they undershoot (16j2)
+\text{compute } T_n, \text{ then see if it is good enough}\,? @@ &lt;span class="vd vd-s"&gt;out of sequence&lt;/span&gt; choose n from the fence first (16j4)
+\text{the fence needs only } f \text{ continuous}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it needs a bound on f″ (16j3)
   </pre>
-  <section class="slides" id="sl5"><div class="eyebrow">The slides · mass by slices · ← → keys work</div></section>
   <section class="sayback">
     <h3>Question</h3>
     <ol class="stql">
-      <li><span class="qid">16j6.1</span><span class="ph understand">understand</span>What does the density technique say when the density depends on x?</li>
-    </ol>
-  </section>
-</section>
-
-<section class="class step" data-step="16j7">
-  <h2 class="sthead"><span class="stno">16j7</span>Moves to Watch Out For</h2>
-  <pre class="lines" data-k="check" data-label="this step: moves to watch out for">
-V_{\text{pyramid}} = \tfrac12 Bh\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the slice shrinks as x², not as x: a third
-\text{square slices: } A(x) = \sqrt x - x^2\,? @@ &lt;span class="vd vd-a"&gt;out of arrangement&lt;/span&gt; that is the side; the area is its square
-\begin{aligned}&\text{a slanted pile has more}\\ &\quad\text{volume than a straight one}\,?\end{aligned} @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; matching-slices: matching slices, matching volume
-m = \rho\,V \text{ when } \rho \text{ changes}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; only for one density throughout; otherwise ∫ ρA
-  </pre>
-  <section class="slides" id="sl6"><div class="eyebrow">The slides · a move to watch out for · ← → keys work</div></section>
-  <section class="sayback">
-    <h3>Question</h3>
-    <ol class="stql">
-      <li><span class="qid">16j7.1</span><span class="ph understand">understand</span>Why is “the volume of a pyramid is ½Bh” a move to watch out for?</li>
+      <li><span class="qid">16j5.1</span><span class="ph understand">understand</span>Which move above uses the one-strip fence for the whole sum, and what is the fence for n strips?</li>
     </ol>
   </section>
 </section>
@@ -209,118 +141,36 @@ m = \rho\,V \text{ when } \rho \text{ changes}\,? @@ &lt;span class="vd vd-p"&gt
 <section class="challenge themeend">
   <div class="eyebrow">Standing questions · there if you want them</div>
   <h2>Standing questions</h2>
-  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung's angel wings need them.</p>
-  <div class="chq"><span class="chid">16j.4.1</span><span class="tagq">build</span>Design a solid over a stretch of length h whose slices are not all one shape, and find its volume. <br>Build a second solid, of another shape, with the same slice areas, and find its volume without a new integral.</div>
-  <div class="chq"><span class="chid">16j.4.2</span><span class="tagq">edge</span><span class="givens"><span data-tex-inline="\text{a cube of side } s"></span></span>Cut the cube into three pyramids, each on a face of the cube with its top at one far corner. Find each piece’s volume without any integral, and check it against the pyramid technique.</div>
-  <div class="chq"><span class="chid">16j.4.3</span><span class="tagq">converse</span><span class="givens"><span data-tex-inline="V = \tfrac13 Bh"></span></span>Prove or refute: a solid with base area B, height h and the given volume is a pyramid.</div>
-  <div class="chq"><span class="chid">16j.4.4</span><span class="tagq">seam</span>One mathematician summed the "indivisible" pages of a solid to compare volumes. Another, a Jesuit, objected in the 1640s that a solid is not made of planes, which have no thickness. Endlessly many of them, he said, sum to nothing or to everything. The first answered that he compared the pages, he did not add them. This step proved the page-by-page comparison, by squeezing between stacks of thin slabs. <br>Was the objector right? <br>Does the squeeze answer him?</div>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">16j.6.1</span><span class="tagq">do</span>Find T₂ for ∫₁³ 1/x dx and the fence on its error.</div>
+  <div class="chq"><span class="chid">16j.6.2</span><span class="tagq">make</span>Make up a function for which T₁ is exact on every interval.</div>
+  <div class="chq"><span class="chid">16j.6.3</span><span class="tagq">converse</span>If |f″| ≤ M, the error is at most (b − a)Mh²/12. Decide whether an error that small means |f″| ≤ M.</div>
+  <div class="chq"><span class="chid">16j.6.4</span><span class="tagq">edge</span>Let f be a straight line. Say what the error is, and why.</div>
+  <div class="chq"><span class="chid">16j.6.5</span><span class="tagq">open</span>Say why the error of flat tops goes only as h.</div>
 </section>
 <div class="themecert themeend"></div>
-
-<nav class="nextrung"><a href="r16i.html">← 16i · improper integrals</a><a href="r16cb12.html">16·cb12 · floating and sinking →</a></nav>
+<nav class="nextrung"><a href="r16i.html">← 16i · improper integrals</a><a href="r16k.html">16k · volumes by cross sections →</a></nav>
 
 <section class="extra basement">
   <div class="eyebrow">The cellar · there if you want it</div>
-  <h3>Solid shapes</h3>
-  <p>Prisms and pyramids as shapes in their own right, with faces and edges, belong to the geometry of space, which the ladder builds after the plane. This step uses only their slices.</p>
-  <h3>Who said it first</h3>
-  <aside class="voice para"><p>Cavalieri compared a flat figure to a cloth woven of parallel threads and a solid to a book made of parallel pages, and argued that two solids are to each other as the totals of their pages, compared page by page.</p><cite>Bonaventura Cavalieri, Geometria indivisibilibus (1635); paraphrase</cite></aside>
-  <p>In 16j.4.4, the one who summed the pages is Bonaventura Cavalieri, and the Jesuit who objected is Paul Guldin.</p>
   <h3>Accepted names</h3>
-  <p>The cross-sections technique is Cavalieri’s principle, in its integral form. The three volume axioms are the start of Jordan content, in three dimensions.</p>
+  <p data-pid="28a6c3">The slanted-top sum is the <b>trapezoidal rule</b>; its fence is the <b>error bound</b> (b − a)h²max|f″|/12. Parabola pieces give <b>Simpson’s rule</b>, with error (b − a)h⁴max|f⁗|/180. Computing integrals by sums is <b>numerical quadrature</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="79e3de">Thomas Simpson published his rule in 1743, though Cavalieri and Kepler used it earlier; error fences of this kind were worked out in the nineteenth century, by Peano among others.</p>
 </section>
+
 </div>
 <script src="rung.js"></script>
-<script>
-(function(){
-const {tex,col,stepper,plane}=Rung;
-const R=String.raw;
-const $=id=>document.getElementById(id);
-const fm=(v,d)=>{ if(v===null||!isFinite(v)) return '—'; let s=v.toFixed(d==null?4:d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s==='-0'?'0':s; };
-const mm=(v,d)=>fm(v,d).replace('-','−');
-/* least and greatest of F.f on [lo, hi]: the ends, F's critical points inside, and a fine sample (exact between critical points for the functions used here) */
-function ext(F,lo,hi){ if(F.dir) return [0,1]; let m=Infinity,M=-Infinity; const t=x=>{ const v=F.f(x); if(v<m) m=v; if(v>M) M=v; };
-  t(lo); t(hi); (F.crit||[]).forEach(c=>{ if(c>lo&&c<hi) t(c); }); for(let k=1;k<64;k++) t(lo+(hi-lo)*k/64); return [m,M]; }
-function sums(F,pts){ let L=0,U=0; const ms=[],Ms=[]; for(let i=1;i<pts.length;i++){ const [m,M]=ext(F,pts[i-1],pts[i]), w=pts[i]-pts[i-1]; ms.push(m); Ms.push(M); L+=m*w; U+=M*w; } return {L,U,ms,Ms}; }
-const eq=(a,b,n)=>Array.from({length:n+1},(_,i)=>a+(b-a)*i/n);
-function curve(P,fn,colr,w,lo,hi,dash){ const c=P.ctx; c.strokeStyle=col(colr); c.lineWidth=w; c.setLineDash(dash||[]); c.beginPath(); let pen=false; for(let k=0;k<=600;k++){ const t=lo+(hi-lo)*k/600; const v=fn(t); if(!isFinite(v)){ pen=false; continue; } pen?c.lineTo(P.X(t),P.Y(v)):c.moveTo(P.X(t),P.Y(v)); pen=true; } c.stroke(); c.setLineDash([]); }
-function boxes(P,pts,hs,stroke,fill,alpha){ const c=P.ctx; for(let i=1;i<pts.length;i++){ const a=pts[i-1],b=pts[i],h=hs[i-1]; c.globalAlpha=alpha; P.poly([[a,0],[b,0],[b,h],[a,h]],null,fill); c.globalAlpha=1; P.poly([[a,0],[b,0],[b,h],[a,h]],stroke,null,1.2); } }
-function dirDots(P,a,b){ const c=P.ctx; c.fillStyle=col('--ink'); for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; const y=(k%2)?0:1; c.fillRect(P.X(x)-1,P.Y(y)-1,2,2); } }
-/* shade between the graph of fn and the axis from lo to hi: above in pos colour, below in neg colour */
-function shade(P,fn,lo,hi,pos,neg,alpha){ if(hi<lo){ const t=lo; lo=hi; hi=t; } const c=P.ctx, N=300; c.globalAlpha=alpha==null?0.32:alpha;
-  for(let k=0;k<N;k++){ const x0=lo+(hi-lo)*k/N, x1=lo+(hi-lo)*(k+1)/N, xm=(x0+x1)/2, y=fn(xm); if(!isFinite(y)) continue; P.poly([[x0,0],[x1,0],[x1,fn(x1)],[x0,fn(x0)]],null,y>=0?pos:neg); }
-  c.globalAlpha=1; }
-function rangeOf(fn,lo,hi,pad){ let m=Infinity,M=-Infinity; for(let k=0;k<=400;k++){ const v=fn(lo+(hi-lo)*k/400); if(isFinite(v)){ if(v<m) m=v; if(v>M) M=v; } } if(m>0) m=0; if(M<0) M=0; const p=(M-m)*(pad==null?0.12:pad)||1; return [m-p,M+p]; }
-function chips(el,FN,get,setk,after){ Object.keys(FN).forEach(k=>{ const b=document.createElement('button'); b.textContent=FN[k].lab; if(k===get()) b.className='on'; b.onclick=()=>{ setk(k); [...el.children].forEach(z=>z.classList.toggle('on',z===b)); after(); }; el.appendChild(b); }); }
-function fitRows(){ document.querySelectorAll('.rows .row').forEach(r=>{ const m=r.querySelector('.m'); if(!m) return; r.classList.remove('wide'); if(m.scrollWidth>m.clientWidth+2) r.classList.add('wide'); }); }
-Rung.ready(()=>{ setTimeout(fitRows,0); setTimeout(fitRows,700); }); window.addEventListener('resize',fitRows); if(document.fonts) document.fonts.ready.then(fitRows);
-const Nw='\\htmlClass{new}';
-function gridFor(sp){ return sp>40?10:sp>16?4:sp>8?2:sp>3?1:sp>1.2?0.5:0.25; }
-function frame2(P,fn,lo,hi,pad){ const w=hi-lo; P.o.x=[lo-0.12*w,hi+0.08*w]; P.o.y=rangeOf(fn,lo,hi,pad==null?0.12:pad); const sx=P.o.x[1]-P.o.x[0], sy=P.o.y[1]-P.o.y[0]; let g=gridFor(sx); while(sy/g>24) g*=2; P.o.grid=g; }
-const num=(f,a,b,n)=>{ n=n||4000; const h=(b-a)/n; let s=0; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h)*h; return s; };
-/* axes with separate steps across and up */
-function axes2(P,gx,gy){ const c=P.ctx,o=P.o; c.lineWidth=1; c.strokeStyle=col('--grid'); c.beginPath();
-  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ c.moveTo(P.X(x),P.Y(o.y[0])); c.lineTo(P.X(x),P.Y(o.y[1])); }
-  for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ c.moveTo(P.X(o.x[0]),P.Y(y)); c.lineTo(P.X(o.x[1]),P.Y(y)); } c.stroke();
-  c.strokeStyle=col('--muted'); c.lineWidth=1.3; c.beginPath(); if(o.y[0]<=0&&o.y[1]>=0){ c.moveTo(P.X(o.x[0]),P.Y(0)); c.lineTo(P.X(o.x[1]),P.Y(0)); } if(o.x[0]<=0&&o.x[1]>=0){ c.moveTo(P.X(0),P.Y(o.y[0])); c.lineTo(P.X(0),P.Y(o.y[1])); } c.stroke();
-  c.fillStyle=col('--muted'); c.font='11px Nunito,system-ui,sans-serif'; c.textAlign='center'; const ly=Math.min(P.H-6,Math.max(12,P.Y(0)+14));
-  for(let x=Math.ceil(o.x[0]/gx)*gx;x<=o.x[1]+1e-9;x+=gx){ if(Math.abs(x)<1e-9) continue; c.fillText(+x.toFixed(6),P.X(x),ly); }
-  c.textAlign='right'; const lx=Math.max(32,Math.min(P.W-4,P.X(0)-5)); for(let y=Math.ceil(o.y[0]/gy)*gy;y<=o.y[1]+1e-9;y+=gy){ if(Math.abs(y)<1e-9) continue; c.fillText(String(+y.toFixed(6)).replace('-','−'),lx,P.Y(y)+4); } }
-function nice(sp){ const raw=sp/6, p=Math.pow(10,Math.floor(Math.log10(raw))), m=raw/p; return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p; }
-const kn=$('kn'),kx=$('kx'),cvF=$('cvF'),cvL=$('cvL');
-const FN={pyr:{lab:'pyramid, B = 36, h = 10',f:x=>36*x*x/100,a:0,b:10,V:120},sq:{lab:'square slices on √x − x²',f:x=>Math.pow(Math.sqrt(x)-x*x,2),a:0,b:1,V:9/70},hill:{lab:'square slices on 4 − x²',f:x=>Math.pow(4-x*x,2),a:-2,b:2,V:512/15}};
-let key='pyr';
-const PF=plane(cvF,{x:[0,10],y:[0,40],grid:1,aspect:0.8,draw:P=>drawF(P)});
-const PL=plane(cvL,{x:[-0.12,1.1],y:[-0.1,1.1],grid:1,aspect:0.8,draw:P=>drawL(P)});
-[[PF,cvF],[PL,cvL]].forEach(([P,cv])=>Object.defineProperty(P.o,'aspect',{get:()=>cv.clientWidth>480?0.75:0.9}));
-const est=()=>{ const F=FN[key], n=+kn.value, w=(F.b-F.a)/n; let s=0; for(let i=0;i<n;i++) s+=F.f(F.a+(i+0.5)*w)*w; return s; };
-function drawF(P){ const F=FN[key], n=+kn.value, w=(F.b-F.a)/n, [lo,hi]=rangeOf(F.f,F.a,F.b,0.1); P.o.x=[F.a-(F.b-F.a)*0.08,F.b+(F.b-F.a)*0.04]; P.o.y=[lo,hi]; axes2(P,nice(F.b-F.a),nice(hi-lo));
-  const pts=[]; for(let i=0;i<=n;i++) pts.push(F.a+i*w); const hs=[]; for(let i=0;i<n;i++) hs.push(F.f(F.a+(i+0.5)*w)); boxes(P,pts,hs,'--teal','--teal',0.25); curve(P,F.f,'--ink',2.6,F.a,F.b); }
-function drawL(P){ const x=+kx.value; axes2(P,0.2,0.2); shade(P,t=>Math.sqrt(t)-t*t,0,1,'--muted','--muted',0); const c=P.ctx; c.globalAlpha=0.18;
-  for(let k=0;k<200;k++){ const a=k/200,b=(k+1)/200; P.poly([[a,a*a],[b,b*b],[b,Math.sqrt(b)],[a,Math.sqrt(a)]],null,'--teal'); } c.globalAlpha=1;
-  curve(P,t=>t*t,'--ink',2,0,1.05); curve(P,Math.sqrt,'--ink',2,0,1.1); P.line(x,x*x,x,Math.sqrt(x),'--ember',4); }
-function read(){ const F=FN[key], n=+kn.value, x=+kx.value, s=Math.sqrt(x)-x*x; $('on').textContent=n; $('ox').textContent=mm(x,3);
-  const e=est(); const vd=$('vdF'); vd.className='verdict'+(Math.abs(e-F.V)/F.V<0.005?' win':'');
-  vd.textContent='With '+n+' slabs the '+F.lab.split(',')[0]+' is about '+mm(e,4)+'; by cross sections it is '+mm(F.V,4)+'. On the right, the square slice at x = '+mm(x,3)+' has side '+mm(s,4)+' and area '+mm(s*s,4)+'.';
-  tex($('eqF'),R`\begin{gathered}\textstyle\sum A(m_i)\,\Delta x \approx ${mm(e,4)},\ \ V = ${mm(F.V,4)}\\ A(${mm(x,3)}) = (\sqrt{${mm(x,3)}} - ${mm(x,3)}^2)^2 \approx ${mm(s*s,4)}\end{gathered}`,true); }
-function all(){ PF.redraw(); PL.redraw(); read(); }
-kn.addEventListener('input',all); kx.addEventListener('input',all);
-chips($('fch'),FN,()=>key,k=>{ key=k; },all);
-window.__pic={set:(k,n,x)=>{ [...$('fch').children][Object.keys(FN).indexOf(k)].click(); kn.value=n; kx.value=x; all(); return {est:+est().toFixed(5),V:+FN[k].V.toFixed(5),num:+num(FN[k].f,FN[k].a,FN[k].b).toFixed(5)}; }};
-all();
-stepper('#sl1',[
-  {k:'ember',kl:'slices',t:R`\{(y, z) : (k, y, z) \in S\}`,n:`The slice at x = k.`},
-  {k:'ember',kl:'three axioms',t:R`${Nw}{V = (q - p)(d - c)(f - e)}`,n:`Boxes; inside no more; side by side.`}
-],{title:'The slides · three axioms · ← → keys work'});
-stepper('#sl7',[
-  {k:'ember',kl:'slab',t:R`${Nw}{V = A(q - p)}`,n:`Boxes over the base, times the length.`},
-  {k:'ember',kl:'tight slices',t:R`I_k \subseteq \text{slice} \subseteq O_k`,n:`The gap shrinks with the pieces.`},
-  {k:'ember',kl:'cross-sections',t:R`${Nw}{V = \textstyle\int_u^v A(x)\,dx}`,n:`Squeezed between stacks of slabs.`},
-  {k:'ember',kl:'nesting',t:R`\text{nesting} \Rightarrow \text{tight}`,n:`The gap is U − L.`}
-]);
-stepper('#sl2',[
-  {k:'ember',kl:'prism',t:R`V = Bh`,n:`Every slice B.`},
-  {k:'ember',kl:'the box',t:R`V = pqr`,n:`B = qr.`},
-  {k:'ember',kl:'pyramid',t:R`${Nw}{V = \tfrac13 Bh}`,n:`From ∫x².`},
-  {k:'ember',kl:'matching-slices',t:R`A_1 = A_2 \Rightarrow V_1 = V_2`,n:`Matching slices.`},
-  {k:'ember',kl:'pages of a book',t:R`1635`,n:`A solid as a book of pages.`}
-],{title:'The slides · prisms and pyramids · ← → keys work'});
-stepper('#sl3',[
-  {k:'ember',kl:'square slices',t:R`A = (\sqrt x - x^2)^2`,n:`The side is the gap.`},
-  {k:'ember',kl:'9/70',t:R`\tfrac12 - \tfrac47 + \tfrac15`,n:`The table.`},
-  {k:'ember',kl:'rectangles',t:R`A = 2\sqrt x \Rightarrow \tfrac{32}{3}`,n:`Height 2.`}
-],{title:'The slides · known slices · ← → keys work'});
-stepper('#sl4',[
-  {k:'ember',kl:'density',t:R`\rho = \tfrac{m}{V}`,n:`kg/m³.`}
-],{title:'The slides · density · ← → keys work'});
-stepper('#sl5',[
-  {k:'ember',kl:'mass by slices',t:R`${Nw}{m = \textstyle\int \rho(x)A(x)\,dx}`,n:`Slab by slab.`},
-  {k:'ember',kl:'the core',t:R`9900 \text{ kg}`,n:`Near Manteca.`}
-],{title:'The slides · mass by slices · ← → keys work'});
-stepper('#sl6',[
-  {k:'plain',kl:'outside the plan',t:R`\tfrac12 Bh`,n:`A third, not a half.`}
-],{title:'The slides · a move to watch out for · ← → keys work'});
+<!--gwjs 16j1--><script>
+(function(){ const {plane,col}=Rung; const $=id=>document.getElementById(id); const f=(v,d)=>{ let s=(+v).toFixed(d); if(s.indexOf('.')>=0) s=s.replace(/0+$/,'').replace(/\.$/,''); return s.replace('-','−'); };
+const FN={sq:{lab:'x²',f:x=>x*x,I:1/3,M:2},g:{lab:'e^(−x²)',f:x=>Math.exp(-x*x),I:0.746824133,M:2}}; let k='sq';
+const P=plane($('g16v'),{x:[-0.05,1.08],y:[-0.08,1.12],grid:0.25,aspect:0.72,draw:P=>{ P.axes(); const F=FN[k], n=+$('g16n').value, h=1/n; let T=0;
+  for(let i=0;i<n;i++){ const a=i*h,b=a+h; T+=h*(F.f(a)+F.f(b))/2; P.ctx.globalAlpha=0.35; P.poly([[a,0],[a,F.f(a)],[b,F.f(b)],[b,0]],null,'--gold'); P.ctx.globalAlpha=1; P.poly([[a,0],[a,F.f(a)],[b,F.f(b)],[b,0]],'--gold',null,1); }
+  P.fn(F.f,'--ink',2); $('g16no').textContent=n;
+  $('g16d').textContent='Tₙ = '+f(T,6)+', area '+f(F.I,6)+': error '+f(Math.abs(T-F.I),6)+', fence '+f(F.M*h*h/12,6)+(k==='sq'?' (met exactly: f″ is 2 everywhere)':' (the error stays under it)'); }});
+Object.keys(FN).forEach(q=>{ const b=document.createElement('button'); b.textContent=FN[q].lab; if(q===k) b.className='on'; b.onclick=()=>{ k=q; [...$('g16c').children].forEach(z=>z.classList.toggle('on',z===b)); P.redraw(); }; $('g16c').appendChild(b); });
+$('g16n').oninput=()=>P.redraw(); P.redraw();
 })();
-</script>
+</script><!--/gwjs 16j1-->
 <script src="tray.js"></script>
 <script src="app.js"></script></body></html>

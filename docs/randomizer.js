@@ -337,7 +337,7 @@ LINKS.forEach(L=>{ if(!L.kinds) L.kinds=['names','add','times']; });
    true or false · what is x, or [x, y], or [x, y, z] · which function is it · which graph is it · what set is it.
    Each pool checks its own question: exactly one offered answer is right, and no decoy equals it. */
 Object.assign(STEPS,{'1e':['r01e','Tables'],'2i':['r02i','Sets by Hand'],'9a':['r09a','A Function Is Its Pairs'],
-  '9e':['r09e','Reading and Drawing Graphs'],'27j':['r27j','Solving Systems by Elimination']});
+  '9e':['r09e','Reading and Drawing Graphs'],'27l':['r27l','Solving Systems by Elimination']});
 const S=n=>n<0?'−'+(-n):String(n);
 const lin=(a,b)=>(a===1?'':a===-1?'−':S(a))+'x'+(b===0?'':b>0?' + '+b:' − '+(-b));
 const ANIMALS=[['cat',{fur:1,legs:4}],['dog',{fur:1,legs:4}],['owl',{flies:1,legs:2}],['bee',{flies:1,legs:6}],['ant',{legs:6}],['eel',{water:1,legs:0}],['spider',{legs:8}]];
@@ -409,7 +409,7 @@ const MODES=[{id:'proof',label:'Check Proofs',say:'One line in the proof is bad.
   {id:'work',label:'Work Equations',say:'Work the equation to completion.'},
   {id:'word',label:'Word Problems',say:'Attach the inputs to the equation and get the output.'},
   {id:'read',label:'Read Graph',say:'Read it off the picture.'}]; /* Read Graph took Understanding's place 2026-11-14; the id stays 'read' */
-const WORKQ=['5g.x','5g.xy','27j.xyz'], DASH='–';
+const WORKQ=['5g.x','5g.xy','27l.xyz'], DASH='–';
 const SKIND={'0a.names':'names','4f.add':'add','4g.times':'times','4h.numbers':'num','5b.integers':'int','5c.fractions':'frac'};
 
 /* --- Reading a line: does it hold? true, false, or null when the line cannot be read as numbers or names. --- */
@@ -1248,24 +1248,24 @@ G.K({id:'tour',step:'42c',title:'a tour of every link',make(){
     ask:'Can a walk use every link exactly once?', right, opts:sh([right,...ws]),
     why:'The counts are '+d.map((x,i)=>NAMES[i]+' '+x).join(', ')+'. The even-tour technique: a closed tour exactly when every count is even; the open-tour technique: an open one exactly when exactly two are odd. Here '+(odd.length?odd.length+' are odd':'none is odd')+'.'}); }});
 
-/* distance in links (42k layer by layer), with lengths for nearest-first */
-G.K({id:'nearest',step:'42k',title:'the shortest way across',make(){
+/* distance in links (42m layer by layer), with lengths for nearest-first */
+G.K({id:'nearest',step:'42m',title:'the shortest way across',make(){
   const n=6, E=net(n,ri(7,9),true); if(!E) return null; const w=E.map(()=>ri(1,6));
   const D=Array(n).fill(Infinity); D[0]=0; const done=Array(n).fill(false);
   for(let k=0;k<n;k++){ let u=-1; for(let i=0;i<n;i++) if(!done[i]&&(u<0||D[i]<D[u])) u=i; done[u]=true; E.forEach(([a,b],j)=>{ if(a===u&&D[u]+w[j]<D[b]) D[b]=D[u]+w[j]; if(b===u&&D[u]+w[j]<D[a]) D[a]=D[u]+w[j]; }); }
   const t=pk([2,3,4]); const direct=E.findIndex(e=>e.includes(0)&&e.includes(t)); const hops=(()=>{ const L=Array(n).fill(Infinity); L[0]=0; for(let k=0;k<n;k++) E.forEach(([a,b])=>{ L[b]=Math.min(L[b],L[a]+1); L[a]=Math.min(L[a],L[b]+1); }); return L[t]; })();
   const right=String(D[t]), ws=uniq(right,[direct>=0?String(w[direct]):String(D[t]+2),String(hops),String(D[t]+1),String(w.reduce((a,c)=>a+c,0)),String(D[t]-1),String(D[t]+2),String(2*D[t])]).filter(x=>+x>0).slice(0,3); if(ws.length<3) return null;
-  return card(this,{seed:'net',ix:'6:'+E.map(e=>e.join('')).join('.')+';'+w.join('.')+';'+t,links:['42k.nearest'], fig:netsvg(n,E,{w}),
+  return card(this,{seed:'net',ix:'6:'+E.map(e=>e.join('')).join('.')+';'+w.join('.')+';'+t,links:['42m.nearest'], fig:netsvg(n,E,{w}),
     ask:'Each link is marked with its length. How long is the shortest way from a to '+NAMES[t]+'?', right, opts:sh([right,...ws]),
     why:'Settling the nearest unsettled dot each time (nearest-first) gives a '+NAMES[t]+' the distance '+right+'. The fewest links, '+hops+', is a different question from the least length.'}); }});
 
-/* ---------- arrow maps: a drawn relation, closed under running arrows in a row (47a order-category, from 6·'s orders) ---------- */
+/* ---------- arrow maps: a drawn relation, closed under running arrows in a row (48a order-category, from 6·'s orders) ---------- */
 function arrsvg(n,A){ const P=[[60,60],[260,60],[260,160],[60,160]].slice(0,n), o=['<svg class="rgfig" viewBox="0 0 320 210" role="img" aria-label="things joined by arrows" xmlns="http://www.w3.org/2000/svg"><defs><marker id="rgah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="rg-head" d="M0 0L10 5L0 10z"/></marker></defs>'];
   A.forEach(([a,b])=>{ const [x1,y1]=P[a],[x2,y2]=P[b], dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy), ux=dx/L, uy=dy/L, off=A.some(([c,d])=>c===b&&d===a)?6:0;
     o.push('<line class="rg-cv" marker-end="url(#rgah)" x1="'+(x1+ux*16-uy*off).toFixed(1)+'" y1="'+(y1+uy*16+ux*off).toFixed(1)+'" x2="'+(x2-ux*18-uy*off).toFixed(1)+'" y2="'+(y2-uy*18+ux*off).toFixed(1)+'"/>'); });
   for(let i=0;i<n;i++) o.push('<circle class="rg-node" cx="'+P[i][0]+'" cy="'+P[i][1]+'" r="12"/><text class="rg-tag" x="'+P[i][0]+'" y="'+(P[i][1]+4.5)+'" text-anchor="middle">'+'xyzw'[i]+'</text>');
   o.push('</svg>'); return o.join(''); }
-G.K({id:'compose',step:'47a',steps:['6b','47a'],title:'the arrow a category must hold',make(){
+G.K({id:'compose',step:'48a',steps:['6b','48a'],title:'the arrow a category must hold',make(){
   for(let t=0;t<1;t++){ /* stragglers: every set of two to four arrows that lacks exactly one arrow is listed once, with the chance the roll gave it, and one is picked */
     const LIB=G._arrows||(G._arrows=(()=>{ const V=[], W=[]; let w=0; [3,4].forEach(n=>{ const all=[]; for(let i=0;i<n;i++) for(let j=0;j<n;j++) if(i!==j) all.push([i,j]); const N=all.length, C=k=>{ let r=1; for(let i=0;i<k;i++) r=r*(N-i)/(i+1); return r; };
       for(let m=0;m<(1<<N);m++){ const A=all.filter((e,x)=>m>>x&1); if(A.length<2||A.length>4) continue; const has=(a,b)=>A.some(e=>e[0]===a&&e[1]===b), need=[]; A.forEach(([a,b])=>A.forEach(([c,d])=>{ if(b===c&&a!==d&&!has(a,d)&&!need.some(e=>e[0]===a&&e[1]===d)) need.push([a,d]); })); if(need.length!==1) continue; w+=1/C(A.length); V.push([n,A]); W.push(w); } }); return {V,W,w}; })());
@@ -1274,13 +1274,13 @@ G.K({id:'compose',step:'47a',steps:['6b','47a'],title:'the arrow a category must
     const need=[]; A.forEach(([a,b])=>A.forEach(([c,d])=>{ if(b===c&&a!==d&&!has(a,d)&&!need.some(e=>e[0]===a&&e[1]===d)) need.push([a,d]); })); if(need.length!==1) continue;
     const nm=i=>'xyzw'[i], ar=([a,b])=>nm(a)+' → '+nm(b), right=ar(need[0]);
     const ws=uniq(right,[ar([need[0][1],need[0][0]]),...sh(all.filter(e=>!has(e[0],e[1])&&!(e[0]===need[0][0]&&e[1]===need[0][1]))).map(ar),...A.map(([a,b])=>ar([b,a]))]).slice(0,3); if(ws.length<3) continue;
-    return card(this,{seed:'arrows',ix:n+':'+A.map(e=>e.join('')).join('.'),links:['47a.order'], fig:arrsvg(n,A),
+    return card(this,{seed:'arrows',ix:n+':'+A.map(e=>e.join('')).join('.'),links:['48a.order'], fig:arrsvg(n,A),
       ask:'The arrows draw a relation. One arrow is missing before it makes a category: any two arrows in a row must have an arrow straight across (the do-nothing arrows at each thing are left undrawn). Which?', right, opts:sh([right,...ws]),
       why:'There is an arrow '+ar([need[0][0],A.find(e=>e[0]===need[0][0]&&A.some(f=>f[0]===e[1]&&f[1]===need[0][1]))[1]])+' and one on to '+nm(need[0][1])+', so their run '+right+' must be there. That is the chain technique of an order (6b), and by the order-category technique a relation makes a category exactly when it is a pre-order.'}); }
   return null; }});
 
-/* vector clocks: messages between machines drawn as arrows in time (45e, 45o) */
-G.K({id:'vclock',step:'45o',steps:['45e','45o'],title:'a stamp read off a message diagram',make(){
+/* vector clocks: messages between machines drawn as arrows in time (46e, 46o) */
+G.K({id:'vclock',step:'46o',steps:['46e','46o'],title:'a stamp read off a message diagram',make(){
   const m=3, Y=[50,110,170], evs=[]; const V=[[0,0,0],[0,0,0],[0,0,0]]; const msgs=[]; const pend=[];
   const steps=ri(5,7); let xpos=[40,40,40];
   for(let s=0;s<steps;s++){ const p=rn(m), kind=pend.length&&R()<0.5?'recv':R()<0.5?'send':'local';
@@ -1299,12 +1299,12 @@ G.K({id:'vclock',step:'45o',steps:['45e','45o'],title:'a stamp read off a messag
   msgs.forEach(([a,x1,b,x2])=>o.push('<line class="rg-cv rg-b" marker-end="url(#rgah2)" x1="'+x1+'" y1="'+Y[a]+'" x2="'+(x2-3)+'" y2="'+(Y[b]+(Y[b]>Y[a]?-5:5))+'"/>'));
   evs.forEach((e,i)=>o.push('<circle class="'+(e===tgt?'rg-dot':'rg-node')+'" cx="'+e.x+'" cy="'+Y[e.p]+'" r="'+(e===tgt?6:4)+'"/>'+(e===tgt?'<text class="rg-tag" x="'+e.x+'" y="'+(Y[e.p]-10)+'" text-anchor="middle">?</text>':'')));
   o.push('</svg>');
-  return card(this,{seed:'clocks',ix:evs.map(e=>e.p+''+e.x).join('.'),links:['45o.stamp'], fig:o.join(''),
+  return card(this,{seed:'clocks',ix:evs.map(e=>e.p+''+e.x).join('.'),links:['46o.stamp'], fig:o.join(''),
     ask:'Each dot is an event on machine P, Q or R; arrows are messages. Every machine starts at (0, 0, 0), adds 1 to its own entry at each event, and on a message takes the larger entry each place first. What stamp does the event marked ? carry?', right, opts:sh([right,...ws]),
     why:'Walk the events in order, taking the larger entry each place at a receipt and then adding 1 to the machine’s own: the marked event gets '+right+'. By list-stamp, e → f exactly when every entry of V(e) is at most V(f)’s and they differ.'}); }});
 
-/* ---------- topology: how many times a loop winds round a point (34l ray-count, read as a count of signed crossings) ---------- */
-G.K({id:'winding',step:'34l',steps:['34g','34l'],title:'the winding number round a point',make(){
+/* ---------- topology: how many times a loop winds round a point (34o ray-count, read as a count of signed crossings) ---------- */
+G.K({id:'winding',step:'34o',steps:['34g','34o'],title:'the winding number round a point',make(){
   const w=pk([-2,-1,1,2,0,0]), f=[], N=300, rot=R()*2*Math.PI, cx=(R()-0.5)*0.6, cy=(R()-0.5)*0.6, lobes=pk([2,3,4]), dent=0.25+0.3*R();
   for(let i=0;i<=N;i++){ const t=i/N*2*Math.PI; let x,y;
     if(w===0){ const r=0.9+0.25*Math.cos(lobes*t); x=1.7+r*Math.cos(t)*1.1; y=r*Math.sin(t)*1.4; }
@@ -1315,7 +1315,7 @@ G.K({id:'winding',step:'34l',steps:['34g','34l'],title:'the winding number round
   const Xp=x=>34+(x+4.5)/9*274, Yp=y=>12+(4.5-y)/9*188, a=f[20], b=f[24];
   let fig=svg({x:[-4.5,4.5],y:[-4.5,4.5],parts:[{t:'line',pts:f},{t:'dots',pts:[[cx,cy]]},{t:'text',at:[cx,cy],s:'w',dx:6,dy:-6}],alt:'a closed loop around a point'});
   fig=fig.replace('</svg>','<defs><marker id="rgah3" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path class="rg-head" d="M0 0L10 5L0 10z"/></marker></defs><line class="rg-cv" marker-end="url(#rgah3)" x1="'+Xp(a[0]).toFixed(1)+'" y1="'+Yp(a[1]).toFixed(1)+'" x2="'+Xp(b[0]).toFixed(1)+'" y2="'+Yp(b[1]).toFixed(1)+'"/></svg>');
-  return card(this,{seed:'loop',ix:[w,lobes,Math.round(rot*100)].join(','),links:['34l.raycount'], fig,
+  return card(this,{seed:'loop',ix:[w,lobes,Math.round(rot*100)].join(','),links:['34o.raycount'], fig,
     ask:'The loop is walked once, the way the arrow points. What is its winding number round w?', right, opts:sh([right,...ws]),
     why:'Draw a ray out from w and count crossings, +1 for each one going anticlockwise and −1 for each going clockwise (ray-count): '+right+'.'+(w===0?' The loop never goes round w, so the ray can be drawn without meeting it.':'')}); }});
 
@@ -2495,10 +2495,10 @@ K({id:'sinoverarc',step:'21f',title:'sine over arc, near 0',make(){ const k=pk([
     ask:'The curve is y = '+S+'; it has a hole at x = 0. What does y head to as x heads to 0?', right, opts:o,
     why:'sin h / h heads to 1 as h heads to 0. Here '+S+' = '+(k===1?'sin x / x':k+' · sin('+K2+')/('+K2+')')+', so it heads to '+right+': the hole sits at that height, though 0 itself has no value.'}); }});
 
-/* 17·bio / 24j: the logistic S-curve */
-K({id:'logistic',step:'24j',steps:['17·bio','24j'],title:'an S-curve: its ceiling and its fastest growth',make(){ const Kc=pk([100,200,500,1000]), r=pk([0.5,0.8,1]), t0=ri(3,7), f=t=>Kc/(1+Math.exp(-r*(t-t0))), what=pk(['cap','fast','fastpop']);
+/* 17·bio / 24l: the logistic S-curve */
+K({id:'logistic',step:'24l',steps:['17·bio','24l'],title:'an S-curve: its ceiling and its fastest growth',make(){ const Kc=pk([100,200,500,1000]), r=pk([0.5,0.8,1]), t0=ri(3,7), f=t=>Kc/(1+Math.exp(-r*(t-t0))), what=pk(['cap','fast','fastpop']);
   const right=what==='cap'?String(Kc):what==='fast'?'t = '+t0:String(Kc/2), o=four(right,what==='cap'?[String(Kc/2),String(Kc*2),dec(Math.round(f(12))),String(Kc/4)]:what==='fast'?['t = 0','t = '+(t0+3),'t = 12','t = '+(t0-2)]:[String(Kc),String(Kc/4),String(Kc*3/4),String(0)]); if(!o) return null;
-  return card(this,{ix:[Kc,r,t0,what].join(','),links:['17·bio.ceiling','24j.logistic'], fig:plane([{t:'fn',f,from:0,to:12},{t:'line',pts:[[0,Kc],[12,Kc]],dash:1,k:'b'}],'an S-shaped growth curve',{x:[0,12],y:[0,Kc*1.15],sx:1,sy:Kc/4,lx:2,ly:Kc/2,xl:'t',yl:'population'}),
+  return card(this,{ix:[Kc,r,t0,what].join(','),links:['17·bio.ceiling','24l.logistic'], fig:plane([{t:'fn',f,from:0,to:12},{t:'line',pts:[[0,Kc],[12,Kc]],dash:1,k:'b'}],'an S-shaped growth curve',{x:[0,12],y:[0,Kc*1.15],sx:1,sy:Kc/4,lx:2,ly:Kc/2,xl:'t',yl:'population'}),
     ask:what==='cap'?'A population grows on limited food. What size does it level off at?':what==='fast'?'When is it growing fastest?':'At what size is it growing fastest?', right, opts:o,
     why:'The logistic curve rises toward its ceiling '+Kc+' (the dashed line) and never passes it. It is steepest where it bends, halfway up, at '+(Kc/2)+', here at t = '+t0+'.'}); }});
 
@@ -2605,16 +2605,16 @@ K({id:'trap',step:'23l',title:'trapezoids under a curve',make(){ const ys=[...Ar
     why:'Each trapezoid is width × (left + right)/2; inside readings count twice, the ends once: '+h+'·('+ys[0]+'/2 + '+ys.slice(1,4).join(' + ')+' + '+ys[4]+'/2) = '+right+'.'}); }});
 
 /* ================= Floor 5 ================= */
-/* 24i: a slope field and Euler steps */
-K({id:'slopefield',step:'24i',title:'a slope field and its solution',make(){ const fields=[['y′ = x',(x,y)=>x],['y′ = y',(x,y)=>y],['y′ = −y',(x,y)=>-y],['y′ = x − y',(x,y)=>x-y],['y′ = −x/y',(x,y)=>y?-x/y:0],['y′ = y(2 − y)/2',(x,y)=>y*(2-y)/2]], [nm,F]=pk(fields), ask=pk(['which','euler']);
+/* 24k: a slope field and Euler steps */
+K({id:'slopefield',step:'24k',title:'a slope field and its solution',make(){ const fields=[['y′ = x',(x,y)=>x],['y′ = y',(x,y)=>y],['y′ = −y',(x,y)=>-y],['y′ = x − y',(x,y)=>x-y],['y′ = −x/y',(x,y)=>y?-x/y:0],['y′ = y(2 − y)/2',(x,y)=>y*(2-y)/2]], [nm,F]=pk(fields), ask=pk(['which','euler']);
   let bd=''; const X=x=>160+x*35, Y=y=>110-y*35; for(let x=-4;x<=4;x++) for(let y=-3;y<=3;y++){ const s=F(x,y), L=11/Math.sqrt(1+s*s); bd+=Ln(X(x)-L,Y(y)+L*s,X(x)+L,Y(y)-L*s,'rg-cv',' stroke-width="1.4"'); }
   bd=Ln(X(-4.5),Y(0),X(4.5),Y(0))+Ln(X(0),Y(-3.2),X(0),Y(3.2))+bd;
   if(ask==='which'){ const right=nm, o=four(right,fields.map(f=>f[0])); if(!o) return null;
-    return card(this,{ix:nm,links:['24i.slope-field'], fig:box(320,220,bd,'a slope field'), ask:'Each short dash shows the slope a solution has as it passes that point. Which rate statement drew this field?', right, opts:o,
+    return card(this,{ix:nm,links:['24k.slope-field'], fig:box(320,220,bd,'a slope field'), ask:'Each short dash shows the slope a solution has as it passes that point. Which rate statement drew this field?', right, opts:o,
       why:'Check a few dashes: '+[[1,0],[0,1],[1,1]].map(([x,y])=>'at ('+x+', '+y+') the slope is '+dec(r2(F(x,y)))).join(', ')+'. Only '+nm+' gives those.'}); }
   const x0=0, YH=LX([1,2,-1],[0.5,1]).filter(([y0,h])=>{ const y1=y0+h*F(x0,y0), y2=y1+h*F(x0+h,y1); return new Set(['('+dec(2*h)+', '+dec(r2(y2))+')','('+dec(2*h)+', '+dec(r2(y1))+')','('+dec(h)+', '+dec(r2(y2))+')','('+dec(2*h)+', '+dec(r2(y0+2*h*F(x0,y0)))+')','('+dec(2*h)+', '+dec(r2(y2+h))+')']).size>=4; }), [y0,h]=YH.length?pk(YH):[pk([1,2,-1]),pk([0.5,1])], y1=y0+h*F(x0,y0), y2=y1+h*F(x0+h,y1), right='('+dec(2*h)+', '+dec(r2(y2))+')';
   const o=four(right,['('+dec(2*h)+', '+dec(r2(y1))+')','('+dec(h)+', '+dec(r2(y2))+')','('+dec(2*h)+', '+dec(r2(y0+2*h*F(x0,y0)))+')','('+dec(2*h)+', '+dec(r2(y2+h))+')']); if(!o) return null;
-  return card(this,{ix:nm+';'+y0+';'+h,links:['24i.slope-field','24i.euler('+h+')'], fig:box(320,220,bd+Ci(X(x0),Y(y0),4),'a slope field with a start point'), ask:'For '+nm+', start at (0, '+y0+') and take two Euler steps of '+h+', each along the slope where it starts. Where do you end up?', right, opts:o,
+  return card(this,{ix:nm+';'+y0+';'+h,links:['24k.slope-field','24k.euler('+h+')'], fig:box(320,220,bd+Ci(X(x0),Y(y0),4),'a slope field with a start point'), ask:'For '+nm+', start at (0, '+y0+') and take two Euler steps of '+h+', each along the slope where it starts. Where do you end up?', right, opts:o,
     why:'Step 1: slope '+dec(r2(F(x0,y0)))+', so y goes to '+dec(r2(y1))+'. Step 2 from ('+dec(h)+', '+dec(r2(y1))+'): slope '+dec(r2(F(h,y1)))+', so y goes to '+dec(r2(y2))+'. Reusing the first slope for both steps is the slip.'}); }});
 
 /* 24then / 24h: Newton cooling */
@@ -2624,10 +2624,10 @@ K({id:'cooling',step:'24·then',steps:['24h','24·then'],title:'how fast a hot d
     ask:what==='room'?'A drink cools; its temperature is drawn. What is the room temperature?':what==='half'?'How long does the gap between the drink and the room take to halve? (dots mark it)':'What is it at t = '+(2*hl)+' min?', right, opts:o,
     why:'It cools toward the room, '+Tr+' °C, the gap falling by half every '+hl+' min: '+(T0-Tr)+', '+((T0-Tr)/2)+', '+((T0-Tr)/4)+'. The temperature itself does not halve; the gap does.'}); }});
 
-/* 24k: a cobweb: the fixed point, stable or not */
-K({id:'cobweb',step:'24k',title:'a cobweb: settling on a fixed point, or not',make(){ const m=pk([0.5,-0.5,1.5,-1.5,0.8,-0.8]), p=ri(1,3), g=x=>p+m*(x-p), x0=p+pk([-2,2,1.5]); const path=[[x0,0]]; let x=x0; for(let i=0;i<6;i++){ const y=g(x); path.push([x,y],[y,y]); x=y; if(Math.abs(x)>6) break; }
+/* 24m: a cobweb: the fixed point, stable or not */
+K({id:'cobweb',step:'24m',title:'a cobweb: settling on a fixed point, or not',make(){ const m=pk([0.5,-0.5,1.5,-1.5,0.8,-0.8]), p=ri(1,3), g=x=>p+m*(x-p), x0=p+pk([-2,2,1.5]); const path=[[x0,0]]; let x=x0; for(let i=0;i<6;i++){ const y=g(x); path.push([x,y],[y,y]); x=y; if(Math.abs(x)>6) break; }
   const right=Math.abs(m)<1?'it settles on '+p:'it runs away from '+p, o=four(right,[Math.abs(m)<1?'it runs away from '+p:'it settles on '+p,'it settles on '+dec(x0),'it settles on 0','it swings between two values','it settles on '+(p+1)]); if(!o) return null;
-  return card(this,{ix:[m,p,x0].join(','),links:['24c.fixed-point','24k.stability'], fig:plane([{t:'fn',f:g,from:-1,to:6},{t:'fn',f:x=>x,from:-1,to:6,dash:1,k:'b'},{t:'line',pts:path,k:'b'}],'a cobweb between a map and the line y = x',{x:[-1,6],y:[-1,6],sx:1,sy:1,lx:1,ly:1,xl:'x',yl:'next'}),
+  return card(this,{ix:[m,p,x0].join(','),links:['24c.fixed-point','24m.stability'], fig:plane([{t:'fn',f:g,from:-1,to:6},{t:'fn',f:x=>x,from:-1,to:6,dash:1,k:'b'},{t:'line',pts:path,k:'b'}],'a cobweb between a map and the line y = x',{x:[-1,6],y:[-1,6],sx:1,sy:1,lx:1,ly:1,xl:'x',yl:'next'}),
     ask:'The solid line is the map, the dashed line y = x; the cobweb follows x, its next, its next. What happens?', right, opts:o,
     why:'The fixed point is where the map meets y = x, at '+p+'. Its slope there is '+dec(m)+': '+(Math.abs(m)<1?'less than 1 in size, so each step shrinks the gap and the cobweb winds in (a map that shrinks has one fixed point).':'more than 1 in size, so each step grows the gap and the cobweb spirals out.')}); }});
 
@@ -2653,18 +2653,18 @@ K({id:'unityroots',step:'25e',steps:['25d','25e','26a'],title:'the roots of zⁿ
     ask:what==='n'?'The dots are every root of one equation, on a circle of radius 1 (drawn larger). Which equation?':'These are the roots of zⁿ = 1 for n = '+n+'. What angle separates neighbours?', right, opts:o,
     why:'zⁿ = 1 has exactly n roots (every polynomial has its roots), equally spaced round the circle starting at 1, each a turn of 2π/n from the last. Here there are '+n+' dots.'}); }});
 
-/* 28a/28k + Andrew 13:54Z: a surface read through its contour map */
-K({id:'contour',step:'28k',steps:['28a','28k'],title:'a surface read off its contour map',make(){ const kind=pk(['bowl','saddle','ridge','hill2']), a=ri(-2,2), b=ri(-2,2);
+/* 28a/28m + Andrew 13:54Z: a surface read through its contour map */
+K({id:'contour',step:'28m',steps:['28a','28m'],title:'a surface read off its contour map',make(){ const kind=pk(['bowl','saddle','ridge','hill2']), a=ri(-2,2), b=ri(-2,2);
   const F={bowl:(x,y)=>(x-a)*(x-a)+(y-b)*(y-b),saddle:(x,y)=>(x-a)*(x-a)-(y-b)*(y-b),ridge:(x,y)=>-(x-a)*(x-a),hill2:(x,y)=>-((x-a)*(x-a)+2*(y-b)*(y-b))}[kind];
   const lv=[...Array(9)].map((_,i)=>(i-4)*2), seg=[]; const N=40, X=i=>-4.5+9*i/N; for(let i=0;i<N;i++) for(let j=0;j<N;j++){ const x0=X(i),x1=X(i+1),y0=X(j),y1=X(j+1), v=[F(x0,y0),F(x1,y0),F(x1,y1),F(x0,y1)], P=[[x0,y0],[x1,y0],[x1,y1],[x0,y1]];
       lv.forEach(L=>{ const pts=[]; for(let e=0;e<4;e++){ const p=v[e]-L, q=v[(e+1)%4]-L; if(p*q<0){ const t=p/(p-q); pts.push([P[e][0]+(P[(e+1)%4][0]-P[e][0])*t,P[e][1]+(P[(e+1)%4][1]-P[e][1])*t]); } } if(pts.length===2) seg.push(pts); }); }
-  const parts=seg.map(s=>({t:'line',pts:s})), what=pk(kind==='ridge'||!measured('28l')/* studygraph: flat points on a contour map are built at 28l */?['shape','dir']:['shape','flat','dir']); /* a ridge is flat along a whole line, not at a point */
+  const parts=seg.map(s=>({t:'line',pts:s})), what=pk(kind==='ridge'||!measured('28n')/* studygraph: flat points on a contour map are built at 28n */?['shape','dir']:['shape','flat','dir']); /* a ridge is flat along a whole line, not at a point */
   let right, o, ask, why;
   if(what==='shape'){ const nm={bowl:'a bowl, lowest in the middle',saddle:'a saddle, up one way and down the other',ridge:'a ridge, highest along a line',hill2:'a hill, highest in the middle'}; right=nm[kind]; o=four(right,Object.values(nm)); ask='Each loop is a level: points at one height (levels go up by 2; the middle value is '+dec(F(a,b))+'). What is the surface’s shape?'; why='Level loops round a point mean a top or a bottom; crossing lines mean a saddle; parallel lines mean a ridge or valley. Here: '+right+'. Check the heights on each side.'; }
   else if(what==='flat'){ if(kind==='ridge') return null; right='('+a+', '+b+')'; o=four(right,['('+b+', '+a+')','(0, 0)','('+(-a)+', '+(-b)+')','('+(a+1)+', '+b+')','('+a+', '+(b+1)+')','('+(a-1)+', '+b+')']); ask='At which point is the surface flat in every direction (both partial slopes 0)?'; why='The levels close in on ('+a+', '+b+'): there both partial slopes are 0, the gradient vanishes. Elsewhere the levels are spaced and the gradient points across them.'; }
   else { const px=a+pk([-2,2]), py=b, gx=kind==='saddle'||kind==='bowl'?2*(px-a):-2*(px-a); right=gx>0?'toward +x (right)':'toward −x (left)'; o=sh([right,gx>0?'toward −x (left)':'toward +x (right)','toward +y (up)','toward −y (down)']); ask='Standing at ('+px+', '+py+'), which way is uphill steepest (the gradient)?'; why='The gradient points across the levels toward higher values, at right angles to the level through the point. Here ∂f/∂x = '+gx+' and ∂f/∂y = 0, so '+right+'.'; }
   if(!o) return null;
-  return card(this,{ix:[kind,a,b,what].join(','),links:['28a.keep-one-still','28k.'+(what==='dir'?'gradient':'partials')], fig:svg(Object.assign({},W9,{sx:1,sy:1,lx:1,ly:1,parts,alt:'a contour map'})), ask, right, opts:o, why}); }});
+  return card(this,{ix:[kind,a,b,what].join(','),links:['28a.keep-one-still','28m.'+(what==='dir'?'gradient':'partials')], fig:svg(Object.assign({},W9,{sx:1,sy:1,lx:1,ly:1,parts,alt:'a contour map'})), ask, right, opts:o, why}); }});
 
 /* 28a: a surface sliced: the partial slope off a slice */
 K({id:'slicepart',step:'28a',title:'a partial slope off a slice',make(F__){ const T__=F__||LPICK(this,'g.slicepart',()=>LX([1,-1,0.5],[1,2,-1],LRG(-2,2),LRG(-2,2),LRG(-2,2)).filter(([a,b,c,y0,x0])=>Math.abs(a*x0*x0+b*x0*y0+c*y0)<=4.5&&Math.abs(2*a*x0+b*y0)<=5)); if(!T__) return null; const [a,b,c,y0,x0]=T__, F=(x,y)=>a*x*x+b*x*y+c*y, g=x=>F(x,y0), slope=2*a*x0+b*y0; if(Math.abs(g(x0))>4.5||Math.abs(slope)>5) return null;
@@ -2703,7 +2703,7 @@ K({id:'eigen',step:'27f',steps:['27d','27f'],title:'arrows a map only stretches'
     why:P(v)+' goes to '+P(Av(v))+' = '+dec(lam)+'·'+P(v)+': same line, stretched by '+dec(lam)+'. It is an eigenvector, with eigenvalue '+dec(lam)+'; every other arrow is turned off its line.'}); }});
 
 /* 29b: a triangle on a sphere: angles add past 180° */
-K({id:'sphere',step:'29b',steps:['29b','29i'],title:'a triangle on a sphere',make(){ const A=pk([30,45,60,75,90,105,120,135,150]), B=90, C=90, sum=A+B+C, area=(sum-180)/720, what=pk(['sum','area']);
+K({id:'sphere',step:'29b',steps:['29b','29m'],title:'a triangle on a sphere',make(){ const A=pk([30,45,60,75,90,105,120,135,150]), B=90, C=90, sum=A+B+C, area=(sum-180)/720, what=pk(['sum','area']);
   const bd='<circle class="rg-set" cx="110" cy="110" r="90"/><ellipse class="rg-grid" cx="110" cy="110" rx="90" ry="26" fill="none"/>'+Ln(110,20,110,110,'rg-cv')+'<path class="rg-cv" d="M110 110 L'+f1(110+90*Math.cos(Math.PI*(A)/180)*1)+' '+f1(110+26*Math.sin(Math.PI*A/180))+'" />'+Ln(110,20,f1(110+90*Math.cos(Math.PI*A/180)),f1(110+26*Math.sin(Math.PI*A/180)),'rg-cv rg-b')+T(118,40,'90°','rg-lab')+T(116,124,A+'°','rg-lab');
   const right=what==='sum'?sum+'°':frac(Math.round((sum-180)),720)+' of the sphere', o=four(right,what==='sum'?['180°',(sum-90)+'°','360°',(sum+90)+'°',(sum+180)+'°',(sum-180)+'°']:[frac(Math.round(sum-180),360)+' of the sphere','1/8 of the sphere',frac(A,360)+' of the sphere','1/2 of the sphere',frac(A,1440)+' of the sphere']); if(!o) return null;
   return card(this,{ix:A+what,links:['29b.sphere-triangle','29e.curvature'], fig:box(220,220,bd,'a triangle on a sphere from the pole to the equator'), ask:'A triangle on a sphere runs from the north pole down two lines of longitude '+A+'° apart to the equator, then along it. '+(what==='sum'?'What do its three angles add to?':'What share of the whole sphere does it cover?'), right, opts:o,
@@ -2820,21 +2820,21 @@ K({id:'isfn',step:'9e',steps:['9a','9e'],title:'is this graph a function?',make(
   return card(this,{ix:kind+';'+h+','+k+','+r,links:['9a.one-output','9e.column'], fig:plane([{t:'line',pts}],'a curve in the plane'), ask:'Is this curve the graph of a function y = f(x)?', right, opts:o,
     why:'A graph is a function exactly when every vertical line meets it at most once: each x has one y (the column test). '+(isF?'Here every vertical line meets it at most once. A level line meeting it twice only says it is not one-to-one.':'Here a vertical line meets it more than once, so one x would have two outputs.')}); }});
 
-/* 31l/31k: a scatter, its least-squares line, the correlation's sign, a prediction */
-K({id:'regress',step:'31l',steps:['31k','31l'],title:'correlation and the fitted line',make(){ const m=pk([-1.5,-1,-0.5,0,0.5,1,1.5]), b=ri(-1,1), noise=pk([0.3,0.8,1.6]), pts=[...Array(14)].map(()=>{ const x=-4+8*R(); return [x,m*x+b+(R()-0.5)*2*noise*2]; }), what=pk(['sign','pred']);
+/* 31n/31m: a scatter, its least-squares line, the correlation's sign, a prediction */
+K({id:'regress',step:'31n',steps:['31m','31n'],title:'correlation and the fitted line',make(){ const m=pk([-1.5,-1,-0.5,0,0.5,1,1.5]), b=ri(-1,1), noise=pk([0.3,0.8,1.6]), pts=[...Array(14)].map(()=>{ const x=-4+8*R(); return [x,m*x+b+(R()-0.5)*2*noise*2]; }), what=pk(['sign','pred']);
   const n=pts.length, mx=sumA(pts.map(p=>p[0]))/n, my=sumA(pts.map(p=>p[1]))/n, sxy=sumA(pts.map(p=>(p[0]-mx)*(p[1]-my))), sxx=sumA(pts.map(p=>(p[0]-mx)**2)), syy=sumA(pts.map(p=>(p[1]-my)**2)), r=sxy/Math.sqrt(sxx*syy), bm=sxy/sxx, bb=my-bm*mx;
   if(what==='sign'){ const right=Math.abs(r)<0.25?'near 0':r>0.75?'strong and positive':r>0?'weak and positive':r<-0.75?'strong and negative':'weak and negative'; const o=four(right,['near 0','strong and positive','weak and positive','strong and negative','weak and negative']); if(!o) return null;
-    return card(this,{ix:pts.map(p=>dec(r2(p[1]))).join(','),links:['31l.correlation'], fig:plane([{t:'dots',pts}],'a scatter of points',{x:[-4.5,4.5],y:[-6.5,6.5],sx:1,sy:1,lx:2,ly:2,xl:'x',yl:'y'}),
+    return card(this,{ix:pts.map(p=>dec(r2(p[1]))).join(','),links:['31n.correlation'], fig:plane([{t:'dots',pts}],'a scatter of points',{x:[-4.5,4.5],y:[-6.5,6.5],sx:1,sy:1,lx:2,ly:2,xl:'x',yl:'y'}),
       ask:'What is the correlation of these points like?', right, opts:o, why:'r = '+dec(r2(r))+': the sign says whether y tends up or down as x grows, the size how tightly the points hug a line. Points scattered with no trend give r near 0.'}); }
   const x0=pk([-3,-2,2,3]), right=dec(Math.round((bm*x0+bb)*2)/2), o=four(right,[dec(Math.round((-bm*x0+bb)*2)/2),dec(Math.round((bm*x0)*2)/2),dec(Math.round(my*2)/2),dec(Math.round((bm*x0+bb+1.5)*2)/2),dec(Math.round((bm*x0+bb-1.5)*2)/2),dec(x0)]); if(!o) return null;
-  return card(this,{ix:pts.map(p=>dec(r2(p[1]))).join(',')+';'+x0,links:['31k.least-squares','31l.predict'], fig:plane([{t:'dots',pts},{t:'fn',f:x=>bm*x+bb,from:-4.5,to:4.5,k:'b',dash:1}],'a scatter with its fitted line',{x:[-4.5,4.5],y:[-6.5,6.5],sx:1,sy:1,lx:2,ly:2,xl:'x',yl:'y'}),
+  return card(this,{ix:pts.map(p=>dec(r2(p[1]))).join(',')+';'+x0,links:['31m.least-squares','31n.predict'], fig:plane([{t:'dots',pts},{t:'fn',f:x=>bm*x+bb,from:-4.5,to:4.5,k:'b',dash:1}],'a scatter with its fitted line',{x:[-4.5,4.5],y:[-6.5,6.5],sx:1,sy:1,lx:2,ly:2,xl:'x',yl:'y'}),
     ask:'The dashed line is the least-squares fit. About what y does it predict at x = '+x0+'?', right, opts:o,
     why:'Read up from x = '+x0+' to the line: y ≈ '+right+' (the line is y ≈ '+dec(r2(bm))+'x + '+dec(r2(bb))+'). The line passes through the mean point ('+dec(r2(mx))+', '+dec(r2(my))+').'}); }});
 
 /* 31stat / 31then: a curve that fits too well */
 K({id:'overfit',step:'31·stat',steps:['31·stat','31·then'],title:'a model that fits too well',make(){ const m=pk([0.5,1,-0.5]), xs=[-4,-3,-2,-1,0,1,2,3,4], ys=xs.map(x=>m*x+(R()-0.5)*1.6), lag=x=>xs.reduce((s,xi,i)=>s+ys[i]*xs.reduce((p,xj,j)=>j===i?p:p*(x-xj)/(xi-xj),1),0);
   const right='the straight line, dashed', o=sh([right,'the wiggly curve, solid: it misses nothing','both alike: they fit the points equally','neither: only more data can tell']);
-  return card(this,{ix:ys.map(y=>dec(r2(y))).join(','),links:['31·stat.overfit','31m.interpolation'], fig:plane([{t:'dots',pts:xs.map((x,i)=>[x,ys[i]])},{t:'fn',f:lag,from:-4.3,to:4.3,n:300},{t:'fn',f:x=>m*x,from:-4.5,to:4.5,k:'b',dash:1}],'noisy points with a wiggly curve and a straight line through them',{x:[-4.5,4.5],y:[-5.5,5.5],sx:1,sy:1,lx:2,ly:2,xl:'x',yl:'y'}),
+  return card(this,{ix:ys.map(y=>dec(r2(y))).join(','),links:['31·stat.overfit','31o.interpolation'], fig:plane([{t:'dots',pts:xs.map((x,i)=>[x,ys[i]])},{t:'fn',f:lag,from:-4.3,to:4.3,n:300},{t:'fn',f:x=>m*x,from:-4.5,to:4.5,k:'b',dash:1}],'noisy points with a wiggly curve and a straight line through them',{x:[-4.5,4.5],y:[-5.5,5.5],sx:1,sy:1,lx:2,ly:2,xl:'x',yl:'y'}),
     ask:'The solid curve passes through every point; the dashed line misses a little. Which will better predict a new point at x = 3.5?', right, opts:o,
     why:'The wiggly curve has as many knobs as points, so it fits the noise too: between and beyond the points it swings wildly. The line keeps only the trend; it misses the old points a little and the new ones less.'}); }});
 
@@ -2884,29 +2884,29 @@ K({id:'heat',step:'33b',steps:['33a','33b'],title:'heat smoothing a bar',make(){
   return card(this,{ix:kind+';'+order.join('')+ask,links:['33a.heat-equation','33b.smooths'], fig:plane([{t:'fn',f:u0,from:-5,to:5,n:400}],'the starting temperature',{x:[-5,5],y:[0,8.5],sx:1,sy:2,lx:2,ly:4,xl:'place',yl:'temp'}), ask:'This is a bar’s temperature at the start. The pictures show it at three later times. Which is the '+(ask==='latest'?'latest':'earliest')+'?', right, opts:[...names,'none: heat sharpens peaks'], html,
     why:'Under the heat equation every bump spreads and sinks, and corners round off at once; the more time, the flatter and wider. The total heat (the area) stays the same.'}); }});
 
-/* 33c: a pulse on a string splits in two */
-K({id:'waveeq',step:'33c',title:'a pulse on a string',make(){ const c=pk([1,2]), t=pk([1,2]), h=pk([2,4]), x0=0, p=x=>h*Math.exp(-x*x*2), u=x=>(p(x-c*t)+p(x+c*t))/2, what=pk(['where','height']);
+/* 33e: a pulse on a string splits in two */
+K({id:'waveeq',step:'33e',title:'a pulse on a string',make(){ const c=pk([1,2]), t=pk([1,2]), h=pk([2,4]), x0=0, p=x=>h*Math.exp(-x*x*2), u=x=>(p(x-c*t)+p(x+c*t))/2, what=pk(['where','height']);
   const right=what==='where'?'at x = ±'+(c*t):String(h/2), o=four(right,what==='where'?['at x = ±'+(c*t*2),'at x = '+(c*t)+' only','at x = 0','at x = ±'+t]:[String(h),String(h/4),'0',String(h*2)]); if(!o) return null;
-  return card(this,{ix:[c,t,h,what].join(','),links:['33c.wave-equation','20i.slide(±'+(c*t)+')'], fig:plane([{t:'fn',f:p,from:-5,to:5,dash:1,k:'b'},{t:'fn',f:u,from:-5,to:5,n:300}],'a pulse at the start (dashed) and later (solid)',{x:[-5,5],y:[0,h+0.5],sx:1,sy:1,lx:1,ly:1,xl:'x',yl:'height'}),
+  return card(this,{ix:[c,t,h,what].join(','),links:['33e.wave-equation','20i.slide(±'+(c*t)+')'], fig:plane([{t:'fn',f:p,from:-5,to:5,dash:1,k:'b'},{t:'fn',f:u,from:-5,to:5,n:300}],'a pulse at the start (dashed) and later (solid)',{x:[-5,5],y:[0,h+0.5],sx:1,sy:1,lx:1,ly:1,xl:'x',yl:'height'}),
     ask:'A string is plucked into the dashed pulse and let go from rest; waves travel at speed '+c+'. At t = '+t+' (solid), '+(what==='where'?'where are the peaks?':'how high is each peak?'), right, opts:o,
     why:'The wave equation splits a pulse let go from rest into two halves, each half as tall ('+(h/2)+'), sliding left and right at speed '+c+': after t = '+t+' they sit at ±'+(c*t)+'. They keep their shape; heat would have flattened it.'}); }});
 
-/* 34k: a surface glued from a square */
-K({id:'gluesq',step:'34k',steps:['34f','34k'],title:'a surface glued from a square',make(){ const kinds=[['torus','a','b','a','b'],['Klein bottle','a','b','a','b̄'],['sphere','a','a','b','b'],['projective plane','a','b','ā','b̄'],['cylinder','a','','a',''],['Möbius band','a','','ā','']], [nm,top,right_,bot,left]=pk(kinds);
+/* 34n: a surface glued from a square */
+K({id:'gluesq',step:'34n',steps:['34f','34n'],title:'a surface glued from a square',make(){ const kinds=[['torus','a','b','a','b'],['Klein bottle','a','b','a','b̄'],['sphere','a','a','b','b'],['projective plane','a','b','ā','b̄'],['cylinder','a','','a',''],['Möbius band','a','','ā','']], [nm,top,right_,bot,left]=pk(kinds);
   const arr=(x1,y1,x2,y2,lab,rev)=>{ const [a,b,c,d]=rev?[x2,y2,x1,y1]:[x1,y1,x2,y2]; return Ln(a,b,c,d,'rg-cv',' marker-end="url(#a9)"')+T((x1+x2)/2+(x1===x2?(x1<100?-14:10):0),(y1+y2)/2+(y1===y2?(y1<100?-6:16):4),lab.replace('̄',''),'rg-tag','middle'); };
   let bd='<defs><marker id="a9" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L6 3L0 6z" class="rg-head"/></marker></defs>'+Ln(50,30,170,30,'rg-axis')+Ln(170,30,170,150,'rg-axis')+Ln(50,150,170,150,'rg-axis')+Ln(50,30,50,150,'rg-axis');
   /* conventions: the top a left to right; the bottom a left to right unless barred; the left b bottom to top; the right b bottom to top unless barred */
   if(nm==='sphere'){ bd+=arr(50,30,170,30,'a')+arr(50,150,50,30,'a',true)+arr(170,30,170,150,'b',true)+arr(50,150,170,150,'b',true); }
   else { bd+=arr(50,30,170,30,'a')+arr(50,150,170,150,'a',bot==='ā'); if(left) bd+=arr(50,150,50,30,'b')+arr(170,150,170,30,'b',right_==='b̄'||bot==='ā'&&left==='b̄'); }
   const right=nm, o=four(right,kinds.map(k=>k[0])); if(!o) return null;
-  return card(this,{ix:nm,links:['34k.glue'], fig:box(220,180,bd,'a square with edges marked for gluing'), ask:'Glue the edges with the same letter so their arrows agree (unmarked edges stay free). Which surface do you get?', right, opts:o,
+  return card(this,{ix:nm,links:['34n.glue'], fig:box(220,180,bd,'a square with edges marked for gluing'), ask:'Glue the edges with the same letter so their arrows agree (unmarked edges stay free). Which surface do you get?', right, opts:o,
     why:{torus:'Both pairs glued the same way round: first a tube, then the tube’s ends meet as they are: a torus, the surface of a ring.','Klein bottle':'One pair the same way, the other reversed: the tube’s ends meet turned over, which needs a fourth dimension: a Klein bottle.',sphere:'Neighbouring edges glued to each other close up like an envelope: a sphere.','projective plane':'Both pairs reversed: every point meets its opposite, the projective plane.',cylinder:'One pair glued the same way, the other edges free: a cylinder.','Möbius band':'One pair glued with a half twist, the other edges free: a Möbius band, with one side.'}[nm]}); }});
 
-/* 35h: the dust with no length */
-K({id:'cantor',step:'35h',title:'dust with no length',make(){ const n=ri(1,4), keep=pk([[2,3],[3,5],[4,5]]), [k,d]=keep, len=Math.pow(k/d,n); let segs=[[0,1]]; for(let s=0;s<n;s++){ const nx=[]; segs.forEach(([a,b])=>{ const w=(b-a)/d; if(k===2){ nx.push([a,a+w],[b-w,b]); } else if(k===3&&d===5){ nx.push([a,a+w],[a+2*w,a+3*w],[b-w,b]); } else { nx.push([a,a+w],[a+w,a+2*w],[a+3*w,a+4*w],[b-w,b]); } }); segs=nx; }
+/* 35i: the dust with no length */
+K({id:'cantor',step:'35i',title:'dust with no length',make(){ const n=ri(1,4), keep=pk([[2,3],[3,5],[4,5]]), [k,d]=keep, len=Math.pow(k/d,n); let segs=[[0,1]]; for(let s=0;s<n;s++){ const nx=[]; segs.forEach(([a,b])=>{ const w=(b-a)/d; if(k===2){ nx.push([a,a+w],[b-w,b]); } else if(k===3&&d===5){ nx.push([a,a+w],[a+2*w,a+3*w],[b-w,b]); } else { nx.push([a,a+w],[a+w,a+2*w],[a+3*w,a+4*w],[b-w,b]); } }); segs=nx; }
   let bd=''; segs.forEach(([a,b])=>{ bd+=Re(20+a*280,30,Math.max(0.8,(b-a)*280),14,'rg-shade'); }); bd+=T(20,70,'0','rg-lab','middle')+T(300,70,'1','rg-lab','middle');
   const right=frac(Math.pow(k,n),Math.pow(d,n)), o=four(right,[frac(Math.pow(k,n),Math.pow(d,n)*2),frac(k,d),frac(Math.pow(k,n+1),Math.pow(d,n+1)),frac(Math.pow(d-k,n),Math.pow(d,n)),frac(segs.length,Math.pow(d,n-1))]); if(!o) return null;
-  return card(this,{ix:k+'/'+d+';'+n,links:['35h.dust('+n+')'], fig:box(320,80,bd,'what is left after removing middle pieces'), ask:'Start with the stretch from 0 to 1; at each round, cut every piece into '+d+' and keep '+k+'. After '+n+' round'+(n>1?'s':'')+' (shown), how much total length is left?', right, opts:o,
+  return card(this,{ix:k+'/'+d+';'+n,links:['35i.dust('+n+')'], fig:box(320,80,bd,'what is left after removing middle pieces'), ask:'Start with the stretch from 0 to 1; at each round, cut every piece into '+d+' and keep '+k+'. After '+n+' round'+(n>1?'s':'')+' (shown), how much total length is left?', right, opts:o,
     why:'Each round keeps '+k+'/'+d+' of what is there, so after '+n+' rounds ('+k+'/'+d+')^'+n+' = '+right+'. Round after round this heads to 0, yet uncountably many points remain: a dust with no length.'}); }});
 
 /* 36d: the circle of hue */
@@ -2990,14 +2990,14 @@ function boxsvg(a,b,c,la,lb,lc){ const s=18, ox=40, oy=160, dx=c*s*0.6, dy=c*s*0
   const front=[[ox,oy],[ox+W,oy],[ox+W,oy-H],[ox,oy-H]], top=[[ox,oy-H],[ox+W,oy-H],[ox+W+dx,oy-H-dy],[ox+dx,oy-H-dy]], side=[[ox+W,oy],[ox+W+dx,oy-dy],[ox+W+dx,oy-H-dy],[ox+W,oy-H]];
   const poly=(p,cls)=>'<polygon class="'+cls+'" points="'+p.map(q=>P(q[0],q[1])).join(' ')+'"/>';
   return box(ox+W+dx+60,oy+30,poly(front,'rg-bar')+poly(top,'rg-shade')+poly(side,'rg-shade')+T(ox+W/2,oy+18,la,'rg-tag','middle')+T(ox-8,oy-H/2,lb,'rg-tag','end')+T(ox+W+dx/2+14,oy-dy/2+8,lc,'rg-tag','start'),'a box with its three edges named'); }
-K({id:'boxread',step:'5i',steps:['5i','16j'],title:'one expression as a rectangle and as a box',make(){ const p=ri(1,3), q=ri(1,3), form=pk(['box','rect','expand']);
+K({id:'boxread',step:'5i',steps:['5i','16k'],title:'one expression as a rectangle and as a box',make(){ const p=ri(1,3), q=ri(1,3), form=pk(['box','rect','expand']);
   const E=(a)=>a===0?'x':'(x + '+a+')', expr='x'+E(p)+(p===q?'²':E(q)).replace(/^x/,'').replace(/^\(/,'('), exprS=p===q?'x(x + '+p+')²':'x(x + '+p+')(x + '+q+')';
   const c2=p+q, c1=p*q, expd='x³ + '+(c2===1?'':c2)+'x² + '+(c1===1?'':c1)+'x';
   if(form==='expand'){ const right=expd, o=four(right,['x³ + '+c1+'x² + '+c2+'x','x³ + '+(c2+c1)+'x','x³ + '+c2+'x² + '+c1,'x² + '+c2+'x + '+c1]); if(!o) return null;
-    return card(this,{ix:p+','+q+';e',links:['5i.grid-of-cells','16j.slab'], fig:boxsvg(3,1+p*0.5+1.2,1+q*0.5+1.2,'x','x + '+p,'x + '+q), ask:'The box is x by (x + '+p+') by (x + '+q+'). Its volume, '+exprS+', written out as a sum of powers, is which?', right, opts:o,
+    return card(this,{ix:p+','+q+';e',links:['5i.grid-of-cells','16k.slab'], fig:boxsvg(3,1+p*0.5+1.2,1+q*0.5+1.2,'x','x + '+p,'x + '+q), ask:'The box is x by (x + '+p+') by (x + '+q+'). Its volume, '+exprS+', written out as a sum of powers, is which?', right, opts:o,
       why:'Multiply out: (x + '+p+')(x + '+q+') = x² + '+c2+'x + '+c1+', then times x: '+right+'. Each term is a slab of the box: one cube x³, '+c2+' flat slabs x², '+c1+' rods x.'}); }
   if(form==='box'){ const right=exprS, o=four(right,['x + (x + '+p+') + (x + '+q+')','x(x + '+(p+q)+')','x²(x + '+(p*q)+')','(x + '+p+')(x + '+q+')']); if(!o) return null;
-    return card(this,{ix:p+','+q+';b',links:['16j.cross-sections'], fig:boxsvg(3,1+p*0.5+1.2,1+q*0.5+1.2,'x','x + '+p,'x + '+q), ask:'Which expression is the volume of this box?', right, opts:o,
+    return card(this,{ix:p+','+q+';b',links:['16k.cross-sections'], fig:boxsvg(3,1+p*0.5+1.2,1+q*0.5+1.2,'x','x + '+p,'x + '+q), ask:'Which expression is the volume of this box?', right, opts:o,
       why:'Volume is across × up × deep: x · (x + '+p+') · (x + '+q+') = '+right+'. Adding the edges gives the length of wire, not the volume.'}); }
   const right=exprS, W=110, s=110/(3+p), H=(3+p)*(3+q)/(3+p)*12; const bd=Re(40,20,90,60,'rg-shade')+T(85,96,'x','rg-tag','middle')+T(138,54,'(x + '+p+')(x + '+q+')','rg-tag','start'); /* the up label sits right of the rectangle: at the left it ran off the picture */
   const o=four(right,['x + (x + '+p+')(x + '+q+')','x(x + '+(p+q)+')','(x + '+p+')(x + '+q+')','2x + (x + '+p+')(x + '+q+')']); if(!o) return null;
@@ -3663,14 +3663,14 @@ function mdia(names,msgs,evs,W,H){ const id=uid(), m=names.length, Yp=i=>30+i*((
 G.F={plot,plot2,panel,wtable,kgrid,fgraph,gtree,gcirc,gEval,mdia,ringPos};
 
 /* ================= kinds on the plot ================= */
-/* 28o: downhill steps on a bowl; which step size drew them */
-K({id:'downhill',step:'28o',steps:['28g','28o'],title:'which step size drew the downhill steps',make(){
+/* 28q: downhill steps on a bowl; which step size drew them */
+K({id:'downhill',step:'28q',steps:['28g','28q'],title:'which step size drew the downhill steps',make(){
   const c=pk([2,3,4]), F=(x,y)=>x*x+c*y*y, x0=pk([-3,-2,2,3]), y0=pk([-2,-1,1,2]), HS=[0.1,0.15,0.2,0.25,0.3,0.35], inb=hh=>{ let x=x0, y=y0; for(let i=0;i<4;i++){ x-=hh*2*x; y-=hh*2*c*y; if(Math.abs(x)>4.4||Math.abs(y)>4.4) return false; } return true; }, h=pk(HS.filter(inb)) /* a step size whose four steps stay in the window */, hs=[h,...sh(HS.filter(v=>v!==h)).slice(0,3)];
   const path=hh=>{ const p=[[x0,y0]]; for(let i=0;i<4;i++){ const [x,y]=p[p.length-1]; p.push([x-hh*2*x,y-hh*2*c*y]); } return p; };
   const P=path(h); if(P.some(([x,y])=>Math.abs(x)>4.4||Math.abs(y)>4.4)) return null;
   const parts=[{t:'level',F,levels:[1,4,9,16].map(v=>v*1)}]; for(let i=0;i<4;i++) parts.push({t:'arrow',from:P[i],to:P[i+1],k:'b'}); parts.push({t:'dots',pts:[P[0]]});
   const right='h = '+dec(h), o=four(right,hs.slice(1).map(v=>'h = '+dec(v))); if(!o) return null;
-  return card(this,{ix:c+';'+x0+','+y0+';'+h,links:['28g.uphill','28o.downhill-step'],fig:plot({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts,alt:''},'level curves of a bowl with four downhill steps'),
+  return card(this,{ix:c+';'+x0+','+y0+';'+h,links:['28g.uphill','28q.downhill-step'],fig:plot({x:[-4.5,4.5],y:[-4.5,4.5],xl:'x',yl:'y',parts,alt:''},'level curves of a bowl with four downhill steps'),
     ask:'The level curves are f = x² + '+c+'y². Four downhill steps p ← p − h∇f start at the dot. Which step size h drew them?',right,opts:o,
     why:'∇f = (2x, '+(2*c)+'y), so each step multiplies x by 1 − 2h and y by 1 − '+(2*c)+'h. The first step goes from ('+sg(x0)+', '+sg(y0)+') to ('+dec(P[1][0])+', '+dec(P[1][1])+'): x is multiplied by '+dec(1-2*h)+', so 1 − 2h = '+dec(1-2*h)+' and h = '+dec(h)+'.'}); }});
 
@@ -3684,15 +3684,15 @@ K({id:'uphill',step:'28g',title:'the uphill vector off a level map',make(F__){
     ask:'The level curves of f = '+nm+' are drawn, with an arrow uphill at the dot ('+sg(p[0])+', '+sg(p[1])+'). What is ∇f there?',right,opts:o,
     why:'∇f lists the two partial slopes: for f = '+nm+' they are '+(nm==='xy'?'(y, x)':P(['∂f/∂x','∂f/∂y']))+'; at ('+sg(p[0])+', '+sg(p[1])+') that is '+right+'. It crosses the level curve at a right angle and points uphill; '+P([-v[0],-v[1]])+' points down and '+P([-v[1],v[0]])+' runs along the curve.'}); }});
 
-/* 24k: resting places that hold, off the graph of F and its phase arrows */
-K({id:'resting',step:'24k',title:'which resting places hold',make(){
+/* 24m: resting places that hold, off the graph of F and its phase arrows */
+K({id:'resting',step:'24m',title:'which resting places hold',make(){
   const rs=sh([-3,-2,-1,0,1,2,3]).slice(0,3).sort((a,b)=>a-b), k=pk([1,-1]), F=y=>k*(y-rs[0])*(y-rs[1])*(y-rs[2])/4, sl=r=>k*rs.filter(s=>s!==r).reduce((p,s)=>p*(r-s),1);
   const hold=rs.filter(r=>sl(r)<0), nm=a=>a.length===3?'all three':a.length===0?'none':a.map(r=>'y = '+sg(r)).join(' and ');
   const parts=[{t:'fn',f:F,from:-4.5,to:4.5}], pts=rs.map(r=>[r,0]);
   [-4.2,...rs.slice(0,2).map((r,i)=>(r+rs[i+1])/2),4.2].forEach(m=>{ const up=F(m)>0; parts.push({t:'arrow',from:[m-(up?0.35:-0.35),0],to:[m+(up?0.35:-0.35),0],k:'b'}); });
   parts.push({t:'dots',pts});
   const right=nm(hold), cand=[nm([rs[0]]),nm([rs[1]]),nm([rs[2]]),nm([rs[0],rs[2]]),nm(rs),nm([rs[0],rs[1]])], o=four(right,cand); if(!o) return null;
-  return card(this,{ix:rs.join(',')+';'+k,links:['24k.rest-holds'],fig:plot({x:[-4.5,4.5],y:[-4.5,4.5],xl:'y',yl:'F(y)',parts},'the graph of F with arrows on the axis'),
+  return card(this,{ix:rs.join(',')+';'+k,links:['24m.rest-holds'],fig:plot({x:[-4.5,4.5],y:[-4.5,4.5],xl:'y',yl:'F(y)',parts},'the graph of F with arrows on the axis'),
     ask:'For y′ = F(y), the graph of F is drawn, with arrows on the axis showing which way y moves. Which resting places hold?',right,opts:o,
     why:'A rest holds when y moves toward it from both sides: F is above 0 just left of it and below 0 just right, so F falls through 0 there. That happens at '+right+'; at '+rs.filter(r=>!hold.includes(r)).map(r=>'y = '+sg(r)).join(' and ')+' the arrows point away.'}); }});
 
@@ -3855,19 +3855,19 @@ K({id:'boxat',step:'3b',title:'where □P is so',make(){
     ask:'P is so in the filled worlds and not in the open ones; arrows say which world sees which. In which world is □P so?',right,opts:o,
     why:'□P is so in a world when P is so in every world it sees. '+[0,1,2,3].map(i=>nm(i)+' sees '+(sees(i).length?sees(i).map(nm).join(', '):'nothing')+(box[i]?': all filled':': '+nm(sees(i).find(j=>!P[j]))+' is open')).join('; ')+'.'}); }});
 
-/* ---------- one-way graphs (42l) ---------- */
+/* ---------- one-way graphs (42n) ---------- */
 const LAY=[[30,110],[110,40],[110,180],[200,40],[200,180],[290,110]];
 function dag(){ const E=[]; for(let i=0;i<6;i++) for(let j=i+1;j<6;j++) if((j-i<=2||R()<0.15)&&R()<0.7) E.push([i,j,ri(1,9)]); return E; }
-K({id:'bestroute',step:'42l',steps:['42k','42l'],title:'the shortest route through a one-way graph',make(){
+K({id:'bestroute',step:'42n',steps:['42m','42n'],title:'the shortest route through a one-way graph',make(){
   const E=dag(), rc=[true]; for(let j=1;j<6;j++){ rc[j]=E.some(e=>e[1]===j&&rc[e[0]]); if(!rc[j]){ E.push([pk([j-1,j-2].filter(i=>i>=0&&rc[i])),j,ri(1,9)]); rc[j]=true; } } E.sort((p,q)=>p[0]-q[0]||p[1]-q[1]); /* every dot reached from s */
   const best=Array(6).fill(Infinity); best[0]=0; for(let j=1;j<6;j++) E.filter(e=>e[1]===j).forEach(([a,b,w])=>{ best[j]=Math.min(best[j],best[a]+w); }); const long=Array(6).fill(-Infinity); long[0]=0; for(let j=1;j<6;j++) E.filter(e=>e[1]===j).forEach(([a,b,w])=>{ long[j]=Math.max(long[j],long[a]+w); });
   let g=0, at=0, gl=0; while(at!==5){ const out=E.filter(e=>e[0]===at); if(!out.length){ gl=null; break; } const m=out.reduce((p,c)=>c[2]<p[2]?c:p); g+=m[2]; at=m[1]; }
   const right=best[5], o=nums(right,[long[5],gl===null?right+2:g,right+1,right-1,E.filter(e=>e[0]===0).reduce((s,e)=>s+e[2],0)]); if(!o) return null;
   const N=LAY.map(([x,y],i)=>({x,y,s:i===0?'s':i===5?'t':DOT[i-1]})), F=E.map(([a,b,w])=>({a,b,s:String(w)}));
-  return card(this,{ix:E.map(e=>e.join('')).join('.'),links:['42l.best-pieces'],fig:fgraph(N,F,320,220,'a one-way graph with lengths'),
+  return card(this,{ix:E.map(e=>e.join('')).join('.'),links:['42n.best-pieces'],fig:fgraph(N,F,320,220,'a one-way graph with lengths'),
     ask:'Links are one-way, with their lengths written on them. How long is the shortest route from s to t?',right:String(right),opts:o,
     why:'Settle the dots in forward order, each at its shortest distance: '+N.map((n,i)=>n.s+' '+(isFinite(best[i])?best[i]:'unreached')).join(', ')+'. A best route is made of best pieces, so t is '+right+'.'+(gl!==null&&g!==right?' Taking the cheapest link at each dot gives '+g+', which is not the best.':'')}); }});
-K({id:'forward',step:'42l',title:'an order that puts every link forward',make(){
+K({id:'forward',step:'42n',title:'an order that puts every link forward',make(){
   const n=5, E=[]; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) if(R()<0.45) E.push([i,j]); /* at least four links: add missing ones */ while(E.length<4){ const miss=[]; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) if(!E.some(e=>e[0]===i&&e[1]===j)) miss.push([i,j]); E.push(pk(miss)); } E.sort((p,q)=>p[0]-q[0]||p[1]-q[1]);
   const lab=sh(DOT.slice(0,n).split('')), ok=ord=>E.every(([a,b])=>ord.indexOf(lab[a])<ord.indexOf(lab[b]));
   const right=[0,1,2,3,4].map(i=>lab[i]).join(' '), bad=[]; for(let t=0;t<60&&bad.length<6;t++){ const p=sh(lab).join(' '); if(!ok(p.split(' '))&&!bad.includes(p)) bad.push(p); }
@@ -3875,7 +3875,7 @@ K({id:'forward',step:'42l',title:'an order that puts every link forward',make(){
   const o=four(right,bad); if(!o||o.filter(x=>ok(x.split(' '))).length!==1) return null;
   const pos=SPOTS[5], N=pos.map(([x,y],i)=>({x,y,s:lab[i]})), F=E.map(([a,b])=>({a,b}));
   const brk=w=>{ const p=w.split(' '); const e=E.find(([a,b])=>p.indexOf(lab[a])>p.indexOf(lab[b])); return lab[e[0]]+' → '+lab[e[1]]+' runs back'; };
-  return card(this,{ix:E.map(e=>e.join('')).join('.')+';'+lab.join(''),links:['42l.forward-order'],fig:fgraph(sh([0]).length?N:N,F,320,220,'a one-way graph with no cycle'),
+  return card(this,{ix:E.map(e=>e.join('')).join('.')+';'+lab.join(''),links:['42n.forward-order'],fig:fgraph(sh([0]).length?N:N,F,320,220,'a one-way graph with no cycle'),
     ask:'The one-way graph has no cycle. Which list of its dots puts every link forward, from earlier to later?',right,opts:o,
     why:'In '+right+' every arrow runs left to right. '+o.filter(x=>x!==right).map(x=>'In '+x+', '+brk(x)).join('; ')+'.'}); }});
 
@@ -3905,7 +3905,7 @@ K({id:'linktour',step:'42c',title:'a tour of the links on a graph with doubled l
     ask:'Two links between the same two dots are two links. Is there a walk that uses every link exactly once, and if so, of which kind?',right,opts:o,
     why:'Count the links at each dot: '+deg.map((d,i)=>nm(i)+' '+d).join(', ')+'. '+(odd.length===0?'All even, and the graph is in one piece: a closed tour.':odd.length===2?'Exactly two odd dots, '+nm(odd[0])+' and '+nm(odd[1])+': a tour must start at one and end at the other.':odd.length+' odd dots: every tour has at most two, so there is none.')}); }});
 
-/* ---------- colours, matchings, layers, the cheapest tree (42d, 42e, 42k) ---------- */
+/* ---------- colours, matchings, layers, the cheapest tree (42d, 42e, 42m) ---------- */
 const chrom=(n,E)=>{ for(let k=1;k<=n;k++){ const c=Array(n).fill(-1); const go=i=>{ if(i===n) return true; for(let x=0;x<k;x++){ if(E.some(([a,b])=>(a===i&&c[b]===x)||(b===i&&c[a]===x))) continue; c[i]=x; if(go(i+1)) return true; } c[i]=-1; return false; }; if(go(0)) return [k,c]; } };
 K({id:'fewcolours',step:'42d',steps:['42d'],title:'the fewest colours for the dots',make(){
   const n=pk([5,6]), E=randE(n,ri(n,n+4)); if(!E) return null; const [k,c]=chrom(n,E), m=E.length;
@@ -3923,24 +3923,24 @@ K({id:'matching',step:'42e',title:'the largest matching in a two-sided graph',ma
   return card(this,{ix:a+'x'+b+';'+E.map(e=>e.join('')).join('.'),links:['42e.matching'],fig:fgraph(N,E.map(([x,y])=>({a:x,b:y,dir:false})),320,220,'a two-sided graph'),
     ask:'A matching is a set of links, no two sharing a dot. How many links has the largest matching here?',right:String(size),opts:o,
     why:'One largest matching: '+[...Array(a)].map((_,i)=>mt[i]>=0?(i+1)+'–'+'pqrs'[mt[i]-a]:'').filter(Boolean).join(', ')+'. No path grows it further (each path from a free dot on the left ends without reaching a free dot on the right), so '+size+' is the most.'}); }});
-K({id:'layers',step:'42k',title:'how many links from the start',make(){
+K({id:'layers',step:'42m',title:'how many links from the start',make(){
   const n=7, E0=randE(n,ri(7,9)), sw=E0.filter(e=>e[0]===0||e[1]===0).length===n-1?E0.find(e=>e[0]===0)[1]:0, E=sw?E0.map(e=>e.map(x=>x===0?sw:x===sw?0:x)):E0; /* when the start touches every dot, a dot it touches becomes the start */ const d=Array(n).fill(-1); d[0]=0; const q=[0]; while(q.length){ const u=q.shift(); E.forEach(([a,b])=>{ const v=a===u?b:b===u?a:-1; if(v>=0&&d[v]<0){ d[v]=d[u]+1; q.push(v); } }); }
   const far=d.map((x,i)=>[x,i]).filter(([x])=>x>=2); if(!far.length) return null; const [k,t]=pk(far);
   const o=nums(k,[k+1,k-1,d.filter(x=>x>=0).length-1,Math.max(...d)+1]); if(!o) return null; const N=nodes(n,i=>i===0?{s:'r'}:{});
-  return card(this,{ix:E.map(e=>e.join('')).join('.')+';'+t,links:['42k.layers'],fig:fgraph(N,E.map(([a,b])=>({a,b,dir:false})),320,220,'dots joined by links, one marked r'),
+  return card(this,{ix:E.map(e=>e.join('')).join('.')+';'+t,links:['42m.layers'],fig:fgraph(N,E.map(([a,b])=>({a,b,dir:false})),320,220,'dots joined by links, one marked r'),
     ask:'Walk out from r layer by layer, each layer one link farther. In which layer is dot '+N[t].s+'?',right:String(k),opts:o,
     why:'Layer 0 is r; '+[...Array(Math.max(...d))].map((_,L)=>'layer '+(L+1)+': '+d.map((x,i)=>x===L+1?N[i].s:'').filter(Boolean).join(', ')).join('; ')+'. So '+N[t].s+' is in layer '+k+'.'}); }});
-K({id:'cheaptree',step:'42k',steps:['42b','42k'],title:'the cost of the cheapest tree',make(){
+K({id:'cheaptree',step:'42m',steps:['42b','42m'],title:'the cost of the cheapest tree',make(){
   const n=5, E=randE(n,ri(6,8)); if(!E) return null; const ws=sh([1,2,3,4,5,6,7,8,9]).slice(0,E.length), W=E.map((e,i)=>[e[0],e[1],ws[i]]);
   const par=[...Array(n).keys()], f=x=>par[x]===x?x:(par[x]=f(par[x])); let cost=0; const pick=[]; W.slice().sort((a,b)=>a[2]-b[2]).forEach(([a,b,w])=>{ if(f(a)!==f(b)){ par[f(a)]=f(b); cost+=w; pick.push(w); } });
   const cheap4=W.map(e=>e[2]).sort((a,b)=>a-b).slice(0,n-1).reduce((s,v)=>s+v,0), all=W.reduce((s,e)=>s+e[2],0);
   const o=nums(cost,[cheap4===cost?cost+1:cheap4,all,cost+2,cost-1,Math.max(...pick)*(n-1)]); if(!o) return null;
-  return card(this,{ix:W.map(e=>e.join('')).join('.'),links:['42k.greedy-tree'],fig:fgraph(nodes(n),W.map(([a,b,w])=>({a,b,dir:false,s:String(w),pos:0.3})),320,220,'dots joined by links with costs'),
+  return card(this,{ix:W.map(e=>e.join('')).join('.'),links:['42m.greedy-tree'],fig:fgraph(nodes(n),W.map(([a,b,w])=>({a,b,dir:false,s:String(w),pos:0.3})),320,220,'dots joined by links with costs'),
     ask:'Each link has a cost. A spanning tree joins all the dots with no cycle. What does the cheapest spanning tree cost?',right:String(cost),opts:o,
     why:'Take links cheapest first, skipping any that would close a cycle: '+pick.join(' + ')+' = '+cost+'.'+(cheap4!==cost?' The four cheapest links alone ('+cheap4+') would close a cycle.':'')}); }});
 
-/* ---------- keys on a ring (45k) ---------- */
-K({id:'keyring',step:'45k',title:'which machine holds a key on the ring',make(){
+/* ---------- keys on a ring (46k) ---------- */
+K({id:'keyring',step:'46k',title:'which machine holds a key on the ring',make(){
   const S=32, gaps=[3,3,3,3,3]; for(let i=0;i<17;i++) gaps[rn(5)]++; const ms=[]; let at=rn(S); gaps.forEach(g=>{ ms.push(at%S); at+=g; }); ms.sort((a,b)=>a-b);
   const free=LRG(0,S-1).filter(k=>!ms.includes(k)), key=free[rn(free.length)]; /* a key between machines */ const after=ms.find(m=>m>key), holder=after!==undefined?after:ms[0], before=ms.filter(m=>m<key), prevM=before.length?before[before.length-1]:ms[4];
   const lab=m=>'M'+m, right=lab(holder), o=four(right,[lab(prevM),...sh(ms.filter(m=>m!==holder)).map(lab)]); if(!o) return null;
@@ -3949,17 +3949,17 @@ K({id:'keyring',step:'45k',title:'which machine holds a key on the ring',make(){
   ms.forEach(m=>{ const [x,y]=P(m); bd+='<circle class="rg-node" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="14"/><text class="rg-tag" x="'+x.toFixed(1)+'" y="'+(y+4.5).toFixed(1)+'" text-anchor="middle">'+m+'</text>'; });
   bd+='<circle class="rg-dot rg-db" cx="'+kx.toFixed(1)+'" cy="'+ky.toFixed(1)+'" r="5"/><text class="rg-wt" x="'+(cx+(r+22)*Math.cos(ang(key))).toFixed(1)+'" y="'+(cy+(r+22)*Math.sin(ang(key))+4).toFixed(1)+'" text-anchor="middle">key '+key+'</text>';
   const fig='<svg class="rgfig" viewBox="0 0 320 235" role="img" aria-label="machines on a ring of 32 places and one key" xmlns="http://www.w3.org/2000/svg">'+bd+'</svg>';
-  return card(this,{ix:ms.join(',')+';'+key,links:['45k.successor'],fig,
+  return card(this,{ix:ms.join(',')+';'+key,links:['46k.successor'],fig,
     ask:'Places 0 to 31 run clockwise round the ring; the numbered circles are machines at their places (machine Mn at place n). Each key is held by the first machine after it, clockwise. Who holds key '+key+'?',right,opts:o,
     why:'Going clockwise from place '+key+', the first machine met is '+right+'. '+lab(prevM)+' is the machine just before the key, a common slip.'}); }});
 
-/* ---------- squares of named arrows (47c) and loops of exchange rates (infecon) ---------- */
-K({id:'square',step:'47c',steps:['47a','47c'],title:'what a commuting square says',make(){
+/* ---------- squares of named arrows (48c) and loops of exchange rates (infecon) ---------- */
+K({id:'square',step:'48c',steps:['48a','48c'],title:'what a commuting square says',make(){
   const L=sh(['f','g','h','k','u','v']).slice(0,4), [top,right_,left,bot]=L, Ob=sh(['A','B','C','D','X','Y']).slice(0,4);
   const N=[{x:80,y:50,s:Ob[0]},{x:240,y:50,s:Ob[1]},{x:80,y:180,s:Ob[2]},{x:240,y:180,s:Ob[3]}], E=[{a:0,b:1,s:top},{a:1,b:3,s:right_,side:-1},{a:0,b:2,s:left,side:-1},{a:2,b:3,s:bot}];
   const ask=R()<0.5, right=ask?bot+' ∘ '+left:right_+' ∘ '+top, given=ask?right_+' ∘ '+top:bot+' ∘ '+left;
   const o=four(right,[left+' ∘ '+bot,top+' ∘ '+right_,top+' ∘ '+left,right_+' ∘ '+bot,bot+' ∘ '+top]); if(!o) return null;
-  return card(this,{ix:L.join('')+Ob.join(''),links:['47a.compose','47c.square'],fig:fgraph(N,E,320,230,'a square of four named arrows'),
+  return card(this,{ix:L.join('')+Ob.join(''),links:['48a.compose','48c.square'],fig:fgraph(N,E,320,230,'a square of four named arrows'),
     ask:'The square commutes: both ways round from '+Ob[0]+' to '+Ob[3]+' give the same arrow. Which arrow equals '+given+'?',right,opts:o,
     why:'Read “after” right to left. One way round is '+top+' then '+right_+', written '+right_+' ∘ '+top+'; the other is '+left+' then '+bot+', written '+bot+' ∘ '+left+'. Commuting says they are equal.'}); }});
 K({id:'rateloop',step:'infecon',title:'what one unit becomes round a loop of rates',make(){
@@ -3980,7 +3980,7 @@ K({id:'chart',step:'40b',steps:['40b'],title:'what a flow chart leaves in x',mak
     ask:askTurns?'Run the chart from box 1. How many times is box 3 visited before it stops?':'Run the chart from box 1. What is x when it stops?',right:String(right),opts:o,
     why:'x runs '+(()=>{ let y=a, L=[a]; while(y<b){ y=mul?y*c:y+c; L.push(y); } return L.join(', '); })()+'; the test fails first at '+x+', after '+turns+' visits to box 3.'}); }});
 
-/* ---------- trees: the statement tree (1e), a tree with lengths (42·bio), combining (45m) ---------- */
+/* ---------- trees: the statement tree (1e), a tree with lengths (42·bio), combining (46m) ---------- */
 const OPS=['∧','∨','⇒'], opv={'∧':(a,b)=>a&&b,'∨':(a,b)=>a||b,'⇒':(a,b)=>!a||b};
 const leaf=s=>({s}), nd=(op,l,r)=>({s:op,kids:[l,r]}), str=t=>t.kids?'('+str(t.kids[0])+' '+t.s+' '+str(t.kids[1])+')':t.s, top=t=>str(t).replace(/^\((.*)\)$/,'$1');
 K({id:'stree',step:'1e',steps:['1e'],title:'which statement the tree draws',make(F__){
@@ -4002,11 +4002,11 @@ K({id:'treelen',step:'42·bio',title:'a distance read off a tree with lengths',m
   return card(this,{ix:ends.join(',')+';'+a.join(',')+';'+mid,links:['42·bio.tree-distance'],fig,
     ask:'The numbers are branch lengths; the two forks are joined by an inner link of '+mid+'. How far apart are '+ends[i]+' and '+ends[j]+' along the tree?',right:String(right),opts:o,
     why:'There is one path in a tree: up from '+ends[i]+' ('+a[i]+'), across the inner link ('+mid+'), down to '+ends[j]+' ('+a[j]+'): '+right+'.'}); }});
-K({id:'combine',step:'45m',title:'the missing piece in a combining tree',make(){
+K({id:'combine',step:'46m',title:'the missing piece in a combining tree',make(){
   const xs=[ri(1,9),ri(1,9),ri(1,9),ri(1,9)], h=rn(4), tot=xs.reduce((s,v)=>s+v,0), leafs=xs.map((v,i)=>({s:i===h?'?':String(v)}));
   const t={s:String(tot),kids:[{s:String(xs[0]+xs[1]),kids:[leafs[0],leafs[1]]},{s:String(xs[2]+xs[3]),kids:[leafs[2],leafs[3]]}]};
   const sib=h^1, right=xs[h], o=nums(right,[tot-xs[sib],xs[sib],right+1,right-1,tot-right]); if(!o) return null;
-  return card(this,{ix:xs.join(',')+';'+h,links:['45m.split-combine'],fig:gtree(t,280,170,'a tree that adds results'),
+  return card(this,{ix:xs.join(',')+';'+h,links:['46m.split-combine'],fig:gtree(t,280,170,'a tree that adds results'),
     ask:'Four machines each hold a number; each fork adds the two below it. One number is hidden. What is it?',right:String(right),opts:o,
     why:'The fork above it shows '+(h<2?xs[0]+xs[1]:xs[2]+xs[3])+' and the other piece under that fork is '+xs[sib]+', so the hidden number is '+right+'. Any tree of + gives the same total, since + groups either way.'}); }});
 
@@ -4038,8 +4038,8 @@ K({id:'ringclock',step:'39g',title:'the beat of a ring of not gates',make(){
     ask:'A ring of '+n+' not gates, each taking '+tau+' ns to answer. How long is one full beat of the ring (high, then low, then high again)?',right,opts:o,
     why:'A change runs round the ring in '+n+' × '+tau+' = '+n*tau+' ns and, the count being odd, comes back flipped. Two trips bring it back as it was: 2 × '+n+' × '+tau+' = '+right+'.'}); }});
 
-/* ---------- message diagrams (45e, 45f) ---------- */
-K({id:'before',step:'45e',title:'which event happened before f',make(){
+/* ---------- message diagrams (46e, 46f) ---------- */
+K({id:'before',step:'46e',title:'which event happened before f',make(){
   /* blankdraws round 5: a diagram drawn freely has an event to ask about about 98 times in 100. When it has none, the diagram is drawn in the
      planted shape: on one machine three events that send nothing, on another an event and then the receipt of a message from a third, and the
      free steps after that. The receipt is then an event to ask about: two events come before it, one on another machine, and the three send
@@ -4057,23 +4057,23 @@ K({id:'before',step:'45e',title:'which event happened before f',make(){
   const L='abcdeghjkmnpqrstuvw', lab=evs.map((e,i)=>L[i]); lab[F.id]='f';
   const yes=evs.filter(a=>hb[a.id][F.id]&&a.p!==F.p), no=evs.filter(a=>a.id!==F.id&&!hb[a.id][F.id]&&!hb[F.id][a.id]); if(!yes.length||no.length<3) return null;
   const pickY=pk(yes), right=lab[pickY.id], o=four(right,sh(no).map(a=>lab[a.id])); if(!o) return null;
-  return card(this,{ix:evs.map(e=>e.p+':'+e.x).join(',')+';'+F.id,links:['45e.happened-before'],fig:mdia(names,msgs,evs.map(e=>({p:e.p,x:e.x,s:lab[e.id],big:e.id===F.id})),320,40+m*45),
+  return card(this,{ix:evs.map(e=>e.p+':'+e.x).join(',')+';'+F.id,links:['46e.happened-before'],fig:mdia(names,msgs,evs.map(e=>({p:e.p,x:e.x,s:lab[e.id],big:e.id===F.id})),320,40+m*45),
     ask:'Events sit on the machines’ time lines; arrows are messages. e → f when e comes first on one machine, or e sends what f receives, or a chain of these. Which of these events happened before f?',right,opts:o,
     why:'From '+right+' a chain of earlier-on-one-machine steps and messages runs to f. The others neither reach f nor are reached from it: they are concurrent with f.'});   };
   return one(false)||one(true); }});
-K({id:'commit',step:'45f',title:'what the coordinator sends after the votes',make(){
+K({id:'commit',step:'46f',title:'what the coordinator sends after the votes',make(){
   const w=3, votes=[...Array(w)].map(()=>R()<0.75?'yes':'no'), lost=R()<0.25?rn(w):-1, allYes=votes.every(v=>v==='yes')&&lost<0;
   const right=allYes?'commit, to all':'abort, to all', o=sh(['commit, to all','abort, to all','commit, to those who voted yes','wait until every vote arrives']);
   const names=['C','W1','W2','W3'], msgs=[], evs=[];
   for(let i=0;i<w;i++){ msgs.push({from:0,x1:50,to:i+1,x2:80+i*18,s:i===0?'prepare':'',lpos:0.25}); msgs.push({from:i+1,x1:130+i*18,to:0,x2:200+i*24,s:votes[i],k:votes[i]==='no'?'b':'a',struck:i===lost,lpos:0.15}); }
   evs.push({p:0,x:240,s:'?',big:1});
-  return card(this,{ix:votes.join(',')+';'+lost,links:['45f.two-phase'],fig:mdia(names,msgs,evs,320,215),
+  return card(this,{ix:votes.join(',')+';'+lost,links:['46f.two-phase'],fig:mdia(names,msgs,evs,320,215),
     ask:'Two-phase commit: C asks each worker to prepare, and each votes. A crossed-out arrow is a vote that never arrives, so C’s wait for it runs out. What does C send next?',right,opts:o,
     why:allYes?'Every vote is yes and every vote arrived, so C sends commit to all.':'C commits only when every worker has voted yes; '+(votes.includes('no')?'a no vote':'a vote that never arrived')+' means abort, sent to all so that none of them commits alone.'}); }});
 })();
 
 /* ===== part F, third part (Andrew 03:44Z "i'm positive about knots"; 03:47Z the upright figure has no picture card):
-   knot drawings closed from a row of twists (34m), and the upright figure of 29a ===== */
+   knot drawings closed from a row of twists (34p), and the upright figure of 29a ===== */
 (function(){
 const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph, K=G.K, {uniq}=G;
 const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
@@ -4209,49 +4209,49 @@ const TKPICK=(lo,hi,alt)=>{ const k=TAIT.make(R,lo,hi,alt); if(!k) return null; 
 const KNALT=k=>k.comps.every((c,ci)=>{ const ev=[]; k.info.X.forEach(x=>{ if(x.ov.c===ci) ev.push([x.ov.s,1]); if(x.un.c===ci) ev.push([x.un.s,0]); }); ev.sort((a,b)=>a[0]-b[0]); return ev.every((e,i)=>e[1]!==ev[(i+1)%ev.length][1]); });
 const KPRIME=[['3₁',[3]],['4₁',[2,2]],['5₁',[5]],['5₂',[3,2]],['6₁',[4,2]],['6₂',[3,1,2]],['6₃',[2,1,1,2]],['7₁',[7]],['7₂',[5,2]],['7₃',[4,3]],['7₄',[3,1,3]],['7₅',[3,2,2]],['7₆',[2,2,1,2]],['7₇',[2,1,1,1,2]]];
 const KPPICK=()=>{ const [nm,v]=pk(KPRIME), ring=v.length===1, k=ring?{comps:KNC.LIB[{3:'tref',5:'cinq',7:'sept'}[v[0]]].comps()}:TAIT.conway(v,R); if(!ring) k.comps=k.comps.map(c=>TAIT.even(c,520)); const mir=R()<0.5, comps=KNC.place(k.comps,ring?R()*2*Math.PI:(R()<0.5?0:Math.PI)+(R()-0.5)*0.2,mir), info=KNC.analyse(comps); return {id:'p'+nm,name:nm==='3₁'?'the overhand knot':nm==='4₁'?'the figure-eight knot':nm==='5₁'?'the five-crossing star':null,prime:nm,code:v,mir,comps,info,many:false}; };
-K({id:'knotsign',step:'34m',steps:['34m'],title:'the signed crossing count of a knot drawing',make(){
+K({id:'knotsign',step:'34p',steps:['34p'],title:'the signed crossing count of a knot drawing',make(){
   if(R()<0.8){ const r=R(), k=(r<0.3?null:r<0.5?KPPICK():TKPICK(3,9,R()<0.6))||KNPICK(['ring']); const w=k.info.writhe, n=k.info.n, plus=k.info.X.filter(x=>x.sign>0).length, right=sgn(w);
     const o=four(right,sh([sgn(-w),String(n),sgn(w+2),sgn(w-2),String(plus),sgn(w+1)]).filter(x=>x!==right)); if(!o) return null;
-    return card(this,{ix:k.id+(k.mir?'m':'')+';'+n+';'+w,links:['34m3.signed-crossings'],fig:KNC.draw(k.comps,k.info,{arrows:true,alt:'a drawing of '+(k.name||'a knot or link')+' with '+n+' crossings, its strands given a direction'}),
+    return card(this,{ix:k.id+(k.mir?'m':'')+';'+n+';'+w,links:['34p3.signed-crossings'],fig:KNC.draw(k.comps,k.info,{arrows:true,alt:'a drawing of '+(k.name||'a knot or link')+' with '+n+' crossings, its strands given a direction'}),
       ask:'The arrows give '+(k.many?'each ring':'the strand')+' its direction. '+SIGNRULE+' What is the signed crossing count w of the drawing?',right,opts:o,
       why:'Go round the '+n+' crossings one at a time: '+plus+' count +1 and '+(n-plus)+' count '+M+'1, so w = '+plus+' '+M+' '+(n-plus)+' = '+right+'. Turning the drawing over (its mirror image) turns every sign.'}); }
   const {n,over,w,rings}=knotSeed(), right=sgn(w), plus=over.filter(c=>c==='f').length;
   const o=four(right,sh([sgn(-w),String(n),sgn(w+2),sgn(w-2),String(plus),sgn(n-2*plus+ (w===0?2:0))]).filter(x=>x!==right)); if(!o) return null;
-  return card(this,{ix:over.join(''),links:['34m3.signed-crossings'],fig:twists(over,'a drawing of '+(rings===1?'a knot':'two rings')+' with '+n+' crossings, its strands given a direction'),
+  return card(this,{ix:over.join(''),links:['34p3.signed-crossings'],fig:twists(over,'a drawing of '+(rings===1?'a knot':'two rings')+' with '+n+' crossings, its strands given a direction'),
     ask:'Both strands run left to right through the twists and back along the outside. '+SIGNRULE+' What is the signed crossing count w of the drawing?',right,opts:o,
     why:'Inside the row both strands run to the right. Where the strand falling to the right lies on top, the crossing counts +1; where the rising strand lies on top, '+M+'1. There are '+plus+' of the first and '+(n-plus)+' of the second, so w = '+plus+' '+M+' '+(n-plus)+' = '+right+'.'}); }});
 
-K({id:'knotcolours',step:'34m',steps:['34m'],title:'how many three-colourings a knot drawing has',make(){
+K({id:'knotcolours',step:'34p',steps:['34p'],title:'how many three-colourings a knot drawing has',make(){
   if(R()<0.8){ const r=R(), k=(r<0.3?null:r<0.5?KPPICK():TKPICK(3,6,R()<0.6))||KNPICK(['sept','t34','t35','borro']), c=k.info.colourings, right=String(c); const o=four(right,['3','9','27','6','1'].filter(x=>x!==right)); if(!o) return null;
-    return card(this,{ix:k.id+(k.mir?'m':''),links:['34m2.three-colour'],fig:KNC.draw(k.comps,k.info,{alt:'a drawing of a knot or link with '+k.info.n+' crossings'}),
+    return card(this,{ix:k.id+(k.mir?'m':''),links:['34p2.three-colour'],fig:KNC.draw(k.comps,k.info,{alt:'a drawing of a knot or link with '+k.info.n+' crossings'}),
       ask:'Colour each strand red, green or blue so that at every crossing the three strands meeting there are all alike or all different. How many such colourings does this drawing have?',right,opts:o,
       why:(k.name?'This is '+k.name+'. ':'The drawing has '+k.info.n+' crossings. ')+(c===3?'Only the 3 one-colour colourings work: any second colour forced in at one crossing runs into a clash at another.':'Besides the 3 one-colour colourings there are '+(c-3)+' that use all three colours'+(c===9?', as on the overhand knot':'')+'.')+' The count is the same for every drawing of one knot, so it can tell knots apart.'}); }
   const {n,over,w,rings}=knotSeed(), m=Math.abs(w), c=m%3===0?9:3, right=String(c);
   const o=four(right,['3','9','27','6','1'].filter(x=>x!==right)); if(!o) return null;
-  return card(this,{ix:over.join(''),links:['34m2.three-colour'],fig:twists(over,'a drawing with '+n+' crossings in a row'),
+  return card(this,{ix:over.join(''),links:['34p2.three-colour'],fig:twists(over,'a drawing with '+n+' crossings in a row'),
     ask:'Colour each strand red, green or blue so that at every crossing the three strands meeting there are all alike or all different. How many such colourings does this drawing have?',right,opts:o,
     why:'Pokes take away neighbouring crossings that lean opposite ways, and they never change the count. That leaves a row of '+m+' crossing'+(m===1?'':'s')+' all leaning one way'+(m?'':', which is '+(rings===2?'two rings lying apart':'the plain ring'))+'. '+(m===0?'Each ring takes any one colour by itself: 3 × 3 = 9.':c===9?'With '+m+' a multiple of 3, the colours can go all different round the row as well as all alike: 3 + 6 = 9.':'With '+m+' crossing'+(m===1?'':'s')+', not a multiple of 3, the colours cannot change round the row and come back, so only the 3 one-colour colourings work.')}); }});
 
-K({id:'knotname',step:'34m',steps:['34m'],title:'which knot or link is drawn',make(){ const k=KNPICK(null,true); const names=[...new Set(Object.values(KNC.LIB).filter(L=>L.taught).map(L=>L.name))];
+K({id:'knotname',step:'34p',steps:['34p'],title:'which knot or link is drawn',make(){ const k=KNPICK(null,true); const names=[...new Set(Object.values(KNC.LIB).filter(L=>L.taught).map(L=>L.name))];
   const o=four(k.name,sh(names.filter(x=>x!==k.name))); if(!o) return null;
-  return card(this,{ix:k.id+(k.mir?'m':''),links:['34m1.three-moves'],fig:KNC.draw(k.comps,k.info,{alt:'a knot or link drawn with '+k.info.n+' crossings'}),
+  return card(this,{ix:k.id+(k.mir?'m':''),links:['34p1.three-moves'],fig:KNC.draw(k.comps,k.info,{alt:'a knot or link drawn with '+k.info.n+' crossings'}),
     ask:'The drawing may be turned, or be the mirror image. Which knot or link is it?',right:k.name,opts:o,
     why:'It has '+k.info.n+' crossing'+(k.info.n===1?'':'s')+' and '+(k.many?k.comps.length+' rings':'one strand')+'. '+(k.id==='kink'?'The one crossing is a twist: untwist it and the plain ring is left.':k.id==='ring'?'No crossings at all.':'Its three-colourings ('+k.info.colourings+') and its crossing count fit '+k.name+'; a mirror image is still the same kind of knot, drawn the other way round.')}); }});
-K({id:'knotalt',step:'34m',steps:['34m'],title:'counting the crossings of a knot drawing, and whether they alternate',make(){ const k=TKPICK(4,9,R()<0.5)||KNPICK(['ring','kink']), n=k.info.n, a=KNALT(k), say=(m,b)=>m+' crossings, '+(b?'alternating':'not alternating');
+K({id:'knotalt',step:'34p',steps:['34p'],title:'counting the crossings of a knot drawing, and whether they alternate',make(){ const k=TKPICK(4,9,R()<0.5)||KNPICK(['ring','kink']), n=k.info.n, a=KNALT(k), say=(m,b)=>m+' crossings, '+(b?'alternating':'not alternating');
   const right=say(n,a), o=four(right,sh([say(n,!a),say(n+1,a),say(n-1,a),say(n+1,!a),say(n-1,!a)])); if(!o) return null;
-  return card(this,{ix:k.id+';'+n+';'+(a?'a':'n'),links:['34m1.three-moves'],fig:KNC.draw(k.comps,k.info,{alt:'a drawing of a knot or link with '+n+' crossings'}),
+  return card(this,{ix:k.id+';'+n+';'+(a?'a':'n'),links:['34p1.three-moves'],fig:KNC.draw(k.comps,k.info,{alt:'a drawing of a knot or link with '+n+' crossings'}),
     ask:'How many crossings does the drawing have? And walking along '+(k.many?'each ring':'the strand')+', do the crossings go over, under, over, under all the way round (alternating)?',right,opts:o,
     why:'There are '+n+' places where the drawing crosses itself. '+(a?'Following the strand, every over is followed by an under and every under by an over, so the drawing is alternating.':'Somewhere along the strand two overs (or two unders) come one after the other, so the drawing is not alternating.')}); }});
-K({id:'knotprime',step:'34m',steps:['34m'],title:'which prime knot a row of twists is',make(){ const k=KPPICK(), right=k.prime, n=+right[0];
+K({id:'knotprime',step:'34p',steps:['34p'],title:'which prime knot a row of twists is',make(){ const k=KPPICK(), right=k.prime, n=+right[0];
   const o=four(right,sh(KPRIME.map(p=>p[0]).filter(x=>x!==right&&Math.abs(+x[0]-n)<=1)).sort((a,b)=>Math.abs(+a[0]-n)-Math.abs(+b[0]-n))); if(!o) return null;
-  return card(this,{ix:right+(k.mir?'m':''),links:['34m4.prime-table'],fig:KNC.draw(k.comps,k.info,{alt:'a knot drawn as a row of twists, '+k.info.n+' crossings'}),
+  return card(this,{ix:right+(k.mir?'m':''),links:['34p4.prime-table'],fig:KNC.draw(k.comps,k.info,{alt:'a knot drawn as a row of twists, '+k.info.n+' crossings'}),
     ask:'The knot may be turned over or seen in a mirror. Which knot of the table of prime knots is it?',right,opts:o,
     why:(k.code.length===1?'It winds twice round its centre and crosses itself '+k.info.n+' times, the shape of a row of '+k.info.n+' twists closed into a ring. In the table the twists '+k.code[0]+' are '+right:'Count the twists group by group along the row: '+k.code.join(', ')+', so '+k.info.n+' crossings in all. In the table the twists '+k.code.join(' ')+' are '+right)+(k.name?', '+k.name:'')+'. A mirror image keeps its name in the table.'}); }});
-K({id:'knotpokes',step:'34m',steps:['34m'],title:'how many crossings are left after the pokes',make(){
+K({id:'knotpokes',step:'34p',steps:['34p'],title:'how many crossings are left after the pokes',make(){
   const n=ri(4,7), over=[...Array(n)].map(()=>R()<0.5?'f':'r'); if(over.every(c=>c===over[0])){ const i=rn(n); over[i]=over[i]==='f'?'r':'f'; } /* a row leaning both ways */
   const w=over.reduce((s,c)=>s+(c==='f'?1:-1),0), m=Math.abs(w), right=String(m);
   const o=four(right,[String(n),String(m+2),String(n-m),String(m+1),String(Math.max(0,m-1))].filter(x=>x!==right)); if(!o) return null;
-  return card(this,{ix:over.join(''),links:['34m1.three-moves'],fig:twists(over,'a row of '+n+' crossings, some leaning each way'),
+  return card(this,{ix:over.join(''),links:['34p1.three-moves'],fig:twists(over,'a row of '+n+' crossings, some leaning each way'),
     ask:'A poke takes away two neighbouring crossings where one strand passes over the other and then back. Making pokes until none is left, how many crossings remain in the row?',right,opts:o,
     why:'Two neighbouring crossings that lean opposite ways are one strand passing over and back, so a poke removes them. Each leaning cancels one of the other leaning: '+over.filter(c=>c==='f').length+' against '+over.filter(c=>c==='r').length+' leaves '+m+'.'}); }});
 
@@ -4638,6 +4638,59 @@ const rgOpen=k=>(k.steps||[k.step]).every(s=>has(s)); /* laundryreach: Read Grap
 function readQ(P,used,last){ const RGX=window.LadderReadGraph; if(!RGX) return null;
   const q=RGX.deal(k=>rgOpen(k)&&P.use({step:k.step,open:()=>true}),used); if(!q) return null;
   return Object.assign({lead:'It is '+q.right+'. '},q); }
+/* ===== gap Read Graph kinds (gapbuild/laundry/gaprgraph.js; Andrew 2026-11-23 20:19Z). Four drawn cards for the new pages, on FINAL
+   step numbers, dealt like the other Read Graph kinds once their step is passed. Spliced after readQ by gapbuild/laundry/splice.py in its own
+   markers, so rgraph/build.py (which swaps only its own block) keeps it. Every answer is computed from the seed. ===== */
+(function(){
+const G=(typeof window!=='undefined'?window:globalThis).LadderReadGraph; if(!G||!G.F) return;
+const {dec,sg,uniq}=G, plot=G.F.plot;
+const R=Math.random, rn=n=>Math.floor(R()*n), pk=a=>a[rn(a.length)], sh=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=rn(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const card=(k,o)=>Object.assign({index:'g:'+k.id+'['+o.ix+']'+(o.links&&o.links.length?'.'+o.links.join('+'):''), a3:['g.'+k.id+'['+o.ix+']',(o.links&&o.links.length?o.links.join('+'):k.step),'–'], step:k.step, steps:k.steps||[k.step], lines:[], kind:'graph'},o);
+const four=(right,c)=>{ const ws=uniq(right,c).slice(0,3); return ws.length<3?null:sh([right,...ws]); };
+const fr=(p,q)=>{ const g=(a,b)=>b?g(b,a%b):Math.abs(a), d=g(p,q)||1; p/=d; q/=d; if(q<0){ p=-p; q=-q; } return q===1?sg(p):(p<0?'−':'')+Math.abs(p)+'/'+q; };
+const K=k=>G.K(k);
+
+/* 16j: how far the slanted tops drawn miss the area under x² */
+K({id:'gstrips',step:'16j',title:'the miss of the slanted tops drawn',make(){
+  const n=pk([2,3,4,5]), parts=[{t:'fn',f:x=>x*x,from:0,to:1,k:'a'}];
+  for(let i=0;i<n;i++){ const a=i/n, b=(i+1)/n; parts.push({t:'line',pts:[[a,0],[a,a*a],[b,b*b],[b,0]],k:'b'}); }
+  const right=fr(1,6*n*n), o=four(right,[fr(1,12*n*n),fr(1,6*n),fr(1,3*n*n),fr(1,6*(n+1)*(n+1))]); if(!o) return null;
+  return card(this,{ix:String(n),links:['16j.fence'],fig:plot({x:[0,1.05],y:[0,1.1],sx:0.25,sy:0.25,lx:0.5,ly:0.5,xl:'x',yl:'y',parts},'the curve y = x² on 0 to 1 under '+n+' slanted-top strips'),
+    ask:'The slanted-top strips drawn sit on y = x² from 0 to 1. By how much does their sum miss the area under the curve?',right,opts:o,
+    why:'There are '+n+' strips, so h = 1/'+n+'. The fence (b − a)M h²/12 has M = 2, since (x²)″ = 2 everywhere, and for x² the fence is met exactly: 2 · (1/'+n+')²/12 = '+right+'.'}); }});
+
+/* 27i: which picture the matrix at the dot draws */
+K({id:'gpicture',step:'27i',title:'which picture the dot on the trace-determinant plane draws',make(){
+  const t=pk([-3,-2,-1,1,2,3]), d=pk([-2,-1,1,2,3,4]); if(Math.abs(t*t-4*d)<1) return null;
+  const name=d<0?'a saddle':t*t<4*d?(t<0?'swirl in':'swirl out'):(t<0?'all fall in':'all flee');
+  const parts=[{t:'fn',f:x=>x*x/4,k:'a',dash:1},{t:'dots',pts:[[t,d]],k:'b',r:4.5}];
+  const right=name, o=four(right,['a saddle','swirl in','swirl out','all fall in','all flee']); if(!o) return null;
+  return card(this,{ix:t+','+d,links:['27i.picture'],fig:plot({x:[-4,4],y:[-3,5],sx:1,sy:1,lx:2,ly:2,xl:'tr A',yl:'det A',parts},'the trace-determinant plane with the curve tr² = 4 det dashed and one dot'),
+    ask:'The dot marks a matrix A on the plane of trace (across) and determinant (up); the dashed curve is tr² = 4 det. Which picture does x′ = Ax draw?',right,opts:o,
+    why:'The dot is at tr = '+sg(t)+', det = '+sg(d)+'. '+(d<0?'A determinant below 0 means a saddle.':t*t<4*d?'It is above the dashed curve (tr² = '+(t*t)+' < 4 det = '+(4*d)+'), so the paths swirl, and the trace '+(t<0?'below 0 draws them in.':'above 0 sends them out.'):'It is between the axis and the dashed curve (tr² = '+(t*t)+' > 4 det = '+(4*d)+'), so both eigenvalues are real with the sign of the trace: '+(t<0?'all fall in.':'all flee.'))}); }});
+
+/* 43l: the third point of a chord on y² = x³ − 36x */
+const C43=[[-3,9],[-3,-9],[-2,8],[-2,-8],[0,0],[6,0],[-6,0],[12,36],[12,-36]];
+K({id:'gchord',step:'43l',title:'the third point of a chord on a cubic',make(){
+  const [P,Q]=sh(C43).slice(0,2); if(P[0]===Q[0]) return null;
+  const ln=Q[1]-P[1], ld=Q[0]-P[0], xn=ln*ln-(P[0]+Q[0])*ld*ld, xd=ld*ld, x=xn/xd; if(!isFinite(x)||x<-7||x>13) return null;
+  const lam=fr(ln,ld), right='x = '+fr(xn,xd), o=four(right,['x = '+fr(ln*ln+(P[0]+Q[0])*ld*ld,xd),'x = '+fr(-xn,xd),'x = '+fr(ln*ld-(P[0]+Q[0])*ld*ld,xd),'x = '+fr(xn+ld*ld,xd)]); if(!o) return null;
+  const F=(a,b)=>b*b-a*a*a+36*a, s=ln/ld, yl=a=>P[1]+s*(a-P[0]);
+  return card(this,{ix:P.join(',')+';'+Q.join(','),links:['43l.chord'],fig:plot({x:[-7,13],y:[-40,40],sx:2,sy:10,lx:4,ly:20,xl:'x',yl:'y',parts:[{t:'level',F,levels:[0]},{t:'fn',f:yl,k:'b'},{t:'dots',pts:[P,Q],k:'b',r:4}]},'the cubic y² = x³ − 36x with a line through two marked points'),
+    ask:'The curve is y² = x³ − 36x. The line through the two dots, ('+P.map(sg).join(', ')+') and ('+Q.map(sg).join(', ')+'), meets it once more. What is x there?',right,opts:o,
+    why:'The slope is λ = ('+sg(Q[1])+' − '+(P[1]<0?'('+sg(P[1])+')':sg(P[1]))+')/('+sg(Q[0])+' − '+(P[0]<0?'('+sg(P[0])+')':sg(P[0]))+') = '+lam+'. The three crossings of a line with the cubic add their x to λ², so the third is λ² − '+(P[0]<0?'('+sg(P[0])+')':sg(P[0]))+' − '+(Q[0]<0?'('+sg(Q[0])+')':sg(Q[0]))+' = '+fr(xn,xd)+'.'}); }});
+
+/* 24·stat: the half-life read off a steady-hazard curve */
+K({id:'ghalf',step:'24·stat',title:'when half are gone, off a steady-hazard curve',make(){
+  const h=pk([0.05,0.1,0.2,0.25,0.5]), T=4/h, half=Math.log(2)/h;
+  const parts=[{t:'fn',f:t=>Math.exp(-h*t),from:0,to:T,k:'a'},{t:'line',pts:[[0,0.5],[T,0.5]],k:'c',dash:1}];
+  const right='t ≈ '+dec(Math.round(half*10)/10), o=four(right,['t ≈ '+dec(Math.round(10/h)/10),'t ≈ '+dec(Math.round(5/h)/10),'t ≈ '+dec(Math.round(half*20)/10),'t ≈ '+dec(Math.round(half*5)/10)]); if(!o) return null;
+  const st=T/4;
+  return card(this,{ix:String(h),links:['24·stat.steady'],fig:plot({x:[0,T],y:[0,1.05],sx:st,sy:0.25,lx:st,ly:0.5,xl:'t, years',yl:'S',parts},'a falling curve S = e^(−'+dec(h)+'t) with a dashed line at one half'),
+    ask:'The share still going, S, falls at a steady hazard of '+dec(h)+' a year. When are half gone?',right,opts:o,
+    why:'S = e^(−'+dec(h)+'t) = 1/2 when t = ln 2/'+dec(h)+' ≈ '+dec(Math.round(half*10)/10)+' years, where the curve crosses the dashed line. 1/'+dec(h)+' = '+dec(Math.round(10/h)/10)+' is the average life, not the half-life.'}); }});
+})();
+/* ===== end of gap Read Graph ===== */
 /* ===== Laundry 5 (Andrew 2026-11-10 19:46Z: "Go ahead and do those floor 1 pools"; 19:49Z: "after floor 1 continue filling in pools by floor") =====
    Terms: one reader and writer for statements (¬ ∧ ∨ ⇒ ⇔ ⊤ ⊥) and for sets (∪ ∩ ∖ ∅). A rewrite technique is a pair of patterns;
    a chain is a seed rewritten link by link, each line citing its technique. A line is checked by its column: every way its letters can come out. */
@@ -5934,9 +5987,9 @@ const I15=[
   ['For which r does rⁿ head to 0?','for |r| < 1',['for r < 1','for 0 < r ≤ 1','for every r'],'Small-powers-vanish. (−2)ⁿ is below 1 at every odd n and heads to nothing, and 1ⁿ stays at 1.']];
 QP.push({id:'15i.endless',step:'15i',label:'endless sums',open:()=>measured('15i'),make(){ return writtenQ('15i.endless',I15); }});
 
-/* ===== Laundry 5, rung 16 (floor 3 pools, stage O): 16a to 16j, the area function and its uses ===== */
+/* ===== Laundry 5, rung 16 (floor 3 pools, stage O): 16a to 16k, the area function and its uses ===== */
 Object.assign(STEPS,{'16a':['r16a','The Area Function'],'16b':['r16b','Its Slope Is the Height'],'16c':['r16c','Evaluating by Antiderivatives'],'16d':['r16d','Substitution'],'16e':['r16e','Parts'],'16f':['r16f','The Table Run Backwards'],
-  '16g':['r16g','Definite Integrals and Areas'],'16h':['r16h','Substitution and Parts by Hand'],'16i':['r16i','Improper Integrals'],'16j':['r16j','Volumes by Cross Sections']});
+  '16g':['r16g','Definite Integrals and Areas'],'16h':['r16h','Substitution and Parts by Hand'],'16i':['r16i','Improper Integrals'],'16k':['r16k','Volumes by Cross Sections']});
 const fact16=n=>n<2?1:n*fact16(n-1), pw16=(b,n)=>b+(n===1?'':sup15(n)), DIV16='it diverges', frs16=(right,fs,n)=>uniq(right,fs.map(fshow),n||3);
 
 /* ---------- 16a The Area Function ---------- */
@@ -6003,13 +6056,13 @@ const I16=[
 
 QP.push({id:'16i.compare',step:'16i',label:'out to forever',open:()=>measured('16i'),make(){ return writtenQ('16i.compare',I16); }});
 
-/* ---------- 16j Volumes by Cross Sections ---------- */
+/* ---------- 16k Volumes by Cross Sections ---------- */
 const J16=[
   ['Is a pyramid’s volume half its base times its height?','no: the slice shrinks as the square of x/h, and the volume is Bh/3',['yes','no: it is Bh/4','no: it is Bh'],'∫₀ʰ B(x/h)² dx = Bh/3. A half is right for a triangle, where the slice shrinks as x/h.'],
   ['Two solids lie between the same walls, and their slices at each x have the same area. What follows?','they have the same volume',['they have the same shape','they have the same surface','nothing'],'Matching-slices: the volume is the integral of the slice areas, and the two integrands agree.'],
   ['A slice is a square with the side √x − x². What is its area?','(√x − x²)²',['√x − x²','x − x⁴','2(√x − x²)'],'That expression is the side. The area is its square, x − 2x^(5/2) + x⁴.'],
   ['By cross sections, what is a solid’s volume?','the integral of the areas of its slices',['the sum of the lengths of its edges','its base area times its greatest height','the area of its largest slice times its length'],'Cross-sections: thin slabs of volume A(x)Δx squeeze the volume to ∫ A(x) dx.']];
-QP.push({id:'16j.slices',step:'16j',label:'slices',open:()=>measured('16j'),make(){ return writtenQ('16j.slices',J16); }},
+QP.push({id:'16k.slices',step:'16k',label:'slices',open:()=>measured('16k'),make(){ return writtenQ('16k.slices',J16); }},
   );
 
 /* ===== Laundry 5, rung 17 (floor 3 pools, stage P): 17a to 17k, ln and exp ===== */
@@ -6833,7 +6886,7 @@ QP.push({id:'23l.rule',step:'23l',label:'techniques for areas',open:()=>measured
   );
 
 /* ===== Laundry 5, rung 24 (floor 5 pools, stage W), part 1: 24a to 24f ===== */
-Object.assign(STEPS,{'24a':['r24a','A Statement and a Start'],'24b':['r24b','Building the Solution by Repeated Integration'],'24c':['r24c','A Map That Shrinks Has One Fixed Point'],'24d':['r24d','Tame Statements Fix the Future'],'24e':['r24e','When the Future Is Not Fixed'],'24f':['r24f','Separating the Variables'],'24g':['r24g','The Integrating Factor'],'24h':['r24h','The Two Model Equations'],'24i':['r24i','Slope Fields and Stepping Forward'],'24j':['r24j','The Logistic Equation Solved'],'24k':['r24k','Fixed Points, Stability and the Start of Chaos'],'24l':['r24l','Solutions as Power Series']});
+Object.assign(STEPS,{'24a':['r24a','A Statement and a Start'],'24b':['r24b','Building the Solution by Repeated Integration'],'24c':['r24c','A Map That Shrinks Has One Fixed Point'],'24d':['r24d','Tame Statements Fix the Future'],'24e':['r24e','When the Future Is Not Fixed'],'24f':['r24f','Separating the Variables'],'24g':['r24g','The Integrating Factor'],'24h':['r24h','The Two Model Equations'],'24k':['r24k','Slope Fields and Stepping Forward'],'24l':['r24l','The Logistic Equation Solved'],'24m':['r24m','Fixed Points, Stability and the Start of Chaos'],'24n':['r24n','Solutions as Power Series']});
 const E24=(k,v)=>k===1&&v==='x'?'eˣ':k===1&&v==='t'?'eᵗ':'e^('+cf22(k,v)+')', A24=a=>a===1?'':a===-1?'−':sg(a);
 
 
@@ -6895,7 +6948,7 @@ const WF24=[
 QP.push({id:'24f.part',step:'24f',label:'parting the letters',open:()=>measured('24f'),make(){ return writtenQ('24f.part',WF24); }},
   );
 
-/* ===== Laundry 5, rung 24 (floor 5 pools, stage W), part 2: 24g to 24l ===== */
+/* ===== Laundry 5, rung 24 (floor 5 pools, stage W), part 2: 24g to 24n ===== */
 
 
 /* ---------- 24g The Integrating Factor ---------- */
@@ -6919,7 +6972,7 @@ const WH24=[
 QP.push({id:'24h.two',step:'24h',label:'rest and swing',open:()=>measured('24h'),make(){ return writtenQ('24h.two',WH24); }},
   );
 
-/* ---------- 24i Slope Fields and Stepping Forward ---------- */
+/* ---------- 24k Slope Fields and Stepping Forward ---------- */
 const WI24=[
   ['Halve the step of a forward walk. What happens to the slip of each step, and to the error of the walk?','each slip falls to about a quarter, and the walk’s error halves, since there are twice as many slips',['each slip halves, and so does the walk’s error','each slip falls to a quarter, and so does the walk’s error','nothing: the walk does not depend on the step'],'A slip is about h². The walk-error technique bounds the whole walk by a multiple of h.'],
   ['Is yₙ₊₁ = yₙ + h·F(xₙ₊₁, ỹ) the look-ahead step?','no: it steps with the average of the two slopes, yₙ₊₁ = yₙ + h(s₁ + s₂)/2',['yes','no: it steps with the first slope only','no: it steps with the larger of the two slopes'],'The slope at the trial point alone is as crude as the forward step. The average is what matches degree 2.'],
@@ -6928,19 +6981,19 @@ const WI24=[
   ['What is the forward walk with step h from (x₀, y₀)?','xₙ₊₁ = xₙ + h and yₙ₊₁ = yₙ + h·F(xₙ, yₙ)',['xₙ₊₁ = xₙ + h and yₙ₊₁ = yₙ + F(xₙ, yₙ)','xₙ₊₁ = xₙ + h and yₙ₊₁ = h·F(xₙ, yₙ)','xₙ₊₁ = xₙ and yₙ₊₁ = yₙ + h'],'Each step follows the stroke of the slope field at the point where it stands. Accepted name: the forward step method.'],
   ['For y′ = ky from (0, A), where do n forward steps of length x/n land, and where does that head?','at A(1 + kx/n)ⁿ, which heads to Ae^(kx) as n grows',['at A + kx, whatever n is','at A(1 + kx)ⁿ, which passes every bound','at Ae^(kx) exactly, for every n'],'Small-step technique: each step multiplies by 1 + kx/n.']];
 const FI24=[['x + y',(x,y)=>fadd(x,y)],['y',(x,y)=>y],['x − y',(x,y)=>fsub(x,y)],['2x',(x,y)=>fmul(fint(2),x)],['xy',(x,y)=>fmul(x,y)],['1 + y',(x,y)=>fadd(fint(1),y)]];
-QP.push({id:'24i.walk',step:'24i',label:'walking the field',open:()=>measured('24i'),make(){ return writtenQ('24i.walk',WI24); }});
+QP.push({id:'24k.walk',step:'24k',label:'walking the field',open:()=>measured('24k'),make(){ return writtenQ('24k.walk',WI24); }});
 
-/* ---------- 24j The Logistic Equation Solved ---------- */
+/* ---------- 24l The Logistic Equation Solved ---------- */
 const WJ24=[
   ['P = K/(1 + Ce^(−rt)) solves the statement. Is it thereby shown that no other solution starts at P₀?','no: checking one solution says nothing about others; tameness and the drift technique do',['yes: it has the right start','yes: the formula has only one C','no: there are always two'],'The statement is tame on every bounded rectangle, so two solutions with the same start agree wherever both live.'],
   ['P climbs toward K. Does it reach K and rest there?','no: it would touch the resting line P = K, and a tame statement forbids it',['yes, after a finite time','yes, at t = 1/r','no: it turns back before K'],'Resting-line technique: no solution that starts off the line ever touches it. P comes as near K as you like and never gets there.'],
   ['1/P closes on 1/K by a fixed factor in every stretch of time T. Does P close on K by the same factor?','no: the factor is for the gap in 1/P; the gap in P shrinks by a factor that changes',['yes: 1/P and P close together','yes, once P is near K','no: P does not close on K at all'],'Reciprocal-cooling technique: u = 1/P solves u′ = −r(u − 1/K).'],
   ['The smooth statement settles at K from any start between 0 and K. Does the yearly walk too?','only when hr < 2; past it the walk swings',['yes, always','yes, if the start is under K','no, never'],'Logistic-walk technique: forward steps of size h pull starts near K in when 0 < hr < 2.'],
   ['A start above K: what does the solution do?','it falls to K',['it climbs past every ceiling','it stays where it is','it runs off to minus infinity'],'Every-start technique. A start below 0 is the one that runs off, in finite time.']];
-QP.push({id:'24j.logi',step:'24j',label:'the logistic statement',open:()=>measured('24j'),make(){ return writtenQ('24j.logi',WJ24); }},
+QP.push({id:'24l.logi',step:'24l',label:'the logistic statement',open:()=>measured('24l'),make(){ return writtenQ('24l.logi',WJ24); }},
   );
 
-/* ---------- 24k Fixed Points, Stability and the Start of Chaos ---------- */
+/* ---------- 24m Fixed Points, Stability and the Start of Chaos ---------- */
 const WK24=[
   ['F(y*) = 0. Do solutions that start near y* head to it?','only if the resting place holds: F′(y*) < 0 is enough; if F′(y*) > 0 they leave',['yes: y* is a resting place','yes, from one side','no: they never do'],'Sign-of-slope technique. Just above a place with F′ < 0 the slope is negative, and just below it is positive: both push back.'],
   ['F′(y*) = 0 at a resting place. Does it hold?','not decided: y′ = y³ falls apart at 0, and y′ = −y³ holds there',['yes','no: it falls apart','yes, from above only'],'The sign-of-slope technique is silent when the slope is 0.'],
@@ -6948,16 +7001,16 @@ const WK24=[
   ['What is a resting place of y′ = F(y)?','a y* with F(y*) = 0',['a y* with F′(y*) = 0','a y* with F(y*) = y*','the start y(0)'],'The constant y = y* is then a solution: a resting line.'],
   ['For y′ = μ − y², what happens as the knob μ is turned down through 0?','the two resting places √μ and −√μ meet at 0 and then there is none',['the two resting places swap','a third resting place appears','nothing: the resting places do not depend on μ'],'Fold technique. Below 0 every solution falls past every floor.'],
   ['For g(x) = μx(1 − x), what are two points p ≠ q with g(p) = q and g(q) = p?','a cycle of two',['two fixed points','a resting place','a fold'],'Two-cycle technique: past μ = 3 the fixed point 1 − 1/μ pushes, and a cycle of two appears.']];
-QP.push({id:'24k.hold',step:'24k',label:'holding and falling apart',open:()=>measured('24k'),make(){ return writtenQ('24k.hold',WK24); }});
+QP.push({id:'24m.hold',step:'24m',label:'holding and falling apart',open:()=>measured('24m'),make(){ return writtenQ('24m.hold',WK24); }});
 
-/* ---------- 24l Solutions as Power Series ---------- */
+/* ---------- 24n Solutions as Power Series ---------- */
 const WL24=[
   ['A power sum obeys the recipe of a statement. Does it solve the statement everywhere?','no: only inside its reach',['yes: the recipe is the statement','yes, wherever the statement is written','no: only at its centre'],'Sum-solves technique: if the coefficients obey the recipe and the sum has reach R > 0, the sum solves the statement on |x − w| < R.'],
   ['y″ = Σ k(k − 1)uₖxᵏ⁻². May you balance uₖ against uₖ at once?','no: write every sum by the same power xᵏ before balancing; the indices shift',['yes: both carry the index k','yes, after dividing by x²','no: sums cannot be balanced at all'],'The piece of y″ with xᵏ is (k + 2)(k + 1)uₖ₊₂xᵏ.'],
   ['Has every statement a power-sum solution about every point?','no: at a bad point solutions can behave like x^(1/2) or x^(−1/2), or need ln x',['yes, by the sum-solves technique','yes, with reach 0','no: only y′ = y has one'],'Where P or Q passes every bound, the point is a bad point of the statement.'],
   ['The starting-power equation has a double root. How many sums of the form xˢ Σ uₖxᵏ does it give?','only one; the second solution needs ln x',['two, as always','none','endlessly many'],'Two different roots can give two sums. A double root gives one starting power.'],
   ['For x²y″ + x·p(x)y′ + q(x)y = 0, which s can start a solution xˢ Σ uₖxᵏ with u₀ ≠ 0?','those with s(s − 1) + p(0)s + q(0) = 0',['every whole number s ≥ 0','those with s² + p(0)s + q(0) = 0','only s = 0'],'Starting-power technique: the lowest power, xˢ, must balance by itself.']];
-QP.push({id:'24l.sums',step:'24l',label:'sums that solve statements',open:()=>measured('24l'),make(){ return writtenQ('24l.sums',WL24); }});
+QP.push({id:'24n.sums',step:'24n',label:'sums that solve statements',open:()=>measured('24n'),make(){ return writtenQ('24n.sums',WL24); }});
 
 /* ===== Laundry 5, rung 25 (floor 5 pools, stage X): 25a to 25f ===== */
 Object.assign(STEPS,{'25a':['r25a','The Pairs Looked Back On'],'25b':['r25b','A Field With No Order'],'25c':['r25c','The Size of a Product'],'25d':['r25d','Every Polynomial Has a Root'],'25e':['r25e','Roots in Pairs'],'25f':['r25f','Maps of the Plane']});
@@ -7038,7 +7091,7 @@ const WF25=[
 QP.push({id:'25f.maps',step:'25f',label:'straight maps and inside out',open:()=>measured('25f'),make(){ return writtenQ('25f.maps',WF25); }});
 
 /* ===== Laundry 5, rung 26 (floor 5 pools, stage Y), part 1: 26a to 26f ===== */
-Object.assign(STEPS,{'26a':['r26a','e to an Imaginary Power'],'26b':['r26b','The Exponential Still Turns Adding Into Multiplying'],'26c':['r26c','The Logarithm of −1'],'26d':['r26d','A Complex Slope'],'26e':['r26e','Integrals Round a Loop'],'26f':['r26f','No Hole, No Total'],'26g':['r26g','The Rim Fixes the Inside'],'26h':['r26h','Residues'],'26i':['r26i','e^(iθ) by Hand'],'26j':['r26j','Why 1/(1 + x²) Has Radius 1'],'26k':['r26k','Real Integrals by Residues'],'26l':['r26l','The Factorial Past the Counting Numbers']});
+Object.assign(STEPS,{'26a':['r26a','e to an Imaginary Power'],'26b':['r26b','The Exponential Still Turns Adding Into Multiplying'],'26c':['r26c','The Logarithm of −1'],'26d':['r26d','A Complex Slope'],'26e':['r26e','Integrals Round a Loop'],'26f':['r26f','No Hole, No Total'],'26g':['r26g','The Rim Fixes the Inside'],'26h':['r26h','Residues'],'26k':['r26k','e^(iθ) by Hand'],'26l':['r26l','Why 1/(1 + x²) Has Radius 1'],'26m':['r26m','Real Integrals by Residues'],'26n':['r26n','The Factorial Past the Counting Numbers']});
 const en26=a=>a===0?'1':a===1?'e':'e'+sup15(a), pii26=(n,d)=>{ const s=pi21(n,d||1); return s==='0'?'0':s.replace('π','πi'); };
 
 const O26=['0','2πi','−2πi','πi'];
@@ -7119,7 +7172,7 @@ const DU26=[['e^z',0,'It has a complex slope at every point.'],['z̄',1,'The fli
 QP.push({id:'26f.hole',step:'26f',label:'no hole, no total',open:()=>measured('26f'),make(){ return writtenQ('26f.hole',WF26); }},
   );
 
-/* ===== Laundry 5, rung 26 (floor 5 pools, stage Y), part 2: 26g to 26l ===== */
+/* ===== Laundry 5, rung 26 (floor 5 pools, stage Y), part 2: 26g to 26n ===== */
 
 /* ---------- 26g The Rim Fixes the Inside ---------- */
 const WG26=[
@@ -7145,7 +7198,7 @@ const WH26=[
 QP.push({id:'26h.res',step:'26h',label:'what a residue is',open:()=>measured('26h'),make(){ return writtenQ('26h.res',WH26); }},
   );
 
-/* ---------- 26i e^(iθ) by Hand ---------- */
+/* ---------- 26k e^(iθ) by Hand ---------- */
 const WI26=[
   ['Is cos³θ = cos 3θ?','no: a power of the cosine is not the cosine of a multiple; cos³θ = (3 cos θ + cos 3θ)/4',['yes','no: cos³θ = 3 cos θ','no: cos³θ = cos θ³'],'Power-to-sum technique.'],
   ['Is (cos θ + i sin θ)ⁿ = cosⁿθ + i sinⁿθ?','no: the power of a sum is not the sum of the powers; it is cos nθ + i sin nθ',['yes','no: it is n cos θ + in sin θ','no: it is cos θⁿ + i sin θⁿ'],'Many-angle technique. The middle terms of the two-term power carry the turn.'],
@@ -7157,10 +7210,10 @@ const MA26=[['cos 2θ','c² − s²',['c² + s²','2cs','2c² + 1']],['sin 2θ',
 const PS26=[['cos²θ','(1 + cos 2θ)/2',['(1 − cos 2θ)/2','cos 2θ','(cos 2θ)/2']],['sin²θ','(1 − cos 2θ)/2',['(1 + cos 2θ)/2','−cos 2θ','(sin 2θ)/2']],['cos³θ','(3 cos θ + cos 3θ)/4',['cos 3θ','(cos θ + 3 cos 3θ)/4','(3 cos θ − cos 3θ)/4']],['sin³θ','(3 sin θ − sin 3θ)/4',['sin 3θ','(3 sin θ + sin 3θ)/4','(sin θ − 3 sin 3θ)/4']],['cos θ sin θ','(sin 2θ)/2',['sin 2θ','(cos 2θ)/2','(1 + sin 2θ)/2']],['cos⁴θ','(3 + 4 cos 2θ + cos 4θ)/8',['cos 4θ','(1 + cos 4θ)/2','(3 − 4 cos 2θ + cos 4θ)/8']]];
 const SD26=[['e^(iθ) + e^(−iθ)','π/3','1'],['e^(iθ) + e^(−iθ)','π','−2'],['e^(iθ) + e^(−iθ)','π/2','0'],['e^(iθ) + e^(−iθ)','2π/3','−1'],['e^(iθ) − e^(−iθ)','π/2','2i'],['e^(iθ) − e^(−iθ)','π/6','i'],['e^(iθ) − e^(−iθ)','π','0'],['e^(iθ) − e^(−iθ)','3π/2','−2i'],['e^(iθ) + e^(−iθ)','0','2'],['e^(iθ) − e^(−iθ)','−π/6','−i']];
 const PW26=[['π/6',6,'−1'],['π/4',4,'−1'],['π/4',8,'1'],['π/3',3,'−1'],['π/2',3,'−i'],['π/6',3,'i'],['π/3',6,'1'],['π/4',2,'i'],['π/4',6,'−i'],['π/6',9,'−i'],['π/3',9,'−1'],['π/6',12,'1']];
-QP.push({id:'26i.hand',step:'26i',label:'reading the parts',open:()=>measured('26i'),make(){ return writtenQ('26i.hand',WI26); }},
+QP.push({id:'26k.hand',step:'26k',label:'reading the parts',open:()=>measured('26k'),make(){ return writtenQ('26k.hand',WI26); }},
   );
 
-/* ---------- 26j Why 1/(1 + x²) Has Radius 1 ---------- */
+/* ---------- 26l Why 1/(1 + x²) Has Radius 1 ---------- */
 const WJ26=[
   ['1/(1 + x²) is smooth on the whole line. Does its power sum about 0 reach everywhere?','no: the reach is set by the nearest trouble in the plane, ±i, at distance 1',['yes: it has no trouble on the line','no: it reaches 2','no: it has no power sum'],'Nearest-trouble technique.'],
   ['Is the reach the distance to the nearest root of the bottom on the floor?','no: in the plane; x² − 2x + 5 has no root on the floor, yet its roots 1 ± 2i stop the sum',['yes','yes, when the bottom has degree 2','no: the bottom does not matter'],'Nearest-trouble technique: the power sum reaches exactly to the nearest root of q in the plane.'],
@@ -7169,10 +7222,10 @@ const WJ26=[
   ['f = p/q, with real polynomials sharing no root. How far does its power sum about w reach?','exactly to the nearest root of q in the plane',['to the nearest root of q on the floor','to the nearest root of p','everywhere'],'Nearest-trouble technique.'],
   ['A power sum equals f on |z − w| < d, and f has a pole at distance d from w. What of its reach?','it is at most d',['it is more than d','it is endless','nothing can be said'],'Pole-wall technique.']];
 const RH26=[['e^x','endless','e^z has a complex slope at every z.'],['sin x','endless','sin z has a complex slope at every z.'],['1/(x − 3)','3','The bottom has its root at 3.'],['1/(1 + x²)','1','The bottom has its roots at ±i.'],['x/(x² + 4)','2','The bottom has its roots at ±2i.'],['1/(x² − 9)','3','The bottom has its roots at ±3.'],['x² − 5x + 1','endless','A polynomial has a complex slope at every z.'],['1/(x² + 9)','3','The bottom has its roots at ±3i.'],['1/((x − 1)(x² + 4))','1','The roots of the bottom are 1 and ±2i, and 1 is nearest.'],['1/((x − 3)(x² + 4))','2','The roots of the bottom are 3 and ±2i, and ±2i are nearest.']];
-QP.push({id:'26j.reach',step:'26j',label:'trouble off the line',open:()=>measured('26j'),make(){ return writtenQ('26j.reach',WJ26); }},
+QP.push({id:'26l.reach',step:'26l',label:'trouble off the line',open:()=>measured('26l'),make(){ return writtenQ('26l.reach',WJ26); }},
   );
 
-/* ---------- 26k Real Integrals by Residues ---------- */
+/* ---------- 26m Real Integrals by Residues ---------- */
 const WK26=[
   ['Is ∫ cos x/(1 + x²) dx over the line equal to 2πi Res(cos z/(1 + z²), i)?','no: cos z grows over the top, so the arc does not fade; use e^(iz) and take the floor part',['yes','no: the residue is at −i','no: the area diverges'],'Upper-wave technique: |e^(ikz)| ≤ 1 above the floor, for k ≥ 0.'],
   ['Is ∫ x dx/(1 + x²) over the line equal to 2πi Res(z/(1 + z²), i) = πi?','no: the arc does not fade, and the area itself diverges',['yes','no: it is π','no: it is −πi'],'On the arc, R · M_R heads to 1, not to 0.'],
@@ -7181,10 +7234,10 @@ const WK26=[
   ['When does the integral along the upper half circle fade?','when R · M_R heads to 0, with |f| ≤ M_R on the half circle of radius R',['when M_R heads to 0','always','when f has no pole on the floor'],'Fading-arc technique: the arc has length πR, so the fence is πR · M_R.'],
   ['Which poles count in the half-disc technique?','those above the floor, of size less than R',['all of them','those on the floor','those below the floor'],'H_R runs along the floor from −R to R and back over the upper half circle.']];
 const FA26=[['1/(1 + z²)',0,'R · M_R is about 1/R.'],['z/(1 + z²)',1,'R · M_R heads to 1.'],['1/(1 + z⁴)',0,'R · M_R is about 1/R³.'],['z²/(1 + z⁴)',0,'R · M_R is about 1/R.'],['z³/(1 + z⁴)',1,'R · M_R heads to 1.'],['1/(z² + 4)',0,'R · M_R is about 1/R.'],['z²/(1 + z²)',2,'M_R heads to 1, so R · M_R is about R.'],['z/(z² + 9)²',0,'R · M_R is about 1/R².']];
-QP.push({id:'26k.arc',step:'26k',label:'the arc and the poles',open:()=>measured('26k'),make(){ return writtenQ('26k.arc',WK26); }},
+QP.push({id:'26m.arc',step:'26m',label:'the arc and the poles',open:()=>measured('26m'),make(){ return writtenQ('26m.arc',WK26); }},
   );
 
-/* ---------- 26l The Factorial Past the Counting Numbers ---------- */
+/* ---------- 26n The Factorial Past the Counting Numbers ---------- */
 const WL26=[
   ['Is Γ(n) = n!?','no: Γ(n + 1) = n!; Γ(5) = 4! = 24, not 120',['yes','no: Γ(n) = (n + 1)!','no: Γ(n) = n'],'Factorial-step technique.'],
   ['Is Γ(0) = 0! = 1?','no: Γ(1) = 0! = 1; Γ(0) has no value',['yes','no: Γ(0) = 0','no: Γ(0) = −1'],'The area diverges at 0, and the step technique would divide by 0.'],
@@ -7193,11 +7246,11 @@ const WL26=[
   ['What is Γ(½)?','√π',['½','π/2','√π/2'],'Bell-area technique: ∫ from 0 to ∞ of e^(−y²) dy = √π/2, so Γ(1/2) = √π.'],
   ['For which real s does the area ∫ from 0 to ∞ of x^(s − 1) e^(−x) dx converge?','for every s > 0',['for every real s','for whole s only','for s ≥ 1 only'],'Two-ends technique: at the end that runs off, and at the end where the power may climb.']];
 const GH26=[['1/2','√π'],['3/2','√π/2'],['5/2','3√π/4'],['7/2','15√π/8'],['−1/2','−2√π'],['−3/2','4√π/3'],['0','it has no value'],['−1','it has no value'],['−2','it has no value']];
-QP.push({id:'26l.gamma',step:'26l',label:'the factorial between',open:()=>measured('26l'),make(){ return writtenQ('26l.gamma',WL26); }},
+QP.push({id:'26n.gamma',step:'26n',label:'the factorial between',open:()=>measured('26n'),make(){ return writtenQ('26n.gamma',WL26); }},
   );
 
 /* ===== Laundry 5, rung 27 (floor 5 pools, stage Z), part 1: 27a to 27g ===== */
-Object.assign(STEPS,{'27a':['r27a','What Adds and Stretches Like Arrows'],'27b':['r27b','Dimension'],'27c':['r27c','Maps That Keep Adding and Stretching'],'27d':['r27d','Matrices as Maps'],'27e':['r27e','The Determinant'],'27f':['r27f','The Vectors a Map Only Stretches'],'27g':['r27g','A Matrix Obeys Its Own Polynomial'],'27h':['r27h','Measuring Sticks for Vectors'],'27i':['r27i','Vectors by Hand'],'27j':['r27j','Solving Systems by Elimination'],'27k':['r27k','Determinants by Hand'],'27l':['r27l','Eigenvectors by Hand'],'27m':['r27m','Turns of Space']});
+Object.assign(STEPS,{'27a':['r27a','What Adds and Stretches Like Arrows'],'27b':['r27b','Dimension'],'27c':['r27c','Maps That Keep Adding and Stretching'],'27d':['r27d','Matrices as Maps'],'27e':['r27e','The Determinant'],'27f':['r27f','The Vectors a Map Only Stretches'],'27g':['r27g','A Matrix Obeys Its Own Polynomial'],'27h':['r27h','Measuring Sticks for Vectors'],'27k':['r27k','Vectors by Hand'],'27l':['r27l','Solving Systems by Elimination'],'27m':['r27m','Determinants by Hand'],'27n':['r27n','Eigenvectors by Hand'],'27o':['r27o','Turns of Space']});
 const v27=x=>'('+x.map(c=>typeof c==='number'?sg(c):c).join(', ')+')', G27=(...r)=>'rows '+r.map(v27).join(', '), g2=(a,b,c,d)=>G27([a,b],[c,d]);
 const mul27=(A,B)=>[A[0]*B[0]+A[1]*B[2],A[0]*B[1]+A[1]*B[3],A[2]*B[0]+A[3]*B[2],A[2]*B[1]+A[3]*B[3]], lin27=ts=>tm25(ts)||'0';
 
@@ -7282,7 +7335,7 @@ const WG27=[
 QP.push({id:'27g.own',step:'27g',label:'its own polynomial',open:()=>measured('27g'),make(){ return writtenQ('27g.own',WG27); }},
   );
 
-/* ===== Laundry 5, rung 27 (floor 5 pools, stage Z), part 2: 27h to 27m ===== */
+/* ===== Laundry 5, rung 27 (floor 5 pools, stage Z), part 2: 27h to 27o ===== */
 const pr27=(a,b)=>sg(Math.min(a,b))+' and '+sg(Math.max(a,b)), i27=()=>rnd(7)-3;
 
 
@@ -7297,7 +7350,7 @@ const WH27=[
 QP.push({id:'27h.read',step:'27h',label:'readings',open:()=>measured('27h'),make(){ return writtenQ('27h.read',WH27); }},
   );
 
-/* ---------- 27i Vectors by Hand ---------- */
+/* ---------- 27k Vectors by Hand ---------- */
 const WI27=[
   ['Is (u × v) × w = u × (v × w)?','no: the cross is not grouping-free; (e₁ × e₁) × e₂ = 0, and e₁ × (e₁ × e₂) = −e₂',['yes','yes, up to sign','no: the left side is always 0'],'Cross technique: u × v = 0 exactly when u and v are not free, so e₁ × e₁ = 0.'],
   ['u · v = 0. Is u = 0 or v = 0?','no: a dot of 0 means at right angles; (1, 0) · (0, 1) = 0',['yes','yes, in the plane','no: then u = v'],'Angle-between technique: cos θ = u · v/(|u| |v|).'],
@@ -7306,10 +7359,10 @@ const WI27=[
   ['When is u × v = 0?','exactly when u and v are not free',['exactly when u · v = 0','only when u = 0 or v = 0','never'],'Cross technique: |u × v| = |u| |v| sin θ.'],
   ['|r(t)| is the same for every t. What follows?','r(t) · r′(t) = 0: the vector moves at right angles to itself',['r′(t) = 0','r(t) × r′(t) = 0','|r′(t)| is the same for every t'],'Moving-dot technique: (r · r)′ = 2 r · r′.']];
 const AN27=[[[1,0],[1,1],'π/4','√2/2'],[[1,0],[0,1],'π/2','0'],[[1,1],[-1,1],'π/2','0'],[[1,0],[-1,1],'3π/4','−√2/2'],[[1,0],[-1,0],'π','−1'],[[1,1],[-1,-1],'π','−1'],[[1,1],[0,1],'π/4','√2/2'],[[0,1],[1,-1],'3π/4','−√2/2']], AO27=['π/4','π/3','π/2','2π/3','3π/4','π'];
-QP.push({id:'27i.dots',step:'27i',label:'dot and cross',open:()=>measured('27i'),make(){ return writtenQ('27i.dots',WI27); }},
+QP.push({id:'27k.dots',step:'27k',label:'dot and cross',open:()=>measured('27k'),make(){ return writtenQ('27k.dots',WI27); }},
   );
 
-/* ---------- 27j Solving Systems by Elimination ---------- */
+/* ---------- 27l Solving Systems by Elimination ---------- */
 const WJ27=[
   ['May a row be stretched by 0?','no: it cannot be undone; x + y = 2, x − y = 0 becomes x + y = 2, 0 = 0, with new answers',['yes','yes: it keeps the answers','no: it leaves no answers'],'Row-move technique: each row move is undone by another row move.'],
   ['May a stretch of one column be added to another?','no: columns hold the unknowns; mixing them changes what the unknowns are, and the answers',['yes','yes: det is unchanged, so the answers are','no: it changes b'],'Row-move technique: a row move on [A | b] keeps exactly the same answers x.'],
@@ -7318,11 +7371,11 @@ const WJ27=[
   ['What does a row move on [A | b] keep?','exactly the same answers x',['the determinant of A','the stretches of A','the entries of b'],'Row-move technique.'],
   ['What does doubling n do to the work of elimination?','it multiplies it by about 8',['it multiplies it by about 2','it multiplies it by about 4','it squares it'],'Elimination-cost technique: the work is ~ n³/3.']];
 const OJ27=['exactly one answer','no answer','a whole line of answers','exactly two answers'], eq27=(a,b,e)=>lin27([[a,'x'],[b,'y']])+' = '+sg(e);
-QP.push({id:'27j.rows',step:'27j',label:'row moves',open:()=>measured('27j'),make(){ return writtenQ('27j.rows',WJ27); }},
+QP.push({id:'27l.rows',step:'27l',label:'row moves',open:()=>measured('27l'),make(){ return writtenQ('27l.rows',WJ27); }},
   
   );
 
-/* ---------- 27k Determinants by Hand ---------- */
+/* ---------- 27m Determinants by Hand ---------- */
 const WK27=[
   ['Does stretching a row by c leave det alone?','no: det is straight in that row; it is multiplied by c',['yes','no: it is multiplied by cⁿ','no: it changes sign'],'Only adding a stretch of one row to another leaves det alone.'],
   ['Does the six-term technique, copied to four rows, give det?','no: its diagonals find 8 terms; a grid of four rows has 4! = 24',['yes','yes, with the signs swapped','no: it finds 24 terms where 16 are needed'],'Use the stair-det technique or the expansion technique.'],
@@ -7331,10 +7384,10 @@ const WK27=[
   ['Every entry below the middle of a square grid is 0. What is its det?','the product of the entries down the middle',['the sum of the entries down the middle','0','the product of all the entries that are not 0'],'Stair-det technique.'],
   ['Row moves with s swaps, and otherwise only adding stretches of rows, bring A to a staircase. What is det A?','(−1)ˢ times the product down the middle of the staircase',['the product down the middle of the staircase','s times the product down the middle of the staircase','(−1)ˢ times the sum down the middle of the staircase'],'Stair-det technique.']];
 const d3=M=>M[0]*(M[4]*M[8]-M[5]*M[7])-M[1]*(M[3]*M[8]-M[5]*M[6])+M[2]*(M[3]*M[7]-M[4]*M[6]);
-QP.push({id:'27k.signs',step:'27k',label:'det by hand',open:()=>measured('27k'),make(){ return writtenQ('27k.signs',WK27); }},
+QP.push({id:'27m.signs',step:'27m',label:'det by hand',open:()=>measured('27m'),make(){ return writtenQ('27m.signs',WK27); }},
   );
 
-/* ---------- 27l Eigenvectors by Hand ---------- */
+/* ---------- 27n Eigenvectors by Hand ---------- */
 const WL27=[
   ['Are the stretches of A + B sums of stretches of A and of B?','no: rows (0, 1), (0, 0) and rows (0, 0), (1, 0) each have only 0; their sum has 1 and −1',['yes','yes, for 2 × 2 grids','no: they are products'],'A and B need not share the vectors they only stretch.'],
   ['A = PDP⁻¹. Is Aᵏ = PᵏDᵏP⁻ᵏ?','no: the P⁻¹P in the middle cancel; Aᵏ = PDᵏP⁻¹',['yes','yes, when P is undoable','no: Aᵏ = PᵏDP⁻ᵏ'],'(PDP⁻¹)(PDP⁻¹) = PD²P⁻¹.'],
@@ -7342,10 +7395,10 @@ const WL27=[
   ['Do row moves keep the stretches?','no: they keep the answers of Ax = b, not the stretches',['yes','yes, apart from swaps','no: they keep them only up to sign'],'Rows (4, 1), (2, 3) have 5 and 2. After half of row 1 is taken from row 2, the stretches are 4 and 5/2.'],
   ['What do the stretches of a grid add to, and multiply to?','they add to the middle sum and multiply to det A',['they add to det A and multiply to the middle sum','they add to 0 and multiply to det A','they add to the middle sum and multiply to 1'],'Middle-sum technique.'],
   ['uₙ₊₁ = p uₙ + q uₙ₋₁. Which are the stretches of the step grid?','the roots of λ² = pλ + q',['p and q','the roots of λ² = qλ + p','p + q and p − q'],'Step-grid technique: M has rows (p, q), (1, 0).']];
-QP.push({id:'27l.sums',step:'27l',label:'stretches by hand',open:()=>measured('27l'),make(){ return writtenQ('27l.sums',WL27); }},
+QP.push({id:'27n.sums',step:'27n',label:'stretches by hand',open:()=>measured('27n'),make(){ return writtenQ('27n.sums',WL27); }},
   );
 
-/* ---------- 27m Turns of Space ---------- */
+/* ---------- 27o Turns of Space ---------- */
 const WM27=[
   ['det Q = 1. Does Q keep lengths?','not always: rows (2, 0, 0), (0, ½, 0), (0, 0, 1) have det 1 and double e₁',['yes','yes, in space','no: a length keeper has det −1'],'Length-keeper technique: Q keeps every length exactly when QᵀQ = I.'],
   ['Does every turn of the plane keep a vector other than 0 in place?','no: the axis needs an odd number of directions; a quarter turn of the plane keeps only 0',['yes','yes: its axis','yes: the vector e₁'],'Axis technique: every turn of space keeps some vector u ≠ 0 in place.'],
@@ -7358,11 +7411,11 @@ const CM27=[[g2(0,-1,1,0),0,'Its columns have length 1 and stand at right angles
 const XM27=[[G27([0,-1,0],[1,0,0],[0,0,1]),'(0, 0, 1)'],[G27([1,0,0],[0,0,-1],[0,1,0]),'(1, 0, 0)'],[G27([0,0,1],[0,1,0],[-1,0,0]),'(0, 1, 0)'],[G27([0,0,1],[1,0,0],[0,1,0]),'(1, 1, 1)']];
 const IM27=[[g2(0,-1,1,0),g2(0,1,-1,0),[g2(1,0,0,1),g2(0,1,1,0)]],[g2('3/5','−4/5','4/5','3/5'),g2('3/5','4/5','−4/5','3/5'),[g2('5/3','−5/4','5/4','5/3'),g2('−3/5','4/5','−4/5','−3/5')]],[g2('4/5','3/5','−3/5','4/5'),g2('4/5','−3/5','3/5','4/5'),[g2('5/4','5/3','−5/3','5/4'),g2('−4/5','−3/5','3/5','−4/5')]]];
 const TM27=[[2,'π/3','1/2'],[1,'π/2','0'],[0,'2π/3','−1/2'],[-1,'π','−1']];
-QP.push({id:'27m.turns',step:'27m',label:'turns and length keepers',open:()=>measured('27m'),make(){ return writtenQ('27m.turns',WM27); }},
+QP.push({id:'27o.turns',step:'27o',label:'turns and length keepers',open:()=>measured('27o'),make(){ return writtenQ('27o.turns',WM27); }},
   );
 
-/* ===== Laundry 5, rung 28 (floor 5 pools, stage AA), part 1: 28a to 28h ===== */
-Object.assign(STEPS,{'28a':['r28a','Two Knobs, Keep One Still'],'28b':['r28b','The Best Flat Map'],'28c':['r28c','The Chain Technique Along Several Roads'],'28d':['r28d','Does the Order of the Knobs Matter?'],'28e':['r28e','Locally Undoable'],'28f':['r28f','When an Equation Fixes a Function'],'28g':['r28g','The Best Point on a Constraint'],'28h':['r28h','Double Integrals'],'28i':['r28i','Changing the Variables'],'28j':['r28j','Flux and Circulation'],'28k':['r28k','Partials and Gradients by Hand'],'28l':['r28l','Polynomials That Hug a Surface, by Hand'],'28m':['r28m','Integrals by Hand'],'28n':['r28n','Along Curves and Across Surfaces'],'28o':['r28o','Gradient Descent'],'28p':['r28p','How Errors Spread']});
+/* ===== Laundry 5, rung 28 (floor 5 pools, stage AA), part 1: 28a to 28j ===== */
+Object.assign(STEPS,{'28a':['r28a','Two Knobs, Keep One Still'],'28b':['r28b','The Best Flat Map'],'28c':['r28c','The Chain Technique Along Several Roads'],'28d':['r28d','Does the Order of the Knobs Matter?'],'28e':['r28e','Locally Undoable'],'28f':['r28f','When an Equation Fixes a Function'],'28g':['r28g','The Best Point on a Constraint'],'28j':['r28j','Double Integrals'],'28k':['r28k','Changing the Variables'],'28l':['r28l','Flux and Circulation'],'28m':['r28m','Partials and Gradients by Hand'],'28n':['r28n','Polynomials That Hug a Surface, by Hand'],'28o':['r28o','Integrals by Hand'],'28p':['r28p','Along Curves and Across Surfaces'],'28q':['r28q','Gradient Descent'],'28r':['r28r','How Errors Spread']});
 const pt28=()=>[pick([1,2,-1,-2,3]),pick([1,2,-1,-2,3])], PY28=[[3,4,5],[6,8,10],[5,12,13],[8,15,17],[4,3,5],[12,5,13]];
 const line28=(id,V,key)=>{ const [tag,lines,j,rr,why]=pick(V); return {index:'q:'+id+'['+[tag,...key].join(';')+']', stack:true, lines, ask:'Is line '+j+' licensed?', right:YN22[rr], opts:YN22, lead:'', why}; };
 
@@ -7446,7 +7499,7 @@ QP.push({id:'28g.best',step:'28g',label:'uphill and lined up',open:()=>measured(
   
   );
 
-/* ---------- 28h Double Integrals ---------- */
+/* ---------- 28j Double Integrals ---------- */
 const WH28=[
   ['The inner total runs along y, from c to d, and the outer along x, from a to b. The order of the totals is swapped. What else must swap?','the order of the limits: the inner total then runs along x, from a to b',['nothing','the sign of the total','f(x, y) becomes f(y, x)'],'Either-order technique.'],
   ['Is ∬ fg = (∬ f)(∬ g) over R?','no: totals add, they do not multiply; only f(x)g(y) splits this way',['yes','yes, when f and g are continuous','no: ∬ fg = ∬ f + ∬ g'],'∬ (f + g) = ∬ f + ∬ g.'],
@@ -7454,12 +7507,12 @@ const WH28=[
   ['R has sides from a to b and from c to d. Is ∬ 1 over R equal to b − a?','no: the total of 1 over R is its area, (b − a)(d − c)',['yes','no: it is 1','no: it is (b − a) + (d − c)'],'The inner total gives d − c, and the outer total gives (b − a)(d − c).'],
   ['f is continuous on the rectangle R. What follows?','f is integrable on R, and the total may be taken in either order',['f is integrable on R, but only with x first','nothing: continuity is not enough','the total of f over R is the area of R'],'Rectangle-total technique and either-order technique.'],
   ['What is ∬ f(x)g(y) over R, for continuous f and g?','the total of f along x times the total of g along y',['the total of f along x plus the total of g along y','the total of f along x','0'],'Either-order technique: the inner total takes f(x) out in front.']];
-QP.push({id:'28h.totals',step:'28h',label:'totals over a rectangle',open:()=>measured('28h'),make(){ return writtenQ('28h.totals',WH28); }},
+QP.push({id:'28j.totals',step:'28j',label:'totals over a rectangle',open:()=>measured('28j'),make(){ return writtenQ('28j.totals',WH28); }},
   );
 
-/* ===== Laundry 5, rung 28 (floor 5 pools, stage AA), part 2: 28i to 28p ===== */
+/* ===== Laundry 5, rung 28 (floor 5 pools, stage AA), part 2: 28k to 28r ===== */
 
-/* ---------- 28i Changing the Variables ---------- */
+/* ---------- 28k Changing the Variables ---------- */
 const WI28=[
   ['Is ∬ f dx dy = ∬ f(r cos θ, r sin θ) dr dθ?','no: the area scale r is missing',['yes','no: the area scale r² is missing','no: the area scale sin θ is missing'],'Change-of-variables technique: the total picks up |det DT|, which is r here.'],
   ['Is the total of f over T(Q) the total over Q of f(T) · det DT?','no: the size of det, not det itself; a flip does not make area negative',['yes','no: det DT is divided out','no: no scale is needed'],'Change-of-variables technique: f(T(u)) · |det DT(u)|.'],
@@ -7467,10 +7520,10 @@ const WI28=[
   ['Is the area of A(Q) the middle sum of A times the area of Q?','no: the area scale is |det A|; the sum down the middle is something else',['yes','no: it is det A times the area, with its sign','no: it is the area of Q'],'Area-scale technique.'],
   ['What does a straight map of space with grid A do to volumes?','it multiplies each by |det A|',['it multiplies each by det A, with its sign','it keeps them','it multiplies each by the middle sum of A'],'Volume-scale technique.'],
   ['What is the area scale of the polar map (r, θ) ↦ (r cos θ, r sin θ)?','r',['r²','1','sin θ'],'det DT = r cos² θ + r sin² θ = r.']];
-QP.push({id:'28i.scale',step:'28i',label:'the area scale',open:()=>measured('28i'),make(){ return writtenQ('28i.scale',WI28); }},
+QP.push({id:'28k.scale',step:'28k',label:'the area scale',open:()=>measured('28k'),make(){ return writtenQ('28k.scale',WI28); }},
   );
 
-/* ---------- 28j Flux and Circulation ---------- */
+/* ---------- 28l Flux and Circulation ---------- */
 const WJ28=[
   ['Is the circulation 0 round every loop, for every field?','no: only for uphill fields; (−y, x) circulates 2π round the unit circle',['yes','yes, for smoothly sloped fields','no: it is never 0'],'Uphill-total technique: for F = ∇φ, the circulation is φ at the end minus φ at the start.'],
   ['The loop is travelled clockwise. What happens in the swirl technique?','the sign flips: the inside must be on the left',['nothing','the total doubles','the total becomes 0'],'Swirl technique: travelled with R on the left.'],
@@ -7478,10 +7531,10 @@ const WJ28=[
   ['Is the spread Py + Qx?','no: the spread is Px + Qy; each part along its own direction',['yes','no: it is Qx − Py','no: it is Px − Qy'],'Spread technique.'],
   ['F = ∇φ. What is the circulation of F along a path?','φ at the end minus φ at the start',['0, for every path','φ at the start minus φ at the end','the length of the path times φ'],'Uphill-total technique.'],
   ['What does the circulation of F = (P, Q) round the edge of R equal, with R on the left?','the total of Qx − Py over R',['the total of Px + Qy over R','the total of Py − Qx over R','the total of Px − Qy over R'],'Swirl technique.']];
-QP.push({id:'28j.fields',step:'28j',label:'swirl and spread',open:()=>measured('28j'),make(){ return writtenQ('28j.fields',WJ28); }},
+QP.push({id:'28l.fields',step:'28l',label:'swirl and spread',open:()=>measured('28l'),make(){ return writtenQ('28l.fields',WJ28); }},
   );
 
-/* ---------- 28k Partials and Gradients by Hand ---------- */
+/* ---------- 28m Partials and Gradients by Hand ---------- */
 const WK28=[
   ['The surface z = f(x, y) is the level set of F = f − z. Is its tangent plane fx(x − w) + fy(y − b) + (z − f(w, b)) = 0?','no: ∇F = (fx, fy, −1); the last term is −(z − f(w, b))',['yes','no: the last term is absent','no: the first two terms change sign'],'Level-plane technique: ∇F(p) · (x − p) = 0.'],
   ['Does ∇h point at the top of the hill?','not always: on 1000 − 0.001x² − 0.004y² at (200, 100) it points along (−1, −2); the top lies along (−2, −1)',['yes','yes, on a smooth hill','no: it points at the bottom'],'∇h points the steepest way up from where you stand.'],
@@ -7489,10 +7542,10 @@ const WK28=[
   ['Every slope along every direction exists at a point. Is each one ∇f · u?','not always: x²y/(x⁴ + y²) has slopes along every direction at 0, and they are no dot with one vector',['yes','yes, at every point','never'],'Two-directions technique: f is smoothly sloped near the point.'],
   ['Which plane touches z = f(x, y) at (w, b)?','z = f(w, b) + fx(w, b)(x − w) + fy(w, b)(y − b)',['z = fx(w, b)x + fy(w, b)y','z = f(w, b) + fx(w, b) + fy(w, b)','z = f(w, b)(x − w)(y − b)'],'Tangent-plane technique.'],
   ['∇F(p) ≠ 0. Which line or plane touches the level set of F through p?','∇F(p) · (x − p) = 0',['∇F(p) · x = 0','∇F(p) × (x − p) = 0','F(p) · (x − p) = 0'],'Level-plane technique.']];
-QP.push({id:'28k.planes',step:'28k',label:'planes that touch',open:()=>measured('28k'),make(){ return writtenQ('28k.planes',WK28); }},
+QP.push({id:'28m.planes',step:'28m',label:'planes that touch',open:()=>measured('28m'),make(){ return writtenQ('28m.planes',WK28); }},
   );
 
-/* ---------- 28l Polynomials That Hug a Surface, by Hand ---------- */
+/* ---------- 28n Polynomials That Hug a Surface, by Hand ---------- */
 const WL28=[
   ['∇f(p) = 0. Is p a top or a bottom?','not always: x² − y² is flat at 0, and has a saddle there',['yes','yes, when f is a polynomial','never'],'Grid-test technique: if D < 0, a saddle.'],
   ['fxx > 0 and fyy > 0 at a flat point. Is it a bottom?','not always: x² + 3xy + y² has A = C = 2, B = 3, D = −5 < 0, a saddle',['yes','yes, when fxy ≠ 0','never'],'Grid-test technique: D = AC − B².'],
@@ -7501,10 +7554,10 @@ const WL28=[
   ['D > 0 and A < 0 at a flat point. What is it?','a top',['a bottom','a saddle','the test cannot tell'],'Grid-test technique.'],
   ['What does the surface-match technique add to f(p) + ∇f(p) · h?','½ hᵀH(p)h',['hᵀH(p)h','½ H(p)h','∇f(p) · ∇f(p)'],'The leftover E(h) has E(h)/|h|² heading to 0.']];
 const OL28=['a bottom','a top','a saddle','the test cannot tell'];
-QP.push({id:'28l.test',step:'28l',label:'top, bottom or saddle',open:()=>measured('28l'),make(){ return writtenQ('28l.test',WL28); }},
+QP.push({id:'28n.test',step:'28n',label:'top, bottom or saddle',open:()=>measured('28n'),make(){ return writtenQ('28n.test',WL28); }},
   );
 
-/* ---------- 28m Integrals by Hand ---------- */
+/* ---------- 28o Integrals by Hand ---------- */
 const WM28=[
   ['A total runs over 0 ≤ x ≤ 1 with y from x to 1. Swapped, does it run over 0 ≤ y ≤ 1 with x from y to 1?','no: the region 0 ≤ x ≤ y ≤ 1 read across is 0 ≤ x ≤ y, not y ≤ x ≤ 1',['yes','yes, when f is continuous','no: x then runs from 0 to 1'],'Order-swap technique: the same region, read in strips the other way.'],
   ['Is the total of 1 over the disc x² + y² ≤ 1 the total with x and y each from −1 to 1?','no: those ends trace the square around the disc; 4, not π',['yes','no: those ends give 2','no: those ends give π/4'],'The inner ends must follow the edge of the region.'],
@@ -7512,10 +7565,10 @@ const WM28=[
   ['Is the volume scale ρ² sin φ when φ is measured up from the equator?','no: from the equator the scale is ρ² cos φ; sin φ is for the angle down from the top',['yes','no: it is ρ sin φ','no: it is ρ²'],'Round-space technique.'],
   ['What is the volume scale in cylinder measures?','r',['r²','1','r sin θ'],'Round-space technique.'],
   ['D is slanted in θ, with r from r₁(θ) to r₂(θ). What is its area?','the total from α to β of ½(r₂² − r₁²) dθ',['the total from α to β of (r₂ − r₁) dθ','the total from α to β of ½(r₂ − r₁)² dθ','(β − α)(r₂ − r₁)'],'Round-slab technique, with f = 1.']];
-QP.push({id:'28m.strips',step:'28m',label:'strips and slabs',open:()=>measured('28m'),make(){ return writtenQ('28m.strips',WM28); }},
+QP.push({id:'28o.strips',step:'28o',label:'strips and slabs',open:()=>measured('28o'),make(){ return writtenQ('28o.strips',WM28); }},
   );
 
-/* ---------- 28n Along Curves and Across Surfaces ---------- */
+/* ---------- 28p Along Curves and Across Surfaces ---------- */
 const WN28=[
   ['Does ∫ f ds over C turn sign when C is walked backwards?','no: |r′| is never negative; only the work total turns sign',['yes','yes, when f > 0','no: neither total turns sign'],'Retrace technique.'],
   ['Py = Qx. Is φ = ∫ P dx, with nothing more?','not yet: the constant of that total may hold y; ∫ (2xy + 3) dx = x²y + 3x can miss a part in y alone',['yes','no: φ = ∫ Q dx','no: no φ exists'],'Fix the part in y alone from φy = Q.'],
@@ -7523,10 +7576,10 @@ const WN28=[
   ['Is the area of a patch ∬ |ru| |rv|?','no: a small piece is a parallelogram, not a rectangle; |ru × rv| = |ru| |rv| sin θ',['yes','no: it is ∬ ru · rv','no: it is ∬ (|ru| + |rv|)'],'The area is ∬ |ru × rv|.'],
   ['When is F = (P, Q) uphill from some φ on a rectangle?','exactly when Py = Qx on the rectangle',['exactly when Px = Qy on the rectangle','exactly when Px + Qy = 0 on the rectangle','always'],'Cross-slopes technique.'],
   ['A curve is traced again backwards. What happens to the work total?','it turns its sign',['it stays the same','it doubles','it becomes 0'],'Retrace technique: ∫ f ds is kept, and the work total turns sign.']];
-QP.push({id:'28n.paths',step:'28n',label:'along and across',open:()=>measured('28n'),make(){ return writtenQ('28n.paths',WN28); }},
+QP.push({id:'28p.paths',step:'28p',label:'along and across',open:()=>measured('28p'),make(){ return writtenQ('28p.paths',WN28); }},
   );
 
-/* ---------- 28o Gradient Descent ---------- */
+/* ---------- 28q Gradient Descent ---------- */
 const WO28=[
   ['Does a bigger step get down faster?','not always: on x² + 4y² from (2, 1), η = 0.3 lands at f = 8.48, above the 8 at the start',['yes','yes, on a bowl','never'],'Downhill-step technique: f goes down for 0 < η < η₀.'],
   ['The walk has stopped. Is it at the lowest point?','not always: on x⁴ − 2x² + x it stops near 0.838 from x = 1; the lowest point is near −1.107',['yes','yes, when f is a polynomial','never'],'The walk stops wherever ∇f = 0.'],
@@ -7535,10 +7588,10 @@ const WO28=[
   ['On a bowl, for which steps η does the walk head to the bottom from every start?','exactly when 0 < η < 2/λₙ',['for every η > 0','exactly when 0 < η < 1/λ₁','only when η = 2/(λ₁ + λₙ)'],'Step-size technique.'],
   ['Which step makes the shrink factor least?','η = 2/(λ₁ + λₙ), where the factor is (λₙ − λ₁)/(λₙ + λ₁)',['η = 2/λₙ, where the factor is 0','η = 1/λ₁, where the factor is 0','the largest step allowed'],'Step-size technique.']];
 const OO28=['yes: fxx > 0 and D > 0 at every point','no: D < 0','no: D = 0','no: fxx < 0, though D > 0'];
-QP.push({id:'28o.walk',step:'28o',label:'the walk down',open:()=>measured('28o'),make(){ return writtenQ('28o.walk',WO28); }},
+QP.push({id:'28q.walk',step:'28q',label:'the walk down',open:()=>measured('28q'),make(){ return writtenQ('28q.walk',WO28); }},
   );
 
-/* ---------- 28p How Errors Spread ---------- */
+/* ---------- 28r How Errors Spread ---------- */
 const WP28=[
   ['Do relative errors add for a difference too?','no: 10.0 ± 0.1 minus 9.8 ± 0.1 is 0.2 ± 0.2, a share of 100%, not 2%',['yes','yes, to first order','no: they subtract'],'Relative-errors-add technique: it is for products of powers.'],
   ['Is the relative error of √x twice that of x?','no: through a power the share is multiplied by the power, ½',['yes','no: it is the same','no: it is the square root of it'],'Relative-errors-add technique: |k₁|e₁ + ⋯ + |kₙ|eₙ.'],
@@ -7547,12 +7600,12 @@ const WP28=[
   ['|∂f/∂xᵢ| ≤ Mᵢ on the box, and xᵢ is known to within Δᵢ. What bounds |f(p + h) − f(p)|?','M₁Δ₁ + ⋯ + MₙΔₙ',['M₁ + ⋯ + Mₙ','Δ₁ + ⋯ + Δₙ','the largest MᵢΔᵢ'],'Error-bound technique.'],
   ['x is found by undoing F from a measured y. When do small doubts in y make large doubts in x?','when det J is near 0',['when det J is large','when det J = 1','never'],'Undo-error technique: every entry of J⁻¹ is a stand-in of J divided by det J.']];
 const PW28={1:'',2:'²',3:'³','-1':'⁻¹','-2':'⁻²'};
-QP.push({id:'28p.doubt',step:'28p',label:'how doubt spreads',open:()=>measured('28p'),make(){ return writtenQ('28p.doubt',WP28); }},
+QP.push({id:'28r.doubt',step:'28r',label:'how doubt spreads',open:()=>measured('28r'),make(){ return writtenQ('28r.doubt',WP28); }},
   
   );
 
 /* ===== Laundry 5, rung 29 (floor 5 pools, stage AB), part 1: 29a to 29g ===== */
-Object.assign(STEPS,{'29a':['r29a','The Fifth Postulate on Trial'],'29b':['r29b','Triangles on a Sphere'],'29c':['r29c','A Plane Where Parallels Are Many'],'29d':['r29d','The Ruler That Changes'],'29e':['r29e','Curvature Lives in the Ruler'],'29f':['r29f','Total Curvature Counts Holes'],'29g':['r29g','Shortest Paths'],'29h':['r29h','Spaces Flat up Close'],'29i':['r29i','Spherical Triangles by Hand'],'29j':['r29j','Hyperbolic Geometry by Hand'],'29k':['r29k','Curvature by Hand'],'29l':['r29l','The Best Path, by Hand'],'29m':['r29m','Perspective']});
+Object.assign(STEPS,{'29a':['r29a','The Fifth Postulate on Trial'],'29b':['r29b','Triangles on a Sphere'],'29c':['r29c','A Plane Where Parallels Are Many'],'29d':['r29d','The Ruler That Changes'],'29e':['r29e','Curvature Lives in the Ruler'],'29f':['r29f','Total Curvature Counts Holes'],'29g':['r29g','Shortest Paths'],'29h':['r29h','Spaces Flat up Close'],'29m':['r29m','Spherical Triangles by Hand'],'29n':['r29n','Hyperbolic Geometry by Hand'],'29o':['r29o','Curvature by Hand'],'29p':['r29p','The Best Path, by Hand'],'29q':['r29q','Perspective']});
 const DR29=[['1/5','ln (3/2)'],['1/3','ln 2'],['1/2','ln 3'],['3/5','ln 4'],['2/3','ln 5'],['3/4','ln 7'],['4/5','ln 9']];
 
 /* ---------- 29a The Fifth Postulate on Trial ---------- */
@@ -7635,7 +7688,7 @@ const WG29=[
 QP.push({id:'29g.paths',step:'29g',label:'best paths',open:()=>measured('29g'),make(){ return writtenQ('29g.paths',WG29); }},
   );
 
-/* ===== Laundry 5, rung 29 (floor 5 pools, stage AB), part 2: 29h to 29m ===== */
+/* ===== Laundry 5, rung 29 (floor 5 pools, stage AB), part 2: 29h to 29q ===== */
 
 /* ---------- 29h Spaces Flat up Close ---------- */
 const WH29=[
@@ -7650,7 +7703,7 @@ const PC29=[['(1, 1)','(1/2, 1/2)','(1, 1)/2'],['(3, 0)','(1/3, 0)','(3, 0)/9'],
 QP.push({id:'29h.charts',step:'29h',label:'charts and pages',open:()=>measured('29h'),make(){ return writtenQ('29h.charts',WH29); }},
   );
 
-/* ---------- 29i Spherical Triangles by Hand ---------- */
+/* ---------- 29m Spherical Triangles by Hand ---------- */
 const WI29=[
   ['Do the angles of the triangle with corners at the north pole, P and Q add to π?','no: they add to π plus the excess',['yes','no: they add to less than π','no: they add to 2π'],'Excess-area technique of 29b.'],
   ['Does the flat cosine-side technique hold on the sphere?','only nearly, for small triangles',['yes','never, even nearly','yes, on a sphere of radius 1'],'Sphere-cosine technique: cos a = cos b cos c + sin b sin c cos A.'],
@@ -7661,10 +7714,10 @@ const WI29=[
 const SC29=[['π/2','π/2','π/3','π/3','0 · 0 + 1 · 1 · 1/2'],['π/2','π/2','π/2','π/2','0 · 0 + 1 · 1 · 0'],['π/2','π/2','2π/3','2π/3','0 · 0 + 1 · 1 · (−1/2)'],['π/2','π/2','π/4','π/4','0 · 0 + 1 · 1 · √2/2'],['π/2','π/3','π/2','π/2','0 · 1/2 + 1 · √3/2 · 0'],['π/4','π/4','π/2','π/3','1/2 + 1/2 · 0'],['π/4','3π/4','π/2','2π/3','−1/2 + 1/2 · 0']];
 const GC29=[['P is the north pole, and Q has latitude π/6',1,3,'cos δ = sin φ₂ = 1/2'],['P is the north pole, and Q has latitude π/4',1,4,'cos δ = sin φ₂ = √2/2'],['P is the north pole, and Q has latitude π/3',1,6,'cos δ = sin φ₂ = √3/2'],['P and Q are on the equator, with longitudes π/3 apart',1,3,'cos δ = cos Δλ = 1/2'],['P and Q are on the equator, with longitudes π/2 apart',1,2,'cos δ = cos Δλ = 0'],['P and Q are on the equator, with longitudes 2π/3 apart',2,3,'cos δ = cos Δλ = −1/2'],['P is the north pole, and Q is on the equator',1,2,'cos δ = sin φ₂ = 0']];
 const FN29=[['the equator','π/6','π/3','1 · 1/2'],['the equator','π/4','π/4','1 · √2/2'],['the equator','π/3','π/6','1 · √3/2'],['the equator','π/2','0','1 · 1'],['latitude π/3','π/2','π/3','1/2 · 1'],['latitude π/4','π/2','π/4','√2/2 · 1']];
-QP.push({id:'29i.sides',step:'29i',label:'sides as angles',open:()=>measured('29i'),make(){ return writtenQ('29i.sides',WI29); }},
+QP.push({id:'29m.sides',step:'29m',label:'sides as angles',open:()=>measured('29m'),make(){ return writtenQ('29m.sides',WI29); }},
   );
 
-/* ---------- 29j Hyperbolic Geometry by Hand ---------- */
+/* ---------- 29n Hyperbolic Geometry by Hand ---------- */
 const WJ29=[
   ['Is d(z, w) = |z − w| in the disc plane?','no: that is the flat distance of the drawing; d(0.5, −0.5) = ln 9, not 1',['yes','yes, near the centre exactly','no: d(z, w) = |z − w|²'],'Disc-shortest technique: d is the ruler length of the line between the points.'],
   ['In the half-plane, is the flat segment the shortest way?','no: from −1 + i to 1 + i it has length 2; the half-circle is shorter, about 1.763',['yes','yes, when it is level','no: the upright half-line is'],'Half-plane technique: ds = |dw| / y, so higher paths are shorter.'],
@@ -7672,10 +7725,10 @@ const WJ29=[
   ['Is the flat centre of a circle of the disc plane its centre?','no: the circle of radius ln 3 about 0.5 meets the floor at 0 and 0.8',['yes','yes, for small circles exactly','no: such a circle has no centre'],'The ruler grows toward the edge, so the centre sits nearer the edge than the flat centre.'],
   ['What becomes of the disc ruler in the upper half-plane?','ds = |dw| / y',['ds = |dw|','ds = y |dw|','ds = |dw| / y²'],'Half-plane technique.'],
   ['Which are the lines of the half-plane?','the upright half-lines and the half-circles with centres on the floor',['the flat straight lines','the half-circles only','the level lines'],'Half-plane technique.']];
-QP.push({id:'29j.disc',step:'29j',label:'the ruler by hand',open:()=>measured('29j'),make(){ return writtenQ('29j.disc',WJ29); }},
+QP.push({id:'29n.disc',step:'29n',label:'the ruler by hand',open:()=>measured('29n'),make(){ return writtenQ('29n.disc',WJ29); }},
   );
 
-/* ---------- 29k Curvature by Hand ---------- */
+/* ---------- 29o Curvature by Hand ---------- */
 const WK29=[
   ['Does a helix of radius a bend by 1/a, like the circle it winds round?','no: the climb straightens it; a/(a² + b²) < 1/a when b ≠ 0',['yes','no: it bends more','no: it does not bend'],'Any-speed-bend technique: κ = |γ′ × γ″| / |γ′|³.'],
   ['Has z = xy the surface bend −1 at every point?','no: only at the centre; the tilt divides by (1 + x² + y²)²',['yes','no: it is 0 away from the centre','no: it is +1 at the centre'],'Graph-bend technique.'],
@@ -7683,10 +7736,10 @@ const WK29=[
   ['Are the main bends of a ring 1/a and 1/R?','no: around the axis it is cos t/(R + a cos t), from 1/(R + a) outside to −1/(R − a) inside',['yes','no: both are 1/a','no: both are 1/R'],'Spun-bends technique: z′/ρ around the axis.'],
   ['What is the bend of a graph y = f(x)?','|f″| / (1 + f′²)^(3/2)',['|f″|','|f″| / (1 + f′²)','|f′| / (1 + f″²)^(3/2)'],'Any-speed-bend technique.'],
   ['What is the surface bend of z = f(x, y)?','(fxx fyy − fxy²) / (1 + fx² + fy²)²',['fxx fyy − fxy²','(fxx fyy − fxy²) / (1 + fx² + fy²)','(fxx + fyy) / (1 + fx² + fy²)²'],'Graph-bend technique.']];
-QP.push({id:'29k.bends',step:'29k',label:'bends by hand',open:()=>measured('29k'),make(){ return writtenQ('29k.bends',WK29); }},
+QP.push({id:'29o.bends',step:'29o',label:'bends by hand',open:()=>measured('29o'),make(){ return writtenQ('29o.bends',WK29); }},
   );
 
-/* ---------- 29l The Best Path, by Hand ---------- */
+/* ---------- 29p The Best Path, by Hand ---------- */
 const WL29=[
   ['Is the straight chute fastest, since it is shortest?','no: a chute that drops steeply at first gains speed early and wins',['yes','yes, when it is steep','no: every chute takes the same time'],'Fastest-slide technique: the curve traced by a point on the rim of a rolling wheel.'],
   ['Is a curve that obeys the best-path equation least?','not always: two films between the same rings can obey it, and only one has the least area',['yes','yes, for soap films','never'],'The equation is asked of best curves; it does not make one best.'],
@@ -7694,10 +7747,10 @@ const WL29=[
   ['Is a hanging chain a parabola?','no: close for shallow sags, but the parabola does not obey the equation of the chain',['yes','yes, when it is heavy','no: it is an arc of a circle'],'Lowest-chain technique: y = λ + c C((x − b)/c).'],
   ['L depends on y and p only. What keeps one value along a best curve?','L − y′Lp',['L','Lp','L + y′Lp'],'No-x technique.'],
   ['Which curve makes the time of the slide least?','the curve traced by a point on the rim of a rolling wheel',['the straight line','an arc of a circle','a parabola'],'Fastest-slide technique.']];
-QP.push({id:'29l.best',step:'29l',label:'best curves by hand',open:()=>measured('29l'),make(){ return writtenQ('29l.best',WL29); }},
+QP.push({id:'29p.best',step:'29p',label:'best curves by hand',open:()=>measured('29p'),make(){ return writtenQ('29p.best',WL29); }},
   );
 
-/* ---------- 29m Perspective ---------- */
+/* ---------- 29q Perspective ---------- */
 const WM29=[
   ['Do lines that run the same way in the world run the same way in the picture?','only when they run square to the line of sight; otherwise they are painted running into one point',['yes','never','only when they are level'],'Vanishing-point technique.'],
   ['Is the picture of a midpoint the midpoint of the picture?','not in general: along a line that runs away from the eye, the far half is painted shorter',['yes','never','yes, when the line runs away from the eye'],'A painter’s move keeps the four-point ratio, not midpoints.'],
@@ -7706,7 +7759,7 @@ const WM29=[
   ['Where do two different lines [a] and [b] meet?','in exactly one point, [a × b]',['in [a + b]','nowhere, when they are parallel','in [a · b]'],'Meet-by-cross technique.'],
   ['A line runs along v, with v₃ > 0. Where is its vanishing point?','(v₁/v₃, v₂/v₃)',['(v₁, v₂)','(v₃/v₁, v₃/v₂)','(v₁v₃, v₂v₃)'],'Vanishing-point technique.']];
 const tr29=x=>'['+x.map(sg).join(' : ')+']', par29=(p,q)=>p[0]*q[1]===p[1]*q[0]&&p[0]*q[2]===p[2]*q[0]&&p[1]*q[2]===p[2]*q[1];
-QP.push({id:'29m.picture',step:'29m',label:'the painter’s window',open:()=>measured('29m'),make(){ return writtenQ('29m.picture',WM29); }},
+QP.push({id:'29q.picture',step:'29q',label:'the painter’s window',open:()=>measured('29q'),make(){ return writtenQ('29q.picture',WM29); }},
   
   );
 
@@ -8073,8 +8126,8 @@ const WH31=[
 QP.push({id:'31h.endless',step:'31h',label:'endlessly many directions',open:()=>measured('31h'),make(){ return writtenQ('31h.endless',WH31); }},
   );
 
-/* ===== Laundry 5, rung 31 (floor 6 pools, stage AD), part 2: 31i to 31o ===== */
-Object.assign(STEPS,{'31i':['r31i','Complete Spaces With a Size'],'31j':['r31j','Polynomials Are Everywhere Near'],'31k':['r31k','Projections and Least Squares by Hand'],'31l':['r31l','Correlation and Regression'],'31m':['r31m','Interpolation and Orthogonal Polynomials'],'31n':['r31n','Eigenvalues by Machine'],'31o':['r31o','Principal Components']});
+/* ===== Laundry 5, rung 31 (floor 6 pools, stage AD), part 2: 31i to 31q ===== */
+Object.assign(STEPS,{'31i':['r31i','Complete Spaces With a Size'],'31l':['r31l','Polynomials Are Everywhere Near'],'31m':['r31m','Projections and Least Squares by Hand'],'31n':['r31n','Correlation and Regression'],'31o':['r31o','Interpolation and Orthogonal Polynomials'],'31p':['r31p','Eigenvalues by Machine'],'31q':['r31q','Principal Components']});
 
 /* ---------- 31i Complete Spaces With a Size ---------- */
 const WI31=[
@@ -8087,7 +8140,7 @@ const WI31=[
 QP.push({id:'31i.complete',step:'31i',label:'complete spaces with a size',open:()=>measured('31i'),make(){ return writtenQ('31i.complete',WI31); }},
   );
 
-/* ---------- 31j Polynomials Are Everywhere Near ---------- */
+/* ---------- 31l Polynomials Are Everywhere Near ---------- */
 const WJ31=[
   ['‖p − f‖∞ < ε. Is |p′ − f′| small?','no: the slope is not bounded; f may have no slope at all',['yes','yes, when ε is small','no: p has no slope'],'Near in height says nothing of slopes.'],
   ['Is Bₙf = f for every polynomial f of degree ≤ n?','no: Bₙ keeps lines only; Bₙx² misses by x(1 − x)/n',['yes','yes, for degree ≤ 2','no: it keeps no function'],'Coin-average technique.'],
@@ -8095,10 +8148,10 @@ const WJ31=[
   ['Is every function on [0, 1] near a polynomial in ‖·‖∞?','no: only continuous ones; a step stays ½ away from every continuous function at its jump',['yes','yes, when it is bounded','no: only polynomials are'],'Average-polynomial technique: f continuous.'],
   ['What is Bₙx²?','x² + x(1 − x)/n',['x²','x² − x(1 − x)/n','x²/n'],'Coin-average technique.'],
   ['f is continuous on [0, 1]. What does ‖Bₙf − f‖∞ head to?','0',['1/4','1/(4n), and no lower','it does not settle'],'Average-polynomial technique.']];
-QP.push({id:'31j.near',step:'31j',label:'polynomials are near',open:()=>measured('31j'),make(){ return writtenQ('31j.near',WJ31); }},
+QP.push({id:'31l.near',step:'31l',label:'polynomials are near',open:()=>measured('31l'),make(){ return writtenQ('31l.near',WJ31); }},
   );
 
-/* ---------- 31k Projections and Least Squares by Hand ---------- */
+/* ---------- 31m Projections and Least Squares by Hand ---------- */
 const WK31=[
   ['Is the shadow of f on the plane at right angles to n equal to (f · n)n?','no: that is the shadow on the line through n, and only for |n| = 1',['yes','yes, when |n| = 1','no: it is f + (f · n)n'],'Through-the-normal technique: f − ((f · n)/|n|²)n.'],
   ['Can y ≈ c₀ + c₁x + c₂x² be fitted by three fits of one column each?','no: the columns are not at right angles; fit them together, or straighten them first',['yes','yes, when the points are evenly spaced','no: no best fit exists'],'Power-columns technique: solve XᵀXc = Xᵀy.'],
@@ -8107,11 +8160,11 @@ const WK31=[
   ['What is the slope of the best line y ≈ bx through 0?','Σxᵢyᵢ / Σxᵢ²',['Σyᵢ / Σxᵢ','Σxᵢyᵢ / Σyᵢ²','Σxᵢ² / Σxᵢyᵢ'],'Through-zero technique.'],
   ['What is the distance from f to the plane at right angles to n?','|f · n|/|n|',['|f · n|','|f · n|/|n|²','|f|/|n|'],'Through-the-normal technique.']];
 const N31=[[[1,2,2],3],[[2,3,6],7],[[0,3,4],5],[[2,2,1],3],[[4,0,3],5]];
-QP.push({id:'31k.fit',step:'31k',label:'least squares by hand',open:()=>measured('31k'),make(){ return writtenQ('31k.fit',WK31); }},
+QP.push({id:'31m.fit',step:'31m',label:'least squares by hand',open:()=>measured('31m'),make(){ return writtenQ('31m.fit',WK31); }},
   
   );
 
-/* ---------- 31l Correlation and Regression ---------- */
+/* ---------- 31n Correlation and Regression ---------- */
 const WL31=[
   ['Is the line of x on y the line of y on x turned round?','no: their slopes multiply to r², not 1',['yes','yes, when r > 0','no: their slopes add to r'],'Two-lines technique.'],
   ['r = 0.6. Is 60% of the spread of y accounted for?','no: the share is r² = 36%',['yes','no: 40%','no: 77%'],'Correlation-angle technique.'],
@@ -8120,22 +8173,22 @@ const WL31=[
   ['What is r, in vectors?','the cosine of the angle between the deviation vectors u and v',['the angle between u and v','the product u · v','the size of u over the size of v'],'Correlation-angle technique.'],
   ['In standard units, what does the line of y on x predict?','r times the units of x',['the units of x','r² times the units of x','1/r times the units of x'],'Two-lines technique.']];
 const UV31=[[[3,4],[4,3],24,25],[[1,0],[3,4],3,5],[[0,1],[3,4],4,5],[[3,4],[5,12],63,65],[[3,4],[-4,3],0,1],[[1,0],[-3,4],-3,5],[[4,3],[-3,-4],-24,25],[[0,2],[5,12],12,13]];
-QP.push({id:'31l.corr',step:'31l',label:'correlation and regression',open:()=>measured('31l'),make(){ return writtenQ('31l.corr',WL31); }},
+QP.push({id:'31n.corr',step:'31n',label:'correlation and regression',open:()=>measured('31n'),make(){ return writtenQ('31n.corr',WL31); }},
   
   );
 
-/* ---------- 31m Interpolation and Orthogonal Polynomials ---------- */
+/* ---------- 31o Interpolation and Orthogonal Polynomials ---------- */
 const WM31=[
   ['Do more evenly spaced points always give a better fit?','no: for the bell the largest miss grows, 0.44, 1.92, 14.4, as the points grow',['yes','yes, for continuous functions','no: the fit never changes'],'Cosine-points technique: where the points sit matters.'],
-  ['Are the polynomials through the points 31j’s near polynomials?','no: 31j used coin averages, which need not pass through any point',['yes','yes, for evenly spaced points','no: 31j used tangent lines'],'Through-the-points technique.'],
+  ['Are the polynomials through the points 31l’s near polynomials?','no: 31l used coin averages, which need not pass through any point',['yes','yes, for evenly spaced points','no: 31l used tangent lines'],'Through-the-points technique.'],
   ['Is every family of straightened polynomials the cosine family?','no: each weight has its own family; weight 1 gives 1, x, x² − 1/3',['yes','yes, on [−1, 1]','no: there is only the family of weight 1'],'Three-term technique: the family of any weight.'],
   ['Is it safe to interpolate a table far past its last entry?','no: ω grows like a power of the distance outside the points',['yes','yes, with enough points','yes, when the points are evenly spaced'],'Interpolation-miss technique.'],
   ['How many polynomials of degree at most n pass through n + 1 points with different inputs?','exactly one',['none','n + 1','endlessly many'],'Through-the-points technique.'],
   ['Which points make the largest size of ω on [−1, 1] least?','the roots of Tₙ₊₁, xₖ = cos((2k + 1)π/(2n + 2))',['evenly spaced points','the ends −1 and 1, repeated','the roots of xⁿ⁺¹'],'Cosine-points technique.']];
-QP.push({id:'31m.interp',step:'31m',label:'through the points',open:()=>measured('31m'),make(){ return writtenQ('31m.interp',WM31); }},
+QP.push({id:'31o.interp',step:'31o',label:'through the points',open:()=>measured('31o'),make(){ return writtenQ('31o.interp',WM31); }},
   );
 
-/* ---------- 31n Eigenvalues by Machine ---------- */
+/* ---------- 31p Eigenvalues by Machine ---------- */
 const WN31=[
   ['Is it wise to find the stretches of a large grid from the roots of det(A − λI)?','legal, with a cost: the polynomial’s numbers are huge, and small errors in them move roots far',['yes: it is the best way','no: it is not legal','no: large grids have no stretches'],'The methods of this step work on A itself.'],
   ['Does applying A again and again always find the largest stretch?','no: a start with c₁ = 0 never swings onto it; two stretches of the same size never settle',['yes','yes, for symmetric A','no: it finds the smallest'],'Near-shift technique: one stretch must be nearest.'],
@@ -8143,10 +8196,10 @@ const WN31=[
   ['Is the two-sided reading of any x a stretch?','no: only of an axis; otherwise it lies between λmin and λmax',['yes','yes, for symmetric A','no: it is never a stretch'],'Two-sided-reading technique.'],
   ['The vector is off its axis by a small angle ε. How far off is the two-sided reading?','by at most (λmax − λmin) sin²ε: the square of the vector’s error',['by about ε','by about √ε','by nothing'],'Two-sided-reading technique.'],
   ['What do every Aₖ and A share?','the same stretches',['the same numbers','the same columns','nothing'],'Same-stretches technique.']];
-QP.push({id:'31n.machine',step:'31n',label:'stretches by machine',open:()=>measured('31n'),make(){ return writtenQ('31n.machine',WN31); }},
+QP.push({id:'31p.machine',step:'31p',label:'stretches by machine',open:()=>measured('31p'),make(){ return writtenQ('31p.machine',WN31); }},
   );
 
-/* ---------- 31o Principal Components ---------- */
+/* ---------- 31q Principal Components ---------- */
 const WO31=[
   ['Is the first axis the cause of the spread?','not shown: it is a direction of most spread; what it means is a guess about the world',['yes','yes, when λ₁ is large','no: the last axis is'],'Most-spread technique.'],
   ['Do the axes depend on the units?','yes: changing one number’s units stretches one place of every point, and C changes',['no','no: only the spreads change','only when there are two measurements'],'The axes are those of C.'],
@@ -8154,10 +8207,10 @@ const WO31=[
   ['Do the components left out carry nothing?','no: they carry n(λᵣ₊₁ + ⋯ + λₚ), and sometimes the small spread is the interesting one',['yes','yes, when r ≥ 2','no: they carry λ₁'],'Closest-piece technique.'],
   ['What is the spread of the points along a direction d of size 1?','dᵀCd',['Cd','dᵀd','the middle sum of C'],'Spread-along technique.'],
   ['What do the spreads along all the axes add to?','the middle sum of C, the total spread',['λ₁','1','det C'],'Most-spread technique.']];
-QP.push({id:'31o.axes',step:'31o',label:'principal components',open:()=>measured('31o'),make(){ return writtenQ('31o.axes',WO31); }},
+QP.push({id:'31q.axes',step:'31q',label:'principal components',open:()=>measured('31q'),make(){ return writtenQ('31q.axes',WO31); }},
   );
 
-/* ===== Phase W floor 7 (Phase K step 6c, Andrew 2026-11-11 05:38Z): rung 47 arrow pools. Check Proofs and Word Problems in arrows:
+/* ===== Phase W floor 7 (Phase K step 6c, Andrew 2026-11-11 05:38Z): rung 48 arrow pools. Check Proofs and Word Problems in arrows:
    a seed is an arrow of a story, a link is an arrow run after it ("after weigh"), and the links spell the plan. No Work Equations pool. ===== */
 const AR47=[
   {id:'Hood River pears',at:'At a Hood River packing shed',T:['Acres','Bins','Pounds','Dollars'],A:[['fill','the bins that a count of acres fills'],['weigh','the pounds that a count of bins holds'],['pay','the dollars that a weight of pears brings']]},
@@ -8882,7 +8935,7 @@ QP.push({id:'8h.between',step:'8h',mode:'work',label:'the point a share of the w
     return {index:'q:8h.between['+a+';'+b+';'+tp+'/'+tq+']', a3:['8h.ends['+a+','+b+']','8h.distance',DASH], lines:[['['+sg(a)+', '+sg(b)+']','an interval'],['x = (1 − t)a + tb, with a = '+sg(a)+' and b = '+sg(b),'a point of it, for 0 ≤ t ≤ 1']], ask:'Which point is '+name+' from '+sg(a)+' to '+sg(b)+'?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'(1 − t)a + tb = a + t(b − a): start at a and go the share t of the distance b − a = '+(b-a)+'. With t = '+fshow(t)+' that is '+sg(a)+' + '+fshow(fmul(t,fint(b-a)))+' = '+right+'.'+(tq===2?'':' Starting from b instead walks the other way.')+' t(b − a) alone forgets to start at a.'}; }
   return null; }});
-/* --- grids and systems (27d, 27f, 27j), clocks (43b), fields grown by a root (44f): seeds whose numbers are dealt afresh; each wrong option is a wrong move --- */
+/* --- grids and systems (27d, 27f, 27l), clocks (43b), fields grown by a root (44f): seeds whose numbers are dealt afresh; each wrong option is a wrong move --- */
 const BK_V=['x','y','z','w'], BK_lin=(c,vs)=>{ let s=''; c.forEach((a,i)=>{ if(a===0) return; const v=(vs||BK_V)[i], m=Math.abs(a)===1?v:Math.abs(a)+v; s+=s===''?(a<0?'−'+m:m):(a<0?' − ':' + ')+m; }); return s||'0'; };
 const BK_G=M=>'rows '+M.map(r=>'('+r.map(sg).join(', ')+')').join(', '), BK_L=x=>'('+x.map(sg).join(', ')+')';
 const BK_mul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,a,k)=>s+a*B[k][j],0))), BK_mv=(A,x)=>A.map(r=>r.reduce((s,a,k)=>s+a*x[k],0));
@@ -8893,27 +8946,27 @@ const BK_unimod=n=>{ let A=Array.from({length:n},(_,i)=>Array.from({length:n},(_
 const BK_inv=A=>{ const n=A.length, d=BK_det(A); if(Math.abs(d)!==1) return null; if(n===2) return [[A[1][1]*d,-A[0][1]*d],[-A[1][0]*d,A[0][0]*d]];
   return A.map((_,i)=>A.map((_,j)=>{ const m=A.filter((_,r)=>r!==j).map(r=>r.filter((_,c)=>c!==i)); return ((i+j)%2?-1:1)*BK_det(m)*d; })); };
 QP.push(
-  {id:'27j.solve',step:'27j',mode:'work',label:'three unknowns: an answer, or none',open:()=>measured('27j'),make(){
+  {id:'27l.solve',step:'27l',mode:'work',label:'three unknowns: an answer, or none',open:()=>measured('27l'),make(){
   for(let t=0;t<40;t++){ const kind=rnd(3), x=BK_small(3); let A;
     if(kind===0){ A=[BK_small(3),BK_small(3),BK_small(3)]; if(BK_det(A)===0) continue; }
     else { const r1=BK_small(3), r2=BK_small(3), a=pick([-1,1,2]), b=pick([-1,1]); A=[r1,r2,r1.map((v,i)=>a*v+b*r2[i])]; if(A.some(r=>r.every(v=>v===0))||A[2].some(v=>Math.abs(v)>6)) continue; }
     const b=BK_mv(A,x); if(kind===2) b[2]+=pick([-2,-1,1,2]);
     const fails=c=>!BK_eq(BK_mv(A,c),b), NO='it has no answer', right=kind===2?NO:BK_L(x);
     const cands=[[x[1],x[0],x[2]],[x[0],x[2],x[1]],[-x[0],x[1],x[2]],[x[0],-x[1],x[2]],[x[0],x[1],x[2]+1],[x[2],x[1],x[0]]].filter(fails).map(BK_L), wrong=uniq(right,(kind===2?[]:[NO]).concat(cands),3); if(wrong.length<3) continue;
-    return {index:'q:27j.solve['+kind+';'+A.flat().join(',')+';'+b.join(',')+']', a3:['27j.systems['+['one answer','a line of answers','no answer'][kind]+']','27j.rowMove+27j.lowestTerms',DASH], lines:A.map((r,i)=>[BK_lin(r)+' = '+sg(b[i]),'sameness '+(i+1)]), ask:'Which is an answer, if any?', right, opts:shuffle([right,...wrong]), lead:'',
+    return {index:'q:27l.solve['+kind+';'+A.flat().join(',')+';'+b.join(',')+']', a3:['27l.systems['+['one answer','a line of answers','no answer'][kind]+']','27l.rowMove+27l.lowestTerms',DASH], lines:A.map((r,i)=>[BK_lin(r)+' = '+sg(b[i]),'sameness '+(i+1)]), ask:'Which is an answer, if any?', right, opts:shuffle([right,...wrong]), lead:'',
       why:kind===2?'Row 3 is '+(A[2]===A[2]?'a mix of rows 1 and 2 on the left':'')+', but its right side is not the same mix of theirs: row moves reach 0 = '+sg(b[2]-BK_mv([A[2]],x)[0])+', so no list answers it.':'Put '+BK_L(x)+' in: every sameness checks. '+(kind===1?'Row 3 is a mix of rows 1 and 2, so there is a whole line of answers; this is one of them.':'The determinant is '+sg(BK_det(A))+', not 0, so this is the only answer.')+' Each wrong list fails one sameness.'}; }
   return null; }},
-  {id:'27j.reach',step:'27j',mode:'work',label:'which right sides can be reached',open:()=>measured('27j'),make(){
+  {id:'27l.reach',step:'27l',mode:'work',label:'which right sides can be reached',open:()=>measured('27l'),make(){
   for(let t=0;t<30;t++){ const r1=BK_small(2), r2=BK_small(2), a=pick([-2,-1,1,2,3]), b=pick([-2,-1,1,2,3]); if(r1[0]*r2[1]-r1[1]*r2[0]===0) continue; const r3=r1.map((v,i)=>a*v+b*r2[i]);
     const Y=(p,q)=>'y₃ = '+BK_lin([p,q],['y₁','y₂']), right=Y(a,b), wrong=uniq(right,[Y(b,a),Y(-a,-b),Y(a,-b),Y(1,1)],3); if(wrong.length<3) continue;
-    return {index:'q:27j.reach['+r1.join(',')+';'+r2.join(',')+';'+a+','+b+']', a3:['27j.letterSides','27j.rowMove',DASH], lines:[[BK_lin(r1)+' = y₁','sameness 1'],[BK_lin(r2)+' = y₂','sameness 2'],[BK_lin(r3)+' = y₃','sameness 3']], ask:'For which right sides does the system have an answer?', right, opts:shuffle([right,...wrong]), lead:'',
+    return {index:'q:27l.reach['+r1.join(',')+';'+r2.join(',')+';'+a+','+b+']', a3:['27l.letterSides','27l.rowMove',DASH], lines:[[BK_lin(r1)+' = y₁','sameness 1'],[BK_lin(r2)+' = y₂','sameness 2'],[BK_lin(r3)+' = y₃','sameness 3']], ask:'For which right sides does the system have an answer?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'The third row is '+sg(a)+' times row 1 plus '+sg(b)+' times row 2 on the left. Take that mix away from row 3: the left side clears to 0, and the right side becomes y₃ − ('+BK_lin([a,b],['y₁','y₂'])+'). An answer exists exactly when that is 0.'}; }
   return null; }},
-  {id:'27j.lowest',step:'27j',mode:'work',label:'in lowest terms or not',open:()=>measured('27j'),make(){
+  {id:'27l.lowest',step:'27l',mode:'work',label:'in lowest terms or not',open:()=>measured('27l'),make(){
   const a=rnd(7)-3, b=rnd(7)-3, c=1+rnd(3), k=rnd(5), opts=['in lowest terms','not in lowest terms'];
   const C=[[[[1,0,a],[0,1,b]],0,'Both leads are 1, the second is right of the first, and each lead is alone in its column.'],[[[1,a,0],[0,0,1]],0,'Both leads are 1 and alone in their columns; a column with no lead may hold anything.'],
     [[[c+1,0,a],[0,1,b]],1,'The first lead is '+(c+1)+', not 1: a stretch of row 1 is still to do.'],[[[0,1,b],[1,0,a]],1,'The lead of row 2 is left of the lead of row 1: a swap is still to do.'],[[[1,c,a],[0,1,b]],1,'The entry '+c+' sits above the lead of row 2: clearing it is still owed.']][k];
-  return {index:'q:27j.lowest['+k+';'+a+','+b+','+c+']', a3:['27j.grids['+k+']','27j.lowestTerms',DASH], lines:[[BK_G(C[0]),'a grid']], ask:'Is this grid in lowest terms?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
+  return {index:'q:27l.lowest['+k+';'+a+','+b+','+c+']', a3:['27l.grids['+k+']','27l.lowestTerms',DASH], lines:[[BK_G(C[0]),'a grid']], ask:'Is this grid in lowest terms?', right:opts[C[1]], opts, lead:'', why:C[2]}; }},
   {id:'27d.chain',step:'27d',mode:'work',label:'grids of chained sizes multiplied',open:()=>measured('27d'),make(){
   for(let t=0;t<20;t++){ const [m,n,p]=pick([[2,3,1],[3,2,2],[2,3,2],[1,3,2],[3,1,2],[2,2,3]]), A=Array.from({length:m},()=>BK_small(n)), B=Array.from({length:n},()=>BK_small(p)), P=BK_mul(A,B), right=BK_G(P);
     const c=[BK_G(P.map(r=>r.map(v=>-v))), p===m?BK_G(BK_T(P)):BK_G(P.map(r=>r.slice().reverse())), BK_G(P.map((r,i)=>r.map((v,j)=>i===0&&j===0?v+A[0][0]:v))), m===p&&n===n?BK_G(BK_mul(B,A).length===m?BK_mul(B,A):P):''].filter(Boolean), wrong=uniq(right,c,3); if(wrong.length<3) continue;
@@ -8926,14 +8979,14 @@ QP.push(
     return {index:'q:27d.zero['+N.flat().join(',')+']', a3:['27d.columnTimesRow['+u.join(',')+';'+v.join(',')+']','27d.productIsDoing',DASH], lines:[['N has '+BK_G(N),'a grid, not 0']], ask:'What is NN?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'N is the column '+BK_L(u)+' times the row '+BK_L(v)+', and the row against the column is '+sg(v[0]*u[0]+v[1]*u[1])+'. So NN is the column times 0 times the row: every place is 0. A product of grids can be 0 when neither grid is; squaring each place is not multiplying grids.'}; }
   return null; }},
-  {id:'27j.undo',step:'27j',mode:'work',label:'the undo of a grid, or none',open:()=>measured('27j'),make(){
+  {id:'27l.undo',step:'27l',mode:'work',label:'the undo of a grid, or none',open:()=>measured('27l'),make(){
   for(let t=0;t<30;t++){ const n=pick([2,2,3]), none=Math.random()<0.25, NO='it has no undo';
     if(none){ const r1=BK_small(n), r2=BK_small(n), k=pick([-2,-1,1,2]), A=n===2?[r1,r1.map(v=>k*v)]:[r1,r2,r1.map((v,i)=>v+k*r2[i])]; if(A.some(r=>r.every(v=>v===0))) continue; const I=BK_unimod(n);
-      return {index:'q:27j.undo[x;'+A.flat().join(',')+']', a3:['27j.grids[no undo]','27j.undoByRows',DASH], lines:[['A has '+BK_G(A),'a square grid']], ask:'Which grid is A⁻¹, if any?', right:NO, opts:shuffle([NO,BK_G(BK_T(A)),BK_G(I),BK_G(A.map(r=>r.map(v=>-v)))]), lead:'',
+      return {index:'q:27l.undo[x;'+A.flat().join(',')+']', a3:['27l.grids[no undo]','27l.undoByRows',DASH], lines:[['A has '+BK_G(A),'a square grid']], ask:'Which grid is A⁻¹, if any?', right:NO, opts:shuffle([NO,BK_G(BK_T(A)),BK_G(I),BK_G(A.map(r=>r.map(v=>-v)))]), lead:'',
         why:'The last row is a mix of the others, so row moves reach a row of 0s and never I. The determinant is 0: there is no undo.'}; }
     const A=BK_unimod(n), V=BK_inv(A); if(!V||A.flat().some(v=>Math.abs(v)>9)||V.flat().some(v=>Math.abs(v)>12)||BK_eq(A,V)) continue; const right=BK_G(V);
     const c=[BK_G(BK_T(V)),BK_G(V.map(r=>r.map(v=>-v))),n===2?BK_G([[A[1][1],A[0][1]],[A[1][0],A[0][0]]]):BK_G(BK_T(A)),NO], wrong=uniq(right,c,3); if(wrong.length<3) continue;
-    return {index:'q:27j.undo['+A.flat().join(',')+']', a3:['27j.grids[undoable]','27j.undoByRows',DASH], lines:[['A has '+BK_G(A),'a square grid']], ask:'Which grid is A⁻¹, if any?', right, opts:shuffle([right,...wrong]), lead:'',
+    return {index:'q:27l.undo['+A.flat().join(',')+']', a3:['27l.grids[undoable]','27l.undoByRows',DASH], lines:[['A has '+BK_G(A),'a square grid']], ask:'Which grid is A⁻¹, if any?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Row moves on [A | I] reach [I | A⁻¹]. Check: A times '+right.replace('rows ','the grid with rows ')+' is I. '+(n===2?'For two rows, swap the middle, change the signs off it, and divide by the determinant '+sg(BK_det(A))+'; swapping without the signs is not the undo.':'The side-turn of A is not its undo unless A keeps lengths.')}; }
   return null; }},
   {id:'27d.thin',step:'27d',mode:'work',label:'a product through a narrow middle',open:()=>measured('27d'),make(){
@@ -9036,7 +9089,7 @@ QP.push(
     return {index:'q:27g.pullback['+A.flat().join(',')+';'+f.join(',')+']', a3:['27d.grids['+BK_G(A)+']','27g.sideTurn+27h.turnRound',DASH], lines:[[BK_G(A),'the grid A of a map'],['f(x, y) = '+BK_lin(f,['x','y']),'a reading']], ask:'Which reading is f done after the map: v ↦ f(Av)?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Av has entries '+BK_lin(A[0],['x','y'])+' and '+BK_lin(A[1],['x','y'])+'. Feed them to f and collect x and y. The new coefficients are the row ('+f.map(sg).join(', ')+') times A, which is the side-turn of A acting on the coefficients. A times the column of coefficients mixes the wrong way.'}; }
   return null; }});
-/* --- polynomials (27g, 27b, 44c, 44j) and determinants (19e, 27e, 27g, 27k): numbers dealt afresh; each wrong option is a wrong move. A polynomial is its list of coefficients, lowest first. --- */
+/* --- polynomials (27g, 27b, 44c, 44j) and determinants (19e, 27e, 27g, 27m): numbers dealt afresh; each wrong option is a wrong move. A polynomial is its list of coefficients, lowest first. --- */
 const BM_SUP=['','','²','³','⁴','⁵','⁶','⁷'], BM_p=(c,v)=>{ v=v||'x'; let s=''; for(let k=c.length-1;k>=0;k--){ const a=c[k]; if(!a) continue; const m=Math.abs(a), body=k===0?''+m:(m===1?'':m)+v+BM_SUP[k]; s+=s===''?(a<0?'−':'')+body:(a<0?' − ':' + ')+body; } return s||'0'; };
 const BM_mul=(a,b)=>{ const o=Array(a.length+b.length-1).fill(0); a.forEach((x,i)=>b.forEach((y,j)=>{ o[i+j]+=x*y; })); return o; }, BM_at=(c,x)=>c.reduceRight((s,a)=>s*x+a,0), BM_d=c=>c.slice(1).map((a,i)=>a*(i+1));
 const BM_I2=[[1,0],[0,1]], BM_addg=(A,B,k)=>A.map((r,i)=>r.map((x,j)=>x+(k===undefined?1:k)*B[i][j])), BM_sc=(A,k)=>A.map(r=>r.map(x=>k*x));
@@ -9087,30 +9140,30 @@ QP.push({id:'27g.polyin',step:'27g',mode:'work',label:'a grid put into a polynom
     return {index:'q:19e.sign['+s.join('')+']', a3:['19e.shuffles['+s.join('')+']','19e.signOfAShuffle',DASH], lines:[['1 → '+s[0]+',  2 → '+s[1]+',  3 → '+s[2]+',  4 → '+s[3],'a shuffle of 1, 2, 3, 4']], ask:'Is the shuffle even or odd?', right:opts[sw%2], opts, lead:'',
       why:'Follow each number round: the loops have lengths '+cyc.join(', ')+'. A loop of length k is k − 1 swaps, so the shuffle is '+sw+' swap'+(sw===1?'':'s')+' in all, an '+(sw%2?'odd':'even')+' count. Counting the pairs that end out of order gives '+inv+', with the same evenness.'}; }
   return null; }},
-  {id:'27k.byrows',step:'27k',mode:'work',label:'a determinant of three rows',open:()=>measured('27k'),make(){
+  {id:'27m.byrows',step:'27m',mode:'work',label:'a determinant of three rows',open:()=>measured('27m'),make(){
   for(let t=0;t<40;t++){ const A=[BK_small(3),BK_small(3),BK_small(3)], d=BK_det(A), dg=A[0][0]*A[1][1]*A[2][2]; if(d===0||Math.abs(d)>40) continue;
     const perm=A[0][0]*A[1][1]*A[2][2]+A[0][1]*A[1][2]*A[2][0]+A[0][2]*A[1][0]*A[2][1]+A[0][2]*A[1][1]*A[2][0]+A[0][1]*A[1][0]*A[2][2]+A[0][0]*A[1][2]*A[2][1];
     const right=''+sg(d), wrong=uniq(right,[sg(-d),sg(perm),sg(dg),'0',sg(d+A[0][1])],3); if(wrong.length<3) continue;
     const m=j=>BK_det(A.slice(1).map(r=>r.filter((_,k)=>k!==j)));
-    return {index:'q:27k.byrows['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27k.expand',DASH], lines:[[BK_G(A),'a grid A']], ask:'What is det A?', right, opts:shuffle([right,...wrong]), lead:'',
+    return {index:'q:27m.byrows['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27m.expand',DASH], lines:[[BK_G(A),'a grid A']], ask:'What is det A?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Along the first row: ('+sg(A[0][0])+')('+sg(m(0))+') − ('+sg(A[0][1])+')('+sg(m(1))+') + ('+sg(A[0][2])+')('+sg(m(2))+') = '+sg(d)+'. The middle term carries a minus sign; with every sign plus the sum is '+sg(perm)+'. The product down the middle alone, '+sg(dg)+', is the determinant only for a staircase.'}; }
   return null; }},
-  {id:'27k.powers',step:'27k',mode:'work',label:'the grid of powers',open:()=>measured('27k'),make(){
+  {id:'27m.powers',step:'27m',mode:'work',label:'the grid of powers',open:()=>measured('27m'),make(){
   for(let t=0;t<40;t++){ const [a,b,c]=shuffle([-3,-2,-1,0,1,2,3,4]).slice(0,3), A=[[1,a,a*a],[1,b,b*b],[1,c,c*c]], d=BK_det(A);
     const right=''+sg(d), wrong=uniq(right,[sg(-d),sg((a-b)*(a-c)*(b-c)+a),sg(a*b*c),sg((b-a)*(c-a)),sg(a*a*b*b*c*c),'0'],3); if(wrong.length<3) continue;
-    return {index:'q:27k.powers['+[a,b,c].join(',')+']', a3:['27d.grids['+BK_G(A)+']','27k.rowMoves+27k.stairDet',DASH], lines:[[BK_G(A),'the rows 1, t, t² for t = '+sg(a)+', '+sg(b)+', '+sg(c)]], ask:'What is its determinant?', right, opts:shuffle([right,...wrong]), lead:'',
+    return {index:'q:27m.powers['+[a,b,c].join(',')+']', a3:['27d.grids['+BK_G(A)+']','27m.rowMoves+27m.stairDet',DASH], lines:[[BK_G(A),'the rows 1, t, t² for t = '+sg(a)+', '+sg(b)+', '+sg(c)]], ask:'What is its determinant?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Take row 1 from rows 2 and 3, then factor: the determinant is (b − a)(c − a)(c − b) = ('+sg(b-a)+')('+sg(c-a)+')('+sg(c-b)+') = '+sg(d)+'. It is not 0 because the three numbers differ, which is why three points fix a polynomial of degree at most 2.'}; }
   return null; }},
-  {id:'27k.opposite',step:'27k',mode:'work',label:'a grid that is the opposite of its side-turn',open:()=>measured('27k'),make(){
+  {id:'27m.opposite',step:'27m',mode:'work',label:'a grid that is the opposite of its side-turn',open:()=>measured('27m'),make(){
   const n=pick([2,3,3]), a=pick([-3,-2,-1,1,2,3]), b=pick([-3,-2,-1,1,2,3]), c=pick([-3,-2,-1,1,2,3]), A=n===2?[[0,a],[-a,0]]:[[0,a,b],[-a,0,c],[-b,-c,0]], d=BK_det(A);
   const right=''+sg(d), wrong=uniq(right,n===2?['0',sg(-a*a),sg(2*a),sg(a)]:[sg(2*a*b*c),sg(-2*a*b*c),sg(a*a+b*b+c*c),sg(a*b*c)],3); if(wrong.length<3) return null;
-  return {index:'q:27k.opposite['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27g.sideTurn',DASH], lines:[[BK_G(A),'a grid A with Aᵀ = −A']], ask:'What is det A?', right, opts:shuffle([right,...wrong]), lead:'',
+  return {index:'q:27m.opposite['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27g.sideTurn',DASH], lines:[[BK_G(A),'a grid A with Aᵀ = −A']], ask:'What is det A?', right, opts:shuffle([right,...wrong]), lead:'',
     why:n===3?'det A = det Aᵀ = det(−A) = (−1)³ det A, since each of the three rows gives up a factor −1. So det A = −det A, and det A = 0. With an even number of rows the argument gives nothing.':'Here det A = 0 · 0 − ('+sg(a)+')('+sg(-a)+') = '+sg(a*a)+'. The side-turn argument gives det A = (−1)² det A, which says nothing: with 2 rows the determinant is a square, and with 3 rows it is 0.'}; }},
-  {id:'27k.ratio',step:'27k',mode:'work',label:'an unknown as a ratio of determinants',open:()=>measured('27k'),make(){
+  {id:'27m.ratio',step:'27m',mode:'work',label:'an unknown as a ratio of determinants',open:()=>measured('27m'),make(){
   for(let t=0;t<40;t++){ const A=[BL_nz(2),BL_nz(2)], x=[pick([-3,-2,-1,1,2,3]),pick([-3,-2,-1,1,2,3])], b=BK_mv(A,x), d=BK_det(A); if(d===0||Math.abs(d)===1) continue;
     const nx=b[0]*A[1][1]-A[0][1]*b[1], ny=A[0][0]*b[1]-b[0]*A[1][0], R=(n,m)=>'x = '+fraw(n,m).replace(/^−(\d+)\/−?/,'−$1/'), S=(n,m)=>'x = '+sg(n)+'/'+sg(m);
     const right=S(nx,d), wrong=uniq(right,[S(ny,d),S(-nx,d),S(d,nx),S(b[0]*A[1][1]+A[0][1]*b[1],d),S(nx,A[0][0]*A[1][1])].filter(o=>!/\/0$/.test(o)),3); if(wrong.length<3||nx===0) continue;
-    return {index:'q:27k.ratio['+A.flat().join(',')+';'+b.join(',')+']', a3:['27j.systems[one answer]','27k.ratios',DASH], lines:A.map((r,i)=>[BK_lin(r,['x','y'])+' = '+sg(b[i]),'sameness '+(i+1)]), ask:'Which ratio of determinants is x?', right, opts:shuffle([right,...wrong]), lead:'',
+    return {index:'q:27m.ratio['+A.flat().join(',')+';'+b.join(',')+']', a3:['27l.systems[one answer]','27m.ratios',DASH], lines:A.map((r,i)=>[BK_lin(r,['x','y'])+' = '+sg(b[i]),'sameness '+(i+1)]), ask:'Which ratio of determinants is x?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'Below: the determinant of the grid, '+sg(d)+'. Above: the same grid with its first column replaced by the right sides, rows ('+sg(b[0])+', '+sg(A[0][1])+') and ('+sg(b[1])+', '+sg(A[1][1])+'), with determinant '+sg(nx)+'. So x = '+sg(x[0])+'. Replacing the second column instead gives y.'}; }
   return null; }},
   {id:'27g.standin',step:'27g',mode:'work',label:'the stand-in grid of a 2 by 2 grid',open:()=>measured('27g'),make(){
@@ -9145,7 +9198,7 @@ QP.push({id:'27f.stretches',step:'27f',mode:'work',label:'the stretches of a gri
   {id:'27f.stairstretch',step:'27f',mode:'work',label:'the stretches of a staircase',open:()=>measured('27f'),make(){
   for(let t=0;t<40;t++){ const d=shuffle([-3,-2,-1,1,2,3,4,5]).slice(0,3), u=[pick([-3,-2,-1,1,2,3]),pick([-3,-2,-1,1,2,3]),pick([-3,-2,-1,1,2,3])], A=[[d[0],u[0],u[1]],[0,d[1],u[2]],[0,0,d[2]]];
     const S=L=>L.slice().sort((x,y)=>x-y).map(sg).join(', '), right=S(d), wrong=uniq(right,[S(u),S(A.map(r=>r[0]+r[1]+r[2])),S([d[0]*d[1]*d[2],d[0]+d[1]+d[2],0]),S(d.map(x=>-x))],3); if(wrong.length<3) continue;
-    return {index:'q:27f.stairstretch['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27f.stretchTest+27k.stairDet',DASH], lines:[[BK_G(A),'a staircase A']], ask:'What are the stretches of A?', right, opts:shuffle([right,...wrong]), lead:'',
+    return {index:'q:27f.stairstretch['+A.flat().join(',')+']', a3:['27d.grids['+BK_G(A)+']','27f.stretchTest+27m.stairDet',DASH], lines:[[BK_G(A),'a staircase A']], ask:'What are the stretches of A?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'A − λI is a staircase too, so its determinant is the product down its middle, ('+sg(d[0])+' − λ)('+sg(d[1])+' − λ)('+sg(d[2])+' − λ). That is 0 exactly at the middle entries. The entries above the middle change the stretched vectors, not the stretches.'}; }
   return null; }},
   {id:'27f.polystretch',step:'27f',mode:'work',label:'the stretches of a polynomial of a grid',open:()=>measured('27g'),make(){
@@ -9259,7 +9312,7 @@ QP.push(
     return {index:'q:31e.signs['+a+','+p+','+c+']', a3:['31e.forms['+F+']','31e.signCount',DASH], lines:[['q(x, y) = '+F,'a form on pairs']], ask:'Written as a mix of squares, what does q have?', right:opts[k], opts, lead:'',
       why:'Complete the square: q = '+(Math.abs(a)===1?(a<0?'−':''):sg(a))+(p?'(x '+(p*a<0?'− ':'+ ')+PF(fr(Math.abs(p),Math.abs(a)))+'y)² ':'x² ')+(rest.p<0?'− ':'+ ')+PF(fr(Math.abs(rest.p),rest.q))+'y². The coefficients are '+sg(a)+' and '+fshow(rest)+'. By the sign-count technique the numbers of coefficients above 0, below 0 and equal to 0 are the same however the squares are found.'}; }
   return null; }});
-/* --- sequences and sums (22a to 22h, 23c), distances and sets of points (34a, 34d, 35h), jumps and even continuity (11e, 15f), square roots of turning numbers (25d): numbers dealt afresh; each wrong option is a wrong move --- */
+/* --- sequences and sums (22a to 22h, 23c), distances and sets of points (34a, 34d, 35i), jumps and even continuity (11e, 15f), square roots of turning numbers (25d): numbers dealt afresh; each wrong option is a wrong move --- */
 const BP_F=(p,q)=>fshow(fr(p,q)), BP_YN=['yes','no'];
 QP.push(
   
@@ -9281,7 +9334,7 @@ QP.push(
     return {index:'q:25d.roots['+u+','+v+']', a3:['25a.numbers['+BO_c(u,v)+']','25d.root',DASH], lines:[[BO_c(u,v),'a turning number w']], ask:'Which two numbers square to w?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'('+BO_c(a,b)+')² = '+(a*a)+' − '+(b*b)+' + 2('+a+')('+sg(b)+')i = '+BO_c(u,v)+', and the opposite squares to the same. The size of w is '+(a*a+b*b)+', and a root has size √'+(a*a+b*b)+': a root halves the angle and takes the root of the size. Every number but 0 has exactly two.'}; }
   return null; }});
-/* --- slopes and limits (13m, 14i, 17e, 23b), totals (15c, 16e, 18i, 31g), lists of functions (23d, 23e, 30d), several variables (28d, 28e, 28i, 28m) and forms (29·cb28): numbers dealt afresh; each wrong option is a wrong move --- */
+/* --- slopes and limits (13m, 14i, 17e, 23b), totals (15c, 16e, 18i, 31g), lists of functions (23d, 23e, 30d), several variables (28d, 28e, 28k, 28o) and forms (29·cb28): numbers dealt afresh; each wrong option is a wrong move --- */
 const BQ_pi=(p,q)=>{ const f=fr(p,q); return f.p===0?'0':(Math.abs(f.p)===1?(f.p<0?'−':''):fshow(fint(f.p)))+'π'+(f.q===1?'':'/'+f.q); }, BQ_e=f=>f.p===0?'1':f.q===1&&f.p===1?'e':f.q===1&&f.p>1&&f.p<8?'e'+BM_SUP[f.p]:'e^('+fshow(f)+')';
 QP.push({id:'14i.bothzero',step:'14i',mode:'work',label:'a ratio whose top and bottom both vanish',open:()=>measured('14i'),make(){
   for(let t=0;t<40;t++){ const [r,s,u]=shuffle([-3,-2,-1,1,2,3,4]).slice(0,3), f=BM_mul([-r,1],[-s,1]), g=BM_mul([-r,1],[-u,1]), L=fr(r-s,r-u);
@@ -9320,10 +9373,10 @@ QP.push({id:'14i.bothzero',step:'14i',mode:'work',label:'a ratio whose top and b
       why:'First by x: f_x = '+(a*m)+'x'+BM_SUP[m-1]+'y'+BM_SUP[n]+' '+(b<0?'− ':'+ ')+(Math.abs(b)===1?'':Math.abs(b))+'y. Then by y: f_xy = '+(a*m*n)+'x'+BM_SUP[m-1]+'y'+BM_SUP[n-1]+' '+(b<0?'− ':'+ ')+Math.abs(b)+', which is '+sg(v)+' at the point. Taking y first and then x gives the same, by the swap-knobs technique: both mixed slopes are continuous.'}; }
   return null; }},
   
-  {id:'28i.parallelogram',step:'28i',mode:'work',label:'the area scale of a straight map',open:()=>measured('28i'),make(){
+  {id:'28k.parallelogram',step:'28k',mode:'work',label:'the area scale of a straight map',open:()=>measured('28k'),make(){
   for(let t=0;t<40;t++){ const u=BL_nz(2), v=BL_nz(2), d=u[0]*v[1]-u[1]*v[0]; if(d===0||Math.abs(d)===1) continue; const R=1+rnd(3), right=''+Math.abs(d)*R;
     const wrong=uniq(right,[''+Math.abs(u[0]*v[1]+u[1]*v[0])*R,''+Math.abs(u[0]*v[0]+u[1]*v[1])*R,''+R,''+(Math.abs(d)+R),''+Math.abs(u[0]*v[1])*R,''+Math.abs(d)].filter(x=>x!=='0'),3); if(wrong.length<3) continue;
-    return {index:'q:28i.parallelogram['+u.join(',')+';'+v.join(',')+';'+R+']', a3:['27d.grids[columns '+BK_L(u)+', '+BK_L(v)+']','28i.areaScale',DASH], lines:[['T(s, t) = s'+BK_L(u)+' + t'+BK_L(v),'a straight map of the plane'],['a region of area '+R,'what T is fed']], ask:'What is the area of the image of the region?', right, opts:shuffle([right,...wrong]), lead:'',
+    return {index:'q:28k.parallelogram['+u.join(',')+';'+v.join(',')+';'+R+']', a3:['27d.grids[columns '+BK_L(u)+', '+BK_L(v)+']','28k.areaScale',DASH], lines:[['T(s, t) = s'+BK_L(u)+' + t'+BK_L(v),'a straight map of the plane'],['a region of area '+R,'what T is fed']], ask:'What is the area of the image of the region?', right, opts:shuffle([right,...wrong]), lead:'',
       why:'The grid of T has columns '+BK_L(u)+' and '+BK_L(v)+', with determinant '+sg(d)+'. By the area-scale technique every area is multiplied by |det| = '+Math.abs(d)+', so the image has area '+right+'. '+(d<0?'The sign says T turns the plane over; areas do not carry it.':'A total over the image is the total over the region of f(T(s, t)) times '+Math.abs(d)+'.')}; }
   return null; }},
   
@@ -9494,8 +9547,8 @@ const WL32=[
   ['Which sign has the turn e^(±iπ/4) at a level point x₀?','+ when φ″(x₀) > 0',['+ always','− when φ″(x₀) > 0','+ when φ(x₀) > 0'],'Level-point technique.']];
 QP.push({id:'32l.level',step:'32l',label:'where oscillating totals live',open:()=>measured('32l'),make(){ return writtenQ('32l.level',WL32); }},
   );
-/* ----- rung 33: heat, waves and still states, 33a to 33j ----- */
-Object.assign(STEPS,{'33a':['r33a','The Heat Equation'],'33b':['r33b','Heat Smooths and Forgets'],'33c':['r33c','The Wave Equation'],'33d':['r33d','When Every Point Is the Average of Its Neighbours'],'33e':['r33e','Characteristics and Shocks'],'33f':['r33f','Boundary Value Problems'],'33g':['r33g','Round Drums'],'33h':['r33h','Separation of Variables by Hand'],'33i':['r33i','Solving on a Grid by Hand'],'33j':['r33j','Potentials by Hand']});
+/* ----- rung 33: heat, waves and still states, 33a to 33l ----- */
+Object.assign(STEPS,{'33a':['r33a','The Heat Equation'],'33b':['r33b','Heat Smooths and Forgets'],'33e':['r33e','The Wave Equation'],'33f':['r33f','When Every Point Is the Average of Its Neighbours'],'33g':['r33g','Characteristics and Shocks'],'33h':['r33h','Boundary Value Problems'],'33i':['r33i','Round Drums'],'33j':['r33j','Separation of Variables by Hand'],'33k':['r33k','Solving on a Grid by Hand'],'33l':['r33l','Potentials by Hand']});
 
 /* 33a The Heat Equation */
 const WA33=[
@@ -9519,87 +9572,87 @@ const WB33=[
 QP.push({id:'33b.smooths',step:'33b',label:'heat smooths and forgets',open:()=>measured('33b'),make(){ return writtenQ('33b.smooths',WB33); }},
   );
 
-/* 33c The Wave Equation */
+/* 33e The Wave Equation */
 const WC33=[
   ['Is the string’s statement y_t = c² y_xx?','no: the pull changes the acceleration, so it is y_tt = c² y_xx',['yes','no: it is y_t = c y_x','no: it is y_tt = c² y_x'],'String-statement technique.'],
   ['A long string is plucked at one end. Is the pluck felt at once at the other, a little?','no: the height at x uses the start only within ct of x',['yes, a little','yes, in full','no: it is never felt there'],'Two-waves technique.'],
-  ['Are a drum’s tones, like a string’s, whole multiples of the lowest?','no: that is for a string tied at two points; a drum is another shape',['yes','yes, for a round drum','no: a drum has one tone'],'String-tones technique is about the string (33g for drums).'],
+  ['Are a drum’s tones, like a string’s, whole multiples of the lowest?','no: that is for a string tied at two points; a drum is another shape',['yes','yes, for a round drum','no: a drum has one tone'],'String-tones technique is about the string (33i for drums).'],
   ['Is the energy of motion alone, ½∫ρ y_t², kept?','no: only the total with the stretch is kept; the two trade back and forth',['yes','no: the stretch alone is kept','no: neither is kept, nor their total'],'Kept-energy technique.'],
   ['What is every answer of the string’s statement on the whole line?','a shape running right plus a shape running left, at speed c',['one shape running right','a shape that fades in place','a sum of bells'],'Two-waves technique.']];
-QP.push({id:'33c.wave',step:'33c',label:'the string’s statement',open:()=>measured('33c'),make(){ return writtenQ('33c.wave',WC33); }},
+QP.push({id:'33e.wave',step:'33e',label:'the string’s statement',open:()=>measured('33e'),make(){ return writtenQ('33e.wave',WC33); }},
   );
 
-/* 33d When Every Point Is the Average of Its Neighbours */
+/* 33f When Every Point Is the Average of Its Neighbours */
 const WD33=[
   ['ln √(x² + y²) is balanced away from 0. Is its value at 0 the average round the unit circle?','no: it is not balanced at 0, so that disc is not inside where it is balanced',['yes: the average is 0','yes, by the circle-average technique','no: the average is 1'],'Circle-average technique needs the circle and its inside.'],
   ['x² + y² has u_xx = u_yy. Is it balanced?','no: balanced asks for the sum to be 0, and here it is 4',['yes','yes, on the unit disc','no: the sum is 2'],'Balanced means u_xx + u_yy = 0.'],
   ['Can a still plate’s hottest point be in the middle, if the middle was heated first?','no: a still plate keeps no memory of what was heated first; the hottest is on the edge',['yes','yes, for a round plate','no: it has no hottest point'],'Edge-decides-inside technique.'],
   ['The real part of z̄ = x − iy is x, which is balanced. Has z̄ a complex slope?','no: the technique runs one way; z̄ has no complex slope',['yes','yes, away from 0','no: and x is not balanced either'],'Real-part technique (26d).'],
   ['Two balanced functions on D agree on the edge. What follows inside?','they are equal throughout D',['they differ by a constant','they agree at the centre only','nothing'],'One-still-state technique.']];
-QP.push({id:'33d.balanced',step:'33d',label:'balanced functions',open:()=>measured('33d'),make(){ return writtenQ('33d.balanced',WD33); }},
+QP.push({id:'33f.balanced',step:'33f',label:'balanced functions',open:()=>measured('33f'),make(){ return writtenQ('33f.balanced',WD33); }},
   );
 
-/* 33e Characteristics and Shocks */
+/* 33g Characteristics and Shocks */
 const WE33=[
   ['Does u_t + u u_x = 0 carry every start unchanged, as u_t + c u_x = 0 does?','no: the speed is u itself; high parts ride faster and the shape changes',['yes','yes, until t = 1','no: it fades the start away'],'Riding-path technique: the riding speed depends on the answer.'],
   ['After the breaking time, does the answer take both values where paths cross?','no: a function has one value at each point; the books choose a jump instead',['yes','yes, for a short while','no: it takes their average'],'Breaking-time technique, then the jump-speed technique.'],
   ['Does a shock move at the speed of the cars in it?','no: its speed is the change of flow over the change of u, which can be negative while every car goes forward',['yes','yes, at the faster cars’ speed','no: a shock never moves'],'Jump-speed technique.'],
   ['Do jumps in u_t + (u²/2)_x = 0 and in (u²)_t + (⅔u³)_x = 0 move at one speed?','no: the statements agree where u has a slope, but they keep different books',['yes','yes, for small jumps','no: the second has no jumps'],'Jump-speed technique: the speed comes from the books.'],
   ['What are the answers of u_t + c u_x = 0 with a continuous slope?','exactly u = f(x − ct), the start carried at the speed c',['u = f(x + ct)','u = f(x) e^(−ct)','u = f(x) − ct'],'Carried-along technique.']];
-QP.push({id:'33e.riding',step:'33e',label:'riding paths and shocks',open:()=>measured('33e'),make(){ return writtenQ('33e.riding',WE33); }},
+QP.push({id:'33g.riding',step:'33g',label:'riding paths and shocks',open:()=>measured('33g'),make(){ return writtenQ('33g.riding',WE33); }},
   );
 
-/* 33f Boundary Value Problems */
+/* 33h Boundary Value Problems */
 const WF33=[
   ['Is ⟨Ly, z⟩ = ⟨y, Lz⟩ for every y and z, whatever their ends?','no: the end terms must vanish; with y = x², z = 1 and Ly = −y″ on [0, 1] the two sides are −2 and 0',['yes','yes, for polynomials','no: it holds for no y and z'],'Swap-by-parts technique asks y and z to be 0 at both ends.'],
   ['Are two shapes with the same number perpendicular, by the technique?','the technique says nothing: its proof divides by the difference of the numbers',['yes','no: they are the same shape','yes, when q ≥ 0'],'Perpendicular-shapes technique is about different numbers.'],
   ['Has the single-kick answer G(x, s) a second slope at x = s?','no: the tent has a corner there; its slope drops by 1, which is the kick',['yes','yes, and it is 0','no: G has a gap there'],'Single-kick technique.'],
   ['With q ≥ 0, can a shape’s number be negative, so that some cooling shapes grow?','no: with q ≥ 0 every number is positive',['yes','yes, for the first shape','no: every number is 0'],'Perpendicular-shapes technique.'],
   ['How is the single-kick answer written in shapes?','each shape, times its value at the kick, divided by its number',['each shape times its number','the sum of the shapes','each shape divided by its value at the kick'],'Kick-in-shapes technique.']];
-QP.push({id:'33f.ends',step:'33f',label:'statements with their ends',open:()=>measured('33f'),make(){ return writtenQ('33f.ends',WF33); }},
+QP.push({id:'33h.ends',step:'33h',label:'statements with their ends',open:()=>measured('33h'),make(){ return writtenQ('33h.ends',WF33); }},
   );
 
-/* 33g Round Drums */
+/* 33i Round Drums */
 const WG33=[
   ['In reach and turn, is Δu = u_rr + u_θθ?','no: the turn is an angle, so it needs 1/r², and the reach leaves the term u_r/r',['yes','no: it is u_rr + u_θθ/r','no: it is u_rr/r + u_θθ'],'Round-rate technique.'],
   ['Can a drum shape have m = ½, winding half a time?','no: it would not come back to itself after one turn, so the drum would tear along a line',['yes','yes, for small drums','no: m must be even'],'Drum-shape technique asks for a whole m.'],
   ['A printed 5.520/2.405 = 2.295 is not a whole number. Is the ratio then proved not whole?','no: a printed number is a rounding; bounds on both sides make it a proof',['yes','yes, to three places','no: the ratio is whole'],'Unharmonic-drum technique: between 2.28 and 2.31.'],
   ['Does a ball that depends only on distance cool like a rod of length R?','rU does, and only with rU = 0 at the centre as well as at the skin',['yes, u does','no: nothing about it is like a rod','yes, with the centre sealed'],'Round-ball technique.'],
   ['Is the second round tone of a drum a whole multiple of the first?','no: their ratio lies between 2.28 and 2.31',['yes: twice','yes: three times','no: the ratio is exactly 2.5'],'Unharmonic-drum technique.']];
-QP.push({id:'33g.drums',step:'33g',label:'round drums',open:()=>measured('33g'),make(){ return writtenQ('33g.drums',WG33); }},
+QP.push({id:'33i.drums',step:'33i',label:'round drums',open:()=>measured('33i'),make(){ return writtenQ('33i.drums',WG33); }},
   );
 
-/* 33h Separation of Variables by Hand */
+/* 33j Separation of Variables by Hand */
 const WH33=[
   ['A rod has its ends held at 100 and 0. Can u be separated directly into sines?','no: sines are 0 at the ends; take away the straight line between the ends first',['yes','yes, with cosines added','no: no series works'],'Shift-to-the-line technique.'],
   ['Does a rod with both ends sealed cool to 0?','no: no heat leaves; it settles at its average',['yes','no: it keeps its start for ever','no: it warms without bound'],'Sealed-rod technique: a₀/2 never changes.'],
   ['For the plate warm on one edge, is Y = sin(nπy/W)?','no: Y″ = +(nπ/W)²Y; the still state grows toward the warm edge, it does not swing',['yes','yes, for even n','no: Y is a constant'],'Warm-edge technique: sinh, not sin.'],
   ['A square plate has one edge at 100 and three at 0. Is its centre at 50?','no: three edges are cold and one warm; the quarter turns give 25',['yes','no: it is at 33⅓','no: it is at 0'],'Four such plates, each turned a quarter, add to a plate at 100 all round.'],
   ['Which shapes fit a rod with both ends sealed?','cosines',['sines','both, mixed','straight lines'],'Sealed-rod technique.']];
-QP.push({id:'33h.separate',step:'33h',label:'separating by hand',open:()=>measured('33h'),make(){ return writtenQ('33h.separate',WH33); }},
+QP.push({id:'33j.separate',step:'33j',label:'separating by hand',open:()=>measured('33j'),make(){ return writtenQ('33j.separate',WH33); }},
   );
 
-/* 33i Solving on a Grid by Hand */
+/* 33k Solving on a Grid by Hand */
 const WI33=[
   ['Halve the gap and keep the tick. Does the heat grid get better?','no: r = κk/h² quadruples, and past ½ the zigzag grows',['yes','yes, twice as good','no: r halves and the grid stalls'],'Grid-average technique needs r ≤ ½.'],
   ['The zigzag starts at 10⁻¹². Can it be ignored?','no: it grows by a factor each tick and passes any size in a few dozen ticks',['yes','yes, on a fine grid','no: but only after a million ticks'],'Rounding alone starts it.'],
   ['Is a finer grid for the string always safer?','only if the tick shrinks with it: σ = ck/h must stay at most 1',['yes','no: a finer grid is never safer','yes, when c < 1'],'Grid-reach technique.'],
   ['The grid prints 37.5000. Is the plate at 37.5000?','no: the grid’s own width is far coarser than the printed figures',['yes','yes, to four places','no: the grid is always exact to two places'],'The second-quotient technique bounds the error by the gap squared.'],
   ['How does the error of the second quotient shrink with the gap h?','like h²',['like h','like h⁴','it does not shrink'],'Second-quotient technique: at most Mh²/12.']];
-QP.push({id:'33i.grid',step:'33i',label:'solving on a grid',open:()=>measured('33i'),make(){ return writtenQ('33i.grid',WI33); }},
+QP.push({id:'33k.grid',step:'33k',label:'solving on a grid',open:()=>measured('33k'),make(){ return writtenQ('33k.grid',WI33); }},
   );
 
-/* 33j Potentials by Hand */
+/* 33l Potentials by Hand */
 const WJ33=[
   ['Does a cube pull outside as if its mass were at its centre?','no: the technique needs the pull to look the same after every turn, and a cube does not',['yes','yes, far away exactly','no: a cube does not pull'],'Shell-flux technique is for a density that depends only on distance.'],
   ['Inside an even ball, is the pull GM/r², stronger nearer the centre?','no: only the mass within r pulls; the pull falls to 0 at the centre',['yes','no: it is the same throughout','no: it is greatest at the centre and 0 at the skin'],'Inside-pull technique.'],
   ['−1/(4πr) is balanced away from 0. Has it then no source?','no: at 0 it passes every bound, and its flux out of every sphere about 0 is 1',['yes','yes, in space','no: its flux out of every sphere is 0'],'Point-source technique.'],
   ['A pipe’s radius is halved. Is the flow halved?','no: the flow goes as the fourth power of the radius: a sixteenth',['yes','no: a quarter','no: an eighth'],'Pipe-flow technique.'],
   ['What shape has the speed across a pipe?','a parabola, greatest at the middle and 0 at the wall',['flat across','a straight line from wall to wall','a bell'],'Pipe-flow technique.']];
-QP.push({id:'33j.potentials',step:'33j',label:'potentials',open:()=>measured('33j'),make(){ return writtenQ('33j.potentials',WJ33); }},
+QP.push({id:'33l.potentials',step:'33l',label:'potentials',open:()=>measured('33l'),make(){ return writtenQ('33l.potentials',WJ33); }},
   );
-/* ----- rung 34: shape and space, 34a to 34m ----- */
-Object.assign(STEPS,{'34a':['r34a','Spaces With a Distance'],'34b':['r34b','Open Sets Alone'],'34c':['r34c','In One Piece'],'34d':['r34d','Finitely Many Suffice'],'34e':['r34e','The Same Shape'],'34f':['r34f','Surfaces Classified'],'34g':['r34g','Loops Count Holes'],'34h':['r34h','Something Stays Put'],'34i':['r34i','Gluing Loops'],'34j':['r34j','Open Sets and Continuity by Hand'],'34k':['r34k','Surfaces From a Square'],'34l':['r34l','Winding Numbers by Hand'],'34m':['r34m','Knots by Hand']});
+/* ----- rung 34: shape and space, 34a to 34p ----- */
+Object.assign(STEPS,{'34a':['r34a','Spaces With a Distance'],'34b':['r34b','Open Sets Alone'],'34c':['r34c','In One Piece'],'34d':['r34d','Finitely Many Suffice'],'34e':['r34e','The Same Shape'],'34f':['r34f','Surfaces Classified'],'34g':['r34g','Loops Count Holes'],'34h':['r34h','Something Stays Put'],'34i':['r34i','Gluing Loops'],'34m':['r34m','Open Sets and Continuity by Hand'],'34n':['r34n','Surfaces From a Square'],'34o':['r34o','Winding Numbers by Hand'],'34p':['r34p','Knots by Hand']});
 const TM34=n=>N34(n)+(Math.abs(n)===1?' time':' times'), N34=n=>(n<0?'−':'')+Math.abs(n), SUP34=n=>N34(n).replace(/\d/g,d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).replace('−','⁻');
 
 /* 34a Spaces With a Distance */
@@ -9705,7 +9758,7 @@ const RD34=w=>{ const o=[]; for(const c of w){ if(o.length&&o[o.length-1]===(c==
 QP.push({id:'34i.words',step:'34i',label:'gluing loops',open:()=>measured('34i'),make(){ return writtenQ('34i.words',WI34); }},
   );
 
-/* 34j Open Sets and Continuity by Hand */
+/* 34m Open Sets and Continuity by Hand */
 const WJ34=[
   ['g is continuous to the line. Is {g ≤ c} open?','no: it is closed; {x² ≤ 1} = [−1, 1] is not open',['yes','yes, when c > 0','no: it is neither'],'Strict-test technique.'],
   ['Does the edge of A lie in A?','not always: the edge of (0, 1) is {0, 1}, outside it',['yes','yes, when A is open','no: never'],'Edge technique.'],
@@ -9713,10 +9766,10 @@ const WJ34=[
   ['What is the inside of the fractions, on the line?','∅: no open stretch lies in the fractions',['the fractions','the line','the whole numbers'],'Edge technique: every open stretch meets the fractions and their leftover.'],
   ['g is continuous to the line. What kind of set is {g > c}?','open',['closed','neither','both, always'],'Strict-test technique.'],
   ['When is p on the edge of A?','when every open set about p meets both A and the leftover of A',['when p is in A','when some open set about p meets A','when p is not in A'],'Edge technique.']];
-QP.push({id:'34j.opens',step:'34j',label:'open sets by hand',open:()=>measured('34j'),make(){ return writtenQ('34j.opens',WJ34); }},
+QP.push({id:'34m.opens',step:'34m',label:'open sets by hand',open:()=>measured('34m'),make(){ return writtenQ('34m.opens',WJ34); }},
   );
 
-/* 34k Surfaces From a Square */
+/* 34n Surfaces From a Square */
 const WK34=[
   ['The square is sewn by x y x y. Is it the torus, since every pair is sewn?','no: the pairs are twisted; it is the cross-cap, one side, count 1',['yes','yes, with one side','no: it is the sphere'],'Square-cap technique.'],
   ['The bottle has count 0. Is it the torus?','no: the bottle has one side; the count and the sides together pick the surface',['yes','yes, since both come from a square','no: the bottle has count 2'],'Surface-list technique.'],
@@ -9724,10 +9777,10 @@ const WK34=[
   ['What is the bottle sewn from a square?','two cross-caps summed',['the torus','one cross-cap','the sphere'],'Bottle-sum technique.'],
   ['What is a torus summed with a cross-cap?','three cross-caps summed',['two tori summed','a torus','two cross-caps summed'],'Handle-cap technique.'],
   ['What is the square sewn by x y x y?','the cross-cap, one side, count 1',['the torus','the bottle','the sphere'],'Square-cap technique.']];
-QP.push({id:'34k.square',step:'34k',label:'surfaces from a square',open:()=>measured('34k'),make(){ return writtenQ('34k.square',WK34); }},
+QP.push({id:'34n.square',step:'34n',label:'surfaces from a square',open:()=>measured('34n'),make(){ return writtenQ('34n.square',WK34); }},
   );
 
-/* 34l Winding Numbers by Hand */
+/* 34o Winding Numbers by Hand */
 const WL34=[
   ['Is every crossing of the ray counted +1?','no: a clockwise crossing counts −1; a loop out and back crosses twice and winds 0',['yes','yes, if the crossings are clean','no: every crossing counts 0'],'Ray-count technique.'],
   ['Does the ray-count work when the loop only touches the ray?','no: a touch is not a crossing; turn the ray a little so that every meeting is clean',['yes','yes, a touch counts ½','yes, a touch counts +1'],'Ray-count technique asks for clean crossings.'],
@@ -9735,10 +9788,10 @@ const WL34=[
   ['Has a loop through w a winding number round w?','no: the direction from w is not defined where the loop meets w',['yes, 0','yes, 1','yes, ½'],'Winding numbers are for loops that miss w.'],
   ['p has no root on the circle C. What counts its roots inside C?','the winding number of p(C) round 0',['the degree of p','the number of crossings of C','the size of p on C'],'Image-winding technique.'],
   ['What is the winding number of γ round w, by a total?','(1/2πi) ∮ dz/(z − w) round γ',['∮ dz/(z − w) round γ','(1/2π) ∮ dz round γ','(1/2πi) ∮ (z − w) dz round γ'],'Winding-total technique.']];
-QP.push({id:'34l.winding',step:'34l',label:'winding numbers by hand',open:()=>measured('34l'),make(){ return writtenQ('34l.winding',WL34); }},
+QP.push({id:'34o.winding',step:'34o',label:'winding numbers by hand',open:()=>measured('34o'),make(){ return writtenQ('34o.winding',WL34); }},
   );
 
-/* 34m Knots by Hand */
+/* 34p Knots by Hand */
 const WM34=[
   ['A drawing has 3 three-colourings. Is its knot the plain ring?','not always: the figure-eight knot has 3 and is knotted; the count can only tell knots apart',['yes','yes, if it has few crossings','no: the plain ring has 9'],'Three-colour technique.'],
   ['Is the bracket ⟨D⟩ alone a number of the knot?','no: a twist multiplies it by −s^(±3); only X, corrected by the signed crossings, is unchanged',['yes','yes, up to its sign','no: neither ⟨D⟩ nor X is'],'Mirror-count technique.'],
@@ -9746,10 +9799,10 @@ const WM34=[
   ['Does switching one crossing never change the knot?','no: switch one crossing of the overhand knot and it falls open into the ring',['yes','yes, if the drawing has three crossings','no: it always changes it'],'A switch is not one of the three moves.'],
   ['How many three-colourings has the overhand knot?','9',['3','6','27'],'Three-colour technique.'],
   ['Which changes of a drawing never change the knot?','the twist, the poke and the slide',['switching a crossing','cutting a strand','any change that keeps the crossing count'],'Three-colour technique.']];
-QP.push({id:'34m.knots',step:'34m',label:'knots by hand',open:()=>measured('34m'),make(){ return writtenQ('34m.knots',WM34); }},
+QP.push({id:'34p.knots',step:'34p',label:'knots by hand',open:()=>measured('34p'),make(){ return writtenQ('34p.knots',WM34); }},
   );
-/* ----- rung 35: sizes of the endless, 35a to 35i ----- */
-Object.assign(STEPS,{'35a':['r35a','Countable'],'35b':['r35b','The Line Cannot Be Listed'],'35c':['r35c','More Parts Than Members'],'35d':['r35d','Two One-Way Matchings Make a Matching'],'35e':['r35e','Arithmetic of Sizes'],'35f':['r35f','Is There a Size in Between?'],'35g':['r35g','Countable or Not, by Hand'],'35h':['r35h','Dust With No Length, and Dimensions Between Whole Numbers'],'35i':['r35i','A Line Onto a Square']});
+/* ----- rung 35: sizes of the endless, 35a to 35j ----- */
+Object.assign(STEPS,{'35a':['r35a','Countable'],'35b':['r35b','The Line Cannot Be Listed'],'35c':['r35c','More Parts Than Members'],'35d':['r35d','Two One-Way Matchings Make a Matching'],'35e':['r35e','Arithmetic of Sizes'],'35f':['r35f','Is There a Size in Between?'],'35h':['r35h','Countable or Not, by Hand'],'35i':['r35i','Dust With No Length, and Dimensions Between Whole Numbers'],'35j':['r35j','A Line Onto a Square']});
 const PL35=(m,n)=>(m+n)*(m+n+1)/2+n, ST35=a=>a.length?'{'+a.join(', ')+'}':'∅', U35=n=>String(n).replace(/\d/g,d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]);
 
 /* 35a Countable */
@@ -9819,7 +9872,7 @@ const WF35=[
 QP.push({id:'35f.between',step:'35f',label:'a size in between',open:()=>measured('35f'),make(){ return writtenQ('35f.between',WF35); }},
   );
 
-/* 35g Countable or Not, by Hand */
+/* 35h Countable or Not, by Hand */
 const WG35=[
   ['For the reals in [0, 1), may the height be the first digit?','no: each height then holds endlessly many reals; a height must leave finitely many',['yes','yes, with ten heights','no: a height must be a fraction'],'Height-listing technique.'],
   ['Must a copy of the bits reach every member of A?','no: it must be one-to-one, not onto',['yes','yes, or A could be larger','no: it need reach none'],'Copy-of-the-bits technique.'],
@@ -9828,10 +9881,10 @@ const WG35=[
   ['What must a height leave at each height?','finitely many members',['one member','no members','countably many members'],'Height-listing technique.'],
   ['A goes one-to-one into ℝ, and 2^ℕ goes one-to-one into A. What size has A?','the size of the line',['ℵ₀','ℵ₁','not decided'],'Line-sized-by-hand technique.']];
 
-QP.push({id:'35g.byhand',step:'35g',label:'countable or not',open:()=>measured('35g'),make(){ return writtenQ('35g.byhand',WG35); }},
+QP.push({id:'35h.byhand',step:'35h',label:'countable or not',open:()=>measured('35h'),make(){ return writtenQ('35h.byhand',WG35); }},
   );
 
-/* 35h Dust With No Length, and Dimensions Between Whole Numbers */
+/* 35i Dust With No Length, and Dimensions Between Whole Numbers */
 const WH35=[
   ['The dust has length 0. Is it countable?','no: countable gives length 0, but length 0 does not give countable; the dust has the size of the line',['yes','yes, since it holds no interval','no: it has length 1'],'Dust technique.'],
   ['Are only the ends of the pieces left in the dust?','no: the ends are countable and the dust is not; 1/4 is no end',['yes','yes, with 0 and 1','no: nothing is left'],'Dust technique.'],
@@ -9840,10 +9893,10 @@ const WH35=[
   ['A set is N copies of itself, each scaled by 1/s. What is its dimension?','log N / log s',['log s / log N','N / s','N · s'],'Scaled-copies technique.'],
   ['What length and size has the dust?','length 0 and the size of the line',['length 0 and size ℵ₀','length 1 and the size of the line','length ⅓ and size ℵ₀'],'Dust technique.']];
 const DIM35=[[2,3],[4,3],[8,3],[3,2],[5,3],[2,4],[3,4],[5,4],[6,4],[7,3],[3,5],[9,4]];
-QP.push({id:'35h.dust',step:'35h',label:'dust and dimension',open:()=>measured('35h'),make(){ return writtenQ('35h.dust',WH35); }},
+QP.push({id:'35i.dust',step:'35i',label:'dust and dimension',open:()=>measured('35i'),make(){ return writtenQ('35i.dust',WH35); }},
   );
 
-/* 35i A Line Onto a Square */
+/* 35j A Line Onto a Square */
 const WI35=[
   ['A path through the centres of the 4ⁿ squares is about 2ⁿ long. Has H a length?','no: those lengths pass every bound, so H has no length',['yes','yes, the limit of 2ⁿ','yes, 2√5'],'Half-power technique bounds H only by a square root.'],
   ['Is there a continuous matching of [0, 1] with the square?','no: every continuous map onto the square sends two inputs to one point',['yes, the filling curve H','yes, the matching of digits','yes, once H is made one-to-one'],'Filling-twice technique.'],
@@ -9851,7 +9904,7 @@ const WI35=[
   ['Can a continuous map raise dimension?','yes: H raises it from 1 to 2',['no','no: only a matching can','only to a dimension below 2'],'Square-filling technique.'],
   ['What does the half-power technique bound?','|H(s) − H(t)| by 2√5 · |s − t|^(1/2)',['|H(s) − H(t)| by 2√5 · |s − t|','the length of H','|s − t| by |H(s) − H(t)|'],'Half-power technique.'],
   ['|F(s) − F(t)| ≤ C|s − t|^α with α > 1/2. Can F fill the square?','no',['yes','yes, if C is large','only if α < 1'],'Fill-rate technique.']];
-QP.push({id:'35i.filling',step:'35i',label:'a line onto a square',open:()=>measured('35i'),make(){ return writtenQ('35i.filling',WI35); }},
+QP.push({id:'35j.filling',step:'35j',label:'a line onto a square',open:()=>measured('35j'),make(){ return writtenQ('35j.filling',WI35); }},
   );
 /* ----- rung 36: colour, 36a to 36j ----- */
 Object.assign(STEPS,{'36a':['r36a','The Shape of a Spectrum'],'36b':['r36b','The Band, and the Window in It'],'36c':['r36c','The Purple That Is Not in the Band'],'36d':['r36d','The Circle of Hue'],'36e':['r36e','The Cylinder'],'36f':['r36f','Colour Spaces Compared'],'36g':['r36g','A Colour Can Be a Name'],'36h':['r36h','Functions of Colour’s Own'],'36i':['r36i','Side by Side Is Not Mixed'],'36j':['r36j','Where It Keys In']});
@@ -10075,8 +10128,8 @@ const WJ37=[
   ['Part of a signal is lost. Can the whole always be got back?','no: only part can be told',['yes','yes, by filtering','yes, by a canceller'],'Partly-told technique: partial, not whole.'],
   ['What does the partly-told technique license from a signal partly lost?','a partial induction of what was first sent',['the whole of what was sent','nothing','the lost part exactly'],'Partly-told technique.']];
 QP.push({id:'37j.keys',step:'37j',label:'where sound keys in',open:()=>measured('37j'),make(){ return writtenQ('37j.keys',WJ37); }});
-/* ----- rung 38: logic about logic, 38a to 38n ----- */
-Object.assign(STEPS,{'38a':['r38a','A Language for Mathematics'],'38b':['r38b','Proofs as Objects'],'38c':['r38c','What Is Provable Is True'],'38d':['r38d','What Is True Everywhere Is Provable'],'38e':['r38e','A Countable Line'],'38f':['r38f','Numbers Past Every Numeral'],'38g':['r38g','Formulas as Numbers'],'38h':['r38h','A Sentence About Itself'],'38i':['r38i','True and Unprovable'],'38j':['r38j','Consistency From Within'],'38k':['r38k','Truth Cannot Be Defined Inside'],'38l':['r38l','Quantifying Over Sets'],'38m':['r38m','Numbering Formulas by Hand'],'38n':['r38n','Natural Deduction by Hand']});
+/* ----- rung 38: logic about logic, 38a to 38p ----- */
+Object.assign(STEPS,{'38a':['r38a','A Language for Mathematics'],'38b':['r38b','Proofs as Objects'],'38c':['r38c','What Is Provable Is True'],'38d':['r38d','What Is True Everywhere Is Provable'],'38e':['r38e','A Countable Line'],'38h':['r38h','Numbers Past Every Numeral'],'38i':['r38i','Formulas as Numbers'],'38j':['r38j','A Sentence About Itself'],'38k':['r38k','True and Unprovable'],'38l':['r38l','Consistency From Within'],'38m':['r38m','Truth Cannot Be Defined Inside'],'38n':['r38n','Quantifying Over Sets'],'38o':['r38o','Numbering Formulas by Hand'],'38p':['r38p','Natural Deduction by Hand']});
 /* small worlds: members 1..n with one relation R */
 const REL38={'<':(x,y)=>x<y,'≤':(x,y)=>x<=y,'divides':(x,y)=>y%x===0,'=':(x,y)=>x===y,'≠':(x,y)=>x!==y};
 const ST38=[
@@ -10144,7 +10197,7 @@ const WE38=[
   ['A collection has an endless world. For any set X, what else has it?','a world with at least as many members as X',['a world matched with X exactly','a finite world','no other world'],'Bigger-world technique.']];
 QP.push({id:'38e.countable',step:'38e',label:'a countable line',open:()=>measured('38e'),make(){ return writtenQ('38e.countable',WE38); }});
 
-/* 38f Numbers Past Every Numeral */
+/* 38h Numbers Past Every Numeral */
 const WF38=[
   ['M makes every statement of T true. Is M the numbers N?','not necessarily: M may hold a member past every numeral',['yes','yes, up to a matching','no: M has fewer members'],'Past-every-numeral technique.'],
   ['Induction holds in M. Is every member of M a numeral’s value?','no: induction is for formulas, and no formula picks out the numerals',['yes','yes, by induction on the numerals','no: no member is'],'Numerals-unpicked technique.'],
@@ -10152,10 +10205,10 @@ const WF38=[
   ['Is ((x + ε)² − x²)/ε equal to 2x?','no: it is 2x + ε; its nearest real is 2x',['yes','yes, as ε is small','no: it is 2x + 2ε'],'Shadow-slope technique.'],
   ['How many reals is a finite member of *R infinitely close to?','exactly one',['none','two','endlessly many'],'Nearest-real technique.'],
   ['Below a block past the numerals, is there another?','yes, and above it too',['no','only above','only below'],'Block technique.']];
-QP.push({id:'38f.past',step:'38f',label:'numbers past every numeral',open:()=>measured('38f'),make(){ return writtenQ('38f.past',WF38); }},
+QP.push({id:'38h.past',step:'38h',label:'numbers past every numeral',open:()=>measured('38h'),make(){ return writtenQ('38h.past',WF38); }},
   );
 
-/* 38g Formulas as Numbers */
+/* 38i Formulas as Numbers */
 const WG38=[
   ['⌜0 = 0⌝ = 2430. Is 0 = 0 a statement about 2430?','no: the statement is about 0; its code is a number that stands for it',['yes','yes, and about 0','no: it is about 5'],'Prime-code technique: a code names a string.'],
   ['Arithmetic has no power mark. Can it say y = 2ˣ?','yes: the list-in-one-number technique says it with + and · alone',['no','only for small x','no: it needs a new mark'],'List-in-one-number technique.'],
@@ -10163,10 +10216,10 @@ const WG38=[
   ['Induction is a given line in PA. Is it no longer a technique?','it is a given of PA; on the ladder it was proved from sets, and PA is a collection the ladder studies',['right: it is only a given now','it is neither','it is an axiom of the ladder'],'Both stand.'],
   ['Can two different strings get one code?','no: different strings get different codes, and a string can be read back from its code',['yes','yes, if they are long','yes, if they share marks'],'Prime-code technique.'],
   ['Which statements of arithmetic does the search-reached technique cover?','the true search statements: a some in front of a bounded condition',['every true statement','every statement with an every in front','the false ones'],'Search-reached technique.']];
-QP.push({id:'38g.codes',step:'38g',label:'formulas as numbers',open:()=>measured('38g'),make(){ return writtenQ('38g.codes',WG38); }},
+QP.push({id:'38i.codes',step:'38i',label:'formulas as numbers',open:()=>measured('38i'),make(){ return writtenQ('38i.codes',WG38); }},
   );
 
-/* 38h A Sentence About Itself */
+/* 38j A Sentence About Itself */
 const WH38=[
   ['Does δ hold the numeral of its own code?','no: that numeral has more marks than δ has; δ holds the numeral of another code',['yes','yes, at its end','no: it holds no numeral'],'Self-statement technique.'],
   ['Is Prov(x) a bounded formula?','no: its some is kept below no term; it is a search formula',['yes','yes, bounded by x','no: it has no some'],'Provable-mark technique.'],
@@ -10174,37 +10227,37 @@ const WH38=[
   ['For any collection T, does T ⊢ Prov_T(⌜φ⌝) give T ⊢ φ?','not for every T: that needs T to reach only truths about N',['yes','no: never','yes, for every T that holds PA'],'Provable-mark technique runs the other way.'],
   ['PA reaches φ. What follows?','PA reaches Prov(⌜φ⌝)',['φ is false','PA reaches ¬Prov(⌜φ⌝)','nothing'],'Provable-mark technique.'],
   ['For a formula ψ(x₀) with one free placeholder, what does the self-statement technique give?','a statement δ with PA reaching δ ⇔ ψ(⌜δ⌝)',['a statement true in every world','a formula with two free placeholders','a proof of ψ'],'Self-statement technique.']];
-QP.push({id:'38h.self',step:'38h',label:'a sentence about itself',open:()=>measured('38h'),make(){ return writtenQ('38h.self',WH38); }});
+QP.push({id:'38j.self',step:'38j',label:'a sentence about itself',open:()=>measured('38j'),make(){ return writtenQ('38j.self',WH38); }});
 
-/* 38i True and Unprovable */
+/* 38k True and Unprovable */
 const WI38=[
   ['PA does not reach U. Is U false?','no: U is true in N; not reached is not false',['yes','yes, in N','no: U is neither'],'Unreached-truth technique.'],
   ['Can U be proved?','not by PA; PA + U reaches it in one line, and the step itself proves it from more than PA',['no, by anything','yes, by PA','no: U is false'],'Unreached-truth technique.'],
   ['Does PA + U reach every truth of arithmetic?','no: it has its own unreached statement',['yes','yes, as U was the only one','no: it reaches nothing new'],'Every-list technique.'],
-  ['Does U say “I am false”?','no: U says it is not reached',['yes','yes, in arithmetic','no: it says “I am true”'],'Truth is tried in 38k.'],
+  ['Does U say “I am false”?','no: U says it is not reached',['yes','yes, in arithmetic','no: it says “I am true”'],'Truth is tried in 38m.'],
   ['What does PA reach of U and its denial?','neither',['U','¬U','both'],'Unreached-truth technique.'],
   ['T holds PA, a recipe settles membership in T, and every member is true in N. What follows?','some statement true in N is not reached by T',['T reaches every truth','T clashes','T is not true in N'],'Every-list technique.']];
-QP.push({id:'38i.unreached',step:'38i',label:'true and unprovable',open:()=>measured('38i'),make(){ return writtenQ('38i.unreached',WI38); }});
+QP.push({id:'38k.unreached',step:'38k',label:'true and unprovable',open:()=>measured('38k'),make(){ return writtenQ('38k.unreached',WI38); }});
 
-/* 38j Consistency From Within */
+/* 38l Consistency From Within */
 const WJ38=[
   ['PA does not reach Con. May PA clash?','no: PA is clash-free, since N is a world of it; PA cannot show it, which is another matter',['yes','yes, we cannot know','no: PA reaches Con'],'No-self-certificate technique.'],
   ['¬Con is false in N. Does PA ∪ {¬Con} clash?','no: ¬Con is true in another world of PA, so it is clash-free',['yes','yes, since ¬Con is false','no: it has no world'],'World-means-clash-free technique.'],
   ['A stronger system proves Con. Does that prove nothing?','it is a proof; it moves the trust to the stronger system',['right: nothing','it proves PA clashes','it proves Con false'],'A proof from more is still a proof.'],
   ['Is Con the English sentence “PA is clash-free”?','no: it is a statement about numbers, true exactly when no number codes a proof of ⊥',['yes','yes, coded','no: it is a set'],'Con is a statement of arithmetic.'],
   ['PA is clash-free. Does PA reach Con?','no',['yes','yes, in one line','only with induction'],'No-self-certificate technique.']];
-QP.push({id:'38j.con',step:'38j',label:'consistency from within',open:()=>measured('38j'),make(){ return writtenQ('38j.con',WJ38); }});
+QP.push({id:'38l.con',step:'38l',label:'consistency from within',open:()=>measured('38l'),make(){ return writtenQ('38l.con',WJ38); }});
 
-/* 38k Truth Cannot Be Defined Inside */
+/* 38m Truth Cannot Be Defined Inside */
 const WK38=[
   ['Truth cannot be defined in arithmetic. Does “true in N” mean nothing?','no: it is defined in sets; it is not defined in arithmetic',['yes','yes, outside sets too','no: it is defined in arithmetic'],'Undefinable-truth technique.'],
   ['Is Prov(x) a truth formula?','no: it misses U, which is true and not reached',['yes','yes, for search statements','no: it is false of every code'],'Undefinable-truth technique.'],
   ['Does λ say “I am not reached”?','no: that is U; λ would say “I am not true”, and there is no truth formula to build it from',['yes','yes, it is U','no: it says “I am reached”'],'Undefinable-truth technique.'],
   ['Does no formula define truth even for bounded statements?','no: bounded statements are settled by a search, and a search formula defines their truth',['right: none does','only for short ones','only Prov does'],'Undefinable-truth technique is about all of arithmetic.'],
   ['Is there a formula of arithmetic true of exactly the codes of the true statements?','no',['yes, Prov','yes, Con','yes, Sub'],'Undefinable-truth technique.']];
-QP.push({id:'38k.truth',step:'38k',label:'truth cannot be defined inside',open:()=>measured('38k'),make(){ return writtenQ('38k.truth',WK38); }});
+QP.push({id:'38m.truth',step:'38m',label:'truth cannot be defined inside',open:()=>measured('38m'),make(){ return writtenQ('38m.truth',WK38); }});
 
-/* 38l Quantifying Over Sets */
+/* 38n Quantifying Over Sets */
 const WL38=[
   ['PA₂ has only N as a world. Does it reach every truth of arithmetic?','no: one world, yet no calculus reaches all its truths',['yes','yes, by the only-the-numbers technique','no: it reaches none'],'No-full-calculus technique.'],
   ['Is first-order induction for every formula the same as second-order induction?','no: formulas pick out countably many parts',['yes','yes, in N','no: first-order is stronger'],'Second-order induction speaks of every part.'],
@@ -10212,9 +10265,9 @@ const WL38=[
   ['Does the finite-parts technique hold for every logic?','no: it rests on the first-order calculus; second order breaks it',['yes','yes, for PA₂','no: it holds for none'],'No-full-calculus technique.'],
   ['How are any two worlds of PA₂ related?','by a matching that carries 0 and next',['they are different','only their finite parts match','by no matching'],'Only-the-numbers technique.'],
   ['Can a recipe list the second-order statements true in every world?','no',['yes','yes, slowly','only the short ones'],'No-full-calculus technique.']];
-QP.push({id:'38l.second',step:'38l',label:'quantifying over sets',open:()=>measured('38l'),make(){ return writtenQ('38l.second',WL38); }});
+QP.push({id:'38n.second',step:'38n',label:'quantifying over sets',open:()=>measured('38n'),make(){ return writtenQ('38n.second',WL38); }});
 
-/* 38m Numbering Formulas by Hand */
+/* 38o Numbering Formulas by Hand */
 const WM38=[
   ['Is ⌜0 = 0⌝ = 1 · 5 · 1 = 5?','no: the marks’ numbers are powers of the primes, not factors: 2¹ · 3⁵ · 5¹ = 2430',['yes','no: it is 1 + 5 + 1','no: it is 2 · 3 · 5'],'Code-by-primes technique.'],
   ['Does 10 code the string 0 0?','no: 3 is skipped; 0 0 would be 2¹ · 3¹ = 6',['yes','yes, as 2 · 5','no: 10 codes S'],'Code-test technique.'],
@@ -10222,10 +10275,10 @@ const WM38=[
   ['Is ⟨3, 5⟩ = ⟨5, 3⟩?','no: 41 against 39; order matters',['yes','yes, as both sum to 8','no: they differ by 2 in the first place'],'Pair-code technique.'],
   ['How is a code read back?','divide by 2 as often as it goes, then by 3, then by 5, in order',['divide by the largest prime first','add its digits','take its square root'],'Code-reading technique.'],
   ['Where does the string read back from a code end?','at the first prime that does not divide',['at the largest prime','at the last digit','never'],'Code-reading technique.']];
-QP.push({id:'38m.byhand',step:'38m',label:'numbering formulas by hand',open:()=>measured('38m'),make(){ return writtenQ('38m.byhand',WM38); }},
+QP.push({id:'38o.byhand',step:'38o',label:'numbering formulas by hand',open:()=>measured('38o'),make(){ return writtenQ('38o.byhand',WM38); }},
   );
 
-/* 38n Natural Deduction by Hand */
+/* 38p Natural Deduction by Hand */
 const WN38=[
   ['May a leaf [P]¹ stay open after the bar marked 1?','no: the bar drops every leaf with its number',['yes','yes, if P is true','yes, until the foot'],'Tree-column technique.'],
   ['Does cutting a detour change the foot?','no: the cut keeps the foot and the givens; only the inside changes',['yes','yes, it shortens it','sometimes'],'Detour-cut technique.'],
@@ -10233,7 +10286,7 @@ const WN38=[
   ['Something stands in R to everything. What follows?','everything has something standing in R to it',['everything stands in R to everything','something stands in R to itself','nothing'],'Swapped-order technique.'],
   ['Everything has something standing in R to it. Does something stand in R to everything?','not always: the order of every and some cannot be swapped this way',['yes','yes, by the swapped-order technique','no: never'],'Swapped-order technique runs one way.'],
   ['Can every column of the calculus be drawn as a tree?','yes, with the same foot and givens',['no','only short ones','only those with no suppositions'],'Tree-column technique.']];
-QP.push({id:'38n.trees',step:'38n',label:'natural deduction by hand',open:()=>measured('38n'),make(){ return writtenQ('38n.trees',WN38); }},
+QP.push({id:'38p.trees',step:'38p',label:'natural deduction by hand',open:()=>measured('38p'),make(){ return writtenQ('38p.trees',WN38); }},
   );
 /* ----- rung 39: a machine made of switches, 39a to 39q ----- */
 Object.assign(STEPS,{'39a':['r39a','True and False as 1 and 0'],'39b':['r39b','The Wave That Is Only 1 or 0'],'39c':['r39c','A Wave Can Carry Power, or a Message'],'39d':['r39d','A One-Way Valve'],'39e':['r39e','A Switch Worked by a Switch'],'39f':['r39f','Every Table From One Gate'],'39g':['r39g','The Liar Box'],'39h':['r39h','Memory'],'39i':['r39i','Adding With Gates'],'39j':['r39j','A Machine That Follows a List'],'39k':['r39k','How Long a Program Takes'],'39l':['r39l','Sorting and Searching'],'39m':['r39m','Divide and Conquer'],'39n':['r39n','Structures That Hold Data'],'39o':['r39o','Remembering Answers'],'39p':['r39p','Wiring a Table by Hand'],'39q':['r39q','Counting Steps by Hand']});
@@ -10614,7 +10667,7 @@ const WE41=[
   ['A reduces to B, and A is not decided. What follows?','B is not decided',['A is listed','B is decided','nothing'],'Reduction-carries technique.'],
   ['Is it decided whether a table has five rows?','yes: that reads the table, not what the machine does',['no, by the behaviour technique','no, by the stopping proof','only for small tables'],'The behaviour technique is about what machines do.'],
   ['Which properties of what machines do are decided?','only the trivial ones',['all of them','the short ones','none at all'],'Behaviour technique.'],
-  ['Does PA reach σ whenever σ is true?','no: only true search statements; some truths are not reached',['yes','yes, for every σ','no: PA reaches nothing true'],'38i’s unreached truth.'],
+  ['Does PA reach σ whenever σ is true?','no: only true search statements; some truths are not reached',['yes','yes, for every σ','no: PA reaches nothing true'],'38k’s unreached truth.'],
   ['Are the equations with a whole-number solution listed?','yes: search every whole-number assignment in turn',['no','only those of degree 2','only those with one letter'],'Equation-search technique.']];
 QP.push({id:'41e.reduce',step:'41e',label:'undecidable everywhere',open:()=>measured('41e'),make(){ return writtenQ('41e.reduce',WE41); }},
   );
@@ -10694,8 +10747,8 @@ const WL41=[
   ['Which sets have a proof of this kind?','every set in NP, through colouring',['only colourings','only fast sets','none'],'Through-colouring technique.']];
 QP.push({id:'41l.convince',step:'41l',label:'convincing without telling',open:()=>measured('41l'),make(){ return writtenQ('41l.convince',WL41); }},
   );
-/* ----- rung 42: dots and links, flows, programs and games, 42a to 42n ----- */
-Object.assign(STEPS,{'42a':['r42a','Dots and Links'],'42b':['r42b','Trees'],'42c':['r42c','Walking Every Link Once'],'42d':['r42d','Flat Drawings'],'42e':['r42e','Matchings'],'42f':['r42f','Flows and Cuts'],'42g':['r42g','The Best Corner'],'42h':['r42h','Games'],'42i':['r42i','The Unavoidable'],'42j':['r42j','Disorder Is Impossible'],'42k':['r42k','Shortest Paths and Greedy Choices'],'42l':['r42l','Best From Best Pieces'],'42m':['r42m','Keeping Things Findable'],'42n':['r42n','The Simplex Method by Hand']});
+/* ----- rung 42: dots and links, flows, programs and games, 42a to 42p ----- */
+Object.assign(STEPS,{'42a':['r42a','Dots and Links'],'42b':['r42b','Trees'],'42c':['r42c','Walking Every Link Once'],'42d':['r42d','Flat Drawings'],'42e':['r42e','Matchings'],'42f':['r42f','Flows and Cuts'],'42g':['r42g','The Best Corner'],'42h':['r42h','Games'],'42i':['r42i','The Unavoidable'],'42j':['r42j','Disorder Is Impossible'],'42m':['r42m','Shortest Paths and Greedy Choices'],'42n':['r42n','Best From Best Pieces'],'42o':['r42o','Keeping Things Findable'],'42p':['r42p','The Simplex Method by Hand']});
 /* a random graph in one piece on n dots: a random tree, then extra links */
 
 
@@ -10811,7 +10864,7 @@ const WJ42=[
 QP.push({id:'42j.ramsey',step:'42j',label:'disorder is impossible',open:()=>measured('42j'),make(){ return writtenQ('42j.ramsey',WJ42); }},
   );
 
-/* 42k Shortest Paths and Greedy Choices */
+/* 42m Shortest Paths and Greedy Choices */
 const WK42=[
   ['Does the nearest-first technique work with any lengths?','no: only with every length at least 0',['yes','yes, if one is negative','no: only with equal lengths'],'Nearest-first technique.'],
   ['Is the cheapest link at each dot in every cheapest tree?','not necessarily: in some cheapest tree; with ties others may lack it',['yes','yes, by the cheapest-across technique','no: in none'],'Cheapest-across technique.'],
@@ -10819,10 +10872,10 @@ const WK42=[
   ['Greed builds the cheapest tree. Does it build the cheapest tour?','no: a tour has no exchange step; greed can be far from best',['yes','yes, the same way','only on flat maps'],'Greed is not always best.'],
   ['How often does the layer-by-layer walk look at each link?','at most twice',['once','n times','log₂ n times'],'Layer-by-layer technique.'],
   ['With lengths at least 0, when is a dot’s tentative distance final?','when it is settled as the nearest unsettled dot',['when it is first reached','at the end only','when it has two neighbours'],'Nearest-first technique.']];
-QP.push({id:'42k.paths',step:'42k',label:'shortest paths and greedy choices',open:()=>measured('42k'),make(){ return writtenQ('42k.paths',WK42); }},
+QP.push({id:'42m.paths',step:'42m',label:'shortest paths and greedy choices',open:()=>measured('42m'),make(){ return writtenQ('42m.paths',WK42); }},
   );
 
-/* 42l Best From Best Pieces */
+/* 42n Best From Best Pieces */
 const WL42=[
   ['A path from r to w is shortest. What are its pieces?','shortest paths between their ends',['longest paths','any paths','not paths at all'],'Best-pieces technique.'],
   ['Are the pieces of a longest path longest, in any graph?','no: only with no cycle',['yes','yes, always','no: never'],'Best-pieces technique.'],
@@ -10830,10 +10883,10 @@ const WL42=[
   ['A further round still lowers some value. What follows?','some cycle has negative total',['the distances are right','a link is missing','nothing'],'Rounds technique.'],
   ['Does Dₖ(i, j) use at most k links?','no: it uses stops among 1 to k; a path with k stops has k + 1 links',['yes','yes, exactly k','no: at most k − 1'],'Stops-allowed technique.'],
   ['What is the best alignment of two strings?','a longest route through their grid',['a shortest path in a tree','a matching','a cut'],'Alignment-route technique.']];
-QP.push({id:'42l.pieces',step:'42l',label:'best from best pieces',open:()=>measured('42l'),make(){ return writtenQ('42l.pieces',WL42); }},
+QP.push({id:'42n.pieces',step:'42n',label:'best from best pieces',open:()=>measured('42n'),make(){ return writtenQ('42n.pieces',WL42); }},
   );
 
-/* 42m Keeping Things Findable */
+/* 42o Keeping Things Findable */
 const WM42=[
   ['How many entries do the neighbour lists take?','n + 2|E|',['n²','|E|','2n'],'Two-stores technique.'],
   ['Is the heap always the best store for the nearest first?','no: on a crowded graph a plain list costs n², below the heap’s',['yes','yes, on every graph','no: never'],'Heap-run technique.'],
@@ -10841,10 +10894,10 @@ const WM42=[
   ['Does a scrambled table answer every look in one step?','no: on average a few; one look can take many',['yes','yes, always one','no: never fewer than n'],'Seen-set technique.'],
   ['Pushing a fresh entry in place of lowering an old one costs how much?','within a factor of two',['n times as much','nothing more','twice n²'],'Heap-run technique.'],
   ['How many looks does the grid take to give the links at u?','n',['d(u)','one','n²'],'Two-stores technique.']];
-QP.push({id:'42m.stores',step:'42m',label:'keeping things findable',open:()=>measured('42m'),make(){ return writtenQ('42m.stores',WM42); }},
+QP.push({id:'42o.stores',step:'42o',label:'keeping things findable',open:()=>measured('42o'),make(){ return writtenQ('42o.stores',WM42); }},
   );
 
-/* 42n The Simplex Method by Hand */
+/* 42p The Simplex Method by Hand */
 const WN42=[
   ['Which kept unknown leaves when x enters?','the one with the least ratio',['the one with the largest ratio','the first one listed','the one with the largest constant'],'Ratio test.'],
   ['A coefficient of z is negative. Stop?','not yet: stop only when none is positive',['yes','yes, the corner is best','no: start again'],'Pivot technique.'],
@@ -10852,10 +10905,10 @@ const WN42=[
   ['When the walk stops, where are the prices?','the coefficients of the slacks in the last row',['the coefficients of x and y','the constants','the first row'],'Last-row technique.'],
   ['A constant is negative at x = 0. What is done first?','the first phase: add x₀ and maximise −x₀',['enter x at once','stop: no plan','drop the limit'],'First-phase technique.'],
   ['Does a pivot ever make z fall?','no: z has not fallen after a step',['yes','yes, sometimes','only in the first phase'],'Pivot technique.']];
-QP.push({id:'42n.simplex',step:'42n',label:'the simplex method by hand',open:()=>measured('42n'),make(){ return writtenQ('42n.simplex',WN42); }},
+QP.push({id:'42p.simplex',step:'42p',label:'the simplex method by hand',open:()=>measured('42p'),make(){ return writtenQ('42p.simplex',WN42); }},
   );
-/* ----- rung 43: clock arithmetic, 43a to 43l ----- */
-Object.assign(STEPS,{'43a':['r43a','Clock Arithmetic'],'43b':['r43b','Undoing on a Clock'],'43c':['r43c','Several Clocks at Once'],'43d':['r43d','Powers Cycle'],'43e':['r43e','A Clock Hand That Reaches Every Hour'],'43f':['r43f','Squares on a Clock'],'43g':['r43g','Primes Are Endless and Thin'],'43h':['r43h','Clock Arithmetic by Hand'],'43i':['r43i','Clock Powers and Secret Keys'],'43j':['r43j','Is It Prime?'],'43k':['r43k','Continued Fractions'],'43l':['r43l','Discrete Logarithms']});
+/* ----- rung 43: clock arithmetic, 43a to 43r ----- */
+Object.assign(STEPS,{'43a':['r43a','Clock Arithmetic'],'43b':['r43b','Undoing on a Clock'],'43c':['r43c','Several Clocks at Once'],'43d':['r43d','Powers Cycle'],'43e':['r43e','A Clock Hand That Reaches Every Hour'],'43f':['r43f','Squares on a Clock'],'43g':['r43g','Primes Are Endless and Thin'],'43n':['r43n','Clock Arithmetic by Hand'],'43o':['r43o','Clock Powers and Secret Keys'],'43p':['r43p','Is It Prime?'],'43q':['r43q','Continued Fractions'],'43r':['r43r','Discrete Logarithms']});
 const MD43=(a,n)=>((a%n)+n)%n, G43=(a,b)=>b?G43(b,a%b):Math.abs(a);
 
 
@@ -10940,7 +10993,7 @@ const WG43=[
 QP.push({id:'43g.primes',step:'43g',label:'primes are endless and thin',open:()=>measured('43g'),make(){ return writtenQ('43g.primes',WG43); }},
   );
 
-/* 43h Clock Arithmetic by Hand */
+/* 43n Clock Arithmetic by Hand */
 const WH43=[
   ['How is aᵏ found on a clock by hand?','square again and again, and multiply the powers whose places in k in twos hold 1',['multiply a by itself k times','add a, k times','divide k by a'],'Square-and-multiply technique.'],
   ['At most how many products does square-and-multiply take?','2⌊log₂ k⌋',['k','k²','log₂ k exactly'],'Power-cost technique.'],
@@ -10948,10 +11001,10 @@ const WH43=[
   ['Square first and reduce at the end?','legal, and slow: reduce after every product, so no number passes n²',['best','needed','wrong: the answer changes'],'Reduce as you go.'],
   ['How many rounds does the gcd algorithm take on a and b, b ≤ a?','at most about 2 log₂ b',['about b','about a/b','exactly log₂ a'],'Halving-remainders technique.'],
   ['How does the remainder fall in the gcd algorithm?','each is less than half of the one two rounds before',['by one each round','by half each round','not at all'],'Halving-remainders technique.']];
-QP.push({id:'43h.byhand',step:'43h',label:'clock arithmetic by hand',open:()=>measured('43h'),make(){ return writtenQ('43h.byhand',WH43); }},
+QP.push({id:'43n.byhand',step:'43n',label:'clock arithmetic by hand',open:()=>measured('43n'),make(){ return writtenQ('43n.byhand',WH43); }},
   );
 
-/* 43i Clock Powers and Secret Keys */
+/* 43o Clock Powers and Secret Keys */
 const WI43=[
   ['On which clock is d the undo of e?','the clock of c, the count of units of the clock of n',['the clock of n','the clock of e','the clock of p + q'],'Two-key technique.'],
   ['Does the same message lock to a fresh hour each time?','no: mᵉ is one hour; real systems pad m with chance first',['yes','yes, by the two-key technique','no: it locks to 0'],'Locking is a power.'],
@@ -10959,10 +11012,10 @@ const WI43=[
   ['Are p and q close together fine?','no: √n is near both, and trying near √n finds them',['yes','yes, if both are large','no: they must be equal'],'Choosing the primes.'],
   ['What does knowing the count c give?','the primes: they are the roots of x² − (n − c + 1)x + n = 0',['nothing','the message','only e'],'Count-gives-factors technique.'],
   ['How is a signature on m checked?','anyone holding (n, e) accepts s exactly when sᵉ ≡ m',['by factoring n','by finding d','by sending m again'],'Turned-key technique.']];
-QP.push({id:'43i.keys',step:'43i',label:'clock powers and secret keys',open:()=>measured('43i'),make(){ return writtenQ('43i.keys',WI43); }},
+QP.push({id:'43o.keys',step:'43o',label:'clock powers and secret keys',open:()=>measured('43o'),make(){ return writtenQ('43o.keys',WI43); }},
   );
 
-/* 43j Is It Prime? */
+/* 43p Is It Prime? */
 const WJ43=[
   ['A number above 1 is not prime. How small is its least prime factor?','at most √n',['at most n/2 only','at most log n','at most 10'],'Root-bound technique.'],
   ['2^(n − 1) ≡ 1 (mod n). Is n prime?','not necessarily: 341 and 561 pass; the little test proves only “composite”',['yes','yes, by the little technique','no: never'],'Some composites fool every base.'],
@@ -10970,10 +11023,10 @@ const WJ43=[
   ['Does a strong witness always give a factor?','no: only when an odd square root of 1 appears',['yes','yes, always two','no: never'],'Strong-test technique.'],
   ['Is trial division to n/2 needed?','legal, and slow: √n is enough',['yes','yes, to n','no: to log n'],'Root-bound technique.'],
   ['On a prime clock, what are the square roots of 1?','only 1 and −1',['1 only','every unit','1, −1 and 0'],'Strong-test technique.']];
-QP.push({id:'43j.prime',step:'43j',label:'is it prime?',open:()=>measured('43j'),make(){ return writtenQ('43j.prime',WJ43); }},
+QP.push({id:'43p.prime',step:'43p',label:'is it prime?',open:()=>measured('43p'),make(){ return writtenQ('43p.prime',WJ43); }},
   );
 
-/* 43k Continued Fractions */
+/* 43q Continued Fractions */
 const WK43=[
   ['Is [1; 2, 2] = 1 + 1/2 + 1/2?','no: the steps nest; 1 + 1/(2 + 1/2) = 7/5',['yes','yes, it is 2','no: it is 5/7'],'Continued fractions nest.'],
   ['Is 22/7 = π?','no: it is a convergent, a little too large',['yes','yes, to every place','no: it is too small'],'Convergent-bound technique.'],
@@ -10981,10 +11034,10 @@ const WK43=[
   ['y = 1 to 1000 fail for x² − 61y² = 1. Has it no answer?','not shown: the least answer has y = 226 153 980; a search is not a proof',['yes','yes, by the unit-climb technique','no: y = 1001 works'],'A search is not a proof.'],
   ['How close is each convergent p_j/q_j to x?','within 1/q_j²',['within 1/q_j','exactly equal','within 1/2'],'Convergent-bound technique.'],
   ['Do the convergents of a number that is no fraction stay on one side?','no: they alternate below and above',['yes, below','yes, above','no: they are random'],'Convergent-bound technique.']];
-QP.push({id:'43k.cf',step:'43k',label:'continued fractions',open:()=>measured('43k'),make(){ return writtenQ('43k.cf',WK43); }},
+QP.push({id:'43q.cf',step:'43q',label:'continued fractions',open:()=>measured('43q'),make(){ return writtenQ('43q.cf',WK43); }},
   );
 
-/* 43l Discrete Logarithms */
+/* 43r Discrete Logarithms */
 const WL43=[
   ['What does a clock log turn products into?','sums, on the clock of p − 1',['products','sums on the clock of p','powers'],'Clock-log technique.'],
   ['log₂ 15 = 4 + 9 = 13 on the clock of 13?','no: logs add on the clock of 12, so 13 ≡ 1',['yes','yes, 13','no: 4 · 9'],'Clock-log technique.'],
@@ -10992,7 +11045,7 @@ const WL43=[
   ['Will any unit do for g?','no: a unit of small order leaves few hours to search',['yes','yes, if it is odd','no: g must be 2'],'Choosing g.'],
   ['Does the exchange alone stop a listener who changes messages?','no: she stands in the middle; each side must sign',['yes','yes, if p is large','no: nothing can'],'Signing is needed.'],
   ['About how many products does step-and-stride take?','about the root of p',['about p','about log p','about p²'],'Step-and-stride technique.']];
-QP.push({id:'43l.logs',step:'43l',label:'discrete logarithms',open:()=>measured('43l'),make(){ return writtenQ('43l.logs',WL43); }},
+QP.push({id:'43r.logs',step:'43r',label:'discrete logarithms',open:()=>measured('43r'),make(){ return writtenQ('43r.logs',WL43); }},
   );
 /* ----- rung 44: rings, fields and modules, 44a to 44l ----- */
 Object.assign(STEPS,{'44a':['r44a','Plus and Times Alone'],'44b':['r44b','Ideals and Quotients'],'44c':['r44c','Division With Remainder for Polynomials'],'44d':['r44d','Unique Factoring'],'44e':['r44e','Where Factoring Fails'],'44f':['r44f','Field Extensions'],'44g':['r44g','Finite Fields'],'44h':['r44h','Only One Complete Ordered Field'],'44i':['r44i','Modules Over a Principal Ring'],'44j':['r44j','Polynomial Division by Hand'],'44k':['r44k','Field Extensions by Hand'],'44l':['r44l','Boolean Algebra Standing on Its Own']});
@@ -11129,12 +11182,12 @@ const WL44=[
   ['How many polynomials over ℤ/2 give one table of n inputs?','exactly one sum of products of distinct inputs',['many','none','two'],'One-polynomial technique.']];
 QP.push({id:'44l.boole',step:'44l',label:'Boolean algebra on its own',open:()=>measured('44l'),make(){ return writtenQ('44l.boole',WL44); }},
   );
-/* ----- rung 45: many machines, one answer, 45a to 45o ----- */
-Object.assign(STEPS,{'45a':['r45a','Numbers for Every Machine'],'45b':['r45b','Machines That Only Talk'],'45c':['r45c','The Two Generals'],'45d':['r45d','Handshakes'],'45e':['r45e','Order Without a Clock'],'45f':['r45f','Commit Together or Not at All'],'45g':['r45g','Agreement Despite Crashes'],'45h':['r45h','Agreement Despite Liars'],'45i':['r45i','Agreement by Lottery'],'45j':['r45j','News Without a Leader'],'45k':['r45k','Who Holds Which Key'],'45l':['r45l','Merging Edits Made Apart'],'45m':['r45m','Splitting a Big Job'],'45n':['r45n','Quorums by Hand'],'45o':['r45o','Vector Clocks by Hand']});
+/* ----- rung 46: many machines, one answer, 46a to 46o ----- */
+Object.assign(STEPS,{'46a':['r46a','Numbers for Every Machine'],'46b':['r46b','Machines That Only Talk'],'46c':['r46c','The Two Generals'],'46d':['r46d','Handshakes'],'46e':['r46e','Order Without a Clock'],'46f':['r46f','Commit Together or Not at All'],'46g':['r46g','Agreement Despite Crashes'],'46h':['r46h','Agreement Despite Liars'],'46i':['r46i','Agreement by Lottery'],'46j':['r46j','News Without a Leader'],'46k':['r46k','Who Holds Which Key'],'46l':['r46l','Merging Edits Made Apart'],'46m':['r46m','Splitting a Big Job'],'46n':['r46n','Quorums by Hand'],'46o':['r46o','Vector Clocks by Hand']});
 
 
 
-/* 45a Numbers for Every Machine */
+/* 46a Numbers for Every Machine */
 const WA45=[
   ['Which line does a router follow?','the longest prefix the destination matches',['the first line in the table','the shortest prefix it matches','the line with the most hops'],'Longest-prefix technique.'],
   ['A shorter prefix and a longer one both match. Which wins?','the longer, more specific one',['the shorter','the first written','neither: the packet is dropped'],'Longest-prefix technique.'],
@@ -11142,41 +11195,41 @@ const WA45=[
   ['When can a written number of fixed width be read back with parts left out?','when what is left out can be counted from the width',['always','never','only when it is short'],'Fixed-width technique.'],
   ['What does every machine carry?','a number of fixed width',['a name of any length','a clock','a list of every other machine'],'Numbers for every machine.'],
   ['How far does one router pass a packet?','one hop',['to the destination','two hops','to every neighbour'],'Longest-prefix technique.']];
-QP.push({id:'45a.address',step:'45a',label:'numbers for every machine',open:()=>measured('45a'),make(){ return writtenQ('45a.address',WA45); }},
+QP.push({id:'46a.address',step:'46a',label:'numbers for every machine',open:()=>measured('46a'),make(){ return writtenQ('46a.address',WA45); }},
   );
 
-/* 45b Machines That Only Talk */
+/* 46b Machines That Only Talk */
 const WB45=[
   ['What does a machine know?','its own state and the messages it has received',['the state of every machine','the time','which machines have crashed'],'Machines that only talk.'],
   ['Two runs give a machine the same view. What does it do?','the same move in both',['different moves','nothing','whatever is safest'],'Same-view technique.'],
   ['No answer has come for a long time. Has the other machine crashed?','not shown: with no bound on delay, a slow machine looks the same',['yes','yes, after a timeout','no: it is slow'],'Same-view technique.'],
   ['Do messages arrive in the order they were sent?','not necessarily: the model allows any order',['yes','yes, on one link','no: always reversed'],'Machines that only talk.'],
-  ['Can every machine read a shared time?','no: there is no shared clock',['yes','yes, roughly','only the leader'],'Order without a clock comes in 45e.'],
+  ['Can every machine read a shared time?','no: there is no shared clock',['yes','yes, roughly','only the leader'],'Order without a clock comes in 46e.'],
   ['What tells two runs apart, for one machine?','only a difference in what it has received or its own state',['the wall clock','the other machines’ states','nothing ever'],'Same-view technique.']];
-QP.push({id:'45b.talk',step:'45b',label:'machines that only talk',open:()=>measured('45b'),make(){ return writtenQ('45b.talk',WB45); }});
+QP.push({id:'46b.talk',step:'46b',label:'machines that only talk',open:()=>measured('46b'),make(){ return writtenQ('46b.talk',WB45); }});
 
-/* 45c The Two Generals */
+/* 46c The Two Generals */
 const WC45=[
   ['Can the sender of the last message know it arrived?','no: so the last message was not needed',['yes','yes, after an acknowledgment','only if it is short'],'Last-message technique.'],
   ['Does acknowledging the acknowledgments until sure work?','no: the last acknowledgment can always be lost',['yes','yes, after three','only with a fast link'],'Last-message technique.'],
-  ['Do the generals fail because one lies?','no: nobody lies; messages are lost',['yes','yes, the second one','no: they fail from slowness only'],'Liars come in 45h.'],
+  ['Do the generals fail because one lies?','no: nobody lies; messages are lost',['yes','yes, the second one','no: they fail from slowness only'],'Liars come in 46h.'],
   ['A run ends with both attacking. What of the same run with its last delivered message lost?','it also ends with both attacking',['it ends with neither','it ends with one attacking','it has no end'],'Last-message technique.'],
   ['Removing the last message, then the next, down to none, shows what?','a plan that meets the demands needs no messages, which cannot be',['the plan is safe','every message arrives','one message is enough'],'Last-message technique.'],
   ['What breaks the two generals’ plan?','messages that can be lost',['a liar','a slow general','a broken clock'],'The two generals.']];
-QP.push({id:'45c.generals',step:'45c',label:'the two generals',open:()=>measured('45c'),make(){ return writtenQ('45c.generals',WC45); }});
+QP.push({id:'46c.generals',step:'46c',label:'the two generals',open:()=>measured('46c'),make(){ return writtenQ('46c.generals',WC45); }});
 
-/* 45d Handshakes */
+/* 46d Handshakes */
 const WD45=[
   ['How does a handshake make every message arrive?','number it, resend until acknowledged, and throw away repeats',['send it once loudly','send it to everyone','wait for a clock'],'Resend technique.'],
-  ['After the handshake, are both machines certain?','no: each knows what it has received; the last message can still be lost',['yes','yes, after three messages','no: neither knows anything'],'45c still holds.'],
+  ['After the handshake, are both machines certain?','no: each knows what it has received; the last message can still be lost',['yes','yes, after three messages','no: neither knows anything'],'46c still holds.'],
   ['Is 5 older than 2³² − 3?','no: on the clock, 5 is newer; the count wrapped',['yes','yes, it is smaller','they are the same'],'Read the numbers on a clock.'],
   ['Each try gets through with chance p > 0, independently. What follows?','every message is acknowledged with chance 1',['some messages never arrive','every message arrives on the first try','nothing'],'Resend technique.'],
   ['How many messages open a handshake?','three',['one','two','four'],'Handshakes.'],
   ['Why are repeats thrown away?','resending can deliver a message twice',['they are always wrong','they are older','they are forged'],'Number every message.']];
-QP.push({id:'45d.hands',step:'45d',label:'handshakes',open:()=>measured('45d'),make(){ return writtenQ('45d.hands',WD45); }},
+QP.push({id:'46d.hands',step:'46d',label:'handshakes',open:()=>measured('46d'),make(){ return writtenQ('46d.hands',WD45); }},
   );
 
-/* 45e Order Without a Clock */
+/* 46e Order Without a Clock */
 const WE45=[
   ['When does e come before f?','when a chain of steps and messages leads from e to f',['when e happened earlier by the clock','when e has the smaller name','never'],'Order without a clock.'],
   ['e → f. What follows for the counters?','L(e) < L(f)',['L(e) > L(f)','L(e) = L(f)','nothing'],'Counter technique.'],
@@ -11184,10 +11237,10 @@ const WE45=[
   ['When is e → f, by list stamps?','exactly when V(e) ≤ V(f) in every entry and V(e) ≠ V(f)',['when the sum of V(e) is smaller','when the first entry is smaller','when V(e) = V(f)'],'List-stamp technique.'],
   ['Does concurrent mean at the same moment?','no: it means neither could affect the other',['yes','yes, roughly','no: it means one after the other'],'Concurrent events.'],
   ['What does a list of counters do that one counter cannot?','capture the order, both ways',['run faster','need no messages','read the time'],'List-stamp technique.']];
-QP.push({id:'45e.order',step:'45e',label:'order without a clock',open:()=>measured('45e'),make(){ return writtenQ('45e.order',WE45); }},
+QP.push({id:'46e.order',step:'46e',label:'order without a clock',open:()=>measured('46e'),make(){ return writtenQ('46e.order',WE45); }},
   );
 
-/* 45f Commit Together or Not at All */
+/* 46f Commit Together or Not at All */
 const WF45=[
   ['When is the change committed in two-phase commit?','only if every machine voted yes',['if most voted yes','if the coordinator wants','if one voted yes'],'Two-phase technique.'],
   ['May a yes voter commit on a timeout?','no: another machine may have voted no',['yes','yes, after a long wait','yes, if it voted first'],'A machine that promised must wait.'],
@@ -11195,9 +11248,9 @@ const WF45=[
   ['Can two machines finish differently?','no',['yes, if one crashes','yes, on a timeout','only the coordinator'],'Two-phase technique.'],
   ['What must a machine that has promised do?','wait to be told',['commit at once','undo at once','ask another voter'],'Commit together or not at all.'],
   ['What is the first phase?','ask everyone to promise',['commit','tell everyone the outcome','elect a leader'],'Two-phase commit.']];
-QP.push({id:'45f.commit',step:'45f',label:'commit together or not at all',open:()=>measured('45f'),make(){ return writtenQ('45f.commit',WF45); }});
+QP.push({id:'46f.commit',step:'46f',label:'commit together or not at all',open:()=>measured('46f'),make(){ return writtenQ('46f.commit',WF45); }});
 
-/* 45g Agreement Despite Crashes */
+/* 46g Agreement Despite Crashes */
 const WG45=[
   ['Why do any two majorities share a machine?','each holds more than n/2, so together they hold more than n',['they are the same set','machines vote twice','the leader is in both'],'Majority-overlap technique.'],
   ['Is a majority of 4 equal to 2?','no: more than half is 3; two sets of 2 may not meet',['yes','yes, half','no: it is 4'],'Majority-overlap technique.'],
@@ -11205,10 +11258,10 @@ const WG45=[
   ['Can there be two leaders in one term?','no: each needs a majority, one vote per machine per term',['yes','yes, if votes are slow','only after a crash'],'Majority-overlap technique.'],
   ['With no bound on delay, is any fixed method sure to finish?','no',['yes','yes, with a majority','only with a leader'],'No fixed method is sure to finish.'],
   ['What does the next majority hear?','what the last majority accepted, from the machine they share',['nothing','only the leader','every message ever sent'],'Majority-overlap technique.']];
-QP.push({id:'45g.crash',step:'45g',label:'agreement despite crashes',open:()=>measured('45g'),make(){ return writtenQ('45g.crash',WG45); }},
+QP.push({id:'46g.crash',step:'46g',label:'agreement despite crashes',open:()=>measured('46g'),make(){ return writtenQ('46g.crash',WG45); }},
   );
 
-/* 45h Agreement Despite Liars */
+/* 46h Agreement Despite Liars */
 const WH45=[
   ['With one liar among three, can an honest machine tell who lied?','no',['yes','yes, by majority','only the leader can'],'Third-bound technique.'],
   ['How many machines does agreement despite f liars need, with forgeable messages?','more than 3f',['more than 2f','f + 1','2f'],'Third-bound technique.'],
@@ -11216,10 +11269,10 @@ const WH45=[
   ['Does the bound come from slow messages?','no: from lying; it holds when every message is on time',['yes','yes, partly','no: from crashes'],'Third-bound technique.'],
   ['What do quorums of two thirds always share, with more than 3f machines?','an honest machine',['a liar','the leader','nothing'],'Agreement despite liars.'],
   ['What makes liars harder than crashes?','a liar can send different stories to different machines',['a liar is slower','a liar sends nothing','nothing'],'Agreement despite liars.']];
-QP.push({id:'45h.liars',step:'45h',label:'agreement despite liars',open:()=>measured('45h'),make(){ return writtenQ('45h.liars',WH45); }},
+QP.push({id:'46h.liars',step:'46h',label:'agreement despite liars',open:()=>measured('46h'),make(){ return writtenQ('46h.liars',WH45); }},
   );
 
-/* 45i Agreement by Lottery */
+/* 46i Agreement by Lottery */
 const WI45=[
   ['Which chain do machines follow?','the chain with the most work',['the longest list of names','the first chain heard','the chain with the most machines'],'Agreement by lottery.'],
   ['Is a block final when it is added?','no: it can still be overtaken; it grows safer with each block after it',['yes','yes, at once','no: never'],'Catch-up technique.'],
@@ -11227,10 +11280,10 @@ const WI45=[
   ['An attacker is z blocks behind. With what chance does it ever draw level?','(q/p)ᶻ',['q/p','zq','1/z'],'Catch-up technique.'],
   ['How is the right to write won?','by finding a rare number',['by vote','by being first to ask','by being oldest'],'Agreement by lottery.'],
   ['What happens to (q/p)ᶻ as z grows, for q < p?','it falls toward 0',['it grows','it stays the same','it reaches 1'],'Catch-up technique.']];
-QP.push({id:'45i.lottery',step:'45i',label:'agreement by lottery',open:()=>measured('45i'),make(){ return writtenQ('45i.lottery',WI45); }},
+QP.push({id:'46i.lottery',step:'46i',label:'agreement by lottery',open:()=>measured('46i'),make(){ return writtenQ('46i.lottery',WI45); }},
   );
 
-/* 45j News Without a Leader */
+/* 46j News Without a Leader */
 const WJ45=[
   ['While few know, what happens to the count each round?','it about doubles',['it grows by one','it squares','it halves'],'News without a leader.'],
   ['A fraction u does not know, and each asks one at random. What is expected next?','u²',['u/2','2u','u − 1'],'Squaring-pull technique.'],
@@ -11238,10 +11291,10 @@ const WJ45=[
   ['Does pushing finish as fast as pulling?','no: once most know, pushes land on knowers; pulling squares the fraction',['yes','yes, exactly','no: pushing is faster'],'Squaring-pull technique.'],
   ['Who tells whom in each round?','each machine tells a random other',['the leader tells everyone','each tells its neighbour','nobody'],'News without a leader.'],
   ['Once most know, how does the unknowing fraction fall, by pulling?','it squares each round',['it halves each round','it falls by one','it stays'],'Squaring-pull technique.']];
-QP.push({id:'45j.gossip',step:'45j',label:'news without a leader',open:()=>measured('45j'),make(){ return writtenQ('45j.gossip',WJ45); }},
+QP.push({id:'46j.gossip',step:'46j',label:'news without a leader',open:()=>measured('46j'),make(){ return writtenQ('46j.gossip',WJ45); }},
   );
 
-/* 45k Who Holds Which Key */
+/* 46k Who Holds Which Key */
 const WK45=[
   ['Where does a key live on the ring?','with the next machine round',['with the nearest machine','with the machine before it','with every machine'],'Who holds which key.'],
   ['A new machine joins. Which keys move?','only the keys between it and the machine before it',['every key','none','half the keys'],'Ring-move technique.'],
@@ -11249,21 +11302,21 @@ const WK45=[
   ['How far does each hop jump?','half the remaining way',['one machine','to the end','a random distance'],'Who holds which key.'],
   ['A machine leaves. Which keys change hands?','only the keys it held, which go to the next machine',['every key','none','the keys of its neighbours'],'Ring-move technique.'],
   ['About how many hops find a key among n machines?','about log₂ n',['n','n/2','one'],'Halving the remaining way.']];
-QP.push({id:'45k.ring',step:'45k',label:'who holds which key',open:()=>measured('45k'),make(){ return writtenQ('45k.ring',WK45); }},
+QP.push({id:'46k.ring',step:'46k',label:'who holds which key',open:()=>measured('46k'),make(){ return writtenQ('46k.ring',WK45); }},
   );
 
-/* 45l Merging Edits Made Apart */
+/* 46l Merging Edits Made Apart */
 const WL45=[
   ['What three things must merging be?','grouping-free, order-free and repeat-free',['fast, short and safe','first, last and largest','one-way, timed and signed'],'Converge technique.'],
   ['Two copies merged the same set of updates in different orders, with repeats. What follows?','they hold the same state',['they differ','the later one wins','nothing'],'Converge technique.'],
   ['Does merging counts by adding work?','no: adding is not repeat-free; a repeated update counts twice',['yes','yes, always','only for small counts'],'Converge technique.'],
-  ['Is “the latest clock time wins” safe?','no: clocks drift; the latest by clock may not be the latest by cause',['yes','yes, with good clocks','no: the earliest wins'],'45e on drifting clocks.'],
+  ['Is “the latest clock time wins” safe?','no: clocks drift; the latest by clock may not be the latest by cause',['yes','yes, with good clocks','no: the earliest wins'],'46e on drifting clocks.'],
   ['What is a copy, when merging is grouping-, order- and repeat-free?','the merge of the set of edits it has seen',['its first edit','its last edit','the sum of its edits'],'Converge technique.'],
   ['Which of these merges is repeat-free: max, plus or minus?','max',['plus','minus','none of them'],'Idempotent merges.']];
-QP.push({id:'45l.merge',step:'45l',label:'merging edits made apart',open:()=>measured('45l'),make(){ return writtenQ('45l.merge',WL45); }},
+QP.push({id:'46l.merge',step:'46l',label:'merging edits made apart',open:()=>measured('46l'),make(){ return writtenQ('46l.merge',WL45); }},
   );
 
-/* 45m Splitting a Big Job */
+/* 46m Splitting a Big Job */
 const WM45=[
   ['If combining ignores grouping, what follows for splitting?','any split among machines gives the same answer',['only one split works','each split gives a different answer','splitting is not allowed'],'Split-combine technique.'],
   ['Is (a − b) − c = a − (b − c)?','no: subtracting is not associative, so it cannot be split freely',['yes','yes, for whole numbers','no: they are both 0'],'Split-combine technique.'],
@@ -11271,9 +11324,9 @@ const WM45=[
   ['What extra does commutative combining give?','every order of the pieces gives the same answer too',['every grouping','a faster run','nothing'],'Split-combine technique.'],
   ['What sets the limit on speed-up?','the part that must run in a row',['the number of machines','the size of the data','the first machine'],'Splitting a big job.'],
   ['Which of these combines can be split freely: plus, minus or divide?','plus',['minus','divide','none of them'],'Associative combining.']];
-QP.push({id:'45m.split',step:'45m',label:'splitting a big job',open:()=>measured('45m'),make(){ return writtenQ('45m.split',WM45); }});
+QP.push({id:'46m.split',step:'46m',label:'splitting a big job',open:()=>measured('46m'),make(){ return writtenQ('46m.split',WM45); }});
 
-/* 45n Quorums by Hand */
+/* 46n Quorums by Hand */
 const WN45=[
   ['What is the least two quorums share?','the sum of their sizes take away n',['the smaller size','n','nothing'],'Quorums by hand.'],
   ['Are quorums of 2 among 4 safe?','no: 2 + 2 − 4 = 0; two of them can miss each other',['yes','yes, half each','no: 2 is too many'],'Quorums by hand.'],
@@ -11281,10 +11334,10 @@ const WN45=[
   ['Read quorum r and write quorum w among n: when does every read meet every write?','when r + w > n',['when r = w','when r + w = n','always'],'Quorums by hand.'],
   ['Why must two quorums share a machine?','so the later one hears what the earlier accepted',['to save messages','to elect a leader','to keep clocks'],'Majority-overlap technique.'],
   ['Larger quorums: what is gained and what is lost?','more overlap is gained; fewer failures can be borne',['nothing changes','more failures can be borne','speed is gained'],'Quorums by hand.']];
-QP.push({id:'45n.quorums',step:'45n',label:'quorums by hand',open:()=>measured('45n'),make(){ return writtenQ('45n.quorums',WN45); }},
+QP.push({id:'46n.quorums',step:'46n',label:'quorums by hand',open:()=>measured('46n'),make(){ return writtenQ('46n.quorums',WN45); }},
   );
 
-/* 45o Vector Clocks by Hand */
+/* 46o Vector Clocks by Hand */
 const WO45=[
   ['What does a machine do to its stamp at each step of its own?','ticks its own entry',['ticks every entry','sets its stamp to 0','copies a neighbour’s stamp'],'Vector clocks by hand.'],
   ['What does a machine do on receipt?','takes the larger place by place, then ticks its own entry',['adds the two stamps','keeps its own stamp','takes the sender’s stamp'],'Vector clocks by hand.'],
@@ -11292,15 +11345,15 @@ const WO45=[
   ['(1, 0, 0) against (0, 1, 0): which is earlier?','neither: they are concurrent',['(1, 0, 0)','(0, 1, 0)','they are the same'],'List-stamp technique.'],
   ['Whose entry ticks when a machine receives?','its own',['the sender’s','both','none'],'Vector clocks by hand.'],
   ['V(e) ≤ V(f) in every place, and they differ. What follows?','e → f',['f → e','they are concurrent','nothing'],'List-stamp technique.']];
-QP.push({id:'45o.vector',step:'45o',label:'vector clocks by hand',open:()=>measured('45o'),make(){ return writtenQ('45o.vector',WO45); }},
+QP.push({id:'46o.vector',step:'46o',label:'vector clocks by hand',open:()=>measured('46o'),make(){ return writtenQ('46o.vector',WO45); }},
   );
-/* ----- rung 46: roots, symmetries and what cannot be built, 46a to 46l ----- */
-Object.assign(STEPS,{'46a':['r46a','Cubics and Quartics'],'46b':['r46b','Symmetric in the Roots'],'46c':['r46c','The Symmetries of the Roots'],'46d':['r46d','Subgroups and Middle Fields'],'46e':['r46e','Groups Taken Apart'],'46f':['r46f','A₅ Is Simple'],'46g':['r46g','No Formula'],'46h':['r46h','Subgroups of Every Prime-Power Size'],'46i':['r46i','What Compass and Straightedge Can Build'],'46j':['r46j','Solving Cubics and Quartics by Hand'],'46k':['r46k','Symmetry Groups of Equations, by Hand'],'46l':['r46l','What Can’t Be Built, by Hand']});
+/* ----- rung 47: roots, symmetries and what cannot be built, 47a to 47m ----- */
+Object.assign(STEPS,{'47a':['r47a','Cubics and Quartics'],'47b':['r47b','Symmetric in the Roots'],'47c':['r47c','The Symmetries of the Roots'],'47d':['r47d','Subgroups and Middle Fields'],'47e':['r47e','Groups Taken Apart'],'47f':['r47f','A₅ Is Simple'],'47g':['r47g','No Formula'],'47h':['r47h','Subgroups of Every Prime-Power Size'],'47j':['r47j','What Compass and Straightedge Can Build'],'47k':['r47k','Solving Cubics and Quartics by Hand'],'47l':['r47l','Symmetry Groups of Equations, by Hand'],'47m':['r47m','What Can’t Be Built, by Hand']});
 const M46=n=>String(n).replace('-','−'), FAC46=n=>n<2?1:n*FAC46(n-1), G46=(a,b)=>b?G46(b,a%b):Math.abs(a);
 
 
 
-/* 46a Cubics and Quartics */
+/* 47a Cubics and Quartics */
 const WA46=[
   ['What does x = y − b/3 do to x³ + bx² + cx + d?','takes out the square term',['takes out the cube term','takes out the constant','doubles the roots'],'Shift-out technique.'],
   ['u³ and v³ are found. Do all nine pairs of cube roots give answers?','no: only the three pairs with uv = −p/3',['yes','yes, nine answers','no: only one pair'],'Cube-formula technique.'],
@@ -11308,10 +11361,10 @@ const WA46=[
   ['∛(2 + 11i) is met for y³ − 15y − 4. Does the formula fail?','no: (2 + i)³ = 2 + 11i, and (2 + i) + (2 − i) = 4 is an answer',['yes','yes, there is no real answer','no: the answer is 2 + 11i'],'The square root of a negative number is used.'],
   ['Is √−3 · √−3 = √9 = 3?','no: (i√3)² = −3',['yes','yes, by the root technique','no: it is 9'],'Root choice for negatives.'],
   ['How is a quartic solved?','by one cubic and two quadratics',['by two cubics','by one quadratic','by no formula'],'Quartic-to-cubic technique.']];
-QP.push({id:'46a.cubics',step:'46a',label:'cubics and quartics',open:()=>measured('46a'),make(){ return writtenQ('46a.cubics',WA46); }},
+QP.push({id:'47a.cubics',step:'47a',label:'cubics and quartics',open:()=>measured('47a'),make(){ return writtenQ('47a.cubics',WA46); }},
   );
 
-/* 46b Symmetric in the Roots */
+/* 47b Symmetric in the Roots */
 const WB46=[
   ['What are the coefficients of (x − r₁)⋯(x − rₙ)?','the elementary symmetric sums of the roots, with signs',['the roots','the squares of the roots','the differences of the roots'],'Roots-to-coefficients technique.'],
   ['Is x₁²x₂ + x₂²x₃ + x₃²x₁ symmetric?','no: the swap of x₁ and x₂ changes it; only the turns of three keep it',['yes','yes, by the symmetric-is-coefficients technique','no: no turn keeps it'],'Symmetric means every shuffle.'],
@@ -11319,10 +11372,10 @@ const WB46=[
   ['What is e₃ for x³ − 2?','2: the constant is (−1)³e₃',['−2','0','3'],'Roots-to-coefficients technique.'],
   ['f has rational coefficients and top 1. What is a symmetric expression in its roots?','a rational number',['a root of f','irrational','0'],'Symmetric-is-rational technique.'],
   ['What is Δ for y³ + py + q?','−4p³ − 27q²',['4p³ + 27q²','p² − 4q','q²/4 + p³/27'],'Cubic-discriminant technique.']];
-QP.push({id:'46b.symmetric',step:'46b',label:'symmetric in the roots',open:()=>measured('46b'),make(){ return writtenQ('46b.symmetric',WB46); }},
+QP.push({id:'47b.symmetric',step:'47b',label:'symmetric in the roots',open:()=>measured('47b'),make(){ return writtenQ('47b.symmetric',WB46); }},
   );
 
-/* 46c The Symmetries of the Roots */
+/* 47c The Symmetries of the Roots */
 const WC46=[
   ['Where does a symmetry of the field of roots send a root?','to a root',['to any member','to itself always','to 0'],'Roots-to-roots technique.'],
   ['Is there a symmetry of ℚ(√2) with σ(√2) = 2?','no: then σ(2) = 4, but σ fixes 2',['yes','yes, a stretch','no: there are none at all'],'Roots-to-roots technique.'],
@@ -11330,10 +11383,10 @@ const WC46=[
   ['Is the group of a polynomial of degree n always Sₙ?','no: x⁴ − 5x² + 6 has a group of 4',['yes','yes, if n is prime','no: it is always a clock'],'Groups of polynomials.'],
   ['How many symmetries has the splitting field K of a polynomial over F?','exactly [K : F]',['the degree of the polynomial','n!','2'],'Count-the-symmetries technique.'],
   ['f cannot be factored over F. Which roots can a symmetry carry α to?','any root of f',['only α','only real roots','none'],'Every-root technique.']];
-QP.push({id:'46c.syms',step:'46c',label:'the symmetries of the roots',open:()=>measured('46c'),make(){ return writtenQ('46c.syms',WC46); }},
+QP.push({id:'47c.syms',step:'47c',label:'the symmetries of the roots',open:()=>measured('47c'),make(){ return writtenQ('47c.syms',WC46); }},
   );
 
-/* 46d Subgroups and Middle Fields */
+/* 47d Subgroups and Middle Fields */
 const WD46=[
   ['Does a bigger part-group have a bigger fixed field?','no: more symmetries leave fewer members alone',['yes','yes, always','no: the same field'],'Middle-field technique.'],
   ['What is [K : K^H]?','|H|',['|G|','|G|/|H|','1'],'Fixed-size technique.'],
@@ -11341,10 +11394,10 @@ const WD46=[
   ['When is a middle field a splitting field over F?','exactly when its part-group is normal',['always','never','when it has degree 2'],'Normal-middle technique.'],
   ['Does every field between ℚ and ℂ appear in the matching?','no: only the middle fields of one splitting field, between F and K',['yes','yes, all of them','no: none'],'Middle-field technique.'],
   ['H is normal in G. What is Aut(K^H/F)?','the quotient G/H',['H','G','the identity alone'],'Normal-middle technique.']];
-QP.push({id:'46d.middle',step:'46d',label:'subgroups and middle fields',open:()=>measured('46d'),make(){ return writtenQ('46d.middle',WD46); }},
+QP.push({id:'47d.middle',step:'47d',label:'subgroups and middle fields',open:()=>measured('47d'),make(){ return writtenQ('47d.middle',WD46); }},
   );
 
-/* 46e Groups Taken Apart */
+/* 47e Groups Taken Apart */
 const WE46=[
   ['When is a group solvable?','when a chain of normal steps takes it to the identity with every step turn-about',['when it is turn-about','when it is simple','when it has prime size'],'Groups taken apart.'],
   ['A part-group of a solvable group: is it solvable?','yes',['no','only if normal','only if of prime size'],'Solvable-parts technique.'],
@@ -11352,9 +11405,9 @@ const WE46=[
   ['Every step is turn-about. Is G turn-about?','not necessarily: S₃’s steps are turn-about and S₃ is not',['yes','yes, by the solvable-parts technique','no: never'],'Solvable is not turn-about.'],
   ['Do the pieces fix the group?','no: ℤ/4 and V both have pieces 2, 2',['yes','yes, by the same-pieces technique','no: they differ in every group'],'Same-pieces technique runs one way.'],
   ['When is a finite group solvable, by its pieces?','exactly when its pieces are all clocks of prime size',['when it has one piece','when its pieces are equal','when it has no pieces'],'Pieces technique.']];
-QP.push({id:'46e.apart',step:'46e',label:'groups taken apart',open:()=>measured('46e'),make(){ return writtenQ('46e.apart',WE46); }});
+QP.push({id:'47e.apart',step:'47e',label:'groups taken apart',open:()=>measured('47e'),make(){ return writtenQ('47e.apart',WE46); }});
 
-/* 46f A₅ Is Simple */
+/* 47f A₅ Is Simple */
 const WF46=[
   ['What does conjugating a shuffle do to its loops?','relabels them, so the loop shape stays',['reverses them','joins them','breaks them'],'Relabel technique.'],
   ['Do the 24 five-loops make one family in A₅?','no: in A₅ they make two families of 12',['yes','yes, of 24','no: five families'],'Families-of-A₅ technique.'],
@@ -11362,10 +11415,10 @@ const WF46=[
   ['A₅ is simple. Is S₅ simple?','no: A₅ ◁ S₅, with half the members',['yes','yes, by the same count','no: S₅ is turn-about'],'Simple-sixty technique.'],
   ['Is every simple group Aₙ or a clock?','no: there are others',['yes','yes, for finite groups','no: none is a clock'],'There are other simple groups.'],
   ['For which n is Sₙ not solvable?','every n ≥ 5',['every n ≥ 3','only n = 5','no n'],'Not-solvable technique.']];
-QP.push({id:'46f.a5',step:'46f',label:'A₅ is simple',open:()=>measured('46f'),make(){ return writtenQ('46f.a5',WF46); }},
+QP.push({id:'47f.a5',step:'47f',label:'A₅ is simple',open:()=>measured('47f'),make(){ return writtenQ('47f.a5',WF46); }},
   );
 
-/* 46g No Formula */
+/* 47g No Formula */
 const WG46=[
   ['f has a formula by roots over F. What is G_f?','solvable',['simple','Sₙ','a clock always'],'Formula-means-solvable technique.'],
   ['No formula exists for x⁵ − 4x + 2. Can its roots not be found?','they can: to any number of places; only a formula by roots is ruled out',['they cannot','only one can','they are not numbers'],'No formula is not no roots.'],
@@ -11373,9 +11426,9 @@ const WG46=[
   ['Does a five-loop alone make G_f = S₅?','no: the loop makes a clock of 5; a swap is needed too',['yes','yes, with the identity','no: it makes A₅'],'Five-loop and swap.'],
   ['G_f is solvable. What follows?','f has a formula by roots',['f has no formula','f has degree below 5','f can be factored'],'Solvable-means-formula technique.'],
   ['A prime p divides |G|. What follows?','some member of G has order p',['every member has order p','G is a clock','G is simple'],'Prime-member technique.']];
-QP.push({id:'46g.noformula',step:'46g',label:'no formula',open:()=>measured('46g'),make(){ return writtenQ('46g.noformula',WG46); }});
+QP.push({id:'47g.noformula',step:'47g',label:'no formula',open:()=>measured('47g'),make(){ return writtenQ('47g.noformula',WG46); }});
 
-/* 46h Subgroups of Every Prime-Power Size */
+/* 47h Subgroups of Every Prime-Power Size */
 const WH46=[
   ['A group has size pᵏ, k ≥ 1. Is its centre trivial?','no: it has more than one member',['yes','yes, always','only for p = 2'],'Centre technique.'],
   ['6 divides 12. Has A₄ a part-group of size 6?','no: 6 is not a prime power, and A₄ has none',['yes','yes, by the largest-part technique','no: 6 does not divide 12'],'Prime-power sizes only.'],
@@ -11383,10 +11436,10 @@ const WH46=[
   ['Is the largest 2-part of S₃ normal?','no: n₂ = 3, conjugate and not normal',['yes','yes, it has size 2','no: S₃ has none'],'Count-of-parts technique.'],
   ['Is a group of prime-power size turn-about?','not necessarily: the square’s group of 8 is not',['yes','yes, by the centre technique','no: never'],'Prime-power groups are solvable, not turn-about.'],
   ['Are any two largest p-parts conjugate?','yes',['no','only if normal','only for p = 2'],'Count-of-parts technique.']];
-QP.push({id:'46h.sylow',step:'46h',label:'subgroups of every prime-power size',open:()=>measured('46h'),make(){ return writtenQ('46h.sylow',WH46); }},
+QP.push({id:'47h.sylow',step:'47h',label:'subgroups of every prime-power size',open:()=>measured('47h'),make(){ return writtenQ('47h.sylow',WH46); }},
   );
 
-/* 46i What Compass and Straightedge Can Build */
+/* 47j What Compass and Straightedge Can Build */
 const WI46=[
   ['What degree over ℚ has a constructible number?','a power of 2',['any degree','an odd degree','3'],'Power-of-two technique.'],
   ['[ℚ(α) : ℚ] = 4. Is α constructible?','not necessarily: a power of 2 is needed, not enough',['yes','yes, by the power-of-two technique','no: never'],'Power-of-two technique runs one way.'],
@@ -11394,9 +11447,9 @@ const WI46=[
   ['Is a root of an irreducible cubic over ℚ constructible?','no',['yes','yes, if real','only for x³ − 2'],'Degree-three technique.'],
   ['Is the circle not squared because π has degree 3?','no: π is a root of no polynomial over ℚ at all',['yes','yes, by the degree-three technique','no: π has degree 2'],'Another proof.'],
   ['How is the 17-sided figure built?','two square-root steps after ℚ(√17)',['by a cube root','it cannot be','by marking the straightedge'],'Seventeen-arcs technique.']];
-QP.push({id:'46i.build',step:'46i',label:'what compass and straightedge can build',open:()=>measured('46i'),make(){ return writtenQ('46i.build',WI46); }});
+QP.push({id:'47j.build',step:'47j',label:'what compass and straightedge can build',open:()=>measured('47j'),make(){ return writtenQ('47j.build',WI46); }});
 
-/* 46j Solving Cubics and Quartics by Hand */
+/* 47k Solving Cubics and Quartics by Hand */
 const WJ46=[
   ['Which rational numbers can be answers of a cubic with whole coefficients and top 1?','whole numbers dividing the last coefficient',['any fraction','only 0','only ±1'],'Whole-answer technique.'],
   ['Might ½ be a root of x³ − 7x + 6?','no: with top 1, only whole divisors of 6',['yes','yes, it divides 6','only if 6 is even'],'Whole-answer technique.'],
@@ -11404,11 +11457,11 @@ const WJ46=[
   ['Does the third-angle technique give one answer?','no: three, at θ/3, θ/3 − 120° and θ/3 − 240°',['yes','yes, k cos(θ/3)','no: two'],'Third-angle technique.'],
   ['By how much is a quartic shifted?','b/4',['b/3','b/2','b'],'Quartic-by-hand technique.'],
   ['D > 0. How many real answers has y³ + py + q?','one',['three','two','none'],'One-real technique.']];
-QP.push({id:'46j.byhand',step:'46j',label:'solving cubics by hand',open:()=>measured('46j'),make(){ return writtenQ('46j.byhand',WJ46); }},
+QP.push({id:'47k.byhand',step:'47k',label:'solving cubics by hand',open:()=>measured('47k'),make(){ return writtenQ('47k.byhand',WJ46); }},
    /* no near miss: a number near a root may be a root; 5 and 6 never are */
   );
 
-/* 46k Symmetry Groups of Equations, by Hand */
+/* 47l Symmetry Groups of Equations, by Hand */
 const WK46=[
   ['Is the group of x⁴ − 2 S₄, since the roots can be shuffled?','no: symmetries keep sums, so opposite corners stay opposite; it has 8',['yes','yes, 24','no: it has 4'],'Group-by-hand technique.'],
   ['Is i ↦ 2i a symmetry of ℚ(i)?','no: i² = −1 must go to (2i)² = −4',['yes','yes, a stretch','no: there are none'],'Roots-to-roots technique.'],
@@ -11416,10 +11469,10 @@ const WK46=[
   ['When is the group of an irreducible cubic A₃?','when Δ is the square of a rational number',['when Δ < 0','when Δ is odd','always'],'Square-discriminant technique.'],
   ['Δ < 0 for an irreducible cubic. What roots has it?','one real root and a flipped pair',['three real roots','no real root','a double root'],'Δ and real roots.'],
   ['How are symmetries named by hand?','by where they send the generators, counted against [K : F]',['by guessing','by the degree alone','by the coefficients'],'Group-by-hand technique.']];
-QP.push({id:'46k.byhand',step:'46k',label:'symmetry groups by hand',open:()=>measured('46k'),make(){ return writtenQ('46k.byhand',WK46); }},
+QP.push({id:'47l.byhand',step:'47l',label:'symmetry groups by hand',open:()=>measured('47l'),make(){ return writtenQ('47l.byhand',WK46); }},
   );
 
-/* 46l What Can’t Be Built, by Hand */
+/* 47m What Can’t Be Built, by Hand */
 const WL46=[
   ['How is a number shown not buildable?','find its polynomial, prove it irreducible, and check its degree is not a power of 2',['draw it and fail','compute it to many places','show it is irrational'],'Unbuildable-test technique.'],
   ['x⁴ − x − 1 has degree 4. Can its roots be built?','no: its group has 24 members, not a power of 2',['yes','yes, degree 4 is a power of 2','no: it has no roots'],'Power of 2 is needed, not enough.'],
@@ -11427,7 +11480,7 @@ const WL46=[
   ['Has 8x³ − 6x − 1 the root ½?','no: 1 − 3 − 1 = −3; and no u/v with u ∣ 1, v ∣ 8 works',['yes','yes, ½ divides 1','no: it has root 1'],'Whole-answer technique, top 8.'],
   ['2³² + 1 is prime, so the (2³² + 1)-gon can be built?','no: 641 divides 2³² + 1',['yes','yes, by the regular-figure technique','no: it is too large to draw'],'Check before using.'],
   ['When can the regular n-gon be built?','exactly when φ(n) is a power of 2',['when n is prime','when n is odd','always'],'Regular-figure technique.']];
-QP.push({id:'46l.unbuild',step:'46l',label:'what can’t be built, by hand',open:()=>measured('46l'),make(){ return writtenQ('46l.unbuild',WL46); }},
+QP.push({id:'47m.unbuild',step:'47m',label:'what can’t be built, by hand',open:()=>measured('47m'),make(){ return writtenQ('47m.unbuild',WL46); }},
   );
 /* ===== Rung pools end ===== */
 /* ===== Annex pools (Andrew 2026-11-15) ===== */
@@ -12000,22 +12053,22 @@ QP.push(
 /* ----- annex 44·now2 Will today’s codes survive quantum computers: Work, Word Problems, Check Proofs ----- */
 QP.push(
   );
-/* ----- annex 46·now What are the building blocks of symmetry: Work, Word Problems, Check Proofs ----- */
+/* ----- annex 47·now What are the building blocks of symmetry: Work, Word Problems, Check Proofs ----- */
 QP.push(
   );
-/* ----- annex 46·now2 Can every symmetry group come from an equation: Work, Word Problems, Check Proofs ----- */
+/* ----- annex 47·now2 Can every symmetry group come from an equation: Work, Word Problems, Check Proofs ----- */
 QP.push(
   );
-/* ----- annex 46·phys What are particles built from: Work, Word Problems, Check Proofs ----- */
+/* ----- annex 47·phys What are particles built from: Work, Word Problems, Check Proofs ----- */
 QP.push(
   );
-/* ----- annex 47·comp Can a program’s type say what it does: Work, Word Problems, Check Proofs ----- */
+/* ----- annex 48·comp Can a program’s type say what it does: Work, Word Problems, Check Proofs ----- */
 QP.push(
   );
-/* ----- annex 47·now When are two things truly the same: Work, Word Problems, Check Proofs ----- */
+/* ----- annex 48·now When are two things truly the same: Work, Word Problems, Check Proofs ----- */
 QP.push(
   );
-/* ----- annex 47·now2 Is all of mathematics one theory: Work, Word Problems, Check Proofs ----- */
+/* ----- annex 48·now2 Is all of mathematics one theory: Work, Word Problems, Check Proofs ----- */
 QP.push(
   );
 /* ----- annex pools: plain maths (Andrew 2026-11-15 07:13Z, the exhaustive draw): the Laundry and the Measuring Stick print a line as text,
@@ -12320,7 +12373,7 @@ const SWAPS=CH.swaps={n:0,stored:0,by:{}};
 /* stragglers4: a seed whose make takes few rolls has them walked once, the first time it is dealt (the roll tape of blank-draws round five): every roll that makes
    a value is kept with its chance, rolls that make the same value are joined, and the seed then lists its values like the seeds that were listed by hand. It is
    dealt by search over that list, so no value of it is made twice and none is stored. Only seeds checked to roll through rnd and Math.random alone are named here. */
-const TAPED=new Set(["13e.roots", "4f.counts", "5c.fracs", "43a.hours", "19a.shuffles", "13e.bkchains", "9b.bkrecips", "1e.bkstatements", "1e.bkpairs", "1e.bkargs", "1e.bklists", "1d.bkclaims", "7f.bkclaims", "4k.bkrows", "8h.bkbars", "27b.bkneighbours", "27j.bkrows", "44·cb27.bkjordan", "27d.bkmaps", "27d.bknil", "14i.bkratios", "44·cb27.bkownpolys", "10c.gaps", "10c.rootgaps", "23a.series", "25c.eighths", "8c.sets", "0a.forms", "1a.line", "2a.rows", "1b.nots", "1c.andor", "1d.ifs", "1e.tables", "1f.rewrites", "0b.named", "0d.seen", "4b.numbers", "4i.written", "13h.fracpows", "17k.splits", "8·phys.sizes", "22a.ratseqs", "22f.pseqs", "30l.dice", "31j.shares", "36c.colours", "42a.graphs", "45e.stamps", "21g.bkwaves", "13d.bkpow", "9d.bkfracs", "13f.bkhalves", "21d.bkpairs", "18i.bkends", "10f.bkroots", "21j.bkdeg", "17f.bkratios", "32b.bkfuncs", "41a.bktables", "21g.bkwobbles", "27f.bkflats", "2b.sentence", "2c.sentence", "3b.sentence", "2j.given", "5a.conforms", "38c.pairs"]);
+const TAPED=new Set(["13e.roots", "4f.counts", "5c.fracs", "43a.hours", "19a.shuffles", "13e.bkchains", "9b.bkrecips", "1e.bkstatements", "1e.bkpairs", "1e.bkargs", "1e.bklists", "1d.bkclaims", "7f.bkclaims", "4k.bkrows", "8h.bkbars", "27b.bkneighbours", "27l.bkrows", "44·cb27.bkjordan", "27d.bkmaps", "27d.bknil", "14i.bkratios", "44·cb27.bkownpolys", "10c.gaps", "10c.rootgaps", "23a.series", "25c.eighths", "8c.sets", "0a.forms", "1a.line", "2a.rows", "1b.nots", "1c.andor", "1d.ifs", "1e.tables", "1f.rewrites", "0b.named", "0d.seen", "4b.numbers", "4i.written", "13h.fracpows", "17k.splits", "8·phys.sizes", "22a.ratseqs", "22f.pseqs", "30l.dice", "31l.shares", "36c.colours", "42a.graphs", "46e.stamps", "21g.bkwaves", "13d.bkpow", "9d.bkfracs", "13f.bkhalves", "21d.bkpairs", "18i.bkends", "10f.bkroots", "21j.bkdeg", "17f.bkratios", "32b.bkfuncs", "41a.bktables", "21g.bkwobbles", "27f.bkflats", "2b.sentence", "2c.sentence", "3b.sentence", "2j.given", "5a.conforms", "38c.pairs"]);
 CH.tapeAttach=()=>{ CH.sizeAttach(); SEEDS.forEach(S=>{ if(S.tuples||S.sized||!TAPED.has(S.id)) return; const mk=S.make; let LT=null; S.taped=true;
   S.tuples=()=>{ if(!LT){ const out=new Map(); let t=[], n=0; for(;;){ const [r,u]=TAPE.run(()=>mk.call(S),t); if(++n>12000) break; if(r&&r.val){ let w=1; u.forEach(x=>{ w/=x[1]; }); const k=JSON.stringify(r.val), e=out.get(k); if(e) e[1]+=w; else out.set(k,[u.map(x=>x[0]),w]); }
       let i=u.length-1; while(i>=0&&u[i][0]===u[i][1]-1) i--; if(i<0) break; t=u.slice(0,i+1).map(x=>x.slice()); t[i][0]++; } LT=[...out.values()]; SWAPS.walked=(SWAPS.walked||0)+n; } return LT; };
@@ -12526,7 +12579,7 @@ NL('8f.root','take the square root of the number you have','the square-root tech
 NL('8h.size','take the size of the number you have','the size-of-a-negative technique',s=>s.v.p<0?num(qn(s.v)):null,s=>[{why:'the size of a negative is taken as the negative itself',v:s.v}],(o,p,nm,nx,s)=>'the size of '+qs(s.v)+': |'+qs(s.v)+'| = '+qs(o.v));
 NL('22k.fact','take the factorial of the number you have','the ranking technique',s=>{ const n=iv(s); if(n===null||n<2||n>7) return null; let f=1; for(let i=2;i<=n;i++) f*=i; return num(f); },s=>{ const n=iv(s); return n===null?[]:[{why:'only the top two factors are multiplied',v:Q(n*(n-1))},{why:'the factors are added instead of multiplied',v:Q(n*(n+1)/2)}]; },(o,p,nm,nx,s)=>'the factorial of '+qs(s.v)+': '+qs(s.v)+'! = '+qs(o.v));
 NL('43a.clock',p=>'read the number you have as an hour on a clock of '+p.k,'the clock-hours technique',(s,p)=>{ const n=iv(s); return n===null?null:num(((n%p.k)+p.k)%p.k); },(s,p)=>{ const n=iv(s); return n===null||n>=0?[{why:'the quotient is read instead of the hour',v:Q(Math.floor((n||0)/p.k))}]:[{why:'a negative is read as its size on the clock',v:Q((-n)%p.k)}]; },(o,p,nm,nx,s)=>'the hour of '+qs(s.v)+' on a clock of '+p.k+': '+qs(s.v)+' ≡ '+qs(o.v)+' (mod '+p.k+')',()=>({k:pick([5,7,9,11,12,13])}));
-NL('43h.power',p=>'raise the number you have to the power '+p.e+' on a clock of '+p.k,'the square-and-multiply technique',(s,p)=>{ const n=iv(s); if(n===null) return null; let b=((n%p.k)+p.k)%p.k, r=1; for(let i=0;i<p.e;i++) r=(r*b)%p.k; return num(r); },
+NL('43n.power',p=>'raise the number you have to the power '+p.e+' on a clock of '+p.k,'the square-and-multiply technique',(s,p)=>{ const n=iv(s); if(n===null) return null; let b=((n%p.k)+p.k)%p.k, r=1; for(let i=0;i<p.e;i++) r=(r*b)%p.k; return num(r); },
   (s,p)=>{ const n=iv(s); if(n===null) return []; const b=((n%p.k)+p.k)%p.k; return [{why:'the power is taken as a product, '+p.e+' · '+b,v:Q((p.e*b)%p.k)}]; },(o,p,nm,nx,s)=>'the power on a clock of '+p.k+': '+par(s.v)+sups(p.e)+' ≡ '+qs(o.v)+' (mod '+p.k+')',()=>({e:ri(3,9),k:pick([5,7,11,13])}));
 NL('17c.logpow',p=>'take the log to base '+p.b+' of the number you have','the log-of-a-power technique',(s,p)=>{ const n=iv(s); if(n===null||n<2) return null; let k=0, x=1; while(x<n){ x*=p.b; k++; } return x===n?num(k):null; },(s,p)=>[{why:'the log is taken as a division by the base',v:qm(s.v,Q(1,p.b))}],(o,p,nm,nx,s)=>qs(s.v)+' is '+p.b+sups(qs(o.v))+', so the log base '+p.b+' of '+qs(s.v)+' = '+qs(o.v),()=>({b:pick([2,3,10])}));
 L.push({id:'39a.bits',from:'num',to:'word',steps:()=>['39a'],say:()=>'write the number you have in 1s and 0s',act:s=>{ const n=iv(s); return n!==null&&n>0&&n<256?word(n.toString(2)):null; },cite:()=>'the remainder-by-two technique',
@@ -12535,7 +12588,7 @@ L.push({id:'39a.bits',from:'num',to:'word',steps:()=>['39a'],say:()=>'write the 
 /* --- grids --- */
 const det=m=>qa(qm(m[0][0],m[1][1]),qn(qm(m[0][1],m[1][0]))), tr=m=>qa(m[0][0],m[1][1]);
 const mmul=(a,b)=>[[0,1].map(j=>qa(qm(a[0][0],b[0][j]),qm(a[0][1],b[1][j]))),[0,1].map(j=>qa(qm(a[1][0],b[0][j]),qm(a[1][1],b[1][j])))];
-L.push({id:'27k.det',from:'mat',to:'num',steps:()=>['27k','27e'],say:(p,nm)=>'take the determinant of the grid '+nm,act:s=>num(det(s.m)),cite:()=>'the expansion technique',
+L.push({id:'27m.det',from:'mat',to:'num',steps:()=>['27m','27e'],say:(p,nm)=>'take the determinant of the grid '+nm,act:s=>num(det(s.m)),cite:()=>'the expansion technique',
   slips:s=>[{why:'the two products are added instead of subtracted',v:qa(qm(s.m[0][0],s.m[1][1]),qm(s.m[0][1],s.m[1][0]))},{why:'the products are taken along the rows instead of the crossings',v:qa(qm(s.m[0][0],s.m[0][1]),qn(qm(s.m[1][0],s.m[1][1])))}],
   line:(o,p,nm,nx,s)=>{ const l='det '+nm+' = '+par(s.m[0][0])+' · '+par(s.m[1][1])+' − '+par(s.m[0][1])+' · '+par(s.m[1][0])+' = '+qs(o.v); return fit('the determinant of '+nm+': '+l,'the determinant: '+l,l); }});
 L.push({id:'27d.square',from:'mat',to:'mat',steps:()=>['27d'],say:(p,nm)=>'multiply the grid '+nm+' by itself',act:s=>mat(mmul(s.m,s.m)),cite:()=>'the product-is-doing technique',
@@ -13057,7 +13110,7 @@ L.push({id:'8h.barset',from:'fn',to:'word',steps:()=>['8h'],make:cur=>{ const c=
   slips:(s,p)=>{ const c=toPoly(s.t); if(!c) return []; const r=barSet(c,p.d); if(!r) return []; const R=setText(r,'iv'); return [['upper','only '+'the upper bound is kept, and the lower one forgotten'],['le','the ends are let in'],['pos','the negative x are left out']].map(([m,why])=>{ const S=barSet(c,p.d,m); return S&&{why,k:'word',s:setText(S,'iv')}; }).filter(w=>w&&w.s!==R); },
   line:(o,p,nm)=>'the x with |'+nm+'(x)| < '+p.d+': '+o.s});
 
-/* ================= G. grids that are not 2 by 2 (27b, 27c, 27d, 27f, 27g, 27j, 27k, 31e, 44c, 44·cb27) ================= */
+/* ================= G. grids that are not 2 by 2 (27b, 27c, 27d, 27f, 27g, 27l, 27m, 31e, 44c, 44·cb27) ================= */
 const gq=m=>m.map(r=>r.map(x=>qq(x))), gsh=m=>'rows '+m.map(r=>'('+r.map(qs).join(', ')+')').join(', ');
 KIND.grid={show:v=>gsh(v.m), seed:v=>'G = '+gsh(v.m), ok:v=>v.m.length>=1&&v.m.length<=4&&v.m[0].length<=4&&v.m.every(r=>r.length===v.m[0].length&&r.every(x=>Math.abs(x.p)<=99&&x.q<=12))&&gsh(v.m).length<=58};
 const grid=m=>({k:'grid',m:gq(m)}), gn=nm=>!nm?'G':/^[A-Z]/.test(nm)?nm:'G'+nm.slice(1);
@@ -13081,9 +13134,9 @@ const sq3free=cap=>{ const V=V3BD(), r0=pick1(V.filter(v=>v.some(z=>z))), r1=pic
 const unimod=n=>{ let m=gI(n).map(r=>r.map(x=>x.p)); for(let t=0;t<n+2;t++){ const i=rnd(n), j=(i+1+rnd(n-1))%n, k=pick1([-2,-1,1,2]); m[i]=m[i].map((a,c)=>a+k*m[j][c]); } if(Math.random()<0.5) m=[m[1],m[0]].concat(m.slice(2)); return m; };
 const mix=(u,v,a,b)=>u.map((x,i)=>a*x+b*v[i]);
 SEEDS.push(
-  {id:'27k.bkgrids3',step:'27k',kind:'grid',label:'3 by 3 grids',make(){ const m=sq3free(40), d=gdet(gq(m)); return qz(d)||Math.abs(d.p)>40?null:{val:grid(m),ix:m.flat().join(',')}; }},
-  {id:'27k.bkpowers',step:'27k',kind:'grid',label:'the rows 1, t, t² for three numbers t',tuples:()=>{ const X=[-3,-2,-1,0,1,2,3,4], o=[]; X.forEach(a=>X.forEach(b=>X.forEach(c=>{ if(a!==b&&a!==c&&b!==c) o.push([[a,b,c],1]); }))); return o; },make(F__){ const z=F__?F__.slice():shuffle([-3,-2,-1,0,1,2,3,4]).slice(0,3); return {val:grid(z.map(t=>[1,t,t*t])),ix:z.join(',')}; }},
-  {id:'27k.bkopposite',step:'27k',kind:'grid',label:'3 by 3 grids that are the negative of their side-turn',make(){ const [a,b,c]=[nz(-3,3),nz(-3,3),nz(-3,3)]; return {val:grid([[0,a,b],[-a,0,c],[-b,-c,0]]),ix:[a,b,c].join(',')}; }},
+  {id:'27m.bkgrids3',step:'27m',kind:'grid',label:'3 by 3 grids',make(){ const m=sq3free(40), d=gdet(gq(m)); return qz(d)||Math.abs(d.p)>40?null:{val:grid(m),ix:m.flat().join(',')}; }},
+  {id:'27m.bkpowers',step:'27m',kind:'grid',label:'the rows 1, t, t² for three numbers t',tuples:()=>{ const X=[-3,-2,-1,0,1,2,3,4], o=[]; X.forEach(a=>X.forEach(b=>X.forEach(c=>{ if(a!==b&&a!==c&&b!==c) o.push([[a,b,c],1]); }))); return o; },make(F__){ const z=F__?F__.slice():shuffle([-3,-2,-1,0,1,2,3,4]).slice(0,3); return {val:grid(z.map(t=>[1,t,t*t])),ix:z.join(',')}; }},
+  {id:'27m.bkopposite',step:'27m',kind:'grid',label:'3 by 3 grids that are the negative of their side-turn',make(){ const [a,b,c]=[nz(-3,3),nz(-3,3),nz(-3,3)]; return {val:grid([[0,a,b],[-a,0,c],[-b,-c,0]]),ix:[a,b,c].join(',')}; }},
   {id:'27b.bklists3',step:'27b',kind:'grid',label:'three lists of three numbers, as rows: free, or one a mix of the others',make(){ const u=[nz(-3,3),ri(-3,3),ri(-3,3)], v=pick1(V3BD().filter(v=>v[1]&&crBD(u,v).some(z=>z))), free=Math.random()<0.5, n=crBD(u,v); /* v off u's line; a free w off their plane; a mix that stays within 9 */
     const w=free?pick1(V3BD().filter(w=>w[2]&&w[0]*n[0]+w[1]*n[1]+w[2]*n[2]!==0)):(([a,b])=>mix(u,v,a,b))(pick1(LX([-2,-1,1,2],[-2,-1,1,2,3]).filter(([a,b])=>mix(u,v,a,b).every(x=>Math.abs(x)<=9)))); const m=[u,v,w]; if(w.some(x=>Math.abs(x)>9)||grank(gq([u,v]))<2||(free&&qz(gdet(gq(m))))) return null; return {val:grid(m),ix:m.flat().join(',')}; }},
   {id:'27b.bkneighbours',step:'27b',kind:'grid',label:'the coefficients of u ± v, v ± w, w ± u in a free list u, v, w',make(){ const s=[pick1([-1,1]),pick1([-1,1]),pick1([-1,1])]; return {val:grid([[1,s[0],0],[0,1,s[1]],[s[2],0,1]]),ix:s.join(',')}; }},
@@ -13092,13 +13145,13 @@ SEEDS.push(
   {id:'27c.bkgrids3',step:'27c',kind:'grid',label:'3 by 3 grids with one, two or three free rows',make(){ const k=rnd(3), r1=[nz(-3,3),ri(-3,3),ri(-3,3)], r2=[ri(-3,3),nz(-3,3),ri(-3,3)];
     const m=k===0?[r1,r1.map(x=>2*x),r1.map(x=>-x)]:k===1?[r1,r2,mix(r1,r2,1,1)]:[r1,r2,[ri(-3,3),ri(-3,3),nz(-3,3)]]; if(k>0&&grank(gq([r1,r2]))<2){ r2[0]+=r2[0]<3?1:-1; if(k===1) m[2]=mix(r1,r2,1,1); } if(k===2&&grank(gq(m))<3){ const c=[r1[1]*r2[2]-r1[2]*r2[1],r1[2]*r2[0]-r1[0]*r2[2],r1[0]*r2[1]-r1[1]*r2[0]], i=c.findIndex(x=>x!==0); m[2][i]+=m[2][i]<3?1:-1; } /* rows that lean together are moved a step apart */ if(grank(gq(m))!==k+1||m.flat().some(x=>Math.abs(x)>6)) return null; return {val:grid(m),ix:m.flat().join(',')}; }},
   {id:'27d.bkgrids',step:'27d',kind:'grid',label:'grids of 2 by 3, 3 by 2 and 1 by 3',make(){ const [r,c]=pick1([[2,3],[3,2],[1,3],[3,3]]); const m=Array.from({length:r},()=>Array.from({length:c},()=>ri(-3,3))); if(m.flat().every(x=>x===0)) m[r-1][c-1]=pick1([-3,-2,-1,1,2,3]); /* never all 0 */ return m.flat().every(x=>x===0)?null:{val:grid(m),ix:r+'x'+c+':'+m.flat().join(',')}; }},
-  {id:'27j.bksystems3',step:'27j',kind:'grid',label:'three samenesses in three unknowns, as a grid with the right sides last',make(){ const kind=rnd(3); let A, x;
+  {id:'27l.bksystems3',step:'27l',kind:'grid',label:'three samenesses in three unknowns, as a grid with the right sides last',make(){ const kind=rnd(3); let A, x;
     if(kind===0){ A=sq3free(1e9); if(qz(gdet(gq(A)))) return null; } else { const r1=[nz(-3,3),ri(-3,3),ri(-3,3)], r2=pick1(V3BD().filter(v=>v[1]&&crBD(r1,v).some(z=>z))); A=[r1,r2,mix(r1,r2,pick1([-1,1,2]),pick1([-1,1]))]; if(grank(gq(A))!==2) return null; }
     x=pick1(V3BD().filter(x=>A.every(r=>Math.abs(r.reduce((s,a,i)=>s+a*x[i],0))<=(kind===2?13:15)))); /* an answer whose right sides stay within 15 */
     const b=A.map(r=>r.reduce((s,a,i)=>s+a*x[i],0)); if(kind===2) b[2]+=pick1([-2,-1,1,2]); const m=A.map((r,i)=>r.concat([b[i]])); return m.flat().some(v=>Math.abs(v)>15)?null:{val:grid(m),ix:kind+':'+m.flat().join(',')}; }},
-  {id:'27j.bkreach',step:'27j',kind:'grid',label:'three rows in two unknowns, the third a mix of the first two',make(){ const r1=[nz(-3,3),ri(-3,3)], r2=pick1(LX(LRG(-3,3),[-3,-2,-1,1,2,3]).filter(r=>r1[0]*r[1]-r1[1]*r[0]!==0)), m=[r1,r2,(([a,b])=>mix(r1,r2,a,b))(pick1(LX([-2,-1,1,2,3],[-2,-1,1,2,3]).filter(([a,b])=>mix(r1,r2,a,b).every(x=>Math.abs(x)<=12))))]; return m.flat().some(x=>Math.abs(x)>12)?null:{val:grid(m),ix:m.flat().join(',')}; }},
-  {id:'27j.bkrows',step:'27j',kind:'grid',label:'2 by 3 grids in lowest terms, or one move short',make(){ const a=ri(-3,3), b=ri(-3,3), c=ri(1,3), k=rnd(5); const m=[[[1,0,a],[0,1,b]],[[1,a,0],[0,0,1]],[[c+1,0,a],[0,1,b]],[[0,1,b],[1,0,a]],[[1,c,a],[0,1,b]]][k]; return {val:grid(m),ix:k+':'+[a,b,c].join(',')}; }},
-  {id:'27j.bkunimod',step:'27j',kind:'grid',label:'3 by 3 grids reached from I by row moves',make(){ /* five row moves from I, each chosen among the moves that keep every entry within 9, the last never landing back on I */
+  {id:'27l.bkreach',step:'27l',kind:'grid',label:'three rows in two unknowns, the third a mix of the first two',make(){ const r1=[nz(-3,3),ri(-3,3)], r2=pick1(LX(LRG(-3,3),[-3,-2,-1,1,2,3]).filter(r=>r1[0]*r[1]-r1[1]*r[0]!==0)), m=[r1,r2,(([a,b])=>mix(r1,r2,a,b))(pick1(LX([-2,-1,1,2,3],[-2,-1,1,2,3]).filter(([a,b])=>mix(r1,r2,a,b).every(x=>Math.abs(x)<=12))))]; return m.flat().some(x=>Math.abs(x)>12)?null:{val:grid(m),ix:m.flat().join(',')}; }},
+  {id:'27l.bkrows',step:'27l',kind:'grid',label:'2 by 3 grids in lowest terms, or one move short',make(){ const a=ri(-3,3), b=ri(-3,3), c=ri(1,3), k=rnd(5); const m=[[[1,0,a],[0,1,b]],[[1,a,0],[0,0,1]],[[c+1,0,a],[0,1,b]],[[0,1,b],[1,0,a]],[[1,c,a],[0,1,b]]][k]; return {val:grid(m),ix:k+':'+[a,b,c].join(',')}; }},
+  {id:'27l.bkunimod',step:'27l',kind:'grid',label:'3 by 3 grids reached from I by row moves',make(){ /* five row moves from I, each chosen among the moves that keep every entry within 9, the last never landing back on I */
     let m=gI(3).map(r=>r.map(x=>x.p)); const OPS=[], sw=Math.random()<0.5, isI=g=>g.every((r,i)=>r.every((a,c)=>a===(i===c?1:0))); for(let i=0;i<3;i++) for(let j=0;j<3;j++) if(i!==j) for(const k of [-2,-1,1,2]) OPS.push([i,j,k]);
     const ap=(g,[i,j,k])=>g.map((r,ii)=>ii===i?r.map((a,c)=>a+k*g[j][c]):r.slice());
     for(let t=0;t<5;t++){ const ok=OPS.filter(o=>{ const g=ap(m,o); return !g.flat().some(x=>Math.abs(x)>9)&&!(t===4&&!sw&&isI(g)); }); m=ap(m,ok[Math.floor(Math.random()*ok.length)]); }
@@ -13115,11 +13168,11 @@ SEEDS.push(
 );
 const GL=o=>L.push(Object.assign({from:'grid'},o));
 const gsq=m=>m.length===m[0].length;
-GL({id:'27k.det3',to:'num',steps:()=>['27k'],say:(p,nm)=>'take the determinant of '+gn(nm)+', along its first row',act:s=>gsq(s.m)&&s.m.length>=3?num(gdet(s.m)):null,cite:()=>'the expansion technique',
+GL({id:'27m.det3',to:'num',steps:()=>['27m'],say:(p,nm)=>'take the determinant of '+gn(nm)+', along its first row',act:s=>gsq(s.m)&&s.m.length>=3?num(gdet(s.m)):null,cite:()=>'the expansion technique',
   slips:s=>{ if(!gsq(s.m)||s.m.length<3) return []; const m=s.m, n=m.length, minor=j=>gdet(m.slice(1).map(r=>r.filter((_,k)=>k!==j))); const allp=m[0].reduce((t,a,j)=>qa(t,qm(a,minor(j))),Q(0)); let dg=Q(1); for(let i=0;i<n;i++) dg=qm(dg,m[i][i]);
     return [{why:'every term along the row is added, with no signs turned',v:allp},{why:'only the product down the middle is taken',v:dg}]; },
   line:(o,p,nm,nx,s)=>{ const m=s.m; if(m.length!==3) return 'det '+gn(nm)+' = '+qs(o.v); const mi=j=>gdet(m.slice(1).map(r=>r.filter((_,k)=>k!==j))); return 'det '+gn(nm)+' by its first row: '+[0,1,2].map(j=>(j===1?' − ':j?' + ':'')+par(m[0][j])+'·'+par(mi(j))).join('')+' = '+qs(o.v); }});
-GL({id:'27k.minor',to:'mat',steps:()=>['27k'],make:()=>({j:ri(1,3)}),say:(p,nm)=>'strike row 1 and column '+p.j+' of '+gn(nm)+': write the 2 by 2 grid that is left',act:(s,p)=>s.m.length===3&&gsq(s.m)?mat(s.m.slice(1).map(r=>r.filter((_,k)=>k!==p.j-1))):null,
+GL({id:'27m.minor',to:'mat',steps:()=>['27m'],make:()=>({j:ri(1,3)}),say:(p,nm)=>'strike row 1 and column '+p.j+' of '+gn(nm)+': write the 2 by 2 grid that is left',act:(s,p)=>s.m.length===3&&gsq(s.m)?mat(s.m.slice(1).map(r=>r.filter((_,k)=>k!==p.j-1))):null,
   cite:()=>'the expansion technique',slips:(s,p)=>s.m.length===3&&gsq(s.m)?[{why:'column '+(p.j%3+1)+' is struck instead of column '+p.j,k:'mat',m:s.m.slice(1).map(r=>r.filter((_,k)=>k!==p.j%3))},{why:'row 2 is struck instead of row 1',k:'mat',m:[s.m[0],s.m[2]].map(r=>r.filter((_,k)=>k!==p.j-1))}]:[],
   line:(o,p,nm)=>gn(nm)+' less row 1 and column '+p.j+': '+KIND.mat.show(o)});
 GL({id:'27c.lost3',to:'num',steps:()=>['27c'],say:(p,nm)=>'find the dimension of what '+gn(nm)+' loses, acting on lists of '+'its width',act:s=>num(s.m[0].length-grank(s.m)),cite:()=>'the lost-plus-reached technique',
@@ -13132,17 +13185,17 @@ GL({id:'27d.times',to:'grid',steps:()=>['27d'],make:cur=>{ if(!cur||!cur.m) retu
   line:(o,p,nm)=>gn(nm)+' times B: '+gsh(o.m)});
 GL({id:'27g.turn3',to:'grid',steps:()=>['27g'],say:(p,nm)=>'turn the grid '+gn(nm)+' on its side, rows to columns',act:s=>geq(s.m,gT(s.m))?null:{k:'grid',m:gT(s.m)},cite:()=>'the side-turn technique',
   slips:s=>[{why:'the rows are put in the opposite order instead of turned',k:'grid',m:s.m.slice().reverse()}].filter(w=>!geq(w.m,gT(s.m))),line:(o,p,nm)=>gn(nm)+' turned on its side: '+gsh(o.m)});
-GL({id:'27j.lowest',to:'grid',steps:()=>['27j'],say:(p,nm)=>'bring '+gn(nm)+' to lowest terms by row moves',act:s=>({k:'grid',m:grref(s.m).m}),cite:()=>'the grid-lowest-terms technique',
+GL({id:'27l.lowest',to:'grid',steps:()=>['27l'],say:(p,nm)=>'bring '+gn(nm)+' to lowest terms by row moves',act:s=>({k:'grid',m:grref(s.m).m}),cite:()=>'the grid-lowest-terms technique',
   slips:s=>{ const R=grref(s.m).m; return [{why:'the entries above each lead are not cleared',k:'grid',m:grref(s.m,'ref').m},{why:'the leads are not stretched to 1',k:'grid',m:grref(s.m,'nonorm').m}].filter(w=>!geq(w.m,R)); },
   line:(o,p,nm)=>gn(nm)+' in lowest terms: '+gsh(o.m)});
 const ansW=m=>{ const n=m[0].length-1, r=grref(m), A=grref(m.map(x=>x.slice(0,n))).rank; if(r.rank>A) return 'it has no answer'; if(A<n) return n-A===1?'a whole line of answers':'a whole plane of answers'; return '('+r.m.slice(0,n).map(x=>qs(x[n])).join(', ')+')'; };
-GL({id:'27j.answer',to:'word',steps:()=>['27j'],say:(p,nm)=>'read '+gn(nm)+' as samenesses, the last column the right sides: solve them',act:s=>s.m[0].length>=3&&s.m.length===s.m[0].length-1?word(ansW(s.m)):null,cite:()=>'the row-move technique',
+GL({id:'27l.answer',to:'word',steps:()=>['27l'],say:(p,nm)=>'read '+gn(nm)+' as samenesses, the last column the right sides: solve them',act:s=>s.m[0].length>=3&&s.m.length===s.m[0].length-1?word(ansW(s.m)):null,cite:()=>'the row-move technique',
   slips:s=>{ const n=s.m[0].length-1, R=ansW(s.m), out=[]; out.push({why:'the right sides are taken with their signs turned',k:'word',s:ansW(s.m.map(r=>r.slice(0,n).concat([qn(r[n])])))});
     out.push({why:'a row move is done on the left side only, leaving the right side as it was',k:'word',s:ansW(s.m.map((r,i)=>i===s.m.length-1?r.slice(0,n).concat([s.m[0][n]]):r))});
     if(R==='it has no answer') out.push({why:'the clash 0 = c in the last row is passed over',k:'word',s:'a whole line of answers'}); return out.filter(w=>w.s!==R); },
   line:(o,p,nm)=>'the samenesses of '+gn(nm)+': '+o.s});
 const YS=['y₁','y₂','y₃'], reachW=(a,b)=>'y₃ = '+[[a,'y₁'],[b,'y₂']].filter(x=>!qz(x[0])).map(([k,v],i)=>(i?(k.p<0?' − ':' + '):(k.p<0?'−':''))+(qe(qabs(k),Q(1))?'':qabs(k).q>1?'('+qs(qabs(k))+')':qs(qabs(k)))+v).join('');
-GL({id:'27j.reach',to:'word',steps:()=>['27j'],say:(p,nm)=>'with right sides y₁, y₂, y₃, find when the samenesses of '+gn(nm)+' have an answer',
+GL({id:'27l.reach',to:'word',steps:()=>['27l'],say:(p,nm)=>'with right sides y₁, y₂, y₃, find when the samenesses of '+gn(nm)+' have an answer',
   act:s=>{ if(s.m.length!==3||s.m[0].length!==2) return null; const top=[s.m[0],s.m[1]]; if(qz(gdet(top))) return null; const inv=ginv(gT(top)), c=gmul(inv,gT([s.m[2]])); return [c[0][0],c[1][0]].some(x=>x.q>12||Math.abs(x.p)>99)?null:word(reachW(c[0][0],c[1][0])); },
   cite:()=>'the row-move technique',
   slips:s=>{ if(s.m.length!==3||s.m[0].length!==2) return []; const top=[s.m[0],s.m[1]]; if(qz(gdet(top))) return []; const c=gmul(ginv(gT(top)),gT([s.m[2]])), a=c[0][0], b=c[1][0], R=reachW(a,b);
@@ -13151,10 +13204,10 @@ GL({id:'27j.reach',to:'word',steps:()=>['27j'],say:(p,nm)=>'with right sides y�
 const lowW=(m,skip)=>{ const lead=r=>r.findIndex(x=>!qz(x)); const L1=m.map(lead); for(let i=0;i<m.length;i++){ const c=L1[i]; if(c<0) continue;
     if(skip!=='stretch'&&!qe(m[i][c],Q(1))) return 'not yet: a stretch of row '+(i+1)+' is still to do'; if(skip!=='swap'&&i>0&&L1[i-1]>=0&&c<L1[i-1]) return 'not yet: a swap of rows is still to do';
     if(skip!=='clear'&&m.some((r,j)=>j!==i&&!qz(r[c]))) return 'not yet: a clearing above or below a lead is still to do'; } return 'in lowest terms'; };
-GL({id:'27j.islowest',to:'word',steps:()=>['27j'],say:(p,nm)=>'say whether '+gn(nm)+' is in lowest terms, and if not, which move is still to do',act:s=>word(lowW(s.m)),cite:()=>'the grid-lowest-terms technique',
+GL({id:'27l.islowest',to:'word',steps:()=>['27l'],say:(p,nm)=>'say whether '+gn(nm)+' is in lowest terms, and if not, which move is still to do',act:s=>word(lowW(s.m)),cite:()=>'the grid-lowest-terms technique',
   slips:s=>{ const R=lowW(s.m); return [['stretch','a lead other than 1 is let pass'],['swap','a lead to the left of the lead above it is let pass'],['clear','an entry beside a lead in its column is let pass']].map(([k,why])=>({why,k:'word',s:lowW(s.m,k)})).filter(w=>w.s!==R); },
   line:(o,p,nm)=>gn(nm)+': '+o.s});
-GL({id:'27j.undo3',to:'grid',steps:()=>['27j'],say:(p,nm)=>'find the undo of '+gn(nm)+' by row moves on ['+gn(nm)+' | I]',act:s=>{ if(!gsq(s.m)||s.m.length<3) return null; const v=ginv(s.m); return v?{k:'grid',m:v}:null; },cite:()=>'the undo-by-rows technique',
+GL({id:'27l.undo3',to:'grid',steps:()=>['27l'],say:(p,nm)=>'find the undo of '+gn(nm)+' by row moves on ['+gn(nm)+' | I]',act:s=>{ if(!gsq(s.m)||s.m.length<3) return null; const v=ginv(s.m); return v?{k:'grid',m:v}:null; },cite:()=>'the undo-by-rows technique',
   slips:s=>{ if(!gsq(s.m)||s.m.length<3) return []; const v=ginv(s.m); if(!v) return []; const d=gdet(s.m); return [{why:'the side-turn of the grid is taken for its undo',k:'grid',m:gT(s.m)},{why:'the undo is turned on its side by mistake',k:'grid',m:gT(v)},{why:'the stand-in grid is not divided by the determinant',k:'grid',m:gsc(v,d)}].filter(w=>!geq(w.m,v)); },
   line:(o,p,nm)=>'undo of '+gn(nm)+': '+gsh(o.m)});
 GL({id:'27b.free3',to:'word',steps:()=>['27b','27e'],say:(p,nm)=>'read the rows of '+gn(nm)+' as a list of vectors: is it free?',act:s=>word(grank(s.m)===s.m.length?'free':'not free'),cite:()=>'the nonzero-det technique',
@@ -13216,7 +13269,7 @@ const pdW=m=>{ const n=m.length; for(let k=1;k<=n;k++){ const d=gdet(m.slice(0,k
 GL({id:'31e.corners3',to:'word',steps:()=>['31e'],say:(p,nm)=>'by its corner determinants, is the form of '+gn(nm)+' positive definite?',act:s=>gsq(s.m)&&geq(s.m,gT(s.m))?word(pdW(s.m)):null,cite:()=>'the form-test technique',
   slips:s=>{ if(!gsq(s.m)||!geq(s.m,gT(s.m))) return []; const R=pdW(s.m), dg=s.m.every((r,i)=>r[i].p>0); return [{why:'only the middle entries are checked for being positive',k:'word',s:dg?'positive definite':pdW(s.m.map((r,i)=>r.map((x,j)=>i===j?x:Q(0))))},{why:'the last corner, the whole determinant, is skipped',k:'word',s:pdW(s.m.slice(0,2).map(r=>r.slice(0,2)))}].filter(w=>w.s!==R); },
   line:(o,p,nm)=>'the form of '+gn(nm)+': '+o.s});
-GL({id:'44c.through',to:'fn',steps:()=>['27k','44c'],say:(p,nm)=>'find the polynomial of degree ≤ 2 through the rows (x, y) of '+gn(nm),
+GL({id:'44c.through',to:'fn',steps:()=>['27m','44c'],say:(p,nm)=>'find the polynomial of degree ≤ 2 through the rows (x, y) of '+gn(nm),
   act:s=>{ if(s.m.length!==3||s.m[0].length!==2) return null; const V=s.m.map(r=>[Q(1),r[0],qm(r[0],r[0])]), inv=ginv(V); if(!inv) return null; const c=gmul(inv,s.m.map(r=>[r[1]])).map(r=>r[0]); const t=fromPoly(c); return fshort(t)?fnv(t):null; },
   cite:()=>'the det-ratio technique',slips:s=>{ if(s.m.length!==3) return []; const V=s.m.map(r=>[Q(1),r[0],qm(r[0],r[0])]), inv=ginv(V); if(!inv) return []; const c=gmul(inv,s.m.map(r=>[r[1]])).map(r=>r[0]);
     return [{why:'the x and y of each point are read the wrong way round',t:(()=>{ const V2=s.m.map(r=>[Q(1),r[1],qm(r[1],r[1])]), i2=ginv(V2); return i2?fromPoly(gmul(i2,s.m.map(r=>[r[0]])).map(r=>r[0])):null; })()},{why:'the coefficients are read from the top power down',t:fromPoly(c.slice().reverse())}].filter(w=>w.t&&show(w.t)!==show(fromPoly(c))); },
@@ -13247,7 +13300,7 @@ ML({id:'27d.newbasis',to:'mat',steps:()=>['27d','27b'],make:()=>{ const P=unimod
   act:(s,p)=>{ const P=mm(p._p), Pi=ginv(P); return Pi?mat(gmul(Pi,gmul(s.m,P))):null; },cite:()=>'the columns technique',
   slips:(s,p)=>{ const P=mm(p._p), Pi=ginv(P); if(!Pi) return []; const R=gmul(Pi,gmul(s.m,P)); return [{why:'the basis change is done the wrong way round, P before and its undo after',k:'mat',m:gmul(P,gmul(s.m,Pi))},{why:'the undo of P is left off',k:'mat',m:gmul(s.m,P)}].filter(w=>!geq(w.m,R)); },
   line:(o,p,nm)=>nm+' in the new basis: '+KIND.mat.show(o)});
-ML({id:'27k.detplusI',to:'num',steps:()=>['27k'],say:(p,nm)=>'take the determinant of I + '+nm,act:s=>num(det2(gadd(gI(2),s.m))),cite:()=>'the expansion technique',
+ML({id:'27m.detplusI',to:'num',steps:()=>['27m'],say:(p,nm)=>'take the determinant of I + '+nm,act:s=>num(det2(gadd(gI(2),s.m))),cite:()=>'the expansion technique',
   slips:s=>[{why:'the determinant is taken to add: det I + det A',v:qa(Q(1),det2(s.m))},{why:'the 1 from I is left out',v:qa(tr2(s.m),det2(s.m))}],line:(o,p,nm,nx,s)=>'det(I + '+nm+') from the trace: 1 + '+par(tr2(s.m))+' + '+par(det2(s.m))+' = '+qs(o.v)});
 ML({id:'27g.adjugate',to:'mat',steps:()=>['27g'],say:(p,nm)=>'write the stand-in grid S of '+nm+', with S'+nm+' = (det '+nm+')I',act:s=>mat([[s.m[1][1],qn(s.m[0][1])],[qn(s.m[1][0]),s.m[0][0]]]),cite:()=>'the stand-in technique',
   slips:s=>[{why:'the corners are swapped but the other two keep their signs',k:'mat',m:[[s.m[1][1],s.m[0][1]],[s.m[1][0],s.m[0][0]]]},{why:'the other two are swapped as well as having their signs turned',k:'mat',m:[[s.m[1][1],qn(s.m[1][0])],[qn(s.m[0][1]),s.m[0][0]]]}].filter(w=>!geq(w.m,[[s.m[1][1],qn(s.m[0][1])],[qn(s.m[1][0]),s.m[0][0]]])),
@@ -13400,7 +13453,7 @@ L.filter(l=>l.from==='rel').forEach(l=>{ const a=l.act; l.act=(s,p)=>s&&s.a&&s.b
 /* where a link of another file already does the move on polynomials, this file's link takes only what that one cannot (quotients, fraction powers) */
 [['16f.anti',()=>true],['14f.test',()=>true],['8g.sign',p=>p&&p.dir<0]].forEach(([id,when])=>{ const l=L.find(x=>x.id===id), a=l.act; l.act=(s,p)=>s&&s.t&&toPoly(s.t)&&when(p)?null:a(s,p); });
 /* a grid made from a grid takes the next name, said in the instruction itself */
-['27d.times','27g.turn3','27j.lowest','27j.undo3','31b.gram','31b.normal'].forEach(id=>{ const l=L.find(x=>x.id===id), sy=l.say; l.say=(p,nm,cur)=>sy(p,nm,cur)+'; call the result '+gnext(nm); });
+['27d.times','27g.turn3','27l.lowest','27l.undo3','31b.gram','31b.normal'].forEach(id=>{ const l=L.find(x=>x.id===id), sy=l.say; l.say=(p,nm,cur)=>sy(p,nm,cur)+'; call the result '+gnext(nm); });
 /* steps0 for the links of this file */
 L.forEach(l=>{ if(!l.steps0) l.steps0=()=>{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }; });
 })();
@@ -13689,7 +13742,7 @@ SEEDS.push(
   {id:'28b.maps',step:'28b',label:'polynomial maps of the plane',kind:'map2',make(){ const MON=[[0,0],[1,0],[0,1],[2,0],[1,1],[0,2]], T2=(n,need2)=>{ const ms=shuffle(MON.slice()).slice(0,n); if(need2&&!ms.some(m=>m[0]+m[1]===2)) ms[0]=[[2,0],[1,1],[0,2]][Math.floor(Math.random()*3)]; return f2n(ms.map(([i,j])=>[i,j,Q(nz(-3,3))])); }, two=Math.random()<0.5, P=T2(ri(2,3),two), Qt=T2(ri(2,3),!two); /* different terms, so none cancel, and a square or cross term in one of the two */ const v=map2(P,Qt); return {val:v,ix:m2s(v)}; }},
   {id:'29·cb28.ones',step:'29·cb28',label:'forms of degree 1 with polynomial parts',kind:'form1',make(){ const D2=n=>f2n(shuffle([[0,0],[1,0],[0,1],[2,0],[1,1],[0,2]]).slice(0,n).map(([i,j])=>[i,j,Q(nz(-3,3))])), P=D2(ri(1,2)), Qt=D2(ri(1,2)); /* different terms, so none cancel */ const v=form1(P,Qt); return {val:v,ix:f1s(v)}; }},
   {id:'29·cb28.twos',step:'29·cb28',label:'forms of degree 2 with polynomial parts',kind:'form2',make(){ const MS=[[0,0],[1,0],[0,1],[2,0],[1,1],[0,2]], Aa=f2n([...Array(ri(1,3))].map(()=>MS.splice(ri(0,MS.length-1),1)[0]).map(([i,j])=>[i,j,Q(nz(-3,3))])); /* different powers, so nothing cancels */ return {val:form2(Aa),ix:f2fs(form2(Aa))}; }},
-  {id:'28h.boxfns',step:'28h',label:'polynomials in x and y for a box',kind:'f2',make(){ /* a term with x, a term with y, maybe one more, all different */ const i1=ri(1,3), j1=ri(0,3-i1), j2=ri(1,3); let i2=ri(0,3-j2); if(i2===i1&&j2===j1) i2=0; const T=[[i1,j1],[i2,j2]];
+  {id:'28j.boxfns',step:'28j',label:'polynomials in x and y for a box',kind:'f2',make(){ /* a term with x, a term with y, maybe one more, all different */ const i1=ri(1,3), j1=ri(0,3-i1), j2=ri(1,3); let i2=ri(0,3-j2); if(i2===i1&&j2===j1) i2=0; const T=[[i1,j1],[i2,j2]];
     if(ri(2,3)===3){ const free=[]; for(let i=0;i<=3;i++) for(let j=0;j<=3-i;j++) if(!T.some(t=>t[0]===i&&t[1]===j)) free.push([i,j]); T.push(free[ri(0,free.length-1)]); } const ts=f2n(T.map(([i,j])=>[i,j,Q(nz(-3,3))])); return {val:F2(ts),ix:f2s(ts)}; }},
   {id:'29·cb28.paths',step:'29·cb28',label:'paths of segments',kind:'ch1',make(){ const n=ri(2,3), pts=[PT()]; for(let i=0;i<n;i++){ const L0=pts[pts.length-1], q=(L=>L[Math.floor(Math.random()*L.length)])(LX(LRG(-2,2),LRG(-2,2)).filter(p=>p[0]!==L0[0]||p[1]!==L0[1])); /* each segment has length */ pts.push(q); }
     if(Math.random()<0.3){ const a=ri(1,2), b=ri(1,2); return {val:ch1([[0,0],[a,0],[a,b],[0,b],[0,0]]),ix:'box'+a+b}; } return {val:ch1(pts),ix:pts.map(p=>p.join(',')).join(';')}; }});
@@ -13704,7 +13757,7 @@ const Lm=l=>[[Q(l[0]),Q(l[1])],[Q(l[2]),Q(l[3])]];
 LINK({id:'28b.jac',from:'map2',to:'mat',steps:()=>['28b','28a'],make:()=>({w:PT()}),say:(p,nm,v)=>'write the slope grid of '+v.lb+' at '+pv(p.w),act:(v,p)=>mat(jac(v,p.w)),cite:()=>'the slope-grid technique',
   slips:(v,p)=>{ const J=jac(v,p.w); return [{why:'the slopes of each output are put in a column instead of a row',k:'mat',m:mT(J)},{why:'the slopes in x and in y are put in each other’s columns',k:'mat',m:[[J[0][1],J[0][0]],[J[1][1],J[1][0]]]}]; },
   line:(o,p,nm,nx,v)=>'slope grid '+nx+' = D'+v.lb+pv(p.w)+' = '+mats(o.m)});
-LINK({id:'28i.factor',from:'map2',to:'num',steps:()=>['28i','28b'],make:()=>({w:PT()}),say:(p,nm,v)=>'find the area factor |det D'+v.lb+'| at '+pv(p.w),act:(v,p)=>num(qabs(det(jac(v,p.w)))),cite:()=>'the change-of-variables technique',
+LINK({id:'28k.factor',from:'map2',to:'num',steps:()=>['28k','28b'],make:()=>({w:PT()}),say:(p,nm,v)=>'find the area factor |det D'+v.lb+'| at '+pv(p.w),act:(v,p)=>num(qabs(det(jac(v,p.w)))),cite:()=>'the change-of-variables technique',
   slips:(v,p)=>{ const J=jac(v,p.w), d=det(J); return [{why:'the size of the determinant is not taken',v:d.p<0?d:null},{why:'the cross products are added instead of taken away',v:qabs(qa(qm(J[0][0],J[1][1]),qm(J[0][1],J[1][0])))},{why:'only the corner product is taken',v:qabs(qm(J[0][0],J[1][1]))}].filter(w=>w.v); },
   line:(o,p,nm,nx,v)=>'area factor of '+v.lb+' at '+pv(p.w)+': |det D'+v.lb+'| = '+qs(o.v)});
 LINK({id:'28c.after',from:'map2',to:'map2',steps:()=>['28c'],make:()=>({l:pick(LINS)}),say:(p,nm,v)=>'follow '+v.lb+' by the straight map L(x, y) = '+linS(p.l),
@@ -13724,11 +13777,11 @@ LINK({id:'28e.undogrid',from:'map2',to:'mat',steps:()=>['28e','27g'],make:()=>({
   line:(o,p,nm,nx,v)=>'undo grid '+nx+' = (D'+v.lb+pv(p.w)+')⁻¹ = '+mats(o.m)});
 const detF=v=>fsub(fmul(fdx(v.P),fdy(v.Q)),fmul(fdy(v.P),fdx(v.Q)));
 const oneSign=ts=>{ const c=ts.find(t=>t[0]===0&&t[1]===0); if(!c) return 0; const s=c[2].p>0?1:-1; return ts.every(t=>t[2].p*s>0)?s:0; };
-LINK({id:'28i.total',from:'map2',to:'num',steps:()=>['28i','28h'],make:()=>({a:ri(1,2),b:ri(1,2)}),say:(p,nm,v)=>'find the total of |det D'+v.lb+'| over [0, '+p.a+'] × [0, '+p.b+']',
+LINK({id:'28k.total',from:'map2',to:'num',steps:()=>['28k','28j'],make:()=>({a:ri(1,2),b:ri(1,2)}),say:(p,nm,v)=>'find the total of |det D'+v.lb+'| over [0, '+p.a+'] × [0, '+p.b+']',
   act:(v,p)=>{ const D=detF(v), s=oneSign(D); if(!s) return null; const r=qabs(fint(D,p.a,p.b)); return okN(r)?num(r):null; },cite:()=>'the change-of-variables technique',
   slips:(v,p)=>{ const D=detF(v); if(!oneSign(D)) return []; return [{why:'the factor is read at the corner (0, 0) and multiplied by the area',v:qabs(qm(f2ev(D,0,0),Q(p.a*p.b)))},{why:'the power of x is raised but not divided by',v:qabs(fint(D,p.a,p.b,true))}]; },
   line:(o,p,nm,nx,v)=>'total of |det D'+v.lb+'| over [0, '+p.a+'] × [0, '+p.b+']: '+qs(o.v)});
-LINK({id:'29·cb28.pullarea',from:'map2',to:'form2',steps:()=>['29·cb28','28i'],say:(p,nm,v)=>'pull dx dy back through '+v.lb,act:v=>form2(detF(v)),cite:()=>'the change-of-variables technique',
+LINK({id:'29·cb28.pullarea',from:'map2',to:'form2',steps:()=>['29·cb28','28k'],say:(p,nm,v)=>'pull dx dy back through '+v.lb,act:v=>form2(detF(v)),cite:()=>'the change-of-variables technique',
   slips:v=>[{why:'the cross products are added instead of taken away',k:'form2',A:fadd(fmul(fdx(v.P),fdy(v.Q)),fmul(fdy(v.P),fdx(v.Q)))},{why:'dy dx is read as dx dy',k:'form2',A:fsc(detF(v),-1)}],
   line:(o,p,nm,nx,v)=>'the area form pulled back: '+v.lb+'*(dx dy) = '+f2fs(o)});
 LINK({id:'28b.gradmap',from:'f2',to:'map2',steps:()=>['28a','28b'],say:(p,nm,F)=>'write the map (x, y) ↦ (∂'+F.lb+'/∂x, ∂'+F.lb+'/∂y)',act:F=>{ const a=fdx(F.ts), b=fdy(F.ts); return a.length&&b.length?map2(a,b,'φ'):null; },cite:()=>'the one-knob technique',
@@ -13744,7 +13797,7 @@ LINK({id:'29·cb28.wedge',from:'form1',to:'form2',steps:()=>['29·cb28','27h'],m
   act:(w,p)=>form2(fsub(fsc(w.P,p.a[1]),fsc(w.Q,p.a[0]))),cite:()=>'the two-vector technique',
   slips:(w,p)=>[{why:'dy dx is taken as dx dy',k:'form2',A:fadd(fsc(w.P,p.a[1]),fsc(w.Q,p.a[0]))},{why:'the parts are matched like a dot',k:'form2',A:fadd(fsc(w.P,p.a[0]),fsc(w.Q,p.a[1]))},{why:'the order is turned, '+as(p.a)+' first',k:'form2',A:fsub(fsc(w.Q,p.a[0]),fsc(w.P,p.a[1]))}],
   line:(o,p)=>'the wedge ω ∧ ('+as(p.a)+') = '+f2fs(o)});
-LINK({id:'28h.rect2',from:'form2',to:'num',steps:()=>['28h','29·cb28'],make:()=>({a:ri(1,2),b:ri(1,3)}),say:p=>'find the total of η over [0, '+p.a+'] × [0, '+p.b+'], one letter at a time',
+LINK({id:'28j.rect2',from:'form2',to:'num',steps:()=>['28j','29·cb28'],make:()=>({a:ri(1,2),b:ri(1,3)}),say:p=>'find the total of η over [0, '+p.a+'] × [0, '+p.b+'], one letter at a time',
   act:(v,p)=>{ const r=fint(v.A,p.a,p.b); return okN(r)?num(r):null; },cite:()=>'the either-order technique',
   slips:(v,p)=>[{why:'the power of x is raised but not divided by',v:fint(v.A,p.a,p.b,true)},{why:'η is read at the far corner and multiplied by the area',v:qm(f2ev(v.A,p.a,p.b),Q(p.a*p.b))}],
   line:(o,p)=>'total of η over [0, '+p.a+'] × [0, '+p.b+']: '+qs(o.v)});
@@ -13755,24 +13808,24 @@ LINK({id:'29·cb28.edge',from:'form1',to:'num',steps:()=>['29·cb28'],make:()=>(
   act:(w,p)=>{ const r=edgeTotal(w,p.a,p.b); return okN(r)?num(r):null; },cite:()=>'the boundary technique',
   slips:(w,p)=>[{why:'the edge is walked with the rectangle on the right',v:qn(edgeTotal(w,p.a,p.b))},{why:'the top and left sides are walked forwards, not turned',v:edgeTotal(w,p.a,p.b,true)},{why:'the spread of ω is totalled instead of its swirl',v:fint(spread(w),p.a,p.b)}],
   line:(o,p)=>'total of ω round the edge of [0, '+p.a+'] × [0, '+p.b+']: '+qs(o.v)});
-LINK({id:'28j.swirl',from:'form1',to:'num',steps:()=>['28j'],make:()=>({a:ri(1,3),b:ri(1,2)}),say:p=>'reading ω as the field (P, Q), find its circulation round the edge of [0, '+p.a+'] × [0, '+p.b+']',
+LINK({id:'28l.swirl',from:'form1',to:'num',steps:()=>['28l'],make:()=>({a:ri(1,3),b:ri(1,2)}),say:p=>'reading ω as the field (P, Q), find its circulation round the edge of [0, '+p.a+'] × [0, '+p.b+']',
   act:(w,p)=>{ const r=fint(swirl(w),p.a,p.b); return okN(r)?num(r):null; },cite:()=>'the swirl technique',
   slips:(w,p)=>[{why:'Pᵧ − Qₓ is totalled, turning the sign',v:qn(fint(swirl(w),p.a,p.b))},{why:'the spread Pₓ + Qᵧ is totalled instead',v:fint(spread(w),p.a,p.b)}],
   line:(o,p)=>'circulation of (P, Q) round [0, '+p.a+'] × [0, '+p.b+']: '+qs(o.v)});
-LINK({id:'28j.flux',from:'form1',to:'num',steps:()=>['28j'],make:()=>({a:ri(1,3),b:ri(1,2)}),say:p=>'reading ω as the field (P, Q), find its flux out of [0, '+p.a+'] × [0, '+p.b+']',
+LINK({id:'28l.flux',from:'form1',to:'num',steps:()=>['28l'],make:()=>({a:ri(1,3),b:ri(1,2)}),say:p=>'reading ω as the field (P, Q), find its flux out of [0, '+p.a+'] × [0, '+p.b+']',
   act:(w,p)=>{ const r=fint(spread(w),p.a,p.b); return okN(r)?num(r):null; },cite:()=>'the spread technique',
   slips:(w,p)=>[{why:'the swirl Qₓ − Pᵧ is totalled instead',v:fint(swirl(w),p.a,p.b)},{why:'the y part is taken away instead of added',v:fint(fsub(fdx(w.P),fdy(w.Q)),p.a,p.b)}],
   line:(o,p)=>'flux of (P, Q) out of [0, '+p.a+'] × [0, '+p.b+']: '+qs(o.v)});
-LINK({id:'28n.segment',from:'form1',to:'num',steps:()=>['28n'],make:()=>{ const p=PT(), q=PT(); return p[0]===q[0]&&p[1]===q[1]?null:{p,q}; },say:p=>'find the total of ω along the segment from '+pv(p.p)+' to '+pv(p.q)+', traced as p + t(q − p)',
+LINK({id:'28p.segment',from:'form1',to:'num',steps:()=>['28p'],make:()=>{ const p=PT(), q=PT(); return p[0]===q[0]&&p[1]===q[1]?null:{p,q}; },say:p=>'find the total of ω along the segment from '+pv(p.p)+' to '+pv(p.q)+', traced as p + t(q − p)',
   act:(w,p)=>{ const r=segTotal(w,p.p,p.q); return okN(r)?num(r):null; },cite:()=>'the retrace technique',
   slips:(w,p)=>[{why:'the segment is traced from its end to its start',v:qn(segTotal(w,p.p,p.q))},{why:'the dx and dy rates are swapped',v:segTotal(w,p.p,p.q,true)},{why:'ω is read at the start only, not totalled',v:qa(qm(f2ev(w.P,p.p[0],p.p[1]),Q(p.q[0]-p.p[0])),qm(f2ev(w.Q,p.p[0],p.p[1]),Q(p.q[1]-p.p[1])))}],
   line:(o,p)=>'total of ω from '+pv(p.p)+' to '+pv(p.q)+': '+qs(o.v)});
-LINK({id:'28i.pull2',from:'form2',to:'form2',steps:()=>['28i','29·cb28'],make:()=>({l:pick(LINS)}),say:p=>'pull η back through the straight map T(x, y) = '+linS(p.l),
+LINK({id:'28k.pull2',from:'form2',to:'form2',steps:()=>['28k','29·cb28'],make:()=>({l:pick(LINS)}),say:p=>'pull η back through the straight map T(x, y) = '+linS(p.l),
   act:(v,p)=>{ const [a,b,c,d]=p.l, D=a*d-b*c; return form2(fsc(fcomp(v.A,flin(a,b),flin(c,d)),D)); },cite:()=>'the change-of-variables technique',
   slips:(v,p)=>{ const [a,b,c,d]=p.l, D=a*d-b*c, Ac=fcomp(v.A,flin(a,b),flin(c,d)); return [{why:'the factor det T = '+D+' is left off',k:'form2',A:Ac},{why:'the part of η is not moved through T',k:'form2',A:fsc(v.A,D)}]; },
   line:(o,p)=>'η pulled back through T = '+linS(p.l)+': '+f2fs(o)});
 /* polynomials in x and y, one letter at a time */
-LINK({id:'28h.inner',from:'f2',to:'fn',steps:()=>['28h'],make:()=>({b:ri(1,2)}),say:(p,nm,F)=>'total '+F.lb+'(x, y) in y from 0 to '+p.b+', holding x',
+LINK({id:'28j.inner',from:'f2',to:'fn',steps:()=>['28j'],make:()=>({b:ri(1,2)}),say:(p,nm,F)=>'total '+F.lb+'(x, y) in y from 0 to '+p.b+', holding x',
   act:(F,p)=>{ const c=[]; F.ts.forEach(([i,j,v])=>{ c[i]=qa(c[i]||Q(0),qm(v,qd(qpow(Q(p.b),j+1),Q(j+1)))); }); for(let i=0;i<c.length;i++) c[i]=c[i]||Q(0); return {k:'fn',t:fromPoly(c)}; },cite:()=>'the either-order technique',
   slips:(F,p)=>{ const c=[], e=[]; F.ts.forEach(([i,j,v])=>{ c[i]=qa(c[i]||Q(0),qm(v,qpow(Q(p.b),j+1))); e[i]=qa(e[i]||Q(0),qm(v,qpow(Q(p.b),j))); }); const fill=a=>{ for(let i=0;i<a.length;i++) a[i]=a[i]||Q(0); return a; };
     return [{why:'the power of y is raised but not divided by',k:'fn',t:fromPoly(fill(c))},{why:'y is set to '+p.b+' instead of totalled',k:'fn',t:fromPoly(fill(e))}]; },
@@ -13790,11 +13843,11 @@ LINK({id:'28c.stretch',from:'mat',to:'num',steps:()=>['28c'],say:(p,nm)=>'find c
   act:s=>num(s.m.flat().reduce((r,x)=>qa(r,sq(x)),Q(0))),cite:()=>'the stretch-bound technique',
   slips:s=>[{why:'the entries are added before squaring',v:sq(s.m.flat().reduce((r,x)=>qa(r,x),Q(0)))},{why:'the square of the determinant is used',v:sq(det(s.m))}],line:(o,p,nm)=>'c² for '+nm+', its entries squared and added: '+qs(o.v)});
 const dot=(u,w)=>qa(qm(u[0],Q(w[0])),qm(u[1],Q(w[1]))), l2=u=>qa(sq(qq(u[0])),sq(qq(u[1])));
-LINK({id:'27i.lensum',from:'vec',to:'num',steps:()=>['27i'],make:()=>({w:[nz(-3,3),ri(-3,3)]}),say:(p,nm)=>'find |'+nm+' + '+pv(p.w)+'|² from |'+nm+'|², |'+pv(p.w)+'|² and the dot',
+LINK({id:'27k.lensum',from:'vec',to:'num',steps:()=>['27k'],make:()=>({w:[nz(-3,3),ri(-3,3)]}),say:(p,nm)=>'find |'+nm+' + '+pv(p.w)+'|² from |'+nm+'|², |'+pv(p.w)+'|² and the dot',
   act:(s,p)=>num(qa(qa(l2(s.u),l2(p.w)),qm(Q(2),dot(s.u,p.w)))),cite:()=>'the angle-between technique',
   slips:(s,p)=>[{why:'the cross term 2'+'u · w is dropped',v:qa(l2(s.u),l2(p.w))},{why:'the cross term is not doubled',v:qa(qa(l2(s.u),l2(p.w)),dot(s.u,p.w))},{why:'the cross term is taken away',v:qsub(qa(l2(s.u),l2(p.w)),qm(Q(2),dot(s.u,p.w)))}],
   line:(o,p,nm,nx,s)=>'lengths and dot: |'+nm+' + '+pv(p.w)+'|² = '+qs(l2(s.u))+' + '+qs(l2(p.w))+' + 2 · '+par(dot(s.u,p.w))+' = '+qs(o.v)});
-LINK({id:'27i.cos2',from:'vec',to:'num',steps:()=>['27i'],make:()=>({w:[nz(-3,3),ri(-3,3)]}),say:(p,nm)=>'find cos²θ for the angle θ between '+nm+' and '+pv(p.w),
+LINK({id:'27k.cos2',from:'vec',to:'num',steps:()=>['27k'],make:()=>({w:[nz(-3,3),ri(-3,3)]}),say:(p,nm)=>'find cos²θ for the angle θ between '+nm+' and '+pv(p.w),
   act:(s,p)=>{ const a=l2(s.u); if(qz(a)) return null; return num(qd(sq(dot(s.u,p.w)),qm(a,l2(p.w)))); },cite:()=>'the angle-between technique',
   slips:(s,p)=>{ const a=l2(s.u); if(qz(a)) return []; const d=dot(s.u,p.w); return [{why:'the dot is not squared',v:qd(d,qm(a,l2(p.w)))},{why:'the dot squared is divided by the first length squared only',v:qd(sq(d),a)}]; },
   line:(o,p,nm)=>'cos²θ between '+nm+' and '+pv(p.w)+': '+qs(o.v)});
@@ -13817,7 +13870,7 @@ LINK({id:'29·cb28.ptread',from:'ch0',to:'num',steps:()=>['29·cb28'],make:()=>(
   slips:(v,p)=>[{why:'the signs of the points are dropped',v:v.w.reduce((r,[c,pt])=>qa(r,qm(Q(Math.abs(c)),f2ev(FS[p.f],pt[0],pt[1]))),Q(0))},{why:'x and y are swapped in each reading',v:v.w.reduce((r,[c,pt])=>qa(r,qm(Q(c),f2ev(FS[p.f],pt[1],pt[0]))),Q(0))}],
   line:(o,p)=>'F = '+f2s(FS[p.f])+' read on ∂c, with signs: '+qs(o.v)});
 const pathT=(c,w,swap)=>{ let r=Q(0); for(let i=0;i+1<c.pts.length;i++) r=qa(r,segTotal(w,c.pts[i],c.pts[i+1],swap)); return r; };
-LINK({id:'28n.pathtotal',from:'ch1',to:'num',steps:()=>['28n','29·cb28'],make:()=>({o:rnd(OM.length)}),say:p=>'find the total of '+f1s(OM[p.o])+' along the path c, segment by segment',
+LINK({id:'28p.pathtotal',from:'ch1',to:'num',steps:()=>['28p','29·cb28'],make:()=>({o:rnd(OM.length)}),say:p=>'find the total of '+f1s(OM[p.o])+' along the path c, segment by segment',
   act:(c,p)=>{ const r=pathT(c,OM[p.o]); return okN(r)?num(r):null; },cite:()=>'the retrace technique',
   slips:(c,p)=>[{why:'the path is walked backwards',v:qn(pathT(c,OM[p.o]))},{why:'the dx and dy rates are swapped',v:pathT(c,OM[p.o],true)},{why:'the last segment is left out',v:c.pts.length>2?pathT({pts:c.pts.slice(0,-1)},OM[p.o]):null}].filter(w=>w.v),
   line:(o,p,nm,nx,c)=>'total of '+f1s(OM[p.o])+' along c: '+qs(o.v)});
@@ -14058,7 +14111,7 @@ const T={
   '8i.quads':()=>LX(LRG(-4,4),LRG(-4,4),[1,-1,2],[0,1,2,3,4]).map(([r,s,t,f])=>[[r,s,t,f],(t===1?3:1)*(f===0?0.8:0.05)]),
   '9e.lines':()=>LX(N(-5,5),LRG(-6,6)).map(t=>[t,1]),
   '9d.odds':()=>LX([1,2,-1,3],LRG(-2,2),LRG(-5,5)).map(t=>[t,1]),
-  '46b.cubics':()=>{ const o=LX(R7,R7,R7).map(t=>[t,0.7/343]); R7.forEach(a=>{ const bs=LRG(Math.max(-3,-4-a),Math.min(3,4-a)); bs.forEach(b=>o.push([[a,b,-a-b],0.3/7/bs.length])); }); return o; } };
+  '47b.cubics':()=>{ const o=LX(R7,R7,R7).map(t=>[t,0.7/343]); R7.forEach(a=>{ const bs=LRG(Math.max(-3,-4-a),Math.min(3,4-a)); bs.forEach(b=>o.push([[a,b,-a-b],0.3/7/bs.length])); }); return o; } };
 const Z={
   '9g.polys':{sizes:[1,2,3,4,5],sized(z){ const C=(n,k)=>k<0||k>n?0:k===0?1:C(n-1,k-1)*n/k, ns=[2,3,3,4].filter(n=>z<=n+1), w=ns.map(n=>C(n,z-1)*Math.pow(8,z-1)/Math.pow(9,n)); let u=Math.random()*w.reduce((a,b)=>a+b,0), i=0; while(i<w.length-1&&u>=w[i]){ u-=w[i]; i++; }
     const n=ns[i], on=new Set(shuffle(LRG(0,n-1)).slice(0,z-1)), L=N(-4,4), top=N(-2,2); return this.make(Array.from({length:n+1},(_,j)=>Q(j===n?top[rnd(top.length)]:on.has(j)?L[rnd(L.length)]:0))); }},
@@ -14670,7 +14723,7 @@ NL('16h.bump','take the area under (1 − x²) raised to the power '+HN+', from 
   (o,p,nm,nx,s)=>'area under (1 − x²)'+supn(iv(s))+' on [−1, 1]: '+qs(o.v));
 NL('16i.forever',p=>'take the area under 1/x'+supn(p.p)+' from x = '+HN+' out to forever','the out-to-forever technique',(s,p)=>posq(s)?num(qm(qpow(s.v,1-p.p),Q(1,p.p-1))):null,
   (s,p)=>[{why:'the sign of the antiderivative is lost',v:qn(qm(qpow(s.v,1-p.p),Q(1,p.p-1)))},{why:'the height at the start is taken as the area',v:qpow(s.v,-p.p)}],(o,p,nm,nx,s)=>'area under 1/x'+supn(p.p)+' from '+qs(s.v)+' on: '+(p.p===2?'1/'+par(s.v):'1/(2 · '+par(s.v)+'²)')+' = '+qs(o.v),()=>({p:pick([2,2,3])}));
-NL('16j.pyramid',p=>'a pyramid is '+HN+' metres high on a square base of side '+p.k+' metres: find its volume','the pyramid technique',(s,p)=>posq(s,999)?num(qm(s.v,Q(p.k*p.k,3))):null,
+NL('16k.pyramid',p=>'a pyramid is '+HN+' metres high on a square base of side '+p.k+' metres: find its volume','the pyramid technique',(s,p)=>posq(s,999)?num(qm(s.v,Q(p.k*p.k,3))):null,
   (s,p)=>[{why:'the third is left off, as for a box',v:qm(s.v,Q(p.k*p.k))},{why:'a half is taken instead of a third',v:qm(s.v,Q(p.k*p.k,2))}],(o,p,nm,nx,s)=>'pyramid volume: ⅓ · '+p.k+'² · '+par(s.v)+' = '+qs(o.v)+' cubic metres',()=>({k:ri(2,6)}));
 
 /* ================= rung 17: logs and exponentials ================= */
@@ -15252,7 +15305,7 @@ nl('23k.fence',{say:(p,x,nm)=>'the trapezoid numbers satisfy c < dₖ < c + 1/(8
 nl('23l.trap',{mk:()=>({len:rint(1,4),h:pick([Q(1,2),Q(1,4),Q(1)])}),say:(p,x,nm)=>'|f″| ≤ K with K = '+nm+' on a stretch of length '+p.len+'; bound the trapezoid error with step '+qs(p.h),
   f:(x,p)=>qpos(x)&&sm(x)?qd(qm(qm(Q(p.len),x),sq(p.h)),Q(6)):null,w:(x,p)=>[['h is not squared',qe(p.h,Q(1))?null:qd(qm(qm(Q(p.len),x),p.h),Q(6))],['the length of the stretch is dropped',p.len===1?null:qd(qm(x,sq(p.h)),Q(6))]],cite:'the trapezoid technique',ln:(x,p,r)=>'the trapezoid error: '+p.len+' · '+qs(x)+' · '+par(p.h)+'²/6 = '+r});
 nl('23l.simpson',{mk:()=>({len:rint(1,3),h:pick([Q(1,2),Q(1)])}),say:(p,x,nm)=>'|f⁽⁴⁾| ≤ K with K = '+nm+' on a stretch of length '+p.len+'; bound the error of the sixteenth sum with step '+qs(p.h),
-  f:(x,p)=>qpos(x)&&sm(x)?qd(qm(qm(Q(p.len),x),qpow(p.h,4)),Q(45)):null,w:(x,p)=>[['the trapezoid’s bound is used instead',qd(qm(qm(Q(p.len),x),sq(p.h)),Q(6))]],cite:'the sixteenth technique',ln:(x,p,r)=>'the sixteenth-sum error: '+p.len+' · '+qs(x)+' · '+par(p.h)+'⁴/45 = '+r});
+  f:(x,p)=>qpos(x)&&sm(x)?qd(qm(qm(Q(p.len),x),qpow(p.h,4)),Q(46)):null,w:(x,p)=>[['the trapezoid’s bound is used instead',qd(qm(qm(Q(p.len),x),sq(p.h)),Q(6))]],cite:'the sixteenth technique',ln:(x,p,r)=>'the sixteenth-sum error: '+p.len+' · '+qs(x)+' · '+par(p.h)+'⁴/45 = '+r});
 nl('23·phys.parallax',{say:(p,x,nm)=>'a star’s parallax is '+nm+' radians; find its distance in AU',f:x=>qpos(x)&&qlt(x,Q(1))?qi(x):null,w:x=>[['the parallax is taken as the distance',x]],cite:'the parallax technique',ln:(x,p,r)=>'the star’s distance: 1/'+par(x)+' = '+r+' AU'});
 
 /* ================= rung 24: rate statements ================= */
@@ -15277,15 +15330,15 @@ gl('24h.rest','num','fn',{mk:()=>({a:nz(-4,4),k:pick([-1,-2,1])}),say:(p,x,nm)=>
   cite:'the shift-to-rest technique',ln:(x,p,r,nm,nx)=>'the solution '+nx+'(x), shifted to rest at '+qs(Q(p.a))+': '+r});
 gl('24h.trial','fn','word',{poly:true,say:(p,t,nm)=>'take '+nm+' as the trial polynomial of a rate statement in y, y′ and y″; find its growth rates',f:t=>{ const c=toPoly(t); if(!c||c.length!==3) return null; const r=ratRoots(c); return r&&r.length?r.map(qs).join(' and '):null; },
   w:t=>{ const c=toPoly(t); if(!c||c.length!==3) return []; const r=ratRoots(c); return r&&r.length?[['the sign of the middle number is turned in the trial equation',r.map(qn).sort((a,b)=>a.p/a.q-b.p/b.q).map(qs).join(' and ')]]:[]; },cite:'the tried-growth technique',ln:(t,p,r,nm)=>'the growth rates, the roots of '+nm+': '+r});
-nl('24i.steps',{mk:()=>({k:pick([1,2,-1]),x:pick([1,2]),n:rint(2,3)}),say:(p,x,nm)=>'take '+p.n+' forward steps for y′ = '+(p.k===1?'':p.k===-1?'−':p.k)+'y from y(0) = '+nm+' to x = '+p.x,
+nl('24k.steps',{mk:()=>({k:pick([1,2,-1]),x:pick([1,2]),n:rint(2,3)}),say:(p,x,nm)=>'take '+p.n+' forward steps for y′ = '+(p.k===1?'':p.k===-1?'−':p.k)+'y from y(0) = '+nm+' to x = '+p.x,
   f:(x,p)=>sm(x)?qm(x,qpow(qa(Q(1),Q(p.k*p.x,p.n)),p.n)):null,w:(x,p)=>[['the step is not divided by n',qm(x,qpow(Q(1+p.k*p.x),p.n))],['only one step is taken',qm(x,qa(Q(1),Q(p.k*p.x,p.n)))]],cite:'the small-step technique',ln:(x,p,r)=>'y('+p.x+') after '+p.n+' steps: '+par(x)+' · (1 + '+qs(Q(p.k*p.x,p.n))+')'+SUPd[p.n]+' = '+r});
-nl('24i.ahead',{mk:()=>({hk:pick([Q(1,2),Q(-1,2),Q(1),Q(1,4)])}),say:(p,x,nm)=>'take one look-ahead step with hk = '+qs(p.hk)+' from y = '+nm,f:(x,p)=>sm(x)?qm(x,qa(qa(Q(1),p.hk),qm(sq(p.hk),Q(1,2)))):null,
+nl('24k.ahead',{mk:()=>({hk:pick([Q(1,2),Q(-1,2),Q(1),Q(1,4)])}),say:(p,x,nm)=>'take one look-ahead step with hk = '+qs(p.hk)+' from y = '+nm,f:(x,p)=>sm(x)?qm(x,qa(qa(Q(1),p.hk),qm(sq(p.hk),Q(1,2)))):null,
   w:(x,p)=>[['a forward step is taken instead',qm(x,qa(Q(1),p.hk))],['the 2 under (hk)² is dropped',qm(x,qa(qa(Q(1),p.hk),sq(p.hk)))]],cite:'the look-ahead technique',ln:(x,p,r)=>'y after one look-ahead step: '+par(x)+' · (1 + '+par(p.hk)+' + '+par(p.hk)+'²/2) = '+r});
-nl('24j.C',{mk:()=>({K:rint(2,10)*10}),say:(p,x,nm)=>'P′ = rP(1 − P/'+p.K+') with P(0) = '+nm+'; find C in P = '+p.K+'/(1 + Ce^(−rt))',f:(x,p)=>qpos(x)&&sm(x)?qd(qsub(Q(p.K),x),x):null,
+nl('24l.C',{mk:()=>({K:rint(2,10)*10}),say:(p,x,nm)=>'P′ = rP(1 − P/'+p.K+') with P(0) = '+nm+'; find C in P = '+p.K+'/(1 + Ce^(−rt))',f:(x,p)=>qpos(x)&&sm(x)?qd(qsub(Q(p.K),x),x):null,
   w:(x,p)=>[['the gap K − P₀ is taken the wrong way',qd(qsub(x,Q(p.K)),x)],['K alone is put over P₀',qd(Q(p.K),x)]],cite:'the every-start technique',ln:(x,p,r)=>'the constant C for P(0) = '+qs(x)+': ('+p.K+' − '+qs(x)+')/'+par(x)+' = '+r});
-nl('24k.fold',{say:(p,x,nm)=>'y′ = μ − y² with μ = '+nm+'; find the resting place that holds',f:x=>qpos(x)?qsqrt(x):null,w:x=>[['the falling resting place −√μ is given',qsqrt(x)&&qn(qsqrt(x))],['μ is halved instead of rooted',qm(x,Q(1,2))]],cite:'the fold technique',ln:(x,p,r)=>'the resting place that holds: √'+par(x)+' = '+r});
-nl('24k.cycle',{say:(p,x,nm)=>'find the fixed point of x ↦ μx(1 − x) with μ = '+nm,f:x=>qlt(Q(1),x)&&sm(x)?qsub(Q(1),qi(x)):null,w:x=>[['1/μ is given in place of 1 − 1/μ',qi(x)],['μ − 1 is given',qsub(x,Q(1))]],cite:'the two-cycle technique',ln:(x,p,r)=>'the fixed point for μ = '+qs(x)+': 1 − 1/'+par(x)+' = '+r});
-nl('24l.stop',{mk:()=>({n:rint(1,4)}),say:(p,x,nm)=>'(1 − x²)y″ − 2xy′ + '+p.n*(p.n+1)+'y = 0 with power-sum start u₀ = '+nm+'; find u₂',f:(x,p)=>qm(x,Q(-p.n*(p.n+1),2)),
+nl('24m.fold',{say:(p,x,nm)=>'y′ = μ − y² with μ = '+nm+'; find the resting place that holds',f:x=>qpos(x)?qsqrt(x):null,w:x=>[['the falling resting place −√μ is given',qsqrt(x)&&qn(qsqrt(x))],['μ is halved instead of rooted',qm(x,Q(1,2))]],cite:'the fold technique',ln:(x,p,r)=>'the resting place that holds: √'+par(x)+' = '+r});
+nl('24m.cycle',{say:(p,x,nm)=>'find the fixed point of x ↦ μx(1 − x) with μ = '+nm,f:x=>qlt(Q(1),x)&&sm(x)?qsub(Q(1),qi(x)):null,w:x=>[['1/μ is given in place of 1 − 1/μ',qi(x)],['μ − 1 is given',qsub(x,Q(1))]],cite:'the two-cycle technique',ln:(x,p,r)=>'the fixed point for μ = '+qs(x)+': 1 − 1/'+par(x)+' = '+r});
+nl('24n.stop',{mk:()=>({n:rint(1,4)}),say:(p,x,nm)=>'(1 − x²)y″ − 2xy′ + '+p.n*(p.n+1)+'y = 0 with power-sum start u₀ = '+nm+'; find u₂',f:(x,p)=>qm(x,Q(-p.n*(p.n+1),2)),
   w:(x,p)=>[['the sign of (k − n) is dropped',qm(x,Q(p.n*(p.n+1),2))],['the (k + 2)(k + 1) below is dropped',qm(x,Q(-p.n*(p.n+1)))]],cite:'the stopping-sum technique',ln:(x,p,r)=>'the piece u₂ = (0 − '+p.n+')(0 + '+(p.n+1)+')u₀/2 with u₀ = '+qs(x)+': '+r});
 nl('24·then.harvest',{mk:()=>({r:pick([Q(1,2),Q(1,4),Q(2,5)])}),say:(p,x,nm)=>'a fish stock grows at r = '+qs(p.r)+' with full size '+nm+' tonnes; find the largest steady catch',f:(x,p)=>qpos(x)&&sm(x,999)?qm(qm(p.r,x),Q(1,4)):null,
   w:(x,p)=>[['the catch is taken at full size',qm(p.r,x)],['the half stock is not squared',qm(qm(p.r,x),Q(1,2))]],cite:'the harvest technique',ln:(x,p,r)=>'the largest steady catch: ('+qs(p.r)+' · '+qs(x)+')/4 = '+r+' t a year'});
@@ -15334,11 +15387,11 @@ gl('26g.rim','fn','num',{poly:true,pt:true,say:(p,t,nm)=>'find (1/2πi)∮ '+nm+
   w:(t,p)=>qz(p.x)?[]:[['the reading at the centre 0 is given',ev(t,Q(0))]],cite:'the rim technique',ln:(t,p,r,nm)=>'the rim total for '+nm+', its reading '+nm+'('+qs(p.x)+'): '+r});
 gl('26h.count','fn','num',{poly:true,mk:()=>({R:pick([Q(1,2),Q(3,2),Q(5,2)])}),say:(p,t,nm)=>'count the roots of '+nm+' inside the circle |z| = '+qs(p.R),f:(t,p)=>{ const c=toPoly(t); if(!c||c.length<2) return null; const r=ratRoots(c); if(!r||r.length!==c.length-1) return null; return Q(r.filter(x=>qlt(qabs(x),p.R)).length); },
   w:(t,p)=>{ const c=toPoly(t); const r=c&&ratRoots(c); return r?[['the roots outside are counted',Q(r.filter(x=>!qlt(qabs(x),p.R)).length)],['every root is counted',Q(c.length-1)]]:[]; },cite:'the root-count technique',ln:(t,p,r,nm)=>'the roots of '+nm+' inside |z| = '+qs(p.R)+': '+r});
-gl('26i.many','ang','ang',{mk:()=>({n:rint(2,4)}),say:p=>'(cos θ + i sin θ)'+SUPd[p.n]+' is cos nθ + i sin nθ with n = '+p.n+'; find the new arc nθ',f:(t,p)=>qm(t,Q(p.n)),w:(t,p)=>[['the power is taken on the length, not the turn',t],['n is added to the turn instead of multiplying it',qa(t,Q(p.n))]],cite:'the many-angle technique',ln:(t,p,r)=>'the new arc '+p.n+'θ: '+p.n+' · '+apar(t)+' = '+r});
-gl('26j.near','fn','num',{poly:true,say:(p,t,nm)=>'find the reach about 0 of the power sum of 1/'+nm+'(x)',f:t=>{ const c=toPoly(t); if(!c||c.length<2||qz(c[0])) return null; const r=ratRoots(c); if(!r||r.length!==c.length-1) return null; return r.map(qabs).reduce((a,b)=>qlt(a,b)?a:b); },
+gl('26k.many','ang','ang',{mk:()=>({n:rint(2,4)}),say:p=>'(cos θ + i sin θ)'+SUPd[p.n]+' is cos nθ + i sin nθ with n = '+p.n+'; find the new arc nθ',f:(t,p)=>qm(t,Q(p.n)),w:(t,p)=>[['the power is taken on the length, not the turn',t],['n is added to the turn instead of multiplying it',qa(t,Q(p.n))]],cite:'the many-angle technique',ln:(t,p,r)=>'the new arc '+p.n+'θ: '+p.n+' · '+apar(t)+' = '+r});
+gl('26l.near','fn','num',{poly:true,say:(p,t,nm)=>'find the reach about 0 of the power sum of 1/'+nm+'(x)',f:t=>{ const c=toPoly(t); if(!c||c.length<2||qz(c[0])) return null; const r=ratRoots(c); if(!r||r.length!==c.length-1) return null; return r.map(qabs).reduce((a,b)=>qlt(a,b)?a:b); },
   w:t=>{ const c=toPoly(t); const r=c&&ratRoots(c); return r&&r.length>1?[['the farthest root is used instead of the nearest',r.map(qabs).reduce((a,b)=>qlt(a,b)?b:a)]]:[]; },cite:'the nearest-trouble technique',ln:(t,p,r,nm)=>'the reach of the sum for 1/'+nm+', the nearest root: '+r});
-nl('26k.half',{to:'word',say:(p,x,nm)=>'find ∫ dx/(x² + a²) over the whole line, with a = '+nm,f:x=>qpos(x)&&sm(x)?angs(qi(x)):null,w:x=>[['a is squared in the answer',angs(qi(sq(x)))],['the half disc is doubled',angs(qd(Q(2),x))]],cite:'the half-disc technique',ln:(x,p,r)=>'the total over the line: 2πi · 1/(2i · '+qs(x)+') = '+r});
-nl('26l.gamma',{say:(p,x,nm)=>'find the value of Γ at '+nm+', the factorial step Γ('+nm+')',f:x=>{ const n=wh(x); return n!==null&&n>=1&&n<=8?Q(fact(n-1)):null; },w:x=>[['Γ(n) is taken as n!, not (n − 1)!',Q(fact(wh(x)))]],cite:'the factorial-step technique',ln:(x,p,r)=>'the factorial step Γ('+qs(x)+') = '+(wh(x)-1)+'! = '+r});
+nl('26m.half',{to:'word',say:(p,x,nm)=>'find ∫ dx/(x² + a²) over the whole line, with a = '+nm,f:x=>qpos(x)&&sm(x)?angs(qi(x)):null,w:x=>[['a is squared in the answer',angs(qi(sq(x)))],['the half disc is doubled',angs(qd(Q(2),x))]],cite:'the half-disc technique',ln:(x,p,r)=>'the total over the line: 2πi · 1/(2i · '+qs(x)+') = '+r});
+nl('26n.gamma',{say:(p,x,nm)=>'find the value of Γ at '+nm+', the factorial step Γ('+nm+')',f:x=>{ const n=wh(x); return n!==null&&n>=1&&n<=8?Q(fact(n-1)):null; },w:x=>[['Γ(n) is taken as n!, not (n − 1)!',Q(fact(wh(x)))]],cite:'the factorial-step technique',ln:(x,p,r)=>'the factorial step Γ('+qs(x)+') = '+(wh(x)-1)+'! = '+r});
 nl('26·cb24.beta',{mk:()=>({c:rint(5,20)}),say:(p,x,nm)=>'y″ + by′ + '+p.c+'y = 0 with b = '+nm+'; find β², the square of the turning rate',f:(x,p)=>{ if(!sm(x)) return null; const v=qsub(Q(p.c),qm(sq(x),Q(1,4))); return qpos(v)?v:null; },
   w:(x,p)=>[['b² is not divided by 4',qsub(Q(p.c),sq(x))],['the order is turned, b²/4 − c',qsub(qm(sq(x),Q(1,4)),Q(p.c))]],cite:'the decaying-turn technique',ln:(x,p,r)=>'the turning rate: β² = '+p.c+' − '+par(x)+'²/4 = '+r});
 gl('26·phys.coil','cx','cx',{mk:()=>({k:rint(1,6)}),say:(p,z,nm)=>'put a coil of impedance '+p.k+'i in a row with the impedance '+nm+'; find the total',f:(z,p)=>[z[0],qa(z[1],Q(p.k))],w:(z,p)=>[['the coil is added to the real part',[qa(z[0],Q(p.k)),z[1]]],['the impedances are multiplied instead of added',cm(z,[Q(0),Q(p.k)])]],cite:'the row technique',ln:(z,p,r,nm,nx)=>nx+', '+nm+' in a row with the coil '+p.k+'i: '+r});
@@ -15352,17 +15405,17 @@ gl('27c.lost','mat','num',{say:(p,m,nm)=>'find the dimension of what '+nm+' lose
 gl('27h.slot','mat','num',{mk:()=>({u:[ri(-3,3),ri(-3,3)],v:[ri(-3,3),ri(-3,3)]}),say:(p,m,nm)=>'find the two-slot value B(s, t) = s · '+nm+'t with s = '+pv(p.u)+' and t = '+pv(p.v),
   f:(m,p)=>[0,1].reduce((s,i)=>qa(s,qm(Q(p.u[i]),qa(qm(m[i][0],Q(p.v[0])),qm(m[i][1],Q(p.v[1]))))),Q(0)),w:(m,p)=>[['the two slots s and t are swapped',[0,1].reduce((s,i)=>qa(s,qm(Q(p.v[i]),qa(qm(m[i][0],Q(p.u[0])),qm(m[i][1],Q(p.u[1]))))),Q(0))]],
   cite:'the two-slot technique',ln:(m,p,r,nm)=>'the two-slot value s · '+nm+'t for s = '+pv(p.u)+', t = '+pv(p.v)+': '+r});
-gl('27i.cross','vec','num',{mk:()=>({w:[ri(-4,4),ri(-4,4)]}),say:(p,P,nm)=>'find the third entry of the cross product of '+nm+' and '+pv(p.w)+', each with third entry 0',f:(P,p)=>qsub(qm(P[0],Q(p.w[1])),qm(P[1],Q(p.w[0]))),
+gl('27k.cross','vec','num',{mk:()=>({w:[ri(-4,4),ri(-4,4)]}),say:(p,P,nm)=>'find the third entry of the cross product of '+nm+' and '+pv(p.w)+', each with third entry 0',f:(P,p)=>qsub(qm(P[0],Q(p.w[1])),qm(P[1],Q(p.w[0]))),
   w:(P,p)=>[['the order is turned, v × u',qsub(qm(P[1],Q(p.w[0])),qm(P[0],Q(p.w[1])))]],cite:'the cross technique',ln:(P,p,r,nm)=>'the third entry of '+nm+' × '+pv(p.w)+': u₁v₂ − u₂v₁ = '+r});
-gl('27j.row','mat','mat',{say:(p,m,nm)=>'clear the entry below the first lead of the grid '+nm+' by a row move',f:m=>qz(m[0][0])?null:(()=>{ const f=qd(m[1][0],m[0][0]); return [m[0],[Q(0),qsub(m[1][1],qm(f,m[0][1]))]]; })(),
+gl('27l.row','mat','mat',{say:(p,m,nm)=>'clear the entry below the first lead of the grid '+nm+' by a row move',f:m=>qz(m[0][0])?null:(()=>{ const f=qd(m[1][0],m[0][0]); return [m[0],[Q(0),qsub(m[1][1],qm(f,m[0][1]))]]; })(),
   w:m=>{ if(qz(m[0][0])) return []; const f=qd(m[1][0],m[0][0]); return [['the row is added instead of taken away',[m[0],[qa(m[1][0],qm(f,m[0][0])),qa(m[1][1],qm(f,m[0][1]))]]]]; },cite:'the row-move technique',ln:(m,p,r,nm,nx)=>nx+', '+nm+' after the row move: '+r});
-gl('27k.cramer','mat','vec',{mk:()=>({b:[ri(-5,5),ri(-5,5)]}),say:(p,m,nm)=>'solve '+nm+'x = '+pv(p.b)+' for the list x',f:(m,p)=>{ const D=det2(m); if(qz(D)) return null; const b=p.b.map(x=>Q(x)); return [qd(det2([[b[0],m[0][1]],[b[1],m[1][1]]]),D),qd(det2([[m[0][0],b[0]],[m[1][0],b[1]]]),D)]; },
+gl('27m.cramer','mat','vec',{mk:()=>({b:[ri(-5,5),ri(-5,5)]}),say:(p,m,nm)=>'solve '+nm+'x = '+pv(p.b)+' for the list x',f:(m,p)=>{ const D=det2(m); if(qz(D)) return null; const b=p.b.map(x=>Q(x)); return [qd(det2([[b[0],m[0][1]],[b[1],m[1][1]]]),D),qd(det2([[m[0][0],b[0]],[m[1][0],b[1]]]),D)]; },
   w:(m,p)=>{ const D=det2(m); if(qz(D)) return []; const b=p.b.map(x=>Q(x)), x=qd(det2([[b[0],m[0][1]],[b[1],m[1][1]]]),D), y=qd(det2([[m[0][0],b[0]],[m[1][0],b[1]]]),D); return [['the two answers are swapped',[y,x]],['each is divided by −det',[qn(x),qn(y)]]]; },
   cite:'the det-ratio technique',ln:(m,p,r,nm,nx)=>nx+', solving '+nm+'x = '+pv(p.b)+' by det ratios: '+r});
-gl('27l.sum','mat','num',{say:(p,m,nm)=>'find the sum of the stretches of the grid '+nm,f:m=>tr2(m),w:m=>[['their product, the determinant, is given',det2(m)]],cite:'the middle-sum technique',ln:(m,p,r,nm)=>'the stretches of '+nm+' add to its middle sum, '+r});
-nl('27l.step',{mk:()=>({u0:ri(0,3),p:rint(1,3),q:rint(1,3)}),say:(p,x,nm)=>'uₙ₊₁ = '+(p.p===1?'':p.p)+'uₙ + '+(p.q===1?'':p.q)+'uₙ₋₁ with u₀ = '+p.u0+' and u₁ = '+nm+'; find u₃',f:(x,p)=>{ if(!sm(x)) return null; const u2=qa(qm(Q(p.p),x),Q(p.q*p.u0)); return qa(qm(Q(p.p),u2),qm(Q(p.q),x)); },
+gl('27n.sum','mat','num',{say:(p,m,nm)=>'find the sum of the stretches of the grid '+nm,f:m=>tr2(m),w:m=>[['their product, the determinant, is given',det2(m)]],cite:'the middle-sum technique',ln:(m,p,r,nm)=>'the stretches of '+nm+' add to its middle sum, '+r});
+nl('27n.step',{mk:()=>({u0:ri(0,3),p:rint(1,3),q:rint(1,3)}),say:(p,x,nm)=>'uₙ₊₁ = '+(p.p===1?'':p.p)+'uₙ + '+(p.q===1?'':p.q)+'uₙ₋₁ with u₀ = '+p.u0+' and u₁ = '+nm+'; find u₃',f:(x,p)=>{ if(!sm(x)) return null; const u2=qa(qm(Q(p.p),x),Q(p.q*p.u0)); return qa(qm(Q(p.p),u2),qm(Q(p.q),x)); },
   w:(x,p)=>{ const u2=qa(qm(Q(p.q),x),Q(p.p*p.u0)); return p.p===p.q?[['u₂ is given, one step short',qa(qm(Q(p.p),x),Q(p.q*p.u0))]]:[['the two multipliers are swapped',qa(qm(Q(p.q),u2),qm(Q(p.p),x))]]; },cite:'the step-grid technique',ln:(x,p,r)=>'u₃, two steps on from u₁ = '+qs(x)+' and u₀ = '+p.u0+': '+r});
-gl('27m.keep','mat','word',{say:(p,m,nm)=>'say whether the grid '+nm+' keeps every length',f:m=>{ const c=[0,1].map(j=>qa(sq(m[0][j]),sq(m[1][j]))), d=qa(qm(m[0][0],m[0][1]),qm(m[1][0],m[1][1])); return qe(c[0],Q(1))&&qe(c[1],Q(1))&&qz(d)?'it keeps lengths':'it does not'; },
+gl('27o.keep','mat','word',{say:(p,m,nm)=>'say whether the grid '+nm+' keeps every length',f:m=>{ const c=[0,1].map(j=>qa(sq(m[0][j]),sq(m[1][j]))), d=qa(qm(m[0][0],m[0][1]),qm(m[1][0],m[1][1])); return qe(c[0],Q(1))&&qe(c[1],Q(1))&&qz(d)?'it keeps lengths':'it does not'; },
   w:m=>[['only det = ±1 is checked',qe(qabs(det2(m)),Q(1))?'it keeps lengths':'it does not']],cite:'the length-keeper technique',ln:(m,p,r,nm)=>'does '+nm+' keep lengths, '+nm+'ᵀ'+nm+' = I? '+r});
 gl('27·crypt.mod','mat','num',{say:(p,m,nm)=>'find the determinant of the key grid '+nm+' on a clock of 26',f:m=>{ const d=det2(m); return d.q===1?Q(((d.p%26)+26)%26):null; },w:m=>{ const d=det2(m); return [['the remainder on division by 26 is not taken',d],['a negative is read as its size',Q(Math.abs(d.p)%26)]]; },cite:'the remainders-pass-through technique',ln:(m,p,r,nm)=>'the key determinant det '+nm+' = '+qs(det2(m))+' ≡ '+r+' (mod 26)'});
 gl('27·crypt.undo','mat','word',{say:(p,m,nm)=>'say whether the key grid '+nm+' can be undone among the 26 letters',f:m=>{ const d=det2(m); if(d.q!==1) return null; const r=((d.p%26)+26)%26; return gcd(r,26)===1?'it can':'it cannot'; },w:m=>[['only det ≠ 0 is checked',qz(det2(m))?'it cannot':'it can']],cite:'the letter-undo technique',ln:(m,p,r,nm)=>'det '+nm+' = '+qs(det2(m))+', checked for a divisor shared with 26: '+r});
@@ -15379,7 +15432,7 @@ nl('27·now.shrink',{mk:()=>({k:rint(1,2)}),say:(p,x,nm)=>'a difference of '+nm+
 /* ================= rung 28: many variables ================= */
 SEEDS.push(
   {id:'28a.polys2',step:'28a',label:'polynomials in x and y',kind:'f2',make(){ const n=rint(2,4), MON=[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1]], ms=shuffle(MON.slice()).slice(0,n); /* different terms, one of them of degree 2 or more */ if(!ms.some(m=>m[0]+m[1]>=2)) ms[0]=(H=>H[Math.floor(Math.random()*H.length)])(MON.filter(m=>m[0]+m[1]>=2&&!ms.some(x=>x[0]===m[0]&&x[1]===m[1]))); const ts=ms.map(([a,b])=>[a,b,Q(nz(-3,3))]); const F=F2(ts); if(F.ts.length<2||!F.ts.some(t=>t[0]+t[1]>=2)) return null; return {val:F,ix:f2s(F.ts)}; }},
-  {id:'28l.forms',step:'28l',label:'squares and cross terms',kind:'f2',make(){ const [a,b,c]=(L=>L[Math.floor(Math.random()*L.length)])(LVC('28l.abc',()=>LX(LRG(-3,3),LRG(-4,4),LRG(-3,3)).filter(t=>t.filter(v=>v).length>=2))), d=ri(-3,3); /* at least two square or cross terms */ const F=F2([[2,0,Q(a)],[1,1,Q(b)],[0,2,Q(c)],[0,0,Q(d)]]); if(F.ts.filter(t=>t[0]+t[1]===2).length<2) return null; return {val:F,ix:[a,b,c,d].join(',')}; }});
+  {id:'28n.forms',step:'28n',label:'squares and cross terms',kind:'f2',make(){ const [a,b,c]=(L=>L[Math.floor(Math.random()*L.length)])(LVC('28n.abc',()=>LX(LRG(-3,3),LRG(-4,4),LRG(-3,3)).filter(t=>t.filter(v=>v).length>=2))), d=ri(-3,3); /* at least two square or cross terms */ const F=F2([[2,0,Q(a)],[1,1,Q(b)],[0,2,Q(c)],[0,0,Q(d)]]); if(F.ts.filter(t=>t[0]+t[1]===2).length<2) return null; return {val:F,ix:[a,b,c,d].join(',')}; }});
 const PT=()=>[ri(-2,2),ri(-2,2)];
 const nextF=l=>'FGHKMF'['FGHKMF'.indexOf(l)+1]||'G';
 gl('28a.px','f2','f2',{mk:()=>({y:Math.random()<0.4}),say:(p,F)=>'take the partial slope of '+F.lb+' in '+(p.y?'y':'x')+', holding '+(p.y?'x':'y')+' fixed',f:(F,p)=>F2(p.y?f2dy(F):f2dx(F),'∂'+F.lb.replace(/^∂/,'')+'/∂'+(p.y?'y':'x')),
@@ -15397,7 +15450,7 @@ gl('28a.stretch','f2','f2',{mk:()=>({k:pick([2,3,-2,-3])}),say:(p,F)=>'put '+qs(
   w:(F,p)=>[['each term with x is multiplied by k once, not by k to its power',F2(F.ts.map(([i,j,c])=>[i,j,i?qm(c,Q(p.k)):c]),nextF(F.lb))],['y is stretched instead of x',F2(F.ts.map(([i,j,c])=>[i,j,qm(c,qpow(Q(p.k),j))]),nextF(F.lb))]],
   st:['9a','28a'],cite:'the substitution technique',ln:(F,p,r)=>'the stretched function '+nextF(F.lb)+'(x, y) = '+F.lb+'('+qs(Q(p.k))+'x, y) = '+r});
 const hessAt=(F,w)=>{ const fx={ts:f2dx(F)}, fy={ts:f2dy(F)}; return [f2ev({ts:f2dx(fx)},w[0],w[1]),f2ev({ts:f2dy(fx)},w[0],w[1]),f2ev({ts:f2dy(fy)},w[0],w[1])]; };
-gl('28l.hess','f2','mat',{mk:()=>({w:[ri(-2,2),ri(-2,2)]}),say:(p,F)=>'write the grid H of the second partial slopes of '+F.lb+' at the point '+pv(p.w),
+gl('28n.hess','f2','mat',{mk:()=>({w:[ri(-2,2),ri(-2,2)]}),say:(p,F)=>'write the grid H of the second partial slopes of '+F.lb+' at the point '+pv(p.w),
   f:(F,p)=>{ const [a,b,c]=hessAt(F,p.w); return qz(a)&&qz(b)&&qz(c)?null:[[a,b],[b,c]]; },
   w:(F,p)=>{ const [a,b,c]=hessAt(F,p.w); return [qe(a,c)?null:['the slopes twice in x and twice in y are swapped',[[c,b],[b,a]]],qz(b)?null:['the mixed slope is left out',[[a,Q(0)],[Q(0),c]]]]; },
   cite:'the surface-match technique',ln:(F,p,r,nm,nx)=>nx+', the grid H of '+F.lb+' at '+pv(p.w)+': '+r});
@@ -15415,27 +15468,27 @@ gl('28f.imp','f2','num',{mk:()=>({w:PT()}),say:(p,F)=>'on the level set of '+F.l
 gl('28g.up','f2','num',{mk:()=>({w:PT()}),say:(p,F)=>'find the square of the greatest slope of '+F.lb+' at '+pv(p.w),f:(F,p)=>{ const g=grad(F,p.w); return qa(sq(g[0]),sq(g[1])); },
   w:(F,p)=>{ const g=grad(F,p.w); return [['the two slopes are added before squaring',sq(qa(g[0],g[1]))],['the square of Fₓ alone is given',sq(g[0])]]; },cite:'the uphill technique',ln:(F,p,r)=>'the greatest slope² of '+F.lb+' at '+pv(p.w)+': |∇'+F.lb+'|² = '+r});
 const f2int=(F,a,b,sx)=>F.ts.reduce((s,[i,j,c])=>qa(s,qm(c,qm(sx?qpow(Q(a),i+1):qd(qpow(Q(a),i+1),Q(i+1)),qd(qpow(Q(b),j+1),Q(j+1))))),Q(0));
-gl('28h.total','f2','num',{mk:()=>({a:rint(1,2),b:rint(1,2)}),say:(p,F)=>'find the total of '+F.lb+' over the box 0 ≤ x ≤ '+p.a+', 0 ≤ y ≤ '+p.b,f:(F,p)=>f2int(F,p.a,p.b),
+gl('28j.total','f2','num',{mk:()=>({a:rint(1,2),b:rint(1,2)}),say:(p,F)=>'find the total of '+F.lb+' over the box 0 ≤ x ≤ '+p.a+', 0 ≤ y ≤ '+p.b,f:(F,p)=>f2int(F,p.a,p.b),
   w:(F,p)=>[['the power of x is raised but not divided by',f2int(F,p.a,p.b,true)],['the box is read at its far corner and multiplied by its area',qm(f2ev(F,p.a,p.b),Q(p.a*p.b))]],cite:'the either-order technique',ln:(F,p,r)=>'the total of '+F.lb+' over [0, '+p.a+'] × [0, '+p.b+']: '+r});
 gl('30e.total','f2','num',{mk:()=>({a:rint(1,2),b:rint(1,2)}),say:(p,F)=>'find ∫∫ '+F.lb+' dm₂ over [0, '+p.a+'] × [0, '+p.b+'], one letter at a time',f:(F,p)=>f2int(F,p.a,p.b),
   w:(F,p)=>[['the power of x is raised but not divided by',f2int(F,p.a,p.b,true)]],cite:'the either-order-sized technique',ln:(F,p,r)=>'∫∫ '+F.lb+' dm₂ over [0, '+p.a+'] × [0, '+p.b+'], in y then x: '+r});
-gl('28i.area','mat','num',{say:(p,m,nm)=>'find the area of the image of the unit square under the grid '+nm,f:m=>qabs(det2(m)),w:m=>[['the size bars on det are dropped',det2(m)],['the middle sum is used instead of det',tr2(m)]],cite:'the area-scale technique',ln:(m,p,r,nm)=>'the area of the unit square under '+nm+': |det| · 1 = '+r});
-gl('28j.circ','f2','num',{mk:()=>({a:PT(),b:PT()}),say:(p,F)=>'find the circulation of ∇'+F.lb+' along a path from '+pv(p.a)+' to '+pv(p.b),f:(F,p)=>qsub(f2ev(F,p.b[0],p.b[1]),f2ev(F,p.a[0],p.a[1])),
+gl('28k.area','mat','num',{say:(p,m,nm)=>'find the area of the image of the unit square under the grid '+nm,f:m=>qabs(det2(m)),w:m=>[['the size bars on det are dropped',det2(m)],['the middle sum is used instead of det',tr2(m)]],cite:'the area-scale technique',ln:(m,p,r,nm)=>'the area of the unit square under '+nm+': |det| · 1 = '+r});
+gl('28l.circ','f2','num',{mk:()=>({a:PT(),b:PT()}),say:(p,F)=>'find the circulation of ∇'+F.lb+' along a path from '+pv(p.a)+' to '+pv(p.b),f:(F,p)=>qsub(f2ev(F,p.b[0],p.b[1]),f2ev(F,p.a[0],p.a[1])),
   w:(F,p)=>[['the end reading is taken from the start',qsub(f2ev(F,p.a[0],p.a[1]),f2ev(F,p.b[0],p.b[1]))],['the two readings are added',qa(f2ev(F,p.b[0],p.b[1]),f2ev(F,p.a[0],p.a[1]))]],cite:'the uphill-total technique',ln:(F,p,r)=>'the circulation of ∇'+F.lb+': '+F.lb+pv(p.b)+' − '+F.lb+pv(p.a)+' = '+r});
-gl('28k.plane','f2','num',{mk:()=>({w:PT(),h:[pick([1,-1]),pick([1,-1,2])]}),say:(p,F)=>'read the tangent plane of '+F.lb+' at '+pv(p.w)+' over the point '+pv([p.w[0]+p.h[0],p.w[1]+p.h[1]]),
+gl('28m.plane','f2','num',{mk:()=>({w:PT(),h:[pick([1,-1]),pick([1,-1,2])]}),say:(p,F)=>'read the tangent plane of '+F.lb+' at '+pv(p.w)+' over the point '+pv([p.w[0]+p.h[0],p.w[1]+p.h[1]]),
   f:(F,p)=>{ const g=grad(F,p.w); return qa(f2ev(F,p.w[0],p.w[1]),qa(qm(g[0],Q(p.h[0])),qm(g[1],Q(p.h[1])))); },
   w:(F,p)=>{ const g=grad(F,p.w); return [['the y term of the plane is left off',qa(f2ev(F,p.w[0],p.w[1]),qm(g[0],Q(p.h[0])))],['the surface is read instead of the plane',f2ev(F,p.w[0]+p.h[0],p.w[1]+p.h[1])]]; },cite:'the tangent-plane technique',ln:(F,p,r)=>'the plane of '+F.lb+' at '+pv(p.w)+', read over '+pv([p.w[0]+p.h[0],p.w[1]+p.h[1]])+': '+r});
 const verdict=(a,b,c)=>{ const D=qsub(qm(a,c),sq(b)); return qpos(D)?(qpos(a)?'a bottom':'a top'):qneg(D)?'a saddle':'the test says nothing'; };
-gl('28l.test','mat','word',{say:(p,m,nm)=>'the grid '+nm+' is the grid H of second partial slopes of a function at one of its flat points; say what kind of point the grid test finds',
+gl('28n.test','mat','word',{say:(p,m,nm)=>'the grid '+nm+' is the grid H of second partial slopes of a function at one of its flat points; say what kind of point the grid test finds',
   f:m=>qe(m[0][1],m[1][0])?verdict(m[0][0],m[0][1],m[1][1]):null,
   w:m=>{ const [a,b,c]=[m[0][0],m[0][1],m[1][1]], D2=qa(qm(a,c),sq(b)); return [['D is taken as fₓₓfᵧᵧ + fₓᵧ² instead of fₓₓfᵧᵧ − fₓᵧ²',qpos(D2)?(qpos(a)?'a bottom':'a top'):qneg(D2)?'a saddle':'the test says nothing'],['the sign of fₓₓ is read backwards',(()=>{ const v=verdict(a,b,c); return v==='a bottom'?'a top':v==='a top'?'a bottom':null; })()]]; },
   cite:'the grid-test technique',ln:(m,p,r,nm)=>{ const [a,b,c]=[m[0][0],m[0][1],m[1][1]]; return 'the grid test on '+nm+': fₓₓ = '+qs(a)+', fₓᵧ = '+qs(b)+', fᵧᵧ = '+qs(c)+', D = '+qs(qsub(qm(a,c),sq(b)))+': '+r; }});
-nl('28m.disc',{to:'word',say:(p,x,nm)=>'find ∬ 1 over the disc of radius '+nm+', in round measures',f:x=>qpos(x)&&sm(x)?angs(sq(x)):null,w:x=>[['the scale r is left out of r dr dθ',angs(qm(Q(2),x))],['the half of r²/2 is dropped',angs(qm(Q(2),sq(x)))]],cite:'the round-slab technique',ln:(x,p,r)=>'the disc’s area in round measures: ∫₀^2π ∫₀^'+(x.q===1?qs(x):'('+qs(x)+')')+' r dr dθ = '+r});
-gl('28n.cross','f2','word',{say:(p,F)=>'say whether the field (∂'+F.lb+'/∂y, ∂'+F.lb+'/∂x) is uphill from some function',f:F=>{ const a=f2dy({ts:f2dy(F)}), b=f2dx({ts:f2dx(F)}); return f2s(a)===f2s(b)?'it is uphill':'it is not'; },
+nl('28o.disc',{to:'word',say:(p,x,nm)=>'find ∬ 1 over the disc of radius '+nm+', in round measures',f:x=>qpos(x)&&sm(x)?angs(sq(x)):null,w:x=>[['the scale r is left out of r dr dθ',angs(qm(Q(2),x))],['the half of r²/2 is dropped',angs(qm(Q(2),sq(x)))]],cite:'the round-slab technique',ln:(x,p,r)=>'the disc’s area in round measures: ∫₀^2π ∫₀^'+(x.q===1?qs(x):'('+qs(x)+')')+' r dr dθ = '+r});
+gl('28p.cross','f2','word',{say:(p,F)=>'say whether the field (∂'+F.lb+'/∂y, ∂'+F.lb+'/∂x) is uphill from some function',f:F=>{ const a=f2dy({ts:f2dy(F)}), b=f2dx({ts:f2dx(F)}); return f2s(a)===f2s(b)?'it is uphill':'it is not'; },
   w:F=>[['it is taken as uphill because it is built from slopes',(()=>{ const a=f2dy({ts:f2dy(F)}), b=f2dx({ts:f2dx(F)}); return f2s(a)===f2s(b)?null:'it is uphill'; })()]],cite:'the cross-slopes technique',ln:(F,p,r)=>'for the field from '+F.lb+', Pᵧ = '+F.lb+'ᵧᵧ and Qₓ = '+F.lb+'ₓₓ: '+r});
-gl('28o.step','f2','vec',{mk:()=>({w:PT(),e:pick([Q(1,2),Q(1,4),Q(1,10)])}),say:(p,F)=>'take one downhill step of size '+qs(p.e)+' on '+F.lb+' from the point '+pv(p.w),f:(F,p)=>{ const g=grad(F,p.w); return [qsub(Q(p.w[0]),qm(p.e,g[0])),qsub(Q(p.w[1]),qm(p.e,g[1]))]; },
+gl('28q.step','f2','vec',{mk:()=>({w:PT(),e:pick([Q(1,2),Q(1,4),Q(1,10)])}),say:(p,F)=>'take one downhill step of size '+qs(p.e)+' on '+F.lb+' from the point '+pv(p.w),f:(F,p)=>{ const g=grad(F,p.w); return [qsub(Q(p.w[0]),qm(p.e,g[0])),qsub(Q(p.w[1]),qm(p.e,g[1]))]; },
   w:(F,p)=>{ const g=grad(F,p.w); return [['the step goes uphill, along +∇F',[qa(Q(p.w[0]),qm(p.e,g[0])),qa(Q(p.w[1]),qm(p.e,g[1]))]]]; },cite:'the downhill-step technique',ln:(F,p,r,nm,nx)=>nx+', one downhill step on '+F.lb+' from '+pv(p.w)+': '+r});
-nl('28p.rel',{mk:()=>({k:rint(1,3),m:rint(1,3),e:pick([Q(1,100),Q(1,50),Q(1,20)])}),say:(p,x,nm)=>'f = x'+(p.k>1?SUPd[p.k]:'')+'y'+(p.m>1?SUPd[p.m]:'')+'; x has relative error '+nm+' and y has '+qs(p.e)+'; bound the relative error of f',
+nl('28r.rel',{mk:()=>({k:rint(1,3),m:rint(1,3),e:pick([Q(1,100),Q(1,50),Q(1,20)])}),say:(p,x,nm)=>'f = x'+(p.k>1?SUPd[p.k]:'')+'y'+(p.m>1?SUPd[p.m]:'')+'; x has relative error '+nm+' and y has '+qs(p.e)+'; bound the relative error of f',
   f:(x,p)=>qpos(x)&&qlt(x,Q(1))?qa(qm(Q(p.k),x),qm(Q(p.m),p.e)):null,w:(x,p)=>[['the powers are dropped',p.k===1&&p.m===1?null:qa(x,p.e)]],cite:'the relative-errors-add technique',ln:(x,p,r)=>'the relative error of f: '+p.k+' · '+qs(x)+' + '+p.m+' · '+qs(p.e)+' = '+r});
 nl('28·econ.share',{mk:()=>({a:pick([Q(1,2),Q(1,3),Q(2,3),Q(1,4),Q(3,4)])}),say:(p,x,nm)=>'a shopper with satisfaction '+qs(p.a)+' ln x + '+qs(qsub(Q(1),p.a))+' ln y has '+nm+' dollars; find the spending on x',
   f:(x,p)=>qpos(x)&&sm(x,999)?qm(p.a,x):null,w:(x,p)=>[['the share of the other good is used',qe(p.a,Q(1,2))?null:qm(qsub(Q(1),p.a),x)],['the budget is split evenly',qe(p.a,Q(1,2))?null:qm(Q(1,2),x)]],cite:'the spending-share technique',ln:(x,p,r)=>'the spending on x: '+qs(p.a)+' · '+qs(x)+' = '+r+' dollars'});
@@ -15459,16 +15512,16 @@ nl('29f.holes',{to:'ang',say:(p,x,nm)=>'a closed surface has '+nm+' holes; find 
 nl('29f.euler',{say:(p,x,nm)=>'a closed surface has '+nm+' holes; find V − E + F for it',f:x=>{ const g=wh(x); return g!==null&&g>=0&&g<=9?Q(2-2*g):null; },w:x=>[['the 2 in front of g is dropped',Q(2-wh(x))]],cite:'the hole-count technique',ln:(x,p,r)=>'V − E + F with '+qs(x)+(wh(x)===1?' hole':' holes')+': 2 − 2 · '+qs(x)+' = '+r});
 gl('29g.heading','ang','ang',{say:()=>'in the ruler du² + u²dv², a straightest path turns v by the arc θ; find the change of its heading',f:t=>qz(t)?null:qn(t),w:t=>[['the minus sign of −gᵤ dv is dropped',t]],cite:'the heading technique',ln:(t,p,r)=>'the change of heading: dψ = −gᵤ dv = '+r});
 gl('29h.page','vec','vec',{say:(p,P,nm)=>'change page: send the point '+nm+' = (X, Y) to (X, Y)/(X² + Y²)',f:P=>{ const r=qa(sq(P[0]),sq(P[1])); return qz(r)?null:[qd(P[0],r),qd(P[1],r)]; },w:P=>{ const r=qa(sq(P[0]),sq(P[1])); return [['the entries are swapped',[qd(P[1],r),qd(P[0],r)]],['it is multiplied by X² + Y² instead of divided',[qm(P[0],r),qm(P[1],r)]]]; },cite:'the page-change technique',ln:(P,p,r,nm,nx)=>nx+', '+nm+' on the other page, '+nm+'/|'+nm+'|²: '+r});
-nl('29i.cos',{mk:()=>({c:pick([Q(1,2),Q(-1,2),Q(1,3),Q(2,3),Q(0)])}),say:(p,x,nm)=>'a right-angled triangle on the sphere has cos b = '+nm+' and cos c = '+qs(p.c)+'; find cos a',f:(x,p)=>qlt(Q(1),qabs(x))?null:qm(x,p.c),
+nl('29m.cos',{mk:()=>({c:pick([Q(1,2),Q(-1,2),Q(1,3),Q(2,3),Q(0)])}),say:(p,x,nm)=>'a right-angled triangle on the sphere has cos b = '+nm+' and cos c = '+qs(p.c)+'; find cos a',f:(x,p)=>qlt(Q(1),qabs(x))?null:qm(x,p.c),
   w:(x,p)=>[['the cosines are added instead of multiplied',qa(x,p.c)]],cite:'the sphere-cosine technique',ln:(x,p,r)=>'the third side: cos a = '+par(x)+' · '+par(p.c)+' = '+r});
-gl('29j.half','cx','cx',{say:(p,z,nm)=>'carry '+nm+' to the half-plane by the map s ↦ i(1 + s)/(1 − s)',f:z=>{ const d=[qsub(Q(1),z[0]),qn(z[1])], n=[qa(Q(1),z[0]),z[1]], r=cs2(d); if(qz(r)) return null; const q=cm(n,[d[0],qn(d[1])]); return [qd(qn(q[1]),r),qd(q[0],r)]; },
+gl('29n.half','cx','cx',{say:(p,z,nm)=>'carry '+nm+' to the half-plane by the map s ↦ i(1 + s)/(1 − s)',f:z=>{ const d=[qsub(Q(1),z[0]),qn(z[1])], n=[qa(Q(1),z[0]),z[1]], r=cs2(d); if(qz(r)) return null; const q=cm(n,[d[0],qn(d[1])]); return [qd(qn(q[1]),r),qd(q[0],r)]; },
   w:z=>{ const d=[qa(Q(1),z[0]),z[1]], n=[qsub(Q(1),z[0]),qn(z[1])], r=cs2(d); if(qz(r)) return []; const q=cm(n,[d[0],qn(d[1])]); return [['the top and the bottom of the quotient are swapped',[qd(qn(q[1]),r),qd(q[0],r)]]]; },cite:'the half-plane technique',ln:(z,p,r,nm,nx)=>nx+', '+nm+' carried to the half-plane: '+r});
-gl('29k.bend','f2','num',{mk:()=>({w:PT()}),say:(p,F)=>'find the surface bend K of z = '+F.lb+'(x, y) at the point '+pv(p.w),f:(F,p)=>{ const fx={ts:f2dx(F)}, fy={ts:f2dy(F)}, g=grad(F,p.w), a=f2ev({ts:f2dx(fx)},p.w[0],p.w[1]), b=f2ev({ts:f2dy(fx)},p.w[0],p.w[1]), c=f2ev({ts:f2dy(fy)},p.w[0],p.w[1]); return qd(qsub(qm(a,c),sq(b)),sq(qa(Q(1),qa(sq(g[0]),sq(g[1]))))); },
+gl('29o.bend','f2','num',{mk:()=>({w:PT()}),say:(p,F)=>'find the surface bend K of z = '+F.lb+'(x, y) at the point '+pv(p.w),f:(F,p)=>{ const fx={ts:f2dx(F)}, fy={ts:f2dy(F)}, g=grad(F,p.w), a=f2ev({ts:f2dx(fx)},p.w[0],p.w[1]), b=f2ev({ts:f2dy(fx)},p.w[0],p.w[1]), c=f2ev({ts:f2dy(fy)},p.w[0],p.w[1]); return qd(qsub(qm(a,c),sq(b)),sq(qa(Q(1),qa(sq(g[0]),sq(g[1]))))); },
   w:(F,p)=>{ const fx={ts:f2dx(F)}, fy={ts:f2dy(F)}, g=grad(F,p.w), a=f2ev({ts:f2dx(fx)},p.w[0],p.w[1]), b=f2ev({ts:f2dy(fx)},p.w[0],p.w[1]), c=f2ev({ts:f2dy(fy)},p.w[0],p.w[1]), n=qsub(qm(a,c),sq(b));
     return [['the bottom is not squared',qd(n,qa(Q(1),qa(sq(g[0]),sq(g[1]))))],['the bottom is left off',n]]; },cite:'the graph-bend technique',ln:(F,p,r)=>'the bend of z = '+F.lb+' at '+pv(p.w)+': K = '+r});
-gl('29l.slide','ang','num',{mk:()=>({r:rint(1,6)}),say:p=>'the fastest slide x = r(θ − sin θ), y = r(1 − cos θ) has r = '+p.r+'; find y at the arc θ',f:(t,p)=>{ const c=cosA(t); return c?qm(Q(p.r),qsub(Q(1),c)):null; },
+gl('29p.slide','ang','num',{mk:()=>({r:rint(1,6)}),say:p=>'the fastest slide x = r(θ − sin θ), y = r(1 − cos θ) has r = '+p.r+'; find y at the arc θ',f:(t,p)=>{ const c=cosA(t); return c?qm(Q(p.r),qsub(Q(1),c)):null; },
   w:(t,p)=>{ const c=cosA(t); return c?[['the sign of cos is turned',qm(Q(p.r),qa(Q(1),c))],['the 1 in 1 − cos θ is dropped',qm(Q(p.r),qn(c))]]:[]; },cite:'the fastest-slide technique',ln:(t,p,r)=>'the height on the slide at θ = '+angs(t)+': '+p.r+'(1 − cos θ) = '+r});
-nl('29m.ratio',{mk:()=>{ const s=shuffle([-2,-1,1,2,3,4,5]).slice(0,3); return {t2:s[0],t3:s[1],t4:s[2]}; },say:(p,x,nm)=>'t₁ = '+nm+', t₂ = '+qs(Q(p.t2))+', t₃ = '+qs(Q(p.t3))+', t₄ = '+qs(Q(p.t4))+'; find the four-point ratio',
+nl('29q.ratio',{mk:()=>{ const s=shuffle([-2,-1,1,2,3,4,5]).slice(0,3); return {t2:s[0],t3:s[1],t4:s[2]}; },say:(p,x,nm)=>'t₁ = '+nm+', t₂ = '+qs(Q(p.t2))+', t₃ = '+qs(Q(p.t3))+', t₄ = '+qs(Q(p.t4))+'; find the four-point ratio',
   f:(x,p)=>{ if(!sm(x)) return null; const d=qm(qsub(Q(p.t2),Q(p.t3)),qsub(x,Q(p.t4))), n=qm(qsub(x,Q(p.t3)),Q(p.t2-p.t4)); return qz(d)||qz(n)?null:qd(n,d); },
   w:(x,p)=>{ const d=qm(qsub(Q(p.t2),Q(p.t3)),qsub(x,Q(p.t4))), n=qm(qsub(x,Q(p.t3)),Q(p.t2-p.t4)); return qz(d)||qz(n)?[]:[['the ratio is turned over',qd(d,n)],['t₃ and t₄ are swapped',(()=>{ const d2=qm(Q(p.t2-p.t4),qsub(x,Q(p.t3))), n2=qm(qsub(x,Q(p.t4)),Q(p.t2-p.t3)); return qz(d2)?null:qd(n2,d2); })()]]; },
   cite:'the four-point-ratio technique',ln:(x,p,r)=>{ const d=qm(qsub(Q(p.t2),Q(p.t3)),qsub(x,Q(p.t4))), n=qm(qsub(x,Q(p.t3)),Q(p.t2-p.t4)); return 'the four-point ratio for t₁ = '+qs(x)+': '+par(n)+'/'+par(d)+' = '+r; }});
@@ -15654,7 +15707,7 @@ const gmatch=g=>{ let best=0; const e=g.e, go=(i,used,k)=>{ if(k>best) best=k; f
 const qi2=a=>a.map(r=>r.map(x=>Q(x)));
 SEEDS.push(
   {id:'31d.symmetric',step:'31d',label:'symmetric grids with whole stretches',kind:'mat',tuples:()=>{ const o=[]; [0,1,2,3,4,5].forEach(i=>[1,-1].forEach(s=>[-3,-2,-1,0,1,2,3].forEach(c=>[1,-1].forEach(t=>o.push([[i,s,c,t],1]))))); return o; },make(F__){ const [d,b2]=(l=>F__?l[F__[0]]:pick(l))([[3,4],[0,2],[8,6],[6,8],[5,12],[0,4]]), b=b2/2*(F__?F__[1]:pick([1,-1])), c=F__?F__[2]:ri(-3,3), a=c+d*(F__?F__[3]:pick([1,-1])); return {val:mat(qi2([[a,b],[b,c]])),ix:[a,b,c].join(',')}; }},
-  {id:'31j.shares',step:'31j',label:'shares between 0 and 1',kind:'num',make(){ const q=pick([2,3,4,5,6,8,10]), p=ri(1,q-1), v=Q(p,q); return {val:num(v),ix:qs(v)}; }},
+  {id:'31l.shares',step:'31l',label:'shares between 0 and 1',kind:'num',make(){ const q=pick([2,3,4,5,6,8,10]), p=ri(1,q-1), v=Q(p,q); return {val:num(v),ix:qs(v)}; }},
   {id:'35a.pairs',step:'35a',label:'pairs of whole numbers',kind:'vec',tuples:()=>{ const o=[]; for(let a=0;a<6;a++) for(let b=0;b<6;b++) o.push([[a,b],1]); return o; },make(F__){ const u=F__?F__.slice():[ri(0,5),ri(0,5)]; return {val:vec(u.map(x=>Q(x))),ix:u.join(',')}; }},
   {id:'36c.colours',step:'36c',label:'colours as triples',kind:'col',make(){ const c=Math.random()<0.25?[0,1,2].map(()=>Q(rnd(2))):rcol(); return {val:col(c),ix:c.map(qs).join(' ')}; }},
   {id:'39a.strings',step:'39a',label:'strings of 1s and 0s',kind:'bits',tuples:()=>{ const o=[]; [4,5,6,7].forEach(n=>{ for(let m=0;m<(1<<n);m++) o.push([[m.toString(2).padStart(n,'0')],1/(1<<n)]); }); return o; },make(F__){ const s=F__?F__[0]:rbits(ri(4,7)); return {val:bits(s),ix:s}; }},
@@ -15666,8 +15719,8 @@ SEEDS.push(
     while(e.length>7){ const ok=e.map((_,i)=>i).filter(i=>{ const r=e.filter((_,j)=>j!==i); for(let a=1;a<n;a++) if(!r.some(x=>x[0]===a)) return false; for(let b=2;b<=n;b++) if(!r.some(x=>x[1]===b)) return false; return true; }); if(!ok.length) break; e.splice(ok[Math.floor(Math.random()*ok.length)],1); } /* links beyond 7 are dropped, keeping every dot joined */
     if(e.length>7) return null; e.sort((x,y)=>x[0]-y[0]||x[1]-y[1]); return {val:graph(n,e,true),ix:e.map(x=>x.join('')).join('.')}; }},
   {id:'44·crypt.points',step:'44·crypt',label:'points of y² = x³ + 2x + 2 on the clock of 17',kind:'vec',tuples:()=>{ const o=[]; for(let x=0;x<17;x++) for(let y=1;y<17;y++) if(md(y*y-(x*x*x+2*x+2),17)===0) o.push([[x,y],1]); return o; },make(F__){ const pts=[]; for(let x=0;x<17;x++) for(let y=1;y<17;y++) if(md(y*y-(x*x*x+2*x+2),17)===0) pts.push([x,y]); const p=F__?F__.slice():pick(pts); return {val:vec(p.map(x=>Q(x))),ix:p.join(',')}; }},
-  {id:'45e.stamps',step:'45e',label:'list stamps of three machines',kind:'stamp',make(){ const u=[ri(0,5),ri(0,5),ri(0,5)]; return {val:stamp(u),ix:u.join('')}; }},
-  {id:'46b.cubics',step:'46b',label:'cubics with whole roots',kind:'fn',make(F__){ const r=F__?F__.slice():[ri(-3,3),ri(-3,3),ri(-3,3)]; if(!F__&&Math.random()<0.3){ r[1]=ri(Math.max(-3,-4-r[0]),Math.min(3,4-r[0])); r[2]=-r[0]-r[1]; }
+  {id:'46e.stamps',step:'46e',label:'list stamps of three machines',kind:'stamp',make(){ const u=[ri(0,5),ri(0,5),ri(0,5)]; return {val:stamp(u),ix:u.join('')}; }},
+  {id:'47b.cubics',step:'47b',label:'cubics with whole roots',kind:'fn',make(F__){ const r=F__?F__.slice():[ri(-3,3),ri(-3,3),ri(-3,3)]; if(!F__&&Math.random()<0.3){ r[1]=ri(Math.max(-3,-4-r[0]),Math.min(3,4-r[0])); r[2]=-r[0]-r[1]; }
     const t=simp(M(A(X,N(-r[0])),A(X,N(-r[1])),A(X,N(-r[2])))); return {val:{k:'fn',t},ix:r.join(','),pts:[...r,0,1,-1]}; }}
 );
 
@@ -15710,29 +15763,29 @@ NL('31h.energy',['31h'],'the list-space technique',(p,nm)=>'take the list 1, '+n
   v=>[['the squares are forgotten, so the list itself is added',qlt(qabs(v),Q(1))?qi(qa(Q(1),qn(v))):null]],(a,o)=>'energy of the list 1, '+qs(a)+', …: 1/(1 − '+par(a)+'²) = '+qs(o));
 NL('31i.sizesum',['31i'],'the size-sum technique',(p,nm)=>'pieces have sizes '+nm+', '+nm+'², '+nm+'³, …; bound the size of their sum',v=>inOpen01(v)?qm(v,qi(qa(Q(1),qn(v)))):null,
   v=>[['the sum is started at the power 0',inOpen01(v)?qi(qa(Q(1),qn(v))):null]],(a,o)=>'bound on the size of the sum: '+qs(a)+'/(1 − '+qs(a)+') = '+qs(o));
-NL('31j.coin',['31j'],'the coin-average technique',(p,nm)=>'take x = '+nm+'; find the coin average B'+p.n+'(x²) = x² + x(1 − x)/'+p.n,(v,p)=>v.p>=0&&v.p<=v.q?qa(qm(v,v),qm(qm(v,qa(Q(1),qn(v))),Q(1,p.n))):null,
+NL('31l.coin',['31l'],'the coin-average technique',(p,nm)=>'take x = '+nm+'; find the coin average B'+p.n+'(x²) = x² + x(1 − x)/'+p.n,(v,p)=>v.p>=0&&v.p<=v.q?qa(qm(v,v),qm(qm(v,qa(Q(1),qn(v))),Q(1,p.n))):null,
   (v,p)=>[['the spread term x(1 − x)/n is left off',qm(v,v)],['the spread term is not divided by n',qa(qm(v,v),qm(v,qa(Q(1),qn(v))))]],(a,o,p)=>'the coin average B'+p.n+'(x²) at x = '+qs(a)+': '+qs(o),()=>({n:ri(2,9)}));
-LK({id:'31k.zero',from:'vec',to:'num',steps:()=>['31k'],say:(p,nm)=>'fit the best line y ≈ bx through 0 to the points (1, u₁) and (2, u₂), with '+nm+' = (u₁, u₂); give b',
+LK({id:'31m.zero',from:'vec',to:'num',steps:()=>['31m'],say:(p,nm)=>'fit the best line y ≈ bx through 0 to the points (1, u₁) and (2, u₂), with '+nm+' = (u₁, u₂); give b',
   act:s=>num(qm(qa(s.u[0],qm(Q(2),s.u[1])),Q(1,5))),cite:()=>'the through-zero technique',
   slips:s=>[{why:'the readings are added and divided by the inputs added',v:qm(qa(s.u[0],s.u[1]),Q(1,3))},{why:'Σxᵢyᵢ is divided by Σxᵢ, not Σxᵢ²',v:qm(qa(s.u[0],qm(Q(2),s.u[1])),Q(1,3))}],
   line:(o,p,nm)=>'slope of the best line through 0: Σxy/Σx² = '+qs(o.v)});
-LK({id:'31k.normal',from:'vec',to:'num',steps:()=>['31k'],make:()=>({n:pick([[3,4],[4,3],[5,12],[12,5],[3,-4]])}),say:(p,nm)=>'find the distance from '+nm+' to the line through 0 at right angles to n = '+vs(p.n),
+LK({id:'31m.normal',from:'vec',to:'num',steps:()=>['31m'],make:()=>({n:pick([[3,4],[4,3],[5,12],[12,5],[3,-4]])}),say:(p,nm)=>'find the distance from '+nm+' to the line through 0 at right angles to n = '+vs(p.n),
   act:(s,p)=>{ const n=p.n.map(x=>Q(x)); return num(qm(qabs(dot(s.u,n)),qi(qsqrt(dot(n,n))))); },cite:()=>'the through-the-normal technique',
   slips:(s,p)=>{ const n=p.n.map(x=>Q(x)); return [{why:'the reading along n is not divided by |n|',v:qabs(dot(s.u,n))},{why:'the reading is divided by |n|² instead of |n|',v:qm(qabs(dot(s.u,n)),qi(dot(n,n)))}]; },
   line:(o,p,nm)=>'distance from '+nm+' to the line: |'+nm+' · n|/|n| = '+qs(o.v)});
-LK({id:'31l.r2',from:'vec',to:'num',steps:()=>['31l'],make:()=>({w:pick(WSM)}),say:(p,nm)=>'take '+nm+' and '+vs(p.w)+' as deviation vectors; find r², the squared cosine of the angle between them',
+LK({id:'31n.r2',from:'vec',to:'num',steps:()=>['31n'],make:()=>({w:pick(WSM)}),say:(p,nm)=>'take '+nm+' and '+vs(p.w)+' as deviation vectors; find r², the squared cosine of the angle between them',
   act:(s,p)=>{ const w=p.w.map(x=>Q(x)), uu=dot(s.u,s.u); if(qz(uu)) return null; const d=dot(s.u,w); return num(qm(qm(d,d),qi(qm(uu,dot(w,w))))); },cite:()=>'the correlation-angle technique',
   slips:(s,p)=>{ const w=p.w.map(x=>Q(x)), uu=dot(s.u,s.u); if(qz(uu)) return []; const d=dot(s.u,w); return [{why:'the square of the product is divided by |u|² alone',v:qm(qm(d,d),qi(uu))},{why:'the product is divided by the squared sizes without being squared',v:qm(d,qi(qm(uu,dot(w,w))))}]; },
   line:(o,p,nm)=>'r² for '+nm+' and '+vs(p.w)+': cos² of the angle = '+qs(o.v)});
-LK({id:'31m.line',from:'vec',to:'fn',steps:()=>['31m'],say:(p,nm)=>'find the polynomial of degree at most 1 through (1, u₁) and (2, u₂), with '+nm+' = (u₁, u₂)',
+LK({id:'31o.line',from:'vec',to:'fn',steps:()=>['31o'],say:(p,nm)=>'find the polynomial of degree at most 1 through (1, u₁) and (2, u₂), with '+nm+' = (u₁, u₂)',
   act:s=>({k:'fn',t:fromPoly([qa(qm(Q(2),s.u[0]),qn(s.u[1])),qa(s.u[1],qn(s.u[0]))])}),cite:()=>'the through-the-points technique',
   slips:s=>[{why:'the slope is taken as u₁ − u₂',k:'fn',t:fromPoly([qa(s.u[0],qn(qa(s.u[0],qn(s.u[1])))),qa(s.u[0],qn(s.u[1]))])}],
   line:(o,p,nm,nx)=>'the line through the points of '+nm+': '+nx+'(x) = '+show(o.t)});
-LK({id:'31n.reading',from:'mat',to:'num',steps:()=>['31n'],make:()=>({x:pick([[1,1],[1,2],[2,1],[1,-1],[1,0]])}),say:(p,nm)=>'read the symmetric grid '+nm+' two-sided: R(x) = xᵀ'+nm+'x / xᵀx at x = '+vs(p.x),
+LK({id:'31p.reading',from:'mat',to:'num',steps:()=>['31p'],make:()=>({x:pick([[1,1],[1,2],[2,1],[1,-1],[1,0]])}),say:(p,nm)=>'read the symmetric grid '+nm+' two-sided: R(x) = xᵀ'+nm+'x / xᵀx at x = '+vs(p.x),
   act:(s,p)=>{ if(!sym(s.m)) return null; const x=p.x.map(v=>Q(v)), Ax=[0,1].map(i=>qa(qm(s.m[i][0],x[0]),qm(s.m[i][1],x[1]))); return num(qm(dot(x,Ax),qi(dot(x,x)))); },cite:()=>'the two-sided-reading technique',
   slips:(s,p)=>{ const x=p.x.map(v=>Q(v)), Ax=[0,1].map(i=>qa(qm(s.m[i][0],x[0]),qm(s.m[i][1],x[1]))); return [{why:'xᵀAx is not divided by xᵀx',v:dot(x,Ax)}]; },
   line:(o,p,nm)=>'the reading of '+nm+' at '+vs(p.x)+': xᵀ'+nm+'x/xᵀx = '+qs(o.v)});
-LK({id:'31o.spread',from:'mat',to:'num',steps:()=>['31o'],make:()=>({d:pick([[3,4],[4,3],[5,12],[12,-5],[-4,3]])}),say:(p,nm)=>'with the spread grid C = '+nm+', find the spread along the direction of '+vs(p.d),
+LK({id:'31q.spread',from:'mat',to:'num',steps:()=>['31q'],make:()=>({d:pick([[3,4],[4,3],[5,12],[12,-5],[-4,3]])}),say:(p,nm)=>'with the spread grid C = '+nm+', find the spread along the direction of '+vs(p.d),
   act:(s,p)=>{ if(!sym(s.m)) return null; const l=qsqrt(Q(p.d[0]**2+p.d[1]**2)), d=p.d.map(v=>qm(Q(v),qi(l))), Cd=[0,1].map(i=>qa(qm(s.m[i][0],d[0]),qm(s.m[i][1],d[1]))); return num(dot(d,Cd)); },cite:()=>'the spread-along technique',
   slips:(s,p)=>{ const d=p.d.map(v=>Q(v)), Cd=[0,1].map(i=>qa(qm(s.m[i][0],d[0]),qm(s.m[i][1],d[1]))); return [{why:'the direction is not cut to size 1',v:dot(d,Cd)}]; },
   line:(o,p,nm)=>'spread of '+nm+' along '+vs(p.d)+': dᵀ'+nm+'d = '+qs(o.v)});
@@ -15810,22 +15863,22 @@ LK({id:'32·now.share',from:'vec',to:'num',steps:()=>['32·now'],make:()=>({k:nz
 NL('33a.decay',['33a'],'the cooling-shape technique',(p,nm)=>'on a rod of length '+p.L+' with κ = '+p.k+', give the fading rate of cooling shape number '+nm+', as a multiple of π²',(v,p)=>{ const n=W(v); return n!==null&&n>=1&&n<=9?Q(p.k*n*n,p.L*p.L):null; },
   (v,p)=>{ const n=W(v); return n===null?[]:[['the shape number is not squared',Q(p.k*n,p.L*p.L)],['the length is not squared',Q(p.k*n*n,p.L)]]; },(a,o,p)=>'fading rate of shape '+qs(a)+': κ(nπ/L)² = '+timesU(o,'π²'),()=>({k:ri(1,3),L:ri(2,4)}));
 NL('33b.bell',['33b'],'the spreading-bell technique',(p,nm)=>'heat spreads from a point with κ = '+p.k+'; give the spread of the bell at t = '+nm,(v,p)=>v.p>0?qm(Q(2*p.k),v):null,(v,p)=>[['the 2 is left off',qm(Q(p.k),v)]],(a,o,p)=>'spread of the bell: 2κt = 2 · '+p.k+' · '+par(a)+' = '+qs(o),()=>({k:ri(1,4)}));
-NL('33c.tone',['33c'],'the string-tones technique',(p,nm)=>'a string of length '+p.L+' has wave speed '+p.c+'; give the frequency of its tone number '+nm,(v,p)=>{ const n=W(v); return n!==null&&n>=1&&n<=12?Q(n*p.c,2*p.L):null; },
+NL('33e.tone',['33e'],'the string-tones technique',(p,nm)=>'a string of length '+p.L+' has wave speed '+p.c+'; give the frequency of its tone number '+nm,(v,p)=>{ const n=W(v); return n!==null&&n>=1&&n<=12?Q(n*p.c,2*p.L):null; },
   (v,p)=>{ const n=W(v); return n===null?[]:[['the 2 is left off',Q(n*p.c,p.L)]]; },(a,o,p)=>'frequency of tone '+qs(a)+': '+qs(a)+' · '+p.c+'/(2 · '+p.L+') = '+qs(o),()=>({L:ri(1,4),c:pick([60,80,100,120])}));
-LK({id:'33d.average',from:'vec',to:'num',steps:()=>['33d'],make:()=>({k:nz(-3,3)}),say:(p,nm)=>'take the point '+nm+' = (x, y); average the balanced h = x² − y² '+(p.k<0?'− '+(-p.k):'+ '+p.k)+'x round any circle about it',
+LK({id:'33f.average',from:'vec',to:'num',steps:()=>['33f'],make:()=>({k:nz(-3,3)}),say:(p,nm)=>'take the point '+nm+' = (x, y); average the balanced h = x² − y² '+(p.k<0?'− '+(-p.k):'+ '+p.k)+'x round any circle about it',
   act:(s,p)=>num(qa(qa(qm(s.u[0],s.u[0]),qn(qm(s.u[1],s.u[1]))),qm(Q(p.k),s.u[0]))),cite:()=>'the circle-average technique',
   slips:(s,p)=>[{why:'the − y² is read as + y²',v:qa(qa(qm(s.u[0],s.u[0]),qm(s.u[1],s.u[1])),qm(Q(p.k),s.u[0]))}],line:(o,p,nm,nx,s)=>'average of h round a circle about '+vs(s.u)+': h there = '+qs(o.v)});
-NL('33e.break',['33e'],'the breaking-time technique',(p,nm)=>'the start f of a wave has the greatest value of −f′ equal to '+nm+'; give the time the slope of u breaks',v=>v.p>0?qi(v):null,v=>[['the greatest value itself is given, not turned over',v]],(a,o)=>'the breaking time: t = 1/'+par(a)+' = '+qs(o));
-NL('33f.kick',['33f'],'the single-kick technique',(p,nm)=>'take x = '+nm+'; read the kick shape G(x, s) of −y″ on [0, 1] at s = '+qs(p.s),(v,p)=>v.p>=0&&v.p<=v.q?qm(qmin(v,p.s),qa(Q(1),qn(qmax(v,p.s)))):null,
+NL('33g.break',['33g'],'the breaking-time technique',(p,nm)=>'the start f of a wave has the greatest value of −f′ equal to '+nm+'; give the time the slope of u breaks',v=>v.p>0?qi(v):null,v=>[['the greatest value itself is given, not turned over',v]],(a,o)=>'the breaking time: t = 1/'+par(a)+' = '+qs(o));
+NL('33h.kick',['33h'],'the single-kick technique',(p,nm)=>'take x = '+nm+'; read the kick shape G(x, s) of −y″ on [0, 1] at s = '+qs(p.s),(v,p)=>v.p>=0&&v.p<=v.q?qm(qmin(v,p.s),qa(Q(1),qn(qmax(v,p.s)))):null,
   (v,p)=>[['x(1 − s) is used whichever is larger',qm(v,qa(Q(1),qn(p.s)))]],(a,o,p)=>'the kick shape at x = '+qs(a)+': G('+qs(a)+', '+qs(p.s)+') = '+qs(o),()=>({s:pick([Q(1,2),Q(1,3),Q(2,3),Q(1,4),Q(3,4)])}));
-NL('33g.drum',['33g'],'the drum-shape technique',(p,nm)=>'add the first three terms of the drum shape J₀(x) = 1 − x²/4 + x⁴/64 − ⋯ at x = '+nm,v=>{ const x=W(v); if(x===null||Math.abs(x)>8) return null; const h=Q(x*x,4); return qa(qa(Q(1),qn(h)),qm(qm(h,h),Q(1,4))); },
+NL('33i.drum',['33i'],'the drum-shape technique',(p,nm)=>'add the first three terms of the drum shape J₀(x) = 1 − x²/4 + x⁴/64 − ⋯ at x = '+nm,v=>{ const x=W(v); if(x===null||Math.abs(x)>8) return null; const h=Q(x*x,4); return qa(qa(Q(1),qn(h)),qm(qm(h,h),Q(1,4))); },
   v=>{ const x=W(v); if(x===null) return []; const h=Q(x*x,4); return [['j! is not squared',qa(qa(Q(1),qn(h)),qm(qm(h,h),Q(1,2)))],['the signs are not turned',qa(qa(Q(1),h),qm(qm(h,h),Q(1,4)))]]; },(a,o)=>'three terms of the drum shape: J₀('+qs(a)+') ≈ '+qs(o));
-LK({id:'33h.sealed',from:'vec',to:'num',steps:()=>['33h'],say:(p,nm)=>'a sealed rod starts at u₁ on its left half and u₂ on its right, with '+nm+' = (u₁, u₂); give the heat it settles at',
+LK({id:'33j.sealed',from:'vec',to:'num',steps:()=>['33j'],say:(p,nm)=>'a sealed rod starts at u₁ on its left half and u₂ on its right, with '+nm+' = (u₁, u₂); give the heat it settles at',
   act:s=>num(qm(qa(s.u[0],s.u[1]),Q(1,2))),cite:()=>'the sealed-rod technique',slips:s=>[{why:'the left end is taken to keep its start',v:s.u[0]},{why:'the halves are added, not averaged',v:qa(s.u[0],s.u[1])}],line:(o,p,nm)=>'the sealed rod settles at the average a₀/2 = '+qs(o.v)});
-LK({id:'33i.step',from:'vec',to:'num',steps:()=>['33i'],make:()=>({c:ri(-4,6),r:pick([Q(1,4),Q(1,2),Q(1,3)])}),say:(p,nm)=>'a grid point holds '+qs(Q(p.c))+' between neighbours holding '+nm+' = (u₁, u₂); take one step with r = '+qs(p.r),
+LK({id:'33k.step',from:'vec',to:'num',steps:()=>['33k'],make:()=>({c:ri(-4,6),r:pick([Q(1,4),Q(1,2),Q(1,3)])}),say:(p,nm)=>'a grid point holds '+qs(Q(p.c))+' between neighbours holding '+nm+' = (u₁, u₂); take one step with r = '+qs(p.r),
   act:(s,p)=>num(qa(qa(qm(p.r,s.u[0]),qm(qa(Q(1),qm(Q(-2),p.r)),Q(p.c))),qm(p.r,s.u[1]))),cite:()=>'the grid-average technique',
   slips:(s,p)=>[{why:'the three are given equal weights',v:qm(qa(qa(s.u[0],s.u[1]),Q(p.c)),Q(1,3))},{why:'the middle keeps its whole value',v:qa(Q(p.c),qm(p.r,qa(s.u[0],s.u[1])))}],line:(o,p,nm)=>'the point after one step: r·u₁ + (1 − 2r)·'+par(Q(p.c))+' + r·u₂ = '+qs(o.v)});
-NL('33j.inside',['33j'],'the shell-flux technique',(p,nm)=>'inside an even ball of radius '+p.R+', give the pull at the distance '+nm+' from the centre as a share of the pull at the edge',(v,p)=>v.p>0&&!qlt(Q(p.R),v)?qm(v,Q(1,p.R)):null,
+NL('33l.inside',['33l'],'the shell-flux technique',(p,nm)=>'inside an even ball of radius '+p.R+', give the pull at the distance '+nm+' from the centre as a share of the pull at the edge',(v,p)=>v.p>0&&!qlt(Q(p.R),v)?qm(v,Q(1,p.R)):null,
   (v,p)=>[['the pull outside the ball is used inside',v.p>0?qm(Q(p.R*p.R),qi(qm(v,v))):null]],(a,o,p)=>'pull inside, as a share of the edge’s: '+par(a)+'/'+p.R+' = '+qs(o),()=>({R:ri(6,20)}));
 NL('33·then.levels',['33·then'],'the box-levels technique',(p,nm)=>'give how far level number '+nm+' of a box stands above level 1, in units of E₁',v=>{ const n=W(v); return n!==null&&n>=1&&n<=12?n*n-1:null; },v=>{ const n=W(v); return n===null?[]:[['the levels are taken to rise like n, not n²',n-1],['the level itself is given, not the gap',n*n]]; },(a,o)=>'gap from level 1 to level '+qs(a)+': '+qs(a)+'² − 1 = '+qs(o));
 NL('33·cb29.ball',['33·cb29'],'the expanding-ball technique',(p,nm)=>'an even ball grows by a factor '+nm+'; give the factor by which (R′/R)² changes, with k = 0',v=>v.p>0?qi(qpow(v,3)):null,v=>[['the density is taken to fall like 1/R², not 1/R³',qi(qm(v,v))]],(a,o)=>'factor on (R′/R)², the density’s: 1/'+par(a)+'³ = '+qs(o));
@@ -15853,14 +15906,14 @@ LK({id:'34h.kept',from:'fn',to:'num',steps:()=>['34h'],poly:true,say:(p,nm)=>'fi
   act:s=>{ const c=toPoly(s.t); if(!c) return null; const rs=ratRoots(padd(c,[Q(0),Q(-1)])); if(!rs) return null; const r=rs.filter(x=>x.p>=0&&x.p<=x.q); return r.length===1?num(r[0]):null; },cite:()=>'the kept-point technique',
   slips:s=>{ const c=toPoly(s.t); if(!c) return []; const rs=ratRoots(c)||[]; return rs.filter(x=>x.p>=0&&x.p<=x.q).slice(0,1).map(v=>({why:'a zero of the function is found instead of a kept point',v})); },line:(o,p,nm)=>'the kept point of '+nm+' in [0, 1]: x = '+qs(o.v)});
 NL('34i.count',['34i'],'the turn-about-count technique',(p,nm)=>'sum '+nm+' tori; letting letters change places, count the whole numbers in each list of the loop group',v=>{ const g=W(v); return g!==null&&g>=1&&g<=20?2*g:null; },v=>{ const g=W(v); return g===null?[]:[['one number is counted for each torus',g]]; },(a,o)=>'numbers in a list for '+qs(a)+' tori: 2g = '+qs(o));
-LK({id:'34j.pull',from:'vec',to:'vec',steps:()=>['34j'],make:()=>({a:ri(2,4),b:nz(-3,3)}),say:(p,nm)=>'read '+nm+' = (u₁, u₂) as an open interval; pull it back by x ↦ '+p.a+'x '+(p.b<0?'− '+(-p.b):'+ '+p.b),
+LK({id:'34m.pull',from:'vec',to:'vec',steps:()=>['34m'],make:()=>({a:ri(2,4),b:nz(-3,3)}),say:(p,nm)=>'read '+nm+' = (u₁, u₂) as an open interval; pull it back by x ↦ '+p.a+'x '+(p.b<0?'− '+(-p.b):'+ '+p.b),
   act:(s,p)=>qlt(s.u[0],s.u[1])?vec(s.u.map(x=>qm(qa(x,Q(-p.b)),Q(1,p.a)))):null,cite:()=>'the base-check technique',
   slips:(s,p)=>[{why:'the interval is pushed forward instead of pulled back',k:'vec',u:s.u.map(x=>qa(qm(Q(p.a),x),Q(p.b)))}],line:(o,p,nm,nx)=>'the pull-back of '+nm+' by x ↦ '+p.a+'x '+(p.b<0?'− '+(-p.b):'+ '+p.b)+': '+vs(o.u)});
-NL('34k.caps',['34k'],'the handle-cap technique',(p,nm)=>'sum '+nm+' handles and one cross-cap; give the number of cross-caps alone that make the same surface',v=>{ const g=W(v); return g!==null&&g>=1&&g<=20?2*g+1:null; },v=>{ const g=W(v); return g===null?[]:[['each handle is taken as one cross-cap, not two',g+1]]; },(a,o)=>'cross-caps for '+qs(a)+' handles and one: 2 · '+qs(a)+' + 1 = '+qs(o));
-LK({id:'34l.wind',from:'cx',to:'num',steps:()=>['34l'],make:()=>({r:ri(2,5),k:nz(-3,3)}),say:(p,nm)=>'a loop runs '+p.k+' times round the circle |z| = '+p.r+'; find its winding number about '+nm,
+NL('34n.caps',['34n'],'the handle-cap technique',(p,nm)=>'sum '+nm+' handles and one cross-cap; give the number of cross-caps alone that make the same surface',v=>{ const g=W(v); return g!==null&&g>=1&&g<=20?2*g+1:null; },v=>{ const g=W(v); return g===null?[]:[['each handle is taken as one cross-cap, not two',g+1]]; },(a,o)=>'cross-caps for '+qs(a)+' handles and one: 2 · '+qs(a)+' + 1 = '+qs(o));
+LK({id:'34o.wind',from:'cx',to:'num',steps:()=>['34o'],make:()=>({r:ri(2,5),k:nz(-3,3)}),say:(p,nm)=>'a loop runs '+p.k+' times round the circle |z| = '+p.r+'; find its winding number about '+nm,
   act:(s,p)=>{ const d=qa(qm(s.re,s.re),qm(s.im,s.im)), r2=Q(p.r*p.r); if(qe(d,r2)) return null; return num(qlt(d,r2)?p.k:0); },cite:()=>'the winding-total technique',
   slips:(s,p)=>[{why:'the turns are counted whether the point is inside or not',v:Q(p.k)},{why:'the sign of the turning is dropped',v:Q(Math.abs(p.k))}],line:(o,p,nm,nx,s)=>'winding of the loop on |z| = '+p.r+' about '+cxs(s)+': '+qs(o.v)});
-NL('34m.colour',['34m'],'the three-colour technique',(p,nm)=>'count the three-colourings of the twisted loop with '+nm+' crossings, two strands',v=>{ const n=W(v); return n!==null&&n>=1&&n<=30?(n%3?3:9):null; },v=>[['the plain colourings are forgotten',W(v)!==null&&W(v)%3===0?6:null],['every crossing is coloured freely',W(v)!==null&&W(v)<=6?3**W(v):null]],(a,o)=>'three-colourings with '+qs(a)+' crossings: '+qs(o));
+NL('34p.colour',['34p'],'the three-colour technique',(p,nm)=>'count the three-colourings of the twisted loop with '+nm+' crossings, two strands',v=>{ const n=W(v); return n!==null&&n>=1&&n<=30?(n%3?3:9):null; },v=>[['the plain colourings are forgotten',W(v)!==null&&W(v)%3===0?6:null],['every crossing is coloured freely',W(v)!==null&&W(v)<=6?3**W(v):null]],(a,o)=>'three-colourings with '+qs(a)+' crossings: '+qs(o));
 NL('34·cb18.passes',['34·cb18'],'the flood-count technique',(p,nm)=>'an island has '+nm+' peaks and '+p.k+' pits; count its passes',(v,p)=>{ const n=W(v); return n!==null&&n>=1?n+p.k-1:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the whole planet’s 2 is used',n+p.k-2],['the 1 is added, not taken away',n+p.k+1]]; },(a,o,p)=>'passes: peaks + pits − 1 = '+qs(a)+' + '+p.k+' − 1 = '+qs(o),()=>({k:ri(1,5)}));
 LK({id:'34·phys.flux',from:'vec',to:'num',steps:()=>['34·phys'],say:(p,nm)=>'a charge u₁ sits inside a closed surface and u₂ outside, with '+nm+' = (u₁, u₂); give the flux out, in units of 1/ε₀',act:s=>num(s.u[0]),cite:()=>'the wrap-count technique',
   slips:s=>[{why:'the charge outside is counted too',v:qa(s.u[0],s.u[1])},{why:'the outside charge is counted instead',v:s.u[1]}],line:(o,p,nm)=>'flux out of the surface = the charge inside = '+qs(o.v)});
@@ -15881,12 +15934,12 @@ LK({id:'35d.compare',from:'num',to:'word',steps:()=>['35d'],make:()=>({m:ri(2,12
   slips:(s,p)=>{ const n=W(s.v); if(n===null) return []; return [{why:'the comparison is turned round',k:'word',s:n>p.m?'only the first into the second':n<p.m?'only the second into the first':'only the first into the second'}]; },line:(o,p,nm,nx,s)=>'sets of '+qs(s.v)+' and of '+p.m+': '+o.s});
 NL('35e.hotel',['35e'],'the aleph-sums technique',(p,nm)=>'a full hotel takes in a countable crowd: each guest moves to twice the room number; give the new room of the guest in room '+nm,v=>{ const n=W(v); return n!==null&&n>=1?2*n:null; },v=>{ const n=W(v); return n===null?[]:[['each guest moves up one room, which frees only one',n+1]]; },(a,o)=>'the guest in room '+qs(a)+' moves to room '+qs(o));
 NL('35f.stretch',['35f'],'the interval-size technique',(p,nm)=>'match (0, 1) with ('+qs(Q(p.a))+', '+p.b+') by a straight stretch; give where '+nm+' goes',(v,p)=>inOpen01(v)?qa(Q(p.a),qm(Q(p.b-p.a),v)):null,(v,p)=>[['the share is divided by the length instead of multiplied',inOpen01(v)?qa(Q(p.a),qm(v,Q(1,p.b-p.a))):null],['the start '+p.a+' is left off',qm(Q(p.b-p.a),v)]],(a,o,p)=>'where '+qs(a)+' goes: '+qs(Q(p.a))+' + '+(p.b-p.a)+' · '+qs(a)+' = '+qs(o),()=>{ const a=ri(-3,3); return {a,b:a+ri(2,6)}; });
-LK({id:'35g.dust',from:'bits',to:'num',steps:()=>['35g'],say:()=>'send the string into the line as a point of the dust: digit d gives 2d in the next place after the point, in threes',
+LK({id:'35h.dust',from:'bits',to:'num',steps:()=>['35h'],say:()=>'send the string into the line as a point of the dust: digit d gives 2d in the next place after the point, in threes',
   act:s=>s.s.length>4?null:num(s.s.split('').reduce((a,c,i)=>qa(a,Q(2*+c,3**(i+1))),Q(0))),cite:()=>'the copy-of-the-bits technique',
   slips:s=>[{why:'the digits are read in twos',v:s.s.split('').reduce((a,c,i)=>qa(a,Q(+c,2**(i+1))),Q(0))},{why:'the digits are put in threes without doubling',v:s.s.split('').reduce((a,c,i)=>qa(a,Q(+c,3**(i+1))),Q(0))}],line:(o,p,nm,nx,s)=>'the dust point of '+s.s+': 0.'+s.s.split('').map(c=>2*c).join('')+' in threes = '+qs(o.v)});
 const dimOf=(n,s)=>{ for(let q=1;q<=3;q++) for(let p=0;p<=12;p++) if(Math.pow(s,p)===Math.pow(n,q)) return Q(p,q); return null; };
-NL('35h.dim',['35h'],'the scaled-copies technique',(p,nm)=>'a set is '+nm+' copies of itself, each scaled by 1/'+p.s+'; give its dimension',(v,p)=>{ const n=W(v); return n!==null&&n>=2&&n<=99?dimOf(n,p.s):null; },(v,p)=>[['the count of copies is divided by '+p.s+' instead of taking logs',qm(v,Q(1,p.s))]],(a,o,p)=>'the dimension: log '+qs(a)+'/log '+p.s+' = '+qs(o),()=>({s:pick([2,3,4,8,9])}));
-NL('35i.bound',['35i'],'the half-power technique',(p,nm)=>'two times s and t have |s − t| = '+nm+'; bound |H(s) − H(t)|, as a multiple of √5',v=>{ const r=qsqrt(v); return r&&v.p>0&&!qlt(Q(1),v)?qm(Q(2),r):null; },v=>[['the half power is left off',qm(Q(2),v)]],(a,o)=>'bound on |H(s) − H(t)|: 2√5 · √'+par(a)+' = '+timesU(o,'√5'));
+NL('35i.dim',['35i'],'the scaled-copies technique',(p,nm)=>'a set is '+nm+' copies of itself, each scaled by 1/'+p.s+'; give its dimension',(v,p)=>{ const n=W(v); return n!==null&&n>=2&&n<=99?dimOf(n,p.s):null; },(v,p)=>[['the count of copies is divided by '+p.s+' instead of taking logs',qm(v,Q(1,p.s))]],(a,o,p)=>'the dimension: log '+qs(a)+'/log '+p.s+' = '+qs(o),()=>({s:pick([2,3,4,8,9])}));
+NL('35j.bound',['35j'],'the half-power technique',(p,nm)=>'two times s and t have |s − t| = '+nm+'; bound |H(s) − H(t)|, as a multiple of √5',v=>{ const r=qsqrt(v); return r&&v.p>0&&!qlt(Q(1),v)?qm(Q(2),r):null; },v=>[['the half power is left off',qm(Q(2),v)]],(a,o)=>'bound on |H(s) − H(t)|: 2√5 · √'+par(a)+' = '+timesU(o,'√5'));
 NL('35·phys.ladder',['35·phys'],'the ladder technique',(p,nm)=>'give the energy of rung number '+nm+' of the spring’s ladder, in units of ħω',v=>{ const n=W(v); return n!==null&&n>=0?qa(v,Q(1,2)):null; },v=>[['the lowest rung is taken at 0',v],['the ladder is taken to step by ½',qa(qm(v,Q(1,2)),Q(1,2))]],(a,o)=>'energy of rung '+qs(a)+': ('+qs(a)+' + ½)ħω = '+timesU(o,'ħω'));
 NL('35·chem.band',['35·chem'],'the band technique',(p,nm)=>'a molecule’s shake is at '+p.f+' with B = '+p.B+'; give line number '+nm+' above the gap',(v,p)=>{ const k=W(v); return k!==null&&k>=1&&k<=9?p.f+2*k*p.B:null; },(v,p)=>{ const k=W(v); return k===null?[]:[['the lines are taken B apart, not 2B',p.f+k*p.B],['the gap at the middle is forgotten',p.f+2*(k-1)*p.B]]; },(a,o,p)=>'line '+qs(a)+' above the gap: '+p.f+' + 2 · '+qs(a)+' · '+p.B+' = '+qs(o),()=>({f:ri(20,30)*100,B:ri(2,9)}));
 
@@ -15962,24 +16015,24 @@ NL('37·crypt.flip',['37·crypt'],'the flip-band technique',(p,nm)=>'flip the ba
 /* ===== 38: logic about logic ===== */
 NL('38a.rows',['38a'],'the free-places technique',(p,nm)=>'a formula has '+nm+' placeholders, '+p.k+' of them free; count the choices of true or false that decide its truth',(v,p)=>{ const n=W(v); return n!==null&&n>=p.k&&n<=10?2**p.k:null; },(v,p)=>{ const n=W(v); return n===null||n>10?[]:[['every placeholder is taken to count, bound ones too',2**n]]; },(a,o,p)=>'choices for '+p.k+' free places: 2'+sup(p.k)+' = '+qs(o),()=>({k:ri(1,4)}));
 NL('38b.list',['38b'],'the proof-listing technique',(p,nm)=>'list the strings of '+p.k+' marks with lengths 1 to '+nm+'; count them',(v,p)=>{ const n=W(v); if(n===null||n<1||n>6) return null; let t=0; for(let i=1;i<=n;i++) t+=p.k**i; return t; },(v,p)=>{ const n=W(v); return n===null||n>6?[]:[['only the longest strings are counted',p.k**n]]; },(a,o,p)=>'strings of '+p.k+' marks, lengths 1 to '+qs(a)+': '+qs(o),()=>({k:ri(2,4)}));
-LK({id:'38f.shadow',from:'fn',to:'num',steps:()=>['38f'],pt:true,say:(p,nm)=>'take the shadow of ('+nm+'('+qs(p.x)+' + ε) − '+nm+'('+qs(p.x)+'))/ε, with ε infinitely small',
+LK({id:'38h.shadow',from:'fn',to:'num',steps:()=>['38h'],pt:true,say:(p,nm)=>'take the shadow of ('+nm+'('+qs(p.x)+' + ε) − '+nm+'('+qs(p.x)+'))/ε, with ε infinitely small',
   act:(s,p)=>{ const r=slope(s.t), v=ev(r.t,p.x); return v&&!big(v)?num(v):null; },cite:()=>'the shadow-slope technique',
   slips:(s,p)=>{ const v=ev(s.t,p.x); return v?[{why:'the shadow of the reading itself is taken',v}]:[]; },line:(o,p,nm)=>'shadow of the slope quotient of '+nm+' at '+qs(p.x)+': '+qs(o.v)});
-LK({id:'38g.code',from:'vec',to:'num',steps:()=>['38g'],say:(p,nm)=>'read '+nm+' as two mark numbers; code them by primes, 2 to the first times 3 to the second',
+LK({id:'38i.code',from:'vec',to:'num',steps:()=>['38i'],say:(p,nm)=>'read '+nm+' as two mark numbers; code them by primes, 2 to the first times 3 to the second',
   act:s=>{ const a=W(s.u[0]), b=W(s.u[1]); return a!==null&&b!==null&&a>=0&&b>=0&&a<=8&&b<=6?num(2**a*3**b):null; },cite:()=>'the prime-code technique',
   slips:s=>{ const a=W(s.u[0]), b=W(s.u[1]); return a===null||b===null||a<0||b<0?[]:[{why:'the two marks are put on the wrong primes',v:Q(2**b*3**a)},{why:'the powers are multiplied in, not raised',v:Q(2*a*3*b)}]; },line:(o,p,nm,nx,s)=>'prime code of the marks '+vs(s.u)+': 2^u₁ · 3^u₂ = '+qs(o.v)});
-NL('38g.beta',['38g'],'the list-in-one-number technique',(p,nm)=>'a list is held in u = '+nm+' and v = '+p.v+'; read entry '+p.i+', the remainder of u on 1 + ('+p.i+' + 1)v',(v,p)=>{ const u=W(v); return u!==null&&u>=0?u%(1+(p.i+1)*p.v):null; },(v,p)=>{ const u=W(v); return u===null||u<0?[]:[['the 1 is left out of the divisor',u%((p.i+1)*p.v)]]; },(a,o,p)=>'entry '+p.i+': the remainder of '+qs(a)+' on '+(1+(p.i+1)*p.v)+' is '+qs(o),()=>({i:ri(0,3),v:ri(2,6)}));
-LK({id:'38m.read',from:'num',to:'vec',steps:()=>['38m'],say:(p,nm)=>'read the prime code '+nm+' back to its two marks: divide by 2 as often as it goes, then by 3',
+NL('38i.beta',['38i'],'the list-in-one-number technique',(p,nm)=>'a list is held in u = '+nm+' and v = '+p.v+'; read entry '+p.i+', the remainder of u on 1 + ('+p.i+' + 1)v',(v,p)=>{ const u=W(v); return u!==null&&u>=0?u%(1+(p.i+1)*p.v):null; },(v,p)=>{ const u=W(v); return u===null||u<0?[]:[['the 1 is left out of the divisor',u%((p.i+1)*p.v)]]; },(a,o,p)=>'entry '+p.i+': the remainder of '+qs(a)+' on '+(1+(p.i+1)*p.v)+' is '+qs(o),()=>({i:ri(0,3),v:ri(2,6)}));
+LK({id:'38o.read',from:'num',to:'vec',steps:()=>['38o'],say:(p,nm)=>'read the prime code '+nm+' back to its two marks: divide by 2 as often as it goes, then by 3',
   act:s=>{ let n=W(s.v); if(n===null||n<2) return null; let a=0,b=0; while(n%2===0){ n/=2; a++; } while(n%3===0){ n/=3; b++; } return n===1?vec([Q(a),Q(b)]):null; },cite:()=>'the code-reading technique',
   slips:s=>{ let n=W(s.v); if(n===null||n<2) return []; let a=0,b=0; while(n%2===0){ n/=2; a++; } while(n%3===0){ n/=3; b++; } return [{why:'the counts are written the wrong way round',k:'vec',u:[Q(b),Q(a)]}]; },line:(o,p,nm,nx,s)=>'the prime code '+qs(s.v)+' read back to marks: '+vs(o.u)});
-LK({id:'38m.pair',from:'vec',to:'num',steps:()=>['38m'],say:(p,nm)=>'read '+nm+' as a pair (x, y) of whole numbers; give its code number ⟨x, y⟩',act:s=>{ const m=W(s.u[0]), n=W(s.u[1]); return m!==null&&n!==null&&m>=0&&n>=0?num((m+n)*(m+n+1)/2+n):null; },cite:()=>'the pair-code technique',
+LK({id:'38o.pair',from:'vec',to:'num',steps:()=>['38o'],say:(p,nm)=>'read '+nm+' as a pair (x, y) of whole numbers; give its code number ⟨x, y⟩',act:s=>{ const m=W(s.u[0]), n=W(s.u[1]); return m!==null&&n!==null&&m>=0&&n>=0?num((m+n)*(m+n+1)/2+n):null; },cite:()=>'the pair-code technique',
   slips:s=>{ const m=W(s.u[0]), n=W(s.u[1]); return m===null||n===null?[]:[{why:'x is added in place of y',v:Q((m+n)*(m+n+1)/2+m)}]; },line:(o,p,nm,nx,s)=>'the code number of the pair '+vs(s.u)+': '+qs(o.v)});
 const good=(n,b)=>{ /* hereditary base b, then bump the base to b + 1 */ if(n===0) return 0; let r=0, e=0, m=n; while(m>0){ const d=m%b; if(d) r+=d*Math.pow(b+1,good(e,b)); m=Math.floor(m/b); e++; } return r; };
 NL('38·cb29.turn',['38·cb29'],'the label-falls technique',(p,nm)=>'one turn of the full game: write '+nm+' in base 2, all the way up, put 3 for every 2, and take 1 away',v=>{ const n=W(v); if(n===null||n<1||n>15) return null; const r=good(n,2)-1; return r<=99999?r:null; },v=>{ const n=W(v); return n===null||n<1?[]:[['the 1 is taken away without changing the base',n-1],['only the outer base is changed',(()=>{ let r=0,e=0,m=n; while(m>0){ if(m%2) r+=3**e; m=Math.floor(m/2); e++; } return r-1; })()]]; },(a,o)=>'one turn of the game takes '+qs(a)+' to '+qs(o));
 NL('38·phys.shells',['38·phys'],'the shell-count technique',(p,nm)=>'count the electrons that level number '+nm+' of hydrogen’s orbitals holds',v=>{ const n=W(v); return n!==null&&n>=1&&n<=9?2*n*n:null; },v=>{ const n=W(v); return n===null?[]:[['the 2 for the two spins is left off',n*n],['the level number is not squared',2*n]]; },(a,o)=>'electrons in level '+qs(a)+': 2 · '+qs(a)+'² = '+qs(o));
 NL('38·phys.shares',['38·phys'],'the two-shares technique',(p,nm)=>'a state has e^((E − μ)/kT) = '+nm+'; give how many particles of the sign −1 it holds on average',v=>v.p>0?qi(qa(v,Q(1))):null,v=>[['the form for the sign +1, with − 1 below, is used',qe(v,Q(1))?null:qi(qa(v,Q(-1)))],['the 1 is left off',qi(v)]],(a,o)=>'average count, sign −1: 1/('+qs(a)+' + 1) = '+qs(o));
-NL('38l.match',['38l'],'the only-the-numbers technique',(p,nm)=>'a world of PA₂ has the even numbers, 0, and next = add 2; give where the matching with the numbers sends '+nm,v=>{ const n=W(v); return n!==null&&n>=0?2*n:null; },v=>{ const n=W(v); return n===null?[]:[['next is matched with next, but 0 is sent to 2',2*n+2],['the number is moved up by 2 once',n+2]]; },(a,o)=>'the matching sends '+qs(a)+' to the even number '+qs(o));
-NL('38n.cut',['38n'],'the detour-cut technique',(p,nm)=>'a proof tree of '+nm+' lines holds one detour, a line built and used at once; count the lines left when it is cut',v=>{ const n=W(v); return n!==null&&n>=3?n-2:null; },v=>{ const n=W(v); return n===null?[]:[['only the line built is cut',n-1]]; },(a,o)=>'lines left after the cut: '+qs(a)+' − 2 = '+qs(o));
+NL('38n.match',['38n'],'the only-the-numbers technique',(p,nm)=>'a world of PA₂ has the even numbers, 0, and next = add 2; give where the matching with the numbers sends '+nm,v=>{ const n=W(v); return n!==null&&n>=0?2*n:null; },v=>{ const n=W(v); return n===null?[]:[['next is matched with next, but 0 is sent to 2',2*n+2],['the number is moved up by 2 once',n+2]]; },(a,o)=>'the matching sends '+qs(a)+' to the even number '+qs(o));
+NL('38p.cut',['38p'],'the detour-cut technique',(p,nm)=>'a proof tree of '+nm+' lines holds one detour, a line built and used at once; count the lines left when it is cut',v=>{ const n=W(v); return n!==null&&n>=3?n-2:null; },v=>{ const n=W(v); return n===null?[]:[['only the line built is cut',n-1]]; },(a,o)=>'lines left after the cut: '+qs(a)+' − 2 = '+qs(o));
 NL('38now2.search',['38·now2'],'the search-finds technique',(p,nm)=>'the proof of φ is number '+nm+' on the list; each check takes '+p.k+' steps; count the steps until it is found',(v,p)=>{ const n=W(v); return n!==null&&n>=1?n*p.k:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the steps are added to the place, not multiplied',n+p.k]]; },(a,o,p)=>'steps to find proof '+qs(a)+': '+qs(a)+' · '+p.k+' = '+qs(o),()=>({k:ri(2,9)}));
 
 /* ===== 39: machines made of switches ===== */
@@ -16087,15 +16140,15 @@ NL('42i.coats',['42i'],'the wrong-coats technique',(p,nm)=>'count the ways '+nm+
 LK({id:'42j.party',from:'vec',to:'num',steps:()=>['42j'],say:(p,nm)=>'with (s, t) = '+nm+', bound the party number R(s, t) by R(s − 1, t) + R(s, t − 1), from R(2, t) = t',
   act:s=>{ const a=W(s.u[0]), b=W(s.u[1]); return a!==null&&b!==null&&a>=2&&b>=2&&a+b<=12?num(binom(a+b-2,a-1)):null; },cite:()=>'the party-number technique',
   slips:s=>{ const a=W(s.u[0]), b=W(s.u[1]); return a===null||b===null||a<2||b<2?[]:[{why:'the two parts are multiplied',v:Q(a*b)}]; },line:(o,p,nm,nx,s)=>'party bound: R('+qs(s.u[0])+', '+qs(s.u[1])+') ≤ '+qs(o.v)});
-LK({id:'42k.layers',from:'graph',to:'num',steps:()=>['42k'],say:()=>'walk out from dot 1 of the graph G in layers; count the links on the shortest route to the last dot',act:s=>{ if(s.w) return null; const d=gbfs(s,1,s.n); return d>0?num(d):null; },cite:()=>'the layer-by-layer technique',
+LK({id:'42m.layers',from:'graph',to:'num',steps:()=>['42m'],say:()=>'walk out from dot 1 of the graph G in layers; count the links on the shortest route to the last dot',act:s=>{ if(s.w) return null; const d=gbfs(s,1,s.n); return d>0?num(d):null; },cite:()=>'the layer-by-layer technique',
   slips:s=>{ const d=gbfs(s,1,s.n); return d>0?[{why:'the dots on the route are counted',v:Q(d+1)}]:[]; },line:o=>'links from dot 1 to the last dot of G, by layers: '+qs(o.v)});
-LK({id:'42k.nearest',from:'graph',to:'num',steps:()=>['42k'],say:()=>'in the network G, settle the nearest dot first; give the distance from dot 1 to the last dot',act:s=>{ if(!s.w) return null; const d=gshort(s,1,s.n); return d===null?null:num(d); },cite:()=>'the nearest-first technique',
+LK({id:'42m.nearest',from:'graph',to:'num',steps:()=>['42m'],say:()=>'in the network G, settle the nearest dot first; give the distance from dot 1 to the last dot',act:s=>{ if(!s.w) return null; const d=gshort(s,1,s.n); return d===null?null:num(d); },cite:()=>'the nearest-first technique',
   slips:s=>{ const f=gfewest(s,1,s.n); return f===null?[]:[{why:'the route with the fewest links is taken',v:Q(f)}]; },line:o=>'distance from dot 1 to the last dot of G: '+qs(o.v)});
-LK({id:'42l.stops',from:'graph',to:'num',steps:()=>['42l'],say:()=>'in the network G, allow stops at dot 2 only; give the shortest such route from dot 1 to the last dot',act:s=>{ if(!s.w) return null; const w=(a,b)=>{ const e=s.e.find(x=>x[0]===a&&x[1]===b); return e?e[2]:Infinity; }; const v=Math.min(w(1,s.n),w(1,2)+w(2,s.n)); return v===Infinity?null:num(v); },cite:()=>'the stops-allowed technique',
+LK({id:'42n.stops',from:'graph',to:'num',steps:()=>['42n'],say:()=>'in the network G, allow stops at dot 2 only; give the shortest such route from dot 1 to the last dot',act:s=>{ if(!s.w) return null; const w=(a,b)=>{ const e=s.e.find(x=>x[0]===a&&x[1]===b); return e?e[2]:Infinity; }; const v=Math.min(w(1,s.n),w(1,2)+w(2,s.n)); return v===Infinity?null:num(v); },cite:()=>'the stops-allowed technique',
   slips:s=>{ const d=gshort(s,1,s.n); return d===null?[]:[{why:'every dot is allowed as a stop',v:Q(d)}]; },line:(o,p,nm,nx,s)=>'shortest route 1 to '+s.n+' in G, stops at 2 only: '+qs(o.v)});
-LK({id:'42m.lists',from:'graph',to:'num',steps:()=>['42m'],say:()=>'store the graph G as neighbour lists, one head a dot; count the entries they take',act:s=>s.w?null:num(s.n+2*s.e.length),cite:()=>'the two-stores technique',
+LK({id:'42o.lists',from:'graph',to:'num',steps:()=>['42o'],say:()=>'store the graph G as neighbour lists, one head a dot; count the entries they take',act:s=>s.w?null:num(s.n+2*s.e.length),cite:()=>'the two-stores technique',
   slips:s=>[{why:'each link is listed once, not at both ends',v:Q(s.n+s.e.length)},{why:'the grid is counted instead',v:Q(s.n*s.n)}],line:(o,p,nm,nx,s)=>'entries in the lists of G: '+s.n+' + 2 · '+s.e.length+' = '+qs(o.v)});
-LK({id:'42n.pivot',from:'vec',to:'num',steps:()=>['42n'],say:(p,nm)=>'an unknown x rises from 0 under the limits x ≤ u₁ and x ≤ u₂, with '+nm+' = (u₁, u₂); give how far it can rise',act:s=>s.u[0].p>0&&s.u[1].p>0?num(qmin(s.u[0],s.u[1])):null,cite:()=>'the pivot technique',
+LK({id:'42p.pivot',from:'vec',to:'num',steps:()=>['42p'],say:(p,nm)=>'an unknown x rises from 0 under the limits x ≤ u₁ and x ≤ u₂, with '+nm+' = (u₁, u₂); give how far it can rise',act:s=>s.u[0].p>0&&s.u[1].p>0?num(qmin(s.u[0],s.u[1])):null,cite:()=>'the pivot technique',
   slips:s=>[{why:'the looser limit is used',v:qmax(s.u[0],s.u[1])}],line:(o,p,nm)=>'the pivot: x rises to the tighter limit of '+nm+', '+qs(o.v)});
 NL('42·cb19.necklace',['42·cb19'],'the average-kept technique',(p,nm)=>'colour the corners of a square with '+nm+' colours; count the patterns left when turns count as the same',v=>{ const k=W(v); return k!==null&&k>=1&&k<=12?(k**4+k*k+2*k)/4:null; },v=>{ const k=W(v); return k===null||k<1?[]:[['only the do-nothing turn is counted',Q(k**4,4)],['the half turn is left out',Q(k**4+2*k,3)]]; },(a,o)=>'square patterns in '+qs(a)+' colours: (k⁴ + k² + 2k)/4 = '+qs(o));
 NL('42·chem.bonds',['42·chem'],'the alkane-tree technique',(p,nm)=>'a molecule has '+nm+' carbons, twice as many hydrogens and 2 more, all bonds single; count its bonds',v=>{ const n=W(v); return n!==null&&n>=1&&n<=40?3*n+1:null; },v=>{ const n=W(v); return n===null?[]:[['the carbons are taken to close a ring, one carbon link more',3*n+2],['the carbon links are left out',2*n+2]]; },(a,o)=>'bonds with '+qs(a)+' carbons: carbon links + hydrogens = '+qs(o));
@@ -16120,14 +16173,14 @@ NL('43d.little',['43d'],'the little technique',(p,nm)=>'raise '+nm+' to the powe
 NL('43d.units',['43d'],'the unit-count technique',(p,nm)=>'count the units of the clock of '+nm,v=>{ const n=W(v); return n!==null&&n>=2&&n<=999?phi(n):null; },v=>{ const n=W(v); return n===null||n<2?[]:[['every hour but 0 is counted',n-1],['only the primes below the size are counted',Array.from({length:n},(_,i)=>i).filter(isPrime).length]]; },(a,o)=>'units of the clock of '+qs(a)+': φ('+qs(a)+') = '+qs(o));
 NL('43e.order',['43e'],'the power-order technique',(p,nm)=>'on the clock of '+p.p+', find the order of '+nm+', the least power that gives 1',(v,p)=>{ const a=W(v); return a===null?null:ordm(a,p.p); },(v,p)=>{ const a=W(v); return a===null||md(a,p.p)===0?[]:[['p − 1 is given for every unit',p.p-1]]; },(a,o,p)=>'['+qs(a)+'] has order '+qs(o)+' on the clock of '+p.p,()=>({p:pick([7,11,13,17])}));
 NL('43f.square',['43f'],'the square-test technique',(p,nm)=>'test whether a = '+nm+' is a square on the clock of '+p.p+': give a^(('+p.p+' − 1)/2) as 1 or −1',(v,p)=>{ const a=W(v); if(a===null||md(a,p.p)===0) return null; const r=pm(a,(p.p-1)/2,p.p); return r===1?1:-1; },(v,p)=>{ const a=W(v); return a===null||md(a,p.p)===0?[]:[['the whole power p − 1 is taken',1]]; },(a,o,p)=>'square test of '+qs(a)+': '+par(a)+'^'+(p.p-1)/2+' ≡ '+qs(o)+' (mod '+p.p+')',()=>({p:pick([7,11,13,17,19])}));
-NL('43h.cost',['43h'],'the power-cost technique',(p,nm)=>'give the most products square-and-multiply takes to raise to the power '+nm,v=>{ const k=W(v); return k!==null&&k>=2&&k<=99999?2*flog2(k):null; },v=>{ const k=W(v); return k===null||k<2?[]:[['the products are counted one by one',k-1]]; },(a,o)=>'products for the power '+qs(a)+': 2⌊log₂ '+qs(a)+'⌋ = '+qs(o));
-NL('43i.lock',['43i'],'the two-key technique',(p,nm)=>'lock the message '+nm+' with the key (n, e) = ('+p.n+', '+p.e+'): raise it to e on the clock of n',(v,p)=>{ const m=W(v); return m===null?null:pm(m,p.e,p.n); },(v,p)=>{ const m=W(v); return m===null?[]:[['the power is taken as a product',md(m*p.e,p.n)]]; },(a,o,p)=>'the locked message: '+par(a)+'^'+p.e+' ≡ '+qs(o)+' (mod '+p.n+')',()=>pick([{n:33,e:3},{n:55,e:3},{n:35,e:5},{n:77,e:7}]));
-NL('43j.strong',['43j'],'the strong-test technique',(p,nm)=>'test whether '+p.n+' is prime with a = '+nm+': give the first reading, a^d on the clock of '+p.n+', where '+(p.n-1)+' = 2ˢd with d odd',(v,p)=>{ const a=W(v); if(a===null||md(a,p.n)===0) return null; let d=p.n-1; while(d%2===0) d/=2; return pm(a,d,p.n); },(v,p)=>{ const a=W(v); return a===null||md(a,p.n)===0?[]:[['the whole power n − 1 is taken',pm(a,p.n-1,p.n)]]; },(a,o,p)=>{ let d=p.n-1; while(d%2===0) d/=2; return 'first reading of the test: '+par(a)+'^'+d+' ≡ '+qs(o)+' (mod '+p.n+')'; },()=>({n:pick([13,17,21,25,29,33])}));
+NL('43n.cost',['43n'],'the power-cost technique',(p,nm)=>'give the most products square-and-multiply takes to raise to the power '+nm,v=>{ const k=W(v); return k!==null&&k>=2&&k<=99999?2*flog2(k):null; },v=>{ const k=W(v); return k===null||k<2?[]:[['the products are counted one by one',k-1]]; },(a,o)=>'products for the power '+qs(a)+': 2⌊log₂ '+qs(a)+'⌋ = '+qs(o));
+NL('43o.lock',['43o'],'the two-key technique',(p,nm)=>'lock the message '+nm+' with the key (n, e) = ('+p.n+', '+p.e+'): raise it to e on the clock of n',(v,p)=>{ const m=W(v); return m===null?null:pm(m,p.e,p.n); },(v,p)=>{ const m=W(v); return m===null?[]:[['the power is taken as a product',md(m*p.e,p.n)]]; },(a,o,p)=>'the locked message: '+par(a)+'^'+p.e+' ≡ '+qs(o)+' (mod '+p.n+')',()=>pick([{n:33,e:3},{n:55,e:3},{n:35,e:5},{n:77,e:7}]));
+NL('43p.strong',['43p'],'the strong-test technique',(p,nm)=>'test whether '+p.n+' is prime with a = '+nm+': give the first reading, a^d on the clock of '+p.n+', where '+(p.n-1)+' = 2ˢd with d odd',(v,p)=>{ const a=W(v); if(a===null||md(a,p.n)===0) return null; let d=p.n-1; while(d%2===0) d/=2; return pm(a,d,p.n); },(v,p)=>{ const a=W(v); return a===null||md(a,p.n)===0?[]:[['the whole power n − 1 is taken',pm(a,p.n-1,p.n)]]; },(a,o,p)=>{ let d=p.n-1; while(d%2===0) d/=2; return 'first reading of the test: '+par(a)+'^'+d+' ≡ '+qs(o)+' (mod '+p.n+')'; },()=>({n:pick([13,17,21,25,29,33])}));
 const cfr=v=>{ const a=[]; let p=v.p, q=v.q; for(let i=0;i<12&&q;i++){ const t=Math.floor(p/q); a.push(t); [p,q]=[q,p-t*q]; } return a; };
-NL('43k.conv',['43k'],'the neighbour technique',(p,nm)=>'write '+nm+' as a chain fraction; give the convergent just before '+nm+' itself',v=>{ if(v.q===1) return null; const a=cfr(v); if(a.length<2) return null; let p0=1,q0=0,p1=a[0],q1=1; for(let i=1;i<a.length-1;i++){ [p0,p1]=[p1,a[i]*p1+p0]; [q0,q1]=[q1,a[i]*q1+q0]; } return Q(p1,q1); },
+NL('43q.conv',['43q'],'the neighbour technique',(p,nm)=>'write '+nm+' as a chain fraction; give the convergent just before '+nm+' itself',v=>{ if(v.q===1) return null; const a=cfr(v); if(a.length<2) return null; let p0=1,q0=0,p1=a[0],q1=1; for(let i=1;i<a.length-1;i++){ [p0,p1]=[p1,a[i]*p1+p0]; [q0,q1]=[q1,a[i]*q1+q0]; } return Q(p1,q1); },
   v=>{ if(v.q===1) return []; const a=cfr(v); return a.length<2?[]:[['the whole part is given',Q(a[0])]]; },(a,o)=>'the convergent before '+qs(a)+' is '+qs(o));
-NL('43l.log',['43l'],'the clock-log technique',(p,nm)=>'on the clock of '+p.p+' with g = '+p.g+', find the power of g that gives '+nm,(v,p)=>{ const a=W(v); if(a===null||md(a,p.p)===0) return null; for(let k=0;k<p.p-1;k++) if(pm(p.g,k,p.p)===md(a,p.p)) return k; return null; },(v,p)=>{ const a=W(v); return a===null||md(a,p.p)===0?[]:[['the log is taken as a division by g on the clock',md(a*minv(p.g,p.p),p.p)]]; },(a,o,p)=>'the log of '+qs(a)+' to the base '+p.g+': '+p.g+'^'+qs(o)+' ≡ '+qs(a)+' (mod '+p.p+')',()=>pick([{p:11,g:2},{p:13,g:2},{p:7,g:3},{p:17,g:3}]));
-NL('43l.secret',['43l'],'the shared-secret technique',(p,nm)=>'on the clock of '+p.p+', the other side sends B = '+p.B+'; your secret is a = '+nm+'; find the shared Bᵃ',(v,p)=>{ const a=W(v); return a===null||a<1?null:pm(p.B,a,p.p); },(v,p)=>{ const a=W(v); return a===null||a<1?[]:[['a is multiplied by B, not raised',md(a*p.B,p.p)]]; },(a,o,p)=>'the shared secret: '+p.B+'^'+qs(a)+' ≡ '+qs(o)+' (mod '+p.p+')',()=>({p:pick([11,13,17,23]),B:ri(2,9)}));
+NL('43r.log',['43r'],'the clock-log technique',(p,nm)=>'on the clock of '+p.p+' with g = '+p.g+', find the power of g that gives '+nm,(v,p)=>{ const a=W(v); if(a===null||md(a,p.p)===0) return null; for(let k=0;k<p.p-1;k++) if(pm(p.g,k,p.p)===md(a,p.p)) return k; return null; },(v,p)=>{ const a=W(v); return a===null||md(a,p.p)===0?[]:[['the log is taken as a division by g on the clock',md(a*minv(p.g,p.p),p.p)]]; },(a,o,p)=>'the log of '+qs(a)+' to the base '+p.g+': '+p.g+'^'+qs(o)+' ≡ '+qs(a)+' (mod '+p.p+')',()=>pick([{p:11,g:2},{p:13,g:2},{p:7,g:3},{p:17,g:3}]));
+NL('43r.secret',['43r'],'the shared-secret technique',(p,nm)=>'on the clock of '+p.p+', the other side sends B = '+p.B+'; your secret is a = '+nm+'; find the shared Bᵃ',(v,p)=>{ const a=W(v); return a===null||a<1?null:pm(p.B,a,p.p); },(v,p)=>{ const a=W(v); return a===null||a<1?[]:[['a is multiplied by B, not raised',md(a*p.B,p.p)]]; },(a,o,p)=>'the shared secret: '+p.B+'^'+qs(a)+' ≡ '+qs(o)+' (mod '+p.p+')',()=>({p:pick([11,13,17,23]),B:ri(2,9)}));
 NL('43·cb19.cosets',['43·cb19'],'the copies-combine technique',(p,nm)=>'on the clock of '+p.n+', with H the multiples of '+p.d+': add the copy '+nm+' + H to the copy '+p.b+' + H; name the copy by its least hour',(v,p)=>{ const a=W(v); return a===null?null:md(a+p.b,p.d); },(v,p)=>{ const a=W(v); return a===null?[]:[['the copies are multiplied',md(a*p.b,p.d)]]; },(a,o,p)=>'copies of H, multiples of '+p.d+': ('+qs(a)+' + H) + ('+p.b+' + H) = '+qs(o)+' + H',()=>{ const d=pick([2,3,4,6]); return {d,n:d*pick([2,3]),b:ri(1,9)}; });
 NL('43·cb7.chain',['43·cb7'],'the clock-chain technique',(p,nm)=>'count the units of the clock of '+nm+'; then count the units of the clock of that size',v=>{ const n=W(v); return n!==null&&n>=3&&n<=9999?phi(phi(n)):null; },v=>{ const n=W(v); return n===null||n<3?[]:[['the count is taken once',phi(n)],['every hour but 0 is counted each time',n-2]]; },(a,o)=>'units twice over: φ(φ('+qs(a)+')) = '+qs(o));
 NL('43·cb37.pitch',['43·cb37'],'the pitch-clock technique',(p,nm)=>'a note sits at hour '+nm+' of the clock of twelve; move it up '+p.k+' steps and give its hour',(v,p)=>{ const n=W(v); return n===null?null:md(n+p.k,12); },(v,p)=>{ const n=W(v); return n===null?[]:[['the move is taken down',md(n-p.k,12)],['the hour is not read on the clock',n+p.k]]; },(a,o,p)=>'the note moved up: '+qs(a)+' + '+p.k+' ≡ '+qs(o)+' (mod 12)',()=>({k:ri(1,11)}));
@@ -16192,103 +16245,103 @@ NL('44·now2.bytes',['44·now2'],'the module-size technique',(p,nm)=>'a list has
 
 /* ===== 45: many machines ===== */
 const pre=[['1','A'],['10','B'],['101','C'],['0','D'],['01','E']];
-LK({id:'45a.prefix',from:'bits',to:'word',steps:()=>['45a'],say:()=>'the string is an address; route it by the table 1 → A, 10 → B, 101 → C, 0 → D, 01 → E, longest match first',act:s=>{ const m=pre.filter(([q])=>s.s.startsWith(q)).sort((a,b)=>b[0].length-a[0].length); return m.length?word('hop '+m[0][1]):null; },cite:()=>'the longest-prefix technique',
+LK({id:'46a.prefix',from:'bits',to:'word',steps:()=>['46a'],say:()=>'the string is an address; route it by the table 1 → A, 10 → B, 101 → C, 0 → D, 01 → E, longest match first',act:s=>{ const m=pre.filter(([q])=>s.s.startsWith(q)).sort((a,b)=>b[0].length-a[0].length); return m.length?word('hop '+m[0][1]):null; },cite:()=>'the longest-prefix technique',
   slips:s=>{ const m=pre.filter(([q])=>s.s.startsWith(q)).sort((a,b)=>a[0].length-b[0].length); return m.length?[{why:'the shortest match is taken',k:'word',s:'hop '+m[0][1]}]:[]; },line:(o,p,nm,nx,s)=>'the address '+s.s+', longest match: '+o.s});
-NL('45c.last',['45c'],'the last-message technique',(p,nm)=>'a run attacks after '+nm+' delivered messages; dropping the last message again and again, count the runs that must also attack',v=>{ const n=W(v); return n!==null&&n>=0?n+1:null; },v=>{ const n=W(v); return n===null?[]:[['the run with no messages is left out',n]]; },(a,o)=>'runs that attack, '+qs(a)+' messages down to 0: '+qs(o));
-NL('45d.resend',['45d'],'the resend technique',(p,nm)=>'each try gets through with chance p = '+nm+'; give the chance the message is through within '+p.k+' tries',(v,p)=>v.p>0&&v.p<=v.q?qa(Q(1),qn(qpow(qa(Q(1),qn(v)),p.k))):null,(v,p)=>[['the chances are added',qm(Q(p.k),v)],['all tries are taken to need to succeed',qpow(v,p.k)]],(a,o,p)=>'through within '+p.k+' tries: 1 − (1 − '+qs(a)+')'+sup(p.k)+' = '+qs(o),()=>({k:ri(2,4)}));
-NL('45e.lamport',['45e'],'the counter technique',(p,nm)=>'a machine’s counter reads '+nm+' when a message stamped '+p.r+' arrives; give the stamp of the arrival',(v,p)=>{ const n=W(v); return n!==null&&n>=0?Math.max(n,p.r)+1:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the stamp on the message is ignored',n+1],['the 1 is not added',Math.max(n,p.r)]]; },(a,o,p)=>'stamp of the arrival: max('+qs(a)+', '+p.r+') + 1 = '+qs(o),()=>({r:ri(0,20)}));
-NL('45g.quorum',['45g'],'the majority-overlap technique',(p,nm)=>'of '+nm+' machines, give the least size of a set holding more than half',v=>{ const n=W(v); return n!==null&&n>=1?Math.floor(n/2)+1:null; },v=>{ const n=W(v); return n===null||n<2?[]:[['half is taken, rounded down',Math.floor(n/2)],['half is rounded up',Math.ceil(n/2)]]; },(a,o)=>'majority of '+qs(a)+' machines: ⌊'+qs(a)+'/2⌋ + 1 = '+qs(o));
-NL('45n.byhand',['45g','45n'],'the majority-overlap technique',(p,nm)=>'of '+nm+' machines, a read quorum has '+p.r+'; give the smallest write quorum that still meets every read quorum',(v,p)=>{ const n=W(v); return n!==null&&n>p.r?n-p.r+1:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the two quorums are made to add to the count, one too few',n-p.r]]; },(a,o,p)=>'smallest write quorum: '+qs(a)+' − '+p.r+' + 1 = '+qs(o),()=>({r:ri(1,4)}));
-NL('45h.liars',['45h'],'the third-bound technique',(p,nm)=>'give the fewest machines that can agree despite '+nm+' liars, with forgeable messages',v=>{ const f=W(v); return f!==null&&f>=0?3*f+1:null; },v=>{ const f=W(v); return f===null?[]:[['a majority is taken to be enough',2*f+1],['three times the liars is taken, without the 1',3*f]]; },(a,o)=>'machines for '+qs(a)+' liars: 3 · '+qs(a)+' + 1 = '+qs(o));
-NL('45i.catch',['45i'],'the catch-up technique',(p,nm)=>'an attacker is '+nm+' blocks behind with q/p = '+qs(p.r)+'; give the chance it ever draws level',(v,p)=>{ const z=W(v); return z!==null&&z>=0&&z<=8?qpow(p.r,z):null; },(v,p)=>{ const z=W(v); return z===null?[]:[['q/p is multiplied by the lead, not raised to it',qm(Q(z),p.r)]]; },(a,o,p)=>'chance of drawing level from '+qs(a)+' behind: ('+qs(p.r)+')'+sup(W(a))+' = '+qs(o),()=>({r:pick([Q(1,2),Q(1,3),Q(2,3),Q(1,4)])}));
-NL('45j.gossip',['45j'],'the squaring-pull technique',(p,nm)=>'a share '+nm+' of machines do not know; each asks one at random; give the share that still does not know',v=>v.p>=0&&v.p<=v.q?qm(v,v):null,v=>[['the share is halved',qm(v,Q(1,2))]],(a,o)=>'share still not knowing: '+par(a)+'² = '+qs(o));
-NL('45k.ring',['45k'],'the ring-move technique',(p,nm)=>'a machine joins a ring of 100 keys at '+nm+', the one before it at '+p.a+'; count the keys that change hands',(v,p)=>{ const h=W(v); return h!==null&&h>p.a?h-p.a:null; },(v,p)=>{ const h=W(v); return h===null?[]:[['the keys after it are moved, not those before',p.a+100-h]]; },(a,o,p)=>'keys that move to the new machine: '+qs(a)+' − '+p.a+' = '+qs(o),()=>({a:ri(0,5)}));
-LK({id:'45l.merge',from:'stamp',to:'stamp',steps:()=>['45l'],make:()=>({w:[ri(0,5),ri(0,5),ri(0,5)]}),say:p=>'merge the list stamp with ['+p.w.join(', ')+'], keeping the larger entry in each place',act:(s,p)=>stamp(s.u.map((x,i)=>Math.max(x,p.w[i]))),cite:()=>'the converge technique',
+NL('46c.last',['46c'],'the last-message technique',(p,nm)=>'a run attacks after '+nm+' delivered messages; dropping the last message again and again, count the runs that must also attack',v=>{ const n=W(v); return n!==null&&n>=0?n+1:null; },v=>{ const n=W(v); return n===null?[]:[['the run with no messages is left out',n]]; },(a,o)=>'runs that attack, '+qs(a)+' messages down to 0: '+qs(o));
+NL('46d.resend',['46d'],'the resend technique',(p,nm)=>'each try gets through with chance p = '+nm+'; give the chance the message is through within '+p.k+' tries',(v,p)=>v.p>0&&v.p<=v.q?qa(Q(1),qn(qpow(qa(Q(1),qn(v)),p.k))):null,(v,p)=>[['the chances are added',qm(Q(p.k),v)],['all tries are taken to need to succeed',qpow(v,p.k)]],(a,o,p)=>'through within '+p.k+' tries: 1 − (1 − '+qs(a)+')'+sup(p.k)+' = '+qs(o),()=>({k:ri(2,4)}));
+NL('46e.lamport',['46e'],'the counter technique',(p,nm)=>'a machine’s counter reads '+nm+' when a message stamped '+p.r+' arrives; give the stamp of the arrival',(v,p)=>{ const n=W(v); return n!==null&&n>=0?Math.max(n,p.r)+1:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the stamp on the message is ignored',n+1],['the 1 is not added',Math.max(n,p.r)]]; },(a,o,p)=>'stamp of the arrival: max('+qs(a)+', '+p.r+') + 1 = '+qs(o),()=>({r:ri(0,20)}));
+NL('46g.quorum',['46g'],'the majority-overlap technique',(p,nm)=>'of '+nm+' machines, give the least size of a set holding more than half',v=>{ const n=W(v); return n!==null&&n>=1?Math.floor(n/2)+1:null; },v=>{ const n=W(v); return n===null||n<2?[]:[['half is taken, rounded down',Math.floor(n/2)],['half is rounded up',Math.ceil(n/2)]]; },(a,o)=>'majority of '+qs(a)+' machines: ⌊'+qs(a)+'/2⌋ + 1 = '+qs(o));
+NL('46n.byhand',['46g','46n'],'the majority-overlap technique',(p,nm)=>'of '+nm+' machines, a read quorum has '+p.r+'; give the smallest write quorum that still meets every read quorum',(v,p)=>{ const n=W(v); return n!==null&&n>p.r?n-p.r+1:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the two quorums are made to add to the count, one too few',n-p.r]]; },(a,o,p)=>'smallest write quorum: '+qs(a)+' − '+p.r+' + 1 = '+qs(o),()=>({r:ri(1,4)}));
+NL('46h.liars',['46h'],'the third-bound technique',(p,nm)=>'give the fewest machines that can agree despite '+nm+' liars, with forgeable messages',v=>{ const f=W(v); return f!==null&&f>=0?3*f+1:null; },v=>{ const f=W(v); return f===null?[]:[['a majority is taken to be enough',2*f+1],['three times the liars is taken, without the 1',3*f]]; },(a,o)=>'machines for '+qs(a)+' liars: 3 · '+qs(a)+' + 1 = '+qs(o));
+NL('46i.catch',['46i'],'the catch-up technique',(p,nm)=>'an attacker is '+nm+' blocks behind with q/p = '+qs(p.r)+'; give the chance it ever draws level',(v,p)=>{ const z=W(v); return z!==null&&z>=0&&z<=8?qpow(p.r,z):null; },(v,p)=>{ const z=W(v); return z===null?[]:[['q/p is multiplied by the lead, not raised to it',qm(Q(z),p.r)]]; },(a,o,p)=>'chance of drawing level from '+qs(a)+' behind: ('+qs(p.r)+')'+sup(W(a))+' = '+qs(o),()=>({r:pick([Q(1,2),Q(1,3),Q(2,3),Q(1,4)])}));
+NL('46j.gossip',['46j'],'the squaring-pull technique',(p,nm)=>'a share '+nm+' of machines do not know; each asks one at random; give the share that still does not know',v=>v.p>=0&&v.p<=v.q?qm(v,v):null,v=>[['the share is halved',qm(v,Q(1,2))]],(a,o)=>'share still not knowing: '+par(a)+'² = '+qs(o));
+NL('46k.ring',['46k'],'the ring-move technique',(p,nm)=>'a machine joins a ring of 100 keys at '+nm+', the one before it at '+p.a+'; count the keys that change hands',(v,p)=>{ const h=W(v); return h!==null&&h>p.a?h-p.a:null; },(v,p)=>{ const h=W(v); return h===null?[]:[['the keys after it are moved, not those before',p.a+100-h]]; },(a,o,p)=>'keys that move to the new machine: '+qs(a)+' − '+p.a+' = '+qs(o),()=>({a:ri(0,5)}));
+LK({id:'46l.merge',from:'stamp',to:'stamp',steps:()=>['46l'],make:()=>({w:[ri(0,5),ri(0,5),ri(0,5)]}),say:p=>'merge the list stamp with ['+p.w.join(', ')+'], keeping the larger entry in each place',act:(s,p)=>stamp(s.u.map((x,i)=>Math.max(x,p.w[i]))),cite:()=>'the converge technique',
   slips:(s,p)=>[{why:'the entries are added, so a repeated merge counts twice',k:'stamp',u:s.u.map((x,i)=>x+p.w[i])},{why:'the smaller entry is kept',k:'stamp',u:s.u.map((x,i)=>Math.min(x,p.w[i]))}],line:(o,p,nm,nx,s)=>'stamps ['+s.u.join(', ')+'] and ['+p.w.join(', ')+'] merged: ['+o.u.join(', ')+']'});
-LK({id:'45m.total',from:'stamp',to:'num',steps:()=>['45m'],say:()=>'the stamp is a count kept in pieces by three machines; combine the pieces into the count',act:s=>num(s.u.reduce((a,b)=>a+b,0)),cite:()=>'the split-combine technique',
+LK({id:'46m.total',from:'stamp',to:'num',steps:()=>['46m'],say:()=>'the stamp is a count kept in pieces by three machines; combine the pieces into the count',act:s=>num(s.u.reduce((a,b)=>a+b,0)),cite:()=>'the split-combine technique',
   slips:s=>[{why:'the largest piece is taken, as in a merge',v:Q(Math.max(...s.u))}],line:(o,p,nm,nx,s)=>'the count kept as ['+s.u.join(', ')+']: '+qs(o.v)});
-LK({id:'45o.compare',from:'stamp',to:'word',steps:()=>['45e','45o'],make:()=>({w:[ri(0,5),ri(0,5),ri(0,5)]}),say:p=>'compare the list stamp with ['+p.w.join(', ')+']: is it before, after, the same, or side by side?',
+LK({id:'46o.compare',from:'stamp',to:'word',steps:()=>['46e','46o'],make:()=>({w:[ri(0,5),ri(0,5),ri(0,5)]}),say:p=>'compare the list stamp with ['+p.w.join(', ')+']: is it before, after, the same, or side by side?',
   act:(s,p)=>{ const le=s.u.every((x,i)=>x<=p.w[i]), ge=s.u.every((x,i)=>x>=p.w[i]); return word(le&&ge?'the same':le?'before':ge?'after':'side by side'); },cite:()=>'the list-stamp technique',
   slips:(s,p)=>{ const a=s.u.reduce((x,y)=>x+y,0), b=p.w.reduce((x,y)=>x+y,0); return [{why:'only the totals are compared',k:'word',s:a<b?'before':a>b?'after':'the same'}]; },line:(o,p,nm,nx,s)=>'['+s.u.join(', ')+'] against ['+p.w.join(', ')+']: '+o.s});
-LK({id:'45e.receive',from:'stamp',to:'stamp',steps:()=>['45e'],make:()=>({w:[ri(0,5),ri(0,5),ri(0,5)]}),say:p=>'machine 1 holds the list stamp and receives a message stamped ['+p.w.join(', ')+']; give its new stamp',
+LK({id:'46e.receive',from:'stamp',to:'stamp',steps:()=>['46e'],make:()=>({w:[ri(0,5),ri(0,5),ri(0,5)]}),say:p=>'machine 1 holds the list stamp and receives a message stamped ['+p.w.join(', ')+']; give its new stamp',
   act:(s,p)=>{ const u=s.u.map((x,i)=>Math.max(x,p.w[i])); u[0]++; return stamp(u); },cite:()=>'the list-stamp technique',
   slips:(s,p)=>{ const u=s.u.slice(); u[0]++; const v=s.u.map((x,i)=>x+p.w[i]); v[0]++; return [{why:'the message’s stamp is ignored',k:'stamp',u},{why:'the stamps are added',k:'stamp',u:v}]; },line:(o,p)=>'machine 1’s stamp after receiving ['+p.w.join(', ')+']: ['+o.u.join(', ')+']'});
-LK({id:'45f.commit',from:'bits',to:'word',steps:()=>['45f'],say:()=>'each place of the string is a machine’s vote, 1 for yes; say whether the change commits or aborts',act:s=>word(/^1+$/.test(s.s)?'commit':'abort'),cite:()=>'the two-phase technique',
+LK({id:'46f.commit',from:'bits',to:'word',steps:()=>['46f'],say:()=>'each place of the string is a machine’s vote, 1 for yes; say whether the change commits or aborts',act:s=>word(/^1+$/.test(s.s)?'commit':'abort'),cite:()=>'the two-phase technique',
   slips:s=>{ const y=s.s.split('').filter(c=>c==='1').length; return [{why:'a majority is taken to be enough',k:'word',s:2*y>s.s.length?'commit':'abort'}]; },line:(o,p,nm,nx,s)=>'two-phase result of the votes '+s.s+': '+o.s});
-NL('45·eng.flood',['45·eng'],'the learning-switch technique',(p,nm)=>'a switch with '+p.k+' ports has learnt '+nm+' addresses out of '+p.N+'; give how many ports a message to an unlearnt address goes out of',(v,p)=>{ const n=W(v); return n!==null&&n>=0&&n<p.N?p.k-1:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['it is sent back out of its own port too',p.k],['it is taken to go out of one port',1]]; },(a,o,p)=>'ports flooded, all but the one it came in on: '+qs(o),()=>({k:ri(3,9),N:ri(20,40)}));
+NL('46·eng.flood',['46·eng'],'the learning-switch technique',(p,nm)=>'a switch with '+p.k+' ports has learnt '+nm+' addresses out of '+p.N+'; give how many ports a message to an unlearnt address goes out of',(v,p)=>{ const n=W(v); return n!==null&&n>=0&&n<p.N?p.k-1:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['it is sent back out of its own port too',p.k],['it is taken to go out of one port',1]]; },(a,o,p)=>'ports flooded, all but the one it came in on: '+qs(o),()=>({k:ri(3,9),N:ri(20,40)}));
 
 /* ===== 46: roots and symmetries ===== */
-LK({id:'46a.shift',from:'fn',to:'fn',steps:()=>['46a'],poly:true,say:(p,nm)=>'the cubic '+nm+' has top coefficient 1; put x = y − b/3 into it to clear the square term',
+LK({id:'47a.shift',from:'fn',to:'fn',steps:()=>['47a'],poly:true,say:(p,nm)=>'the cubic '+nm+' has top coefficient 1; put x = y − b/3 into it to clear the square term',
   act:s=>{ const c=toPoly(s.t); if(!c||c.length!==4||!qe(c[3],Q(1))) return null; return {k:'fn',t:simp(sub(s.t,A(X,N(qn(qm(c[2],Q(1,3)))))))}; },cite:()=>'the shift-out technique',
   slips:s=>{ const c=toPoly(s.t); if(!c||c.length!==4) return []; return [{why:'the shift is taken the wrong way, y + b/3',k:'fn',t:simp(sub(s.t,A(X,N(qm(c[2],Q(1,3))))))}]; },line:(o,p,nm,nx)=>nm+' with its square term cleared: '+nx+'(y) = '+show(o.t).replace(/x/g,'y')});
 const depress=c=>{ if(!c||c.length!==4||!qe(c[3],Q(1))) return null; const h=qm(c[2],Q(-1,3)), at=x=>c.reduceRight((a,v)=>qa(qm(a,x),v),Q(0));
   /* x = y + h with h = −b/3: p = c₁ − b²/3, q = the cubic at h */ return [at(h),qa(c[1],qn(qm(qm(c[2],c[2]),Q(1,3))))]; };
-LK({id:'46a.D',from:'fn',to:'num',steps:()=>['46a'],poly:true,say:(p,nm)=>'clear the square term of the cubic '+nm+' if it has one, read it as y³ + py + q, and find D = q²/4 + p³/27',
+LK({id:'47a.D',from:'fn',to:'num',steps:()=>['47a'],poly:true,say:(p,nm)=>'clear the square term of the cubic '+nm+' if it has one, read it as y³ + py + q, and find D = q²/4 + p³/27',
   act:s=>{ const d=depress(toPoly(s.t)); if(!d) return null; const [q,pp]=d; return num(qa(qm(qm(q,q),Q(1,4)),qm(qpow(pp,3),Q(1,27)))); },cite:()=>'the three-real-roots technique',
   slips:s=>{ const d=depress(toPoly(s.t)); if(!d) return []; const [q,pp]=d; return [{why:'p³/27 is taken away',v:qa(qm(qm(q,q),Q(1,4)),qn(qm(qpow(pp,3),Q(1,27))))}]; },line:(o,p,nm)=>'D of the cubic '+nm+': q²/4 + p³/27 = '+qs(o.v)});
-LK({id:'46b.quad',from:'vec',to:'fn',steps:()=>['46b'],say:(p,nm)=>'build the quadratic with top coefficient 1 whose two roots are the entries of '+nm,act:s=>({k:'fn',t:fromPoly([qm(s.u[0],s.u[1]),qn(qa(s.u[0],s.u[1])),Q(1)])}),cite:()=>'the roots-to-coefficients technique',
+LK({id:'47b.quad',from:'vec',to:'fn',steps:()=>['47b'],say:(p,nm)=>'build the quadratic with top coefficient 1 whose two roots are the entries of '+nm,act:s=>({k:'fn',t:fromPoly([qm(s.u[0],s.u[1]),qn(qa(s.u[0],s.u[1])),Q(1)])}),cite:()=>'the roots-to-coefficients technique',
   slips:s=>[{why:'the sign of the middle term is not turned',k:'fn',t:fromPoly([qm(s.u[0],s.u[1]),qa(s.u[0],s.u[1]),Q(1)])},{why:'the factors are written x + r, not x − r',k:'fn',t:fromPoly([qm(s.u[0],s.u[1]),qa(s.u[0],s.u[1]),Q(1)])}],line:(o,p,nm,nx,s)=>'quadratic with roots '+qs(s.u[0])+' and '+qs(s.u[1])+': '+show(o.t)});
-LK({id:'46b.sum',from:'fn',to:'num',steps:()=>['46b'],poly:true,say:(p,nm)=>'add the roots of the polynomial '+nm+', counted with repeats, from its coefficients',act:s=>{ const c=toPoly(s.t); if(!c||c.length<3) return null; const n=c.length-1; return num(qm(qn(c[n-1]),qi(c[n]))); },cite:()=>'the roots-to-coefficients technique',
+LK({id:'47b.sum',from:'fn',to:'num',steps:()=>['47b'],poly:true,say:(p,nm)=>'add the roots of the polynomial '+nm+', counted with repeats, from its coefficients',act:s=>{ const c=toPoly(s.t); if(!c||c.length<3) return null; const n=c.length-1; return num(qm(qn(c[n-1]),qi(c[n]))); },cite:()=>'the roots-to-coefficients technique',
   slips:s=>{ const c=toPoly(s.t); if(!c||c.length<3) return []; const n=c.length-1; return [{why:'the sign is not turned',v:qm(c[n-1],qi(c[n]))},{why:'the constant term is read instead',v:qm(qn(c[0]),qi(c[n]))}]; },line:(o,p,nm)=>'sum of the roots of '+nm+': e₁ = '+qs(o.v)});
-LK({id:'46b.prod',from:'fn',to:'num',steps:()=>['46b'],poly:true,say:(p,nm)=>'multiply the roots of the polynomial '+nm+', counted with repeats, from its coefficients',act:s=>{ const c=toPoly(s.t); if(!c||c.length<3) return null; const n=c.length-1; return num(qm(qm(c[0],qi(c[n])),Q(n%2?-1:1))); },cite:()=>'the roots-to-coefficients technique',
+LK({id:'47b.prod',from:'fn',to:'num',steps:()=>['47b'],poly:true,say:(p,nm)=>'multiply the roots of the polynomial '+nm+', counted with repeats, from its coefficients',act:s=>{ const c=toPoly(s.t); if(!c||c.length<3) return null; const n=c.length-1; return num(qm(qm(c[0],qi(c[n])),Q(n%2?-1:1))); },cite:()=>'the roots-to-coefficients technique',
   slips:s=>{ const c=toPoly(s.t); if(!c||c.length<3) return []; const n=c.length-1; return [{why:'the sign (−1)ⁿ is left off',v:qm(c[0],qi(c[n]))}]; },line:(o,p,nm)=>'product of the roots of '+nm+': eₙ = '+qs(o.v)});
-LK({id:'46b.squares',from:'fn',to:'num',steps:()=>['46b'],poly:true,say:(p,nm)=>'add the squares of the roots of the polynomial '+nm+', from its coefficients',act:s=>{ const c=toPoly(s.t); if(!c||c.length<3) return null; const n=c.length-1, e1=qm(qn(c[n-1]),qi(c[n])), e2=qm(c[n-2],qi(c[n])); return num(qa(qm(e1,e1),qm(Q(-2),e2))); },cite:()=>'the symmetric-is-coefficients technique',
+LK({id:'47b.squares',from:'fn',to:'num',steps:()=>['47b'],poly:true,say:(p,nm)=>'add the squares of the roots of the polynomial '+nm+', from its coefficients',act:s=>{ const c=toPoly(s.t); if(!c||c.length<3) return null; const n=c.length-1, e1=qm(qn(c[n-1]),qi(c[n])), e2=qm(c[n-2],qi(c[n])); return num(qa(qm(e1,e1),qm(Q(-2),e2))); },cite:()=>'the symmetric-is-coefficients technique',
   slips:s=>{ const c=toPoly(s.t); if(!c||c.length<3) return []; const n=c.length-1, e1=qm(qn(c[n-1]),qi(c[n])), e2=qm(c[n-2],qi(c[n])); return [{why:'the 2e₂ is left off',v:qm(e1,e1)},{why:'2e₂ is added',v:qa(qm(e1,e1),qm(Q(2),e2))}]; },line:(o,p,nm)=>'squares of the roots of '+nm+': e₁² − 2e₂ = '+qs(o.v)});
-LK({id:'46b.disc',from:'fn',to:'num',steps:()=>['46b'],poly:true,say:(p,nm)=>'clear the square term of the cubic '+nm+' if it has one, read it as y³ + py + q, and find Δ = −4p³ − 27q²',
+LK({id:'47b.disc',from:'fn',to:'num',steps:()=>['47b'],poly:true,say:(p,nm)=>'clear the square term of the cubic '+nm+' if it has one, read it as y³ + py + q, and find Δ = −4p³ − 27q²',
   act:s=>{ const d=depress(toPoly(s.t)); if(!d) return null; const [q,pp]=d; return num(qa(qm(Q(-4),qpow(pp,3)),qm(Q(-27),qm(q,q)))); },cite:()=>'the cubic-discriminant technique',
   slips:s=>{ const d=depress(toPoly(s.t)); if(!d) return []; const [q,pp]=d; return [{why:'27q² is added',v:qa(qm(Q(-4),qpow(pp,3)),qm(Q(27),qm(q,q)))}]; },line:(o,p,nm)=>'Δ of the cubic '+nm+': −4p³ − 27q² = '+qs(o.v)});
-NL('46d.fixed',['46d'],'the fixed-size technique',(p,nm)=>'[K : F] = '+p.n+' and a group H of symmetries has '+nm+' members; give [K^H : F] for the field H fixes',(v,p)=>{ const h=W(v); return h!==null&&h>=1&&p.n%h===0?p.n/h:null; },(v,p)=>{ const h=W(v); return h===null?[]:[['[K : K^H] is given instead',h]]; },(a,o,p)=>'[K^H : F] = [K : F]/|H| = '+p.n+'/'+qs(a)+' = '+qs(o),()=>({n:pick([6,8,12,24])}));
-LK({id:'46e.pieces',from:'num',to:'word',steps:()=>['46e'],say:(p,nm)=>'break the clock of '+nm+' into pieces of prime size; list the prime sizes, repeats and all',act:s=>{ const n=W(s.v); return n!==null&&n>=2&&n<=999?word(factor(n).join(', ')):null; },cite:()=>'the pieces technique',
+NL('47d.fixed',['47d'],'the fixed-size technique',(p,nm)=>'[K : F] = '+p.n+' and a group H of symmetries has '+nm+' members; give [K^H : F] for the field H fixes',(v,p)=>{ const h=W(v); return h!==null&&h>=1&&p.n%h===0?p.n/h:null; },(v,p)=>{ const h=W(v); return h===null?[]:[['[K : K^H] is given instead',h]]; },(a,o,p)=>'[K^H : F] = [K : F]/|H| = '+p.n+'/'+qs(a)+' = '+qs(o),()=>({n:pick([6,8,12,24])}));
+LK({id:'47e.pieces',from:'num',to:'word',steps:()=>['47e'],say:(p,nm)=>'break the clock of '+nm+' into pieces of prime size; list the prime sizes, repeats and all',act:s=>{ const n=W(s.v); return n!==null&&n>=2&&n<=999?word(factor(n).join(', ')):null; },cite:()=>'the pieces technique',
   slips:s=>{ const n=W(s.v); return n===null||n<2||n>999?[]:[{why:'each prime is listed once only',k:'word',s:[...new Set(factor(n))].join(', ')},{why:'the divisors are listed',k:'word',s:divs(n).slice(1).join(', ')}]; },line:(o,p,nm,nx,s)=>'prime pieces of the clock of '+qs(s.v)+': '+o.s});
-LK({id:'46·now.pieces',from:'num',to:'word',steps:()=>['46e','46·now'],say:(p,nm)=>'list each prime clock that is a piece of the clock of '+nm+', with how many times it comes',act:s=>{ const n=W(s.v); if(n===null||n<2||n>999) return null; const f=factor(n), u=[...new Set(f)]; return word(u.map(x=>'ℤ/'+x+' × '+f.filter(y=>y===x).length).join(', ')); },cite:()=>'the pieces technique',
+LK({id:'47·now.pieces',from:'num',to:'word',steps:()=>['47e','47·now'],say:(p,nm)=>'list each prime clock that is a piece of the clock of '+nm+', with how many times it comes',act:s=>{ const n=W(s.v); if(n===null||n<2||n>999) return null; const f=factor(n), u=[...new Set(f)]; return word(u.map(x=>'ℤ/'+x+' × '+f.filter(y=>y===x).length).join(', ')); },cite:()=>'the pieces technique',
   slips:s=>{ const n=W(s.v); if(n===null||n<2||n>999) return []; const u=[...new Set(factor(n))]; return [{why:'each prime is taken once',k:'word',s:u.map(x=>'ℤ/'+x+' × 1').join(', ')}]; },line:(o,p,nm,nx,s)=>'prime clocks in the clock of '+qs(s.v)+': '+o.s});
-NL('46f.fam',['46f'],'the relabel technique',(p,nm)=>'among shuffles of '+nm+' things, count those with the loop shape of a single swap',v=>{ const n=W(v); return n!==null&&n>=3&&n<=9?n*(n-1)/2:null; },v=>{ const n=W(v); return n===null?[]:[['the two swapped are counted in order, twice each',n*(n-1)]]; },(a,o)=>'single swaps of '+qs(a)+' things: C('+qs(a)+', 2) = '+qs(o));
-LK({id:'46g.orders',from:'num',to:'word',steps:()=>['46g'],say:(p,nm)=>'a group has '+nm+' members; list the primes p for which some member must have order p',act:s=>{ const n=W(s.v); return n!==null&&n>=2&&n<=999?word([...new Set(factor(n))].join(', ')):null; },cite:()=>'the prime-member technique',
+NL('47f.fam',['47f'],'the relabel technique',(p,nm)=>'among shuffles of '+nm+' things, count those with the loop shape of a single swap',v=>{ const n=W(v); return n!==null&&n>=3&&n<=9?n*(n-1)/2:null; },v=>{ const n=W(v); return n===null?[]:[['the two swapped are counted in order, twice each',n*(n-1)]]; },(a,o)=>'single swaps of '+qs(a)+' things: C('+qs(a)+', 2) = '+qs(o));
+LK({id:'47g.orders',from:'num',to:'word',steps:()=>['47g'],say:(p,nm)=>'a group has '+nm+' members; list the primes p for which some member must have order p',act:s=>{ const n=W(s.v); return n!==null&&n>=2&&n<=999?word([...new Set(factor(n))].join(', ')):null; },cite:()=>'the prime-member technique',
   slips:s=>{ const n=W(s.v); return n===null||n<2||n>999?[]:[{why:'every divisor is listed, not only the primes',k:'word',s:divs(n).slice(1).join(', ')}]; },line:(o,p,nm,nx,s)=>'orders forced by '+qs(s.v)+': '+o.s});
-LK({id:'46h.sylow',from:'num',to:'word',steps:()=>['46h'],make:()=>({p:pick([2,3,5])}),say:(p,nm)=>'a group has '+nm+' members; list the counts its largest '+p.p+'-parts may have',
+LK({id:'47h.sylow',from:'num',to:'word',steps:()=>['47h'],make:()=>({p:pick([2,3,5])}),say:(p,nm)=>'a group has '+nm+' members; list the counts its largest '+p.p+'-parts may have',
   act:(s,p)=>{ let n=W(s.v); if(n===null||n<2||n>999||n%p.p) return null; while(n%p.p===0) n/=p.p; return word(divs(n).filter(d=>d%p.p===1).join(', ')); },cite:()=>'the count-of-parts technique',
   slips:(s,p)=>{ let n=W(s.v); if(n===null||n<2||n%p.p) return []; while(n%p.p===0) n/=p.p; return [{why:'every divisor of m is kept, not only those leaving 1',k:'word',s:divs(n).join(', ')}]; },line:(o,p,nm,nx,s)=>'counts of '+p.p+'-parts of a group of '+qs(s.v)+': '+o.s});
-NL('46i.steps',['46i'],'the power-of-two technique',(p,nm)=>'a buildable number has degree '+nm+' over ℚ; count the square-root steps that reach it',v=>{ const n=W(v); return n!==null&&n>=1?lg2(n):null; },v=>{ const n=W(v); return n===null?[]:[['the degree is halved, not logged',Q(n,2)]]; },(a,o)=>'square-root steps for degree '+qs(a)+': log₂ '+qs(a)+' = '+qs(o));
-LK({id:'46j.roots',from:'fn',to:'word',steps:()=>['46j'],poly:true,say:(p,nm)=>'list the whole-number roots of the polynomial '+nm,act:s=>{ const c=toPoly(s.t); if(!c||c.length<3||!qe(c[c.length-1],Q(1))||!c.every(x=>x.q===1)) return null; const r=ratRoots(c); if(r===null) return null; const w=r.filter(x=>x.q===1); return word(w.length?w.map(qs).join(', '):'none'); },cite:()=>'the whole-answer technique',
+NL('47j.steps',['47j'],'the power-of-two technique',(p,nm)=>'a buildable number has degree '+nm+' over ℚ; count the square-root steps that reach it',v=>{ const n=W(v); return n!==null&&n>=1?lg2(n):null; },v=>{ const n=W(v); return n===null?[]:[['the degree is halved, not logged',Q(n,2)]]; },(a,o)=>'square-root steps for degree '+qs(a)+': log₂ '+qs(a)+' = '+qs(o));
+LK({id:'47k.roots',from:'fn',to:'word',steps:()=>['47k'],poly:true,say:(p,nm)=>'list the whole-number roots of the polynomial '+nm,act:s=>{ const c=toPoly(s.t); if(!c||c.length<3||!qe(c[c.length-1],Q(1))||!c.every(x=>x.q===1)) return null; const r=ratRoots(c); if(r===null) return null; const w=r.filter(x=>x.q===1); return word(w.length?w.map(qs).join(', '):'none'); },cite:()=>'the whole-answer technique',
   slips:s=>{ const c=toPoly(s.t); if(!c) return []; const r=ratRoots(c); if(!r) return []; const w=r.filter(x=>x.q===1); return [{why:'the signs of the roots are turned',k:'word',s:w.length?w.map(x=>qs(qn(x))).sort().join(', '):'none'}]; },line:(o,p,nm)=>'the whole roots of '+nm+': '+o.s});
-LK({id:'46k.group',from:'fn',to:'word',steps:()=>['46k'],poly:true,say:(p,nm)=>'the cubic '+nm+' has no rational root; say whether its group is A₃ or S₃',
+LK({id:'47l.group',from:'fn',to:'word',steps:()=>['47l'],poly:true,say:(p,nm)=>'the cubic '+nm+' has no rational root; say whether its group is A₃ or S₃',
   act:s=>{ const c=toPoly(s.t); if(!c||c.length!==4) return null; const r=ratRoots(c); if(r===null||r.length) { if(r&&r.length) return null; } const [d,cc,b,a]=c; const D=qa(qa(qa(qa(qm(qm(Q(18),qm(a,b)),qm(cc,d)),qm(Q(-4),qm(qpow(b,3),d))),qm(qm(b,b),qm(cc,cc))),qm(Q(-4),qm(a,qpow(cc,3)))),qm(Q(-27),qm(qm(a,a),qm(d,d)))); if(D.p<=0&&!qz(D)) return word('S₃'); return word(qsqrt(D)?'A₃':'S₃'); },cite:()=>'the square-discriminant technique',
-  slips:s=>{ const c=toPoly(s.t); if(!c||c.length!==4) return []; const r=L.find(l=>l.id==='46k.group').act(s); return r?[{why:'the test is read the wrong way round, a square taken to give S₃',k:'word',s:r.s==='A₃'?'S₃':'A₃'}]:[]; },line:(o,p,nm)=>'the group of '+nm+' is '+o.s});
-LK({id:'46l.build',from:'num',to:'word',steps:()=>['46l'],say:(p,nm)=>'say whether the regular figure with '+nm+' sides can be built with straight edge and compass',act:s=>{ const n=W(s.v); return n!==null&&n>=3&&n<=200?word(lg2(phi(n))!==null?'it can be built':'it cannot be built'):null; },cite:()=>'the regular-figure technique',
+  slips:s=>{ const c=toPoly(s.t); if(!c||c.length!==4) return []; const r=L.find(l=>l.id==='47l.group').act(s); return r?[{why:'the test is read the wrong way round, a square taken to give S₃',k:'word',s:r.s==='A₃'?'S₃':'A₃'}]:[]; },line:(o,p,nm)=>'the group of '+nm+' is '+o.s});
+LK({id:'47m.build',from:'num',to:'word',steps:()=>['47m'],say:(p,nm)=>'say whether the regular figure with '+nm+' sides can be built with straight edge and compass',act:s=>{ const n=W(s.v); return n!==null&&n>=3&&n<=200?word(lg2(phi(n))!==null?'it can be built':'it cannot be built'):null; },cite:()=>'the regular-figure technique',
   slips:s=>{ const n=W(s.v); return n===null||n<3?[]:[{why:'n itself is tested for a power of 2',k:'word',s:lg2(n)!==null?'it can be built':'it cannot be built'}]; },line:(o,p,nm,nx,s)=>'the figure with '+qs(s.v)+' sides, by φ('+qs(s.v)+') = '+phi(W(s.v))+': '+o.s});
-LK({id:'46·phys.phase',from:'cx',to:'num',steps:()=>['46·phys'],say:(p,nm)=>'turn the amplitude '+nm+' by the phase 3/5 + 4/5 i; give |ψ|²',act:s=>num(qa(qm(s.re,s.re),qm(s.im,s.im))),cite:()=>'the phase-keeps technique',
+LK({id:'47·phys.phase',from:'cx',to:'num',steps:()=>['47·phys'],say:(p,nm)=>'turn the amplitude '+nm+' by the phase 3/5 + 4/5 i; give |ψ|²',act:s=>num(qa(qm(s.re,s.re),qm(s.im,s.im))),cite:()=>'the phase-keeps technique',
   slips:s=>{ const r=qa(qm(Q(3,5),s.re),qn(qm(Q(4,5),s.im))); return [{why:'only the real part of the turned amplitude is squared',v:qm(r,r)}]; },line:(o,p,nm,nx,s)=>'|ψ|² of '+cxs(s)+', kept by the phase: '+qs(o.v)});
-NL('46·now2.any',['46·now2'],'the any-group technique',(p,nm)=>'a group of '+nm+' members sits inside the shuffles of that many things; count those shuffles',v=>{ const n=W(v); return n!==null&&n>=1&&n<=8?fact(n):null; },v=>{ const n=W(v); return n===null||n>8?[]:[['the shuffles are counted as the size squared',n*n]]; },(a,o)=>'shuffles of '+qs(a)+' things: '+qs(a)+'! = '+qs(o));
-NL('46c.count',['46c'],'the count-the-symmetries technique',(p,nm)=>'a splitting field has degree '+nm+' over F; count its symmetries over F',v=>{ const n=W(v); return n!==null&&n>=1?n:null; },v=>{ const n=W(v); return n===null||n>8?[]:[['every shuffle of the roots is counted',fact(n)]]; },(a,o)=>'symmetries, one per degree: |Aut(K/F)| = '+qs(o));
-NL('46·cb27.chars',['46·cb27'],'the perpendicular-characters technique',(p,nm)=>'on the clock of '+p.n+', with ω a turn of 1/'+p.n+', average ω^(jk) over the hours j, for k = '+nm,(v,p)=>{ const k=W(v); return k===null?null:(md(k,p.n)===0?1:0); },(v,p)=>{ const k=W(v); return k===null?[]:[['the hours are added, not averaged',md(k,p.n)===0?p.n:0],['every k is taken as matching',1]]; },(a,o,p)=>'average of ω^(j · '+qs(a)+') on the clock of '+p.n+': '+qs(o),()=>({n:pick([3,4,5,6])}));
+NL('47·now2.any',['47·now2'],'the any-group technique',(p,nm)=>'a group of '+nm+' members sits inside the shuffles of that many things; count those shuffles',v=>{ const n=W(v); return n!==null&&n>=1&&n<=8?fact(n):null; },v=>{ const n=W(v); return n===null||n>8?[]:[['the shuffles are counted as the size squared',n*n]]; },(a,o)=>'shuffles of '+qs(a)+' things: '+qs(a)+'! = '+qs(o));
+NL('47c.count',['47c'],'the count-the-symmetries technique',(p,nm)=>'a splitting field has degree '+nm+' over F; count its symmetries over F',v=>{ const n=W(v); return n!==null&&n>=1?n:null; },v=>{ const n=W(v); return n===null||n>8?[]:[['every shuffle of the roots is counted',fact(n)]]; },(a,o)=>'symmetries, one per degree: |Aut(K/F)| = '+qs(o));
+NL('47·cb27.chars',['47·cb27'],'the perpendicular-characters technique',(p,nm)=>'on the clock of '+p.n+', with ω a turn of 1/'+p.n+', average ω^(jk) over the hours j, for k = '+nm,(v,p)=>{ const k=W(v); return k===null?null:(md(k,p.n)===0?1:0); },(v,p)=>{ const k=W(v); return k===null?[]:[['the hours are added, not averaged',md(k,p.n)===0?p.n:0],['every k is taken as matching',1]]; },(a,o,p)=>'average of ω^(j · '+qs(a)+') on the clock of '+p.n+': '+qs(o),()=>({n:pick([3,4,5,6])}));
 
 /* ===== 47: categories ===== */
-NL('47a.order',['47a'],'the order-category technique',(p,nm)=>'the divisors of '+nm+' with an arrow d → e when d divides e: count the arrows',v=>{ const n=W(v); return n!==null&&n>=1&&n<=999?divs(n).reduce((a,d)=>a+divs(d).length,0):null; },v=>{ const n=W(v); return n===null||n<1||n>999?[]:[['only the do-nothing arrows are counted',divs(n).length],['the do-nothing arrows are left out',divs(n).reduce((a,d)=>a+divs(d).length,0)-divs(n).length]]; },(a,o)=>'arrows among the divisors of '+qs(a)+': '+qs(o));
-LK({id:'47b.turn',from:'mat',to:'mat',steps:()=>['47b'],make:()=>({b:[[ri(-2,2),ri(-2,2)],[ri(-2,2),ri(-2,2)]]}),say:(p,nm)=>'with the grid G of '+msh(qi2(p.b))+', find (G'+nm+')ᵀ as '+nm+'ᵀGᵀ',act:(s,p)=>mat(mmul(mT(s.m),mT(qi2(p.b)))),cite:()=>'the turned-round technique',
+NL('48a.order',['48a'],'the order-category technique',(p,nm)=>'the divisors of '+nm+' with an arrow d → e when d divides e: count the arrows',v=>{ const n=W(v); return n!==null&&n>=1&&n<=999?divs(n).reduce((a,d)=>a+divs(d).length,0):null; },v=>{ const n=W(v); return n===null||n<1||n>999?[]:[['only the do-nothing arrows are counted',divs(n).length],['the do-nothing arrows are left out',divs(n).reduce((a,d)=>a+divs(d).length,0)-divs(n).length]]; },(a,o)=>'arrows among the divisors of '+qs(a)+': '+qs(o));
+LK({id:'48b.turn',from:'mat',to:'mat',steps:()=>['48b'],make:()=>({b:[[ri(-2,2),ri(-2,2)],[ri(-2,2),ri(-2,2)]]}),say:(p,nm)=>'with the grid G of '+msh(qi2(p.b))+', find (G'+nm+')ᵀ as '+nm+'ᵀGᵀ',act:(s,p)=>mat(mmul(mT(s.m),mT(qi2(p.b)))),cite:()=>'the turned-round technique',
   slips:(s,p)=>[{why:'the order is kept when the grids are turned',k:'mat',m:mmul(mT(qi2(p.b)),mT(s.m))}],line:(o,p,nm,nx)=>'(G'+nm+')ᵀ = '+nm+'ᵀGᵀ: '+msh(o.m)});
-NL('47d.pairs',['47d'],'the pair-map technique',(p,nm)=>'a set A has '+nm+' members and B has '+p.b+'; count the members of A × B',(v,p)=>{ const n=W(v); return n!==null&&n>=0?n*p.b:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the sizes are added, the sum, not the product',n+p.b]]; },(a,o,p)=>'members of A × B: '+qs(a)+' · '+p.b+' = '+qs(o),()=>({b:ri(2,9)}));
-NL('47d.cases',['47d'],'the cases-map technique',(p,nm)=>'a set A has '+nm+' members and B has '+p.b+'; count the members of their sum A + B',(v,p)=>{ const n=W(v); return n!==null&&n>=0?n+p.b:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the product is taken instead',n*p.b]]; },(a,o,p)=>'members of A + B: '+qs(a)+' + '+p.b+' = '+qs(o),()=>({b:ri(2,9)}));
-NL('47e.glue',['47e'],'the glued-is-colimit technique',(p,nm)=>'a set A has '+nm+' members, B has '+p.b+', glued along C of '+p.c+' sitting in both; count the members of the glued set',(v,p)=>{ const n=W(v); return n!==null&&n>=p.c?n+p.b-p.c:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['C is not taken away',n+p.b],['C is taken away twice',n+p.b-2*p.c]]; },(a,o,p)=>'members of the glued set: '+qs(a)+' + '+p.b+' − '+p.c+' = '+qs(o),()=>{ const c=ri(1,3); return {b:c+ri(1,6),c}; });
-NL('47f.curry',['47f'],'the pair-to-function technique',(p,nm)=>'sets A, B and D have '+p.a+', '+p.b+' and '+nm+' members; count the functions from A × B to D',(v,p)=>{ const d=W(v); return d!==null&&d>=1&&d**(p.a*p.b)<=99999?d**(p.a*p.b):null; },(v,p)=>{ const d=W(v); return d===null||d<1?[]:[['the sizes of A and B are added, not multiplied',d**(p.a+p.b)]]; },(a,o,p)=>'functions from A × B to D: '+qs(a)+sup(p.a*p.b)+' = '+qs(o),()=>({a:ri(1,2),b:ri(1,3)}));
-NL('47f.free',['47f'],'the free-forgetful technique',(p,nm)=>'S has '+p.s+' letters and a group G has '+nm+' members; count the product-keeping maps from the free group on S to G',(v,p)=>{ const g=W(v); return g!==null&&g>=1&&g**p.s<=99999?g**p.s:null; },(v,p)=>{ const g=W(v); return g===null||g<1||p.s**g>99999?[]:[['the power is taken the other way',p.s**g]]; },(a,o,p)=>'maps, one per choice for each letter: '+qs(a)+sup(p.s)+' = '+qs(o),()=>({s:ri(2,4)}));
-NL('47g.from1',['47g'],'the arrows-from-one technique',(p,nm)=>'a group G has '+nm+' members; count the product-keeping maps from ℤ into G',v=>{ const g=W(v); return g!==null&&g>=1?g:null; },v=>{ const g=W(v); return g===null?[]:[['only the map to the do-nothing member is counted',1],['the maps are counted as functions',g*g]]; },(a,o)=>'maps from ℤ, one for each member: '+qs(o));
-LK({id:'47h.rank',from:'mat',to:'num',steps:()=>['47h'],say:(p,nm)=>'read the grid '+nm+' as a member of V ⊗ W; give the fewest terms v ⊗ w that make it',act:s=>num(s.m.flat().every(qz)?0:qz(det(s.m))?1:2),cite:()=>'the fewest-terms technique',
+NL('48d.pairs',['48d'],'the pair-map technique',(p,nm)=>'a set A has '+nm+' members and B has '+p.b+'; count the members of A × B',(v,p)=>{ const n=W(v); return n!==null&&n>=0?n*p.b:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the sizes are added, the sum, not the product',n+p.b]]; },(a,o,p)=>'members of A × B: '+qs(a)+' · '+p.b+' = '+qs(o),()=>({b:ri(2,9)}));
+NL('48d.cases',['48d'],'the cases-map technique',(p,nm)=>'a set A has '+nm+' members and B has '+p.b+'; count the members of their sum A + B',(v,p)=>{ const n=W(v); return n!==null&&n>=0?n+p.b:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['the product is taken instead',n*p.b]]; },(a,o,p)=>'members of A + B: '+qs(a)+' + '+p.b+' = '+qs(o),()=>({b:ri(2,9)}));
+NL('48e.glue',['48e'],'the glued-is-colimit technique',(p,nm)=>'a set A has '+nm+' members, B has '+p.b+', glued along C of '+p.c+' sitting in both; count the members of the glued set',(v,p)=>{ const n=W(v); return n!==null&&n>=p.c?n+p.b-p.c:null; },(v,p)=>{ const n=W(v); return n===null?[]:[['C is not taken away',n+p.b],['C is taken away twice',n+p.b-2*p.c]]; },(a,o,p)=>'members of the glued set: '+qs(a)+' + '+p.b+' − '+p.c+' = '+qs(o),()=>{ const c=ri(1,3); return {b:c+ri(1,6),c}; });
+NL('48f.curry',['48f'],'the pair-to-function technique',(p,nm)=>'sets A, B and D have '+p.a+', '+p.b+' and '+nm+' members; count the functions from A × B to D',(v,p)=>{ const d=W(v); return d!==null&&d>=1&&d**(p.a*p.b)<=99999?d**(p.a*p.b):null; },(v,p)=>{ const d=W(v); return d===null||d<1?[]:[['the sizes of A and B are added, not multiplied',d**(p.a+p.b)]]; },(a,o,p)=>'functions from A × B to D: '+qs(a)+sup(p.a*p.b)+' = '+qs(o),()=>({a:ri(1,2),b:ri(1,3)}));
+NL('48f.free',['48f'],'the free-forgetful technique',(p,nm)=>'S has '+p.s+' letters and a group G has '+nm+' members; count the product-keeping maps from the free group on S to G',(v,p)=>{ const g=W(v); return g!==null&&g>=1&&g**p.s<=99999?g**p.s:null; },(v,p)=>{ const g=W(v); return g===null||g<1||p.s**g>99999?[]:[['the power is taken the other way',p.s**g]]; },(a,o,p)=>'maps, one per choice for each letter: '+qs(a)+sup(p.s)+' = '+qs(o),()=>({s:ri(2,4)}));
+NL('48g.from1',['48g'],'the arrows-from-one technique',(p,nm)=>'a group G has '+nm+' members; count the product-keeping maps from ℤ into G',v=>{ const g=W(v); return g!==null&&g>=1?g:null; },v=>{ const g=W(v); return g===null?[]:[['only the map to the do-nothing member is counted',1],['the maps are counted as functions',g*g]]; },(a,o)=>'maps from ℤ, one for each member: '+qs(o));
+LK({id:'48h.rank',from:'mat',to:'num',steps:()=>['48h'],say:(p,nm)=>'read the grid '+nm+' as a member of V ⊗ W; give the fewest terms v ⊗ w that make it',act:s=>num(s.m.flat().every(qz)?0:qz(det(s.m))?1:2),cite:()=>'the fewest-terms technique',
   slips:s=>[{why:'the entries that are not 0 are counted',v:Q(s.m.flat().filter(x=>!qz(x)).length)}],line:(o,p,nm)=>'fewest terms v ⊗ w for '+nm+', its rank: '+qs(o.v)});
-NL('47h.clocks',['47h'],'the coprime-clocks technique',(p,nm)=>'over the whole numbers, tensor the clock of '+nm+' with the clock of '+p.k+'; give the size of the clock that results',(v,p)=>{ const n=W(v); return n!==null&&n>=1?gcd(n,p.k):null; },(v,p)=>{ const n=W(v); return n===null||n<1?[]:[['the product is taken',n*p.k],['the least common multiple is taken',n*p.k/gcd(n,p.k)]]; },(a,o,p)=>'tensor of the clocks: ℤ/'+qs(a)+' ⊗ ℤ/'+p.k+' = ℤ/gcd = ℤ/'+qs(o),()=>({k:pick([2,3,4,6,8,9,10,12])}));
-NL('47i.lcm',['47i'],'the divides-order technique',(p,nm)=>'in the order where d comes before e when d divides e, give the sum of '+nm+' and '+p.k,(v,p)=>{ const n=W(v); return n!==null&&n>=1?n*p.k/gcd(n,p.k):null; },(v,p)=>{ const n=W(v); return n===null||n<1?[]:[['the product of the order, the gcd, is given',gcd(n,p.k)],['the plain sum is given',n+p.k]]; },(a,o,p)=>'sum in the dividing order: lcm('+qs(a)+', '+p.k+') = '+qs(o),()=>({k:pick([4,6,8,9,10,12,15])}));
-NL('47i.count',['47i'],'the count-the-arrows technique',(p,nm)=>'S is the sum of A, of '+p.a+' members, and B, of '+p.b+'; X has '+nm+' members; count the arrows from S to X',(v,p)=>{ const x=W(v); return x!==null&&x>=1&&x**(p.a+p.b)<=99999?x**(p.a+p.b):null; },(v,p)=>{ const x=W(v); return x===null||x<1?[]:[['the counts are added, not multiplied',x**p.a+x**p.b]]; },(a,o,p)=>'arrows from A + B to X: '+qs(a)+sup(p.a)+' · '+qs(a)+sup(p.b)+' = '+qs(o),()=>({a:ri(1,3),b:ri(1,3)}));
-LK({id:'47j.twice',from:'fn',to:'fn',steps:()=>['47j'],say:(p,nm)=>'apply the term Λf. λx. f (f x) to the polynomial '+nm+', giving '+nm+' run twice',act:s=>{ const c=toPoly(s.t); if(!c||c.length>3) return null; const t=simp(sub(s.t,s.t)); return show(t).length>36?null:{k:'fn',t}; },cite:()=>'the typed-term technique',
+NL('48h.clocks',['48h'],'the coprime-clocks technique',(p,nm)=>'over the whole numbers, tensor the clock of '+nm+' with the clock of '+p.k+'; give the size of the clock that results',(v,p)=>{ const n=W(v); return n!==null&&n>=1?gcd(n,p.k):null; },(v,p)=>{ const n=W(v); return n===null||n<1?[]:[['the product is taken',n*p.k],['the least common multiple is taken',n*p.k/gcd(n,p.k)]]; },(a,o,p)=>'tensor of the clocks: ℤ/'+qs(a)+' ⊗ ℤ/'+p.k+' = ℤ/gcd = ℤ/'+qs(o),()=>({k:pick([2,3,4,6,8,9,10,12])}));
+NL('48i.lcm',['48i'],'the divides-order technique',(p,nm)=>'in the order where d comes before e when d divides e, give the sum of '+nm+' and '+p.k,(v,p)=>{ const n=W(v); return n!==null&&n>=1?n*p.k/gcd(n,p.k):null; },(v,p)=>{ const n=W(v); return n===null||n<1?[]:[['the product of the order, the gcd, is given',gcd(n,p.k)],['the plain sum is given',n+p.k]]; },(a,o,p)=>'sum in the dividing order: lcm('+qs(a)+', '+p.k+') = '+qs(o),()=>({k:pick([4,6,8,9,10,12,15])}));
+NL('48i.count',['48i'],'the count-the-arrows technique',(p,nm)=>'S is the sum of A, of '+p.a+' members, and B, of '+p.b+'; X has '+nm+' members; count the arrows from S to X',(v,p)=>{ const x=W(v); return x!==null&&x>=1&&x**(p.a+p.b)<=99999?x**(p.a+p.b):null; },(v,p)=>{ const x=W(v); return x===null||x<1?[]:[['the counts are added, not multiplied',x**p.a+x**p.b]]; },(a,o,p)=>'arrows from A + B to X: '+qs(a)+sup(p.a)+' · '+qs(a)+sup(p.b)+' = '+qs(o),()=>({a:ri(1,3),b:ri(1,3)}));
+LK({id:'48j.twice',from:'fn',to:'fn',steps:()=>['48j'],say:(p,nm)=>'apply the term Λf. λx. f (f x) to the polynomial '+nm+', giving '+nm+' run twice',act:s=>{ const c=toPoly(s.t); if(!c||c.length>3) return null; const t=simp(sub(s.t,s.t)); return show(t).length>36?null:{k:'fn',t}; },cite:()=>'the typed-term technique',
   slips:s=>[{why:'f (f x) is read as f(x) times f(x)',k:'fn',t:simp(M(s.t,s.t))}],line:(o,p,nm,nx)=>nm+' run twice: '+nm+'('+nm+'(x)) = '+show(o.t)});
-NL('47·cb0.into',['47·cb0'],'the arrow-counts-kept technique',(p,nm)=>'a set A is matched with a set of '+nm+' members; X has '+p.x+' members; count the arrows from X into A',(v,p)=>{ const a=W(v); return a!==null&&a>=1&&a**p.x<=99999?a**p.x:null; },(v,p)=>{ const a=W(v); return a===null||a<1||p.x**a>99999?[]:[['the arrows are counted the other way, out of A',p.x**a]]; },(a,o,p)=>'arrows from X into A: '+qs(a)+sup(p.x)+' = '+qs(o),()=>({x:ri(2,4)}));
-NL('47·comp.types',['47·comp'],'the type-counts technique',(p,nm)=>'a type Y has '+p.y+' members and Z has '+nm+'; count the members of the function type Y → Z',(v,p)=>{ const z=W(v); return z!==null&&z>=1&&z**p.y<=99999?z**p.y:null; },(v,p)=>{ const z=W(v); return z===null||z<1||p.y**z>99999?[]:[['the power is taken the other way',p.y**z],['the product is taken',z*p.y]]; },(a,o,p)=>'members of Y → Z: '+qs(a)+sup(p.y)+' = '+qs(o),()=>({y:ri(2,4)}));
-LK({id:'47·phys.square',from:'mat',to:'num',steps:()=>['47·phys'],say:(p,nm)=>'find the trace of '+nm+' ⊗ '+nm+', the grid '+nm+' tensored with itself',act:s=>num(qm(tr(s.m),tr(s.m))),cite:()=>'the square-the-space technique',
+NL('48·cb0.into',['48·cb0'],'the arrow-counts-kept technique',(p,nm)=>'a set A is matched with a set of '+nm+' members; X has '+p.x+' members; count the arrows from X into A',(v,p)=>{ const a=W(v); return a!==null&&a>=1&&a**p.x<=99999?a**p.x:null; },(v,p)=>{ const a=W(v); return a===null||a<1||p.x**a>99999?[]:[['the arrows are counted the other way, out of A',p.x**a]]; },(a,o,p)=>'arrows from X into A: '+qs(a)+sup(p.x)+' = '+qs(o),()=>({x:ri(2,4)}));
+NL('48·comp.types',['48·comp'],'the type-counts technique',(p,nm)=>'a type Y has '+p.y+' members and Z has '+nm+'; count the members of the function type Y → Z',(v,p)=>{ const z=W(v); return z!==null&&z>=1&&z**p.y<=99999?z**p.y:null; },(v,p)=>{ const z=W(v); return z===null||z<1||p.y**z>99999?[]:[['the power is taken the other way',p.y**z],['the product is taken',z*p.y]]; },(a,o,p)=>'members of Y → Z: '+qs(a)+sup(p.y)+' = '+qs(o),()=>({y:ri(2,4)}));
+LK({id:'48·phys.square',from:'mat',to:'num',steps:()=>['48·phys'],say:(p,nm)=>'find the trace of '+nm+' ⊗ '+nm+', the grid '+nm+' tensored with itself',act:s=>num(qm(tr(s.m),tr(s.m))),cite:()=>'the square-the-space technique',
   slips:s=>[{why:'the trace of the grid times itself is taken',v:tr(mmul(s.m,s.m))},{why:'the trace is doubled, not squared',v:qm(Q(2),tr(s.m))}],line:(o,p,nm)=>'trace of '+nm+' ⊗ '+nm+': (tr '+nm+')² = '+qs(o.v)});
-NL('47·eng.loop',['47·eng'],'the loop-closing technique',(p,nm)=>'a part of transfer G = '+nm+' is fed back through H = '+qs(p.h)+', taken from the input; give the transfer of the loop',(v,p)=>{ const d=qa(Q(1),qm(v,p.h)); return qz(d)?null:qm(v,qi(d)); },(v,p)=>{ const d=qa(Q(1),qn(qm(v,p.h))); return [['the feedback is added, not taken from the input',qz(d)?null:qm(v,qi(d))],['the 1 is left out',qz(p.h)?null:qi(p.h)]]; },(a,o,p)=>'loop transfer: G/(1 + GH) = '+par(a)+'/(1 + '+par(a)+' · '+qs(p.h)+') = '+qs(o),()=>({h:pick([Q(1),Q(1,2),Q(2),Q(1,4)])}));
-NL('47·eng.row',['47·eng'],'the row-of-boxes technique',(p,nm)=>'a part of transfer '+nm+' is followed by one of transfer '+qs(p.h)+'; give the transfer of the row',(v,p)=>qm(v,p.h),(v,p)=>[['the transfers are added',qa(v,p.h)]],(a,o,p)=>'transfer of the row: '+qs(p.h)+' · '+par(a)+' = '+qs(o),()=>({h:pick([Q(2),Q(3),Q(1,2),Q(-1),Q(1,3)])}));
-LK({id:'47·eng.grid',from:'mat',to:'mat',steps:()=>['47·eng'],make:()=>({r:ri(1,5)}),say:(p,nm)=>'a part has the chain grid '+nm+'; follow it with a resistor '+p.r+' along the path, the grid with rows (1, '+p.r+'), (0, 1)',act:(s,p)=>mat(mmul([[Q(1),Q(p.r)],[Q(0),Q(1)]],s.m)),cite:()=>'the chain-grid technique',
+NL('48·eng.loop',['48·eng'],'the loop-closing technique',(p,nm)=>'a part of transfer G = '+nm+' is fed back through H = '+qs(p.h)+', taken from the input; give the transfer of the loop',(v,p)=>{ const d=qa(Q(1),qm(v,p.h)); return qz(d)?null:qm(v,qi(d)); },(v,p)=>{ const d=qa(Q(1),qn(qm(v,p.h))); return [['the feedback is added, not taken from the input',qz(d)?null:qm(v,qi(d))],['the 1 is left out',qz(p.h)?null:qi(p.h)]]; },(a,o,p)=>'loop transfer: G/(1 + GH) = '+par(a)+'/(1 + '+par(a)+' · '+qs(p.h)+') = '+qs(o),()=>({h:pick([Q(1),Q(1,2),Q(2),Q(1,4)])}));
+NL('48·eng.row',['48·eng'],'the row-of-boxes technique',(p,nm)=>'a part of transfer '+nm+' is followed by one of transfer '+qs(p.h)+'; give the transfer of the row',(v,p)=>qm(v,p.h),(v,p)=>[['the transfers are added',qa(v,p.h)]],(a,o,p)=>'transfer of the row: '+qs(p.h)+' · '+par(a)+' = '+qs(o),()=>({h:pick([Q(2),Q(3),Q(1,2),Q(-1),Q(1,3)])}));
+LK({id:'48·eng.grid',from:'mat',to:'mat',steps:()=>['48·eng'],make:()=>({r:ri(1,5)}),say:(p,nm)=>'a part has the chain grid '+nm+'; follow it with a resistor '+p.r+' along the path, the grid with rows (1, '+p.r+'), (0, 1)',act:(s,p)=>mat(mmul([[Q(1),Q(p.r)],[Q(0),Q(1)]],s.m)),cite:()=>'the chain-grid technique',
   slips:(s,p)=>[{why:'the resistor is put across the path, rows (1, 0), ('+p.r+', 1)',k:'mat',m:mmul([[Q(1),Q(0)],[Q(p.r),Q(1)]],s.m)},{why:'the grids are run in the other order',k:'mat',m:mmul(s.m,[[Q(1),Q(p.r)],[Q(0),Q(1)]])}],line:(o,p,nm,nx)=>nm+' then a resistor '+p.r+': '+nx+' = '+msh(o.m)});
-NL('47·now.ways',['47·now'],'the way-count technique',(p,nm)=>'a type has '+nm+' members; count the ways it is the same as itself',v=>{ const n=W(v); return n!==null&&n>=1&&n<=8?fact(n):null; },v=>{ const n=W(v); return n===null||n>8?[]:[['only the turns of a round are counted',n]]; },(a,o)=>'ways a type of '+qs(a)+' is itself: '+qs(a)+'! = '+qs(o));
-LK({id:'47·now2.count',from:'fn',to:'num',steps:()=>['47·now2'],poly:true,make:()=>({p:pick([3,5,7])}),say:(p,nm)=>'on the clock of '+p.p+', count the pairs (x, y) with y² + y = '+nm+'(x)',
+NL('48·now.ways',['48·now'],'the way-count technique',(p,nm)=>'a type has '+nm+' members; count the ways it is the same as itself',v=>{ const n=W(v); return n!==null&&n>=1&&n<=8?fact(n):null; },v=>{ const n=W(v); return n===null||n>8?[]:[['only the turns of a round are counted',n]]; },(a,o)=>'ways a type of '+qs(a)+' is itself: '+qs(a)+'! = '+qs(o));
+LK({id:'48·now2.count',from:'fn',to:'num',steps:()=>['48·now2'],poly:true,make:()=>({p:pick([3,5,7])}),say:(p,nm)=>'on the clock of '+p.p+', count the pairs (x, y) with y² + y = '+nm+'(x)',
   act:(s,p)=>{ const c=toPoly(s.t); if(!c||!c.every(x=>x.q===1)) return null; let k=0; for(let x=0;x<p.p;x++){ const f=md(c.reduce((a,v,i)=>a+v.p*x**i,0),p.p); for(let y=0;y<p.p;y++) if(md(y*y+y-f,p.p)===0) k++; } return num(k); },cite:()=>'the clock-count technique',
   slips:(s,p)=>{ const c=toPoly(s.t); if(!c||!c.every(x=>x.q===1)) return []; let k=0; for(let x=0;x<p.p;x++){ const f=md(c.reduce((a,v,i)=>a+v.p*x**i,0),p.p); for(let y=0;y<p.p;y++) if(md(y*y-f,p.p)===0) k++; } return [{why:'the + y is dropped',v:Q(k)},{why:'one answer is taken for each x',v:Q(p.p)}]; },line:(o,p,nm)=>'pairs with y² + y = '+nm+'(x) on the clock of '+p.p+': '+qs(o.v)});
 
@@ -16327,7 +16380,7 @@ NL(INF.O+'.step',[INF.O],'the clock-step technique',(p,nm)=>'T(x) is x/2 for eve
 LK({id:INF.h+'.disc',from:'mat',to:'num',steps:()=>[INF.h],say:(p,nm)=>'read the grid '+nm+' as the form px² + qxy + ry², q the sum of the two crossing entries; give D = q² − 4pr',act:s=>{ const q=qa(s.m[0][1],s.m[1][0]); return num(qa(qm(q,q),qm(Q(-4),qm(s.m[0][0],s.m[1][1])))); },cite:()=>'the det-product technique',
   slips:s=>{ const q=qa(s.m[0][1],s.m[1][0]); return [{why:'only one of the two crossing entries is used for q',v:qa(qm(s.m[0][1],s.m[0][1]),qm(Q(-4),qm(s.m[0][0],s.m[1][1])))},{why:'4pr is added',v:qa(qm(q,q),qm(Q(4),qm(s.m[0][0],s.m[1][1])))}]; },line:(o,p,nm)=>'D of the form read from '+nm+': q² − 4pr = '+qs(o.v)});
 
-/* ===== a few more: 40h, 40i, 44h, 47c ===== */
+/* ===== a few more: 40h, 40i, 44h, 48c ===== */
 LK({id:'40h.check',from:'num',to:'word',steps:()=>['40h'],say:(p,nm)=>'a program declares x : whole number and starts x at '+nm+'; does the type check let it run?',
   act:s=>word(s.v.q===1?'it passes the check':'it fails the check'),cite:()=>'the type-check technique',
   slips:s=>[{why:'the start value is not checked against the type',k:'word',s:s.v.q===1?'it fails the check':'it passes the check'}],line:(o,p,nm,nx,s)=>'type check of x ← '+qs(s.v)+' for a whole number: '+o.s});
@@ -16336,10 +16389,10 @@ LK({id:'40i.summap',from:'vec',to:'num',steps:()=>['40i'],make:()=>({k:nz(-3,4)}
   slips:(s,p)=>[{why:'the factor is added once, not to each member',v:qa(Q(p.k),qa(s.u[0],s.u[1]))},{why:'only the head is scaled',v:qa(qm(Q(p.k),s.u[0]),s.u[1])}],line:(o,p,nm)=>'sum of '+nm+' mapped by × '+qs(Q(p.k))+': '+qs(Q(p.k))+' · sum '+nm+' = '+qs(o.v)});
 NL('44h.rigid',['44h'],'the rigid-line technique',(p,nm)=>'f : ℝ → ℝ keeps sums and products and sends 1 to 1; give f('+nm+')',v=>v,v=>[['f is taken as squaring, which keeps products only',qm(v,v)],['f is taken as turning the sign, which keeps sums only',qn(v)]],(a,o)=>'the rigid line keeps every number: f('+qs(a)+') = '+qs(o));
 const inv2=m=>{ const d=det(m); return qz(d)?null:[[qm(m[1][1],qi(d)),qm(qn(m[0][1]),qi(d))],[qm(qn(m[1][0]),qi(d)),qm(m[0][0],qi(d))]]; };
-LK({id:'47c.row',from:'mat',to:'mat',steps:()=>['47c'],make:()=>({b:pick([[[1,1],[0,1]],[[0,1],[1,0]],[[2,0],[0,1]],[[1,0],[-1,1]],[[0,-1],[1,0]]])}),say:(p,nm)=>'a natural map has component '+nm+' at a space; follow it by one with component '+msh(qi2(p.b))+'; give the component of the two in a row',
+LK({id:'48c.row',from:'mat',to:'mat',steps:()=>['48c'],make:()=>({b:pick([[[1,1],[0,1]],[[0,1],[1,0]],[[2,0],[0,1]],[[1,0],[-1,1]],[[0,-1],[1,0]]])}),say:(p,nm)=>'a natural map has component '+nm+' at a space; follow it by one with component '+msh(qi2(p.b))+'; give the component of the two in a row',
   act:(s,p)=>mat(mmul(qi2(p.b),s.m)),cite:()=>'the square-in-a-row technique',
   slips:(s,p)=>[{why:'the components are run in the other order',k:'mat',m:mmul(s.m,qi2(p.b))},{why:'the components are added, not run one after the other',k:'mat',m:s.m.map((r,i)=>r.map((x,j)=>qa(x,Q(p.b[i][j]))))}],line:(o,p,nm,nx)=>'component of the two maps in a row after '+nm+': '+msh(o.m)});
-LK({id:'47c.undo',from:'mat',to:'mat',steps:()=>['47c'],say:(p,nm)=>'a natural map has component '+nm+' here, and every arrow of it can be undone; give the component of the map back',
+LK({id:'48c.undo',from:'mat',to:'mat',steps:()=>['48c'],say:(p,nm)=>'a natural map has component '+nm+' here, and every arrow of it can be undone; give the component of the map back',
   act:s=>{ const r=inv2(s.m); return r?mat(r):null; },cite:()=>'the natural-undo technique',
   slips:s=>{ const r=inv2(s.m), d=det(s.m); return r?[{why:'the grid is turned on its side, not undone',k:'mat',m:mT(s.m)},{why:'the swaps and signs are made but the division by the determinant is skipped',k:'mat',m:r.map(x=>x.map(y=>qm(y,d)))}]:[]; },line:(o,p,nm,nx)=>'component of the map back, '+nm+'⁻¹: '+msh(o.m)});
 /* ===== Word Problems: annex laws with stories and units ===== */
@@ -16354,12 +16407,12 @@ LAWS.push(
   {id:'39·eng.heat',step:'39·eng',label:'the energy to fill a store',make(){ const C=ri(2,9); return {c:[0,0,C],ix:String(C),tag:'store',story:'Filling a store on a chip to V volts costs the supply E(V) = '+C+'V² picojoules.',f:'E',x:'V',xu:'volts',yu:'picojoules',rate:'picojoules per volt',area:null,pts:[1,2,3]}; }},
   {id:'40·comp.cost',step:'40·comp',label:'the cost of a missing check',make(){ const F=ri(2,9)*100, k=ri(2,9)*10; return {c:[F,k],ix:F+','+k,story:'A program at '+pick(['Lantern Wharf','Fox Hill','Otter Creek'])+' shipped without a bounds check; fixing it after n bad requests costs C(n) = '+F+' + '+k+'n dollars.',f:'C',x:'n',xu:'requests',yu:'dollars',rate:'dollars per request',area:null,pts:[5,10,20]}; }},
   {id:'40·now.lines',step:'40·now',label:'lines a checker reads',make(){ const a=ri(2,6), b=ri(5,20); return {c:[b,a],ix:a+','+b,story:'Jean’s checker reads a proof of n moves in L(n) = '+a+'n + '+b+' lines of the core.',f:'L',x:'n',xu:'moves',yu:'lines',rate:'lines per move',area:null,pts:[3,5,10]}; }},
-  {id:'45·now.messages',step:'45·now',label:'messages in one round of agreement',make(){ return {c:[0,-1,1],ix:'1',story:'In one round, each of n machines sends a message to every other: M(n) = n² − n messages.',f:'M',x:'n',xu:'machines',yu:'messages',rate:'messages per machine',area:null,pts:[3,4,5,7]}; }},
-  {id:'45·econ.reward',step:'45·econ',label:'what a miner gains',make(){ const a=ri(2,9), F=ri(10,40); return {c:[-F,a],ix:a+','+F,story:'Mike runs a miner that earns '+a+' tokens an hour and paid '+F+' tokens to start: his gain after t hours is G(t) = '+a+'t − '+F+' tokens.',f:'G',x:'t',xu:'hours',yu:'tokens',rate:'tokens an hour',area:'token hours',pts:[5,10,20]}; }},
-  {id:'45·comp.addresses',step:'45·comp',label:'addresses handed out',make(){ const a=ri(2,6), b=ri(1,4); return {c:[a,b,1],ix:a+','+b,story:'A network at '+pick(['Badger Ridge','Swan Lake','Pine Hollow'])+' hands out U(t) = '+a+' + '+b+'t + t² thousand addresses by year t.',f:'U',x:'t',xu:'years',yu:'thousand addresses',rate:'thousand addresses a year',area:null,pts:[1,2,3,5]}; }},
-  {id:'45·eng.flood',step:'45·eng',label:'messages a switch floods',make(){ const p=ri(3,8), N=ri(20,40); return {c:[(p-1)*N,-(p-1)],ix:p+','+N,tag:'flood',ports:p,story:'A switch with '+p+' ports has '+N+' senders to learn; while it knows n of them, a round of one message from each floods F(n) = '+(p-1)+'('+N+' − n) extra copies.',f:'F',x:'n',xu:'senders learnt',yu:'copies',rate:'copies per sender learnt',area:null,pts:[2,5,10]}; }},
-  {id:'47·eng.loading',step:'47·eng',label:'a voltage through a chain of parts',make(){ const a=ri(2,6); return {c:[0,Q(1,a)],ix:String(a),tag:'chain',a,story:'A chain of parts at '+pick(['Gull Point','Ash Mill','the Weir'])+' passes 1/'+a+' of its input: V(x) = x/'+a+' volts out for x volts in.',f:'V',x:'x',xu:'volts in',yu:'volts out',rate:'volts out per volt in',area:null,pts:[a,2*a,3*a]}; }},
-  {id:'47·phys.axes',step:'47·phys',label:'a reading that keeps its form under new axes',make(){ const k=ri(2,6); return {c:[0,0,k],ix:String(k),story:'Evita reads an arrow x metres long on her axes as q(x) = '+k+'x² square metres; Zoe, on turned axes, gets the same.',f:'q',x:'x',xu:'metres',yu:'square metres',rate:'square metres per metre',area:null,pts:[1,2,3]}; }}
+  {id:'46·now.messages',step:'46·now',label:'messages in one round of agreement',make(){ return {c:[0,-1,1],ix:'1',story:'In one round, each of n machines sends a message to every other: M(n) = n² − n messages.',f:'M',x:'n',xu:'machines',yu:'messages',rate:'messages per machine',area:null,pts:[3,4,5,7]}; }},
+  {id:'46·econ.reward',step:'46·econ',label:'what a miner gains',make(){ const a=ri(2,9), F=ri(10,40); return {c:[-F,a],ix:a+','+F,story:'Mike runs a miner that earns '+a+' tokens an hour and paid '+F+' tokens to start: his gain after t hours is G(t) = '+a+'t − '+F+' tokens.',f:'G',x:'t',xu:'hours',yu:'tokens',rate:'tokens an hour',area:'token hours',pts:[5,10,20]}; }},
+  {id:'46·comp.addresses',step:'46·comp',label:'addresses handed out',make(){ const a=ri(2,6), b=ri(1,4); return {c:[a,b,1],ix:a+','+b,story:'A network at '+pick(['Badger Ridge','Swan Lake','Pine Hollow'])+' hands out U(t) = '+a+' + '+b+'t + t² thousand addresses by year t.',f:'U',x:'t',xu:'years',yu:'thousand addresses',rate:'thousand addresses a year',area:null,pts:[1,2,3,5]}; }},
+  {id:'46·eng.flood',step:'46·eng',label:'messages a switch floods',make(){ const p=ri(3,8), N=ri(20,40); return {c:[(p-1)*N,-(p-1)],ix:p+','+N,tag:'flood',ports:p,story:'A switch with '+p+' ports has '+N+' senders to learn; while it knows n of them, a round of one message from each floods F(n) = '+(p-1)+'('+N+' − n) extra copies.',f:'F',x:'n',xu:'senders learnt',yu:'copies',rate:'copies per sender learnt',area:null,pts:[2,5,10]}; }},
+  {id:'48·eng.loading',step:'48·eng',label:'a voltage through a chain of parts',make(){ const a=ri(2,6); return {c:[0,Q(1,a)],ix:String(a),tag:'chain',a,story:'A chain of parts at '+pick(['Gull Point','Ash Mill','the Weir'])+' passes 1/'+a+' of its input: V(x) = x/'+a+' volts out for x volts in.',f:'V',x:'x',xu:'volts in',yu:'volts out',rate:'volts out per volt in',area:null,pts:[a,2*a,3*a]}; }},
+  {id:'48·phys.axes',step:'48·phys',label:'a reading that keeps its form under new axes',make(){ const k=ri(2,6); return {c:[0,0,k],ix:String(k),story:'Evita reads an arrow x metres long on her axes as q(x) = '+k+'x² square metres; Zoe, on turned axes, gets the same.',f:'q',x:'x',xu:'metres',yu:'square metres',rate:'square metres per metre',area:null,pts:[1,2,3]}; }}
 );
 
 /* word links of these annexes: each carries a reading of the law on, in the story's own terms and units */
@@ -16386,10 +16439,10 @@ WL.push(
   {id:'39·eng.switch',steps:['39·eng'],from:'qty',when:after('store','9a.read'),ask:()=>'the store keeps half of what the supply pays; give the heat the switch gives off',
     act:(S,p,q)=>({v:qm(q.v,Q(1,2)),u:'picojoules'}),slips:(S,p,q)=>[{why:'the whole of the supply’s cost is put on the switch',v:q.v,u:'picojoules'},{why:'the switch is taken to give off a quarter',v:qm(q.v,Q(1,4)),u:'picojoules'}],
     cite:()=>'the switch-heat technique',line:(o,S,p,q)=>'heat given off in the switch: ½ · '+qs(q.v)+' = '+qs(o.v)+' '+o.u},
-  {id:'45·eng.unlearnt',steps:['45·eng'],from:'qty',when:after('flood','9a.read'),ask:S=>'each message to an unlearnt sender floods out of '+(S.ports-1)+' ports; give how many senders are still unlearnt',
+  {id:'46·eng.unlearnt',steps:['46·eng'],from:'qty',when:after('flood','9a.read'),ask:S=>'each message to an unlearnt sender floods out of '+(S.ports-1)+' ports; give how many senders are still unlearnt',
     act:(S,p,q)=>({v:qm(q.v,Q(1,S.ports-1)),u:'senders'}),slips:(S,p,q)=>[{why:'the copies are shared over all '+S.ports+' ports, its own port too',v:qm(q.v,Q(1,S.ports)),u:'senders'}],
     cite:()=>'the learning-switch technique',line:(o,S,p,q)=>'senders still unlearnt: '+qs(q.v)+'/'+(S.ports-1)+' = '+qs(o.v)+' '+o.u},
-  {id:'47·eng.row',steps:['47·eng'],from:'qty',when:after('chain','9a.read'),ask:S=>'the output feeds a second chain just like the first; give the voltage out of the second',
+  {id:'48·eng.row',steps:['48·eng'],from:'qty',when:after('chain','9a.read'),ask:S=>'the output feeds a second chain just like the first; give the voltage out of the second',
     act:(S,p,q)=>({v:qm(q.v,Q(1,S.a)),u:'volts out'}),slips:(S,p,q)=>[{why:'the two parts are added side by side, not run in a row',v:qm(q.v,Q(2)),u:'volts out'},{why:'the second part is taken to multiply by '+S.a,v:qm(q.v,Q(S.a)),u:'volts out'}],
     cite:()=>'the row-of-boxes technique',line:(o,S,p,q)=>'out of the second chain: '+qs(q.v)+'/'+S.a+' = '+qs(o.v)+' '+o.u}
 );
@@ -16965,13 +17018,13 @@ T('16g.total','net area and total area',p=>'f(x) = x − '+HN+' on ['+HN+' − '
 T('16i.forever','an integral out to forever, or in to a bad point','find ∫ from 1 to ∞ of '+HN+'/x² dx',n=>n,
   [['the integral is taken at 1 only and halved',n=>half(n)],['an integral out to forever is taken as 0',n=>qz(n)?null:0],['the antiderivative is taken as n/x³',n=>qm(n,Q(-1,3))]],
   (n,o)=>'[−'+par(n)+'/x] from 1 to b → '+qs(o));
-T('16j.slice','a point of space and a slice',p=>'S = {(x, y, z) : x, y, z ≥ 0, x + y + z ≤ '+HN+'}: find the area of the slice at x = '+p.k,(n,p)=>qc(n,F(p.k))>0?half(sq(qa(n,F(-p.k)))):null,
+T('16k.slice','a point of space and a slice',p=>'S = {(x, y, z) : x, y, z ≥ 0, x + y + z ≤ '+HN+'}: find the area of the slice at x = '+p.k,(n,p)=>qc(n,F(p.k))>0?half(sq(qa(n,F(-p.k)))):null,
   [['the slice is taken at x = 0',n=>half(sq(n))],['the triangle is not halved',(n,p)=>sq(qa(n,F(-p.k)))],['the slice side is taken as n',(n,p)=>half(qm(n,qa(n,F(-p.k))))]],
   (n,o,p)=>'y + z ≤ '+qs(qa(n,F(-p.k)))+': a triangle of area '+qs(o),()=>({k:ri(1,4)}));
-TW('16j.inside','the inside-no-more axiom for volume',p=>'a solid of volume '+HN+' lies inside a box of volume '+p.v+': which must hold?',(n,p)=>qc(n,F(p.v))<=0&&n.p>0?qs(n)+' ≤ '+p.v:null,
+TW('16k.inside','the inside-no-more axiom for volume',p=>'a solid of volume '+HN+' lies inside a box of volume '+p.v+': which must hold?',(n,p)=>qc(n,F(p.v))<=0&&n.p>0?qs(n)+' ≤ '+p.v:null,
   [['the order is turned',(n,p)=>qs(n)+' ≥ '+p.v],['they are taken as equal',(n,p)=>qs(n)+' = '+p.v],['the volumes are taken to add',(n,p)=>qs(qa(n,F(p.v)))+' ≤ '+p.v]],
   (n,o)=>'inside, no more: '+o,()=>({v:ri(20,60)}));
-T('16j.side','the side-by-side axiom for volume',p=>'two solids of volumes '+HN+' and '+p.k+' share only a flat wall: find their volume together',(n,p)=>n.p>0?qa(n,F(p.k)):null,
+T('16k.side','the side-by-side axiom for volume',p=>'two solids of volumes '+HN+' and '+p.k+' share only a flat wall: find their volume together',(n,p)=>n.p>0?qa(n,F(p.k)):null,
   [['the volumes are multiplied',(n,p)=>qm(n,F(p.k))],['the wall is taken off as a volume',(n,p)=>qa(n,F(p.k-1))],['only the larger is kept',(n,p)=>qmx(n,F(p.k))]],
   (n,o,p)=>qs(n)+' + '+p.k+' = '+qs(o),()=>({k:ri(2,20)}));
 T('16·eng.balance','the balance of forces and the balance of moments',p=>'a beam held still by two supports carries loads of '+HN+' N and '+p.k+' N: what do the two pushes add to?',(n,p)=>n.p>0?qa(n,F(p.k)):null,
@@ -17108,7 +17161,7 @@ T('24·phys.fall','the steady-fall technique',p=>'a body of mass '+HN+' kg falls
 T('25·chem.dissolve','the acid-dissolves technique','the pH falls by '+HN+': how many times more magnesium hydroxide dissolves?',n=>{ const z=WH(n,1,2); return z===null?null:Math.pow(100,z); },
   [['the root of the square is forgotten, 10 a step',n=>Math.pow(10,W(n))],['the times are added',n=>100*W(n)],['the steps are doubled',n=>2*W(n)]],
   (n,o)=>'[OH⁻] falls 10'+SUP(W(n))+' times, and Ksp/[OH⁻]² rises '+qs(o)+' times');
-TW('26l.hill','the narrowing-hill technique','what does √k ∫ from −1 to 1 of (1 − x²)ᵏ dx head to as k grows, starting from k = '+HN+'?',n=>'√π',
+TW('26n.hill','the narrowing-hill technique','what does √k ∫ from −1 to 1 of (1 − x²)ᵏ dx head to as k grows, starting from k = '+HN+'?',n=>'√π',
   [['the root is lost',()=> 'π'],['the hill is taken to keep area 1',()=> '1'],['the hill is taken to flatten to 0',()=> '0']],(n,o)=>'by the narrowing-hill technique: '+o);
 TW('27a.field',"the any-field technique",p=>'over the clock of '+p.p+', can the grid ['+HN+' '+m(p.a)+'; '+m(p.b)+' '+m(p.c)+'] be undone?',(n,p)=>{ const z=W(n); if(z===null) return null; const d=(((z*p.c-p.a*p.b)%p.p)+p.p)%p.p; return d?'yes: its determinant is '+d+', not 0, on the clock of '+p.p:'no: its determinant is 0 on the clock of '+p.p; },
   [['the determinant is not brought onto the clock',(n,p)=>{ const d=W(n)*p.c-p.a*p.b; return d===0||((d%p.p)+p.p)%p.p===d?null:(d?'yes: its determinant is '+m(d):'no: its determinant is 0'); }],['the determinant is taken with a plus',(n,p)=>{ const d=(((W(n)*p.c+p.a*p.b)%p.p)+p.p)%p.p; return d?'yes: its determinant is '+d+', not 0, on the clock of '+p.p:'no: its determinant is 0 on the clock of '+p.p; }],
@@ -17149,46 +17202,46 @@ TW('27h.misses','the misses-none technique',p=>p.k+' vectors, none of them 0, in
 TW('27h.twoslot','the two-slot grid technique','G = ['+HN+' 0; 0 1] and the new basis has columns Q = [1 1; 0 1]: find QᵀGQ',n=>gr([[n,n],[n,qa(n,Q(1))]]),
   [['QGQᵀ is taken',n=>gr([[qa(n,Q(1)),1],[1,1]])],['Q is not turned on its side',n=>gr([[n,qa(n,Q(1))],[0,1]])],['G is left as it is',n=>gr([[n,0],[0,1]])]],
   (n,o)=>'QᵀGQ = '+o);
-TW('27j.lowest','the same-lowest-form technique','the rows (1, '+HN+') and (2, 2 · '+HN+'): find the lowest form',n=>'(1, '+qs(n)+'), (0, 0)',
+TW('27l.lowest','the same-lowest-form technique','the rows (1, '+HN+') and (2, 2 · '+HN+'): find the lowest form',n=>'(1, '+qs(n)+'), (0, 0)',
   [['the second row is kept',n=>'(1, '+qs(n)+'), (2, '+qs(qm(F(2),n))+')'],['the first entry is cleared instead',n=>qz(n)?'(1, 1), (0, 0)':'(0, '+qs(n)+'), (0, 0)'],['the rows are taken as free',()=> '(1, 0), (0, 1)']],
   (n,o)=>'take 2 times row 1 from row 2: '+o);
-T('27j.rows','the row-space technique',p=>'the rows (1, '+HN+', '+m(p.a)+') and (2, 2 · '+HN+', '+m(2*p.a+1)+'): how many leads has the lowest form?',n=>2,
+T('27l.rows','the row-space technique',p=>'the rows (1, '+HN+', '+m(p.a)+') and (2, 2 · '+HN+', '+m(2*p.a+1)+'): how many leads has the lowest form?',n=>2,
   [['the second row is taken as twice the first',()=>1],['the columns are counted',()=>3],['no lead is taken',()=>0]],
   (n,o,p)=>'row 2 − 2 · row 1 = (0, 0, 1): '+qs(o)+' leads',()=>({a:ri(-5,5)}));
-TW('27j.zerorows',"the zero-rows technique",p=>'row moves bring [A | b] to rows (1 2 | 3) and (0 0 | '+HN+' − '+m(p.k)+'): has Ax = b an answer?',(n,p)=>qe(n,F(p.k))?'yes: the zero row has 0 on the right':'no: a zero row has '+qs(qa(n,F(-p.k)))+' on the right',
+TW('27l.zerorows',"the zero-rows technique",p=>'row moves bring [A | b] to rows (1 2 | 3) and (0 0 | '+HN+' − '+m(p.k)+'): has Ax = b an answer?',(n,p)=>qe(n,F(p.k))?'yes: the zero row has 0 on the right':'no: a zero row has '+qs(qa(n,F(-p.k)))+' on the right',
   [['the zero row is ignored',(n,p)=>qe(n,F(p.k))?'no: a zero row has 0 on the right':'yes: one row is enough'],['the answer is taken as one',()=> 'yes: exactly one answer'],['the zero row is read as 0 = 0 whatever',()=> 'yes: every x is an answer']],
   (n,o)=>o,()=>({k:ri(-4,4)}));
-T('27k.block','the block-det technique',p=>'a 4 × 4 grid has A = ['+HN+' 1; 0 1] and D = ['+m(p.a)+' '+m(p.b)+'; '+m(p.c)+' '+m(p.d)+'] down its middle and zeros below A: find its determinant',(n,p)=>qm(n,det2(p.a,p.b,p.c,p.d)),
+T('27m.block','the block-det technique',p=>'a 4 × 4 grid has A = ['+HN+' 1; 0 1] and D = ['+m(p.a)+' '+m(p.b)+'; '+m(p.c)+' '+m(p.d)+'] down its middle and zeros below A: find its determinant',(n,p)=>qm(n,det2(p.a,p.b,p.c,p.d)),
   [['the dets are added',(n,p)=>qa(n,det2(p.a,p.b,p.c,p.d))],['det D is taken with a plus',(n,p)=>qm(n,F(p.a*p.d+p.b*p.c))],['only det A is kept',n=>n]],
   (n,o,p)=>'det A · det D = '+par(n)+' · '+par(det2(p.a,p.b,p.c,p.d))+' = '+qs(o),()=>({a:ri(-3,3),b:ri(-3,3),c:ri(-3,3),d:ri(-3,3)}));
-T('27k.four','the four-blocks technique',p=>'1 × 1 blocks A = '+HN+', B = '+m(p.b)+', C = '+m(p.c)+', D = '+m(p.d)+' that turn about: find det [A B; C D]',(n,p)=>qa(qm(n,F(p.d)),F(-p.c*p.b)),
+T('27m.four','the four-blocks technique',p=>'1 × 1 blocks A = '+HN+', B = '+m(p.b)+', C = '+m(p.c)+', D = '+m(p.d)+' that turn about: find det [A B; C D]',(n,p)=>qa(qm(n,F(p.d)),F(-p.c*p.b)),
   [['CB is added',(n,p)=>qa(qm(n,F(p.d)),F(p.c*p.b))],['the blocks are multiplied down the wrong diagonal',(n,p)=>qa(qm(n,F(p.b)),F(-p.c*p.d))],['A is divided in',(n,p)=>qz(n)?null:qa(F(p.d),qn(qm(F(p.c*p.b),qi(n))))]],
   (n,o,p)=>'det(AD − CB) = '+par(n)+' · '+m(p.d)+' − '+m(p.c)+' · '+m(p.b)+' = '+qs(o),()=>({b:ri(-4,4),c:ri(-4,4),d:nz(-4,4)}));
-TW('27k.stair','the staircase-basis technique',p=>'A = ['+HN+' '+m(p.a)+'; 0 '+m(p.k)+']: what stretches stand down the middle of its staircase?',(n,p)=>'{'+[qs(n),m(p.k)].join(', ')+'}',
+TW('27m.stair','the staircase-basis technique',p=>'A = ['+HN+' '+m(p.a)+'; 0 '+m(p.k)+']: what stretches stand down the middle of its staircase?',(n,p)=>'{'+[qs(n),m(p.k)].join(', ')+'}',
   [['the corner is taken',(n,p)=>'{'+qs(n)+', '+m(p.a)+'}'],['the top row is taken',(n,p)=>'{'+m(p.a)+', '+m(p.k)+'}'],['the product is given',(n,p)=>'{'+qs(qm(n,F(p.k)))+'}']],
   (n,o)=>'it is a staircase already: '+o,()=>({a:nz(-5,5),k:ri(-5,5)}));
-TW('27k.fstretch','the stretches-of-f technique',p=>'A has stretches '+HN+' and '+m(p.k)+'; f(x) = x² + 1: find the stretches of f(A)',(n,p)=>'{'+qs(qa(sq(n),Q(1)))+', '+(p.k*p.k+1)+'}',
+TW('27m.fstretch','the stretches-of-f technique',p=>'A has stretches '+HN+' and '+m(p.k)+'; f(x) = x² + 1: find the stretches of f(A)',(n,p)=>'{'+qs(qa(sq(n),Q(1)))+', '+(p.k*p.k+1)+'}',
   [['f is taken once only',(n,p)=>'{'+qs(qa(n,Q(1)))+', '+m(p.k+1)+'}'],['the 1 is dropped',(n,p)=>'{'+qs(sq(n))+', '+p.k*p.k+'}'],['the stretches are taken unchanged',(n,p)=>'{'+qs(n)+', '+m(p.k)+'}']],
   (n,o)=>'f(λ) for each λ: '+o,()=>({k:nz(-5,5)}));
-T('27k.small','the small-dets technique','A = ['+HN+' 1; 1 1]: find the dimension of what A reaches',n=>qe(n,Q(1))?1:2,
+T('27m.small','the small-dets technique','A = ['+HN+' 1; 1 1]: find the dimension of what A reaches',n=>qe(n,Q(1))?1:2,
   [['one row is taken to be enough',n=>qe(n,Q(1))?2:1],['A is taken to reach nothing',()=>0],['the entries are counted',()=>4]],
   (n,o)=>'det A = '+qs(qa(n,F(-1)))+': '+qs(o));
-T('27k.letters','the letters-inside technique',p=>'grids of polynomials: det A = '+HN+' and det B = '+m(p.k)+': find det(AB)',(n,p)=>qm(n,F(p.k)),
+T('27m.letters','the letters-inside technique',p=>'grids of polynomials: det A = '+HN+' and det B = '+m(p.k)+': find det(AB)',(n,p)=>qm(n,F(p.k)),
   [['the dets are added',(n,p)=>qa(n,F(p.k))],['only the first is kept',n=>n],['the product is squared',(n,p)=>sq(qm(n,F(p.k)))]],
   (n,o,p)=>qs(n)+' · '+par(F(p.k))+' = '+qs(o),k9);
-T('27l.swapsum','the swap-sum technique',p=>'A = ['+HN+' 1; 2 0] and B = [1 '+m(p.a)+'; 0 '+m(p.b)+']: find s(AB)',(n,p)=>qa(n,F(2*p.a)),
+T('27n.swapsum','the swap-sum technique',p=>'A = ['+HN+' 1; 2 0] and B = [1 '+m(p.a)+'; 0 '+m(p.b)+']: find s(AB)',(n,p)=>qa(n,F(2*p.a)),
   [['the middle of A is given',n=>n],['the corners are multiplied',(n,p)=>qm(n,F(p.b))],['the off-diagonal is lost',(n,p)=>qa(n,F(p.b))]],
   (n,o,p)=>'s(AB) = s(BA) = '+par(n)+' + 2 · '+par(F(p.a))+' = '+qs(o),()=>({a:nz(-4,4),b:nz(-4,4)}));
-T('27l.only','the only-reading technique',p=>'f is a reading on 2 × 2 grids with f(AB) = f(BA), and f(I) = '+HN+': find f of a grid with middle sum '+m(p.t),(n,p)=>qm(n,Q(p.t,2)),
+T('27n.only','the only-reading technique',p=>'f is a reading on 2 × 2 grids with f(AB) = f(BA), and f(I) = '+HN+': find f of a grid with middle sum '+m(p.t),(n,p)=>qm(n,Q(p.t,2)),
   [['f(I) is taken as c',(n,p)=>qm(n,F(p.t))],['the middle sum is given',(n,p)=>p.t],['f is taken as the determinant',(n,p)=>null]],
   (n,o,p)=>'c = '+qs(n)+'/2, and f = c · s: '+qs(o),()=>({t:nz(-6,6)}));
-T('27l.push','the push-from-I technique',p=>'A has stretches '+HN+' and '+m(p.k)+': find the t coefficient of det(I + tA)',(n,p)=>qa(n,F(p.k)),
+T('27n.push','the push-from-I technique',p=>'A has stretches '+HN+' and '+m(p.k)+': find the t coefficient of det(I + tA)',(n,p)=>qa(n,F(p.k)),
   [['the det is given',(n,p)=>qm(n,F(p.k))],['the 1 is added',(n,p)=>qa(n,F(p.k+1))],['the stretches are taken away',(n,p)=>qa(n,F(-p.k))]],
   (n,o)=>'(1 + tλ₁)(1 + tλ₂): the t coefficient is '+qs(o),k9);
 TW('27·cb24.growth','the growth-det technique',p=>'A has middle sum '+HN+': find det e^(tA)',n=>'e^('+(qz(n)?'0':qe(n,Q(1))?'t':qs(n)+'t')+')',
   [['the det is put inside',n=>'e^(t · det A)'],['the exponential is dropped',n=>qz(n)?'1 + 0t':qs(n)+'t'],['the middle sum is squared',n=>'e^('+qs(sq(n))+'t)']],
   (n,o)=>'det e^(tA) = e^(t s(A)) = '+o);
-T('28h.swing','the zero-swing technique',p=>'F is '+HN+' for x < 0 and '+m(p.k)+' for x ≥ 0: find its swing at 0',(n,p)=>{ const d=qa(n,F(-p.k)); return d.p<0?qn(d):d; },
+T('28j.swing','the zero-swing technique',p=>'F is '+HN+' for x < 0 and '+m(p.k)+' for x ≥ 0: find its swing at 0',(n,p)=>{ const d=qa(n,F(-p.k)); return d.p<0?qn(d):d; },
   [['the difference keeps its sign',(n,p)=>{ const d=qa(F(p.k),qn(n)); return d; }],['a jump is taken to swing 0',(n,p)=>0],['the values are added',(n,p)=>qa(n,F(p.k))]],
   (n,o,p)=>'|'+qs(n)+' − '+par(F(p.k))+'| = '+qs(o),k9);
 T('29·cb28.forms','the any-degree-forms technique',p=>'in '+HN+' directions, how many forms dxᵢ₁⋯dxᵢ'+'ₖ with rising places build the forms of degree '+m(p.k)+'?',(n,p)=>{ const z=WH(n,p.k,9); return z===null?null:binom(z,p.k); },
@@ -17274,10 +17327,10 @@ TW('31e.polar','the stretch-then-turn technique',p=>'A = ['+HN+' 0; 0 '+m(p.k)+'
 TW('31e.order','the map-order technique',p=>'A = '+HN+' · I and B = '+p.k+' · I with A ≤ B, both positive definite: compare B⁻¹ and A⁻¹',(n,p)=>n.p>0&&qc(n,F(p.k))<0?'B⁻¹ = '+qs(Q(1,p.k))+' · I ≤ A⁻¹ = '+qs(qi(n))+' · I':null,
   [['the order is kept',(n,p)=>'A⁻¹ = '+qs(qi(n))+' · I ≤ B⁻¹ = '+qs(Q(1,p.k))+' · I'],['the undoings are taken as equal',(n,p)=>'B⁻¹ = A⁻¹'],['the undo is taken as the negative',(n,p)=>'B⁻¹ = '+m(-p.k)+' · I ≤ A⁻¹ = '+qs(qn(n))+' · I']],
   (n,o)=>o,()=>({k:ri(5,12)}));
-TW('31j.apart','tells points apart','does the one function x ↦ x^'+HN+' tell the points of ℝ apart?',n=>{ const z=WH(n,1,12); return z===null?null:z%2?'yes: an odd power gives different values at different points':'no: it gives 1 at both 1 and −1'; },
+TW('31l.apart','tells points apart','does the one function x ↦ x^'+HN+' tell the points of ℝ apart?',n=>{ const z=WH(n,1,12); return z===null?null:z%2?'yes: an odd power gives different values at different points':'no: it gives 1 at both 1 and −1'; },
   [['odd and even are swapped',n=>W(n)%2?'no: it gives 1 at both 1 and −1':'yes: an even power gives different values at different points'],['one function is taken never to be enough',()=> 'no: a family needs two members'],['powers are taken to agree only at 0',()=> 'yes: only 0 and 0 agree']],
   (n,o)=>o);
-T('31m.pieces','the stretch-pieces technique',p=>'A = '+HN+'E₁ + '+m(p.k)+'E₂ with E₁, E₂ its stretch pieces: find the middle sum of A² (each piece of rank 1)',(n,p)=>qa(sq(n),F(p.k*p.k)),
+T('31o.pieces','the stretch-pieces technique',p=>'A = '+HN+'E₁ + '+m(p.k)+'E₂ with E₁, E₂ its stretch pieces: find the middle sum of A² (each piece of rank 1)',(n,p)=>qa(sq(n),F(p.k*p.k)),
   [['the stretches are not squared',(n,p)=>qa(n,F(p.k))],['the cross term is kept',(n,p)=>sq(qa(n,F(p.k)))],['only E₁ is kept',n=>sq(n)]],
   (n,o,p)=>'A² = '+par(n)+'²E₁ + '+par(F(p.k))+'²E₂: '+qs(o),()=>({k:nz(-6,6)}));
 T('32b.spread','the even-spread technique','θ/2π is not a fraction; f(θ) = '+HN+' + cos θ: what does the average of f(θ), f(2θ), …, f(Nθ) head to?',n=>n,
@@ -17301,7 +17354,7 @@ TW('34a.fill','the hole-filling technique','a crowding list of fractions comes e
 TW('34d.notenough','the not-enough technique','in ℓ², find the distance from e_'+HN+' to e_('+HN+' + 1)',n=>WH(n,1,99)===null?null:'√2',
   [['the root is not taken',()=> '2'],['one place is taken to differ',()=> '1'],['the points are taken to crowd together',()=> '0']],
   (n,o)=>'two places differ by 1 each: '+o+', so no thread of them settles');
-TW('34j.listed','the listed-base technique','does ℝ^'+HN+' have a dense part that fits in one list?',n=>WH(n,1,9)===null?null:'yes: the points with fraction coordinates',
+TW('34m.listed','the listed-base technique','does ℝ^'+HN+' have a dense part that fits in one list?',n=>WH(n,1,9)===null?null:'yes: the points with fraction coordinates',
   [['the reals are taken to be needed',()=> 'no: a dense part must hold irrational points'],['dimension is taken to block it',n=>'only when the dimension is 1'],['the whole space is taken',()=> 'yes: ℝ^n itself fits in one list']],
   (n,o)=>o);
 T('34·bio.knot','the knot-pass technique',HN+' rings, each tied in one overhand knot: how many passes, at least, untie them all?',n=>WH(n,1,20),
@@ -17310,10 +17363,10 @@ T('34·bio.knot','the knot-pass technique',HN+' rings, each tied in one overhand
 TW('35a.jumps','the jump-list technique','an increasing function on [0, '+HN+']: how many jumps can it have?',n=>n.p>0?'at most a countable list of them':null,
   [['a jump is taken to stop it increasing',()=> 'none'],['the length is taken as the bound',n=>'at most '+qs(n)],['jumps are taken to be any number',()=> 'more than any list can hold']],
   (n,o)=>o);
-TW('35h.lonely','a lonely point, and a thick point','A = {1, 1/2, 1/3, …} ∪ {0}: is 1/'+HN+' a lonely point of A?',n=>WH(n,1,99)===null?null:'yes: an interval round it holds no other point of A',
+TW('35i.lonely','a lonely point, and a thick point','A = {1, 1/2, 1/3, …} ∪ {0}: is 1/'+HN+' a lonely point of A?',n=>WH(n,1,99)===null?null:'yes: an interval round it holds no other point of A',
   [['every point near 0 is taken as crowded',()=> 'no: points of A crowd round it'],['lonely is taken to mean not in A',()=> 'no: it is a member of A'],['it is taken as a thick point',()=> 'it is a thick point']],
   (n,o)=>o);
-TW('35h.nolonely','the no-lonely-point technique','[0, '+HN+'] is closed, with a member and no lonely point: can it be listed?',n=>n.p>0?'no: it cannot be listed':null,
+TW('35i.nolonely','the no-lonely-point technique','[0, '+HN+'] is closed, with a member and no lonely point: can it be listed?',n=>n.p>0?'no: it cannot be listed':null,
   [['closed bounded sets are taken to be lists',()=> 'yes: it is closed and bounded'],['the length is taken to decide',n=>'yes, since its length is '+qs(n)],['only its ends are taken to count',()=> 'yes: list its two ends']],
   (n,o)=>o);
 T('35·phys.wall','the thin-wall technique','an electron gets through a thin wall of width d with chance 1/'+HN+': with what chance does it get through a wall of width 2d?',n=>{ const z=WH(n,2,300); return z===null?null:Q(1,z*z); },
@@ -18813,7 +18866,7 @@ SK.push({id:'f7.vieta',area:'f7',label:'sums of the roots of a cubic',
     o.box('sup','bot','nz','refute',[{t:'one of r₁, r₂, r₃ is 0',tag:'sup'},{t:'e₃ = 0',tag:'bare'},{t:'every root of '+fn+' is 0',tag:'otherden'}]);
     o.plant({at:'rec',on:['c2','c3'],reason:'cond',why:'1/r₁ + 1/r₂ + 1/r₃ needs every root other than 0; row #nz, which shows it, is not cited'});
     if(E1!==0&&qs(Q(1,E1))!==qs(RC)) o.plant({at:'rec',t:'1/r₁ + 1/r₂ + 1/r₃ = 1/(r₁ + r₂ + r₃) = '+qs(Q(1,E1)),reason:'arr',why:'over one denominator the sum is (r₂r₃ + r₁r₃ + r₁r₂)/(r₁r₂r₃); the row puts the sum of the roots under 1, a different statement'});
-    o.plant({at:'p2',t:'(r₁ − r₂)(r₁ − r₃)(r₂ − r₃) is symmetric, so it is a polynomial in e₁, e₂, e₃',c:'the symmetric-is-coefficients technique',reason:'cite',why:'a swap of two roots changes its sign, so it is not symmetric; only its square is (step 46b lists it among its Moves to Watch Out For)'});
+    o.plant({at:'p2',t:'(r₁ − r₂)(r₁ − r₃)(r₂ − r₃) is symmetric, so it is a polynomial in e₁, e₂, e₃',c:'the symmetric-is-coefficients technique',reason:'cite',why:'a swap of two roots changes its sign, so it is not symmetric; only its square is (step 47b lists it among its Moves to Watch Out For)'});
     o.slip('e3','c3','the constant of x³ − e₁x² + e₂x − e₃ is −e₃, so e₃ = '+sg(v.E3)+', not '+sg(-v.E3));
     o.slip('sq','sq','(r₁ + r₂ + r₃)² holds each cross product twice, so the square sum is e₁² − 2e₂ = '+(E1*E1-2*E2));
     return Object.assign(o,{goal:'r₁² + r₂² + r₃² = '+S2+', 1/r₁ + 1/r₂ + 1/r₃ = '+qs(RC)+', and r₁²r₂² + r₁²r₃² + r₂²r₃² = '+P2,show:'find r₁² + r₂² + r₃², 1/r₁ + 1/r₂ + 1/r₃ and r₁²r₂² + r₁²r₃² + r₂²r₃²'}); }});
@@ -18870,9 +18923,9 @@ const CK={refute:'refute writes the denial of what the box supposed, once the bo
 const AX={f1:['the infinity axiom','the power axiom','the gather axiom'],f2:['the infinity axiom','the power axiom','the gather axiom'],f3:['the box-area axiom','the inside-no-more axiom','the side-by-side axiom'],
   f4:['the box-area axiom','the inside-no-more axiom','the side-by-side axiom','the infinity axiom'],f5:['the box-volume axiom','the box-area axiom','the power axiom'],
   f6:['the box-volume axiom','the box-area axiom','the power axiom','the infinity axiom'],f7:['the box-volume axiom','the power axiom','the infinity axiom','the gather axiom']};
-const TECH=/*TECHDICT*/{"a chain of order":"A chain of order such as a < c < b is short for a < c ∧ c < b.","add an option":"From P, you may write P ∨ Q, or Q ∨ P, for any statement Q whatever.","bounding a gap":"Factor the gap, bound the factor you do not control, and keep the one you do.","carry an if through":"From P and P ⇒ Q, you may write Q.","check after squaring":"After squaring both sides, check every answer in the original.","clash":"A line that holds P and ¬P equals ⊥.","clearing inner fractions":"A fraction whose numerator or denominator holds fractions comes apart in one move: multiply by k/k, with k a common denominator of the inner fractions.","completing the sameness":"x² + bx = (x + b/2)² − (b/2)².","counting answers by the discriminant":"If the discriminant is positive, there are two answers; if it is 0, one; if it is negative, none on the line.","hunt for the bad row":"An ⇒ can only fail where its right side is false and its left side is true, so make the right side F and see whether the left side can still give 1.","join":"From P and Q, you may write P and Q.","keep either part":"From P and Q, you may write P, and you may write Q.","main mark first, then inward":"To put a sentence into marks, find its main mark first, then work inward.","making and using an exactly-when":"To make P ⇔ Q in a line, have an if each way and join; to use it, keep the direction you need and carry it through.","proof by induction":"To prove a statement of every number, prove the base at 0, then the step: let n be a number, assume the statement of n, and reach it of the next one.","prove an if":"Open a supposition of P, reach Q inside it, close it, and write if P then Q outside","reading the completed form":"The completed form t(x − h)² + k has the value k at x = h; for t > 0 no value is below k, and for t < 0 none is above.","reason by cases":"In a line that holds P ∨ Q, work inside the option P until it reads R, and inside the option Q until it reads the same R; then R ∨ R says R once, and you may write R.","refute":"A line worked by techniques until it equals ⊥ has statements that cannot all be so together.","show an example":"From P(t), for some name t, you may write ∃x P(x).","speak of everything by speaking of anything":"If you reach P(n) for a letter n let be anything, using nothing about n but that it is a thing, you may write for every x, P(x).","substitution":"If one condition gives x = t, where t is written without x, then t may be put in the place of x in the other condition.","the adding-keeps-answers technique":"For rationals L, R and c, L = R exactly when L + c = R + c.","the agreeing-near technique":"If f and g are defined near w and f(x) = g(x) for every x in some neighbourhood of w, of reach r, then lim_{x→w} f(x) = L exactly when lim_{x→w} g(x) = L.","the angle-between technique":"For vectors u, v ≠ 0 of lists of n numbers, u · v/(|u| |v|) lies between −1 and 1; so exactly one θ between 0 and π has cos θ = u · v/(|u| |v|), and with it |u − v|² = |u|² + |v|² − 2|u| |v| cos θ.","the antiderivative-exists technique":"If f is continuous on an interval I and p is in I, then F(x) = ∫ₚˣ f(t) dt is an antiderivative of f on I.","the any-two-compare technique":"Of two numbers, one is less than the other, or they are the same, and exactly one of these is true.","the any-two-compare technique on ℚ":"For rationals w and b, exactly one of w < b, w = b, b < w.","the anything-times-zero technique":"w · 0 = 0.","the area technique for sums":"Let f be positive and falling on [1, ∞), and uₙ = f(n). Then Σ uₙ settles exactly when ∫₁^∞ f settles.","the area-bound technique":"If f is integrable on [p, q] and |f(t)| ≤ M for every t there, then |∫ₚ^q f| ≤ M(q − p).","the area-is-a-change technique":"If f is continuous on [p, q] and G is an antiderivative of f on [p, q], then ∫ₚ^q f(x) dx = G(q) − G(p).","the area-slope technique":"Let f be integrable on every closed interval inside an interval I, let p be in I, and let F(x) = ∫ₚˣ f(t) dt. If f is continuous at a point c inside I, then F has a slope at c, and F′(c) = f(c). At an end of I that belongs to I, the same holds with the slope from one side.","the area-under-a-power technique":"For every whole k ≥ 0 and b > 0, ∫₀ᵇ xᵏ dx = bᵏ⁺¹/(k + 1).","the areas-add technique":"If f and g are integrable on [u, v], so is f + g, and ∫ᵤᵛ (f + g) = ∫ᵤᵛ f + ∫ᵤᵛ g.","the areas-scale technique":"If f is integrable on [u, v] and c is a number, then cf is integrable and ∫ᵤᵛ cf = c ∫ᵤᵛ f.","the assignment technique":"The step x ← e changes x and nothing else, and the new value of x is the value e had before the step.","the at-most-is-a-partial-order technique on ℝ":"At most on ℝ is reflexive, antisymmetric and transitive.","the at-most-n-zeros technique":"a polynomial whose sum has degree n has at most n zeros: its set of zeros has k members for some number k ≤ n.","the average-height technique":"If f is continuous on [u, v], some c in [u, v] has f(c) = (1/(v − u)) ∫ᵤᵛ f.","the average-slope technique":"If f is continuous on [α, β] and has a slope at every input of (α, β), then some c with α < c < β has f′(c) equal to the chord slope (f(β) − f(α))/(β − α).","the backwards-assignment technique":"{Q[e/x]} x ← e {Q}, where Q[e/x] is Q with e put in every gap marked x.","the box-area axiom":"The box [p, q] × [c, d] has area (q − p)(d − c), its width times its height.","the box-volume axiom":"The box [p, q] × [c, d] × [e, f] has volume (q − p)(d − c)(f − e).","the branch-product technique":"The chance of a path through a tree is the product of the given chances on its branches; and the chance of an event is the sum of the chances of the separate paths that make it up.","the cancel technique for fractions":"If w ≠ 0 and wb = wb′, then b = b′.","the cancel technique for plus":"If sums agree after adding the same number, they agreed before.","the cancel technique for times on ℚ":"If wc = bc and c ≠ 0, then w = b.","the candidates technique":"If f is continuous on [α, β], then its greatest value on [α, β] is reached at α, at β, or at a critical point of f inside (α, β). Likewise its least value.","the carry-to-the-clock technique":"If m ≡ m′ and b ≡ b′ (mod n), then m + b ≡ m′ + b′ and mb ≡ m′b′ (mod n).","the chain technique":"If x is the same thing as b, and b is the same thing as c, then x is the same thing as c.","the chain technique for If":"A line that holds P, P ⇒ Q and Q ⇒ R reaches Q, and then R.","the chain technique for divides":"If d divides m and m divides n, then d divides n.","the chain technique for less":"If p is less than b and b is less than c, then p is less than c.","the chain technique for less on ℚ":"x < y ∧ y < z ⇒ x < z.","the chance technique":"P(not A) = 1 − P(A), and P(A or B) = P(A) + P(B) − P(A and B).","the choice technique":"From {P ∧ B} c₁ {Q} and {P ∧ ¬B} c₂ {Q}, write {P} if B then c₁ else c₂ {Q}.","the circle technique for cos and sin":"For every θ, cos² θ + sin² θ = 1.","the circle-equation technique":"x² + y² + Dx + Ey + F = 0 is a circle exactly when D² + E² − 4F > 0, with centre (−D/2, −E/2) and radius √(D² + E² − 4F)/2. When D² + E² − 4F = 0 it is one point, and when it is negative it holds no point.","the circle-through-three technique":"Three points A, B, C that are not collinear lie on exactly one circle. Its centre is where the perpendicular bisectors of AB and BC meet. Three collinear points lie on no circle.","the climb technique":"A sequence that climbs and has a ceiling settles, at its least upper bound.","the clock-cancel technique":"On the clock of n, [a][x] = [a][y] always gives [x] = [y] exactly when gcd(a, n) = 1.","the clock-hours technique":"ℤ/n has exactly n members, [0], [1], …, [n − 1], and every integer lies in one of them.","the closest-point technique":"If ‖e‖ = 1, the point of the line through e closest to f is ⟨f, e⟩e, and the miss f − ⟨f, e⟩e is at right angles to e.","the codomain technique":"If f : A → B and B ⊆ B′, then f : A → B′; and f : A → ran f.","the columns technique":"Every straight map L from lists of n numbers to lists of m is x ↦ Ax for exactly one grid A, whose column j is L(eⱼ).","the compare-by-cross-multiplying technique":"If q and s are positive integers, then p/q < r/s exactly when ps < qr.","the comparison technique":"Let 0 ≤ uₙ ≤ vₙ from some place on. If Σ vₙ settles, so does Σ uₙ. If Σ uₙ wanders, so does Σ vₙ.","the comparison technique for areas":"If 0 ≤ f(x) ≤ g(x) for x ≥ u, both integrable on every [u, b], and ∫ᵤ^∞ g converges, then ∫ᵤ^∞ f converges, and is at most ∫ᵤ^∞ g.","the complete-ordered-field technique":"ℝ, with its + and ·, 0 and 1, −α, α⁻¹ and positive, is a complete ordered field.","the composite-is-a-function technique":"For f : A → B and g : B → C, g ∘ f : A → C, and (g ∘ f)(x) = g(f(x)) for every x ∈ A.","the consequence technique":"If P′ ⇒ P, {P} c {Q} and Q ⇒ Q′, then {P′} c {Q′}.","the continuity-unpacked technique":"For f defined near w with w an input, f is continuous at w exactly when ∀ε > 0 ∃δ > 0 : ∀x ∈ dom f (|x − w| < δ ⇒ |f(x) − f(w)| < ε).","the continuous-both-ways technique":"For f defined near w with w an input, f is continuous at w exactly when it is continuous from the left and from the right at w.","the continuous-is-integrable technique":"If f is continuous on [u, v], then f is integrable on [u, v].","the cooling-shape technique":"The answers of u_t = κu_xx of the form X(x)T(t), with u = 0 at both ends, are exactly the multiples of e^(−κ(nπ/L)²t) sin(nπx/L), for n = 1, 2, 3, ….","the countable-removed technique":"If A cannot be listed and C is countable, then the part of A outside C cannot be listed.","the countable-union technique":"If A₀, A₁, A₂, … are countably many sets, each with a member and each given a list Lₘ, their union has a list.","the cross technique":"U × v = (u₂v₃ − u₃v₂, u₃v₁ − u₁v₃, u₁v₂ − u₂v₁). It is at right angles to u and to v; v × u = −(u × v); |u × v| = |u| |v| sin θ, the area of the parallelogram on u and v; and u × v = 0 exactly when u and v are not free.","the cross-multiplying technique":"p/q = r/s exactly when ps = qr.","the crossing-flips technique":"Two flips across lines that cross at a point make a turn about that point.","the crowded-box technique":"If more than n · k things go into n boxes, some box gets more than k.","the cubic-discriminant technique":"The roots of y³ + py + q have Δ = −4p³ − 27q², which is −108 times the D of 46a.","the decimal-block technique":"If q shares nothing with 10, the decimal of 1/q repeats from the first place in a block whose length is the least k with 10ᵏ ≡ 1 (mod q), and that length divides the count of units of the clock of q.","the det-product technique":"Det(AB) = det A · det B for all n × n grids.","the difference technique":"Cos(A − B) = cos A cos B + sin A sin B, and sin(A − B) = sin A cos B − cos A sin B.","the difference-of-squares technique":"(w + b)(w − b) = w² − b².","the difference-test technique":"Two counting numbers leave the same remainder on dividing by n exactly when n divides their difference.","the different-stretches technique":"Vectors only stretched by A, with stretches all different, are free.","the distance-basics technique":"For all points P, Q and displacements u, and every real t: d(P, Q) ≥ 0, with d(P, Q) = 0 only when P = Q; d(P, Q) = d(Q, P); and |tu| = |t| |u|.","the divides-a-multiple technique":"A number that divides m divides every multiple of m.","the divides-a-sum technique":"A number that divides each of two numbers divides their sum.","the divides-the-rest technique":"A number that divides x, and divides x + y, divides y.","the division technique":"For rationals w and b with b ≠ 0, b · (w/b) = w; and if bx = w, then x = w/b.","the division-with-remainder technique":"Dividing by a number other than 0 leaves a remainder less than that number.","the domains-trade-places technique":"dom f⁻¹ = ran f and ran f⁻¹ = dom f.","the dot technique":"The dot product obeys u · v = v · u, u · (v + w) = u · v + u · w, (tu) · v = t(u · v), and u · u = |u|².","the double technique":"Cos 2A = cos² A − sin² A and sin 2A = 2 sin A cos A.","the doubled-sum technique":"Twice the sum 0 + 1 + ⋯ + n is n times n + 1.","the each-place technique":"Each place xᵢ is a continuous function of the point x, and so is every sum, product and quotient (where the bottom is not 0) of continuous functions.","the either-order technique":"If f is continuous on R, then ∬R f = ∫ab (∫cd f(x, y) dy) dx = ∫cd (∫ab f(x, y) dx) dy.","the endless-ratio-sum technique":"If |r| < 1, then Σᵢ₌₀^∞ c rⁱ = c/(1 − r). If |r| ≥ 1 and c ≠ 0, the series diverges.","the ends-count technique":"Adding the links at every dot counts every link exactly twice.","the equal-functions technique":"For f : A → B and g : C → D, f = g exactly when A = C and f(x) = g(x) for every x ∈ A.","the even-or-odd technique":"Every number is even or odd, and not both.","the even-square technique":"If a number times itself is even, the number is even.","the even-tour technique":"A graph in one piece, with at least one link, has a closed tour of the links exactly when every dot has an even count of links.","the exchange technique":"If w₁, …, wₘ build V, and u₁, …, uₖ in V are free, then k ≤ m.","the exponent-clock technique":"If gcd(a, n) = 1 and c is the count of units of the clock of n, then a^c ≡ 1 (mod n), and a^k ≡ a^j (mod n) whenever k ≡ j (mod c).","the factor technique":"r is a zero of p exactly when p(x) = (x − r)q(x) for a polynomial q; and if p has degree n ≥ 1, q has degree n − 1 and the same leading coefficient.","the fading-series technique":"If Σ|b_n| settles, then u(x, t) = Σ b_n e^(−κ(nπ/L)²t) sin(nπx/L) solves the heat statement for t > 0, is 0 at both ends, and at t = 0 is the sine series of f.","the fall technique":"A sequence that falls and has a floor settles, at its greatest lower bound.","the fence technique for sums":"If f is positive and falling, the total of Σ f(n) lies between ∫₁^∞ f and f(1) + ∫₁^∞ f; and the tail after n pieces lies between ∫_{n+1}^∞ f and ∫ₙ^∞ f.","the finite-decimal technique":"A fraction has a finite decimal exactly when its denominator in lowest terms has no prime in its prime list but 2 and 5.","the fixed-point technique":"If a sequence given by sₙ₊₁ = g(sₙ) settles, and g is continuous at its limit L, then L = g(L).","the flat-means-continuous technique":"If f has a best flat map at w, f is continuous at w.","the flat-top technique":"If f has a top or a bottom at c, and f has a slope at c, then f′(c) = 0.","the flip-formula technique":"For the line through the origin along a unit displacement u, the flip is F(P) = 2(P · u)u − P.","the flip-keeps technique":"A flip keeps every distance.","the flips-reverse technique":"A flip changes the sign of D, and keeps its size.","the forgetting technique":"On a rod with both ends at 0, if Σ|b_n| settles, then |u(x, t)| ≤ (Σ|b_n|) e^(−κπ²t/L²) for every x and every t ≥ 0, and the shapes with two or more arches shrink against the first by at least e^(−3κπ²t/L²).","the fraction-zeros technique":"If a polynomial has integer coefficients, u_n ≠ 0, and the fraction m/d in lowest terms is a zero of it, then m ∣ u₀ and d ∣ u_n.","the fractions-keep-order technique":"For rationals r and s, r ≤ s ⇔ r* ≤ s*, and r < s ⇔ r* < s*; in particular r* = s* ⇔ r = s.","the fractions-of-rationals technique":"For rationals u, c and b, d, k other than 0, fractions of rationals scale, multiply, add over one denominator, and divide as fractions of integers do.","the gather axiom":"For any p and q there is the set whose members are exactly p and q.","the gcd-as-a-sum technique":"For any integers a and n, not both 0, there are integers x and y with ax + ny = gcd(a, n).","the given-chance technique":"For fixed B with P(B) > 0, A ↦ P(A | B) is a chance on the same events.","the glued-functions technique":"Let f be a function with w as an input, equal to g on some interval (w − r, w) and to h on (w, w + r). Then f is continuous at w exactly when lim_{x→w⁻} g(x) = f(w) = lim_{x→w⁺} h(x).","the graph-flip technique":"Flipped over the floor, y = f(x) becomes y = −f(x); flipped over the upright axis, it becomes y = f(−x).","the greatest-common-divisor technique":"Any two numbers have a greatest common divisor.","the grid-of-cells technique":"(w + b)(c + d) = wc + wd + bc + bd.","the grouping technique":"1 + ½ + ⅓ + ¼ + ⋯ passes every ceiling, although its pieces head to 0.","the grow-to-basis technique":"In a space of dimension n, every free list can be grown into a basis, and every list of n free vectors is already one.","the half-are-even technique":"For n ≥ 2, Aₙ is a part-group of Sₙ with n!/2 members.","the half-the-dots technique":"A graph with n ≥ 3 dots, each with links to at least n/2 dots, has a round of the dots.","the half-turn technique":"Cos(π − θ) = −cos θ and sin(π − θ) = sin θ; cos(θ + π) = −cos θ and sin(θ + π) = −sin θ.","the heat-statement technique":"If heat runs down the temperature slope at a rate in proportion to it, and no heat is made or lost inside the rod, then u_t = κ u_xx, with κ = K/(ρc).","the highest-and-lowest technique":"If f is continuous on [v, w], then f reaches a greatest value on [v, w] and a least value on [v, w].","the hottest-at-the-edge technique":"The greatest value of u on R is taken on the floor or the walls.","the in-between-value technique":"If f is continuous on [v, w] and f(v) < 0 < f(w), then f has a zero c with v < c < w.","the independent technique":"If A and B are independent, so are A and not B.","the infinity axiom":"Some set holds 0 and never runs out of next ones.","the inside-no-more axiom":"If one set lies inside another, and both have areas, the first area is no more than the second.","the keep-order technique for plus on ℚ":"If w < b, then w + c < b + c.","the keep-order technique for times on ℚ":"If w < b and c is positive, then wc < bc.","the leading-term technique":"Let p have degree n ≥ 1 and leading coefficient u_n, and let C = |u₀| + |u₁| + ⋯ + |u_(n−1)| and M = max(1, 2C/|u_n|). Then for every real x with |x| ≥ M, |p(x) − u_n xⁿ| ≤ ½|u_n xⁿ|.","the level-ends technique":"If f is continuous on [α, β], has a slope at every input of (α, β), and f(α) = f(β), then f′(c) = 0 for some c with α < c < β.","the limit technique for sequences":"A sequence settles at no more than one real.","the limits-add technique":"If lim_{x→w} f(x) = L and lim_{x→w} g(x) = M, then lim_{x→w} (f + g)(x) = L + M.","the limits-keep-order technique":"If f and g are defined near w, f(x) ≤ g(x) for every x in some neighbourhood of w, lim_{x→w} f(x) = L and lim_{x→w} g(x) = M, then L ≤ M.","the line-limit technique":"For reals m, b and w, lim_{x→w} (mx + b) = mw + b.","the line-meets-circle technique":"Let a line ℓ be at distance δ from the centre O of a circle of radius r, with F the foot of the perpendicular from O. If δ < r, ℓ meets the circle in exactly two points, F ± √(r² − δ²) e, for a direction e of ℓ with |e| = 1. If δ = r, only at F. If δ > r, nowhere. When it meets only at F, ℓ is perpendicular to the radius OF.","the line-through-two-points technique":"Through two different points P and Q there is exactly one line: the line through P with direction Q − P.","the lines-are-continuous technique":"For reals m and b, x ↦ mx + b is continuous at every real w.","the little technique":"If p is prime and p does not divide a, then a^(p − 1) ≡ 1 (mod p); and aᵖ ≡ a (mod p) for every integer a.","the log-of-a-power technique":"For x > 0 and every rational r, ln(xʳ) = r ln x.","the log-of-a-product technique":"For all x, y > 0, ln(xy) = ln x + ln y.","the log-of-a-quotient technique":"ln(1/y) = −ln y and ln(x/y) = ln x − ln y, for x, y > 0.","the log-onto-ℝ technique":"For every real c there is exactly one x > 0 with ln x = c. So ln is a bijection from (0, ∞) to ℝ, and its inverse is a continuous function from ℝ to (0, ∞).","the log-rises technique":"ln 1 = 0; ln x < 0 for 0 < x < 1; ln x > 0 for x > 1; and 0 < x < y gives ln x < ln y.","the log-unbounded technique":"For every M there are x with ln x > M and x with ln x < −M. As x → ∞, ln x → ∞; as x → 0⁺, ln x → −∞.","the lost-plus-reached technique":"If V has dimension n and L is straight from V, then the dimension of what L loses plus the dimension of what it reaches is n.","the miss-at-right-angles technique":"Let v₁, …, vₖ be free and G the grid with Gᵢⱼ = ⟨vⱼ, vᵢ⟩. Then w = Σ cⱼvⱼ is the point of W closest to f exactly when Gc = b, where bᵢ = ⟨f, vᵢ⟩, and G is undoable, so there is exactly one such c.","the move-keeps technique":"Each move of the calculus, fed lines that hold in a world, writes a line that holds in that world.","the moving-dot technique":"If u(t) and v(t) have slopes, then (u · v)′ = u′ · v + u · v′ and (u × v)′ = u′ × v + u × v′. So a vector of fixed length moves at right angles to itself: if |r(t)| is the same for every t, then r(t) · r′(t) = 0.","the multiplying-keeps-answers technique":"If c ≠ 0, then L = R exactly when Lc = Rc.","the nearest-point technique":"For a point P₀ = (x₀, y₀) and a line ℓ: Ax + By = C with n = (A, B), the point F = P₀ − ((n · P₀ − C)/|n|²) n is on ℓ, P₀ − F is perpendicular to ℓ, F is the one nearest point of ℓ to P₀, and d(P₀, F) = |Ax₀ + By₀ − C|/√(A² + B²).","the nonzero-det technique":"A square grid can be undone exactly when its determinant is not 0.","the nothing-sent technique":"For a straight map L, what it loses is a space inside V, what it reaches is a space inside W, and L is one-to-one exactly when it loses only 0.","the nothing-times-0-is-1 technique":"There is no c with c · 0 = 1.","the odd-times-odd technique":"An odd number times an odd number is odd.","the odds-update technique":"If P(E) > 0 and P(E | not A) > 0, the odds of A given E are the odds of A times the ratio P(E | A) / P(E | not A).","the one-changes-nothing technique":"Multiplying by 1, on either side, changes nothing.","the one-count technique":"If X has n members and has n′ members, then n = n′.","the one-future technique":"Two answers of the heat statement on R with the same start and the same ends are the same answer. If their starts and ends differ by at most δ, the answers differ by at most δ everywhere in R.","the one-knob technique":"To find a partial slope, treat every other input as a fixed number and use the slope techniques of rung 13.","the one-limit technique":"If f is defined near w, lim_{x→w} f(x) = L and lim_{x→w} f(x) = M, then L = M.","the one-output technique":"For f ⊆ A × B, these three say the same thing: (i) every input has an output and no input has two; (ii) ∀x ∈ A ∃!y ((x, y) ∈ f); (iii) each member of A is the left entry of exactly one member of f.","the one-root technique":"For non-negative x and y, x² = y² ⇒ x = y.","the open-tour technique":"A graph in one piece has a tour of the links that is not closed exactly when exactly two dots have odd counts; it runs from one of them to the other.","the order-and-arithmetic-agree technique":"α ≤ β ⇒ α + σ ≤ β + σ; α < β ⇒ α + σ < β + σ; and α < β ⇔ β − α is positive.","the order-divides technique":"In a finite group, the order of every member divides the size of the group.","the out-to-forever technique":"For rational p, ∫₁^∞ x⁻ᵖ dx converges when p > 1, to 1/(p − 1), and diverges when p ≤ 1.","the over-and-under technique":"The number of members of U lying in none of A₁, …, Aₘ is |U| minus the sizes of the Aᵢ, plus the sizes of the overlaps of two, minus those of three, and so on to the overlap of all m.","the p-sum technique":"Σ 1/nᵖ settles exactly when p > 1.","the pair-product technique":"The turn by (a, b) after the turn by (c, d) is the turn by (ac − bd, ad + bc).","the pair-undo technique":"The turn by (a, −b) undoes the turn by (a, b).","the parallel-flips technique":"Two flips across parallel lines make a slide, at right angles to the lines, by twice the gap between them.","the parallel-through-a-point technique":"For a line ℓ: Ax + By = C and a point P = (p₁, p₂) not on ℓ, exactly one line through P is parallel to ℓ: Ax + By = Ap₁ + Bp₂.","the parity technique":"Every string of swaps for a shuffle σ is even in length when N(σ) is even, and odd when N(σ) is odd.","the part-of-the-way technique":"For points P ≠ Q and 0 ≤ t ≤ 1, the point X = P + t(Q − P) has d(P, X) = t · d(P, Q) and d(X, Q) = (1 − t) · d(P, Q). With t = ½ it is the midpoint ((x₁ + x₂)/2, (y₁ + y₂)/2); with t = m/(m + n) it divides the way from P to Q in the ratio m : n.","the partial-sum technique":"Every question about an endless sum is a question about the sequence of its running totals.","the perp technique":"W⊥ is a space inside the space, and W and W⊥ share one vector only, 0.","the perpendicular-bisector technique":"For points A ≠ B, the set {X : d(X, A) = d(X, B)} is the line 2(B − A) · X = |B|² − |A|². It passes through the midpoint M of AB and is perpendicular to AB.","the perpendicular-lines technique":"The lines A₁x + B₁y = C₁ and A₂x + B₂y = C₂ have perpendicular directions exactly when A₁A₂ + B₁B₂ = 0. If neither is vertical, with slopes m₁ and m₂, that is m₁m₂ = −1.","the polynomial-division technique":"For polynomials p and d, with d of degree m ≥ 1, there are polynomials q and r with p(x) = d(x)q(x) + r(x) for every real x, where r is the zero polynomial or has degree less than m.","the polynomial-slope technique":"Every polynomial has a slope at every real, found term by term.","the polynomials-are-continuous technique":"Every polynomial is continuous at every real.","the positive-product technique on ℚ":"A positive rational times a positive rational is positive.","the positive-product technique on ℝ":"A product of positive reals is positive.","the positive-reciprocal technique on ℚ":"For a positive s, s⁻¹ is positive; and 0 < x < y ⇒ y⁻¹ < x⁻¹.","the positive-sum technique on ℝ":"A sum of positive reals is positive.","the power axiom":"For any set u there is the set of all the subsets of u.","the power technique for slopes":"The slope of x to a whole power is that power times x to one less.","the power-cost technique":"The square-and-multiply technique finds aᵏ on a clock with at most 2⌊log₂ k⌋ products of hours.","the power-of-a-next technique":"k to the power of the next one after b is k to the power b, times k.","the power-of-a-power technique":"Doing “b times” c times over is doing it b · c times.","the power-of-one-plus technique":"For h ≥ 0 and whole n, (1 + h)ⁿ ≥ 1 + nh.","the power-one technique":"A number to the power 1 is itself.","the power-zero technique":"Any number to the power 0 is 1.","the product-bound technique":"For any product, |⟨f, g⟩| ≤ ‖f‖ ‖g‖, with equality exactly when one of f and g is a multiple of the other.","the product-is-doing technique":"If B is a grid with n columns and k rows, and A has k columns and m rows, then doing B and then A is the grid AB, whose column j is A times column j of B: (AB)ᵢⱼ = aᵢ₁b₁ⱼ + ⋯ + aᵢₖbₖⱼ.","the product-keeper technique":"A square grid U of turning numbers keeps every product, ⟨Ux, Uy⟩ = ⟨x, y⟩, exactly when U*U = I; then it keeps every size, and every stretch of U has size 1.","the product-triangle technique":"For any product, ‖f + g‖ ≤ ‖f‖ + ‖g‖; so ‖f − h‖ ≤ ‖f − g‖ + ‖g − h‖, and the size of a difference is a distance.","the quadratic-formula technique":"For reals t, b and c with t ≠ 0 and b² − 4tc ≥ 0, tx² + bx + c = 0 exactly when x = (−b ± √(b² − 4tc))/(2t).","the quarters technique":"The signs of cos θ and sin θ are fixed by the quarter of the circle the walk ends in.","the read-off technique":"If d₁, …, dₙ are vectors of length 1 in lists of n numbers, each at right angles to the others, they are a basis, and every vector u is (u · d₁)d₁ + ⋯ + (u · dₙ)dₙ.","the real-stretches technique":"Every stretch of a symmetric map is a real number.","the reciprocal technique":"If w ≠ 0, there is exactly one rational b with wb = 1; for w = p/q it is q/p.","the rectangle-total technique":"If f is continuous on R, then f is integrable on R.","the regroup technique for times":"In a product of three numbers, which pair is multiplied first does not change the product.","the regroup technique for times on ℚ":"Brackets in a product of rationals do not matter.","the remaining-option technique":"From P or Q, and not Q, you may write P.","the right-angled-stretches technique":"If a symmetric map stretches u by λ and v by μ, with λ ≠ μ, then u and v are at right angles.","the right-triangle technique":"For all displacements u and v, |u + v|² = |u|² + |v|² + 2u · v. So |u + v|² = |u|² + |v|² exactly when u ⊥ v. In a triangle with a right angle at C, the squares of the two sides that meet at C add to the square of the side across from it; and if they add so, the angle at C is right.","the rise-or-fall technique":"Any row of n² + 1 different numbers holds n + 1 of them, in their order in the row, that rise, or n + 1 that fall.","the root technique":"Every polynomial of degree n ≥ 1 with complex numbers in front has a root in ℂ; and p(z) = uₙ(z − r₁)(z − r₂)⋯(z − rₙ) for some r₁, …, rₙ in ℂ.","the roots-to-coefficients technique":"(x − r₁)⋯(x − rₙ) = xⁿ − e₁xⁿ⁻¹ + e₂xⁿ⁻² − ⋯ + (−1)ⁿeₙ.","the row-move technique":"Each row move is multiplying on the left by an undoable grid E; so a row move on [A | b] keeps exactly the same answers x, and each row move is undone by another row move.","the running-backwards technique":"f : A → B can be run backwards exactly when it is a bijection; and then its only inverse is f⁻¹.","the same-answers technique":"If every rational x has φ(x) ⇔ ψ(x), then {x ∈ ℚ : φ(x)} = {x ∈ ℚ : ψ(x)}.","the same-coefficients technique":"If Σ_{k≤n} u_k x^k = Σ_{k≤n} v_k x^k at n + 1 different reals, then u_k = v_k for every k ≤ n.","the same-size technique":"If a space has a basis of n vectors, every basis of it has n vectors.","the same-squares technique":"If w² = b², then w = b or w = −b.","the sandwich technique":"−|p| ≤ p ≤ |p|.","the sequence technique":"From {P} c₁ {R} and {R} c₂ {Q}, write {P} c₁; c₂ {Q}.","the settles-in-size technique":"If Σ |uₙ| settles, then Σ uₙ settles too.","the shadow-sum technique":"If e₁, …, eₙ is a right-angled list building W, the point of W closest to f is Pf = ⟨f, e₁⟩e₁ + ⋯ + ⟨f, eₙ⟩eₙ; the miss f − Pf is at right angles to every vector of W, and no other point of W is as close.","the shrink technique":"If Σ uₙ settles, then uₙ → 0.","the shuffles-compose technique":"A shuffle done after a shuffle is a shuffle.","the shuffles-form-a-group technique":"The shuffles of any set, composed, form a group.","the side-by-side axiom":"If two sets with areas share no points except some on a single line x = k, then the two together have the sum of the two areas.","the side-turn technique":"Det Aᵀ = det A. So every technique for columns holds for rows: swapping two rows changes the sign, and adding a stretch of one row to another changes nothing.","the size-of-a-negative technique":"|−p| = |p|.","the size-of-a-product technique":"|pq| = |p| |q|.","the size-squared technique":"|p|² = p², and √(p²) = |p|.","the slope-bound technique":"Suppose f is continuous on [α, β], has a slope at every input of (α, β), and |f′(x)| ≤ K for every x in (α, β). Then |f(y) − f(x)| ≤ K · |y − x| for every x and y in [α, β].","the slope-means-no-gap technique":"If f has a slope at w, then f is continuous at w.","the slope-of-log technique":"ln is differentiable on (0, ∞), and ln′(x) = 1/x.","the slope-sign-order technique":"If f is continuous on an interval and has a positive slope at every input inside it, then f is increasing on the interval. If every slope inside is negative, f is decreasing. If every slope inside is at least 0, then x < y gives f(x) ≤ f(y).","the smaller-function-smaller-area technique":"If f and g are integrable on [u, v] and f(x) ≤ g(x) for every x there, then ∫ᵤᵛ f ≤ ∫ᵤᵛ g. In particular, if m ≤ f(x) ≤ M on [u, v], then m(v − u) ≤ ∫ᵤᵛ f ≤ M(v − u).","the socks-and-shoes technique":"If f : A → B and g : B → C are bijections, (g ∘ f)⁻¹ = f⁻¹ ∘ g⁻¹.","the spare-vector technique":"If v₁, …, vₖ are not free, and v₁ ≠ 0, then some vⱼ is a mix of the vectors before it, and dropping vⱼ leaves every mix the list can make.","the split-in-any-order technique":"If f is integrable on every closed interval inside I, then for any p, q, r in I, ∫ₚ^q f = ∫ₚ^r f + ∫ᵣ^q f.","the spread technique for times over plus":"A number times a sum is the sum of the two products.","the spread technique on ℚ":"Times spreads over plus on the rationals.","the spread technique on ℤ":"Times spreads over plus on the integers.","the spreading-bell technique":"Φ solves the heat statement for every t > 0, totals 1 along the line at every t, and is the bell with spread 2κt.","the square's-area technique":"The region 0 ≤ x ≤ s, 0 ≤ y ≤ s has area ∫₀ˢ s dx = s², and the box with edges s has volume s³ (16j's prism); a rectangle with sides p and q along the axes has area pq.","the square-and-multiply technique":"To find aᵏ on the clock of n, square a again and again to get a, a², a⁴, a⁸, …, each on the clock, and multiply together those whose places in k written in twos hold a 1.","the square-limit technique":"For every real w, lim_{x→w} x² = w².","the square-never-negative technique":"For every real x, 0 ≤ x².","the square-of-a-difference technique":"(w − b)² = w² − 2wb + b².","the square-of-a-sum technique":"(w + b)² = w² + 2wb + b².","the square-root technique":"For a real u ≥ 0 there is a real x ≥ 0 with x² = u.","the square-sum technique":"If f and g are at right angles, the square of the size of f + g is the sum of the squares of their sizes.","the squares-keep-order technique on ℚ":"0 ≤ s < r ⇒ s² < r².","the stair-det technique":"If every entry below the middle of a square grid is 0, its determinant is the product of the entries down the middle. So if row moves with s swaps, and otherwise only adding stretches of rows, bring A to a staircase, det A is (−1)ˢ times the product down the middle of the staircase.","the straighten-out technique":"If A, n × n, has n free vectors v₁, …, vₙ that it only stretches, by λ₁, …, λₙ, and P is the grid with those columns, then A = P D P⁻¹, where D has λ₁, …, λₙ down its middle and 0 elsewhere; and Aᵏ = P Dᵏ P⁻¹ for every counting number k.","the stretch-test technique":"Λ is a stretch of A exactly when det(A − λI) = 0. As λ varies, det(A − λI) is a polynomial in λ of degree n, with (−1)ⁿλⁿ first.","the sum technique":"Cos(A + B) = cos A cos B − sin A sin B, and sin(A + B) = sin A cos B + cos A sin B.","the sum-and-product technique":"(x + m)(x + n) = x² + (m + n)x + mn.","the sum-of-sums technique":"If Σ uₙ = A and Σ vₙ = B, then Σ (uₙ + vₙ) = A + B and Σ c·uₙ = c·A.","the swap-is-odd technique":"Exchanging two entries of a list changes the number of pairs out of order by an odd number.","the swap-knobs technique":"If fx, fy and fxy, fyx exist near (a, b), and fxy and fyx are continuous at (a, b), then fxy(a, b) = fyx(a, b).","the swapped-pairs technique":"(x, y) ∈ f ⇔ (y, x) ∈ f⁻¹.","the swapped-pairs-function technique":"For f : A → B, f⁻¹ : B → A exactly when f is one-to-one and onto B.","the swaps-build-every-shuffle technique":"Every shuffle of {1, …, n} is e or a string of swaps.","the symmetric-is-coefficients technique":"Every symmetric polynomial is a polynomial in e₁, …, eₙ, and its coefficients stay among whole numbers when the symmetric polynomial’s do.","the symmetric-is-rational technique":"If f has rational coefficients and top coefficient 1, every symmetric polynomial with rational coefficients, evaluated at the roots of f, is a rational number.","the tables agree with the techs":"Each tech of the rung, run on lines that give 1 in a row, gives a line that gives 1 in that row.","the tail technique":"Dropping or changing finitely many pieces never changes whether a sum settles.","the tangent-is-steepness technique":"Tan θ is the slope of the line from the centre to the point at θ.","the tangent-secant technique":"Wherever cos θ ≠ 0, 1 + tan² θ = sec² θ.","the there-and-back technique":"If f : A → B is a bijection, then f⁻¹(f(x)) = x for every x ∈ A, and f(f⁻¹(y)) = y for every y ∈ B; that is, f⁻¹ ∘ f = id_A and f ∘ f⁻¹ = id_B.","the thinning technique":"A set with a list is finite or matched with ℕ.","the three-conditions technique":"Exactly one D obeys straight, flat and unit: D(A) = Σ over the shuffles σ of 1..n of sign(σ) a_{σ(1)1} a_{σ(2)2} ⋯ a_{σ(n)n}, where sign(σ) is +1 for an even shuffle and −1 for an odd one. Any D that is only straight and flat equals D(I) times this.","the three-way-order technique on ℝ":"For reals α and β, exactly one of α < β, α = β, β < α holds.","the times-a-next technique":"k times the next one after b is k times b, plus k.","the times-zero technique":"Any number times 0 is 0.","the transcendentals-exist technique":"Some real is transcendental; the diagonal of a list of the algebraic reals in [0, 1) is one.","the triangle technique":"|p + q| ≤ |p| + |q|.","the true-everywhere technique":"If G reaches φ, then φ is true in every world of G.","the turn-about technique for plus on ℚ":"Order in a sum of rationals does not matter.","the turn-about technique for times":"A product is the same in either order.","the turn-around technique":"If P(A) > 0 and P(B) > 0, then P(B | A) = P(A | B) P(B) / P(A).","the turn-is-a-pair technique":"A turn about the origin is fixed by where it sends (1, 0).","the turned-product technique":"In the second slot a product is straight up to conjugates, ⟨f, sg + th⟩ = s̄⟨f, g⟩ + t̄⟨f, h⟩, and ⟨f, f⟩ is always a real number.","the turning-adds-arcs technique":"The turn by the pair (cos B, sin B) sends the point at arc A to the point at arc A + B.","the two-circles-meet technique":"Let circles have centres O₁ ≠ O₂, radii r₁ and r₂, and d = d(O₁, O₂). They meet in exactly two points when |r₁ − r₂| < d < r₁ + r₂, in exactly one when d = r₁ + r₂ or d = |r₁ − r₂|, and nowhere otherwise.","the two-descriptions-agree technique":"The line through P with direction v is the set {X : n · X = n · P}, where n = (−v₂, v₁). Conversely, the set Ax + By = C is the line through any of its points with direction (−B, A), and it has points.","the two-flips technique":"Every turn and every slide is two flips.","the two-forms-of-one-to-one technique":"f is one-to-one exactly when x₁ ≠ x₂ ⇒ f(x₁) ≠ f(x₂) for all inputs x₁ and x₂.","the two-lines-meet technique":"Let A₁x + B₁y = C₁ and A₂x + B₂y = C₂ be lines, and D = A₁B₂ − A₂B₁. If D ≠ 0 they have exactly one common point, x = (C₁B₂ − C₂B₁)/D, y = (A₁C₂ − A₂C₁)/D. If D = 0, their normals are multiples, and the lines are the same or parallel.","the two-targets technique":"For reals L, M and y, and a positive ε with 2ε ≤ |L − M|, it is not so that |y − L| < ε and |y − M| < ε.","the undo-exactly-when technique":"The hour [a] has an undo on the clock of n exactly when gcd(a, n) = 1, and then it has only one.","the uniqueness method":"To show two roots are the same, show both sides are non-negative and have the same square.","the units-group technique":"The units of the clock of n form a group under times.","the unlisted-real technique":"For every list x₀, x₁, x₂, … of reals in [0, 1), some real in [0, 1) is none of them.","the unpack-the-bars technique":"For d ≥ 0, |p| ≤ d ⇔ −d ≤ p ≤ d, and |p| < d ⇔ −d < p < d.","the walk-to-path technique":"If a walk joins u to w, a path joins u to w.","the while technique":"From {I ∧ B} c {I}, write {I} while B do c {I ∧ ¬B}.","the whole-chance technique":"If B₁, B₂, … are separate events of positive chance that fill Ω, then P(A) = Σ P(A | Bₖ) P(Bₖ).","the whole-exponent techniques":"For reals u, v ≠ 0 and integers m, n: u^m u^n = u^(m + n), (u^m)^n = u^(mn), (uv)^n = u^n v^n.","the word-for-number technique":"Each word stands for exactly one first digit d, so a line “word n” names exactly one instruction number, 100d + n.","the world-means-clash-free technique":"A collection of statements that has a world is clash-free.","the zero-product technique":"If wb = 0, then w = 0 or b = 0.","the zero-slope-is-constant technique":"If f has slope 0 at every input of an open interval I, then f is constant on I. Likewise if f is continuous on [α, β] and has slope 0 at every input of (α, β), then f is constant on [α, β].","the zero-stretch technique":"In every space of vectors, 0·v = 0, t·0 = 0, and (−1)·v = −v.","two things the same as a third":"Two things that are each the same as one thing are the same as each other.","use a some":"From ∃x P(x), set in the case of a fresh name b, with nothing said of b but P(b); work the case to some R that does not mention b, and R comes back to the margin.","use an every":"From ∀x P(x), you may write P(t) for any name t you have.","when nothing is true, everything is permitted":"A line that equals ⊥ may be written again as any statement at all."};
-const STEPOF=/*STEPOF*/{"a chain of order":"5f","add an option":"1c","bounding a gap":"8h","carry an if through":"1d","check after squaring":"8i","clash":"1b","clearing inner fractions":"5h","completing the sameness":"8i","counting answers by the discriminant":"8i","hunt for the bad row":"1e","join":"1c","keep either part":"1c","main mark first, then inward":"2c","making and using an exactly-when":"1d","proof by induction":"4c","prove an if":"1d","reading the completed form":"8i","reason by cases":"1c","refute":"1b","show an example":"2b","speak of everything by speaking of anything":"2b","substitution":"5g","the adding-keeps-answers technique":"5g","the agreeing-near technique":"10a","the angle-between technique":"27i","the antiderivative-exists technique":"16b","the any-two-compare technique":"4h","the any-two-compare technique on ℚ":"5d","the anything-times-zero technique":"5e","the area technique for sums":"22f","the area-bound technique":"16a","the area-is-a-change technique":"16c","the area-slope technique":"16b","the area-under-a-power technique":"15i","the areas-add technique":"15e","the areas-scale technique":"15e","the assignment technique":"40c","the at-most-is-a-partial-order technique on ℝ":"8a","the at-most-n-zeros technique":"9g","the average-height technique":"15f","the average-slope technique":"14c","the backwards-assignment technique":"40f","the box-area axiom":"15a","the box-volume axiom":"16j","the branch-product technique":"30l","the cancel technique for fractions":"5c","the cancel technique for plus":"4f","the cancel technique for times on ℚ":"5e","the candidates technique":"14a","the carry-to-the-clock technique":"43a","the chain technique":"0c","the chain technique for If":"1d","the chain technique for divides":"4j","the chain technique for less":"4h","the chain technique for less on ℚ":"8a","the chance technique":"30f","the choice technique":"40f","the circle technique for cos and sin":"21c","the circle-equation technique":"18d","the circle-through-three technique":"18d","the climb technique":"22a","the clock-cancel technique":"43a","the clock-hours technique":"43a","the closest-point technique":"31b","the codomain technique":"9a","the columns technique":"27d","the compare-by-cross-multiplying technique":"5f","the comparison technique":"22e","the comparison technique for areas":"16i","the complete-ordered-field technique":"8d","the composite-is-a-function technique":"9b","the consequence technique":"40f","the continuity-unpacked technique":"11a","the continuous-both-ways technique":"11a","the continuous-is-integrable technique":"15f","the cooling-shape technique":"33a","the countable-removed technique":"35b","the countable-union technique":"35a","the cross technique":"27i","the cross-multiplying technique":"5c","the crossing-flips technique":"20e","the crowded-box technique":"42i","the cubic-discriminant technique":"46b","the decimal-block technique":"43d","the det-product technique":"27e","the difference technique":"21e","the difference-of-squares technique":"5i","the difference-test technique":"43a","the different-stretches technique":"27f","the distance-basics technique":"18a","the divides-a-multiple technique":"4j","the divides-a-sum technique":"4j","the divides-the-rest technique":"4j","the division technique":"5c","the division-with-remainder technique":"4j","the domains-trade-places technique":"9d","the dot technique":"18a","the double technique":"21d","the doubled-sum technique":"4k","the each-place technique":"28a","the either-order technique":"28h","the endless-ratio-sum technique":"15i","the ends-count technique":"42a","the equal-functions technique":"9a","the even-or-odd technique":"4j","the even-square technique":"4j","the even-tour technique":"42c","the exchange technique":"27b","the exponent-clock technique":"43d","the factor technique":"9g","the fading-series technique":"33a","the fall technique":"22a","the fence technique for sums":"22f","the finite-decimal technique":"5h","the fixed-point technique":"22a","the flat-means-continuous technique":"28b","the flat-top technique":"14a","the flip-formula technique":"20c","the flip-keeps technique":"20d","the flips-reverse technique":"20g","the forgetting technique":"33b","the fraction-zeros technique":"9g","the fractions-keep-order technique":"8a","the fractions-of-rationals technique":"5h","the gather axiom":"2f","the gcd-as-a-sum technique":"43b","the given-chance technique":"30f","the glued-functions technique":"11e","the graph-flip technique":"20i","the greatest-common-divisor technique":"4j","the grid-of-cells technique":"5i","the grouping technique":"22d","the grow-to-basis technique":"27b","the half-are-even technique":"19e","the half-the-dots technique":"42c","the half-turn technique":"21e","the heat-statement technique":"33a","the highest-and-lowest technique":"12c","the hottest-at-the-edge technique":"33b","the in-between-value technique":"12a","the independent technique":"30f","the infinity axiom":"3d","the inside-no-more axiom":"15a","the keep-order technique for plus on ℚ":"5f","the keep-order technique for times on ℚ":"5f","the leading-term technique":"9g","the level-ends technique":"14b","the limit technique for sequences":"22a","the limits-add technique":"10c","the limits-keep-order technique":"10b","the line-limit technique":"10a","the line-meets-circle technique":"18d","the line-through-two-points technique":"18c","the lines-are-continuous technique":"11a","the little technique":"43d","the log-of-a-power technique":"17c","the log-of-a-product technique":"17c","the log-of-a-quotient technique":"17c","the log-onto-ℝ technique":"17d","the log-rises technique":"17a","the log-unbounded technique":"17d","the lost-plus-reached technique":"27c","the miss-at-right-angles technique":"31b","the move-keeps technique":"38c","the moving-dot technique":"27i","the multiplying-keeps-answers technique":"5g","the nearest-point technique":"18c","the nonzero-det technique":"27e","the nothing-sent technique":"27c","the nothing-times-0-is-1 technique":"5e","the odd-times-odd technique":"4j","the odds-update technique":"30l","the one-changes-nothing technique":"4g","the one-count technique":"4k","the one-future technique":"33b","the one-knob technique":"28a","the one-limit technique":"10b","the one-output technique":"9a","the one-root technique":"8f","the open-tour technique":"42c","the order-and-arithmetic-agree technique":"8d","the order-divides technique":"19d","the out-to-forever technique":"16i","the over-and-under technique":"42i","the p-sum technique":"22f","the pair-product technique":"20j","the pair-undo technique":"20j","the parallel-flips technique":"20e","the parallel-through-a-point technique":"18c","the parity technique":"19e","the part-of-the-way technique":"18a","the partial-sum technique":"22d","the perp technique":"27i","the perpendicular-bisector technique":"18d","the perpendicular-lines technique":"18c","the polynomial-division technique":"9g","the polynomial-slope technique":"13d","the polynomials-are-continuous technique":"11d","the positive-product technique on ℚ":"5d","the positive-product technique on ℝ":"8d","the positive-reciprocal technique on ℚ":"8d","the positive-sum technique on ℝ":"8d","the power axiom":"2g","the power technique for slopes":"13d","the power-cost technique":"43h","the power-of-a-next technique":"4g","the power-of-a-power technique":"4g","the power-of-one-plus technique":"15i","the power-one technique":"4g","the power-zero technique":"4g","the product-bound technique":"31a","the product-is-doing technique":"27d","the product-keeper technique":"31d","the product-triangle technique":"31a","the quadratic-formula technique":"8i","the quarters technique":"21c","the read-off technique":"27i","the real-stretches technique":"31d","the reciprocal technique":"5c","the rectangle-total technique":"28h","the regroup technique for times":"4g","the regroup technique for times on ℚ":"5d","the remaining-option technique":"1c","the right-angled-stretches technique":"31d","the right-triangle technique":"18a","the rise-or-fall technique":"42i","the root technique":"25d","the roots-to-coefficients technique":"46b","the row-move technique":"27j","the running-backwards technique":"9d","the same-answers technique":"5g","the same-coefficients technique":"9g","the same-size technique":"27b","the same-squares technique":"5i","the sandwich technique":"8h","the sequence technique":"40f","the settles-in-size technique":"22e","the shadow-sum technique":"31b","the shrink technique":"22d","the shuffles-compose technique":"19a","the shuffles-form-a-group technique":"19a","the side-by-side axiom":"15a","the side-turn technique":"27g","the size-of-a-negative technique":"8h","the size-of-a-product technique":"8h","the size-squared technique":"8h","the slope-bound technique":"14c","the slope-means-no-gap technique":"13b","the slope-of-log technique":"17b","the slope-sign-order technique":"14d","the smaller-function-smaller-area technique":"15e","the socks-and-shoes technique":"9d","the spare-vector technique":"27b","the split-in-any-order technique":"16a","the spread technique for times over plus":"4g","the spread technique on ℚ":"5d","the spread technique on ℤ":"5b","the spreading-bell technique":"33b","the square's-area technique":"18a","the square-and-multiply technique":"43h","the square-limit technique":"10a","the square-never-negative technique":"8f","the square-of-a-difference technique":"5i","the square-of-a-sum technique":"5i","the square-root technique":"8f","the square-sum technique":"31a","the squares-keep-order technique on ℚ":"8a","the stair-det technique":"27k","the straighten-out technique":"27f","the stretch-test technique":"27f","the sum technique":"21d","the sum-and-product technique":"5i","the sum-of-sums technique":"22d","the swap-is-odd technique":"19e","the swap-knobs technique":"28d","the swapped-pairs technique":"9d","the swapped-pairs-function technique":"9d","the swaps-build-every-shuffle technique":"19e","the symmetric-is-coefficients technique":"46b","the symmetric-is-rational technique":"46b","the tables agree with the techs":"1e","the tail technique":"22d","the tangent-is-steepness technique":"21c","the tangent-secant technique":"21c","the there-and-back technique":"9d","the thinning technique":"35a","the three-conditions technique":"27e","the three-way-order technique on ℝ":"8b","the times-a-next technique":"4g","the times-zero technique":"4g","the transcendentals-exist technique":"35b","the triangle technique":"8h","the true-everywhere technique":"38c","the turn-about technique for plus on ℚ":"5d","the turn-about technique for times":"4g","the turn-around technique":"30f","the turn-is-a-pair technique":"20j","the turned-product technique":"31a","the turning-adds-arcs technique":"21d","the two-circles-meet technique":"18d","the two-descriptions-agree technique":"18c","the two-flips technique":"20e","the two-forms-of-one-to-one technique":"9c","the two-lines-meet technique":"18c","the two-targets technique":"10b","the undo-exactly-when technique":"43b","the uniqueness method":"8f","the units-group technique":"43b","the unlisted-real technique":"35b","the unpack-the-bars technique":"8h","the walk-to-path technique":"42a","the while technique":"40g","the whole-chance technique":"30f","the whole-exponent techniques":"8i","the word-for-number technique":"40a","the world-means-clash-free technique":"38c","the zero-product technique":"5e","the zero-slope-is-constant technique":"14d","the zero-stretch technique":"27a","two things the same as a third":"0concl","use a some":"2b","use an every":"2b","when nothing is true, everything is permitted":"1b"};
-const SKSTEPS=/*SKSTEPS*/{"f1.oddsum":["1b","1c","2b","4g","4j"],"f1.divsum":["1d","2b","4g","4j"],"f1.sumind":["0c","1d","2b","4c","4g","5g"],"f1.cases":["1b","1c","1d"],"f3.onezero":["1b","1c","5g","8b","8d","8f","12a","13b","13d","14b"],"f3.bound":["1d","2b","5g","8a","8d","13b","13d","14c"],"f3.greatest":["1d","5d","5e","5g","8d","13b","13d","14a"],"f3.powind":["1d","2b","4c","4g","5d","5e","5f","8a","8d"],"f5.onto":["1c","1d","2b","5e","5g","27b","27c","27d","27e","27j"],"f5.straight":["1d","2b","5e","27a","27d","27f"],"f5.notone":["1b","1c","4h","5g","27b","27c","27i"],"f5.gridpow":["1c","1d","2b","4c","4g","5b","27d","27k"],"f1.answers":["1d","5d","5e","5g"],"f1.evencases":["1c","2b","4g","4j"],"f2.sqrteq":["1d","5e","5g","5i","8f","8h","8i"],"f2.gapbound":["1c","1d","5i","8a","8d","8h"],"f2.inverse":["1c","1d","2b","5g","9d"],"f2.factor":["1c","1d","5e","5g","8b","8i","9g"],"f2.hole":["1c","1d","5c","5e","5g","5i","10a","11a"],"f2.glued":["1d","5g","10a","10c","11e"],"f3.area":["1c","1d","5g","8d","8f","8i","11d","13d","15e","15f","16c"],"f3.logeq":["1d","5e","5g","5i","17c","17d"],"f4.circle":["1d","18a","18c","18d"],"f4.parity":["1b","1c","2b","4j","4k","19e"],"f4.flips":["1c","2b","5g","18a","20c","20e","20j","21d"],"f4.sumangle":["1b","1c","5e","5g","5i","21c","21d"],"f4.climb":["1c","1d","4c","5d","5f","5g","8d","10a","22a"],"f4.series":["1c","2b","5f","8d","16i","22d","22e","22f"],"f5.bayes":["0c","1b","1c","5d","30f","30l"],"f5.fubini":["0c","1c","2b","5g","15i","16c","28a","28h"],"f6.closest":["1c","2b","5g","8f","18a","31a","31b"],"f6.bound":["0c","1b","1c","5d","5g","8a","18a","27a","27i","31a"],"f6.symm":["1c","1d","5g","5i","27f","31d"],"f6.diag":["1c","1d","2b","5f","5g","15i","35b"],"f6.heat":["1b","1c","5f","5g","8h","33a","33b"],"f6.world":["1b","1c","2b","2c","38c"],"f7.congr":["1c","1d","4j","5g","43a","43b"],"f7.power":["0c","1d","4j","8i","43a","43d","43h"],"f7.tour":["1b","1c","2b","5g","42a","42c"],"f7.crowd":["1c","2b","4j","5g","42i","43a"],"f7.vieta":["1b","1c","5e","5g","5h","5i","46b"],"f7.loop":["1d","5d","5g","40c","40f","40g"]};
+const TECH=/*TECHDICT*/{"a chain of order":"A chain of order such as a < c < b is short for a < c ∧ c < b.","add an option":"From P, you may write P ∨ Q, or Q ∨ P, for any statement Q whatever.","bounding a gap":"Factor the gap, bound the factor you do not control, and keep the one you do.","carry an if through":"From P and P ⇒ Q, you may write Q.","check after squaring":"After squaring both sides, check every answer in the original.","clash":"A line that holds P and ¬P equals ⊥.","clearing inner fractions":"A fraction whose numerator or denominator holds fractions comes apart in one move: multiply by k/k, with k a common denominator of the inner fractions.","completing the sameness":"x² + bx = (x + b/2)² − (b/2)².","counting answers by the discriminant":"If the discriminant is positive, there are two answers; if it is 0, one; if it is negative, none on the line.","hunt for the bad row":"An ⇒ can only fail where its right side is false and its left side is true, so make the right side F and see whether the left side can still give 1.","join":"From P and Q, you may write P and Q.","keep either part":"From P and Q, you may write P, and you may write Q.","main mark first, then inward":"To put a sentence into marks, find its main mark first, then work inward.","making and using an exactly-when":"To make P ⇔ Q in a line, have an if each way and join; to use it, keep the direction you need and carry it through.","proof by induction":"To prove a statement of every number, prove the base at 0, then the step: let n be a number, assume the statement of n, and reach it of the next one.","prove an if":"Open a supposition of P, reach Q inside it, close it, and write if P then Q outside","reading the completed form":"The completed form t(x − h)² + k has the value k at x = h; for t > 0 no value is below k, and for t < 0 none is above.","reason by cases":"In a line that holds P ∨ Q, work inside the option P until it reads R, and inside the option Q until it reads the same R; then R ∨ R says R once, and you may write R.","refute":"A line worked by techniques until it equals ⊥ has statements that cannot all be so together.","show an example":"From P(t), for some name t, you may write ∃x P(x).","speak of everything by speaking of anything":"If you reach P(n) for a letter n let be anything, using nothing about n but that it is a thing, you may write for every x, P(x).","substitution":"If one condition gives x = t, where t is written without x, then t may be put in the place of x in the other condition.","the adding-keeps-answers technique":"For rationals L, R and c, L = R exactly when L + c = R + c.","the agreeing-near technique":"If f and g are defined near w and f(x) = g(x) for every x in some neighbourhood of w, of reach r, then lim_{x→w} f(x) = L exactly when lim_{x→w} g(x) = L.","the angle-between technique":"For vectors u, v ≠ 0 of lists of n numbers, u · v/(|u| |v|) lies between −1 and 1; so exactly one θ between 0 and π has cos θ = u · v/(|u| |v|), and with it |u − v|² = |u|² + |v|² − 2|u| |v| cos θ.","the antiderivative-exists technique":"If f is continuous on an interval I and p is in I, then F(x) = ∫ₚˣ f(t) dt is an antiderivative of f on I.","the any-two-compare technique":"Of two numbers, one is less than the other, or they are the same, and exactly one of these is true.","the any-two-compare technique on ℚ":"For rationals w and b, exactly one of w < b, w = b, b < w.","the anything-times-zero technique":"w · 0 = 0.","the area technique for sums":"Let f be positive and falling on [1, ∞), and uₙ = f(n). Then Σ uₙ settles exactly when ∫₁^∞ f settles.","the area-bound technique":"If f is integrable on [p, q] and |f(t)| ≤ M for every t there, then |∫ₚ^q f| ≤ M(q − p).","the area-is-a-change technique":"If f is continuous on [p, q] and G is an antiderivative of f on [p, q], then ∫ₚ^q f(x) dx = G(q) − G(p).","the area-slope technique":"Let f be integrable on every closed interval inside an interval I, let p be in I, and let F(x) = ∫ₚˣ f(t) dt. If f is continuous at a point c inside I, then F has a slope at c, and F′(c) = f(c). At an end of I that belongs to I, the same holds with the slope from one side.","the area-under-a-power technique":"For every whole k ≥ 0 and b > 0, ∫₀ᵇ xᵏ dx = bᵏ⁺¹/(k + 1).","the areas-add technique":"If f and g are integrable on [u, v], so is f + g, and ∫ᵤᵛ (f + g) = ∫ᵤᵛ f + ∫ᵤᵛ g.","the areas-scale technique":"If f is integrable on [u, v] and c is a number, then cf is integrable and ∫ᵤᵛ cf = c ∫ᵤᵛ f.","the assignment technique":"The step x ← e changes x and nothing else, and the new value of x is the value e had before the step.","the at-most-is-a-partial-order technique on ℝ":"At most on ℝ is reflexive, antisymmetric and transitive.","the at-most-n-zeros technique":"a polynomial whose sum has degree n has at most n zeros: its set of zeros has k members for some number k ≤ n.","the average-height technique":"If f is continuous on [u, v], some c in [u, v] has f(c) = (1/(v − u)) ∫ᵤᵛ f.","the average-slope technique":"If f is continuous on [α, β] and has a slope at every input of (α, β), then some c with α < c < β has f′(c) equal to the chord slope (f(β) − f(α))/(β − α).","the backwards-assignment technique":"{Q[e/x]} x ← e {Q}, where Q[e/x] is Q with e put in every gap marked x.","the box-area axiom":"The box [p, q] × [c, d] has area (q − p)(d − c), its width times its height.","the box-volume axiom":"The box [p, q] × [c, d] × [e, f] has volume (q − p)(d − c)(f − e).","the branch-product technique":"The chance of a path through a tree is the product of the given chances on its branches; and the chance of an event is the sum of the chances of the separate paths that make it up.","the cancel technique for fractions":"If w ≠ 0 and wb = wb′, then b = b′.","the cancel technique for plus":"If sums agree after adding the same number, they agreed before.","the cancel technique for times on ℚ":"If wc = bc and c ≠ 0, then w = b.","the candidates technique":"If f is continuous on [α, β], then its greatest value on [α, β] is reached at α, at β, or at a critical point of f inside (α, β). Likewise its least value.","the carry-to-the-clock technique":"If m ≡ m′ and b ≡ b′ (mod n), then m + b ≡ m′ + b′ and mb ≡ m′b′ (mod n).","the chain technique":"If x is the same thing as b, and b is the same thing as c, then x is the same thing as c.","the chain technique for If":"A line that holds P, P ⇒ Q and Q ⇒ R reaches Q, and then R.","the chain technique for divides":"If d divides m and m divides n, then d divides n.","the chain technique for less":"If p is less than b and b is less than c, then p is less than c.","the chain technique for less on ℚ":"x < y ∧ y < z ⇒ x < z.","the chance technique":"P(not A) = 1 − P(A), and P(A or B) = P(A) + P(B) − P(A and B).","the choice technique":"From {P ∧ B} c₁ {Q} and {P ∧ ¬B} c₂ {Q}, write {P} if B then c₁ else c₂ {Q}.","the circle technique for cos and sin":"For every θ, cos² θ + sin² θ = 1.","the circle-equation technique":"x² + y² + Dx + Ey + F = 0 is a circle exactly when D² + E² − 4F > 0, with centre (−D/2, −E/2) and radius √(D² + E² − 4F)/2. When D² + E² − 4F = 0 it is one point, and when it is negative it holds no point.","the circle-through-three technique":"Three points A, B, C that are not collinear lie on exactly one circle. Its centre is where the perpendicular bisectors of AB and BC meet. Three collinear points lie on no circle.","the climb technique":"A sequence that climbs and has a ceiling settles, at its least upper bound.","the clock-cancel technique":"On the clock of n, [a][x] = [a][y] always gives [x] = [y] exactly when gcd(a, n) = 1.","the clock-hours technique":"ℤ/n has exactly n members, [0], [1], …, [n − 1], and every integer lies in one of them.","the closest-point technique":"If ‖e‖ = 1, the point of the line through e closest to f is ⟨f, e⟩e, and the miss f − ⟨f, e⟩e is at right angles to e.","the codomain technique":"If f : A → B and B ⊆ B′, then f : A → B′; and f : A → ran f.","the columns technique":"Every straight map L from lists of n numbers to lists of m is x ↦ Ax for exactly one grid A, whose column j is L(eⱼ).","the compare-by-cross-multiplying technique":"If q and s are positive integers, then p/q < r/s exactly when ps < qr.","the comparison technique":"Let 0 ≤ uₙ ≤ vₙ from some place on. If Σ vₙ settles, so does Σ uₙ. If Σ uₙ wanders, so does Σ vₙ.","the comparison technique for areas":"If 0 ≤ f(x) ≤ g(x) for x ≥ u, both integrable on every [u, b], and ∫ᵤ^∞ g converges, then ∫ᵤ^∞ f converges, and is at most ∫ᵤ^∞ g.","the complete-ordered-field technique":"ℝ, with its + and ·, 0 and 1, −α, α⁻¹ and positive, is a complete ordered field.","the composite-is-a-function technique":"For f : A → B and g : B → C, g ∘ f : A → C, and (g ∘ f)(x) = g(f(x)) for every x ∈ A.","the consequence technique":"If P′ ⇒ P, {P} c {Q} and Q ⇒ Q′, then {P′} c {Q′}.","the continuity-unpacked technique":"For f defined near w with w an input, f is continuous at w exactly when ∀ε > 0 ∃δ > 0 : ∀x ∈ dom f (|x − w| < δ ⇒ |f(x) − f(w)| < ε).","the continuous-both-ways technique":"For f defined near w with w an input, f is continuous at w exactly when it is continuous from the left and from the right at w.","the continuous-is-integrable technique":"If f is continuous on [u, v], then f is integrable on [u, v].","the cooling-shape technique":"The answers of u_t = κu_xx of the form X(x)T(t), with u = 0 at both ends, are exactly the multiples of e^(−κ(nπ/L)²t) sin(nπx/L), for n = 1, 2, 3, ….","the countable-removed technique":"If A cannot be listed and C is countable, then the part of A outside C cannot be listed.","the countable-union technique":"If A₀, A₁, A₂, … are countably many sets, each with a member and each given a list Lₘ, their union has a list.","the cross technique":"U × v = (u₂v₃ − u₃v₂, u₃v₁ − u₁v₃, u₁v₂ − u₂v₁). It is at right angles to u and to v; v × u = −(u × v); |u × v| = |u| |v| sin θ, the area of the parallelogram on u and v; and u × v = 0 exactly when u and v are not free.","the cross-multiplying technique":"p/q = r/s exactly when ps = qr.","the crossing-flips technique":"Two flips across lines that cross at a point make a turn about that point.","the crowded-box technique":"If more than n · k things go into n boxes, some box gets more than k.","the cubic-discriminant technique":"The roots of y³ + py + q have Δ = −4p³ − 27q², which is −108 times the D of 47a.","the decimal-block technique":"If q shares nothing with 10, the decimal of 1/q repeats from the first place in a block whose length is the least k with 10ᵏ ≡ 1 (mod q), and that length divides the count of units of the clock of q.","the det-product technique":"Det(AB) = det A · det B for all n × n grids.","the difference technique":"Cos(A − B) = cos A cos B + sin A sin B, and sin(A − B) = sin A cos B − cos A sin B.","the difference-of-squares technique":"(w + b)(w − b) = w² − b².","the difference-test technique":"Two counting numbers leave the same remainder on dividing by n exactly when n divides their difference.","the different-stretches technique":"Vectors only stretched by A, with stretches all different, are free.","the distance-basics technique":"For all points P, Q and displacements u, and every real t: d(P, Q) ≥ 0, with d(P, Q) = 0 only when P = Q; d(P, Q) = d(Q, P); and |tu| = |t| |u|.","the divides-a-multiple technique":"A number that divides m divides every multiple of m.","the divides-a-sum technique":"A number that divides each of two numbers divides their sum.","the divides-the-rest technique":"A number that divides x, and divides x + y, divides y.","the division technique":"For rationals w and b with b ≠ 0, b · (w/b) = w; and if bx = w, then x = w/b.","the division-with-remainder technique":"Dividing by a number other than 0 leaves a remainder less than that number.","the domains-trade-places technique":"dom f⁻¹ = ran f and ran f⁻¹ = dom f.","the dot technique":"The dot product obeys u · v = v · u, u · (v + w) = u · v + u · w, (tu) · v = t(u · v), and u · u = |u|².","the double technique":"Cos 2A = cos² A − sin² A and sin 2A = 2 sin A cos A.","the doubled-sum technique":"Twice the sum 0 + 1 + ⋯ + n is n times n + 1.","the each-place technique":"Each place xᵢ is a continuous function of the point x, and so is every sum, product and quotient (where the bottom is not 0) of continuous functions.","the either-order technique":"If f is continuous on R, then ∬R f = ∫ab (∫cd f(x, y) dy) dx = ∫cd (∫ab f(x, y) dx) dy.","the endless-ratio-sum technique":"If |r| < 1, then Σᵢ₌₀^∞ c rⁱ = c/(1 − r). If |r| ≥ 1 and c ≠ 0, the series diverges.","the ends-count technique":"Adding the links at every dot counts every link exactly twice.","the equal-functions technique":"For f : A → B and g : C → D, f = g exactly when A = C and f(x) = g(x) for every x ∈ A.","the even-or-odd technique":"Every number is even or odd, and not both.","the even-square technique":"If a number times itself is even, the number is even.","the even-tour technique":"A graph in one piece, with at least one link, has a closed tour of the links exactly when every dot has an even count of links.","the exchange technique":"If w₁, …, wₘ build V, and u₁, …, uₖ in V are free, then k ≤ m.","the exponent-clock technique":"If gcd(a, n) = 1 and c is the count of units of the clock of n, then a^c ≡ 1 (mod n), and a^k ≡ a^j (mod n) whenever k ≡ j (mod c).","the factor technique":"r is a zero of p exactly when p(x) = (x − r)q(x) for a polynomial q; and if p has degree n ≥ 1, q has degree n − 1 and the same leading coefficient.","the fading-series technique":"If Σ|b_n| settles, then u(x, t) = Σ b_n e^(−κ(nπ/L)²t) sin(nπx/L) solves the heat statement for t > 0, is 0 at both ends, and at t = 0 is the sine series of f.","the fall technique":"A sequence that falls and has a floor settles, at its greatest lower bound.","the fence technique for sums":"If f is positive and falling, the total of Σ f(n) lies between ∫₁^∞ f and f(1) + ∫₁^∞ f; and the tail after n pieces lies between ∫_{n+1}^∞ f and ∫ₙ^∞ f.","the finite-decimal technique":"A fraction has a finite decimal exactly when its denominator in lowest terms has no prime in its prime list but 2 and 5.","the fixed-point technique":"If a sequence given by sₙ₊₁ = g(sₙ) settles, and g is continuous at its limit L, then L = g(L).","the flat-means-continuous technique":"If f has a best flat map at w, f is continuous at w.","the flat-top technique":"If f has a top or a bottom at c, and f has a slope at c, then f′(c) = 0.","the flip-formula technique":"For the line through the origin along a unit displacement u, the flip is F(P) = 2(P · u)u − P.","the flip-keeps technique":"A flip keeps every distance.","the flips-reverse technique":"A flip changes the sign of D, and keeps its size.","the forgetting technique":"On a rod with both ends at 0, if Σ|b_n| settles, then |u(x, t)| ≤ (Σ|b_n|) e^(−κπ²t/L²) for every x and every t ≥ 0, and the shapes with two or more arches shrink against the first by at least e^(−3κπ²t/L²).","the fraction-zeros technique":"If a polynomial has integer coefficients, u_n ≠ 0, and the fraction m/d in lowest terms is a zero of it, then m ∣ u₀ and d ∣ u_n.","the fractions-keep-order technique":"For rationals r and s, r ≤ s ⇔ r* ≤ s*, and r < s ⇔ r* < s*; in particular r* = s* ⇔ r = s.","the fractions-of-rationals technique":"For rationals u, c and b, d, k other than 0, fractions of rationals scale, multiply, add over one denominator, and divide as fractions of integers do.","the gather axiom":"For any p and q there is the set whose members are exactly p and q.","the gcd-as-a-sum technique":"For any integers a and n, not both 0, there are integers x and y with ax + ny = gcd(a, n).","the given-chance technique":"For fixed B with P(B) > 0, A ↦ P(A | B) is a chance on the same events.","the glued-functions technique":"Let f be a function with w as an input, equal to g on some interval (w − r, w) and to h on (w, w + r). Then f is continuous at w exactly when lim_{x→w⁻} g(x) = f(w) = lim_{x→w⁺} h(x).","the graph-flip technique":"Flipped over the floor, y = f(x) becomes y = −f(x); flipped over the upright axis, it becomes y = f(−x).","the greatest-common-divisor technique":"Any two numbers have a greatest common divisor.","the grid-of-cells technique":"(w + b)(c + d) = wc + wd + bc + bd.","the grouping technique":"1 + ½ + ⅓ + ¼ + ⋯ passes every ceiling, although its pieces head to 0.","the grow-to-basis technique":"In a space of dimension n, every free list can be grown into a basis, and every list of n free vectors is already one.","the half-are-even technique":"For n ≥ 2, Aₙ is a part-group of Sₙ with n!/2 members.","the half-the-dots technique":"A graph with n ≥ 3 dots, each with links to at least n/2 dots, has a round of the dots.","the half-turn technique":"Cos(π − θ) = −cos θ and sin(π − θ) = sin θ; cos(θ + π) = −cos θ and sin(θ + π) = −sin θ.","the heat-statement technique":"If heat runs down the temperature slope at a rate in proportion to it, and no heat is made or lost inside the rod, then u_t = κ u_xx, with κ = K/(ρc).","the highest-and-lowest technique":"If f is continuous on [v, w], then f reaches a greatest value on [v, w] and a least value on [v, w].","the hottest-at-the-edge technique":"The greatest value of u on R is taken on the floor or the walls.","the in-between-value technique":"If f is continuous on [v, w] and f(v) < 0 < f(w), then f has a zero c with v < c < w.","the independent technique":"If A and B are independent, so are A and not B.","the infinity axiom":"Some set holds 0 and never runs out of next ones.","the inside-no-more axiom":"If one set lies inside another, and both have areas, the first area is no more than the second.","the keep-order technique for plus on ℚ":"If w < b, then w + c < b + c.","the keep-order technique for times on ℚ":"If w < b and c is positive, then wc < bc.","the leading-term technique":"Let p have degree n ≥ 1 and leading coefficient u_n, and let C = |u₀| + |u₁| + ⋯ + |u_(n−1)| and M = max(1, 2C/|u_n|). Then for every real x with |x| ≥ M, |p(x) − u_n xⁿ| ≤ ½|u_n xⁿ|.","the level-ends technique":"If f is continuous on [α, β], has a slope at every input of (α, β), and f(α) = f(β), then f′(c) = 0 for some c with α < c < β.","the limit technique for sequences":"A sequence settles at no more than one real.","the limits-add technique":"If lim_{x→w} f(x) = L and lim_{x→w} g(x) = M, then lim_{x→w} (f + g)(x) = L + M.","the limits-keep-order technique":"If f and g are defined near w, f(x) ≤ g(x) for every x in some neighbourhood of w, lim_{x→w} f(x) = L and lim_{x→w} g(x) = M, then L ≤ M.","the line-limit technique":"For reals m, b and w, lim_{x→w} (mx + b) = mw + b.","the line-meets-circle technique":"Let a line ℓ be at distance δ from the centre O of a circle of radius r, with F the foot of the perpendicular from O. If δ < r, ℓ meets the circle in exactly two points, F ± √(r² − δ²) e, for a direction e of ℓ with |e| = 1. If δ = r, only at F. If δ > r, nowhere. When it meets only at F, ℓ is perpendicular to the radius OF.","the line-through-two-points technique":"Through two different points P and Q there is exactly one line: the line through P with direction Q − P.","the lines-are-continuous technique":"For reals m and b, x ↦ mx + b is continuous at every real w.","the little technique":"If p is prime and p does not divide a, then a^(p − 1) ≡ 1 (mod p); and aᵖ ≡ a (mod p) for every integer a.","the log-of-a-power technique":"For x > 0 and every rational r, ln(xʳ) = r ln x.","the log-of-a-product technique":"For all x, y > 0, ln(xy) = ln x + ln y.","the log-of-a-quotient technique":"ln(1/y) = −ln y and ln(x/y) = ln x − ln y, for x, y > 0.","the log-onto-ℝ technique":"For every real c there is exactly one x > 0 with ln x = c. So ln is a bijection from (0, ∞) to ℝ, and its inverse is a continuous function from ℝ to (0, ∞).","the log-rises technique":"ln 1 = 0; ln x < 0 for 0 < x < 1; ln x > 0 for x > 1; and 0 < x < y gives ln x < ln y.","the log-unbounded technique":"For every M there are x with ln x > M and x with ln x < −M. As x → ∞, ln x → ∞; as x → 0⁺, ln x → −∞.","the lost-plus-reached technique":"If V has dimension n and L is straight from V, then the dimension of what L loses plus the dimension of what it reaches is n.","the miss-at-right-angles technique":"Let v₁, …, vₖ be free and G the grid with Gᵢⱼ = ⟨vⱼ, vᵢ⟩. Then w = Σ cⱼvⱼ is the point of W closest to f exactly when Gc = b, where bᵢ = ⟨f, vᵢ⟩, and G is undoable, so there is exactly one such c.","the move-keeps technique":"Each move of the calculus, fed lines that hold in a world, writes a line that holds in that world.","the moving-dot technique":"If u(t) and v(t) have slopes, then (u · v)′ = u′ · v + u · v′ and (u × v)′ = u′ × v + u × v′. So a vector of fixed length moves at right angles to itself: if |r(t)| is the same for every t, then r(t) · r′(t) = 0.","the multiplying-keeps-answers technique":"If c ≠ 0, then L = R exactly when Lc = Rc.","the nearest-point technique":"For a point P₀ = (x₀, y₀) and a line ℓ: Ax + By = C with n = (A, B), the point F = P₀ − ((n · P₀ − C)/|n|²) n is on ℓ, P₀ − F is perpendicular to ℓ, F is the one nearest point of ℓ to P₀, and d(P₀, F) = |Ax₀ + By₀ − C|/√(A² + B²).","the nonzero-det technique":"A square grid can be undone exactly when its determinant is not 0.","the nothing-sent technique":"For a straight map L, what it loses is a space inside V, what it reaches is a space inside W, and L is one-to-one exactly when it loses only 0.","the nothing-times-0-is-1 technique":"There is no c with c · 0 = 1.","the odd-times-odd technique":"An odd number times an odd number is odd.","the odds-update technique":"If P(E) > 0 and P(E | not A) > 0, the odds of A given E are the odds of A times the ratio P(E | A) / P(E | not A).","the one-changes-nothing technique":"Multiplying by 1, on either side, changes nothing.","the one-count technique":"If X has n members and has n′ members, then n = n′.","the one-future technique":"Two answers of the heat statement on R with the same start and the same ends are the same answer. If their starts and ends differ by at most δ, the answers differ by at most δ everywhere in R.","the one-knob technique":"To find a partial slope, treat every other input as a fixed number and use the slope techniques of rung 13.","the one-limit technique":"If f is defined near w, lim_{x→w} f(x) = L and lim_{x→w} f(x) = M, then L = M.","the one-output technique":"For f ⊆ A × B, these three say the same thing: (i) every input has an output and no input has two; (ii) ∀x ∈ A ∃!y ((x, y) ∈ f); (iii) each member of A is the left entry of exactly one member of f.","the one-root technique":"For non-negative x and y, x² = y² ⇒ x = y.","the open-tour technique":"A graph in one piece has a tour of the links that is not closed exactly when exactly two dots have odd counts; it runs from one of them to the other.","the order-and-arithmetic-agree technique":"α ≤ β ⇒ α + σ ≤ β + σ; α < β ⇒ α + σ < β + σ; and α < β ⇔ β − α is positive.","the order-divides technique":"In a finite group, the order of every member divides the size of the group.","the out-to-forever technique":"For rational p, ∫₁^∞ x⁻ᵖ dx converges when p > 1, to 1/(p − 1), and diverges when p ≤ 1.","the over-and-under technique":"The number of members of U lying in none of A₁, …, Aₘ is |U| minus the sizes of the Aᵢ, plus the sizes of the overlaps of two, minus those of three, and so on to the overlap of all m.","the p-sum technique":"Σ 1/nᵖ settles exactly when p > 1.","the pair-product technique":"The turn by (a, b) after the turn by (c, d) is the turn by (ac − bd, ad + bc).","the pair-undo technique":"The turn by (a, −b) undoes the turn by (a, b).","the parallel-flips technique":"Two flips across parallel lines make a slide, at right angles to the lines, by twice the gap between them.","the parallel-through-a-point technique":"For a line ℓ: Ax + By = C and a point P = (p₁, p₂) not on ℓ, exactly one line through P is parallel to ℓ: Ax + By = Ap₁ + Bp₂.","the parity technique":"Every string of swaps for a shuffle σ is even in length when N(σ) is even, and odd when N(σ) is odd.","the part-of-the-way technique":"For points P ≠ Q and 0 ≤ t ≤ 1, the point X = P + t(Q − P) has d(P, X) = t · d(P, Q) and d(X, Q) = (1 − t) · d(P, Q). With t = ½ it is the midpoint ((x₁ + x₂)/2, (y₁ + y₂)/2); with t = m/(m + n) it divides the way from P to Q in the ratio m : n.","the partial-sum technique":"Every question about an endless sum is a question about the sequence of its running totals.","the perp technique":"W⊥ is a space inside the space, and W and W⊥ share one vector only, 0.","the perpendicular-bisector technique":"For points A ≠ B, the set {X : d(X, A) = d(X, B)} is the line 2(B − A) · X = |B|² − |A|². It passes through the midpoint M of AB and is perpendicular to AB.","the perpendicular-lines technique":"The lines A₁x + B₁y = C₁ and A₂x + B₂y = C₂ have perpendicular directions exactly when A₁A₂ + B₁B₂ = 0. If neither is vertical, with slopes m₁ and m₂, that is m₁m₂ = −1.","the polynomial-division technique":"For polynomials p and d, with d of degree m ≥ 1, there are polynomials q and r with p(x) = d(x)q(x) + r(x) for every real x, where r is the zero polynomial or has degree less than m.","the polynomial-slope technique":"Every polynomial has a slope at every real, found term by term.","the polynomials-are-continuous technique":"Every polynomial is continuous at every real.","the positive-product technique on ℚ":"A positive rational times a positive rational is positive.","the positive-product technique on ℝ":"A product of positive reals is positive.","the positive-reciprocal technique on ℚ":"For a positive s, s⁻¹ is positive; and 0 < x < y ⇒ y⁻¹ < x⁻¹.","the positive-sum technique on ℝ":"A sum of positive reals is positive.","the power axiom":"For any set u there is the set of all the subsets of u.","the power technique for slopes":"The slope of x to a whole power is that power times x to one less.","the power-cost technique":"The square-and-multiply technique finds aᵏ on a clock with at most 2⌊log₂ k⌋ products of hours.","the power-of-a-next technique":"k to the power of the next one after b is k to the power b, times k.","the power-of-a-power technique":"Doing “b times” c times over is doing it b · c times.","the power-of-one-plus technique":"For h ≥ 0 and whole n, (1 + h)ⁿ ≥ 1 + nh.","the power-one technique":"A number to the power 1 is itself.","the power-zero technique":"Any number to the power 0 is 1.","the product-bound technique":"For any product, |⟨f, g⟩| ≤ ‖f‖ ‖g‖, with equality exactly when one of f and g is a multiple of the other.","the product-is-doing technique":"If B is a grid with n columns and k rows, and A has k columns and m rows, then doing B and then A is the grid AB, whose column j is A times column j of B: (AB)ᵢⱼ = aᵢ₁b₁ⱼ + ⋯ + aᵢₖbₖⱼ.","the product-keeper technique":"A square grid U of turning numbers keeps every product, ⟨Ux, Uy⟩ = ⟨x, y⟩, exactly when U*U = I; then it keeps every size, and every stretch of U has size 1.","the product-triangle technique":"For any product, ‖f + g‖ ≤ ‖f‖ + ‖g‖; so ‖f − h‖ ≤ ‖f − g‖ + ‖g − h‖, and the size of a difference is a distance.","the quadratic-formula technique":"For reals t, b and c with t ≠ 0 and b² − 4tc ≥ 0, tx² + bx + c = 0 exactly when x = (−b ± √(b² − 4tc))/(2t).","the quarters technique":"The signs of cos θ and sin θ are fixed by the quarter of the circle the walk ends in.","the read-off technique":"If d₁, …, dₙ are vectors of length 1 in lists of n numbers, each at right angles to the others, they are a basis, and every vector u is (u · d₁)d₁ + ⋯ + (u · dₙ)dₙ.","the real-stretches technique":"Every stretch of a symmetric map is a real number.","the reciprocal technique":"If w ≠ 0, there is exactly one rational b with wb = 1; for w = p/q it is q/p.","the rectangle-total technique":"If f is continuous on R, then f is integrable on R.","the regroup technique for times":"In a product of three numbers, which pair is multiplied first does not change the product.","the regroup technique for times on ℚ":"Brackets in a product of rationals do not matter.","the remaining-option technique":"From P or Q, and not Q, you may write P.","the right-angled-stretches technique":"If a symmetric map stretches u by λ and v by μ, with λ ≠ μ, then u and v are at right angles.","the right-triangle technique":"For all displacements u and v, |u + v|² = |u|² + |v|² + 2u · v. So |u + v|² = |u|² + |v|² exactly when u ⊥ v. In a triangle with a right angle at C, the squares of the two sides that meet at C add to the square of the side across from it; and if they add so, the angle at C is right.","the rise-or-fall technique":"Any row of n² + 1 different numbers holds n + 1 of them, in their order in the row, that rise, or n + 1 that fall.","the root technique":"Every polynomial of degree n ≥ 1 with complex numbers in front has a root in ℂ; and p(z) = uₙ(z − r₁)(z − r₂)⋯(z − rₙ) for some r₁, …, rₙ in ℂ.","the roots-to-coefficients technique":"(x − r₁)⋯(x − rₙ) = xⁿ − e₁xⁿ⁻¹ + e₂xⁿ⁻² − ⋯ + (−1)ⁿeₙ.","the row-move technique":"Each row move is multiplying on the left by an undoable grid E; so a row move on [A | b] keeps exactly the same answers x, and each row move is undone by another row move.","the running-backwards technique":"f : A → B can be run backwards exactly when it is a bijection; and then its only inverse is f⁻¹.","the same-answers technique":"If every rational x has φ(x) ⇔ ψ(x), then {x ∈ ℚ : φ(x)} = {x ∈ ℚ : ψ(x)}.","the same-coefficients technique":"If Σ_{k≤n} u_k x^k = Σ_{k≤n} v_k x^k at n + 1 different reals, then u_k = v_k for every k ≤ n.","the same-size technique":"If a space has a basis of n vectors, every basis of it has n vectors.","the same-squares technique":"If w² = b², then w = b or w = −b.","the sandwich technique":"−|p| ≤ p ≤ |p|.","the sequence technique":"From {P} c₁ {R} and {R} c₂ {Q}, write {P} c₁; c₂ {Q}.","the settles-in-size technique":"If Σ |uₙ| settles, then Σ uₙ settles too.","the shadow-sum technique":"If e₁, …, eₙ is a right-angled list building W, the point of W closest to f is Pf = ⟨f, e₁⟩e₁ + ⋯ + ⟨f, eₙ⟩eₙ; the miss f − Pf is at right angles to every vector of W, and no other point of W is as close.","the shrink technique":"If Σ uₙ settles, then uₙ → 0.","the shuffles-compose technique":"A shuffle done after a shuffle is a shuffle.","the shuffles-form-a-group technique":"The shuffles of any set, composed, form a group.","the side-by-side axiom":"If two sets with areas share no points except some on a single line x = k, then the two together have the sum of the two areas.","the side-turn technique":"Det Aᵀ = det A. So every technique for columns holds for rows: swapping two rows changes the sign, and adding a stretch of one row to another changes nothing.","the size-of-a-negative technique":"|−p| = |p|.","the size-of-a-product technique":"|pq| = |p| |q|.","the size-squared technique":"|p|² = p², and √(p²) = |p|.","the slope-bound technique":"Suppose f is continuous on [α, β], has a slope at every input of (α, β), and |f′(x)| ≤ K for every x in (α, β). Then |f(y) − f(x)| ≤ K · |y − x| for every x and y in [α, β].","the slope-means-no-gap technique":"If f has a slope at w, then f is continuous at w.","the slope-of-log technique":"ln is differentiable on (0, ∞), and ln′(x) = 1/x.","the slope-sign-order technique":"If f is continuous on an interval and has a positive slope at every input inside it, then f is increasing on the interval. If every slope inside is negative, f is decreasing. If every slope inside is at least 0, then x < y gives f(x) ≤ f(y).","the smaller-function-smaller-area technique":"If f and g are integrable on [u, v] and f(x) ≤ g(x) for every x there, then ∫ᵤᵛ f ≤ ∫ᵤᵛ g. In particular, if m ≤ f(x) ≤ M on [u, v], then m(v − u) ≤ ∫ᵤᵛ f ≤ M(v − u).","the socks-and-shoes technique":"If f : A → B and g : B → C are bijections, (g ∘ f)⁻¹ = f⁻¹ ∘ g⁻¹.","the spare-vector technique":"If v₁, …, vₖ are not free, and v₁ ≠ 0, then some vⱼ is a mix of the vectors before it, and dropping vⱼ leaves every mix the list can make.","the split-in-any-order technique":"If f is integrable on every closed interval inside I, then for any p, q, r in I, ∫ₚ^q f = ∫ₚ^r f + ∫ᵣ^q f.","the spread technique for times over plus":"A number times a sum is the sum of the two products.","the spread technique on ℚ":"Times spreads over plus on the rationals.","the spread technique on ℤ":"Times spreads over plus on the integers.","the spreading-bell technique":"Φ solves the heat statement for every t > 0, totals 1 along the line at every t, and is the bell with spread 2κt.","the square's-area technique":"The region 0 ≤ x ≤ s, 0 ≤ y ≤ s has area ∫₀ˢ s dx = s², and the box with edges s has volume s³ (16k's prism); a rectangle with sides p and q along the axes has area pq.","the square-and-multiply technique":"To find aᵏ on the clock of n, square a again and again to get a, a², a⁴, a⁸, …, each on the clock, and multiply together those whose places in k written in twos hold a 1.","the square-limit technique":"For every real w, lim_{x→w} x² = w².","the square-never-negative technique":"For every real x, 0 ≤ x².","the square-of-a-difference technique":"(w − b)² = w² − 2wb + b².","the square-of-a-sum technique":"(w + b)² = w² + 2wb + b².","the square-root technique":"For a real u ≥ 0 there is a real x ≥ 0 with x² = u.","the square-sum technique":"If f and g are at right angles, the square of the size of f + g is the sum of the squares of their sizes.","the squares-keep-order technique on ℚ":"0 ≤ s < r ⇒ s² < r².","the stair-det technique":"If every entry below the middle of a square grid is 0, its determinant is the product of the entries down the middle. So if row moves with s swaps, and otherwise only adding stretches of rows, bring A to a staircase, det A is (−1)ˢ times the product down the middle of the staircase.","the straighten-out technique":"If A, n × n, has n free vectors v₁, …, vₙ that it only stretches, by λ₁, …, λₙ, and P is the grid with those columns, then A = P D P⁻¹, where D has λ₁, …, λₙ down its middle and 0 elsewhere; and Aᵏ = P Dᵏ P⁻¹ for every counting number k.","the stretch-test technique":"Λ is a stretch of A exactly when det(A − λI) = 0. As λ varies, det(A − λI) is a polynomial in λ of degree n, with (−1)ⁿλⁿ first.","the sum technique":"Cos(A + B) = cos A cos B − sin A sin B, and sin(A + B) = sin A cos B + cos A sin B.","the sum-and-product technique":"(x + m)(x + n) = x² + (m + n)x + mn.","the sum-of-sums technique":"If Σ uₙ = A and Σ vₙ = B, then Σ (uₙ + vₙ) = A + B and Σ c·uₙ = c·A.","the swap-is-odd technique":"Exchanging two entries of a list changes the number of pairs out of order by an odd number.","the swap-knobs technique":"If fx, fy and fxy, fyx exist near (a, b), and fxy and fyx are continuous at (a, b), then fxy(a, b) = fyx(a, b).","the swapped-pairs technique":"(x, y) ∈ f ⇔ (y, x) ∈ f⁻¹.","the swapped-pairs-function technique":"For f : A → B, f⁻¹ : B → A exactly when f is one-to-one and onto B.","the swaps-build-every-shuffle technique":"Every shuffle of {1, …, n} is e or a string of swaps.","the symmetric-is-coefficients technique":"Every symmetric polynomial is a polynomial in e₁, …, eₙ, and its coefficients stay among whole numbers when the symmetric polynomial’s do.","the symmetric-is-rational technique":"If f has rational coefficients and top coefficient 1, every symmetric polynomial with rational coefficients, evaluated at the roots of f, is a rational number.","the tables agree with the techs":"Each tech of the rung, run on lines that give 1 in a row, gives a line that gives 1 in that row.","the tail technique":"Dropping or changing finitely many pieces never changes whether a sum settles.","the tangent-is-steepness technique":"Tan θ is the slope of the line from the centre to the point at θ.","the tangent-secant technique":"Wherever cos θ ≠ 0, 1 + tan² θ = sec² θ.","the there-and-back technique":"If f : A → B is a bijection, then f⁻¹(f(x)) = x for every x ∈ A, and f(f⁻¹(y)) = y for every y ∈ B; that is, f⁻¹ ∘ f = id_A and f ∘ f⁻¹ = id_B.","the thinning technique":"A set with a list is finite or matched with ℕ.","the three-conditions technique":"Exactly one D obeys straight, flat and unit: D(A) = Σ over the shuffles σ of 1..n of sign(σ) a_{σ(1)1} a_{σ(2)2} ⋯ a_{σ(n)n}, where sign(σ) is +1 for an even shuffle and −1 for an odd one. Any D that is only straight and flat equals D(I) times this.","the three-way-order technique on ℝ":"For reals α and β, exactly one of α < β, α = β, β < α holds.","the times-a-next technique":"k times the next one after b is k times b, plus k.","the times-zero technique":"Any number times 0 is 0.","the transcendentals-exist technique":"Some real is transcendental; the diagonal of a list of the algebraic reals in [0, 1) is one.","the triangle technique":"|p + q| ≤ |p| + |q|.","the true-everywhere technique":"If G reaches φ, then φ is true in every world of G.","the turn-about technique for plus on ℚ":"Order in a sum of rationals does not matter.","the turn-about technique for times":"A product is the same in either order.","the turn-around technique":"If P(A) > 0 and P(B) > 0, then P(B | A) = P(A | B) P(B) / P(A).","the turn-is-a-pair technique":"A turn about the origin is fixed by where it sends (1, 0).","the turned-product technique":"In the second slot a product is straight up to conjugates, ⟨f, sg + th⟩ = s̄⟨f, g⟩ + t̄⟨f, h⟩, and ⟨f, f⟩ is always a real number.","the turning-adds-arcs technique":"The turn by the pair (cos B, sin B) sends the point at arc A to the point at arc A + B.","the two-circles-meet technique":"Let circles have centres O₁ ≠ O₂, radii r₁ and r₂, and d = d(O₁, O₂). They meet in exactly two points when |r₁ − r₂| < d < r₁ + r₂, in exactly one when d = r₁ + r₂ or d = |r₁ − r₂|, and nowhere otherwise.","the two-descriptions-agree technique":"The line through P with direction v is the set {X : n · X = n · P}, where n = (−v₂, v₁). Conversely, the set Ax + By = C is the line through any of its points with direction (−B, A), and it has points.","the two-flips technique":"Every turn and every slide is two flips.","the two-forms-of-one-to-one technique":"f is one-to-one exactly when x₁ ≠ x₂ ⇒ f(x₁) ≠ f(x₂) for all inputs x₁ and x₂.","the two-lines-meet technique":"Let A₁x + B₁y = C₁ and A₂x + B₂y = C₂ be lines, and D = A₁B₂ − A₂B₁. If D ≠ 0 they have exactly one common point, x = (C₁B₂ − C₂B₁)/D, y = (A₁C₂ − A₂C₁)/D. If D = 0, their normals are multiples, and the lines are the same or parallel.","the two-targets technique":"For reals L, M and y, and a positive ε with 2ε ≤ |L − M|, it is not so that |y − L| < ε and |y − M| < ε.","the undo-exactly-when technique":"The hour [a] has an undo on the clock of n exactly when gcd(a, n) = 1, and then it has only one.","the uniqueness method":"To show two roots are the same, show both sides are non-negative and have the same square.","the units-group technique":"The units of the clock of n form a group under times.","the unlisted-real technique":"For every list x₀, x₁, x₂, … of reals in [0, 1), some real in [0, 1) is none of them.","the unpack-the-bars technique":"For d ≥ 0, |p| ≤ d ⇔ −d ≤ p ≤ d, and |p| < d ⇔ −d < p < d.","the walk-to-path technique":"If a walk joins u to w, a path joins u to w.","the while technique":"From {I ∧ B} c {I}, write {I} while B do c {I ∧ ¬B}.","the whole-chance technique":"If B₁, B₂, … are separate events of positive chance that fill Ω, then P(A) = Σ P(A | Bₖ) P(Bₖ).","the whole-exponent techniques":"For reals u, v ≠ 0 and integers m, n: u^m u^n = u^(m + n), (u^m)^n = u^(mn), (uv)^n = u^n v^n.","the word-for-number technique":"Each word stands for exactly one first digit d, so a line “word n” names exactly one instruction number, 100d + n.","the world-means-clash-free technique":"A collection of statements that has a world is clash-free.","the zero-product technique":"If wb = 0, then w = 0 or b = 0.","the zero-slope-is-constant technique":"If f has slope 0 at every input of an open interval I, then f is constant on I. Likewise if f is continuous on [α, β] and has slope 0 at every input of (α, β), then f is constant on [α, β].","the zero-stretch technique":"In every space of vectors, 0·v = 0, t·0 = 0, and (−1)·v = −v.","two things the same as a third":"Two things that are each the same as one thing are the same as each other.","use a some":"From ∃x P(x), set in the case of a fresh name b, with nothing said of b but P(b); work the case to some R that does not mention b, and R comes back to the margin.","use an every":"From ∀x P(x), you may write P(t) for any name t you have.","when nothing is true, everything is permitted":"A line that equals ⊥ may be written again as any statement at all."};
+const STEPOF=/*STEPOF*/{"a chain of order":"5f","add an option":"1c","bounding a gap":"8h","carry an if through":"1d","check after squaring":"8i","clash":"1b","clearing inner fractions":"5h","completing the sameness":"8i","counting answers by the discriminant":"8i","hunt for the bad row":"1e","join":"1c","keep either part":"1c","main mark first, then inward":"2c","making and using an exactly-when":"1d","proof by induction":"4c","prove an if":"1d","reading the completed form":"8i","reason by cases":"1c","refute":"1b","show an example":"2b","speak of everything by speaking of anything":"2b","substitution":"5g","the adding-keeps-answers technique":"5g","the agreeing-near technique":"10a","the angle-between technique":"27k","the antiderivative-exists technique":"16b","the any-two-compare technique":"4h","the any-two-compare technique on ℚ":"5d","the anything-times-zero technique":"5e","the area technique for sums":"22f","the area-bound technique":"16a","the area-is-a-change technique":"16c","the area-slope technique":"16b","the area-under-a-power technique":"15i","the areas-add technique":"15e","the areas-scale technique":"15e","the assignment technique":"40c","the at-most-is-a-partial-order technique on ℝ":"8a","the at-most-n-zeros technique":"9g","the average-height technique":"15f","the average-slope technique":"14c","the backwards-assignment technique":"40f","the box-area axiom":"15a","the box-volume axiom":"16k","the branch-product technique":"30l","the cancel technique for fractions":"5c","the cancel technique for plus":"4f","the cancel technique for times on ℚ":"5e","the candidates technique":"14a","the carry-to-the-clock technique":"43a","the chain technique":"0c","the chain technique for If":"1d","the chain technique for divides":"4j","the chain technique for less":"4h","the chain technique for less on ℚ":"8a","the chance technique":"30f","the choice technique":"40f","the circle technique for cos and sin":"21c","the circle-equation technique":"18d","the circle-through-three technique":"18d","the climb technique":"22a","the clock-cancel technique":"43a","the clock-hours technique":"43a","the closest-point technique":"31b","the codomain technique":"9a","the columns technique":"27d","the compare-by-cross-multiplying technique":"5f","the comparison technique":"22e","the comparison technique for areas":"16i","the complete-ordered-field technique":"8d","the composite-is-a-function technique":"9b","the consequence technique":"40f","the continuity-unpacked technique":"11a","the continuous-both-ways technique":"11a","the continuous-is-integrable technique":"15f","the cooling-shape technique":"33a","the countable-removed technique":"35b","the countable-union technique":"35a","the cross technique":"27k","the cross-multiplying technique":"5c","the crossing-flips technique":"20e","the crowded-box technique":"42i","the cubic-discriminant technique":"47b","the decimal-block technique":"43d","the det-product technique":"27e","the difference technique":"21e","the difference-of-squares technique":"5i","the difference-test technique":"43a","the different-stretches technique":"27f","the distance-basics technique":"18a","the divides-a-multiple technique":"4j","the divides-a-sum technique":"4j","the divides-the-rest technique":"4j","the division technique":"5c","the division-with-remainder technique":"4j","the domains-trade-places technique":"9d","the dot technique":"18a","the double technique":"21d","the doubled-sum technique":"4k","the each-place technique":"28a","the either-order technique":"28j","the endless-ratio-sum technique":"15i","the ends-count technique":"42a","the equal-functions technique":"9a","the even-or-odd technique":"4j","the even-square technique":"4j","the even-tour technique":"42c","the exchange technique":"27b","the exponent-clock technique":"43d","the factor technique":"9g","the fading-series technique":"33a","the fall technique":"22a","the fence technique for sums":"22f","the finite-decimal technique":"5h","the fixed-point technique":"22a","the flat-means-continuous technique":"28b","the flat-top technique":"14a","the flip-formula technique":"20c","the flip-keeps technique":"20d","the flips-reverse technique":"20g","the forgetting technique":"33b","the fraction-zeros technique":"9g","the fractions-keep-order technique":"8a","the fractions-of-rationals technique":"5h","the gather axiom":"2f","the gcd-as-a-sum technique":"43b","the given-chance technique":"30f","the glued-functions technique":"11e","the graph-flip technique":"20i","the greatest-common-divisor technique":"4j","the grid-of-cells technique":"5i","the grouping technique":"22d","the grow-to-basis technique":"27b","the half-are-even technique":"19e","the half-the-dots technique":"42c","the half-turn technique":"21e","the heat-statement technique":"33a","the highest-and-lowest technique":"12c","the hottest-at-the-edge technique":"33b","the in-between-value technique":"12a","the independent technique":"30f","the infinity axiom":"3d","the inside-no-more axiom":"15a","the keep-order technique for plus on ℚ":"5f","the keep-order technique for times on ℚ":"5f","the leading-term technique":"9g","the level-ends technique":"14b","the limit technique for sequences":"22a","the limits-add technique":"10c","the limits-keep-order technique":"10b","the line-limit technique":"10a","the line-meets-circle technique":"18d","the line-through-two-points technique":"18c","the lines-are-continuous technique":"11a","the little technique":"43d","the log-of-a-power technique":"17c","the log-of-a-product technique":"17c","the log-of-a-quotient technique":"17c","the log-onto-ℝ technique":"17d","the log-rises technique":"17a","the log-unbounded technique":"17d","the lost-plus-reached technique":"27c","the miss-at-right-angles technique":"31b","the move-keeps technique":"38c","the moving-dot technique":"27k","the multiplying-keeps-answers technique":"5g","the nearest-point technique":"18c","the nonzero-det technique":"27e","the nothing-sent technique":"27c","the nothing-times-0-is-1 technique":"5e","the odd-times-odd technique":"4j","the odds-update technique":"30l","the one-changes-nothing technique":"4g","the one-count technique":"4k","the one-future technique":"33b","the one-knob technique":"28a","the one-limit technique":"10b","the one-output technique":"9a","the one-root technique":"8f","the open-tour technique":"42c","the order-and-arithmetic-agree technique":"8d","the order-divides technique":"19d","the out-to-forever technique":"16i","the over-and-under technique":"42i","the p-sum technique":"22f","the pair-product technique":"20j","the pair-undo technique":"20j","the parallel-flips technique":"20e","the parallel-through-a-point technique":"18c","the parity technique":"19e","the part-of-the-way technique":"18a","the partial-sum technique":"22d","the perp technique":"27k","the perpendicular-bisector technique":"18d","the perpendicular-lines technique":"18c","the polynomial-division technique":"9g","the polynomial-slope technique":"13d","the polynomials-are-continuous technique":"11d","the positive-product technique on ℚ":"5d","the positive-product technique on ℝ":"8d","the positive-reciprocal technique on ℚ":"8d","the positive-sum technique on ℝ":"8d","the power axiom":"2g","the power technique for slopes":"13d","the power-cost technique":"43n","the power-of-a-next technique":"4g","the power-of-a-power technique":"4g","the power-of-one-plus technique":"15i","the power-one technique":"4g","the power-zero technique":"4g","the product-bound technique":"31a","the product-is-doing technique":"27d","the product-keeper technique":"31d","the product-triangle technique":"31a","the quadratic-formula technique":"8i","the quarters technique":"21c","the read-off technique":"27k","the real-stretches technique":"31d","the reciprocal technique":"5c","the rectangle-total technique":"28j","the regroup technique for times":"4g","the regroup technique for times on ℚ":"5d","the remaining-option technique":"1c","the right-angled-stretches technique":"31d","the right-triangle technique":"18a","the rise-or-fall technique":"42i","the root technique":"25d","the roots-to-coefficients technique":"47b","the row-move technique":"27l","the running-backwards technique":"9d","the same-answers technique":"5g","the same-coefficients technique":"9g","the same-size technique":"27b","the same-squares technique":"5i","the sandwich technique":"8h","the sequence technique":"40f","the settles-in-size technique":"22e","the shadow-sum technique":"31b","the shrink technique":"22d","the shuffles-compose technique":"19a","the shuffles-form-a-group technique":"19a","the side-by-side axiom":"15a","the side-turn technique":"27g","the size-of-a-negative technique":"8h","the size-of-a-product technique":"8h","the size-squared technique":"8h","the slope-bound technique":"14c","the slope-means-no-gap technique":"13b","the slope-of-log technique":"17b","the slope-sign-order technique":"14d","the smaller-function-smaller-area technique":"15e","the socks-and-shoes technique":"9d","the spare-vector technique":"27b","the split-in-any-order technique":"16a","the spread technique for times over plus":"4g","the spread technique on ℚ":"5d","the spread technique on ℤ":"5b","the spreading-bell technique":"33b","the square's-area technique":"18a","the square-and-multiply technique":"43n","the square-limit technique":"10a","the square-never-negative technique":"8f","the square-of-a-difference technique":"5i","the square-of-a-sum technique":"5i","the square-root technique":"8f","the square-sum technique":"31a","the squares-keep-order technique on ℚ":"8a","the stair-det technique":"27m","the straighten-out technique":"27f","the stretch-test technique":"27f","the sum technique":"21d","the sum-and-product technique":"5i","the sum-of-sums technique":"22d","the swap-is-odd technique":"19e","the swap-knobs technique":"28d","the swapped-pairs technique":"9d","the swapped-pairs-function technique":"9d","the swaps-build-every-shuffle technique":"19e","the symmetric-is-coefficients technique":"47b","the symmetric-is-rational technique":"47b","the tables agree with the techs":"1e","the tail technique":"22d","the tangent-is-steepness technique":"21c","the tangent-secant technique":"21c","the there-and-back technique":"9d","the thinning technique":"35a","the three-conditions technique":"27e","the three-way-order technique on ℝ":"8b","the times-a-next technique":"4g","the times-zero technique":"4g","the transcendentals-exist technique":"35b","the triangle technique":"8h","the true-everywhere technique":"38c","the turn-about technique for plus on ℚ":"5d","the turn-about technique for times":"4g","the turn-around technique":"30f","the turn-is-a-pair technique":"20j","the turned-product technique":"31a","the turning-adds-arcs technique":"21d","the two-circles-meet technique":"18d","the two-descriptions-agree technique":"18c","the two-flips technique":"20e","the two-forms-of-one-to-one technique":"9c","the two-lines-meet technique":"18c","the two-targets technique":"10b","the undo-exactly-when technique":"43b","the uniqueness method":"8f","the units-group technique":"43b","the unlisted-real technique":"35b","the unpack-the-bars technique":"8h","the walk-to-path technique":"42a","the while technique":"40g","the whole-chance technique":"30f","the whole-exponent techniques":"8i","the word-for-number technique":"40a","the world-means-clash-free technique":"38c","the zero-product technique":"5e","the zero-slope-is-constant technique":"14d","the zero-stretch technique":"27a","two things the same as a third":"0concl","use a some":"2b","use an every":"2b","when nothing is true, everything is permitted":"1b"};
+const SKSTEPS=/*SKSTEPS*/{"f1.oddsum":["1b","1c","2b","4g","4j"],"f1.divsum":["1d","2b","4g","4j"],"f1.sumind":["0c","1d","2b","4c","4g","5g"],"f1.cases":["1b","1c","1d"],"f3.onezero":["1b","1c","5g","8b","8d","8f","12a","13b","13d","14b"],"f3.bound":["1d","2b","5g","8a","8d","13b","13d","14c"],"f3.greatest":["1d","5d","5e","5g","8d","13b","13d","14a"],"f3.powind":["1d","2b","4c","4g","5d","5e","5f","8a","8d"],"f5.onto":["1c","1d","2b","5e","5g","27b","27c","27d","27e","27l"],"f5.straight":["1d","2b","5e","27a","27d","27f"],"f5.notone":["1b","1c","4h","5g","27b","27c","27k"],"f5.gridpow":["1c","1d","2b","4c","4g","5b","27d","27m"],"f1.answers":["1d","5d","5e","5g"],"f1.evencases":["1c","2b","4g","4j"],"f2.sqrteq":["1d","5e","5g","5i","8f","8h","8i"],"f2.gapbound":["1c","1d","5i","8a","8d","8h"],"f2.inverse":["1c","1d","2b","5g","9d"],"f2.factor":["1c","1d","5e","5g","8b","8i","9g"],"f2.hole":["1c","1d","5c","5e","5g","5i","10a","11a"],"f2.glued":["1d","5g","10a","10c","11e"],"f3.area":["1c","1d","5g","8d","8f","8i","11d","13d","15e","15f","16c"],"f3.logeq":["1d","5e","5g","5i","17c","17d"],"f4.circle":["1d","18a","18c","18d"],"f4.parity":["1b","1c","2b","4j","4k","19e"],"f4.flips":["1c","2b","5g","18a","20c","20e","20j","21d"],"f4.sumangle":["1b","1c","5e","5g","5i","21c","21d"],"f4.climb":["1c","1d","4c","5d","5f","5g","8d","10a","22a"],"f4.series":["1c","2b","5f","8d","16i","22d","22e","22f"],"f5.bayes":["0c","1b","1c","5d","30f","30l"],"f5.fubini":["0c","1c","2b","5g","15i","16c","28a","28j"],"f6.closest":["1c","2b","5g","8f","18a","31a","31b"],"f6.bound":["0c","1b","1c","5d","5g","8a","18a","27a","27k","31a"],"f6.symm":["1c","1d","5g","5i","27f","31d"],"f6.diag":["1c","1d","2b","5f","5g","15i","35b"],"f6.heat":["1b","1c","5f","5g","8h","33a","33b"],"f6.world":["1b","1c","2b","2c","38c"],"f7.congr":["1c","1d","4j","5g","43a","43b"],"f7.power":["0c","1d","4j","8i","43a","43d","43n"],"f7.tour":["1b","1c","2b","5g","42a","42c"],"f7.crowd":["1c","2b","4j","5g","42i","43a"],"f7.vieta":["1b","1c","5e","5g","5h","5i","47b"],"f7.loop":["1d","5d","5g","40c","40f","40g"]};
 const say=n=>TECH[n]?TECH[n].replace(/\.$/,''):'';
 const stepOk=(n,ok)=>!ok||!STEPOF[n]||ok(STEPOF[n]);
 
@@ -19163,12 +19216,12 @@ NL({id:'13f.gluedtimes',from:'fn',to:'num',steps:()=>['13f'],say:(p,nm)=>'glue '
   slips:s=>{ const r=onePow(s.t); if(!r||r.p<=0) return []; const k=Math.ceil(qf(r)-1e-12)-1; return [{why:'the last slope, which has a corner at 0, is counted',v:Q(k+1)},{why:'one slope too few is counted',v:Q(Math.max(0,k-1))},{why:'the power itself is given',v:r}]; },
   line:(o,p,nm)=>'the glued '+nm+' can be differentiated '+qs(o.v)+' times at 0'});
 /* the area scale of (r, θ) ↦ (k r cos θ, k r sin θ) */
-NL({id:'28i.polar',from:'num',to:'num',steps:()=>['28i'],make:()=>({k:pk([1,2,3])}),say:(p,nm)=>'find the factor by which F(r, θ) = ('+(p.k===1?'':p.k)+'r cos θ, '+(p.k===1?'':p.k)+'r sin θ) scales small areas at reach r = '+nm,
+NL({id:'28k.polar',from:'num',to:'num',steps:()=>['28k'],make:()=>({k:pk([1,2,3])}),say:(p,nm)=>'find the factor by which F(r, θ) = ('+(p.k===1?'':p.k)+'r cos θ, '+(p.k===1?'':p.k)+'r sin θ) scales small areas at reach r = '+nm,
   act:(s,p)=>s.v.p>0?num(qm(Q(p.k*p.k),s.v)):null, cite:()=>'the change-of-variables technique',
   slips:(s,p)=>[{why:'the stretch k is counted once, not in both directions',v:qm(Q(p.k),s.v)},{why:'the reach is squared',v:qm(Q(p.k*p.k),qm(s.v,s.v))},{why:'the reach is left out, as if turn and reach were straight measures',v:Q(p.k*p.k)}],
   line:(o,p,nm)=>'the area scale at reach '+nm+': '+qs(o.v)});
 /* a band of a ball, and a rim from what it holds */
-NL({id:'28n.band',from:'num',to:'word',steps:()=>['28n'],make:cur=>{ const R=iv(cur); if(R===null||R<2||R>9) return null; const a=ri(-R,R-1), b=ri(a+1,Math.min(R,a+3)); return {a,b}; },
+NL({id:'28p.band',from:'num',to:'word',steps:()=>['28p'],make:cur=>{ const R=iv(cur); if(R===null||R<2||R>9) return null; const a=ri(-R,R-1), b=ri(a+1,Math.min(R,a+3)); return {a,b}; },
   say:(p,nm)=>'find the area of the band of the ball’s skin x² + y² + z² = '+nm+'² between the cuts z = '+p.a+' and z = '+p.b,
   act:(s,p)=>{ const R=iv(s); if(R===null||R<Math.max(Math.abs(p.a),Math.abs(p.b))) return null; return word(piS(Q(2*R*(p.b-p.a)),1)); }, cite:()=>'the surface-area technique',
   slips:(s,p)=>{ const R=iv(s); if(R===null) return []; const w=p.b-p.a; return [{why:'the 2 of the turning rim is left out',s:piS(Q(R*w),1)},{why:'the radius is left out of the skin',s:piS(Q(2*w),1)},{why:'the whole skin is taken',s:piS(Q(4*R*R),1)}].map(x=>({k:'word',s:x.s,why:x.why})); },
@@ -19176,7 +19229,7 @@ NL({id:'28n.band',from:'num',to:'word',steps:()=>['28n'],make:cur=>{ const R=iv(
 const RIM=[[2,'the disc in the plane',a=>piS(Q(a*a),1),a=>piS(Q(2*a),1),a=>[piS(Q(a),1),piS(Q(2*a*a),1),piS(Q(a*a,2),1)]],
   [3,'the ball in space',a=>piS(Q(4*a*a*a,3),1),a=>piS(Q(4*a*a),1),a=>[piS(Q(4*a*a,3),1),piS(Q(4*a*a*a),1),piS(Q(a*a,3),1)]],
   [4,'the ball in four dimensions',a=>piS(Q(a*a*a*a,2),2),a=>piS(Q(2*a*a*a),2),a=>[piS(Q(a*a*a,2),2),piS(Q(2*a*a*a*a),2),piS(Q(a*a*a,8),2)]]];
-NL({id:'28j.rim',from:'num',to:'word',steps:()=>['28j'],make:()=>({i:rnd(3)}),say:(p,nm)=>'find the size of the rim of '+RIM[p.i][1]+' of radius '+nm+', from what it holds and the flow F(x) = x pointing straight out',
+NL({id:'28l.rim',from:'num',to:'word',steps:()=>['28l'],make:()=>({i:rnd(3)}),say:(p,nm)=>'find the size of the rim of '+RIM[p.i][1]+' of radius '+nm+', from what it holds and the flow F(x) = x pointing straight out',
   act:(s,p)=>{ const a=iv(s); if(a===null||a<1||a>6) return null; return word(RIM[p.i][3](a)); }, cite:()=>'the flux-out technique',
   slips:(s,p)=>{ const a=iv(s); if(a===null||a<1) return []; const W=RIM[p.i][4](a); return [{why:'the size held is divided by the radius but not multiplied by the spread',s:W[0]},{why:'the size held is multiplied by the spread but not divided by the radius',s:W[1]},{why:'the spread is taken as 1',s:W[2]}].map(x=>({k:'word',s:x.s,why:x.why})); },
   line:(o,p,nm)=>'the rim’s size: '+o.s});
@@ -19334,7 +19387,7 @@ RTW.forEach(([id,w])=>NL({id,from:'num',to:'rt',steps:()=>['21m'],say:(p,nm)=>'w
   line:(o,p,nm)=>w+nm+') = '+(qs(o.b)+'√'+o.d)}));
 })();
 /* ===== the book pools of 2026-11-16 that the chains above now carry leave the Laundry ===== */
-(function(){ const R=new Set(["27f.along","21g.wobble","32b.energysum","41a.tables","10a.quadreach","10a.sumreach","10f.rootsfar","12c.attains","11f.share","13d.kth","13f.halfpower","13h.double","14h.spread","14h.nearline","9d.fracundo","14d.oneone","16b.chainend","21d.amplitude","21j.degslope","21m.backforth","17f.ebottom","21n.wallis","18i.graphlength","21r.polararea","28i.polarscale","28n.band","28j.ballskin","30d.movingtotal","17i.mixslope","21g.mixslope","17k.mixtotal","21n.arches"]);
+(function(){ const R=new Set(["27f.along","21g.wobble","32b.energysum","41a.tables","10a.quadreach","10a.sumreach","10f.rootsfar","12c.attains","11f.share","13d.kth","13f.halfpower","13h.double","14h.spread","14h.nearline","9d.fracundo","14d.oneone","16b.chainend","21d.amplitude","21j.degslope","21m.backforth","17f.ebottom","21n.wallis","18i.graphlength","21r.polararea","28k.polarscale","28p.band","28l.ballskin","30d.movingtotal","17i.mixslope","21g.mixslope","17k.mixtotal","21n.arches"]);
   /* held in a list, not thrown away (Andrew 2026-11-16 17:44Z) */
   for(let i=QP.length-1;i>=0;i--) if(QP[i]&&R.has(QP[i].id)){ QP.splice(i,1); } })();
 /* ===== Chains, part f1b (Andrew 2026-11-16 16:20Z: "Whole question hasn't been part of the design since nearly the conception ...
@@ -19979,8 +20032,8 @@ NL('16g.travel','num',p=>'a shuttle on a track has the velocity t − '+YOU+' me
 NL('16i.into0','word',()=>'take '+YOU+' as n. Say what the area under 1/x^(1/n) from x = 0 to x = 1 is',s=>{ const n=nIn(s,1,300); return n===null?null:wordv(n===1?'it diverges':qs(Q(n,n-1))); },'the in-to-0 technique',
   s=>{ const n=iv(s); return n===1?[ww('the power 1 is put into 1/(1 − p) as if it were below 1','0'),ww('the area is taken as the height at x = 1','1'),ww('the power is taken as the area','1/1'),ww('the area is taken to settle because the interval is short','2')]:[ww('every area running in to 0 is taken to diverge','it diverges'),ww('the technique for out to forever, 1/(p − 1), is used and its sign dropped',qs(Q(n,n-1))+' out to forever too'),ww('1 − p is not turned over',qs(Q(n-1,n))),ww('the power is taken as the area',qs(Q(1,n)))].filter(w=>!/too$/.test(w.s)); },
   (o,p,nm,nx,s)=>iv(s)===1?'the power is 1, not less than 1, so '+o.s:'the power 1/'+qs(s.v)+' is less than 1, so the area is 1/(1 − 1/'+qs(s.v)+') = '+o.s);
-/* 16j: mass from density (pool 16j.mass) */
-NL('16j.brine','num',p=>'a tank of brine stands '+YOU+' metres deep, with a level cross section of '+p.A+' square metres. At the depth x metres its density is 1000 + '+p.k+'x kilograms per cubic metre. Write its mass, in kilograms',(s,p)=>{ const n=nIn(s,1,20); return n===null?null:numv(p.A*(1000*n+p.k*n*n/2)); },'the density technique',
+/* 16k: mass from density (pool 16k.mass) */
+NL('16k.brine','num',p=>'a tank of brine stands '+YOU+' metres deep, with a level cross section of '+p.A+' square metres. At the depth x metres its density is 1000 + '+p.k+'x kilograms per cubic metre. Write its mass, in kilograms',(s,p)=>{ const n=nIn(s,1,20); return n===null?null:numv(p.A*(1000*n+p.k*n*n/2)); },'the density technique',
   (s,p)=>{ const n=iv(s); return [nw('the density at the top is used all the way down',p.A*1000*n),nw('the density at the bottom is used all the way up',p.A*(1000+p.k*n)*n),nw('the cross section is left out',1000*n+p.k*n*n/2),nw('the half in the area under '+p.k+'x is left off',p.A*(1000*n+p.k*n*n))]; },
   (o,p,nm,nx,s)=>'the mass is the cross section times the area under the density: '+p.A+' · (1000 · '+qs(s.v)+' + '+p.k+' · '+qs(s.v)+'²/2) = '+qs(o.v),()=>({A:ri(2,5),k:pick([20,40,60,100])}),true);
 /* ---- annexes ---- */
@@ -20027,7 +20080,7 @@ NL('16·phys.struck','num',p=>'a ball of '+p.m+' kilogram'+(p.m===1?'':'s')+' at
   (s,p)=>{ const n=iv(s); return [nq('the greatest force is taken to act the whole time: a box, not the triangle under the force',n*p.T,p.m),nq('the impulse is not divided by the mass',n*p.T,2),nq('the time is left out',n,2*p.m),nq('the half of the triangle is taken twice',n*p.T,4*p.m)]; },
   (o,p,nm,nx,s)=>'the change in momentum is the area under the force, '+qs(s.v)+' · '+p.T+'/2, and dividing by '+p.m+' gives '+qs(o.v),()=>({T:pick([2,4,6]),m:pick([1,2,5])}),true);
 /* links that stand and read as stories */
-['12·phys.balance','12·phys.gears','12·eng.worst','12·eng.push','13n.convert','14·econ.grow','14·logi.pool','15·chem.work','16·eng.balance','16·eng.shear','16j.pyramid','13·chem.rate','13·econ.mr','16·econ.buyers'].forEach(id=>{ const l=L.find(x=>x.id===id); if(l) l.story=true; });
+['12·phys.balance','12·phys.gears','12·eng.worst','12·eng.push','13n.convert','14·econ.grow','14·logi.pool','15·chem.work','16·eng.balance','16·eng.shear','16k.pyramid','13·chem.rate','13·econ.mr','16·econ.buyers'].forEach(id=>{ const l=L.find(x=>x.id===id); if(l) l.story=true; });
 /* the floor 3 pools these seeds and links carry: held in CH.RETIRED */
 { const R={"13e.rates":1};
   for(let i=QP.length-1;i>=0;i--) if(QP[i]&&R[QP[i].id]){ QP.splice(i,1); } }
@@ -20167,13 +20220,13 @@ const NL=(id,to,say,act0,cite,slips,line,make,story)=>{ const act=(s,p)=>{ try{ 
 
 const pi=v=>v.q===1?(v.p===1?'':v.p)+'π':'('+qs(v)+')π', ww3=(a,b,c)=>[a,b,c].filter(Boolean);
 /* ---- main steps: the kinds told as stories ---- */
-NL('27j.stall','num',p=>'at a stall, 1 '+p.t[0]+' and 1 '+p.t[1]+' cost '+YOU+' coins together. At the same prices, 1 '+p.t[0]+' and 2 '+p.t[1]+'s cost '+YOU+' + '+p.k+' coins. Write what one '+p.t[0]+' costs',(s,p)=>{ const n=nIn(s,p.k+1,900); return n===null?null:numv(n-p.k); },'the row-move technique',
+NL('27l.stall','num',p=>'at a stall, 1 '+p.t[0]+' and 1 '+p.t[1]+' cost '+YOU+' coins together. At the same prices, 1 '+p.t[0]+' and 2 '+p.t[1]+'s cost '+YOU+' + '+p.k+' coins. Write what one '+p.t[0]+' costs',(s,p)=>{ const n=nIn(s,p.k+1,900); return n===null?null:numv(n-p.k); },'the row-move technique',
   (s,p)=>{ const n=iv(s); return [nw('that is the cost of one '+p.t[1],p.k),nw('the second row is added to the first, where it is taken away',n+p.k),nq('the first total is shared equally between the two things',n,2),nw('the extra '+p.t[1]+' is taken off twice',n-2*p.k)]; },
   (o,p,nm,nx,s)=>'row 2 − row 1 leaves one '+p.t[1]+' = '+p.k+'; putting that back in row 1 gives one '+p.t[0]+' = '+qs(s.v)+' − '+p.k+' = '+qs(o.v),()=>({k:ri(1,9),t:pick([['bulb','seed'],['nail','hook'],['apple','pear']])}),true);
 NL('24h.tea','num',p=>'a pot of tea stands '+YOU+' degrees above the room and cools by the statement T′ = k(T − A), with A the room. After '+p.m+' minutes the gap is a third of what it was. Write the gap after '+(2*p.m)+' minutes, in degrees',(s,p)=>{ const n=nIn(s,1,900); return n===null?null:{k:'num',v:Q(n,9)}; },'the shift-to-rest technique',
   (s,p)=>{ const n=iv(s); return [nq('only the first '+p.m+' minutes are counted',n,3),nw('the gap is taken to fall by equal amounts, so it would be gone already',0),nq('the third is doubled, where it is squared',n,6),nq('one step too many is counted',n,27)]; },
   (o,p,nm,nx,s)=>'the gap T − A is '+qs(s.v)+'e^(kt): equal times multiply it by equal factors, so two steps leave '+qs(s.v)+'/3² = '+qs(o.v),()=>({m:ri(3,9)}),true);
-NL('24j.pond','num',p=>'a pond can feed '+p.K+' carp and no more. Each year the count grows by itself times the share of the room still free: Pₙ₊₁ = Pₙ + Pₙ(1 − Pₙ/'+p.K+'). This year there are '+YOU+'. Write how many there are next year',(s,p)=>{ const n=nIn(s,1,p.K-1); return n===null?null:{k:'num',v:Q(n*(2*p.K-n),p.K)}; },'the logistic-walk technique',
+NL('24l.pond','num',p=>'a pond can feed '+p.K+' carp and no more. Each year the count grows by itself times the share of the room still free: Pₙ₊₁ = Pₙ + Pₙ(1 − Pₙ/'+p.K+'). This year there are '+YOU+'. Write how many there are next year',(s,p)=>{ const n=nIn(s,1,p.K-1); return n===null?null:{k:'num',v:Q(n*(2*p.K-n),p.K)}; },'the logistic-walk technique',
   (s,p)=>{ const n=iv(s), K=p.K; return [nq('that is the growth alone, without this year’s count',n*(K-n),K),nw('the count is doubled, as if all the room were free',2*n),nw('the pond is taken to fill in one year',K),nq('the free share is added without being multiplied by the count',n*K+K-n,K)]; },
   (o,p,nm,nx,s)=>qs(s.v)+' + '+qs(s.v)+'(1 − '+qs(s.v)+'/'+p.K+') = '+qs(o.v),()=>({K:pick([100,200,400])}),true);
 NL('25c.drone','num',p=>'a drone flies '+YOU+' kilometres in one straight line, the step z, and then '+p.k+' kilometres in another, the step w. Write the '+(p.most?'most':'least')+' it can be from its start, in kilometres',(s,p)=>{ const n=nIn(s,1,900); return n===null?null:numv(p.most?n+p.k:Math.abs(n-p.k)); },'the plane-triangle technique',
@@ -20185,7 +20238,7 @@ NL('26a.cap','word',p=>'a valve cap sits on the rim of a wheel of radius '+YOU+'
 NL('28g.dune','num',p=>'a sand dune is flat enough to treat as a plane. It rises '+p.t[0]+' centimetres for each metre walked west, and '+p.t[1]+' centimetres for each metre walked north. Write how many centimetres it rises over '+YOU+' metres walked the steepest way up',(s,p)=>{ const n=nIn(s,1,300); return n===null?null:numv(p.t[2]*n); },'the uphill technique',
   (s,p)=>{ const n=iv(s), [a,b,c]=p.t; return [nw('the two slopes are added, where the steepest slope is the length of the uphill vector',(a+b)*n),nw('the walk is taken due '+(a>b?'west':'north')+', along the larger slope only',Math.max(a,b)*n),nw('the steepest slope is given, not multiplied by the metres walked',c),nw('the walk is taken along the smaller slope',Math.min(a,b)*n)]; },
   (o,p,nm,nx,s)=>'the greatest slope is the length of ∇f = ('+p.t[0]+', '+p.t[1]+'), which is '+p.t[2]+', and over '+qs(s.v)+' metres that is '+qs(o.v),()=>({t:pick([[3,4,5],[8,15,17],[5,12,13],[6,8,10],[12,5,13]])}),true);
-NL('28p.can','num',p=>'a tin can is a cylinder, of volume V = πr²h. Its radius r is measured to within '+YOU+'%, and its height h to within '+p.k+'%. Write, to first order, the percentage within which the volume is known',(s,p)=>{ const n=nIn(s,1,20); return n===null?null:numv(2*n+p.k); },'the relative-errors-add technique',
+NL('28r.can','num',p=>'a tin can is a cylinder, of volume V = πr²h. Its radius r is measured to within '+YOU+'%, and its height h to within '+p.k+'%. Write, to first order, the percentage within which the volume is known',(s,p)=>{ const n=nIn(s,1,20); return n===null?null:numv(2*n+p.k); },'the relative-errors-add technique',
   (s,p)=>{ const n=iv(s); return [nw('the power 2 on the radius is not counted',n+p.k),nw('the radius’s error is squared with the radius',n*n+p.k),nw('both errors are doubled',2*n+2*p.k),nw('the height’s error is left out',2*n)]; },
   (o,p,nm,nx,s)=>'the relative errors add, each times its power: 2 · '+qs(s.v)+' + 1 · '+p.k+' = '+qs(o.v),()=>({k:ri(1,6)}),true);
 NL('29b.stripe','word',p=>'a float is a sphere of radius '+p.R+' centimetres. One stripe is painted from pole to pole, between two half great circles that meet at the angle π/'+YOU+'. Write the area of the stripe, in square centimetres',(s,p)=>{ const n=nIn(s,2,300); return n===null?null:wordv(pi(Q(2*p.R*p.R,n))); },'the lune-area technique',
@@ -20299,7 +20352,7 @@ NL('30·stat.fields','num',p=>'two mixes of fertiliser are each grown once in ev
 })();
 /* ===== Chains, part f6 (Andrew 2026-11-16 16:20Z): the floor 6 whole-question pools (rungs 31 to 38). Most of their techniques are dealt
    already by links that stand; this part adds the links for the steps that had none, and retires the pools into CH.RETIRED with what
-   carries each. Held back, not retired: the licence pools of 37j and 38c to 38k, which have nothing to work. ===== */
+   carries each. Held back, not retired: the licence pools of 37j and 38c to 38m, which have nothing to work. ===== */
 (function(){
 const {L,Q,qs,ri,fit}=CH;
 const ms=x=>String(x).replace('-','−'), numv=n=>({k:'num',v:Q(n)}), wordv=s=>({k:'word',s}), YOU='the number in hand';
@@ -20308,10 +20361,10 @@ const NL=(id,to,say,act0,cite,slips,line,make,story)=>{ const act=(s,p)=>{ try{ 
   L.push({id,from:'num',to,steps:()=>[id.split('.')[0]],say,act,cite:()=>cite,make,line,story:!!story,
   slips:(s,p)=>{ const r=act(s,p); if(!r) return []; const sh=w=>w.k==='word'?w.s:qs(w.v), rs=sh(r), seen=new Set([rs]); return (slips(s,p)||[]).filter(w=>{ const x=sh(w); if(seen.has(x)) return false; seen.add(x); return true; }); }}); };
 
-NL('31k.scales','num',p=>'two scales weigh the same stone. The first reads '+YOU+' grams, and its readings have spread 1. The second reads '+YOU+' + '+p.d+' grams, and its readings have spread '+p.s+'. Write the best single weight, in grams',(s,p)=>{ const n=nIn(s,1,900); return n===null?null:{k:'num',v:Q(n*(p.s+1)+p.d,p.s+1)}; },'the weighted-shadow technique',
+NL('31m.scales','num',p=>'two scales weigh the same stone. The first reads '+YOU+' grams, and its readings have spread 1. The second reads '+YOU+' + '+p.d+' grams, and its readings have spread '+p.s+'. Write the best single weight, in grams',(s,p)=>{ const n=nIn(s,1,900); return n===null?null:{k:'num',v:Q(n*(p.s+1)+p.d,p.s+1)}; },'the weighted-shadow technique',
   (s,p)=>{ const n=iv(s), S=p.s, d=p.d; return [nq('the two readings are averaged plainly, whatever their spreads',2*n+d,2),nq('the weights have changed places, so the wider scale counts for more',n*(S+1)+S*d,S+1),nw('the narrower scale is used alone',n),nw('the wider scale is used alone',n+d)]; },
   (o,p,nm,nx,s)=>'with weights 1/σ², here 1 and 1/'+p.s+', the best weight is ('+qs(s.v)+' · 1 + ('+qs(s.v)+' + '+p.d+') · 1/'+p.s+')/(1 + 1/'+p.s+') = '+qs(o.v),()=>({d:ri(1,9),s:ri(2,5)}),true);
-NL('31l.quiz','num',p=>'a class takes two quizzes, and the scores on the two have correlation '+p.r[0]+'/'+p.r[1]+'. One score on the first quiz is '+YOU+' spread widths above the average. Write how many spread widths above the average the best line predicts for that pupil on the second',(s,p)=>{ const n=nIn(s,1,300); return n===null?null:{k:'num',v:Q(p.r[0]*n,p.r[1])}; },'the two-lines technique',
+NL('31n.quiz','num',p=>'a class takes two quizzes, and the scores on the two have correlation '+p.r[0]+'/'+p.r[1]+'. One score on the first quiz is '+YOU+' spread widths above the average. Write how many spread widths above the average the best line predicts for that pupil on the second',(s,p)=>{ const n=nIn(s,1,300); return n===null?null:{k:'num',v:Q(p.r[0]*n,p.r[1])}; },'the two-lines technique',
   (s,p)=>{ const n=iv(s), [a,b]=p.r; return [nw('the pupil is taken to stand as far out on the second quiz as on the first',n),nq('the other line is used: the widths are divided by r',b*n,a),nq('r² is used for the slope, where it is the share of the spread explained',a*a*n,b*b),nq('the correlation itself is given',a,b)]; },
   (o,p,nm,nx,s)=>'in standard units the best line has slope r: '+p.r[0]+'/'+p.r[1]+' · '+qs(s.v)+' = '+qs(o.v),()=>({r:pick([[1,2],[2,5],[3,5],[3,4],[1,4]])}),true);
 NL('32·bio.casts','num',()=>'a town of '+YOU+' thousand people has one pharmacy. Each person has a chance of 1 in 5000 a day of a broken wrist, which needs one cast, each apart from the others. Write the average number of casts needed in a day',s=>{ const n=nIn(s,1,900); return n===null?null:{k:'num',v:Q(n,5)}; },'the large-count technique',
@@ -20334,7 +20387,7 @@ NL('38·now.core','num',p=>'a team’s checker is split into a small core of '+Y
 })();
 /* ===== Chains, part f7 (Andrew 2026-11-16 16:20Z): the whole-question pools of floor 7 (rungs 39 to 47) and of the Endless floor annexes.
    Most of their techniques are dealt already by links that stand; this part adds the links for the steps that had none, and retires
-   the pools into CH.RETIRED with what carries each. Held back, not retired: the licence pools of 41d, 41f and 45b, which have nothing to work. ===== */
+   the pools into CH.RETIRED with what carries each. Held back, not retired: the licence pools of 41d, 41f and 46b, which have nothing to work. ===== */
 (function(){
 const {L,Q,qs,ri,fit}=CH;
 const ms=x=>String(x).replace('-','−'), numv=n=>({k:'num',v:Q(n)}), wordv=s=>({k:'word',s}), YOU='the number in hand';
@@ -20343,7 +20396,7 @@ const NL=(id,to,say,act0,cite,slips,line,make,story)=>{ const act=(s,p)=>{ try{ 
   L.push({id,from:'num',to,steps:()=>[id.split('.')[0]],say,act,cite:()=>cite,make,line,story:!!story,
   slips:(s,p)=>{ const r=act(s,p); if(!r) return []; const sh=w=>w.k==='word'?w.s:qs(w.v), rs=sh(r), seen=new Set([rs]); return (slips(s,p)||[]).filter(w=>{ const x=sh(w); if(seen.has(x)) return false; seen.add(x); return true; }); }}); };
 
-NL('47a.line','num',p=>'at a '+p.t+', '+YOU+' stations stand in a line, and there is one arrow from a station x to a station y exactly when x comes no later than y. Count the arrows, the do-nothing ones too',(s,p)=>{ const n=nIn(s,1,300); return n===null?null:numv(n*(n+1)/2); },'the order-category technique',
+NL('48a.line','num',p=>'at a '+p.t+', '+YOU+' stations stand in a line, and there is one arrow from a station x to a station y exactly when x comes no later than y. Count the arrows, the do-nothing ones too',(s,p)=>{ const n=nIn(s,1,300); return n===null?null:numv(n*(n+1)/2); },'the order-category technique',
   (s,p)=>{ const n=iv(s); return [nw('the do-nothing arrows are left out',n*(n-1)/2),nw('an arrow is counted each way between every two stations',n*n),nw('only the arrows from each station to the next are counted',Math.max(0,n-1)),nw('only the do-nothing arrows are counted',n)].filter(w=>w.v.p!==n*(n+1)/2); },
   (o,p,nm,nx,s)=>'one arrow for each pair x ≤ y: '+qs(s.v)+' do-nothing arrows and '+(iv(s)*(iv(s)-1)/2)+' onward ones, '+qs(o.v)+' in all',()=>({t:pick(['Wenatchee cider press','Skagit tulip farm','Hood River packing shed'])}),true);
 NL('39·chem.doped','num',()=>'a wafer of silicon at 300 K has nᵢ = 10¹⁰ per cubic centimetre. Boron is added, 10 to the power '+YOU+' atoms per cubic centimetre, and every one frees a hole. Write the power of ten of n, the free electrons per cubic centimetre',s=>{ const n=nIn(s,11,19); return n===null?null:numv(20-n); },'the fixed-product technique',
@@ -20359,15 +20412,15 @@ NL('41·now2.letters','num',p=>'clause branching decides a statement in clauses 
   (s,p)=>{ const n=iv(s), k=p.k; return [nw('every letter is taken to double the work, as trying every row does',2**k),nq('the factor is multiplied by the letters added, where it is raised to them',46*k,25).v.p===46&&k===1?nq('the factor is taken once too often',46*46,625):nq('the factor is multiplied by the letters added, where it is raised to them',46*k,25),nq('the letters already there are counted in',46*(n+k),25),nw('the steps are taken to grow by the count of letters added',k+1)]; },
   (o,p,nm,nx,s)=>'each letter multiplies the steps by about 46/25, so '+p.k+' more multiply them by '+(p.k===1?'':'(46/25)'+['','','²','³'][p.k]+' = ')+qs(o.v),()=>({k:ri(1,3)}),true);
 /* links that stand and read as stories */
-['47d.pairs','47d.cases','39·phys.band','39·now.ramp','41·comp.wipe','41·phys.factor','41·now3.colours','42·chem.bonds','42·phys.agree','42·eng.faces','42·logi.longest','42·econ.proposals','42·now.fives','42·now2.linked','43·comp.tag','43·phys.band','43·crypt.rebuild','43·now.cover','43·now2.twin','44·comp.fix','44·chem.fill','44·bio.few','44·now.cube','44·now2.bytes','46·now.pieces','46·phys.phase','46·now2.any','47·comp.types','47·now.ways','47·now2.count','39·bio.unit',
- '∞·phys.train','∞·bio.looks','∞·crypt.shifts','∞·comp.adder','∞·chem.balances','∞·chem.orbit','∞·logi.short','∞·eng.teeth','∞·eng.frame','∞·nav.squeeze','∞·econ.loop','∞·stat.flag','∞·stat.draw','45g.quorum','45h.liars','45k.ring','45·eng.flood'].forEach(id=>{ const l=L.find(x=>x.id===id); if(l) l.story=true; });
+['48d.pairs','48d.cases','39·phys.band','39·now.ramp','41·comp.wipe','41·phys.factor','41·now3.colours','42·chem.bonds','42·phys.agree','42·eng.faces','42·logi.longest','42·econ.proposals','42·now.fives','42·now2.linked','43·comp.tag','43·phys.band','43·crypt.rebuild','43·now.cover','43·now2.twin','44·comp.fix','44·chem.fill','44·bio.few','44·now.cube','44·now2.bytes','47·now.pieces','47·phys.phase','47·now2.any','48·comp.types','48·now.ways','48·now2.count','39·bio.unit',
+ '∞·phys.train','∞·bio.looks','∞·crypt.shifts','∞·comp.adder','∞·chem.balances','∞·chem.orbit','∞·logi.short','∞·eng.teeth','∞·eng.frame','∞·nav.squeeze','∞·econ.loop','∞·stat.flag','∞·stat.draw','46g.quorum','46h.liars','46k.ring','46·eng.flood'].forEach(id=>{ const l=L.find(x=>x.id===id); if(l) l.story=true; });
 /* the pools these seeds and links carry: held in CH.RETIRED */
 { const R={"∞·econ.plan":1,"∞·econ.line":1,"∞·crypt.plan":1,"∞·crypt.line":1,"∞·phys.plan":1,"∞·phys.line":1,"∞·nav.plan":1,"∞·nav.line":1,"∞·stat.plan":1,"∞·stat.line":1,"∞·eng.plan":1,"∞·eng.line":1,"∞·comp.plan":1,"∞·comp.line":1,"∞·chem.plan":1,"∞·chem.line":1,"∞·bio.plan":1,"∞·bio.line":1,"∞·logi.plan":1,"∞·logi.line":1};
   for(let i=QP.length-1;i>=0;i--) if(QP[i]&&R[QP[i].id]){ QP.splice(i,1); } }
 })();
 /* ===== Chains, part f8 (Andrew 2026-11-16 19:11Z, "Ride as wrong moves"): the last twelve whole-question pools.
    38c "a world that shows not reached" becomes a seed (a collection G and a statement φ) and two links: write the denial of φ (the crossing links of 2j),
-   then name a world where G and that denial are both true. The wrong moves of the second are the worlds that do not show it. The eleven claim catalogues of 37j, 38c to 38k, 41d, 41f and 45b have nothing to work:
+   then name a world where G and that denial are both true. The wrong moves of the second are the worlds that do not show it. The eleven claim catalogues of 37j, 38c to 38m, 41d, 41f and 46b have nothing to work:
    their claims are held in CH.RETIRED. ===== */
 (function(){
 const {L,SEEDS,KIND}=CH;
@@ -20420,17 +20473,17 @@ L.push({id:'38c.world',from:'gneg',to:'word',steps:()=>['38c'],
         MORE[id](s.v,p).forEach(([why,v])=>{ if(!v||!(v.q>0)||v.p<0||seen.has(qs(v))) return; seen.add(qs(v)); out.push({why,k:'num',v}); }); }catch(e){ if(e&&e.over) throw e; } return out; }; }); }
 const HELD='held: a catalogue of claims with nothing to work, so its claims ride on no link';
 const R={'38c.work':'38c.pairs, 38c.deny, 38c.world','38c.line':'38c.pairs, 38c.deny, 38c.world; its claims have nothing to work and are held here'};
-['37j.line','38d.line','38e.line','38h.line','38i.line','38j.line','38k.line','41d.line','41f.line','45b.line'].forEach(id=>{ R[id]=HELD; });
+['37j.line','38d.line','38e.line','38j.line','38k.line','38l.line','38m.line','41d.line','41f.line','46b.line'].forEach(id=>{ R[id]=HELD; });
 for(let i=QP.length-1;i>=0;i--) if(QP[i]&&R[QP[i].id]){ QP.splice(i,1); }
 })();
 /* ===== Chains, part f9 (Andrew 2026-11-16 21:31Z, "Go ahead and do the proof thing"): Check Proofs links for the steps whose only pools were
-   claim catalogues: 37j, 38c to 38k, 41d, 41f and 45b. Each claim of a catalogue is a seed (the line given) carried through a link (the technique
+   claim catalogues: 37j, 38c to 38m, 41d, 41f and 46b. Each claim of a catalogue is a seed (the line given) carried through a link (the technique
    cited). A licensed claim is a sound link; an unlicensed claim rides as the wrong move of its technique's link. Where the last line of one sound
    claim is the first line of another on the same rung, the dealer joins them, so a proof can run across steps. One card asks which line, if any,
    does not follow from what it cites. These seeds and links are dealt by CH.claimCard only: they have nothing to work, so the Work dealer never sees them. ===== */
 (function(){
-const E={"37j":[{"tag":"j1","lines":[["part of a signal is lost","given"],["what is left can be analysed for part of what was sent","the partly-told technique"]],"bad":0,"why":"That is the technique."},{"tag":"j2","lines":[["part of a signal is lost","given"],["all of what was sent can be told from what is left","the partly-told technique"]],"bad":2,"why":"Partial loss gives partial induction only."}],"38c":[{"tag":"c1","lines":[["G ⊢ φ, and M is a world of G","given"],["φ is true in M","the true-everywhere technique"]],"bad":0,"why":"That is the technique."},{"tag":"c2","lines":[["φ is true in N","given"],["the axioms of arithmetic reach φ","the true-everywhere technique"]],"bad":2,"why":"That runs the technique backwards: true does not give reached."},{"tag":"c3","lines":[["G has a world","given"],["G is clash-free","the world-means-clash-free technique"]],"bad":0,"why":"That is the technique."},{"tag":"c4","lines":[["G ⊢ φ","given"],["φ is true in every world","the true-everywhere technique"]],"bad":2,"why":"In every world of G only."},{"tag":"c5","lines":[["M makes G true and φ false","given"],["G does not reach φ","the true-everywhere technique"]],"bad":0,"why":"If G reached φ, φ would be true in M."}],"38d":[{"tag":"d1","lines":[["the language is listed, and φ is true in every world of G","given"],["G reaches φ","the reached-if-true-everywhere technique"]],"bad":0,"why":"That is the technique."},{"tag":"d2","lines":[["G does not reach φ","given"],["G reaches ¬φ","the full-growth technique"]],"bad":2,"why":"G may reach neither. Only G* holds one of them."},{"tag":"d3","lines":[["every finite part of G has a world","given"],["G has a world","the finite-parts technique"]],"bad":0,"why":"That is the technique."},{"tag":"d4","lines":[["every finite part of G is true in N","given"],["G is true in N","the finite-parts technique"]],"bad":2,"why":"The technique gives some world, not N."},{"tag":"d5","lines":[["G is clash-free, in a listed language","given"],["G grows into a clash-free G* holding each statement or its denial","the full-growth technique"]],"bad":0,"why":"That is the technique."}],"38e":[{"tag":"e1","lines":[["G, in a listed language, has an endless world","given"],["G has an endless world whose members can be listed","the countable-world technique"]],"bad":0,"why":"That is the technique."},{"tag":"e2","lines":[["the true statements of the line have a world C that can be listed","the countable-world technique"],["the line can be listed","the listed-line technique"]],"bad":2,"why":"C is another world. The line itself cannot be listed."},{"tag":"e3","lines":[["G has an endless world, and X is a set","given"],["G has a world with at least as many members as X","the bigger-world technique"]],"bad":0,"why":"That is the technique."},{"tag":"e4","lines":[["the statements true in N","given"],["every world of them can be listed","the countable-world technique"]],"bad":2,"why":"The bigger-world technique gives worlds of every endless size."}],"38h":[{"tag":"h1","lines":[["PA reaches φ","given"],["PA reaches Prov(⌜φ⌝)","the provable-mark technique"]],"bad":0,"why":"That is the technique."},{"tag":"h2","lines":[["PA reaches Prov(⌜φ⌝)","given"],["PA reaches φ","the provable-mark technique"]],"bad":2,"why":"The technique runs from φ to Prov(⌜φ⌝), not back."},{"tag":"h3","lines":[["ψ(x₀) has one free placeholder","given"],["some δ has PA reaching δ ⇔ ψ(⌜δ⌝)","the self-statement technique"]],"bad":0,"why":"That is the technique."}],"38i":[{"tag":"i1","lines":[["PA ⊬ U","the unreached-truth technique"],["U is false in N","not reached"]],"bad":2,"why":"U is true in N. Not reached is not false."},{"tag":"i2","lines":[["PA ⊬ U","the unreached-truth technique"],["PA ⊢ ¬Prov(⌜U⌝)","not reached"]],"bad":2,"why":"That no proof exists is true in N, not reached by PA: it has an every in front."},{"tag":"i3","lines":[["T holds PA, a recipe settles membership in T, and every member of T is true in N","given"],["some statement true in N is not reached by T","the every-list technique"]],"bad":0,"why":"That is the technique."},{"tag":"i4","lines":[["T = PA + U","given"],["T reaches every truth of arithmetic","the every-list technique"]],"bad":2,"why":"T has its own unreached statement."}],"38j":[{"tag":"j1","lines":[["PA is clash-free","given"],["PA ⊬ Con","the no-self-certificate technique"]],"bad":0,"why":"That is the technique."},{"tag":"j2","lines":[["PA ⊬ Con","given"],["PA clashes","the no-self-certificate technique"]],"bad":2,"why":"N is a world of PA, so PA is clash-free. It cannot show it."},{"tag":"j3","lines":[["¬Con is false in N","given"],["PA ∪ {¬Con} clashes","the world-means-clash-free technique"]],"bad":2,"why":"¬Con is true in another world of PA. A world makes it clash-free."}],"38k":[{"tag":"k1","lines":[["τ(x) is a formula of arithmetic","given"],["τ is not true of exactly the codes of the true statements","the undefinable-truth technique"]],"bad":0,"why":"That is the technique."},{"tag":"k2","lines":[["Prov(x) is a formula of arithmetic","given"],["Prov is a truth formula","the provable-mark technique"]],"bad":2,"why":"Prov misses U, which is true and not reached."},{"tag":"k3","lines":[["truth cannot be defined in arithmetic","the undefinable-truth technique"],["“true in N” is not defined anywhere","the undefinable-truth technique"]],"bad":2,"why":"It is defined in sets."}],"41d":[{"tag":"d1","lines":[["a machine lists the stopping set","the stopping-listed technique"],["no machine decides the stopping set","the no-stop-decider technique"],["no machine lists the pairs that never stop","the both-sides technique"]],"bad":0,"why":"If both sides were listed, stopping would be decided."},{"tag":"d2","lines":[["no machine decides the stopping set","the no-stop-decider technique"],["for some M and w, nobody can know whether M stops on w","the no-stop-decider technique"]],"bad":2,"why":"The technique says no one machine sorts them all. A particular run can still be sorted."},{"tag":"d3","lines":[["D decides stopping","supposed"],["E on ⟨E⟩ does the opposite of what D predicts about E on ⟨E⟩","E is built from D"],["D does not decide stopping","the totally false"]],"bad":0,"why":"The supposition is refuted."},{"tag":"d4","lines":[["the stopping set is not decided","the no-stop-decider technique"],["the stopping set is not listed","the both-sides technique"]],"bad":2,"why":"It is listed. Only one side is."}],"41f":[{"tag":"f1","lines":[["T reads a code and a string","given"],["some R on any w does what T does on ⟨R⟩ # w","the own-code technique"]],"bad":0,"why":"That is the technique."},{"tag":"f2","lines":[["R is a machine","given"],["R’s table contains ⟨R⟩","the own-code technique"]],"bad":2,"why":"⟨R⟩ is longer than any table holding it. R is built as A B T."},{"tag":"f3","lines":[["no machine lists endlessly many shortest machines","the shortest-unlisted technique"],["no shortest machine exists","the shortest-unlisted technique"]],"bad":2,"why":"Endlessly many exist. None of them is listed endlessly."},{"tag":"f4","lines":[["A writes B’s code, and B writes the code of a machine that writes what it reads","given"],["A B, started on a blank tape, stops with its own code","the self-print technique"]],"bad":0,"why":"B writes A’s code in front of B’s."}],"45b":[{"tag":"b1","lines":[["in runs R and R′ machine M has the same state and the same messages","given"],["M makes the same move in R and R′","the same-view technique"]],"bad":0,"why":"That is the technique."},{"tag":"b2","lines":[["no answer from M for a minute","given"],["M has crashed","the same-view technique"]],"bad":2,"why":"A slow M gives the same view."},{"tag":"b3","lines":[["m₁ was sent before m₂","given"],["m₁ arrives before m₂","the model"]],"bad":2,"why":"The model allows any order."},{"tag":"b4","lines":[["a crashed M and a slow M give N the same view","given"],["N makes the same move in both runs","the same-view technique"]],"bad":0,"why":"N cannot tell them apart."}]};
-const TECH={"37a":["the sound-pressure technique","the air-wave technique","the medium-speed technique","the wavelength technique"],"37b":["the repeat-rate technique","the ten-octave technique","the pitch-line technique"],"37c":["the adding-power technique","the pressure-level technique","the spreading technique"],"37d":["the recipe technique","the crest-meeting technique","the turn-free technique"],"37e":["the fading technique","the far-is-low technique","the bounce technique","the echo technique"],"37f":["the window-trade technique","the source-filter technique","the tube technique","the hiss-band technique"],"37g":["the sound-name technique","the vowel-set technique","the octave-induction technique","the voicing technique","the rate-forward technique"],"37h":["the mixer technique","the filter-corner technique","the undo-filter technique","the best-guess technique","the level-squeeze technique"],"37i":["the bar-rate technique","the meet-once technique","the rhythm-is-pitch technique","the lock-in technique"],"37j":["the partly-told technique"],"38a":["the one-reading technique","the free-places technique","the matching-worlds technique","the defined-set technique","the chooser technique","the named-every technique"],"38b":["the derived-move technique","the proof-check technique","the proof-listing technique"],"38c":["the move-keeps technique","the true-everywhere technique","the world-means-clash-free technique"],"38d":["the two-questions technique","the full-growth technique","the term-world technique","the reached-if-true-everywhere technique","the finite-parts technique"],"38e":["the countable-world technique","the bigger-world technique","the listed-line technique","the seen-from-outside technique"],"38f":["the past-every-numeral technique","the block technique","the numerals-unpicked technique","the nearest-real technique","the shadow-slope technique"],"38g":["the prime-code technique","the list-in-one-number technique","the search-reached technique"],"38h":["the provable-mark technique","the self-statement technique"],"38i":["the unreached-truth technique","the every-list technique"],"38j":["the no-self-certificate technique"],"38k":["the undefinable-truth technique"],"38l":["the only-the-numbers technique","the no-full-calculus technique"],"38m":["the code-by-primes technique","the code-reading technique","the code-test technique","the pair-code technique"],"38n":["the tree-column technique","the swapped-order technique","the detour-cut technique"],"41a":["the one-next technique","the both-sides technique","the tracks technique"],"41b":["the built-runs technique","the one-search technique","the search-graph technique","the numeral-iterator technique","the equal-reach technique"],"41c":["the table-code technique","the universal technique","the few-machines technique"],"41d":["the stopping-listed technique","the no-stop-decider technique","the not-stopping technique"],"41e":["the reduction-carries technique","the behaviour technique","the reach-undecided technique","the equation-search technique","the every-world technique"],"41f":["the self-print technique","the own-code technique","the shortest-unlisted technique"],"41g":["the joined-machines technique","the pumping technique","the two-loop technique","the bounded-room technique"],"41h":["the power-stays technique","the certificate-search technique","the tableau technique","the more-time technique","the halving-room technique"],"41i":["the majority-vote technique","the random-point technique","the random-column technique","the all-coins technique","the fast-fall technique"],"41j":["the trace-line technique","the blank-march technique","the one-way technique","the flip-diagonal technique"],"41k":["the clause-split technique","the palette technique","the or-piece technique","the map-from-clauses technique"],"41l":["the which-one technique","the locked-colours technique","the self-made-record technique","the through-colouring technique"],"45a":["the fixed-width technique","the longest-prefix technique"],"45b":["the same-view technique"],"45c":["the last-message technique"],"45d":["the resend technique"],"45e":["the counter technique","the list-stamp technique"],"45f":["the two-phase technique"],"45g":["the majority-overlap technique"],"45h":["the third-bound technique"],"45i":["the catch-up technique"],"45j":["the squaring-pull technique"],"45k":["the ring-move technique"],"45l":["the converge technique"],"45m":["the split-combine technique"]}, WORDS={"the partly-told technique":"Partial loss of signal can still be analyzed for partial induction of initial transmission.","the true-everywhere technique":"If G reaches φ, then φ is true in every world of G.","the world-means-clash-free technique":"A collection of statements that has a world is clash-free.","the full-growth technique":"A clash-free collection in a listed language grows into a clash-free collection that holds each statement or its denial, and holds a named example of each some it holds.","the reached-if-true-everywhere technique":"In a listed language, whatever is true in every world of G is reached from G.","the finite-parts technique":"If every finite part of a collection of statements has a world, the whole collection has a world.","the countable-world technique":"If a collection of statements in a listed language has a world, it has a world whose members can be listed; and if it has an endless world, it has one that is endless and can be listed.","the bigger-world technique":"If a collection of statements has an endless world, then for any set X it has a world with at least as many members as X.","the listed-line technique":"A world of the true statements of the line whose members can be listed has a bounded set of members with no least upper bound among them.","the provable-mark technique":"If PA reaches φ, then PA reaches Prov(⌜φ⌝).","the self-statement technique":"For every formula ψ(x₀) with one free placeholder, there is a statement δ such that PA reaches δ ⇔ ψ(⌜δ⌝).","the unreached-truth technique":"The unreached statement is true in N, and PA reaches neither it nor its denial.","the every-list technique":"If a collection T holds PA, membership in T is settled by a recipe, and every member of T is true in N, then some statement true in N is not reached by T.","the no-self-certificate technique":"If PA is clash-free, PA does not reach Con.","the undefinable-truth technique":"No formula of arithmetic is a truth formula for arithmetic.","the both-sides technique":"A set is decided by a machine exactly when the set and the strings outside it are both listed.","the stopping-listed technique":"A machine lists the stopping set.","the no-stop-decider technique":"No tape machine decides the stopping set.","the self-print technique":"Some machine, started on a blank tape, stops with its own code on the tape.","the own-code technique":"For every machine T that reads a code and a string, there is a machine R such that R on any w does what T does on ⟨R⟩ # w.","the shortest-unlisted technique":"No machine lists endlessly many shortest machines.","the same-view technique":"If two runs give a machine the same view, the machine makes the same move in both."};
+const E={"37j":[{"tag":"j1","lines":[["part of a signal is lost","given"],["what is left can be analysed for part of what was sent","the partly-told technique"]],"bad":0,"why":"That is the technique."},{"tag":"j2","lines":[["part of a signal is lost","given"],["all of what was sent can be told from what is left","the partly-told technique"]],"bad":2,"why":"Partial loss gives partial induction only."}],"38c":[{"tag":"c1","lines":[["G ⊢ φ, and M is a world of G","given"],["φ is true in M","the true-everywhere technique"]],"bad":0,"why":"That is the technique."},{"tag":"c2","lines":[["φ is true in N","given"],["the axioms of arithmetic reach φ","the true-everywhere technique"]],"bad":2,"why":"That runs the technique backwards: true does not give reached."},{"tag":"c3","lines":[["G has a world","given"],["G is clash-free","the world-means-clash-free technique"]],"bad":0,"why":"That is the technique."},{"tag":"c4","lines":[["G ⊢ φ","given"],["φ is true in every world","the true-everywhere technique"]],"bad":2,"why":"In every world of G only."},{"tag":"c5","lines":[["M makes G true and φ false","given"],["G does not reach φ","the true-everywhere technique"]],"bad":0,"why":"If G reached φ, φ would be true in M."}],"38d":[{"tag":"d1","lines":[["the language is listed, and φ is true in every world of G","given"],["G reaches φ","the reached-if-true-everywhere technique"]],"bad":0,"why":"That is the technique."},{"tag":"d2","lines":[["G does not reach φ","given"],["G reaches ¬φ","the full-growth technique"]],"bad":2,"why":"G may reach neither. Only G* holds one of them."},{"tag":"d3","lines":[["every finite part of G has a world","given"],["G has a world","the finite-parts technique"]],"bad":0,"why":"That is the technique."},{"tag":"d4","lines":[["every finite part of G is true in N","given"],["G is true in N","the finite-parts technique"]],"bad":2,"why":"The technique gives some world, not N."},{"tag":"d5","lines":[["G is clash-free, in a listed language","given"],["G grows into a clash-free G* holding each statement or its denial","the full-growth technique"]],"bad":0,"why":"That is the technique."}],"38e":[{"tag":"e1","lines":[["G, in a listed language, has an endless world","given"],["G has an endless world whose members can be listed","the countable-world technique"]],"bad":0,"why":"That is the technique."},{"tag":"e2","lines":[["the true statements of the line have a world C that can be listed","the countable-world technique"],["the line can be listed","the listed-line technique"]],"bad":2,"why":"C is another world. The line itself cannot be listed."},{"tag":"e3","lines":[["G has an endless world, and X is a set","given"],["G has a world with at least as many members as X","the bigger-world technique"]],"bad":0,"why":"That is the technique."},{"tag":"e4","lines":[["the statements true in N","given"],["every world of them can be listed","the countable-world technique"]],"bad":2,"why":"The bigger-world technique gives worlds of every endless size."}],"38j":[{"tag":"h1","lines":[["PA reaches φ","given"],["PA reaches Prov(⌜φ⌝)","the provable-mark technique"]],"bad":0,"why":"That is the technique."},{"tag":"h2","lines":[["PA reaches Prov(⌜φ⌝)","given"],["PA reaches φ","the provable-mark technique"]],"bad":2,"why":"The technique runs from φ to Prov(⌜φ⌝), not back."},{"tag":"h3","lines":[["ψ(x₀) has one free placeholder","given"],["some δ has PA reaching δ ⇔ ψ(⌜δ⌝)","the self-statement technique"]],"bad":0,"why":"That is the technique."}],"38k":[{"tag":"i1","lines":[["PA ⊬ U","the unreached-truth technique"],["U is false in N","not reached"]],"bad":2,"why":"U is true in N. Not reached is not false."},{"tag":"i2","lines":[["PA ⊬ U","the unreached-truth technique"],["PA ⊢ ¬Prov(⌜U⌝)","not reached"]],"bad":2,"why":"That no proof exists is true in N, not reached by PA: it has an every in front."},{"tag":"i3","lines":[["T holds PA, a recipe settles membership in T, and every member of T is true in N","given"],["some statement true in N is not reached by T","the every-list technique"]],"bad":0,"why":"That is the technique."},{"tag":"i4","lines":[["T = PA + U","given"],["T reaches every truth of arithmetic","the every-list technique"]],"bad":2,"why":"T has its own unreached statement."}],"38l":[{"tag":"j1","lines":[["PA is clash-free","given"],["PA ⊬ Con","the no-self-certificate technique"]],"bad":0,"why":"That is the technique."},{"tag":"j2","lines":[["PA ⊬ Con","given"],["PA clashes","the no-self-certificate technique"]],"bad":2,"why":"N is a world of PA, so PA is clash-free. It cannot show it."},{"tag":"j3","lines":[["¬Con is false in N","given"],["PA ∪ {¬Con} clashes","the world-means-clash-free technique"]],"bad":2,"why":"¬Con is true in another world of PA. A world makes it clash-free."}],"38m":[{"tag":"k1","lines":[["τ(x) is a formula of arithmetic","given"],["τ is not true of exactly the codes of the true statements","the undefinable-truth technique"]],"bad":0,"why":"That is the technique."},{"tag":"k2","lines":[["Prov(x) is a formula of arithmetic","given"],["Prov is a truth formula","the provable-mark technique"]],"bad":2,"why":"Prov misses U, which is true and not reached."},{"tag":"k3","lines":[["truth cannot be defined in arithmetic","the undefinable-truth technique"],["“true in N” is not defined anywhere","the undefinable-truth technique"]],"bad":2,"why":"It is defined in sets."}],"41d":[{"tag":"d1","lines":[["a machine lists the stopping set","the stopping-listed technique"],["no machine decides the stopping set","the no-stop-decider technique"],["no machine lists the pairs that never stop","the both-sides technique"]],"bad":0,"why":"If both sides were listed, stopping would be decided."},{"tag":"d2","lines":[["no machine decides the stopping set","the no-stop-decider technique"],["for some M and w, nobody can know whether M stops on w","the no-stop-decider technique"]],"bad":2,"why":"The technique says no one machine sorts them all. A particular run can still be sorted."},{"tag":"d3","lines":[["D decides stopping","supposed"],["E on ⟨E⟩ does the opposite of what D predicts about E on ⟨E⟩","E is built from D"],["D does not decide stopping","the totally false"]],"bad":0,"why":"The supposition is refuted."},{"tag":"d4","lines":[["the stopping set is not decided","the no-stop-decider technique"],["the stopping set is not listed","the both-sides technique"]],"bad":2,"why":"It is listed. Only one side is."}],"41f":[{"tag":"f1","lines":[["T reads a code and a string","given"],["some R on any w does what T does on ⟨R⟩ # w","the own-code technique"]],"bad":0,"why":"That is the technique."},{"tag":"f2","lines":[["R is a machine","given"],["R’s table contains ⟨R⟩","the own-code technique"]],"bad":2,"why":"⟨R⟩ is longer than any table holding it. R is built as A B T."},{"tag":"f3","lines":[["no machine lists endlessly many shortest machines","the shortest-unlisted technique"],["no shortest machine exists","the shortest-unlisted technique"]],"bad":2,"why":"Endlessly many exist. None of them is listed endlessly."},{"tag":"f4","lines":[["A writes B’s code, and B writes the code of a machine that writes what it reads","given"],["A B, started on a blank tape, stops with its own code","the self-print technique"]],"bad":0,"why":"B writes A’s code in front of B’s."}],"46b":[{"tag":"b1","lines":[["in runs R and R′ machine M has the same state and the same messages","given"],["M makes the same move in R and R′","the same-view technique"]],"bad":0,"why":"That is the technique."},{"tag":"b2","lines":[["no answer from M for a minute","given"],["M has crashed","the same-view technique"]],"bad":2,"why":"A slow M gives the same view."},{"tag":"b3","lines":[["m₁ was sent before m₂","given"],["m₁ arrives before m₂","the model"]],"bad":2,"why":"The model allows any order."},{"tag":"b4","lines":[["a crashed M and a slow M give N the same view","given"],["N makes the same move in both runs","the same-view technique"]],"bad":0,"why":"N cannot tell them apart."}]};
+const TECH={"37a":["the sound-pressure technique","the air-wave technique","the medium-speed technique","the wavelength technique"],"37b":["the repeat-rate technique","the ten-octave technique","the pitch-line technique"],"37c":["the adding-power technique","the pressure-level technique","the spreading technique"],"37d":["the recipe technique","the crest-meeting technique","the turn-free technique"],"37e":["the fading technique","the far-is-low technique","the bounce technique","the echo technique"],"37f":["the window-trade technique","the source-filter technique","the tube technique","the hiss-band technique"],"37g":["the sound-name technique","the vowel-set technique","the octave-induction technique","the voicing technique","the rate-forward technique"],"37h":["the mixer technique","the filter-corner technique","the undo-filter technique","the best-guess technique","the level-squeeze technique"],"37i":["the bar-rate technique","the meet-once technique","the rhythm-is-pitch technique","the lock-in technique"],"37j":["the partly-told technique"],"38a":["the one-reading technique","the free-places technique","the matching-worlds technique","the defined-set technique","the chooser technique","the named-every technique"],"38b":["the derived-move technique","the proof-check technique","the proof-listing technique"],"38c":["the move-keeps technique","the true-everywhere technique","the world-means-clash-free technique"],"38d":["the two-questions technique","the full-growth technique","the term-world technique","the reached-if-true-everywhere technique","the finite-parts technique"],"38e":["the countable-world technique","the bigger-world technique","the listed-line technique","the seen-from-outside technique"],"38h":["the past-every-numeral technique","the block technique","the numerals-unpicked technique","the nearest-real technique","the shadow-slope technique"],"38i":["the prime-code technique","the list-in-one-number technique","the search-reached technique"],"38j":["the provable-mark technique","the self-statement technique"],"38k":["the unreached-truth technique","the every-list technique"],"38l":["the no-self-certificate technique"],"38m":["the undefinable-truth technique"],"38n":["the only-the-numbers technique","the no-full-calculus technique"],"38o":["the code-by-primes technique","the code-reading technique","the code-test technique","the pair-code technique"],"38p":["the tree-column technique","the swapped-order technique","the detour-cut technique"],"41a":["the one-next technique","the both-sides technique","the tracks technique"],"41b":["the built-runs technique","the one-search technique","the search-graph technique","the numeral-iterator technique","the equal-reach technique"],"41c":["the table-code technique","the universal technique","the few-machines technique"],"41d":["the stopping-listed technique","the no-stop-decider technique","the not-stopping technique"],"41e":["the reduction-carries technique","the behaviour technique","the reach-undecided technique","the equation-search technique","the every-world technique"],"41f":["the self-print technique","the own-code technique","the shortest-unlisted technique"],"41g":["the joined-machines technique","the pumping technique","the two-loop technique","the bounded-room technique"],"41h":["the power-stays technique","the certificate-search technique","the tableau technique","the more-time technique","the halving-room technique"],"41i":["the majority-vote technique","the random-point technique","the random-column technique","the all-coins technique","the fast-fall technique"],"41j":["the trace-line technique","the blank-march technique","the one-way technique","the flip-diagonal technique"],"41k":["the clause-split technique","the palette technique","the or-piece technique","the map-from-clauses technique"],"41l":["the which-one technique","the locked-colours technique","the self-made-record technique","the through-colouring technique"],"46a":["the fixed-width technique","the longest-prefix technique"],"46b":["the same-view technique"],"46c":["the last-message technique"],"46d":["the resend technique"],"46e":["the counter technique","the list-stamp technique"],"46f":["the two-phase technique"],"46g":["the majority-overlap technique"],"46h":["the third-bound technique"],"46i":["the catch-up technique"],"46j":["the squaring-pull technique"],"46k":["the ring-move technique"],"46l":["the converge technique"],"46m":["the split-combine technique"]}, WORDS={"the partly-told technique":"Partial loss of signal can still be analyzed for partial induction of initial transmission.","the true-everywhere technique":"If G reaches φ, then φ is true in every world of G.","the world-means-clash-free technique":"A collection of statements that has a world is clash-free.","the full-growth technique":"A clash-free collection in a listed language grows into a clash-free collection that holds each statement or its denial, and holds a named example of each some it holds.","the reached-if-true-everywhere technique":"In a listed language, whatever is true in every world of G is reached from G.","the finite-parts technique":"If every finite part of a collection of statements has a world, the whole collection has a world.","the countable-world technique":"If a collection of statements in a listed language has a world, it has a world whose members can be listed; and if it has an endless world, it has one that is endless and can be listed.","the bigger-world technique":"If a collection of statements has an endless world, then for any set X it has a world with at least as many members as X.","the listed-line technique":"A world of the true statements of the line whose members can be listed has a bounded set of members with no least upper bound among them.","the provable-mark technique":"If PA reaches φ, then PA reaches Prov(⌜φ⌝).","the self-statement technique":"For every formula ψ(x₀) with one free placeholder, there is a statement δ such that PA reaches δ ⇔ ψ(⌜δ⌝).","the unreached-truth technique":"The unreached statement is true in N, and PA reaches neither it nor its denial.","the every-list technique":"If a collection T holds PA, membership in T is settled by a recipe, and every member of T is true in N, then some statement true in N is not reached by T.","the no-self-certificate technique":"If PA is clash-free, PA does not reach Con.","the undefinable-truth technique":"No formula of arithmetic is a truth formula for arithmetic.","the both-sides technique":"A set is decided by a machine exactly when the set and the strings outside it are both listed.","the stopping-listed technique":"A machine lists the stopping set.","the no-stop-decider technique":"No tape machine decides the stopping set.","the self-print technique":"Some machine, started on a blank tape, stops with its own code on the tape.","the own-code technique":"For every machine T that reads a code and a string, there is a machine R such that R on any w does what T does on ⟨R⟩ # w.","the shortest-unlisted technique":"No machine lists endlessly many shortest machines.","the same-view technique":"If two runs give a machine the same view, the machine makes the same move in both."};
 const ALL=[]; Object.keys(E).forEach(step=>E[step].forEach(e=>{ e.step=step; ALL.push(e); }));
 const slug=c=>/ technique$/.test(c)?c.replace(/^the /,'').replace(/ technique$/,''):'claim', lid=(e,i)=>e.step+'.'+slug(e.lines[i][1]);
 const first=e=>e.lines[0][0], last=e=>e.lines[e.lines.length-1][0];
@@ -20489,7 +20542,7 @@ else { try{ const s=document.createElement('script'); s.src='footproofs.js'; s.o
 /* ===== Chains, retired pools (Andrew 2026-11-13 22:34Z: "break the single-question pools into seeds and links"): the book pools
    whose every question is now dealt as a seed and its links (chains/bk1-map.tsv marks them "full") leave the Laundry; the partly
    carried ones stay. ===== */
-(function(){ const R=new Set(["13d.run", "13h.run", "13c.run", "13i.run", "13e.run", "13d.twice", "13d.factor", "13d.sum", "13c.times", "13i.over", "13e.power", "13h.root", "13e.links", "13d.speed", "13d.gain", "1e.kind", "13d.at", "13d.tangent", "14a.level", "14f.second", "16f.back", "16f.scale", "16f.add", "16c.ends", "1e.same", "1e.valid", "1e.together", "8g.findall", "4k.rowstep", "4k.twoterm", "9f.domains", "9b.twice", "8h.between", "27j.solve", "27j.reach", "27j.lowest", "27d.chain", "27d.zero", "27j.undo", "27d.thin", "27f.which", "43b.noundo", "44f.recip", "27b.free", "27b.mix", "27b.neighbours", "27b.coords", "27b.share", "27c.lostreached", "27d.after", "27d.otherbasis", "27g.own2", "27h.readbasis", "27g.pullback", "27g.polyin", "27b.shifted", "44c.through", "44c.remainder", "44j.common", "44j.repeated", "19e.sign", "27k.byrows", "27k.powers", "27k.opposite", "27k.ratio", "27g.standin", "27e.plusI", "27f.stretches", "27f.straightens", "27f.stairstretch", "27f.polystretch", "27f.swapspace", "27g.least", "44cb27.killer", "44cb27.maker", "44cb27.howmany", "44cb27.blocks", "44cb27.parts", "44cb27.root", "31a.fourcorners", "31a.fromsizes", "31b.shadow", "31c.straighten", "31d.keepers", "31d.symprod", "31e.corners", "31e.signs", "25d.roots", "14i.bothzero", "13m.tangentstep", "23b.seconddiff", "31g.matched", "28d.mixed", "28i.parallelogram", "2g.howmany", "2h.lists", "5cb2.class", "35a.pairing", "35b.diagonalrow"]); let k=0; const G=[];
+(function(){ const R=new Set(["13d.run", "13h.run", "13c.run", "13i.run", "13e.run", "13d.twice", "13d.factor", "13d.sum", "13c.times", "13i.over", "13e.power", "13h.root", "13e.links", "13d.speed", "13d.gain", "1e.kind", "13d.at", "13d.tangent", "14a.level", "14f.second", "16f.back", "16f.scale", "16f.add", "16c.ends", "1e.same", "1e.valid", "1e.together", "8g.findall", "4k.rowstep", "4k.twoterm", "9f.domains", "9b.twice", "8h.between", "27l.solve", "27l.reach", "27l.lowest", "27d.chain", "27d.zero", "27l.undo", "27d.thin", "27f.which", "43b.noundo", "44f.recip", "27b.free", "27b.mix", "27b.neighbours", "27b.coords", "27b.share", "27c.lostreached", "27d.after", "27d.otherbasis", "27g.own2", "27h.readbasis", "27g.pullback", "27g.polyin", "27b.shifted", "44c.through", "44c.remainder", "44j.common", "44j.repeated", "19e.sign", "27m.byrows", "27m.powers", "27m.opposite", "27m.ratio", "27g.standin", "27e.plusI", "27f.stretches", "27f.straightens", "27f.stairstretch", "27f.polystretch", "27f.swapspace", "27g.least", "44cb27.killer", "44cb27.maker", "44cb27.howmany", "44cb27.blocks", "44cb27.parts", "44cb27.root", "31a.fourcorners", "31a.fromsizes", "31b.shadow", "31c.straighten", "31d.keepers", "31d.symprod", "31e.corners", "31e.signs", "25d.roots", "14i.bothzero", "13m.tangentstep", "23b.seconddiff", "31g.matched", "28d.mixed", "28k.parallelogram", "2g.howmany", "2h.lists", "5cb2.class", "35a.pairing", "35b.diagonalrow"]); let k=0; const G=[];
   for(let i=QP.length-1;i>=0;i--){ if(QP[i]&&R.has(QP[i].id)){ G.push(QP[i].id+"@"+QP[i].step+":"+(QP[i].label||"")); QP.splice(i,1); k++; } }
   try{ window.__chRetired=k; window.__chRetiredIds=G; if(window.LADDER_CHDEBUG) console.log("chains retired",k); }catch(e){} })();
 /* ===== Chains, Word Problems round 2 (Andrew 2026-11-14 02:03Z and 02:17Z): the story is the beginning and the end of the chain.
@@ -20769,18 +20822,18 @@ const CLOSE={
   G(X({u:'yu',k:'above',ask:(S,p)=>'the repair budget is '+p.K+' dollars: how many dollars of it are left?',ln:()=>'budget left'},LESS))],
 '40·now.lines':[
   Pr(X({u:'yu',out:'seconds',k:()=>pick([2,5]),ask:(S,p)=>'the core reads '+p.K+' lines a second: how many seconds does the check take?',ln:()=>'seconds to check'},MQ))],
-'45·now.messages':[
+'46·now.messages':[
   Pr(X({u:'yu',out:'seconds',k:()=>pick([2,3,5]),ask:(S,p)=>'the network carries '+p.K+' messages a second: how many seconds do those messages take?',ln:()=>'seconds for the round'},MQ))],
-'45·econ.reward':[
+'46·econ.reward':[
   Tm(X({u:'yu',out:'dollars',k:()=>pick([2,3,5]),ask:(S,p)=>'each token sells for '+p.K+' dollars: what is Mike’s gain in dollars?',ln:()=>'gain in dollars'},MQ))],
-'45·comp.addresses':[
+'46·comp.addresses':[
   G(X({u:'yu',k:'above',ask:(S,p)=>'the block holds '+p.K+' thousand addresses: how many thousand are left to hand out?',ln:()=>'addresses left'},LESS))],
-'45·eng.flood':[
-  G(X({u:'senders',k:S=>S.c[0]/(S.ports-1),ask:()=>'how many senders has the switch learnt?',ln:()=>'senders learnt'},own('45·eng','the learning-switch technique'))),
+'46·eng.flood':[
+  G(X({u:'senders',k:S=>S.c[0]/(S.ports-1),ask:()=>'how many senders has the switch learnt?',ln:()=>'senders learnt'},own('46·eng','the learning-switch technique'))),
   Tm(X({u:'yu',out:'microseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each copy takes '+p.K+' microseconds on the wire: how long do the copies take?',ln:()=>'time on the wire'},MQ))],
-'47·eng.loading':[
+'48·eng.loading':[
   Tm(X({u:'yu',out:'watts',k:()=>pick([2,3,4]),ask:(S,p)=>'the load at the end draws '+p.K+' amps: what power does it take?',ln:()=>'power at the load'},MQ))],
-'47·phys.axes':[
+'48·phys.axes':[
   G(X({u:'yu',k:'above',ask:(S,p)=>'the reading must stay under '+p.K+' square metres: how much room is left?',ln:()=>'room left'},LESS))]
 };
 /* a few readings of old stories tidied for print */
@@ -21066,11 +21119,11 @@ law('44·bio.samples','samples and their stretches',()=>{ const a=ri(2,6); retur
   [O(X({u:'yu',out:'stretches',k:1,ask:()=>'with their average taken away, at most how many stretches other than 0 can the spread grid have?',ln:()=>'stretches at most',w:['1 is taken the wrong way round','1 is added'],xs:(S,p,q)=>[{why:'the average is not taken away',v:q.v}]},own('44·bio','the few-samples technique')))]);
 law('44·chem.fill','electrons filled from the bottom',()=>({c:[0,2],story:'A chain molecule of n carbons spreads E(n) = 2n electrons over its links.',f:'E',x:'n',xu:'carbons',yu:'electrons',rate:'electrons per carbon',area:null,pts:[2,3,4,5,6,8,10]}),
   [Pr(X({u:'yu',out:'orbitals',k:2,ask:()=>'filling from the bottom, two to an orbital, how many orbitals are filled?',ln:()=>'orbitals filled'},own('44·chem','the fill-from-bottom technique')))]);
-law('47·comp.types','members of a type',()=>{ const a=pick([2,3]), b=pick([1,2]); return {c:[b,a],story:'A type in '+who()+'’s program has X(n) = '+sp([b,a],'n')+' members, for a setting n.',f:'X',x:'n',xu:'settings',yu:'members',rate:'members per setting',area:null,pts:[1,2,3,4,5]}; },
-  [Tm(X({u:'yu',k:()=>pick([2,3]),ask:(S,p)=>'how many members has the type of pairs of it with a choice of '+p.K+'?',ln:()=>'members of the pair type',w:['the count is divided','the two are added, as for one or the other']},own('47·comp','the type-counts technique')))]);
-law('47·now.ways','ways a type is the same as itself',()=>{ const b=pick([1,2,3]); return {c:[b,1],story:'A finite type in a proof checker has M(k) = k + '+b+' members.',f:'M',x:'k',xu:'steps',yu:'members',rate:'members per step',area:null,pts:[1,2,3,4]}; },
+law('48·comp.types','members of a type',()=>{ const a=pick([2,3]), b=pick([1,2]); return {c:[b,a],story:'A type in '+who()+'’s program has X(n) = '+sp([b,a],'n')+' members, for a setting n.',f:'X',x:'n',xu:'settings',yu:'members',rate:'members per setting',area:null,pts:[1,2,3,4,5]}; },
+  [Tm(X({u:'yu',k:()=>pick([2,3]),ask:(S,p)=>'how many members has the type of pairs of it with a choice of '+p.K+'?',ln:()=>'members of the pair type',w:['the count is divided','the two are added, as for one or the other']},own('48·comp','the type-counts technique')))]);
+law('48·now.ways','ways a type is the same as itself',()=>{ const b=pick([1,2,3]); return {c:[b,1],story:'A finite type in a proof checker has M(k) = k + '+b+' members.',f:'M',x:'k',xu:'steps',yu:'members',rate:'members per step',area:null,pts:[1,2,3,4]}; },
   [Cu(X({u:'yu',out:'ways',k:1,f:(S,p,q)=>{ const n=num(q.v); if(q.v.q!==1||n<1||n>7) return null; let r=1; for(let i=2;i<=n;i++) r*=i; return Q(r); },ex:(S,p,q)=>qs(q.v)+'!',ask:()=>'with the univalence axiom, in how many ways is it the same as itself?',ln:()=>'ways',
-    xs:(S,p,q)=>{ const n=num(q.v); return [{why:'the members are counted instead of the ways',v:q.v},{why:'the ways are taken as n squared',v:Q(n*n)},{why:'the ways are taken as 2 to the n',v:Q(Math.pow(2,n))}]; }},own('47·now','the way-count technique')))]);
+    xs:(S,p,q)=>{ const n=num(q.v); return [{why:'the members are counted instead of the ways',v:q.v},{why:'the ways are taken as n squared',v:Q(n*n)},{why:'the ways are taken as 2 to the n',v:Q(Math.pow(2,n))}]; }},own('48·now','the way-count technique')))]);
 law('2·comp.cond','tests before the then part',()=>{ const a=ri(2,4), b=ri(1,3); return {c:[b,a],early:1,story:'Before the then part of '+who()+'’s program runs, the computer checks a condition of n comparisons joined by and, in T(n) = '+sp([b,a],'n')+' steps.',
   f:'T',x:'n',xu:'comparisons',yu:'steps',rate:'steps per comparison',area:null,pts:[2,3,4,5,6]}; },
   [Tm(X({u:'yu',out:'nanoseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each step takes '+p.K+' nanoseconds: how long does the check take?',ln:()=>'time for the check'},MQ))]);
@@ -21225,7 +21278,7 @@ const cp=(id,after,mk)=>mark(id,S=>{ const k=pick([2,3,4]); S.copies={k,after,as
 const spl=(id,after,mk)=>mark(id,S=>{ const k=pick([2,4,5]); S.split={k,after,ask:mk(k)[0],ln:mk(k)[1]}; });
 const RD=['9a.read'], RD5=['5g.put','9a.read'];
 cp('16·phys.spring',RD,k=>[k+' such springs push side by side on the latch: multiply by '+k+' for their push together','push of '+k+' springs']);
-cp('45·econ.reward',RD,k=>['Mike runs '+k+' such miners: multiply by '+k+' for the gain of them all','gain of '+k+' miners']);
+cp('46·econ.reward',RD,k=>['Mike runs '+k+' such miners: multiply by '+k+' for the gain of them all','gain of '+k+' miners']);
 cp('5·chem.burn',RD5.concat(['9a.read']),k=>['the plant runs '+k+' such burners: multiply by '+k+' for the hydrogen of them all','hydrogen of '+k+' burners']);
 cp('5·chem.propane',RD5,k=>['the house has '+k+' such heaters: multiply by '+k+' for the oxygen of them all','oxygen of '+k+' heaters']);
 cp('6·chem.plate',RD5,k=>['the shop runs '+k+' such cells on separate supplies: multiply by '+k+' for all the electrons','electrons of '+k+' cells']);
@@ -21241,7 +21294,7 @@ spl('9·stat.weir',RD,k=>['the fish are tagged by '+k+' crews in equal shares: g
 spl('18·econ.revenue',['9a.read','14a.best'],k=>['the takings are shared by '+k+' stalls of a cooperative, equally: give one stall’s share','one of '+k+' shares']);
 
 cp('18·nav.chart',RD,k=>['the trip has '+k+' legs that long: multiply by '+k+' for the whole trip','the whole trip']);
-cp('45·comp.addresses',RD,k=>[k+' offices alike draw from the same block: multiply by '+k+' for all their addresses','addresses of '+k+' offices']);
+cp('46·comp.addresses',RD,k=>[k+' offices alike draw from the same block: multiply by '+k+' for all their addresses','addresses of '+k+' offices']);
 cp('2·comp.cond',RD5,k=>[k+' such conditions are checked one after another: multiply by '+k+' for all the steps','steps for '+k+' conditions']);
 cp('8·econ.rent',RD,k=>['Randy rents '+k+' flats alike: multiply by '+k+' for all the rent','rent of '+k+' flats']);
 cp('10·logi.trucks',RD,k=>[k+' depots alike share the trucks: multiply by '+k+' for all their trips','trips of '+k+' depots']);
@@ -24501,8 +24554,8 @@ map(L,[
       ['the time a line divides',(S,p)=>'divide the lines by '+p.t+' and by 1000',(v,S,p)=>dv(v,p.t*1000)]]}]]);
 Z(L,G(X({u:'milliseconds',k:'above',ask:(S,p)=>'the check must finish within '+p.K+' milliseconds: how many are to spare?',ln:()=>'milliseconds to spare'},LESS)));
 }
-/* ---------- 45·now.messages: one round of agreement; one more machine, the rounds, the bytes, the link ---------- */
-{ const L='45·now.messages';
+/* ---------- 46·now.messages: one round of agreement; one more machine, the rounds, the bytes, the link ---------- */
+{ const L='46·now.messages';
 map(L,[
  ['join',{u:'messages',out:'messages',st:'5j',cite:MQ.cite,mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n}; },
    ask:(S,p)=>'one more machine joins, making '+(p.n+1)+': how many messages in a round now?',
@@ -24526,8 +24579,8 @@ map(L,[
       ['the bytes divide instead of multiply',(S,p)=>'divide the messages by '+p.b+'/1000',(v,S,p)=>mul(v,1000,p.b)]]}]]);
 Z(L,Pr(X({u:'kilobytes',out:'seconds',k:()=>pick([2,4,5]),ask:(S,p)=>'the link carries '+p.K+' kilobytes a second: how many seconds does the agreement take?',ln:()=>'seconds on the link'},MQ)));
 }
-/* ---------- 45·econ.reward: a miner's gain; more hours, the pool's cut, dollars, the power bill ---------- */
-{ const L='45·econ.reward';
+/* ---------- 46·econ.reward: a miner's gain; more hours, the pool's cut, dollars, the power bill ---------- */
+{ const L='46·econ.reward';
 map(L,[
  ['later',{u:'tokens',out:'tokens',st:'5j',cite:MQ.cite,mk:()=>({d:pick([2,5,10])}),
    ask:(S,p)=>'Mike lets it run '+p.d+' hours more: what is his gain then?',
@@ -24551,8 +24604,8 @@ map(L,[
       ['the pool’s cut is left out',(S,p)=>'multiply the gain by '+p.c,(v,S,p)=>mul(v,p.c)]]}]]);
 Z(L,O(X({u:'dollars',k:'below',ask:(S,p)=>'the power bill for the run is '+p.K+' dollars: what does Mike clear?',ln:()=>'cleared after power'},LESS)));
 }
-/* ---------- 45·comp.addresses: addresses handed out; a year on, one office's share, blocks of 256, the router ---------- */
-{ const L='45·comp.addresses';
+/* ---------- 46·comp.addresses: addresses handed out; a year on, one office's share, blocks of 256, the router ---------- */
+{ const L='46·comp.addresses';
 const U3=(S,t)=>qa(qa(cq(S.c[0]),qm(cq(S.c[1]),R(t))),qm(cq(S.c[2]),R(t*t)));
 map(L,[
  ['year',{u:'thousand addresses',out:'thousand addresses',st:'5j',cite:MQ.cite,mk:(S,ch)=>{ const t=x0(ch); return t===undefined?null:{t}; },
@@ -24577,10 +24630,10 @@ map(L,[
       ['the thousands are dropped','divide by 256 and round up',v=>R(Math.ceil(num(v)/256))]]}]]);
 Z(L,G(X({u:'blocks of 256',k:'above',ask:(S,p)=>'the router holds '+p.K+' blocks: how many more blocks could it hold?',ln:()=>'blocks to spare'},LESS)));
 }
-/* ---------- 45·eng.flood: copies a switch floods; more senders learnt, kilobytes, the uplink, the round's budget ---------- */
-{ const L='45·eng.flood', LS='the learning-switch technique';
+/* ---------- 46·eng.flood: copies a switch floods; more senders learnt, kilobytes, the uplink, the round's budget ---------- */
+{ const L='46·eng.flood', LS='the learning-switch technique';
 map(L,[
- ['learn',{u:'copies',out:'copies',st:'45·eng',cite:LS,mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n,d:pick([2,5,10]),k:S.ports-1}; },
+ ['learn',{u:'copies',out:'copies',st:'46·eng',cite:LS,mk:(S,ch)=>{ const n=x0(ch); return n===undefined?null:{n,d:pick([2,5,10]),k:S.ports-1}; },
    ask:(S,p)=>'the switch learns '+p.d+' more senders: how many extra copies does a round flood now?',
    f:(v,S,p)=>sub(v,p.k*p.d),ex:(V,S,p)=>V+' − '+p.k+' · '+p.d,ln:'copies after learning more',
    w:[['each sender learnt saves one copy, not one a port',(S,p)=>'take '+p.d+' copies off',(v,S,p)=>sub(v,p.d)],
@@ -24602,10 +24655,10 @@ map(L,[
       ['the time a copy divides',(S,p)=>'divide the copies by '+p.t+' and by 1000',(v,S,p)=>dv(v,1000*p.t)]]}]]);
 Z(L,G(X({u:'milliseconds',k:'above',ask:(S,p)=>'a round must finish within '+p.K+' milliseconds: how many are to spare?',ln:()=>'milliseconds to spare'},LESS)));
 }
-/* ---------- 47·eng.loading: a chain of parts; a second stage, the current in the load, its power, the rating ---------- */
-{ const L='47·eng.loading', LT='the loading technique';
+/* ---------- 48·eng.loading: a chain of parts; a second stage, the current in the load, its power, the rating ---------- */
+{ const L='48·eng.loading', LT='the loading technique';
 map(L,[
- ['stage',{u:'volts out',out:'volts out',st:'47·eng',cite:'the chain-grid technique',
+ ['stage',{u:'volts out',out:'volts out',st:'48·eng',cite:'the chain-grid technique',
    ask:(S)=>'a second chain, alike, follows the first: what voltage comes out of both?',
    f:(v,S)=>qm(v,cq(S.c[1])),ex:(V,S)=>V+' · '+qs(cq(S.c[1])),ln:'out of two chains',
    w:[['the second chain’s share is added',(S)=>'add '+qs(cq(S.c[1]))+' of it to the output',(v,S)=>qa(v,qm(v,cq(S.c[1])))],
@@ -24615,37 +24668,37 @@ map(L,[
    f:(v,S,p)=>mul(v,1000,p.r),ex:(V,S,p)=>V+' · 1000/'+p.r,ln:'current in the load',
    w:[['the resistance multiplies',(S,p)=>'multiply the volts by '+p.r+' ohms',(v,S,p)=>mul(v,p.r)],
       ['amps are given as milliamps',(S,p)=>'divide the volts by '+p.r+' ohms',(v,S,p)=>dv(v,p.r)]]}],
- ['watts',{after:['amps'],u:'milliamps',out:'milliwatts',st:'47·eng',cite:LT,mk:(S,ch)=>{ const a=has(ch,L,'amps'); return a?{r:a.p.r}:null; },
+ ['watts',{after:['amps'],u:'milliamps',out:'milliwatts',st:'48·eng',cite:LT,mk:(S,ch)=>{ const a=has(ch,L,'amps'); return a?{r:a.p.r}:null; },
    ask:(S,p)=>'with I²R, what power does the '+p.r+' ohm load take, in milliwatts?',
    f:(v,S,p)=>mul(qm(v,v),p.r,1000),ex:(V,S,p)=>V+'² · '+p.r+'/1000',ln:'power in the load',
    w:[['the current is not squared',(S,p)=>'multiply the milliamps by '+p.r+'/1000',(v,S,p)=>mul(v,p.r,1000)],
       ['milliamps are taken as amps',(S,p)=>'square the milliamps and multiply by '+p.r,(v,S,p)=>mul(qm(v,v),p.r)]]}],
- ['wattsone',{after:['read','stage'],u:'volts out',out:'milliwatts',st:'47·eng',cite:LT,mk:()=>({r:pick([100,200,500])}),
+ ['wattsone',{after:['read','stage'],u:'volts out',out:'milliwatts',st:'48·eng',cite:LT,mk:()=>({r:pick([100,200,500])}),
    ask:(S,p)=>'the output drives a '+p.r+' ohm load: with V²/R, what power does it take, in milliwatts?',
    f:(v,S,p)=>mul(qm(v,v),1000,p.r),ex:(V,S,p)=>V+'² · 1000/'+p.r,ln:'power in the load',
    w:[['the voltage is not squared',(S,p)=>'multiply the volts by 1000/'+p.r,(v,S,p)=>mul(v,1000,p.r)],
       ['the resistance multiplies',(S,p)=>'square the volts and multiply by '+p.r,(v,S,p)=>mul(qm(v,v),p.r)]]}]]);
 Z(L,G(X({u:'milliwatts',k:'above',ask:(S,p)=>'the load is rated for '+p.K+' milliwatts: how many are to spare?',ln:()=>'milliwatts to spare'},LESS)));
 }
-/* ---------- 47·phys.axes: a reading that keeps its form; a longer arrow, the part on Zoe's first axis, her second, the limit ---------- */
-{ const L='47·phys.axes', NA='the new-axes technique';
+/* ---------- 48·phys.axes: a reading that keeps its form; a longer arrow, the part on Zoe's first axis, her second, the limit ---------- */
+{ const L='48·phys.axes', NA='the new-axes technique';
 map(L,[
- ['longer',{u:'square metres',out:'square metres',st:'47·phys',cite:'the same-on-every-axes technique',mk:(S,ch)=>{ const x=x0(ch); return x===undefined?null:{x,d:pick([1,2])}; },
+ ['longer',{u:'square metres',out:'square metres',st:'48·phys',cite:'the same-on-every-axes technique',mk:(S,ch)=>{ const x=x0(ch); return x===undefined?null:{x,d:pick([1,2])}; },
    ask:(S,p)=>'Evita makes the arrow '+p.d+' metre'+(p.d>1?'s':'')+' longer: what does she read now?',
    f:(v,S,p)=>qm(cq(S.c[2]),R((p.x+p.d)*(p.x+p.d))),ex:(V,S,p)=>qs(cq(S.c[2]))+' · '+(p.x+p.d)+'²',ln:'reading of the longer arrow',
    w:[['only the added piece is squared',(S,p)=>'add '+qs(cq(S.c[2]))+' · '+p.d+'² to the reading',(v,S,p)=>qa(v,qm(cq(S.c[2]),R(p.d*p.d)))],
       ['the metres are added as square metres',(S,p)=>'add the '+p.d+' metres to the reading',(v,S,p)=>add(v,p.d)]]}],
- ['first',{after:['read','longer'],u:'square metres',out:'square metres on Zoe’s first axis',st:'47·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
+ ['first',{after:['read','longer'],u:'square metres',out:'square metres on Zoe’s first axis',st:'48·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
    ask:(S,p)=>'on Zoe’s axes the arrow runs '+p.a+'/5 along her first axis: what part of the reading is that?',
    f:(v,S,p)=>mul(v,p.a*p.a,25),ex:(V,S,p)=>V+' · ('+p.a+'/5)²',ln:'part on the first axis',
    w:[['the share is not squared',(S,p)=>'take '+p.a+'/5 of the reading',(v,S,p)=>mul(v,p.a,5)],
       ['the other axis’s share is taken',(S,p)=>'take ('+p.b+'/5)² of the reading',(v,S,p)=>mul(v,p.b*p.b,25)]]}],
- ['second',{after:['first'],u:'square metres on Zoe’s first axis',out:'square metres on Zoe’s second axis',st:'47·phys',cite:'the same-on-every-axes technique',mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{t:c.in.v}:null; },
+ ['second',{after:['first'],u:'square metres on Zoe’s first axis',out:'square metres on Zoe’s second axis',st:'48·phys',cite:'the same-on-every-axes technique',mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{t:c.in.v}:null; },
    ask:(S,p)=>'the whole reading, '+qs(p.t)+', is the same on her axes: what part is on her second axis?',
    f:(v,S,p)=>qa(p.t,qn(v)),ex:(V,S,p)=>qs(p.t)+' − '+V,ln:'part on the second axis',
    w:[['the parts are added','add the first part to the whole reading',(v,S,p)=>qa(p.t,v)],
       ['the second part is taken equal to the first','take the second part equal to the first',v=>v]]}],
- ['secondone',{after:['read','longer'],u:'square metres',out:'square metres on Zoe’s second axis',st:'47·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
+ ['secondone',{after:['read','longer'],u:'square metres',out:'square metres on Zoe’s second axis',st:'48·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
    ask:(S,p)=>'the arrow runs '+p.a+'/5 along Zoe’s first axis: what part of the reading is on her second?',
    f:(v,S,p)=>mul(v,p.b*p.b,25),ex:(V,S,p)=>V+' · (1 − ('+p.a+'/5)²)',ln:'part on the second axis',
    w:[['the first axis’s part is given',(S,p)=>'take ('+p.a+'/5)² of the reading',(v,S,p)=>mul(v,p.a*p.a,25)],
@@ -25577,57 +25630,57 @@ map(L,[
       ['the millimoles divide',(S,p)=>'divide by '+p.k+' and multiply by 96',(v,S,p)=>mul(v,96,p.k)]]}]]);
 Z(L,Pr(X({u:'coulombs',out:'seconds',k:()=>pick([2,4,5]),ask:(S,p)=>'a current of '+p.K+' amps carries that charge: how many seconds does it take?',ln:()=>'seconds'},MQ)));
 }
-/* ---------- 47·comp.types: members of a type; the next setting, pairs, a maybe, maps from a two-member type ---------- */
-{ const L='47·comp.types', TC='the type-counts technique';
+/* ---------- 48·comp.types: members of a type; the next setting, pairs, a maybe, maps from a two-member type ---------- */
+{ const L='48·comp.types', TC='the type-counts technique';
 map(L,[
- ['up',{u:'members',out:'members',st:'47·comp',cite:TC,
+ ['up',{u:'members',out:'members',st:'48·comp',cite:TC,
    ask:()=>'Mike raises the setting by one: how many members does the type have now?',
    f:(v,S)=>qa(v,cq(S.c[1])),ex:(V,S)=>V+' + '+qs(cq(S.c[1])),ln:'members at the next setting',
    w:[['one setting is taken to add one member','add 1 member',v=>add(v,1)],
       ['the members are doubled','double the members',v=>mul(v,2)]]}],
- ['pairs',{after:['read','up'],u:'members',out:'members of the pair type',st:'47·comp',cite:'the two-picks technique',
+ ['pairs',{after:['read','up'],u:'members',out:'members of the pair type',st:'48·comp',cite:'the two-picks technique',
    ask:()=>'a pair picks one member for each of two slots: how many members has the type of pairs?',
    f:v=>qm(v,v),ex:V=>V+' · '+V,ln:'members of the pair type',
    w:[['the two slots are added, not multiplied','add the members to themselves',v=>mul(v,2)],
       ['a member may not be picked twice','take N(N − 1)',v=>qm(v,sub(v,1))]]}],
- ['maybe',{after:['pairs'],u:'members of the pair type',out:'members of the maybe type',st:'47·comp',cite:TC,
+ ['maybe',{after:['pairs'],u:'members of the pair type',out:'members of the maybe type',st:'48·comp',cite:TC,
    ask:()=>'a maybe type holds a pair or one extra member, nothing: how many members has it?',
    f:v=>add(v,1),ex:V=>V+' + 1',ln:'members of the maybe type',
    w:[['the nothing member is left out','keep the pairs alone',v=>v],
       ['the maybe is taken to double the type','double the pairs',v=>mul(v,2)]]}],
- ['maybeone',{after:['read','up'],u:'members',out:'members of the maybe type',st:'47·comp',cite:TC,
+ ['maybeone',{after:['read','up'],u:'members',out:'members of the maybe type',st:'48·comp',cite:TC,
    ask:()=>'a maybe type holds a member or one extra, nothing: how many members has it?',
    f:v=>add(v,1),ex:V=>V+' + 1',ln:'members of the maybe type',
    w:[['the nothing member is left out','keep the members alone',v=>v],
       ['the maybe is taken to double the type','double the members',v=>mul(v,2)]]}]]);
 Z(L,Cu(X({u:'members of the maybe type',out:'maps',k:1,f:(S,p,q)=>qm(q.v,q.v),ex:(S,p,q)=>par(q.v)+'²',ask:()=>'a map from a two-member type picks a member for each: how many such maps are there?',ln:()=>'maps',
-  xs:(S,p,q)=>[{why:'the choices are added, not multiplied',v:mul(q.v,2)},{why:'the maps are counted the other way, 2 to the members',v:num(q.v)<=16?R(Math.pow(2,num(q.v))):null}]},own('47·comp','the map-over technique'))));
+  xs:(S,p,q)=>[{why:'the choices are added, not multiplied',v:mul(q.v,2)},{why:'the maps are counted the other way, 2 to the members',v:num(q.v)<=16?R(Math.pow(2,num(q.v))):null}]},own('48·comp','the map-over technique'))));
 }
-/* ---------- 47·now.ways: ways a type is the same as itself; one more member, maps to itself, the share that are ways, a random pick ---------- */
-{ const L='47·now.ways', WC='the way-count technique';
+/* ---------- 48·now.ways: ways a type is the same as itself; one more member, maps to itself, the share that are ways, a random pick ---------- */
+{ const L='48·now.ways', WC='the way-count technique';
 const fact=n=>{ let f=1; for(let i=2;i<=n;i++) f*=i; return f; };
 map(L,[
- ['up',{u:'members',out:'members',st:'47·now',cite:WC,
+ ['up',{u:'members',out:'members',st:'48·now',cite:WC,
    ask:()=>'one more member is added to the type: how many members now?',
    f:v=>add(v,1),ex:V=>V+' + 1',ln:'members',
    w:[['the members are doubled','double the members',v=>mul(v,2)],
       ['two members are added','add 2 members',v=>add(v,2)]]}],
- ['maps',{after:['read','up'],u:'members',out:'maps of it to itself',st:'47·now',cite:WC,
+ ['maps',{after:['read','up'],u:'members',out:'maps of it to itself',st:'48·now',cite:WC,
    ask:()=>'a map of the type to itself picks a member for each member: how many maps are there?',
    f:v=>v.q===1&&v.p<=6?R(Math.pow(v.p,v.p)):null,ex:V=>V+'^'+V,ln:'maps to itself',
    w:[['the choices are multiplied as N · N only','take N²',v=>qm(v,v)],
       ['each member is taken to have only fewer choices left','take N!',v=>R(fact(v.p))]]}],
- ['share',{after:['maps'],u:'maps of it to itself',out:'of the maps that are ways',st:'47·now',cite:WC,mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{n:c.in.v.p}:null; },
+ ['share',{after:['maps'],u:'maps of it to itself',out:'of the maps that are ways',st:'48·now',cite:WC,mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{n:c.in.v.p}:null; },
    ask:(S,p)=>'the ways are the '+p.n+'! maps that miss no member: what share of the maps is that?',
    f:(v,S,p)=>dv(R(fact(p.n)),v),ex:(V,S,p)=>p.n+'!/'+V,ln:'share that are ways',
    w:[['the share is turned over',(S,p)=>'divide the maps by '+p.n+'!',(v,S,p)=>dv(v,fact(p.n))],
       ['the ways are taken as N, one for each member',(S,p)=>'divide '+p.n+' by the maps',(v,S,p)=>dv(R(p.n),v)]]}],
- ['shareone',{after:['read','up'],u:'members',out:'of the maps that are ways',st:'47·now',cite:WC,
+ ['shareone',{after:['read','up'],u:'members',out:'of the maps that are ways',st:'48·now',cite:WC,
    ask:()=>'of the maps of the type to itself, N^N, what share are ways, N! of them?',
    f:v=>v.q===1&&v.p<=6?R(fact(v.p),Math.pow(v.p,v.p)):null,ex:V=>V+'!/'+V+'^'+V,ln:'share that are ways',
    w:[['the share is turned over','divide N^N by N!',v=>v.p<=6?R(Math.pow(v.p,v.p),fact(v.p)):null],
       ['the maps are taken as N²','divide N! by N²',v=>R(fact(v.p),v.p*v.p)]]}]]);
-Z(L,Tm(X({u:'of the maps that are ways',out:'ways expected',k:()=>pick([100,1000]),ask:(S,p)=>'picking '+p.K+' maps at random, about how many are ways?',ln:()=>'ways expected'},own('47·now',WC))));
+Z(L,Tm(X({u:'of the maps that are ways',out:'ways expected',k:()=>pick([100,1000]),ask:(S,p)=>'picking '+p.K+' maps at random, about how many are ways?',ln:()=>'ways expected'},own('48·now',WC))));
 }
 /* ---------- 30·econ.drift: a drift against a wobble; more days, the drift in wobbles, four times as long, a trader's mark ---------- */
 { const L='30·econ.drift', DW='the drift-and-width technique';
@@ -26837,8 +26890,8 @@ CH.wstat={T,cardOf,statCard,mk,SHARE,LISTS,listOf,SC,TALLY};
     '8·econ.wage':['copies',k=>(k-1)+' others at the cannery earn the same: what do the '+k+' of them earn an hour together?'],
     '16·then.inflow':['copies',k=>k+' streams alike feed the lake: what is their flow together?'],
     '18·nav.chart':['copies',k=>'the trip has '+k+' legs that long: how far is the whole trip?'],
-    '45·econ.reward':['copies',k=>'Mike runs '+k+' such miners: what is the gain of them all?'],
-    '45·comp.addresses':['copies',k=>k+' offices alike draw from the same block: how many thousand addresses for them all?'],
+    '46·econ.reward':['copies',k=>'Mike runs '+k+' such miners: what is the gain of them all?'],
+    '46·comp.addresses':['copies',k=>k+' offices alike draw from the same block: how many thousand addresses for them all?'],
     '5·chem.burn':['copies',k=>'the plant runs '+k+' such burners: how many moles of hydrogen do they burn in all?'],
     '5·chem.propane':['copies',k=>'the house has '+k+' such heaters: how many moles of oxygen do they take in all?'],
     '6·chem.plate':['copies',k=>'the shop runs '+k+' such cells on separate supplies: how many moles of electrons pass in all?'],
@@ -26892,7 +26945,7 @@ CH.wstat={T,cardOf,statCard,mk,SHARE,LISTS,listOf,SC,TALLY};
   addClose('33·bio.oxygen',[
     G(X({u:'units a litre above the middle',out:'units a litre',k:S=>S.edge-S.mid,ask:(S,p)=>'the edge of the sheet stands '+p.K+' above the middle: how far below the edge is this spot?',ln:()=>'below the edge'},own('33·bio','the uptake-curve technique'))),
     Pr(X({u:'units a litre above the middle',out:'square millimetres',k:S=>S.c[2]>1?S.c[2]:null,ask:(S,p)=>'the oxygen rises as '+p.K+' times the distance squared: what is the distance squared?',ln:()=>'the distance squared'},own('33·bio','the uptake-curve technique')))]);
-  mid('45·eng.flood','m:eng.flood.unlearnt','45·eng.unlearnt',yuOf('45·eng.flood'),'senders',['read'],[]);
+  mid('46·eng.flood','m:eng.flood.unlearnt','46·eng.unlearnt',yuOf('46·eng.flood'),'senders',['read'],[]);
   mid('15·econ.lease','15·econ.forever','15·econ.forever',yuOf('15·econ.lease'),'dollars',['read'],[]); /* it keeps its old name: the lease's two closes tell by it which of them follows */
   /* openings on the law */
   addClose('13·phys.bkmovers',[Tm(X({u:S=>S.gain,out:S=>S.rate,pos:false,k:()=>pick([2,3,4]),ask:(S,p)=>'if the speed kept gaining at that pace, how much would it gain in '+p.K+' more seconds?',ln:()=>'speed gained'},MQ))]);
@@ -26956,12 +27009,12 @@ CH.L.forEach(l=>{ if(!l.steps0) l.steps0=()=>{ try{ const s=l.steps(new Set()); 
   /* 36a: a spectrum with one peak inside [0, 1] */
   seed('36a.spectra','36a','spectra with one peak in [0, 1]',()=>LX(INS,[1,2,3],LRG(1,9)).map(t=>[t,1]),
     ([[q,p],m,h])=>fv(PQ([h-m*p*p,2*m*q*p,-m*q*q]),[q,p,m,h],[0,1,2,-1]));
-  /* 38f: curves whose slope is exact at the reading points: powers, a reciprocal, roots, and pairs of them */
-  seed('38f.curves','38f','powers, reciprocals and roots, alone or in pairs',()=>LX(['p2','p3','p4','rc','rc2','rt','r3','p2rc','xrt','p3x'],[1,1,2,-1,3]).map(t=>[t,1]),
+  /* 38h: curves whose slope is exact at the reading points: powers, a reciprocal, roots, and pairs of them */
+  seed('38h.curves','38h','powers, reciprocals and roots, alone or in pairs',()=>LX(['p2','p3','p4','rc','rc2','rt','r3','p2rc','xrt','p3x'],[1,1,2,-1,3]).map(t=>[t,1]),
     ([s,k])=>{ const sq=[1,4,9], B={p2:[P(X,2),[1,-1,2,-2,3]],p3:[P(X,3),[1,-1,2,-2]],p4:[P(X,4),[1,-1,2]],rc:[P(X,-1),[1,-1,2,-2]],rc2:[P(X,-2),[1,-1,2]],rt:[P(X,Q(1,2)),sq],r3:[P(X,Q(3,2)),sq],p2rc:[A(P(X,2),P(X,-1)),[1,-1,2,-2]],xrt:[A(X,P(X,Q(1,2))),sq],p3x:[A(P(X,3),M(N(-3),X)),[1,-1,2,0]]}[s];
       const t=k===1?B[0]:B[0].t==='+'?A(...B[0].a.map(u=>simp(M(N(k),u)))):M(N(k),B[0]); return fv(t,[s,k],B[1]); });
-  /* 47j: short terms to run twice: a line, or a square with a shift */
-  seed('47j.terms','47j','lines and squares short enough to run twice',()=>{ const o=[]; LX(NZ(-3,3),LRG(-4,4)).filter(([a,b])=>!(a===1&&b===0)).forEach(t=>o.push([['l'].concat(t),1])); LX([1,1,2,-1],LRG(-3,3)).forEach(t=>o.push([['s'].concat(t),2])); return o; },
+  /* 48j: short terms to run twice: a line, or a square with a shift */
+  seed('48j.terms','48j','lines and squares short enough to run twice',()=>{ const o=[]; LX(NZ(-3,3),LRG(-4,4)).filter(([a,b])=>!(a===1&&b===0)).forEach(t=>o.push([['l'].concat(t),1])); LX([1,1,2,-1],LRG(-3,3)).forEach(t=>o.push([['s'].concat(t),2])); return o; },
     ([s,a,b])=>fv(s==='l'?lin(a,b):PQ([b,0,a]),[s,a,b],[0,1,-1,2,-2]));
 })();
 /* the size of a seed, for the gear's "terms and rows": terms in an expression, rows in a table or grid, members of a list */
@@ -27319,11 +27372,11 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
     catch(e){ if(e&&e.over) return null; throw e; }
     finally{ CH.pref=keep; CH.dl=dl0; CH.adl=0; } };
   /* the steps that had a pool of each kind (w work, p proof, d word): a plain table, in place of the retired list */
-  const HADPOOL={"9g":"w","13e":"wd","17f":"w","17b":"w","21g":"w","43a":"wp","27d":"wp","27f":"wp","18a":"w","19a":"wd","20j":"wp","13d":"wp","13h":"w","13c":"w","13f":"w","14a":"w","16f":"w","9b":"w","1d":"p","7f":"p","8b":"w","4k":"p","9f":"w","8g":"wpd","8h":"wpd","27k":"wp","27b":"wp","27c":"wp","27j":"wpd","27g":"wp","44c":"wp","31e":"wp","31d":"wp","14i":"w","44j":"wp","25d":"wp","44f":"wp","10c":"w","12a":"wpd","13j":"w","13l":"w","21l":"w","23a":"w","25c":"wpd","8c":"w","23c":"w","28b":"wp","29·cb28":"w","28h":"wp","2a":"wp","2d":"w","2e":"d","3e":"w","4i":"w","8i":"w","9e":"w","9d":"wp","10f":"w","17k":"w","8·phys":"wp","18d":"w","21a":"w","22a":"wp","22d":"wp","22f":"w","28a":"wp","28l":"wp","30f":"wpd","30l":"wp","31j":"wp","35a":"wp","36c":"wp","39a":"wp","42a":"wp","42f":"wp","45e":"wp","46b":"wp","17i":"w","14d":"w","21d":"w","18i":"wd","21j":"wd","32b":"wp","41a":"wp","2b":"wd","2c":"d","3b":"d","2j":"wp","5a":"wp","2·bio":"wpd","38c":"wp","6a":"wp","7a":"p","9a":"w","10a":"wpd","11a":"d","13a":"w","14b":"wp","15a":"w","16e":"w","17a":"w","20b":"wp","23b":"wp","24a":"wp","26a":"wpd","27a":"wp","28g":"wpd","29a":"wp","30a":"wp","33a":"wp","34a":"wp","36d":"wp","37a":"wp","38a":"wp","40a":"wp","41b":"wp","42b":"wp","44a":"wp","45c":"p","46c":"wp","47a":"pd","5g":"w","16c":"wp","8f":"w","22k":"w","43h":"wp","17c":"wp","27e":"wp","25a":"wp","19b":"wp","19e":"wp","14f":"w","8d":"w","31b":"wp","27h":"wp","31a":"wp","31g":"wp","43b":"wp","11e":"w","14c":"wd","15b":"w","16b":"w","16d":"w","17e":"w","22h":"w","8e":"w","22e":"wp","23d":"wp","28i":"wp","28c":"wp","28e":"wp","28j":"wp","28n":"wp","27i":"wp","7b":"w","1g":"w","2·comp":"wp","2f":"w","2g":"w","2h":"w","6b":"w","6c":"w","6·logi":"wpd","7c":"w","7e":"w","6e":"w","3c":"w","5k":"d","3·comp":"wpd","4d":"w","36·comp":"wpd","4l":"w","4·crypt":"wpd","5d":"w","5h":"w","5·chem":"wpd","5·bio":"wpd","5·nav":"wpd","6·stat":"wpd","6·phys":"wpd","6·chem":"wpd","7·phys":"wpd","7·crypt":"wpd","8a":"w","8·eng":"wpd","8·econ":"wp","8·comp":"wpd","9h":"wd","9·bio":"wp","9·crypt":"wp","10e":"w","10·crypt":"wpd","10·logi":"wpd","11c":"w","11f":"w","11·crypt":"wp","12b":"w","12c":"w","12e":"w","12f":"w","12·phys":"wpd","12·eng":"wpd","12·comp":"wpd","13g":"w","13i":"w","13k":"w","13m":"w","13n":"d","13·comp":"wpd","14e":"w","14g":"w","14h":"wd","15c":"w","15d":"wd","15e":"w","15f":"w","15g":"wp","15h":"wd","15i":"w","16a":"w","16g":"wd","16h":"w","16i":"w","16j":"wd","17g":"w","17h":"wd","17j":"wd","17·comp":"wpd","17·crypt":"wpd","18b":"wp","18c":"w","18h":"w","18e":"w","18f":"w","18g":"wd","18j":"w","19c":"wp","19d":"w","19f":"wd","19·crypt":"wpd","19·chem":"wpd","19·bio":"wpd","20a":"w","20c":"wd","20d":"wp","20e":"wd","20f":"wp","20g":"wp","20h":"w","20i":"w","20·phys":"wpd","20·chem":"wpd","20·nav":"wpd","21b":"wd","21c":"wp","21e":"w","21i":"wd","21f":"wp","21h":"wd","21k":"wp","21m":"wp","21n":"w","21o":"wd","21p":"wd","21q":"wp","21r":"w","21·nav":"wpd","21·bio":"wpd","22b":"w","22c":"w","22i":"w","22g":"wp","22j":"wd","22l":"wd","22·econ":"wpd","22·phys":"wpd","22·logi":"wpd","22·stat":"wpd","22·crypt":"wpd","22·comp":"wpd","23e":"w","23f":"w","23g":"wp","23h":"w","23i":"w","23j":"w","23k":"w","23l":"wd","23·phys":"wpd","24b":"w","24c":"w","24d":"w","24e":"w","24f":"wp","24g":"w","24h":"wd","24i":"w","24j":"wd","24k":"w","24l":"w","24·bio":"wpd","24·now":"wpd","25b":"wp","25e":"wp","25f":"w","25·now":"wpd","25·chem":"wpd","26b":"wp","26c":"wp","26d":"wp","26e":"wp","26f":"wp","26g":"wp","26h":"wp","26i":"wp","26j":"wp","26k":"wp","26l":"wp","26·phys":"wpd","27l":"wp","27m":"wp","27·crypt":"wpd","27·econ":"wpd","27·chem":"wpd","27·now":"wpd","28d":"wp","28f":"wp","30e":"wp","28k":"wp","28m":"wp","28o":"wp","28p":"wpd","28·econ":"wpd","28·logi":"wpd","28·now":"wpd","29b":"wpd","29c":"wp","29d":"wp","29e":"wp","29f":"wpd","29g":"wp","29h":"wp","29i":"wp","29j":"wp","29k":"wp","29l":"wp","29m":"wp","29·phys":"wpd","29·nav":"wpd","30g":"wp","30i":"wp","30h":"wp","30j":"wp","30k":"wpd","30m":"wp","30n":"wp","30o":"wp","30p":"wpd","30q":"wp","30r":"wp","30s":"wp","30t":"wp","30u":"wpd","30v":"wp","30b":"wp","30c":"wp","30d":"wp","30·bio":"wpd","30·nav":"wpd","30·comp":"wpd","30·econ":"wpd","30·logi":"wpd","30·stat":"wpd","30·phys":"wpd","30·now":"wpd","31c":"wp","31f":"wp","31h":"wp","31i":"wp","31k":"wpd","31l":"wpd","31m":"wp","31n":"wp","31o":"wp","31·eng":"wpd","31·logi":"wpd","31·phys":"wpd","31·now":"wpd","32a":"wp","32c":"wp","32d":"wp","32e":"wp","32f":"wp","32g":"wp","32h":"wp","32i":"wp","32j":"wp","32k":"wp","32l":"wp","32·stat":"wpd","32·phys":"wpd","32·chem":"wpd","32·comp":"wpd","32·eng":"wpd","32·nav":"wpd","32·now":"wpd","33b":"wp","33c":"wp","33d":"wp","33e":"wp","33f":"wp","33g":"wp","33h":"wp","33i":"wp","33j":"wp","33·now":"wpd","34b":"wp","34c":"wp","34d":"wp","34e":"wp","34f":"wp","34g":"wp","34h":"wp","34i":"wp","34j":"wp","34k":"wp","34l":"wp","34m":"wp","34·phys":"wpd","34·bio":"wpd","34·now":"wpd","35b":"wp","35c":"wp","35d":"wp","35e":"wp","35f":"wp","35g":"wp","35h":"wp","35i":"wp","35·chem":"wpd","36a":"wp","36b":"wp","36e":"wp","36f":"wp","36g":"wp","36h":"wp","36i":"wp","36j":"wp","36·chem":"wpd","36·bio":"wpd","36·nav":"wpd","37b":"wp","37c":"wp","37d":"wp","37e":"wp","37f":"wp","37g":"wp","37h":"wp","37i":"wp","37·eng":"wpd","37·comp":"wpd","37·bio":"wpd","37·crypt":"wpd","38b":"p","38f":"wp","38g":"wp","38m":"wp","38l":"p","38n":"wp","38·now2":"wpd","39·bio":"wpd","39b":"wp","39c":"wp","39d":"wp","39e":"wp","39f":"wp","39g":"wp","39h":"wp","39i":"wp","39j":"wp","39k":"wp","39l":"wp","39m":"wp","39n":"wp","39o":"wp","39p":"wp","39q":"wp","39·phys":"wpd","39·now":"wpd","40b":"wp","40c":"wp","40d":"wp","40e":"wp","40f":"wp","40g":"wp","40k":"wp","40j":"p","40l":"p","41c":"wp","41e":"wp","41g":"wp","41h":"wp","41i":"wp","41j":"wp","41k":"wp","41l":"wp","41·comp":"wpd","41·phys":"wpd","41·now3":"wpd","42c":"wp","42d":"wp","42e":"p","42g":"wp","42h":"wp","42i":"wp","42j":"wp","42k":"wp","42l":"wp","42m":"wp","42n":"wp","42·chem":"wpd","42·phys":"wpd","42·eng":"wpd","42·logi":"wpd","42·econ":"wpd","42·now":"wpd","42·now2":"wpd","43c":"wp","43d":"wp","43e":"wp","43f":"wp","43i":"wp","43j":"wp","43k":"wp","43l":"wp","43·comp":"wpd","43·phys":"wpd","43·crypt":"wpd","43·now":"wpd","43·now2":"wpd","43g":"wp","44b":"wp","44d":"wp","44e":"wp","44g":"wp","44i":"wp","44k":"wp","44l":"wp","44·comp":"wpd","44·chem":"wpd","44·bio":"wpd","44·now":"wpd","44·now2":"wpd","45a":"wp","45d":"wp","45g":"wp","45n":"wp","45h":"wp","45i":"wp","45j":"wp","45k":"wp","45l":"wp","45m":"p","45o":"wp","45f":"p","46a":"wp","46d":"wp","46e":"p","46·now":"wpd","46f":"wp","46g":"p","46h":"wp","46i":"p","46j":"wp","46k":"wp","46l":"wp","46·phys":"wpd","46·now2":"wpd","47b":"p","47d":"pd","47·comp":"wpd","47·now":"wpd","47·now2":"wpd","∞·phys":"pd","∞·bio":"pd","∞·crypt":"pd","∞·comp":"pd","∞·chem":"pd","∞·logi":"pd","∞·eng":"pd","∞·nav":"pd","∞·econ":"pd","∞·stat":"pd","40h":"wp","40i":"wp","44h":"p","14·econ":"wpd","14·logi":"wpd","15·chem":"wpd","16·eng":"wpd","17·phys":"wpd","18·eng":"wpd","4a":"p","4m":"d","6f":"d","3a":"wp","0·crypt":"wpd","1·comp":"wpd","27·comp":"wpd","28·chem":"wpd","1·crypt":"wpd","2·crypt":"wpd","3·crypt":"wpd","6·crypt":"wpd","5·crypt":"wpd","1·phys":"wpd","7g":"d","11·econ":"wpd","13·eng":"wpd","13·nav":"wpd","13·phys":"wpd","14·bio":"wpd","14·phys":"wpd","15·econ":"wpd","15·eng":"wpd","16·logi":"wpd","16·nav":"wpd","16·phys":"wpd","17·bio":"wpd","18·econ":"wpd","18·nav":"wpd","18·phys":"wpd","19·comp":"wpd","19·eng":"wpd","20·crypt":"wpd","21·eng":"wpd","21·phys":"wpd","22·chem":"wpd","22·nav":"wpd","22·now":"wpd","23·eng":"wpd","23·nav":"wpd","30w":"wp","24·eng":"wpd","25·econ":"wpd","25·eng":"wpd","27·nav":"wpd","27·phys":"wpd","28·bio":"wpd","28·phys":"wpd","29·now":"wpd","32·bio":"wpd","35·now":"wpd","38·chem":"wpd","38·now":"wpd","39·chem":"wpd","40·eng":"wpd","41·now":"wpd","41·now2":"wpd"};
+  const HADPOOL={"9g":"w","13e":"wd","17f":"w","17b":"w","21g":"w","43a":"wp","27d":"wp","27f":"wp","18a":"w","19a":"wd","20j":"wp","13d":"wp","13h":"w","13c":"w","13f":"w","14a":"w","16f":"w","9b":"w","1d":"p","7f":"p","8b":"w","4k":"p","9f":"w","8g":"wpd","8h":"wpd","27m":"wp","27b":"wp","27c":"wp","27l":"wpd","27g":"wp","44c":"wp","31e":"wp","31d":"wp","14i":"w","44j":"wp","25d":"wp","44f":"wp","10c":"w","12a":"wpd","13j":"w","13l":"w","21l":"w","23a":"w","25c":"wpd","8c":"w","23c":"w","28b":"wp","29·cb28":"w","28j":"wp","2a":"wp","2d":"w","2e":"d","3e":"w","4i":"w","8i":"w","9e":"w","9d":"wp","10f":"w","17k":"w","8·phys":"wp","18d":"w","21a":"w","22a":"wp","22d":"wp","22f":"w","28a":"wp","28n":"wp","30f":"wpd","30l":"wp","31l":"wp","35a":"wp","36c":"wp","39a":"wp","42a":"wp","42f":"wp","46e":"wp","47b":"wp","17i":"w","14d":"w","21d":"w","18i":"wd","21j":"wd","32b":"wp","41a":"wp","2b":"wd","2c":"d","3b":"d","2j":"wp","5a":"wp","2·bio":"wpd","38c":"wp","6a":"wp","7a":"p","9a":"w","10a":"wpd","11a":"d","13a":"w","14b":"wp","15a":"w","16e":"w","17a":"w","20b":"wp","23b":"wp","24a":"wp","26a":"wpd","27a":"wp","28g":"wpd","29a":"wp","30a":"wp","33a":"wp","34a":"wp","36d":"wp","37a":"wp","38a":"wp","40a":"wp","41b":"wp","42b":"wp","44a":"wp","46c":"p","47c":"wp","48a":"pd","5g":"w","16c":"wp","8f":"w","22k":"w","43n":"wp","17c":"wp","27e":"wp","25a":"wp","19b":"wp","19e":"wp","14f":"w","8d":"w","31b":"wp","27h":"wp","31a":"wp","31g":"wp","43b":"wp","11e":"w","14c":"wd","15b":"w","16b":"w","16d":"w","17e":"w","22h":"w","8e":"w","22e":"wp","23d":"wp","28k":"wp","28c":"wp","28e":"wp","28l":"wp","28p":"wp","27k":"wp","7b":"w","1g":"w","2·comp":"wp","2f":"w","2g":"w","2h":"w","6b":"w","6c":"w","6·logi":"wpd","7c":"w","7e":"w","6e":"w","3c":"w","5k":"d","3·comp":"wpd","4d":"w","36·comp":"wpd","4l":"w","4·crypt":"wpd","5d":"w","5h":"w","5·chem":"wpd","5·bio":"wpd","5·nav":"wpd","6·stat":"wpd","6·phys":"wpd","6·chem":"wpd","7·phys":"wpd","7·crypt":"wpd","8a":"w","8·eng":"wpd","8·econ":"wp","8·comp":"wpd","9h":"wd","9·bio":"wp","9·crypt":"wp","10e":"w","10·crypt":"wpd","10·logi":"wpd","11c":"w","11f":"w","11·crypt":"wp","12b":"w","12c":"w","12e":"w","12f":"w","12·phys":"wpd","12·eng":"wpd","12·comp":"wpd","13g":"w","13i":"w","13k":"w","13m":"w","13n":"d","13·comp":"wpd","14e":"w","14g":"w","14h":"wd","15c":"w","15d":"wd","15e":"w","15f":"w","15g":"wp","15h":"wd","15i":"w","16a":"w","16g":"wd","16h":"w","16i":"w","16k":"wd","17g":"w","17h":"wd","17j":"wd","17·comp":"wpd","17·crypt":"wpd","18b":"wp","18c":"w","18h":"w","18e":"w","18f":"w","18g":"wd","18j":"w","19c":"wp","19d":"w","19f":"wd","19·crypt":"wpd","19·chem":"wpd","19·bio":"wpd","20a":"w","20c":"wd","20d":"wp","20e":"wd","20f":"wp","20g":"wp","20h":"w","20i":"w","20·phys":"wpd","20·chem":"wpd","20·nav":"wpd","21b":"wd","21c":"wp","21e":"w","21i":"wd","21f":"wp","21h":"wd","21k":"wp","21m":"wp","21n":"w","21o":"wd","21p":"wd","21q":"wp","21r":"w","21·nav":"wpd","21·bio":"wpd","22b":"w","22c":"w","22i":"w","22g":"wp","22j":"wd","22l":"wd","22·econ":"wpd","22·phys":"wpd","22·logi":"wpd","22·stat":"wpd","22·crypt":"wpd","22·comp":"wpd","23e":"w","23f":"w","23g":"wp","23h":"w","23i":"w","23j":"w","23k":"w","23l":"wd","23·phys":"wpd","24b":"w","24c":"w","24d":"w","24e":"w","24f":"wp","24g":"w","24h":"wd","24k":"w","24l":"wd","24m":"w","24n":"w","24·bio":"wpd","24·now":"wpd","25b":"wp","25e":"wp","25f":"w","25·now":"wpd","25·chem":"wpd","26b":"wp","26c":"wp","26d":"wp","26e":"wp","26f":"wp","26g":"wp","26h":"wp","26k":"wp","26l":"wp","26m":"wp","26n":"wp","26·phys":"wpd","27n":"wp","27o":"wp","27·crypt":"wpd","27·econ":"wpd","27·chem":"wpd","27·now":"wpd","28d":"wp","28f":"wp","30e":"wp","28m":"wp","28o":"wp","28q":"wp","28r":"wpd","28·econ":"wpd","28·logi":"wpd","28·now":"wpd","29b":"wpd","29c":"wp","29d":"wp","29e":"wp","29f":"wpd","29g":"wp","29h":"wp","29m":"wp","29n":"wp","29o":"wp","29p":"wp","29q":"wp","29·phys":"wpd","29·nav":"wpd","30g":"wp","30i":"wp","30h":"wp","30j":"wp","30k":"wpd","30m":"wp","30n":"wp","30o":"wp","30p":"wpd","30q":"wp","30r":"wp","30s":"wp","30t":"wp","30u":"wpd","30v":"wp","30b":"wp","30c":"wp","30d":"wp","30·bio":"wpd","30·nav":"wpd","30·comp":"wpd","30·econ":"wpd","30·logi":"wpd","30·stat":"wpd","30·phys":"wpd","30·now":"wpd","31c":"wp","31f":"wp","31h":"wp","31i":"wp","31m":"wpd","31n":"wpd","31o":"wp","31p":"wp","31q":"wp","31·eng":"wpd","31·logi":"wpd","31·phys":"wpd","31·now":"wpd","32a":"wp","32c":"wp","32d":"wp","32e":"wp","32f":"wp","32g":"wp","32h":"wp","32i":"wp","32j":"wp","32k":"wp","32l":"wp","32·stat":"wpd","32·phys":"wpd","32·chem":"wpd","32·comp":"wpd","32·eng":"wpd","32·nav":"wpd","32·now":"wpd","33b":"wp","33e":"wp","33f":"wp","33g":"wp","33h":"wp","33i":"wp","33j":"wp","33k":"wp","33l":"wp","33·now":"wpd","34b":"wp","34c":"wp","34d":"wp","34e":"wp","34f":"wp","34g":"wp","34h":"wp","34i":"wp","34m":"wp","34n":"wp","34o":"wp","34p":"wp","34·phys":"wpd","34·bio":"wpd","34·now":"wpd","35b":"wp","35c":"wp","35d":"wp","35e":"wp","35f":"wp","35h":"wp","35i":"wp","35j":"wp","35·chem":"wpd","36a":"wp","36b":"wp","36e":"wp","36f":"wp","36g":"wp","36h":"wp","36i":"wp","36j":"wp","36·chem":"wpd","36·bio":"wpd","36·nav":"wpd","37b":"wp","37c":"wp","37d":"wp","37e":"wp","37f":"wp","37g":"wp","37h":"wp","37i":"wp","37·eng":"wpd","37·comp":"wpd","37·bio":"wpd","37·crypt":"wpd","38b":"p","38h":"wp","38i":"wp","38o":"wp","38n":"p","38p":"wp","38·now2":"wpd","39·bio":"wpd","39b":"wp","39c":"wp","39d":"wp","39e":"wp","39f":"wp","39g":"wp","39h":"wp","39i":"wp","39j":"wp","39k":"wp","39l":"wp","39m":"wp","39n":"wp","39o":"wp","39p":"wp","39q":"wp","39·phys":"wpd","39·now":"wpd","40b":"wp","40c":"wp","40d":"wp","40e":"wp","40f":"wp","40g":"wp","40k":"wp","40j":"p","40l":"p","41c":"wp","41e":"wp","41g":"wp","41h":"wp","41i":"wp","41j":"wp","41k":"wp","41l":"wp","41·comp":"wpd","41·phys":"wpd","41·now3":"wpd","42c":"wp","42d":"wp","42e":"p","42g":"wp","42h":"wp","42i":"wp","42j":"wp","42m":"wp","42n":"wp","42o":"wp","42p":"wp","42·chem":"wpd","42·phys":"wpd","42·eng":"wpd","42·logi":"wpd","42·econ":"wpd","42·now":"wpd","42·now2":"wpd","43c":"wp","43d":"wp","43e":"wp","43f":"wp","43o":"wp","43p":"wp","43q":"wp","43r":"wp","43·comp":"wpd","43·phys":"wpd","43·crypt":"wpd","43·now":"wpd","43·now2":"wpd","43g":"wp","44b":"wp","44d":"wp","44e":"wp","44g":"wp","44i":"wp","44k":"wp","44l":"wp","44·comp":"wpd","44·chem":"wpd","44·bio":"wpd","44·now":"wpd","44·now2":"wpd","46a":"wp","46d":"wp","46g":"wp","46n":"wp","46h":"wp","46i":"wp","46j":"wp","46k":"wp","46l":"wp","46m":"p","46o":"wp","46f":"p","47a":"wp","47d":"wp","47e":"p","47·now":"wpd","47f":"wp","47g":"p","47h":"wp","47j":"p","47k":"wp","47l":"wp","47m":"wp","47·phys":"wpd","47·now2":"wpd","48b":"p","48d":"pd","48·comp":"wpd","48·now":"wpd","48·now2":"wpd","∞·phys":"pd","∞·bio":"pd","∞·crypt":"pd","∞·comp":"pd","∞·chem":"pd","∞·logi":"pd","∞·eng":"pd","∞·nav":"pd","∞·econ":"pd","∞·stat":"pd","40h":"wp","40i":"wp","44h":"p","14·econ":"wpd","14·logi":"wpd","15·chem":"wpd","16·eng":"wpd","17·phys":"wpd","18·eng":"wpd","4a":"p","4m":"d","6f":"d","3a":"wp","0·crypt":"wpd","1·comp":"wpd","27·comp":"wpd","28·chem":"wpd","1·crypt":"wpd","2·crypt":"wpd","3·crypt":"wpd","6·crypt":"wpd","5·crypt":"wpd","1·phys":"wpd","7g":"d","11·econ":"wpd","13·eng":"wpd","13·nav":"wpd","13·phys":"wpd","14·bio":"wpd","14·phys":"wpd","15·econ":"wpd","15·eng":"wpd","16·logi":"wpd","16·nav":"wpd","16·phys":"wpd","17·bio":"wpd","18·econ":"wpd","18·nav":"wpd","18·phys":"wpd","19·comp":"wpd","19·eng":"wpd","20·crypt":"wpd","21·eng":"wpd","21·phys":"wpd","22·chem":"wpd","22·nav":"wpd","22·now":"wpd","23·eng":"wpd","23·nav":"wpd","30w":"wp","24·eng":"wpd","25·econ":"wpd","25·eng":"wpd","27·nav":"wpd","27·phys":"wpd","28·bio":"wpd","28·phys":"wpd","29·now":"wpd","32·bio":"wpd","35·now":"wpd","38·chem":"wpd","38·now":"wpd","39·chem":"wpd","40·eng":"wpd","41·now":"wpd","41·now2":"wpd"};
   [...stepsOf].forEach(step=>{ ['work','proof','word'].forEach(mode=>{ if(mode==='word'&&!storySteps.has(step)) return;
     if(!(HADPOOL[step]||'').includes(mode==='work'?'w':mode==='proof'?'p':'d')) return; /* a seeds-and-links pool stands where the table says the step had a pool of that kind, and nowhere else */
     QP.push({id:step+'.chains.'+mode,step,mode,label:'seeds and links',chain:true,open:()=>measured(step),make:()=>CH.chainPool(step,mode)}); }); });
-  /* a rung with no pool at all for one kind of question (rung 45 on its own dealt blank Word Problems, the Endless floor blank Work) gets one on each
+  /* a rung with no pool at all for one kind of question (rung 46 on its own dealt blank Word Problems, the Endless floor blank Work) gets one on each
      of its steps that owns a seed or a link: for Word Problems, on each step that has a link told as a story */
   ['work','proof','word'].forEach(mode=>{ const has=new Set(QP.filter(P=>qmode(P)===mode).map(P=>String(rungOf(P.step))));
     [...(mode==='word'?storySteps:stepsOf)].forEach(step=>{ const r=rungOf(step); if(r<5||has.has(String(r))) return; QP.push({id:step+'.chains.'+mode,step,mode,label:'seeds and links',chain:true,open:()=>measured(step),make:()=>CH.chainPool(step,mode)}); }); }); }
@@ -27332,13 +27385,13 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
    relevant seed in their own pool, and if not they should wait until the later pool (when the math is built)".
    Fourteen links took a kind of thing whose first seed sat higher up the ladder. Four already waited on the later step. Of the rest:
    - the math is built on the link's own step, so the step gets a seed of its own (the later seed's maker, on this step):
-     28a (functions of two inputs, 28a1), 35b and 35g (endless strings of 0s and 1s, 9a4 and 35g2);
+     28a (functions of two inputs, 28a1), 35b and 35h (endless strings of 0s and 1s, 9a4 and 35h2);
    - the math is built later, so the link waits for that step: 34c.cut and 34e.out are worked on a network of dots and links,
-     built at 42a; 28j.swirl, 28j.flux and 28n.segment are written on a form ω, built at 29·cb28. ===== */
+     built at 42a; 28l.swirl, 28l.flux and 28p.segment are written on a form ω, built at 29·cb28. ===== */
 (function(){
-  const own=[['28h.boxfns','28a.twoknobs','28a','polynomials in x and y'],['39a.strings','35b.rows','35b','strings of 1s and 0s'],['39a.strings','35g.strings','35g','strings of 1s and 0s']];
+  const own=[['28j.boxfns','28a.twoknobs','28a','polynomials in x and y'],['39a.strings','35b.rows','35b','strings of 1s and 0s'],['39a.strings','35h.strings','35h','strings of 1s and 0s']];
   own.forEach(([from,id,step,label])=>{ const S=CH.SEEDS.find(s=>s.id===from); if(!S||CH.SEEDS.some(s=>s.id===id)) return; const c=Object.assign({},S,{id,step,label}); c.make=function(){ return S.make.apply(S,arguments); }; if(S.tuples) c.tuples=function(){ return S.tuples.apply(S,arguments); }; if(S.sized) c.sized=function(){ return S.sized.apply(S,arguments); }; CH.SEEDS.push(c); });
-  const wait={'34c.cut':'42a','34e.out':'42a','28j.swirl':'29·cb28','28j.flux':'29·cb28','28n.segment':'29·cb28'};
+  const wait={'34c.cut':'42a','34e.out':'42a','28l.swirl':'29·cb28','28l.flux':'29·cb28','28p.segment':'29·cb28'};
   CH.L.forEach(l=>{ const w=wait[l.id]; if(!w) return; const st=l.steps; l.steps=function(){ const s=(st.apply(l,arguments)||[]).slice(); if(!s.includes(w)) s.push(w); return s; }; l.steps0=()=>{ const s=l.steps(new Set()); return s&&s.length?s:[l.id.split('.')[0]]; }; });
 })();
 /* ===== end of ownseeds ===== */
@@ -27350,9 +27403,9 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
     '1f.noAisB':'2c',                                                  /* "no A is B" read over a set, sets are built at 2c */
     '1b.blame':'3a','1d.nest':'3a','1b.closed':'3a','1a.foot':'3a',    /* worked with letters standing for claims, built at 3a */
     '14i.zerozero':'17f',                                              /* 0 to the power 0 */
-    '13g.square':'15a', '13e.melts':'16j',
-    '27d.grid':'27l','27f.swapped':'27l',                              /* the middle sum, built at 27l */
-    '35g.dust':'35h',
+    '13g.square':'15a', '13e.melts':'16k',
+    '27d.grid':'27n','27f.swapped':'27n',                              /* the middle sum, built at 27n */
+    '35h.dust':'35i',
     '3·comp.loop':'4j',                                                /* even and odd */
     '4e.split':'5b','2c.domain':'5b',                                  /* negative numbers */
     '4e.back':'5c',                                                    /* fractions */
@@ -27408,8 +27461,8 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
   wrap('7e.cases',s=>s.replace(/: find \|f\((.+)\)\|$/,(m,x)=>': find the larger of f('+x+') and −f('+x+')'));
   /* at rung 3 only 0 to 4 have names */
   { const S=CH.SEEDS.find(x=>x.id==='3e.below'); if(S){ const mk=S.make; S.make=function(F){ if(F&&F>5) return null; for(let t=0;t<20;t++){ const r=mk.apply(S,arguments); if(r&&r.val&&r.val.s&&r.val.s.length<=5) return r; if(F) return null; } return null; }; } }
-  /* held: the ladder never teaches these. "True" counted by earned columns (1a), and how many lines a detour cut removes (38n): told to Andrew */
-  ['1a.true','38n.cut'].forEach(id=>{ const i=CH.L.findIndex(x=>x.id===id); if(i>=0) CH.L.splice(i,1); });
+  /* held: the ladder never teaches these. "True" counted by earned columns (1a), and how many lines a detour cut removes (38p): told to Andrew */
+  ['1a.true','38p.cut'].forEach(id=>{ const i=CH.L.findIndex(x=>x.id===id); if(i>=0) CH.L.splice(i,1); });
 })();
 /* ===== end of studywords ===== */
 /* ===== studydomain (answer study, 2026-11-18): links dealt where their technique does not hold. A slope at a point needs the function
@@ -27433,12 +27486,348 @@ CH.wordCard=function(P,used){ if(Math.random()<CH.train.SHARE*reach(P)){ const q
     if(['5·cb2.add','5·cb2.mul','5·cb2.pow','5·cb2.powmod','5·cb2.class'].includes(l.id)) wrapAct(l,s=>!s||!s.v||s.v.p>=0);
     if(l.id==='23l.simpson') wrapAct(l,(s,p)=>{ if(!p.h) return true; const N=p.len*p.h.q/p.h.p; return Number.isInteger(N)&&N%2===0; });
     if(l.id==='33·now.pressure') wrapAct(l,s=>!s||!s.m||Math.abs(s.m.reduce((t,r,i)=>t+fq(r[i]),0))<1e-12); /* the technique holds only for a flow with no spread */
-    if(l.id==='28j.rim'){ const mk=l.make; l.make=function(){ const p=mk.apply(l,arguments); return p&&p.i===2?{i:Math.random()<0.5?0:1}:p; }; }
+    if(l.id==='28l.rim'){ const mk=l.make; l.make=function(){ const p=mk.apply(l,arguments); return p&&p.i===2?{i:Math.random()<0.5?0:1}:p; }; }
   });
 })();
 /* ===== end of studydomain ===== */
 CH.tapeAttach(); CH.sizeAttach();
 /* ===== end of chains ===== */
+/* ===== gap chains (gapbuild/laundry/gapchains.js; Andrew 2026-11-23 20:19Z "the laundry should all be done"). Links for the new math
+   steps of the MIT and Stanford gap build, on FINAL step numbers. Spliced after the chains block by gapbuild/laundry/splice.py, in its own
+   markers, so chains/build.py (which strips only its own block) keeps it. Steps that are reasoning about reasoning, with nothing to compute,
+   get no link, as for the older ones (26i 26j 29i 29j 29l 31j 31k 35g 38f 38g 38q 38r 45a 45b 45c 45e 45f 45g 45i 45k 47i). ===== */
+(function(){
+const {L,Q,qs,qa,qm,qn,qi}=CH;
+const num=v=>({k:'num',v:typeof v==='number'?Q(v):v});
+const W=v=>v&&v.q===1?v.p:null;  /* a whole number, or null */
+const toQ=r=>r==null||r===false?null:typeof r==='number'?(Number.isInteger(r)&&Math.abs(r)<=99999?Q(r):null):r;
+const NL=(id,st,cite,say,f,sl,line,make)=>L.push({id,from:'num',to:'num',steps:()=>st,make,say:typeof say==='function'?say:()=>say,
+  act:(s,p)=>{ const r=toQ(f(s.v,p)); return r?num(r):null; },cite:()=>cite,
+  slips:(s,p)=>(sl?sl(s.v,p)||[]:[]).map(([why,r])=>({why,v:toQ(r)})).filter(w=>w.v),
+  line:(o,p,nm,nx,s)=>line(s.v,o.v,p,nm)});
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const isPrime=n=>{ if(!(n>=2&&n<=1e7)) return false; for(let p=2;p*p<=n;p++) if(n%p===0) return false; return true; };
+const binom=(n,k)=>{ if(k<0||k>n) return 0; let r=1; for(let i=1;i<=k;i++) r=r*(n-k+i)/i; return Math.round(r); };
+const phi=n=>{ let r=n, m=n; for(let p=2;p*p<=m;p++) if(m%p===0){ while(m%p===0) m/=p; r-=r/p; } if(m>1) r-=r/m; return r; };
+const md=(a,m)=>((a%m)+m)%m;
+const parts=n=>{ const a=Array(n+1).fill(0); a[0]=1; for(let k=1;k<=n;k++) for(let i=k;i<=n;i++) a[i]+=a[i-k]; return a[n]; };
+const leg=(a,p)=>{ a=md(a,p); if(a===0) return 0; let r=1, b=a, e=(p-1)/2; while(e>0){ if(e%2) r=r*b%p; b=b*b%p; e=Math.floor(e/2); } return r===1?1:-1; };
+
+/* 16j: the slanted-top fence, met exactly by x² */
+NL('16j.fence',['16j'],'the slanted-top technique',(p,nm)=>'top '+nm+' strips across [0, 1] with slanted lines; give how far their sum misses the area under x²',
+  v=>{ const n=W(v); return n!==null&&n>=1&&n<=12?Q(1,6*n*n):null; },
+  v=>{ const n=W(v); return n===null||n<1?[]:[['the strip width is not squared',Q(1,6*n)],['M is taken as 1, but (x²)″ = 2',Q(1,12*n*n)]]; },
+  (a,o)=>'miss with '+qs(a)+' strips: (1 − 0) · 2 · (1/'+qs(a)+')²/12 = '+qs(o));
+
+/* 24i: the transform of a growth */
+NL('24i.entry',['24i'],'the growth-entry technique',(p,nm)=>'give the transform of e^('+nm+'t) at s = '+nm+' + '+p.d,
+  (v,p)=>{ const a=W(v); return a!==null&&Math.abs(a)<=20?Q(1,p.d):null; },
+  (v,p)=>{ const a=W(v); return a===null?[]:[['s + a is used for s − a',Q(1,2*a+p.d)],['the transform is taken as s − a',p.d]]; },
+  (a,o,p)=>'𝓛e^('+qs(a)+'t) at s = '+qs(a)+' + '+p.d+': 1/(s '+(a.p<0?'+ '+qs(qn(a)):'− '+qs(a))+') = '+qs(o),()=>({d:pick([1,2,3,4,5])}));
+
+/* 24j: the resting value from the transform */
+NL('24j.rest',['24j'],'the resting-value technique',(p,nm)=>'Y(s) = '+nm+'/(s(s + '+p.k+')); give the value y settles to',
+  (v,p)=>W(v)!==null&&Math.abs(W(v))<=60?qm(v,Q(1,p.k)):null,
+  (v,p)=>[['s is not multiplied in, and Y(0) is read',null],['the '+p.k+' is multiplied, not divided',qm(v,Q(p.k))],['the top is read as the resting value',v]],
+  (a,o,p)=>'resting value: sY(s) = '+qs(a)+'/(s + '+p.k+') at s = 0 gives '+qs(o),()=>({k:pick([2,3,4,5])}));
+
+/* 27j: the magnifier */
+NL('27j.magnify',['27j'],'the magnifier technique',(p,nm)=>'‖A‖ ‖A⁻¹‖ = '+p.k+' and the data b is off by the share '+nm+'; give the largest share the answer x can be off by',
+  (v,p)=>v.p>0&&v.p*p.k<v.q&&v.q<=1000?qm(v,Q(p.k)):null,
+  (v,p)=>[['the share is divided by the magnifier, not multiplied',qm(v,Q(1,p.k))],['only ‖A‖ is used, as if ‖A⁻¹‖ were 1',null]],
+  (a,o,p)=>'answer off by at most '+p.k+' · '+qs(a)+' = '+qs(o),()=>({k:pick([4,10,25,100])}));
+
+/* 28h: a floor under the constrained best: least x² with x ≥ 1, price λ on 1 − x */
+NL('28h.floor',['28h'],'the floor technique',(p,nm)=>'least of x² with x ≥ 1: with the price λ = '+nm+' on 1 − x, give the floor, the least of x² + λ(1 − x)',
+  v=>{ const l=W(v); return l!==null&&l>=1&&l<=4?qa(Q(l),qn(Q(l*l,4))):null; },
+  v=>{ const l=W(v); return l===null||l<0?[]:[['the least is taken at x = λ, not λ/2',Q(l)],['the price is dropped',Q(0)]]; },
+  (a,o)=>'x = λ/2: (λ/2)² + λ(1 − λ/2) = '+qs(a)+' − '+qs(a)+'²/4 = '+qs(o)+' ≤ 1');
+
+/* 29k: the count of directions of the turns */
+NL('29k.count',['29k'],'the count technique',(p,nm)=>'give the number of directions of the smooth space of grids with QᵀQ = I in '+nm+' directions',
+  v=>{ const n=W(v); return n!==null&&n>=2&&n<=12?n*(n-1)/2:null; },
+  v=>{ const n=W(v); return n===null?[]:[['the diagonal is counted too',n*(n+1)/2],['every entry is counted',n*n]]; },
+  (a,o)=>'directions: '+qs(a)+'('+qs(a)+' − 1)/2 = '+qs(o));
+
+/* 33c: the move of the wandering path is a bell with spread t − s */
+NL('33c.move',['33c'],'the wandering technique',(p,nm)=>'B moves from time '+p.s+' to time '+p.s+' + '+nm+'; give the spread of the move',
+  v=>v.p>0&&v.q<=12&&v.p<=60*v.q?v:null,
+  (v,p)=>[['the times are added, not subtracted',qa(v,Q(2*p.s))],['the spread is taken from 0, not from '+p.s,qa(v,Q(p.s))]],
+  (a,o,p)=>'spread of B('+p.s+' + '+qs(a)+') − B('+p.s+') = t − s = '+qs(o),()=>({s:pick([1,2,3,5])}));
+
+/* 34j: corners less edges plus faces, for a closed surface with g holes */
+NL('34j.alt',['34j'],'the alternating-count technique',(p,nm)=>'a closed surface in one piece has '+nm+' handles; give corners less edges plus faces for any cutting of it',
+  v=>{ const g=W(v); return g!==null&&g>=0&&g<=8?2-2*g:null; },
+  v=>{ const g=W(v); return g===null?[]:[['each handle is counted once, not twice',2-g],['the sign of the handles is turned',2+2*g]]; },
+  (a,o)=>'r₀ − r₁ + r₂ = 1 − 2·'+qs(a)+' + 1 = '+qs(o));
+
+/* 42k: forks, and splittings */
+NL('42k.forks',['42k'],'the building-rule technique',(p,nm)=>'count the fork shapes with '+nm+' forks',
+  v=>{ const n=W(v); return n!==null&&n>=2&&n<=10?binom(2*n,n)/(n+1):null; },
+  v=>{ const n=W(v); return n===null||n<0?[]:[['(2n)!/(n! n!) is taken, without the 1/(n + 1)',binom(2*n,n)],['the next size is counted',binom(2*n+2,n+1)/(n+2)]]; },
+  (a,o)=>'C = 1 + xC²: (2·'+qs(a)+')!/('+qs(a)+'!·('+qs(a)+' + 1)!) = '+qs(o));
+NL('42k.split',['42k'],'the splitting technique',(p,nm)=>'count the ways to split '+nm+' into whole parts, order ignored',
+  v=>{ const n=W(v); return n!==null&&n>=3&&n<=20?parts(n):null; },
+  v=>{ const n=W(v); return n===null||n<1?[]:[['order is counted',2**(n-1)],['the parts of one less are counted',parts(n-1)]]; },
+  (a,o)=>'coefficient of x^'+qs(a)+' in the product of 1/(1 − xᵏ): '+qs(o));
+
+/* 42l: necklaces up to turning */
+NL('42l.beads',['42l'],'the averaging technique',(p,nm)=>'count the necklaces of '+nm+' beads in '+p.k+' colours, two the same when one turns into the other',
+  (v,p)=>{ const n=W(v); if(n===null||n<2||n>8) return null; let s=0; for(let d=1;d<=n;d++) if(n%d===0) s+=phi(d)*p.k**(n/d); return s/n; },
+  (v,p)=>{ const n=W(v); return n===null||n<2?[]:[['every colouring is counted, as if no turn mattered',p.k**n],['only the turn by 0 is averaged',(p.k**n)%n===0?(p.k**n)/n:null]]; },
+  (a,o,p)=>'average, over the '+qs(a)+' turns, of the colourings each leaves alone: '+qs(o),()=>({k:pick([2,3])}));
+
+/* 43j: an odd prime one more than a multiple of 4, as two squares */
+NL('43j.two',['43j'],'the two-squares technique',(p,nm)=>'write the prime '+nm+' as a² + b² with 0 < a < b; give a',
+  v=>{ const n=W(v); if(n===null||n%4!==1||!isPrime(n)||n>2000) return null; for(let a=1;2*a*a<n;a++){ const b=Math.round(Math.sqrt(n-a*a)); if(b*b===n-a*a) return a; } return null; },
+  v=>{ const n=W(v); if(n===null||n%4!==1||!isPrime(n)||n>2000) return []; for(let a=1;2*a*a<n;a++){ const b=Math.round(Math.sqrt(n-a*a)); if(b*b===n-a*a) return [['b is given in place of a',b],['a² is given in place of a',a*a]]; } return []; },
+  (a,o)=>qs(a)+' = '+qs(o)+'² + b²: a = '+qs(o));
+
+/* 43k: the fraction point of the circle on the line of slope t through (−1, 0) */
+NL('43k.slope',['43k'],'the slope technique',(p,nm)=>'the line of slope '+nm+' through (−1, 0) meets x² + y² = 1 again; give x there',
+  v=>{ if(v.q>12||Math.abs(v.p)>12*v.q) return null; const t2=qm(v,v); return qm(qa(Q(1),qn(t2)),qi(qa(Q(1),t2))); },
+  v=>{ const t2=qm(v,v); return [['the fraction is turned upside down',qa(Q(1),qn(t2)).p===0?null:qm(qa(Q(1),t2),qi(qa(Q(1),qn(t2))))],['y is given, not x',qm(qm(Q(2),v),qi(qa(Q(1),t2)))]]; },
+  (a,o)=>'x = (1 − t²)/(1 + t²) with t = '+qs(a)+': '+qs(o));
+
+/* 43m: points of y² = x³ + x + 1 on the clock of p */
+NL('43m.count',['43m'],'the point-count technique',(p,nm)=>'count the points of y² = x³ + x + 1 on the clock of the prime '+nm+', the far point among them',
+  v=>{ const n=W(v); if(n===null||n<5||n>60||!isPrime(n)) return null; let s=n+1; for(let x=0;x<n;x++) s+=leg(x*x*x+x+1,n); return s; },
+  v=>{ const n=W(v); if(n===null||n<5||n>60||!isPrime(n)) return []; let s=n+1; for(let x=0;x<n;x++) s+=leg(x*x*x+x+1,n); return [['the far point is left out',s-1],['p + 1 is given, the signs not added',n+1]]; },
+  (a,o)=>qs(a)+' + 1 + Σ (x³ + x + 1 ∕ '+qs(a)+') = '+qs(o));
+
+/* 45j: shared points of two curves */
+NL('45j.shared',['45j'],'the shared-points technique',(p,nm)=>'a curve of degree '+nm+' and a curve of degree '+p.n+' share no piece; how many points do they share, counted rightly?',
+  (v,p)=>{ const m=W(v); return m!==null&&m>=1&&m<=12?m*p.n:null; },
+  (v,p)=>{ const m=W(v); return m===null?[]:[['the degrees are added, not multiplied',m+p.n]]; },
+  (a,o,p)=>'shared points: '+qs(a)+' · '+p.n+' = '+qs(o),()=>({n:pick([2,3,4])}));
+
+/* ===== the gap annexes (an annex is one step: its laundry id is rung·subject) ===== */
+const fr=(a,b)=>Q(a,b), sq=n=>{ const r=Math.round(Math.sqrt(n)); return r*r===n?r:null; };
+NL('13·eng2.sheets',['13·eng2'],'the sheet technique',(p,nm)=>'between two surfaces in a vacuum hang '+nm+' thin sheets; what share of the glow still passes?',
+  v=>{ const n=W(v); return n!==null&&n>=2&&n<=40?fr(1,n+1):null; },v=>{ const n=W(v); return n===null||n<1?[]:[['the sheets alone are counted, not the gaps between',fr(1,n)],['each sheet is taken to halve the glow',n<=12?fr(1,2**n):null]]; },
+  (a,o)=>qs(a)+' sheets divide the glow by '+qs(a)+' + 1: '+qs(o));
+NL('14·econ2.best',['14·econ2'],'the best-amount technique',(p,nm)=>'the other spring sells '+nm+' of the 12; give this spring’s best amount',
+  v=>{ const y=W(v); return y!==null&&y>=0&&y<=12?fr(12-y,2):null; },v=>{ const y=W(v); return y===null?[]:[['the half is not taken',12-y],['the other’s amount is added, not taken away',fr(12+y,2)]]; },
+  (a,o)=>'x = (12 − '+qs(a)+')/2 = '+qs(o));
+NL('16·eng2.hoop',['16·eng2'],'the thin-wall technique',(p,nm)=>'a pipe has r/t = '+p.k+' and pressure '+nm+'; give the pull round the wall',
+  (v,p)=>v.p>0&&v.q<=10&&v.p<=99*v.q?qm(v,Q(p.k)):null,(v,p)=>[['the pull along the pipe is given',qm(v,Q(p.k,2))],['r/t is divided, not multiplied',qm(v,Q(1,p.k))]],
+  (a,o,p)=>'round the pipe: pr/t = '+qs(a)+' · '+p.k+' = '+qs(o),()=>({k:pick([10,20,25,40,50])}));
+NL('17·bio2.half',['17·bio2'],'the half-time technique',(p,nm)=>'after '+nm+' half-times, what share of the gap to the breathed pressure is left?',
+  v=>{ const n=W(v); return n!==null&&n>=1&&n<=10?fr(1,2**n):null; },v=>{ const n=W(v); return n===null||n<1?[]:[['the gap is taken to shrink by a half-time’s share each time, as a straight line',n<2?null:fr(1,2*n)],['one half-time too many',fr(1,2**(n+1))]]; },
+  (a,o)=>'halved '+qs(a)+' times: (1/2)^'+qs(a)+' = '+qs(o));
+NL('17·phys2.fuel',['17·phys2'],'the rocket technique',(p,nm)=>'a rocket’s mass ratio full over empty is '+nm+'; what share of the full rocket is fuel?',
+  v=>{ const k=W(v); return k!==null&&k>=2&&k<=50?fr(k-1,k):null; },v=>{ const k=W(v); return k===null||k<2?[]:[['the empty share is given',fr(1,k)],['the fuel is counted against the empty rocket',k-1]]; },
+  (a,o)=>'fuel share: 1 − 1/'+qs(a)+' = '+qs(o));
+NL('18·phys2.layers',['18·phys2'],'the half-thickness technique',(p,nm)=>'the beam must be cut to 1/'+nm+' of itself; how many half-thicknesses of shield does it take?',
+  v=>{ const n=W(v); if(n===null||n<4||n>4096) return null; let k=0,x=1; while(x<n){ x*=2; k++; } return x===n?k:null; },v=>{ const n=W(v); return n===null?[]:[['the cut is divided by 2, as if the shield grew with it',n/2]]; },
+  (a,o)=>'2^'+qs(o)+' = '+qs(a)+': '+qs(o)+' half-thicknesses');
+NL('21·comp.depth',['21·comp'],'the depth technique',(p,nm)=>'a point at x = '+p.x+' sits at depth '+nm+'; with the screen at d = '+p.d+', where across is it drawn?',
+  (v,p)=>{ const z=W(v); return z!==null&&z>=1&&z<=60?fr(p.d*p.x,z):null; },(v,p)=>{ const z=W(v); return z===null?[]:[['x is multiplied by the depth, not divided',p.d*p.x*z],['d is left out',fr(p.x,z)]]; },
+  (a,o,p)=>'drawn at d·x/z = '+p.d+' · '+p.x+'/'+qs(a)+' = '+qs(o),()=>({x:pick([2,3,4,6]),d:pick([2,5,10])}));
+NL('21·nav2.window',['21·nav2'],'the window technique',(p,nm)=>'the target moves through '+nm+'° during the trip; by how many degrees should it lead at the start?',
+  v=>{ const a=W(v); return a!==null&&a>=10&&a<=170?180-a:null; },v=>{ const a=W(v); return a===null?[]:[['the half turn is taken from the trip angle',a-180],['a whole turn is used, not half',360-a]]; },
+  (a,o)=>'lead = 180° − '+qs(a)+'° = '+qs(o)+'°');
+NL('24·nav.drift',['24·nav'],'the twice-added technique',(p,nm)=>'a steady error of '+p.a+' in acceleration runs for '+nm+' seconds; how far off is the place?',
+  (v,p)=>{ const s=W(v); return s!==null&&s>=1&&s<=60?fr(p.a*s*s,2):null; },(v,p)=>{ const s=W(v); return s===null?[]:[['the error is added once, giving a speed',p.a*s],['the half is left out',p.a*s*s]]; },
+  (a,o,p)=>'½ · '+p.a+' · '+qs(a)+'² = '+qs(o),()=>({a:pick([1,2,4])}));
+NL('24·stat.life',['24·stat'],'the steady-hazard technique',(p,nm)=>'a part fails at a steady hazard of '+nm+' a year; give its average life in years',
+  v=>v.p>0&&v.p<v.q&&v.q<=50?qi(v):null,v=>[['the hazard itself is given',v],['half the average life is given',qm(qi(v),Q(1,2))]],
+  (a,o)=>'average life = 1/h = 1/('+qs(a)+') = '+qs(o));
+NL('25·phys.size',['25·phys'],'the size technique',(p,nm)=>'a star is '+nm+' times as bright as the sun, at 1/'+p.k+' of the sun’s temperature; give its radius in sun radii',
+  (v,p)=>{ const r=sq(W(v)); return r!==null&&r>=1&&r<=30?r*p.k*p.k:null; },(v,p)=>{ const r=sq(W(v)); return r===null?[]:[['the brightness is not rooted',W(v)*p.k*p.k],['the temperature ratio is not squared',r*p.k]]; },
+  (a,o,p)=>'R = √'+qs(a)+' · '+p.k+'² = '+qs(o),()=>({k:pick([2,3])}));
+NL('27·crypt2.forge',['27·crypt2'],'the root-count technique',(p,nm)=>'the message is a polynomial of degree at most '+nm+' over the clock of '+p.p+'; give the forger’s best chance',
+  (v,p)=>{ const n=W(v); return n!==null&&n>=2&&n<p.p?fr(n,p.p):null; },(v,p)=>{ const n=W(v); return n===null?[]:[['one root is counted, not n',fr(1,p.p)]]; },
+  (a,o,p)=>'at most '+qs(a)+' roots in '+p.p+' hours: '+qs(o),()=>({p:pick([101,997,1009])}));
+NL('28·eng.poses',['28·eng'],'the reach technique',(p,nm)=>'a two-joint arm has links '+p.a+' and '+p.b+'; how many poses reach a target '+nm+' from the shoulder?',
+  (v,p)=>{ if(v.q!==1||v.p<0||v.p>20) return null; const r=v.p, lo=Math.abs(p.a-p.b), hi=p.a+p.b; return r<lo||r>hi?0:(r===lo||r===hi)?1:2; },(v,p)=>[['every target is taken to have two poses',2],['the ends are taken to have none',0]],
+  (a,o,p)=>'poses that reach '+qs(a)+', with |'+p.a+' − '+p.b+'| and '+p.a+' + '+p.b+' as the limits: '+qs(o),()=>({a:pick([3,4,5]),b:pick([1,2,3])}));
+NL('30·logi2.hold',['30·logi2'],'the held-seat technique',(p,nm)=>'the low fare is '+nm+' and the high fare '+p.h+'; hold one more seat while the chance late demand reaches it is at least what?',
+  (v,p)=>{ const l=W(v); return l!==null&&l>=20&&l<p.h?fr(l,p.h):null; },(v,p)=>{ const l=W(v); return l===null?[]:[['the fares are turned over',fr(p.h,l)],['the gain over the high fare is used',fr(p.h-l,p.h)]]; },
+  (a,o,p)=>'hold while chance ≥ '+qs(a)+'/'+p.h+' = '+qs(o),()=>({h:pick([200,300,400,500])}));
+NL('30·stat2.sign',['30·stat2'],'the sign technique',(p,nm)=>'of '+nm+' changes, all but one went up; if the treatment does nothing, what is the chance of at least that many ups?',
+  v=>{ const n=W(v); return n!==null&&n>=3&&n<=14?fr(n+1,2**n):null; },v=>{ const n=W(v); return n===null?[]:[['only the one pattern with all up is counted',fr(1,2**n)],['the pattern with every change up is left out',fr(n,2**n)]]; },
+  (a,o)=>'patterns with at least '+qs(a)+' − 1 ups: '+qs(a)+' + 1 of 2^'+qs(a)+': '+qs(o));
+NL('31·chem.order',['31·chem'],'the filling technique',(p,nm)=>'two equal atoms share '+nm+' electrons in the even and odd mixes; give the bond order',
+  v=>{ const e=W(v); if(e===null||e<2||e>4) return null; const ev=Math.min(e,2), od=e-ev; return fr(ev-od,2); },v=>{ const e=W(v); return e===null||e<1||e>4?[]:[['every electron is put in the even mix',fr(e,2)],['the difference is not halved',Math.min(e,2)-(e-Math.min(e,2))]]; },
+  (a,o)=>'(even − odd)/2 with '+qs(a)+' electrons: '+qs(o));
+NL('31·nav.gain',['31·nav'],'the gain technique',(p,nm)=>'the guess has spread² P = '+nm+' and the measurement R = '+p.r+'; give the gain',
+  (v,p)=>v.p>0&&v.q<=10&&v.p<=99*v.q?qm(v,qi(qa(v,Q(p.r)))):null,(v,p)=>[['R is put on top',qm(Q(p.r),qi(qa(v,Q(p.r))))],['P is divided by R alone',qm(v,Q(1,p.r))]],
+  (a,o,p)=>'K = P/(P + R) = '+qs(a)+'/('+qs(a)+' + '+p.r+') = '+qs(o),()=>({r:pick([1,2,3,4])}));
+NL('31·stat3.keep',['31·stat3'],'the axis technique',(p,nm)=>'along a square axis with d² = '+nm+', the charge is λ = '+p.l+'; what share of the plain fit is kept?',
+  (v,p)=>v.p>0&&v.q<=10&&v.p<=99*v.q?qm(v,qi(qa(v,Q(p.l)))):null,(v,p)=>[['the share taken away is given',qm(Q(p.l),qi(qa(v,Q(p.l))))]],
+  (a,o,p)=>'d²/(d² + λ) = '+qs(a)+'/('+qs(a)+' + '+p.l+') = '+qs(o),()=>({l:pick([1,2,5,10])}));
+NL('32·stat2.worth',['32·stat2'],'the worth technique',(p,nm)=>nm+' daily readings have memory φ = '+qs(p.f)+'; how many readings’ worth of evidence do they carry?',
+  (v,p)=>{ const n=W(v); if(n===null||n<2||n>400) return null; const r=qm(Q(n),qm(qa(Q(1),qn(p.f)),qi(qa(Q(1),p.f)))); return r.q===1?r:null; },(v,p)=>{ const n=W(v); if(n===null) return []; return [['the fraction is turned over',qm(Q(n),qm(qa(Q(1),p.f),qi(qa(Q(1),qn(p.f)))))],['the 1 + φ is left out',qm(Q(n),qa(Q(1),qn(p.f)))]]; },
+  (a,o,p)=>qs(a)+' · (1 − '+qs(p.f)+')/(1 + '+qs(p.f)+') = '+qs(o),()=>({f:pick([Q(1,2),Q(1,3),Q(3,5)])}));
+NL('33·bio2.cross',['33·bio2'],'the jostling technique',(p,nm)=>'a molecule with D = '+p.d+' must jostle across a length '+nm+'; about how long does it take?',
+  (v,p)=>{ const L=W(v); return L!==null&&L>=1&&L<=30?fr(L*L,2*p.d):null; },(v,p)=>{ const L=W(v); return L===null?[]:[['the length is not squared',fr(L,2*p.d)],['the 2 is left out',fr(L*L,p.d)]]; },
+  (a,o,p)=>'L²/(2D) = '+qs(a)+'²/(2 · '+p.d+') = '+qs(o),()=>({d:pick([1,2,5])}));
+NL('33·stat.bar',['33·stat'],'the divided-bar technique',(p,nm)=>'a list of '+nm+' findings, with α = 1/20 for the whole list; below what chance must each p fall?',
+  v=>{ const m=W(v); return m!==null&&m>=2&&m<=10000?fr(1,20*m):null; },v=>{ const m=W(v); return m===null?[]:[['α is used for each finding',fr(1,20)],['α is multiplied by the count',fr(m,20)]]; },
+  (a,o)=>'α/m = (1/20)/'+qs(a)+' = '+qs(o));
+NL('37·chem.lines',['37·chem'],'the splitting technique',(p,nm)=>'a nucleus has '+nm+' equal neighbours; into how many lines is its note split?',
+  v=>{ const n=W(v); return n!==null&&n>=2&&n<=9?n+1:null; },v=>{ const n=W(v); return n===null?[]:[['one line per neighbour',n],['the heights are added instead of the lines counted',2**n]]; },
+  (a,o)=>qs(a)+' neighbours: '+qs(a)+' + 1 = '+qs(o)+' lines');
+NL('39·comp.wait',['39·comp'],'the cache technique',(p,nm)=>'a hit takes '+p.h+' ticks, a miss costs '+p.c+' more, and the share of misses is '+nm+'; give the average wait',
+  (v,p)=>v.p>0&&v.p<v.q&&v.q<=100?qa(Q(p.h),qm(v,Q(p.c))):null,(v,p)=>[['the hit time is left out',qm(v,Q(p.c))],['every access is taken to miss',p.h+p.c]],
+  (a,o,p)=>p.h+' + '+qs(a)+' · '+p.c+' = '+qs(o),()=>({h:pick([1,2,4]),c:pick([50,100,200])}));
+NL('17·logi.weight',['17·logi'],'the smoothing technique',(p,nm)=>'smoothing with a = '+qs(p.a)+': what weight does the week '+nm+' weeks back carry?',
+  (v,p)=>{ const k=W(v); if(k===null||k<1||k>8) return null; let w=p.a; for(let i=0;i<k;i++) w=qm(w,qa(Q(1),qn(p.a))); return w; },(v,p)=>{ const k=W(v); if(k===null||k<1) return []; let w=Q(1); for(let i=0;i<k;i++) w=qm(w,qa(Q(1),qn(p.a))); return [['the a in front is left out',w]]; },
+  (a,o,p)=>qs(p.a)+' · (1 − '+qs(p.a)+')^'+qs(a)+' = '+qs(o),()=>({a:pick([Q(1,2),Q(1,3),Q(1,4)])}));
+NL('42·logi2.saving',['42·logi2'],'the savings technique',(p,nm)=>'stops i and j are '+p.a+' and '+p.b+' from the depot and '+nm+' apart; give the saving of joining them',
+  (v,p)=>{ const c=W(v); return c!==null&&c>=Math.abs(p.a-p.b)&&c<=p.a+p.b?p.a+p.b-c:null; },(v,p)=>{ const c=W(v); return c===null?[]:[['the link between them is added, not taken away',p.a+p.b+c],['each trip out and home is counted twice',2*(p.a+p.b)-c]]; },
+  (a,o,p)=>p.a+' + '+p.b+' − '+qs(a)+' = '+qs(o),()=>({a:pick([5,6,8,10]),b:pick([4,7,9])}));
+NL('33·eng2.speed',['33·eng2'],'the coefficient technique',(p,nm)=>'in smooth flow the wind speed is multiplied by '+nm+'; by how much is the heat coefficient h multiplied?',
+  v=>{ const r=sq(W(v)); return r!==null&&r>=2&&r<=12?r:null; },v=>{ const k=W(v); return k===null?[]:[['h is taken to grow with the speed itself',k],['the square is taken, not the root',k*k]]; },
+  (a,o)=>'h grows as √speed: √'+qs(a)+' = '+qs(o));
+
+/* ===== round 2 (Andrew 2026-11-23 21:02Z: "15 seeds doesn't seem like a commensurate number. how many word problems did we add?"):
+   second links, seeds for the new steps, and word-problem laws for the annexes with numbers ===== */
+const SEEDS=CH.SEEDS, ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const sd=(id,step,label,f)=>SEEDS.push({id,step,label,kind:'num',make(){ const v=f(); if(v==null) return null; const q=typeof v==='number'?Q(v):v; return {val:num(q),ix:qs(q)}; }});
+const P14=[5,13,17,29,37,41,53,61,73,89,97], PR=[5,7,11,13,17,19,23,29,31,37,41,43,47];
+sd('16j.strips','16j','numbers of strips',()=>ri(2,8));
+sd('24i.rates','24i','growth rates',()=>ri(-3,4));
+sd('24j.tops','24j','tops of a transform',()=>ri(1,12));
+sd('27j.shares','27j','small shares of error',()=>Q(1,pick([20,50,100,200,500,1000])));
+sd('28h.prices','28h','prices on a limit',()=>ri(1,4));
+sd('29k.dims','29k','numbers of directions',()=>ri(2,6));
+sd('33c.times','33c','lengths of time',()=>pick([Q(1,2),Q(1),Q(2),Q(3),Q(5,2),Q(4)]));
+sd('34j.handles','34j','numbers of handles',()=>ri(0,4));
+sd('42k.sizes','42k','sizes to count',()=>ri(3,8));
+sd('42l.beads','42l','numbers of beads',()=>ri(3,6));
+sd('43j.primes','43j','primes one more than a multiple of 4',()=>pick(P14));
+sd('43k.slopes','43k','fraction slopes',()=>Q(ri(1,4)*pick([1,-1]),pick([1,2,3,5])));
+sd('43m.primes','43m','odd primes',()=>pick(PR.slice(0,7)));
+sd('45g.dims','45g','dimensions of shapes',()=>ri(1,5));
+sd('45j.degrees','45j','degrees of curves',()=>ri(1,5));
+sd('13·eng2.sheets','13·eng2','numbers of sheets',()=>ri(2,9));
+sd('17·phys2.ratios','17·phys2','mass ratios',()=>ri(2,12));
+sd('18·phys2.cuts','18·phys2','cuts by powers of 2',()=>2**ri(2,10));
+sd('24·stat.hazards','24·stat','steady hazards',()=>Q(1,pick([2,4,5,8,10,20,25])));
+sd('31·nav.spreads','31·nav','spreads squared',()=>ri(1,9));
+sd('33·stat.lists','33·stat','numbers of findings',()=>pick([5,10,20,25,50,100,1000]));
+
+/* second links, where the step has a second technique to compute with */
+NL('16j.onestrip',['16j'],'the one-strip technique',(p,nm)=>'one strip under y = t², from t = 0 to t = '+nm+', is topped by its chord; by how much does the chord’s area overshoot?',
+  v=>v.p>0&&v.q<=10&&v.p<=3*v.q?qm(qm(qm(v,v),v),Q(1,6)):null,v=>[['M is taken as 1, not 2',qm(qm(qm(v,v),v),Q(1,12))],['the 12 is left out',qm(qm(qm(v,v),v),Q(2))]],
+  (a,o)=>'M h³/12 with M = 2 and h = '+qs(a)+': 2 · '+qs(a)+'³/12 = '+qs(o));
+NL('24i.slope',['24i'],'the slope-to-times technique',(p,nm)=>'F(s) = '+qs(p.F)+' at s = '+p.s+' and f(0) = '+nm+'; give the transform of f′ there',
+  (v,p)=>W(v)!==null&&W(v)!==0&&Math.abs(W(v))<=20?qa(qm(Q(p.s),p.F),qn(v)):null,(v,p)=>[['the start is added, not taken away',qa(qm(Q(p.s),p.F),v)],['F is not multiplied by s',qa(p.F,qn(v))]],
+  (a,o,p)=>'𝓛f′ = sF(s) − f(0) = '+p.s+' · '+qs(p.F)+' − '+(a.p<0?'('+qs(a)+')':qs(a))+' = '+qs(o),()=>({s:pick([2,3,4]),F:Q(pick([1,2,3]),pick([1,2,5]))}));
+NL('24j.split',['24j'],'the read-back technique',(p,nm)=>'split 1/((s + '+nm+')(s + '+p.b+')) into A/(s + '+nm+') + B/(s + '+p.b+'); give A',
+  (v,p)=>{ const a=W(v); return a!==null&&a>=1&&a<=12&&a!==p.b?fr(1,p.b-a):null; },(v,p)=>{ const a=W(v); return a===null||a===p.b?[]:[['the subtraction is turned round, which gives B',fr(1,a-p.b)],['the two are added',fr(1,a+p.b)]]; },
+  (a,o,p)=>'A = 1/(−'+qs(a)+' + '+p.b+') = '+qs(o),()=>({b:pick([1,2,3,5,7])}));
+NL('28i.area',['28i'],'the area technique',(p,nm)=>'each turn of Hénon’s map multiplies small areas by b = '+nm+'; by what after '+p.n+' turns?',
+  (v,p)=>v.p>0&&v.p<v.q&&v.q<=10?qm(v,p.n===2?v:qm(v,v)):null,(v,p)=>[['the factor is multiplied by the turns, not raised to them',qm(v,Q(p.n))],['one turn too few',p.n===2?v:qm(v,v)]],
+  (a,o,p)=>'('+qs(a)+')^'+p.n+' = '+qs(o),()=>({n:pick([2,3])}));
+NL('33d.square',['33d'],'the wandering-sum technique',(p,nm)=>'hold a steady stake of '+p.k+' from time 0 to '+nm+'; give the average square of ∫ H dB',
+  (v,p)=>v.p>0&&v.q<=12&&v.p<=40*v.q?qm(Q(p.k*p.k),v):null,(v,p)=>[['the stake is not squared',qm(Q(p.k),v)],['the average, 0, is given',null]],
+  (a,o,p)=>'E ∫ H² dt = '+p.k+'² · '+qs(a)+' = '+qs(o),()=>({k:pick([2,3,4])}));
+NL('42l.reach',['42l'],'the reach-keepers technique',(p,nm)=>'a group of '+p.g+' symmetries keeps a point P in place with '+nm+' of them; to how many places does it send P?',
+  (v,p)=>{ const s=W(v); return s!==null&&s>=2&&p.g%s===0&&s<p.g?p.g/s:null; },(v,p)=>{ const s=W(v); return s===null?[]:[['the keepers are taken from the group, not divided into it',p.g-s],['the keepers are multiplied in',p.g*s]]; },
+  (a,o,p)=>'places × keepers = '+p.g+': '+p.g+'/'+qs(a)+' = '+qs(o),()=>({g:pick([8,12,24])}));
+NL('43k.lift',['43k'],'the lifting technique',(p,nm)=>'r = '+nm+' solves r² ≡ c on the clock of '+p.p+', with c = '+nm+'² taken on that clock; lift r to the clock of '+(p.p*p.p),
+  (v,p)=>{ const a=W(v); if(a===null||a<1||a>=p.p||(2*a)%p.p===0) return null; const c=md(a*a,p.p), m=p.p*p.p; for(let k=0;k<p.p;k++){ const b=a+k*p.p; if(md(b*b-c,m)===0) return b===a||b===m-a?null:b; } return null; },
+  (v,p)=>{ const a=W(v); return a===null?[]:[['the root is kept as it was',a],['the other root of the clock is lifted',p.p*p.p-a]]; },
+  (a,o,p)=>'b ≡ '+qs(a)+' (mod '+p.p+') with b² ≡ '+md(a.p*a.p,p.p)+' (mod '+(p.p*p.p)+'): b = '+qs(o),()=>({p:pick([5,7,11])}));
+NL('45g.cut',['45g'],'the cut technique',(p,nm)=>'a whole shape has dimension '+nm+'; one equation, neither 0 on it nor never 0, cuts it: give the dimension of the pieces',
+  v=>{ const d=W(v); return d!==null&&d>=1&&d<=8?d-1:null; },v=>{ const d=W(v); return d===null?[]:[['the dimension is kept',d],['two are taken away, one per side of the equation',d-2]]; },
+  (a,o)=>'pieces of dimension '+qs(a)+' − 1 = '+qs(o));
+
+/* word problems: one law for each annex with numbers. The story opens the card, the reading link and the middles carry it, the close asks in the story’s units */
+const W2=CH.W2;
+if(W2){ const {G:Gp,Tm,Pr,In,Fr,Pl,X,own,LESS,LAWS,at,who,qq,num:wn}=W2;
+  const par=v=>v.p<0||v.q!==1?'('+qs(v)+')':qs(v);
+  const sp=(c,x)=>{ const t=[]; c.forEach((k,i)=>{ k=qq(k); if(!k.p) return; const s=qs(k), m=i===0?s:(k.p===k.q&&!(i===0)?'':k.p===-k.q?'−':s)+(i===1?x:x+(i===2?'²':'³')); t.push(m); }); return (t.join(' + ')||'0').replace(/\+ −/g,'− '); };
+  const lw=(id,label,fn,close)=>{ const L={id,step:id.split('.')[0],label,close,make(){ let S=null; try{ S=fn(); }catch(e){ S=null; } if(!S) return null; S.lawId=id; if(!S.ix) S.ix=S.c.map(x=>qs(qq(x))).join(',')+(S.k!==undefined?';'+S.k:''); return S; }}; LAWS.push(L); return L; };
+  const C=(kind,o)=>({gap:Gp,times:Tm,per:Pr,into:In,frac:Fr,plus:Pl}[kind])(o);
+  lw('13·eng2.glow','glow across a vacuum gap',()=>{ const a=ri(2,9)*10; return {c:[0,a],story:'In a flask from '+at()+', glow carries G(h) = '+a+'h joules across the vacuum from the warm wall to the cold one in h hours.',f:'G',x:'h',xu:'hours',yu:'joules',rate:'joules an hour',area:null,pts:[2,3,4,5,6]}; },
+    [C('per',X({u:'yu',k:()=>pick([3,4,5,6,9,10]),ask:(S,p)=>(wn(p.k)-1)+' thin sheets now hang in the gap: how many joules pass?',ln:()=>'glow through the sheets',w:['the glow is multiplied instead of divided',null],xs:(S,p,q)=>[{why:'the glow is divided by the number of sheets, not one more',v:qm(q.v,qi(qa(p.k,Q(-1))))}]},own('13·eng2','the sheet technique')))]);
+  lw('14·econ2.rival','a rival spring’s sales',()=>({c:[12,-1],story:'The spring at '+at()+' watches its rival: w weeks into a dry spell, the rival sells y(w) = 12 − w thousand bottles a week.',f:'y',x:'w',xu:'weeks',yu:'thousand bottles',rate:'thousand bottles a week',area:null,pts:[2,4,6,8,10]}),
+    [C('times',X({u:'yu',k:Q(1,2),ask:()=>'what is this spring’s best amount against that?',ln:()=>'best amount',f:(S,p,q)=>wn(q.v)>=12?null:qm(qa(Q(12),qn(q.v)),Q(1,2)),ex:(S,p,q)=>'(12 − '+par(q.v)+')/2',w:[null,null],
+      xs:(S,p,q)=>[{why:'the half is not taken',v:qa(Q(12),qn(q.v))},{why:'the rival’s amount is added, not taken from the 12',v:qm(qa(Q(12),q.v),Q(1,2))}]},own('14·econ2','the best-amount technique')))]);
+  lw('16·eng2.main','pressure in a water main',()=>{ const b=ri(1,4)*100; return {c:[b,50],story:'The pressure in a water main at '+at()+' is p(n) = 50n + '+b+' kilopascals with n pumps running.',f:'p',x:'n',xu:'pumps',yu:'kilopascals',rate:'kilopascals a pump',area:null,pts:[1,2,3,4]}; },
+    [C('times',X({u:'yu',k:()=>pick([10,20,25,40]),ask:(S,p)=>'the pipe’s radius is '+p.K+' times its wall: how hard is the wall pulled round the pipe?',ln:()=>'pull round the wall',
+      xs:(S,p,q)=>[{why:'the pull along the pipe, pr/2t, is given',v:qm(q.v,qm(p.k,Q(1,2)))}]},own('16·eng2','the thin-wall technique')))]);
+  lw('17·bio2.depth','pressure with depth',()=>({c:[1,Q(1,10)],story:who()+' dives off '+at()+' and breathes air at P(d) = d/10 + 1 atmospheres at a depth of d metres.',f:'P',x:'d',xu:'metres',yu:'atmospheres',rate:'atmospheres a metre',area:null,pts:[10,20,30,40]}),
+    [C('times',X({u:'yu',k:()=>pick([1,2,3]),ask:(S,p)=>'a tissue that starts at 1 atmosphere soaks '+p.K+' half-times here: how much extra load has it taken on?',ln:()=>'extra load',
+      f:(S,p,q)=>wn(q.v)<=1?null:qm(qa(q.v,Q(-1)),qa(Q(1),qn(Q(1,2**p.k.p)))),ex:(S,p,q)=>'('+par(q.v)+' − 1)(1 − 1/2^'+p.K+')',w:[null,null],
+      xs:(S,p,q)=>[{why:'the gap left is given, not the load taken on',v:qm(qa(q.v,Q(-1)),Q(1,2**p.k.p))},{why:'the surface pressure is not taken away',v:qm(q.v,qa(Q(1),qn(Q(1,2**p.k.p))))}]},own('17·bio2','the half-time technique')))]);
+  lw('17·phys2.stack','a rocket’s full mass',()=>{ const b=ri(2,6); return {c:[b,3],story:'A rocket assembled at '+at()+' has a full mass of M(s) = 3s + '+b+' tonnes with s fuel stages.',f:'M',x:'s',xu:'stages',yu:'tonnes',rate:'tonnes a stage',area:null,pts:[1,2,3,4,5]}; },
+    [C('frac',X({u:'yu',k:()=>{ const R=pick([2,3,4,5,10]); return Q(R-1,R); },ask:(S,p)=>'its mass ratio, full over empty, is '+p.k.q+': how many tonnes of it are fuel?',ln:()=>'fuel',w:['the empty mass is given','the mass is divided by the share']},own('17·phys2','the rocket technique')))]);
+  lw('18·phys2.counts','counts near a source',()=>{ const a=pick([64,128,256,512]); return {c:[0,a],story:'A counter beside a source at '+at()+' reads C(m) = '+a+'m counts in m minutes.',f:'C',x:'m',xu:'minutes',yu:'counts',rate:'counts a minute',area:null,pts:[1,2,3,4,5]}; },
+    [C('per',X({u:'yu',k:()=>2**ri(1,5),ask:(S,p)=>'a shield '+Math.log2(wn(p.k))+' half-thicknesses thick now stands between: how many counts?',ln:()=>'counts behind the shield',w:['the counts are multiplied instead of divided',null],
+      xs:(S,p,q)=>[{why:'the count is divided by the number of half-thicknesses',v:qm(q.v,Q(1,Math.max(1,Math.log2(wn(p.k)))))}]},own('18·phys2','the half-thickness technique')))]);
+  lw('21·comp.post','a post in a game',()=>{ const b=ri(1,4); return {c:[b,1],story:'In '+who()+'’s game the lamp post on level n stands h(n) = n + '+b+' units tall.',f:'h',x:'n',xu:'levels',yu:'units',rate:'units a level',area:null,pts:[1,2,3,4,5]}; },
+    [C('times',X({u:'yu',k:()=>Q(pick([2,3,5]),pick([4,6,10,20])),ask:(S,p)=>'the screen stands '+p.k.p+' units from the eye and the post '+p.k.q+' deep: how tall is it drawn?',ln:()=>'drawn height',
+      xs:(S,p,q)=>[{why:'the depth is put on top',v:qm(q.v,qi(p.k))}]},own('21·comp','the depth technique')))]);
+  lw('21·nav2.trip','Mars during the trip',()=>({c:[0,Q(1,2)],story:'In a model of the inner planets, Mars moves θ(d) = d/2 degrees round the sun in d days.',f:'θ',x:'d',xu:'days',yu:'degrees',rate:'degrees a day',area:null,pts:[200,220,240,260,280,300]}),
+    [C('gap',X({u:'yu',k:180,ask:()=>'the trip takes that long: by how many degrees must Mars lead the earth at launch?',ln:()=>'the lead at launch',xs:(S,p,q)=>[{why:'the degrees Mars moves are given as the lead',v:q.v},{why:'the move is taken from 360, not 180',v:qa(Q(360),qn(q.v))}]},own('21·nav2','the window technique')))]);
+  lw('24·nav.legs','a silent run',()=>({c:[0,60],story:'A submarine out of '+at()+' runs silent for t(n) = 60n seconds on n legs.',f:'t',x:'n',xu:'legs',yu:'seconds',rate:'seconds a leg',area:null,pts:[1,2,3]}),
+    [C('times',X({u:'yu',out:'millimetres',k:()=>Q(1,pick([10,20,50])),ask:(S,p)=>'its accelerometer reads '+qs(p.k)+' mm/s² too high all the way: how far off is the end point?',ln:()=>'error in place',
+      f:(S,p,q)=>qm(qm(p.k,qm(q.v,q.v)),Q(1,2)),ex:(S,p,q)=>'½ · '+qs(p.k)+' · '+par(q.v)+'²',w:[null,null],
+      xs:(S,p,q)=>[{why:'the error is added once, giving a speed',v:qm(p.k,q.v)},{why:'the half is left out',v:qm(p.k,qm(q.v,q.v))}]},own('24·nav','the twice-added technique')))]);
+  lw('24·stat.bearings','a steady hazard on bearings',()=>({c:[0,Q(1,100)],story:'Bearings at '+at()+' fail at a steady hazard of h(c) = c/100 a year when run c hours a day.',f:'h',x:'c',xu:'hours a day',yu:'a year',rate:'a year per hour a day',area:null,pts:[2,4,5,10,20,25]}),
+    [C('into',X({u:'yu',out:'years',k:1,ask:()=>'what is a bearing’s average life?',ln:()=>'average life',w:['the hazard is given',null],xs:(S,p,q)=>[{why:'the half-life is mixed in: 1/(2h)',v:qm(qi(q.v),Q(1,2))}]},own('24·stat','the steady-hazard technique')))]);
+  lw('25·phys.model','a model star’s light',()=>({c:[0,0,0,1],story:'In '+who()+'’s model, a star of m sun-masses shines L(m) = m³ times as bright as the sun.',f:'L',x:'m',xu:'sun-masses',yu:'suns',rate:'suns per sun-mass',area:null,pts:[2,3,4,5]}),
+    [C('into',X({u:'yu',out:'billion years',k:()=>pick([10,20,40,50,100]),ask:(S,p)=>'its fuel would keep the sun shining '+p.K+' billion years: how long does the star last?',ln:()=>'the star’s life',w:['the brightness is divided by the fuel','the fuel is multiplied by the brightness']},own('25·phys','the fuel technique')))]);
+  lw('26·eng.motor','a motor’s current',()=>({c:[2,1],story:'A motor at '+at()+' draws a swinging current of height I(n) = n + 2 amps on setting n.',f:'I',x:'n',xu:'settings',yu:'amps',rate:'amps a setting',area:null,pts:[1,2,3,4,6,8]}),
+    [C('times',X({u:'yu',out:'watts',k:()=>{ const V=pick([100,200,300]), c=pick([Q(3,5),Q(4,5),Q(1,2)]); return qm(Q(V,2),c); },ask:(S,p)=>'the voltage height and cos φ make ½ · V · cos φ = '+p.K+' volts: what is the average power?',ln:()=>'average power',
+      xs:(S,p,q)=>[{why:'the half is left out',v:qm(q.v,qm(p.k,Q(2)))}]},own('26·eng','the power technique')))]);
+  lw('30·logi2.fare','a full fare before a flight',()=>({c:[400,-10],story:'The full fare n days before a flight out of '+at()+' is F(n) = 400 − 10n dollars.',f:'F',x:'n',xu:'days',yu:'dollars',rate:'dollars a day',area:null,pts:[5,10,15,20]}),
+    [C('into',X({u:'yu',out:'chance',k:()=>pick([50,100,150]),ask:(S,p)=>'the cheap fare is '+p.K+' dollars: hold one more seat while the chance late demand reaches it is at least what?',ln:()=>'the chance to hold at',w:['the fares are turned over',null],
+      xs:(S,p,q)=>[{why:'the gain over the full fare is used',v:qm(qa(q.v,qn(p.k)),qi(q.v))}]},own('30·logi2','the held-seat technique')))]);
+  lw('30·stat2.plots','plots in a trial',()=>({c:[4,1],story:who()+' tests a treatment at '+at()+' on n(w) = w + 4 plots in week w.',f:'n',x:'w',xu:'weeks',yu:'plots',rate:'plots a week',area:null,pts:[1,2,3,4,6]}),
+    [C('times',X({u:'yu',out:'chance',k:1,ask:()=>'all but one plot went up: if the treatment does nothing, what is the chance of at least that many ups?',ln:()=>'chance',
+      f:(S,p,q)=>q.v.q!==1||q.v.p<3||q.v.p>14?null:Q(q.v.p+1,2**q.v.p),ex:(S,p,q)=>'('+par(q.v)+' + 1)/2^'+par(q.v),w:[null,null],
+      xs:(S,p,q)=>q.v.q!==1||q.v.p>14?[]:[{why:'only the pattern with every plot up is counted',v:Q(1,2**q.v.p)},{why:'the pattern with every plot up is left out',v:Q(q.v.p,2**q.v.p)}]},own('30·stat2','the sign technique')))]);
+  lw('31·nav.drift','a guess that drifts',()=>({c:[1,1],story:'Between fixes, the spread² of '+who()+'’s guess of a boat’s place off '+at()+' grows P(t) = t + 1 square metres over t seconds.',f:'P',x:'t',xu:'seconds',yu:'square metres',rate:'square metres a second',area:null,pts:[1,2,3,4,5]}),
+    [C('times',X({u:'yu',out:'of the miss',k:()=>pick([1,2,3,4]),ask:(S,p)=>'a fix comes in with spread² R = '+p.K+' square metres: what share of the miss does the guess move?',ln:()=>'the gain',
+      f:(S,p,q)=>qm(q.v,qi(qa(q.v,p.k))),ex:(S,p,q)=>par(q.v)+'/('+par(q.v)+' + '+p.K+')',w:[null,null],xs:(S,p,q)=>[{why:'R is put on top',v:qm(p.k,qi(qa(q.v,p.k)))},{why:'P is divided by R alone',v:qm(q.v,qi(p.k))}]},own('31·nav','the gain technique')))]);
+  lw('31·stat3.axis','a strong axis',()=>({c:[0,2],story:'The strong axis of '+who()+'’s data has d²(n) = 2n square units with n readings.',f:'d²',x:'n',xu:'readings',yu:'square units',rate:'square units a reading',area:null,pts:[2,3,5,10,20]}),
+    [C('times',X({u:'yu',out:'of the plain fit',k:()=>pick([1,2,5,10]),ask:(S,p)=>'the charge is λ = '+p.K+': what share of the plain fit is kept along that axis?',ln:()=>'share kept',
+      f:(S,p,q)=>qm(q.v,qi(qa(q.v,p.k))),ex:(S,p,q)=>par(q.v)+'/('+par(q.v)+' + '+p.K+')',w:[null,null],xs:(S,p,q)=>[{why:'the share taken away is given',v:qm(p.k,qi(qa(q.v,p.k)))}]},own('31·stat3','the axis technique')))]);
+  lw('32·stat2.days','readings over days',()=>({c:[0,4],story:who()+' reads the river at '+at()+' four times a day: n(d) = 4d readings in d days.',f:'n',x:'d',xu:'days',yu:'readings',rate:'readings a day',area:null,pts:[3,6,9,12,15]}),
+    [C('times',X({u:'yu',out:'readings’ worth',k:()=>pick([Q(1,3),Q(1,2),Q(1,4)]),ask:(S,p)=>'the readings have memory φ = '+qs(qm(qa(Q(1),qn(p.k)),qi(qa(Q(1),p.k))))+': how many readings’ worth of evidence do they carry?',ln:()=>'evidence',
+      xs:(S,p,q)=>[{why:'the fraction (1 − φ)/(1 + φ) is turned over',v:qm(q.v,qi(p.k))}]},own('32·stat2','the worth technique')))]);
+  lw('33·bio2.arm','a long arm of a cell',()=>({c:[0,2],story:'A vesicle must cross L(k) = 2k micrometres of a nerve cell’s arm, k segments long.',f:'L',x:'k',xu:'segments',yu:'micrometres',rate:'micrometres a segment',area:null,pts:[1,2,3,5,10]}),
+    [C('times',X({u:'yu',out:'seconds',k:()=>pick([1,2,5]),ask:(S,p)=>'with D = '+p.K+' square micrometre'+(p.K==='1'?'':'s')+' a second, about how long does jostling take?',ln:()=>'time by jostling',
+      f:(S,p,q)=>qm(qm(q.v,q.v),qi(qm(Q(2),p.k))),ex:(S,p,q)=>par(q.v)+'²/(2 · '+p.K+')',w:[null,null],xs:(S,p,q)=>[{why:'the length is not squared',v:qm(q.v,qi(qm(Q(2),p.k)))},{why:'the 2 is left out',v:qm(qm(q.v,q.v),qi(p.k))}]},own('33·bio2','the jostling technique')))]);
+  lw('33·stat.genes','genes in a screen',()=>({c:[0,100],story:who()+'’s screen at '+at()+' tests m(g) = 100g genes on g plates.',f:'m',x:'g',xu:'plates',yu:'genes',rate:'genes a plate',area:null,pts:[1,2,5,10]}),
+    [C('into',X({u:'yu',out:'chance',k:Q(1,20),ask:()=>'the list may raise a false alarm with chance at most 1/20: below what must each p fall?',ln:()=>'the bar for each',w:['the count is divided by α',null],
+      xs:(S,p,q)=>[{why:'α is used for each finding',v:Q(1,20)}]},own('33·stat','the divided-bar technique')))]);
+  lw('39·comp.reads','memory reads in a loop',()=>({c:[0,1000],story:'A program at '+at()+' makes A(n) = 1000n memory reads in n loops.',f:'A',x:'n',xu:'loops',yu:'reads',rate:'reads a loop',area:null,pts:[1,2,3,5]}),
+    [C('times',X({u:'yu',out:'ticks',k:()=>{ const h=pick([1,2]), m=pick([10,20,50]), c=pick([50,100,200]); return qa(Q(h),Q(c,m)); },ask:(S,p)=>'with hits, misses and their cost each read waits '+p.K+' ticks on average: how many ticks do the reads take?',ln:()=>'ticks in all'},own('39·comp','the cache technique')))]);
+  lw('42·logi2.road','a road between two stops',()=>{ const a=ri(6,10), b=ri(5,9); return {c:[3,1],a,b,story:'Two stops near '+at()+' lie '+a+' and '+b+' kilometres from the depot; the road between them is r(w) = w + 3 kilometres long after w weeks of road works.',f:'r',x:'w',xu:'weeks',yu:'kilometres',rate:'kilometres a week',area:null,pts:[1,2,3,4]}; },
+    [C('gap',X({u:'yu',k:S=>Q(S.a+S.b),ask:S=>'how many kilometres does joining the two stops on one route save?',ln:()=>'the saving',w:['the road is taken from nothing, the subtraction turned round','the road is added, not taken away']},own('42·logi2','the savings technique')))]);
+  lw('17·logi.back','weeks back in a forecast',()=>({c:[0,4],story:'Terry’s sales forecast at '+at()+' is run each Monday; the figure from m months ago lies w(m) = 4m weeks back.',f:'w',x:'m',xu:'months',yu:'weeks',rate:'weeks a month',area:null,pts:[1,2]}),
+    [C('times',X({u:'yu',out:'of the forecast',k:Q(1,2),ask:()=>'smoothing with a = 1/2: what weight does that week carry?',ln:()=>'its weight',
+      f:(S,p,q)=>q.v.q!==1||q.v.p<1||q.v.p>12?null:Q(1,2**(q.v.p+1)),ex:(S,p,q)=>'1/2 · (1 − 1/2)^'+par(q.v),w:[null,null],
+      xs:(S,p,q)=>q.v.q!==1||q.v.p<1||q.v.p>12?[]:[{why:'the a in front is left out',v:Q(1,2**q.v.p)},{why:'the newest week’s weight, a, is given',v:Q(1,2)},{why:'the weeks are counted from 1, one power too many',v:Q(1,2**(q.v.p+2))}]},own('17·logi','the smoothing technique')))]);
+  lw('27·crypt2.tags','tags on longer messages',()=>({c:[1,1],story:'Randy’s tags at '+at()+' read a message of n blocks as a polynomial of degree at most d(n) = n + 1.',f:'d',x:'n',xu:'blocks',yu:'degrees',rate:'degrees a block',area:null,pts:[1,2,3,4,5]}),
+    [C('times',X({u:'yu',out:'chance',k:Q(1,101),ask:()=>'the clock is of 101: what is a forger’s best chance?',ln:()=>'the forger’s chance',
+      f:(S,p,q)=>q.v.q!==1||q.v.p<1?null:Q(q.v.p,101),ex:(S,p,q)=>par(q.v)+' ÷ 101',w:[null,null],
+      xs:(S,p,q)=>[{why:'a forger is taken to have one guess',v:Q(1,101)},{why:'the degree plus one is used',v:qm(qa(q.v,Q(1)),Q(1,101))}]},own('27·crypt2','the root-count technique')))]);
+  lw('28·eng.target','a target for a two-link arm',()=>({c:[2,1],story:'A two-link arm at '+at()+', with links 3 and 4 metres, must reach a target d(t) = t + 2 metres from its shoulder on try t.',f:'d',x:'t',xu:'tries',yu:'metres',rate:'metres a try',area:null,pts:[1,2,3,4]}),
+    [C('gap',X({u:'yu',k:7,ask:()=>'how far short of the arm’s farthest reach is the target?',ln:()=>'short of the reach',
+      xs:(S,p,q)=>[{why:'the gap to the nearest reach, 4 − 3, is given',v:qa(q.v,Q(-1))},{why:'one link alone is taken as the reach',v:qa(Q(4),qn(q.v))}]},own('28·eng','the reach technique')))]);
+  lw('31·chem.even','electrons in the even mixes',()=>({c:[4,2],story:'In a model of a two-atom molecule, the even mixes hold E(n) = 2n + 4 electrons in the n-th of a run of such molecules.',f:'E',x:'n',xu:'in the run',yu:'electrons',rate:'electrons a step',area:null,pts:[1,2,3]}),
+    [C('times',X({u:'yu',out:'net bonding pairs',k:()=>pick([2,4]),ask:(S,p)=>'the odd mixes hold '+p.K+' electrons: give the bond order',ln:()=>'bond order',
+      f:(S,p,q)=>(q.v.p*p.k.q>p.k.p*q.v.q)?qm(qa(q.v,qn(p.k)),Q(1,2)):null,ex:(S,p,q)=>'('+par(q.v)+' − '+p.K+')/2',w:[null,null],
+      xs:(S,p,q)=>[{why:'the difference is not halved',v:qa(q.v,qn(p.k))},{why:'the odd electrons are added',v:qm(qa(q.v,p.k),Q(1,2))},{why:'only the even electrons are halved',v:qm(q.v,Q(1,2))}]},own('31·chem','the filling technique')))]);
+  lw('33·eng2.gusts','wind over a panel',()=>({c:[0,0,1],story:'In a model, the wind over a panel at '+at()+' blows v(g) = g² metres a second on gust setting g.',f:'v',x:'g',xu:'settings',yu:'metres a second',rate:'metres a second a setting',area:null,pts:[2,3,4,5]}),
+    [C('times',X({u:'yu',out:'times as much',k:1,ask:()=>'in smooth flow h grows as the root of the speed: how many times its value at 1 metre a second is h?',ln:()=>'h against 1 metre a second',
+      f:(S,p,q)=>{ const r=q.v.q===1?Math.round(Math.sqrt(q.v.p)):-1; return r>0&&r*r===q.v.p?Q(r):null; },ex:(S,p,q)=>'√'+par(q.v),w:[null,null],
+      xs:(S,p,q)=>[{why:'h is taken to grow with the speed itself',v:q.v},{why:'the root is halved, not taken',v:qm(q.v,Q(1,2))}]},own('33·eng2','the coefficient technique')))]);
+  lw('37·chem.chain','neighbours in a chain',()=>({c:[1,2],story:'In a model chain molecule, the marked nucleus has N(n) = 2n + 1 equal neighbours when the chain is n links long.',f:'N',x:'n',xu:'links',yu:'neighbours',rate:'neighbours a link',area:null,pts:[1,2,3,4]}),
+    [C('times',X({u:'yu',out:'lines',k:1,ask:()=>'into how many lines is the marked nucleus’s note split?',ln:()=>'lines',
+      f:(S,p,q)=>q.v.q===1&&q.v.p>=0?qa(q.v,Q(1)):null,ex:(S,p,q)=>par(q.v)+' + 1',w:[null,null],
+      xs:(S,p,q)=>[{why:'one line per neighbour',v:q.v},{why:'two lines per neighbour',v:qm(q.v,Q(2))}]},own('37·chem','the splitting technique')))]);
+}
+})();
+/* ===== end of gap chains ===== */
 
 for(let i=QP.length-1;i>=0;i--) if(qmode(QP[i])==='read') QP.splice(i,1); /* the Understanding pools now live in the crosswalk (rgraph) */
 const toggled=()=>[...LINKS,...QP,...OPS,...MOVES];
@@ -27475,7 +27864,7 @@ function build(mode){
 
 /* ===== Laundry 6 (Andrew 2026-11-11 13:10Z): pools named in words, a tree closed to the floor level, and a score =====
    Pools are switched by rung, and a floor's switch moves all its rungs; inside a rung each pool unlocks with its step. */
-const FLOORS=[[1,'Logic',0,7],[2,'Analysis',8,11],[3,'Derivation',12,16],[4,'Geometry',17,21],[5,'Statistics',22,30],[6,'Mathematics',31,38],[7,'Advanced',39,47]];
+const FLOORS=[[1,'Logic',0,7],[2,'Analysis',8,11],[3,'Derivation',12,16],[4,'Geometry',17,21],[5,'Statistics',22,30],[6,'Mathematics',31,38],[7,'Advanced',39,48]];
 function floorOf(r){ const L=window.LADMAP; if(L) for(const [f,rs] of L) if(rs.some(x=>x[0]===r)) return f; const F=FLOORS.find(F=>r>=F[2]&&r<=F[3]); return F?F[0]:8; }
 const floorName=f=>{ const F=FLOORS.find(F=>F[0]===f); return F?F[1]:'Endless'; };
 const cap1=s=>{ s=String(s); return s.charAt(0).toUpperCase()+s.slice(1); };
@@ -27504,7 +27893,7 @@ const countsLine=()=>{ const k=get('rand:rightk',{}), t=get('rand:right',0); ret
 function nLinks(q){ const by=poolBy(); const l=(q.a3||[])[1]; if(!l||l===DASH) return 0; if(q.chain) return String(l).split('+').length;
   return String(l).split('+').filter(x=>{ const P=by[x.replace(/[\[?#].*$/,'')]; return !!P&&(LINKS.includes(P)||OPS.includes(P)); }).length; }
 function bonus(){ const off=get('rand:off',{}), st=new Set(); [...SEEDS,...toggled(),...BANK].forEach(P=>{ const r=rungOf(P.step); if(!off['rung:'+r]&&P.open()) st.add(P.step); });
-  let b=0; st.forEach(s=>{ b+=Math.min(rungOf(s),48)/100; }); return b; } /* steps above rung 47 (the infinity series) count as 48 */
+  let b=0; st.forEach(s=>{ b+=Math.min(rungOf(s),49)/100; }); return b; } /* steps above rung 48 (the infinity series) count as 49 */
 const mult=()=>Math.round((1+bonus()/100)*100)/100;
 const fmt2=x=>String(Math.round(x*100)/100);
 const treeOpen={};
@@ -27631,7 +28020,7 @@ window.LadderRandomizer={render, build, parseNames, licensers, LINKS, SEEDS, QP,
    The Measuring Stick draws only from the Laundry pools of the section's steps: two of each of the four kinds, at full links and terms,
    each draw at least 2 standard deviations of complexity above the norm (the Laundry's ordinary draws at that rung or floor); draws below
    the mark are discarded. Eight questions; the first is dealt as soon as it is drawn, the rest are drawn while the climber works. */
-const STKNORM=/*norms*/{"r0":{"proof":[10.64,0.3,400,11.16]},"r1":{"proof":[18.52,7.48,400,34.1],"work":[7.43,5.49,400,22.68],"word":[5.86,2.7,400,9.06],"read":[7.88,3.55,400,20.41]},"r2":{"proof":[14.55,3.75,400,25.98],"work":[10.89,5.35,400,25.84],"word":[4.96,2.79,400,10.44],"read":[6.97,1.77,400,11.58]},"r3":{"proof":[14.63,4.56,400,23.13],"work":[12.96,7.14,400,24.32],"word":[2.61,0.28,400,2.98],"read":[7.18,1.44,400,10.07]},"r4":{"proof":[16.21,4.81,400,24.47],"work":[12.65,6.29,400,24.33],"word":[8.02,3.46,400,21.39],"read":[5.19,1.85,400,12.72]},"r5":{"proof":[18.11,3.77,400,23.14],"work":[11.83,6.98,400,24.42],"word":[7.04,5.04,400,25.9],"read":[4.23,1.33,400,7.45]},"r6":{"proof":[4.23,0.09,400,4.38],"work":[3.72,1.15,400,5.05],"word":[3.75,3.71,400,11.87]},"r7":{"proof":[10.81,2.73,400,21.91],"work":[8.79,5.59,400,15.79],"word":[1.39,0.27,400,1.78],"read":[5.24,1.61,400,8.53]},"f1":{"proof":[19.75,7.29,400,33.48],"work":[13.59,6.85,400,27.13],"word":[9.35,5.26,400,27.04],"read":[6.19,2.65,400,15.2]},"r8":{"proof":[14.27,5.91,400,23.21],"work":[10.44,7.91,400,24.84],"word":[3.7,3.51,400,12.07],"read":[6.04,1.74,400,14.04]},"r9":{"proof":[11.94,6.36,400,23.16],"work":[10.37,6.97,400,24.63],"word":[3.48,3.73,400,11],"read":[4.99,2.25,400,12.33]},"r10":{"proof":[12.77,7.35,400,24.57],"work":[10.78,8.01,400,24.94],"word":[2.18,0.07,400,2.29],"read":[5.46,1.67,400,9.64]},"r11":{"work":[4.56,1.36,400,6.52],"word":[5.96,4.16,400,9.84],"read":[5.63,0.58,400,8.48]},"f2":{"proof":[14.5,6.96,400,24.62],"work":[11.18,7.91,400,24.86],"word":[6.39,4.01,400,12.09],"read":[5.46,2.23,400,12.33]},"r12":{"proof":[12.83,7.91,400,23.35],"work":[10.92,7.85,400,24.99],"word":[1.82,0.02,400,1.86],"read":[4.7,1.55,400,8.2]},"r13":{"proof":[9.55,7.56,400,26.18],"work":[10.31,6.78,400,26.04],"word":[6.43,4.12,400,10.87],"read":[5.54,1.58,400,9.24]},"r14":{"proof":[5.09,0.13,400,5.28],"work":[3.87,2.43,400,14.96],"word":[6.22,4.09,400,10.22],"read":[6.56,1.59,400,10.5]},"r15":{"proof":[3.51,0.19,400,3.83],"work":[3.01,1.1,400,5.57],"word":[3.38,2.61,400,8.58],"read":[4.55,1.4,400,8.25]},"r16":{"proof":[10.73,7.45,400,23.23],"work":[10.6,6.86,400,25.94],"word":[7.62,4.83,400,12.5],"read":[6.22,1.2,400,8.59]},"f3":{"proof":[13.6,8.31,400,27.86],"work":[11.46,7.95,400,27.63],"word":[6.59,4.55,400,17.14],"read":[5.82,1.74,400,12.08]},"r17":{"proof":[4.58,3.54,400,23.22],"work":[5.28,5.38,400,24.43],"word":[4.03,3.44,400,11.58],"read":[5.86,1.81,400,10.57]},"r18":{"proof":[12.31,6.88,400,23.13],"work":[10.49,7.54,400,24.54],"word":[1.94,0.53,400,2.71],"read":[6.44,1.88,400,11.78]},"r19":{"proof":[11.5,7.52,400,23.22],"work":[10.27,8.78,400,24.63],"word":[1.55,0.29,400,2.26]},"r20":{"proof":[10.43,5.62,400,16.98],"work":[9.79,6.15,400,18.66],"word":[1.49,0.31,400,1.99],"read":[6.43,2.11,400,12.18]},"r21":{"proof":[11.1,7.88,400,23.43],"work":[9.53,7.15,400,24.21],"word":[1.64,0.36,400,2.16],"read":[8.01,1.47,400,13.29]},"f4":{"proof":[12.14,7.8,400,24.58],"work":[10.5,7.71,400,25.8],"word":[3.66,3.64,400,11.58],"read":[6.58,1.99,400,12.13]},"r22":{"proof":[8.89,6.97,400,23.22],"work":[10.02,6.14,400,24.19],"word":[3.79,3.43,400,10.09],"read":[6.93,1.11,400,9.47]},"r23":{"proof":[10.53,7.28,400,23.07],"work":[9.66,6.42,400,23.73],"word":[1.95,0.11,400,2.17],"read":[4.3,1.11,400,5.8]},"r24":{"proof":[3.82,0.65,400,5.3],"work":[3.73,1.03,400,5.73],"word":[2.47,0.35,400,2.83],"read":[5.82,1.61,400,9.53]},"r25":{"proof":[11.84,7.99,400,24.48],"work":[10.66,7.56,400,26.18],"word":[2,0.02,400,2.06],"read":[7.1,1.08,400,9.55]},"r26":{"proof":[3.28,0.18,400,3.71],"work":[2.82,0.78,400,4.38],"word":[2.01,0.02,400,2.05]},"r27":{"proof":[9.24,8.07,400,25.77],"work":[10.19,7.54,400,26.24],"word":[1.53,0.01,400,1.54],"read":[6.52,1.4,400,9.68]},"r28":{"proof":[9.16,7.74,400,24.42],"work":[9.87,7,400,25.56],"word":[1.55,0.03,400,1.6],"read":[6.56,1.37,400,10.86]},"r29":{"proof":[8.43,6.75,400,21.59],"work":[8.71,6.16,400,22.95],"word":[1.41,0.12,400,1.54],"read":[6.73,0.01,400,6.74]},"r30":{"proof":[11.74,8.34,400,23.27],"work":[10.49,7.38,400,24.62],"word":[3.69,3.37,400,11.5],"read":[6.14,1.97,400,12.17]},"f5":{"proof":[12.75,8.65,400,24.71],"work":[11.44,7.82,400,26.34],"word":[3.77,3.49,400,11.5],"read":[6.24,1.87,400,11.18]},"r31":{"proof":[3.89,3.51,400,22.99],"work":[7.62,6.71,400,24.46],"word":[3.89,3.33,400,9.63],"read":[6.9,1.29,400,9.38]},"r32":{"proof":[3.15,0.19,400,3.63],"work":[2.56,0.56,400,3.54],"read":[6.66,1.6,400,10.43]},"r33":{"proof":[3.11,0.17,400,3.44],"work":[2.52,0.58,400,3.47],"read":[6.35,0.58,400,6.87]},"r34":{"proof":[3.21,0.35,400,4.83],"work":[2.61,1.09,400,5.41],"read":[5.1,1.22,400,7.88]},"r35":{"proof":[3.76,3.01,400,20.81],"work":[3.12,1.3,400,5.5],"read":[3.75,0.95,400,6.28]},"r36":{"proof":[11.47,8.41,400,23.29],"work":[10.99,8.37,400,25.62],"read":[4.68,0.16,400,4.87]},"r37":{"proof":[3.07,0.13,400,3.47],"work":[2.03,0.27,400,2.66],"read":[6.49,1.82,400,10.63]},"r38":{"proof":[3.04,0.4,400,4.82],"work":[3.75,1.53,400,6.71],"read":[4.86,1.25,400,7.88]},"f6":{"proof":[11.62,8.72,400,23.4],"work":[9.26,8.2,400,25.08],"word":[4.11,3.56,400,11.5],"read":[6.1,1.68,400,10.77]},"r39":{"proof":[10.86,7.74,400,23.03],"work":[11.02,8.44,400,24.18],"read":[8.03,1.51,400,11.85]},"r40":{"proof":[3.16,0.2,400,3.67],"work":[2.34,0.61,400,3.37]},"r41":{"proof":[3.27,0.44,400,4.64],"work":[2.6,1.6,400,8.03]},"r42":{"proof":[5.1,5.42,400,22.89],"work":[2.18,0.63,400,3.46],"read":[4.7,1.8,400,9.01]},"r43":{"proof":[10.53,8.22,400,23.06],"work":[2.27,2.14,400,25.01],"read":[6.47,1.21,400,9.52]},"r44":{"proof":[10.02,6.82,400,23.22],"work":[8.73,6.26,400,23.26]},"r45":{"proof":[11.47,7.52,400,24.61],"work":[9,6.91,400,24.11],"read":[6.06,1.2,400,8.43]},"r46":{"proof":[3.87,3.43,400,22.18],"work":[2.1,0.54,400,3.46]},"r47":{"proof":[3.67,0.41,400,4.51],"word":[8.07,1.41,400,9.98]},"f7":{"proof":[11.39,8.27,400,23.22],"work":[8.15,8.24,400,25.73],"word":[8,1.36,400,9.98],"read":[6.24,2.06,400,11.85]}}/*end norms*/;
+const STKNORM=/*norms*/{"r0":{"proof":[10.64,0.3,400,11.16]},"r1":{"proof":[18.52,7.48,400,34.1],"work":[7.43,5.49,400,22.68],"word":[5.86,2.7,400,9.06],"read":[7.88,3.55,400,20.41]},"r2":{"proof":[14.55,3.75,400,25.98],"work":[10.89,5.35,400,25.84],"word":[4.96,2.79,400,10.44],"read":[6.97,1.77,400,11.58]},"r3":{"proof":[14.63,4.56,400,23.13],"work":[12.96,7.14,400,24.32],"word":[2.61,0.28,400,2.98],"read":[7.18,1.44,400,10.07]},"r4":{"proof":[16.21,4.81,400,24.47],"work":[12.65,6.29,400,24.33],"word":[8.02,3.46,400,21.39],"read":[5.19,1.85,400,12.72]},"r5":{"proof":[18.11,3.77,400,23.14],"work":[11.83,6.98,400,24.42],"word":[7.04,5.04,400,25.9],"read":[4.23,1.33,400,7.45]},"r6":{"proof":[4.23,0.09,400,4.38],"work":[3.72,1.15,400,5.05],"word":[3.75,3.71,400,11.87]},"r7":{"proof":[10.81,2.73,400,21.91],"work":[8.79,5.59,400,15.79],"word":[1.39,0.27,400,1.78],"read":[5.24,1.61,400,8.53]},"f1":{"proof":[19.75,7.29,400,33.48],"work":[13.59,6.85,400,27.13],"word":[9.35,5.26,400,27.04],"read":[6.19,2.65,400,15.2]},"r8":{"proof":[14.27,5.91,400,23.21],"work":[10.44,7.91,400,24.84],"word":[3.7,3.51,400,12.07],"read":[6.04,1.74,400,14.04]},"r9":{"proof":[11.94,6.36,400,23.16],"work":[10.37,6.97,400,24.63],"word":[3.48,3.73,400,11],"read":[4.99,2.25,400,12.33]},"r10":{"proof":[12.77,7.35,400,24.57],"work":[10.78,8.01,400,24.94],"word":[2.18,0.07,400,2.29],"read":[5.46,1.67,400,9.64]},"r11":{"work":[4.56,1.36,400,6.52],"word":[5.96,4.16,400,9.84],"read":[5.63,0.58,400,8.48]},"f2":{"proof":[14.5,6.96,400,24.62],"work":[11.18,7.91,400,24.86],"word":[6.39,4.01,400,12.09],"read":[5.46,2.23,400,12.33]},"r12":{"proof":[12.83,7.91,400,23.35],"work":[10.92,7.85,400,24.99],"word":[1.82,0.02,400,1.86],"read":[4.7,1.55,400,8.2]},"r13":{"proof":[9.55,7.56,400,26.18],"work":[10.31,6.78,400,26.04],"word":[6.43,4.12,400,10.87],"read":[5.54,1.58,400,9.24]},"r14":{"proof":[5.09,0.13,400,5.28],"work":[3.87,2.43,400,14.96],"word":[6.22,4.09,400,10.22],"read":[6.56,1.59,400,10.5]},"r15":{"proof":[3.51,0.19,400,3.83],"work":[3.01,1.1,400,5.57],"word":[3.38,2.61,400,8.58],"read":[4.55,1.4,400,8.25]},"r16":{"proof":[10.73,7.45,400,23.23],"work":[10.6,6.86,400,25.94],"word":[7.62,4.83,400,12.5],"read":[6.22,1.2,400,8.59]},"f3":{"proof":[13.6,8.31,400,27.86],"work":[11.46,7.95,400,27.63],"word":[6.59,4.55,400,17.14],"read":[5.82,1.74,400,12.08]},"r17":{"proof":[4.58,3.54,400,23.22],"work":[5.28,5.38,400,24.43],"word":[4.03,3.44,400,11.58],"read":[5.86,1.81,400,10.57]},"r18":{"proof":[12.31,6.88,400,23.13],"work":[10.49,7.54,400,24.54],"word":[1.94,0.53,400,2.71],"read":[6.44,1.88,400,11.78]},"r19":{"proof":[11.5,7.52,400,23.22],"work":[10.27,8.78,400,24.63],"word":[1.55,0.29,400,2.26]},"r20":{"proof":[10.43,5.62,400,16.98],"work":[9.79,6.15,400,18.66],"word":[1.49,0.31,400,1.99],"read":[6.43,2.11,400,12.18]},"r21":{"proof":[11.1,7.88,400,23.43],"work":[9.53,7.15,400,24.21],"word":[1.64,0.36,400,2.16],"read":[8.01,1.47,400,13.29]},"f4":{"proof":[12.14,7.8,400,24.58],"work":[10.5,7.71,400,25.8],"word":[3.66,3.64,400,11.58],"read":[6.58,1.99,400,12.13]},"r22":{"proof":[8.89,6.97,400,23.22],"work":[10.02,6.14,400,24.19],"word":[3.79,3.43,400,10.09],"read":[6.93,1.11,400,9.47]},"r23":{"proof":[10.53,7.28,400,23.07],"work":[9.66,6.42,400,23.73],"word":[1.95,0.11,400,2.17],"read":[4.3,1.11,400,5.8]},"r24":{"proof":[3.82,0.65,400,5.3],"work":[3.73,1.03,400,5.73],"word":[2.47,0.35,400,2.83],"read":[5.82,1.61,400,9.53]},"r25":{"proof":[11.84,7.99,400,24.48],"work":[10.66,7.56,400,26.18],"word":[2,0.02,400,2.06],"read":[7.1,1.08,400,9.55]},"r26":{"proof":[3.28,0.18,400,3.71],"work":[2.82,0.78,400,4.38],"word":[2.01,0.02,400,2.05]},"r27":{"proof":[9.24,8.07,400,25.77],"work":[10.19,7.54,400,26.24],"word":[1.53,0.01,400,1.54],"read":[6.52,1.4,400,9.68]},"r28":{"proof":[9.16,7.74,400,24.42],"work":[9.87,7,400,25.56],"word":[1.55,0.03,400,1.6],"read":[6.56,1.37,400,10.86]},"r29":{"proof":[8.43,6.75,400,21.59],"work":[8.71,6.16,400,22.95],"word":[1.41,0.12,400,1.54],"read":[6.73,0.01,400,6.74]},"r30":{"proof":[11.74,8.34,400,23.27],"work":[10.49,7.38,400,24.62],"word":[3.69,3.37,400,11.5],"read":[6.14,1.97,400,12.17]},"f5":{"proof":[12.75,8.65,400,24.71],"work":[11.44,7.82,400,26.34],"word":[3.77,3.49,400,11.5],"read":[6.24,1.87,400,11.18]},"r31":{"proof":[3.89,3.51,400,22.99],"work":[7.62,6.71,400,24.46],"word":[3.89,3.33,400,9.63],"read":[6.9,1.29,400,9.38]},"r32":{"proof":[3.15,0.19,400,3.63],"work":[2.56,0.56,400,3.54],"read":[6.66,1.6,400,10.43]},"r33":{"proof":[3.11,0.17,400,3.44],"work":[2.52,0.58,400,3.47],"read":[6.35,0.58,400,6.87]},"r34":{"proof":[3.21,0.35,400,4.83],"work":[2.61,1.09,400,5.41],"read":[5.1,1.22,400,7.88]},"r35":{"proof":[3.76,3.01,400,20.81],"work":[3.12,1.3,400,5.5],"read":[3.75,0.95,400,6.28]},"r36":{"proof":[11.47,8.41,400,23.29],"work":[10.99,8.37,400,25.62],"read":[4.68,0.16,400,4.87]},"r37":{"proof":[3.07,0.13,400,3.47],"work":[2.03,0.27,400,2.66],"read":[6.49,1.82,400,10.63]},"r38":{"proof":[3.04,0.4,400,4.82],"work":[3.75,1.53,400,6.71],"read":[4.86,1.25,400,7.88]},"f6":{"proof":[11.62,8.72,400,23.4],"work":[9.26,8.2,400,25.08],"word":[4.11,3.56,400,11.5],"read":[6.1,1.68,400,10.77]},"r39":{"proof":[10.86,7.74,400,23.03],"work":[11.02,8.44,400,24.18],"read":[8.03,1.51,400,11.85]},"r40":{"proof":[3.16,0.2,400,3.67],"work":[2.34,0.61,400,3.37]},"r41":{"proof":[3.27,0.44,400,4.64],"work":[2.6,1.6,400,8.03]},"r42":{"proof":[5.1,5.42,400,22.89],"work":[2.18,0.63,400,3.46],"read":[4.7,1.8,400,9.01]},"r43":{"proof":[10.53,8.22,400,23.06],"work":[2.27,2.14,400,25.01],"read":[6.47,1.21,400,9.52]},"r44":{"proof":[10.02,6.82,400,23.22],"work":[8.73,6.26,400,23.26]},"r46":{"proof":[11.47,7.52,400,24.61],"work":[9,6.91,400,24.11],"read":[6.06,1.2,400,8.43]},"r47":{"proof":[3.87,3.43,400,22.18],"work":[2.1,0.54,400,3.46]},"r48":{"proof":[3.67,0.41,400,4.51],"word":[8.07,1.41,400,9.98]},"f7":{"proof":[11.39,8.27,400,23.22],"work":[8.15,8.24,400,25.73],"word":[8,1.36,400,9.98],"read":[6.24,2.06,400,11.85]}}/*end norms*/;
 function cx(q){ const a3=q.a3||[], no=x=>!x||x==='–'||x==='-'||(typeof DASH!=='undefined'&&x===DASH);
   const links=no(a3[1])?0:String(a3[1]).split('+').length, bank=no(a3[2])?0:1;
   const steps=new Set(q.steps||[q.step]).size, L=q.lines||[], cites=new Set(L.map(x=>x[1])).size;
@@ -27660,11 +28049,11 @@ Object.assign(window.LadderRandomizer,{stickPlan,stickDraw,stickWith,stickBuild,
 /* ===== Laundry gear (Andrew 2026-11-13 21:20Z) =====
    A yellow gear at the bottom left of the Laundry shows or hides its settings, to clear up the view:
    the link number (opens at rung 7), the terms and rows number (rung 16), the Poisson pool strays (rung 30),
-   the Poisson link-number strays (rung 39), the Poisson terms-and-rows strays (rung 47), and the pools by floor and rung.
+   the Poisson link-number strays (rung 39), the Poisson terms-and-rows strays (rung 48), and the pools by floor and rung.
    A stray is a question dealt off the settings: from a rung switched off, or with another link number, or another seed size.
    Strays come as a Poisson stream, at the rate chosen here, so many a day on average. */
 const GEARD={links:2,terms:2,lp:0.025,ll:0.025,lt:0.025}; /* gear5 (Andrew 2026-11-15 13:19Z, 13:30Z): links and terms are levels 0-4 (very low to very high), medium before they unlock */
-const GEARU={links:'7a',terms:'16a',lp:'30a',ll:'39a',lt:'47a'}, GEARR={links:7,terms:16,lp:30,ll:39,lt:47};
+const GEARU={links:'7a',terms:'16a',lp:'30a',ll:'39a',lt:'48a'}, GEARR={links:7,terms:16,lp:30,ll:39,lt:48};
 /* the median each level stands for, by kind of question, and the range the bell may reach */
 const GEARM={work:{links:[2,2.5,3,4,5],lr:[2,5],terms:[1,2,3,4,5],tr:[1,5]},proof:{links:[3,3.5,4,4.5,5],lr:[3,5],terms:[1,2,3,4,5],tr:[1,5]},word:{links:[2,2.5,3,4,5],lr:[2,5],terms:[1,1.5,2,3,4],tr:[1,5]}};
 const GEARS=0.9; /* the bell's spread, in steps */
