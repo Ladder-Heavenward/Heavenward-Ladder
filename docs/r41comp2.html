@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>41·comp2 · Can a Quantum Search Beat Looking Everywhere?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r41comp.html">← 41·comp must computing cost energy?</a><a href="r41phys.html">next: 41·phys are faraway particles secretly connected? →</a></p>
+  <div class="tags"><span class="tag comp">41·comp2 · computing</span></div>
+  <h1>Can a Quantum Search Beat Looking Everywhere?</h1>
+  <p data-pid="af511a">Can a quantum search beat looking everywhere? Hunting for one marked box among a million, with no clue where it is, you must open boxes one by one: half a million on average. No cleverness helps, because nothing about one box tells you about another. Yet a quantum computer can find it in under a thousand steps. This page counts the ordinary search, writes the quantum state as an arrow in one plane with 41·phys’s qubits, makes a turn from two flips as 20e did, counts the turns needed with 21’s radians, and finds why turning too far overshoots.</p>
+  <p class="gesture" data-pid="57cd45">Put every box into the state at once, an arrow tilted a tiny angle θ ≈ 1/√n from the unmarked direction toward the marked one. Two flips, one across the unmarked direction and one across the start, make a turn by 2θ toward the marked box. After about (π/4)√n turns the arrow points at the marked box, and reading it gives that box. Turn further and it swings past and away.</p>
+</header>
+
+<section class="class step" data-step="41comp21">
+  <h2 class="sthead"><span class="stno">41comp21</span>n Boxes, One Marked: Checking Takes About n/2 Tries</h2>
+  <p data-pid="4f0212">Mike works on search problems. A black box answers one question: given a number from 1 to n, is it the marked one? With no clue where the mark is, open boxes in any order.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the ordinary search">
+\text{average tries} = \dfrac{1 + 2 + \cdots + n}{n} = \dfrac{n + 1}{2} @@ 
+\htmlClass{new}{n = 10^6:\ \text{about } 500\,000 \text{ tries}} @@ and no method does better on average
+  </pre>
+  <p data-pid="ec31cf">From here on, on this page, a <i>try</i> is one question to the black box.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·comp2.1.1</span><span class="ph understand">understand</span>Why does an ordinary search of n boxes take about n/2 tries, and why can no method do better?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41comp22">
+  <h2 class="sthead"><span class="stno">41comp22</span>The State as an Arrow in One Plane</h2>
+  <p data-pid="3095cd">A quantum computer holds a state that is an arrow of size one, with a part for each of the n boxes (41·phys). Start with all parts equal, 1/√n each. Only two directions matter: m, the marked box, and u, the even spread over all the unmarked ones. The state stays in the plane of m and u throughout.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the start">
+s = \tfrac{1}{\sqrt n}\,m + \sqrt{\tfrac{n - 1}{n}}\,u @@ 
+\htmlClass{new}{\sin\theta = \dfrac{1}{\sqrt n}:\ \ \theta \approx \dfrac{1}{\sqrt n} \text{ for large } n} @@ the tilt from u toward m
+  </pre>
+  <p data-pid="0bb6e4">Reading the state picks a box with chance equal to its part squared. At the start, the marked box is picked with chance 1/n: no better than guessing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·comp2.2.1</span><span class="ph understand">understand</span>Why does the state stay in one plane, and what is its starting tilt?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41comp23">
+  <h2 class="sthead"><span class="stno">41comp23</span>Two Flips Make a Turn</h2>
+  <p data-pid="354eaa">One try of the black box, done on the whole state at once, flips the sign of the marked part: a flip across u. A second step, built from the start state, flips across s. Two flips across lines at angle θ make a turn by 2θ (20e).</p>
+  <pre class="lines" data-k="ember" data-label="this page: one round">
+\text{flip across } u, \text{ then across } s:\ \text{turn by } 2\theta @@ two flips (20e)
+\htmlClass{new}{\text{after } k \text{ rounds: tilt} = (2k + 1)\,\theta} @@ each round costs one try
+  </pre>
+  <p data-pid="e0fcbe">Two-flip search technique: <b>flip the state across the unmarked direction with one try, then across the start; each round turns it 2θ toward the marked box, so the marked part grows round by round.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·comp2.3.1</span><span class="ph understand">understand</span>Why do two flips turn the state by 2θ, and what does each round cost?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41comp24">
+  <h2 class="sthead"><span class="stno">41comp24</span>About √n Turns Reach the Marked Box</h2>
+  <pre class="lines" data-k="ember" data-label="this page: rounds to reach m">
+(2k + 1)\theta \approx \dfrac{\pi}{2} @@ pointing at m: a quarter turn in radians (21j)
+k \approx \dfrac{\pi}{4\theta} \approx \dfrac{\pi}{4}\sqrt n @@ 
+\htmlClass{new}{n = 10^6:\ k \approx 785 \text{ tries, against } 500\,000} @@ a square root of the work
+  </pre>
+  <p data-pid="e0e159"><b>A quantum search finds one marked box among n in about (π/4)√n tries, where looking needs about n/2; for a million boxes, under a thousand against half a million.</b> For four boxes, θ = 30°, and one round turns the state from 30° to 90°: exactly onto the marked box. Small quantum computers run this four-box search and pick the marked box in nearly every run, as the turn predicts, the misses coming from noise in the machine.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·comp2.4.1</span><span class="ph understand">understand</span>How many rounds bring the state to the marked box, and what happens for four boxes?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41comp25">
+  <h2 class="sthead"><span class="stno">41comp25</span>Turning Too Far Overshoots</h2>
+  <p data-pid="d4bc35">The rounds do not stop by themselves. Each turns the state by the same 2θ, past the marked direction and on.</p>
+  <pre class="lines" data-k="ember" data-label="this page: chance of the marked box after k rounds">
+P(k) = \sin^2\!\big((2k + 1)\theta\big) @@ 
+n = 10^6:\ k = 785:\ P \approx 1;\ \ k = 1\,570:\ P \approx 0 @@ twice as many rounds: back to nothing
+\htmlClass{new}{\text{stop at the right round, or the gain swings away}} @@ 
+  </pre>
+  <p data-pid="f32c47"><b>Quantum search must be stopped at the right count; more rounds swing the state past the marked box and lose what was gained.</b> And the square root is the best any quantum search can do: no method finds an unmarked box in fewer than about √n tries, so quantum computers speed up blind search, but do not make it free.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·comp2.5.1</span><span class="ph understand">understand</span>Why does turning too far lose the marked box, and is √n the best a quantum search can do?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="41comp26">
+  <h2 class="sthead"><span class="stno">41comp26</span>Moves to Watch Out For</h2>
+  <p data-pid="8de0dc">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a quantum computer checks all boxes at once and reads the answer}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; reading the start gives a random box; the turns must grow the marked part (41comp22)
+\text{more rounds, more certainty}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; past (π/4)√n the state swings away (41comp25)
+\text{the search takes } \log n \text{ tries}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; about (π/4)√n, and no quantum search beats √n (41comp24)
+\text{each round turns by } \theta\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; two flips turn by 2θ (41comp23)
+\text{search a million boxes one by one}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it works, in half a million tries; the quantum search takes 785 (41comp21)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">41·comp2.6.1</span><span class="ph understand">understand</span>Which move above says more rounds always mean more certainty, and what really happens?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">41·comp2.7.1</span><span class="tagq">do</span>For n = 10,000, find θ, the best number of rounds, and the chance of success at that number.</div>
+  <div class="chq"><span class="chid">41·comp2.7.2</span><span class="tagq">make</span>Make up an n for which exactly 2 rounds point the state straight at the marked box.</div>
+  <div class="chq"><span class="chid">41·comp2.7.3</span><span class="tagq">converse</span>Two flips make a turn by twice the angle between their lines. Decide whether every turn of the plane is two flips.</div>
+  <div class="chq"><span class="chid">41·comp2.7.4</span><span class="tagq">edge</span>Say what the search does when n = 1, and when n = 2.</div>
+  <div class="chq"><span class="chid">41·comp2.7.5</span><span class="tagq">open</span>If several boxes are marked, but you do not know how many, say how the angle changes and why stopping at the right round gets harder.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r41comp.html">← 41·comp · must computing cost energy?</a><a href="r41phys.html">41·phys · are faraway particles secretly connected? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="060d08">This is <b>Grover’s algorithm</b>; the black box is an <b>oracle</b>, the second flip the <b>diffusion operator</b>, and growing the marked part <b>amplitude amplification</b>. The square-root gain is a <b>quadratic speedup</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="2b418d">Lov Grover found the search in 1996; Charles Bennett, Ethan Bernstein, Gilles Brassard and Umesh Vazirani proved in 1997 that no quantum search beats √n (not yet revisited for the dates).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

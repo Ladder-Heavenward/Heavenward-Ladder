@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>40·eng2 · Can a Loom Follow a Program?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r40eng.html">← 40·eng how do you know the compiler is right?</a><a href="r40comp.html">next: 40·comp what did a missing check cost? →</a></p>
+  <div class="tags"><span class="tag eng">40·eng2 · engineering</span></div>
+  <h1>Can a Loom Follow a Program?</h1>
+  <p data-pid="2ae146">Can a loom follow a program? Two centuries ago, weavers of patterned silk needed a helper perched on the loom, lifting the right threads by hand for every row. Then a chain of punched cards took the helper’s place: a hole meant lift, no hole meant stay. The loom wove whatever the cards said, and could weave it again. This page reads each card as a row of 1s and 0s (39a), the chain of cards as a list a machine follows (39j), repeats as 40b’s loops, traces the cards into the first computing machines, and finds the one thing a loom cannot do: decide what to weave from what it has woven.</p>
+  <p class="gesture" data-pid="7a1c9a">Each card is one row of the cloth: a hole for each warp thread to lift, none for each to stay. The chain of cards is a program with no choices: do row 1, then row 2, and so on. A repeat is a loop: join the chain into a ring. The cards passed from looms to census machines and on to computers. But the loom never reads its own cloth, so it cannot branch, and it can compute nothing.</p>
+</header>
+
+<section class="class step" data-step="40eng21">
+  <h2 class="sthead"><span class="stno">40eng21</span>One Card per Row: Holes Lift Threads</h2>
+  <p data-pid="cc2755">Zoe weaves patterned cloth on a card loom. Above the loom, a row of hooks holds the warp threads, one hook per thread. Before each pass of the weft, a card is pressed against the hooks: where it has a hole, a hook goes through and lifts its thread; where it has none, the hook is pushed aside and its thread stays down.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one card">
+\text{hole} = 1 = \text{lift},\ \ \text{no hole} = 0 = \text{stay} @@ true and false as 1 and 0 (39a)
+\htmlClass{new}{\text{one card} = \text{one row of the weave grid}} @@ as in 20·eng’s grids of 1s and 0s
+  </pre>
+  <p data-pid="70bddf">From here on, on this page, a <i>card</i> is one row of 1s and 0s, as long as the number of warp threads, and a <i>chain</i> is the cards laced together in order.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·eng2.1.1</span><span class="ph understand">understand</span>How does one card set one row of the cloth?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40eng22">
+  <h2 class="sthead"><span class="stno">40eng22</span>The Chain of Cards Is a List a Machine Follows</h2>
+  <p data-pid="e164cd">After each pass, the loom turns the chain on by one card. The cloth grows row by row exactly as the chain lists.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the chain as a program">
+\text{for each card in order: lift by its holes, pass the weft, beat it in} @@ a machine following a list (39j)
+\htmlClass{new}{\text{the weaver never decides a row; the chain does}} @@ 
+  </pre>
+  <p data-pid="640d89">Card-row technique: <b>write the weave as a grid of 1s and 0s, cut one card per row, and lace the cards in order; the loom then weaves the grid exactly, as often as asked, with no one choosing threads.</b> Zoe punches a 20-card chain for a twill border, runs it, and the cloth comes off with every crossing where the grid put it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·eng2.2.1</span><span class="ph understand">understand</span>Why is the chain of cards a program, and what does the loom do with it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40eng23">
+  <h2 class="sthead"><span class="stno">40eng23</span>Repeats as Loops</h2>
+  <p data-pid="d6de69">Most cloth repeats. A 2/2 twill repeats every 4 rows; a damask flower might repeat every 400. Rather than punch the same cards again and again, join the end of the chain back to its start.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a 4-row twill, 1,000 rows of cloth">
+\text{straight chain: } 1\,000 \text{ cards} @@ 
+\text{ring of } 4 \text{ cards, run } 250 \text{ times} @@ a loop (40b)
+\htmlClass{new}{\text{a loop: a jump back to the start, taken every time}} @@ no condition
+  </pre>
+  <p data-pid="b4f02e">The loom’s ring of cards is a loop that always jumps back: it never asks whether to stop. The weaver stops it by hand.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·eng2.3.1</span><span class="ph understand">understand</span>How does a ring of cards make a loop, and what kind of loop is it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40eng24">
+  <h2 class="sthead"><span class="stno">40eng24</span>From Loom Cards to Punched Cards</h2>
+  <p data-pid="ca5176">The card loom showed that a long, exact sequence of choices could be stored in holes and run by a machine. The idea travelled.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>when</th><th>what the cards did</th></tr>
+    <tr><th>early 1800s</th><td>card looms weave patterned silk</td></tr>
+    <tr><th>1830s</th><td>a design for a calculating engine takes its instructions from loom-style cards</td></tr>
+    <tr><th>1890</th><td>punched cards hold each person’s answers in a national census, sorted and counted by machine</td></tr>
+    <tr><th>1950s to 1970s</th><td>computer programs and data are typed onto punched cards</td></tr>
+  </table></div>
+  <p data-pid="87a156"><b>The punched card carried the loom’s idea, a sequence of choices stored as holes and read by a machine, from weaving into counting and then into computing.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·eng2.4.1</span><span class="ph understand">understand</span>How did the loom’s cards travel into counting machines and computers?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40eng25">
+  <h2 class="sthead"><span class="stno">40eng25</span>What a Loom Can’t Do: Branch on What It Has Woven</h2>
+  <p data-pid="9f7d09">A computer’s program can test a value and jump one way or the other (40b): if the count is done, stop; if not, go on. The loom has no such test. It never reads the cloth it has made, so its next row never depends on what came before.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the missing piece">
+\text{loom: next card} = \text{the card after this one, always} @@ 
+\text{computer: next step may depend on what is stored} @@ a jump taken only if (40b)
+\htmlClass{new}{\text{no test, no branch: a loom can store a pattern but compute nothing}} @@ 
+  </pre>
+  <p data-pid="a405b0"><b>A loom follows its list exactly but cannot choose; a machine that computes must also read what it has done and jump on it.</b> That one addition, a test that picks the next step, is what turned stored patterns into programs, and the reason the calculating engine’s designer added it to the cards he borrowed.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·eng2.5.1</span><span class="ph understand">understand</span>What can a computer’s program do that a loom’s chain cannot, and why does that matter?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="40eng26">
+  <h2 class="sthead"><span class="stno">40eng26</span>Moves to Watch Out For</h2>
+  <p data-pid="0c3c14">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a card loom is a computer}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it cannot test and branch, so it computes nothing (40eng25)
+\text{a hole holds a thread down}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; a hole lets the hook lift its thread (40eng21)
+\text{punch a card for every row of the cloth}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it works, but a ring of the repeat is far shorter (40eng23)
+\text{the loom’s ring of cards knows when to stop}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it always jumps back; the weaver stops it (40eng23)
+\text{the weaver chooses each row’s threads}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the chain does; the weaver chose once, in punching it (40eng22)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">40·eng2.6.1</span><span class="ph understand">understand</span>Which move above makes the card loom a computer, and what does it lack?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">40·eng2.7.1</span><span class="tagq">do</span>Write the four cards for a 2/2 twill on 8 warp threads, as rows of 1s and 0s.</div>
+  <div class="chq"><span class="chid">40·eng2.7.2</span><span class="tagq">make</span>Make up a chain of cards with a ring inside a ring, for a border that repeats a small pattern inside a large one.</div>
+  <div class="chq"><span class="chid">40·eng2.7.3</span><span class="tagq">converse</span>A machine that branches can compute. Decide whether a machine that only follows a fixed list could compute anything at all, given a long enough list.</div>
+  <div class="chq"><span class="chid">40·eng2.7.4</span><span class="tagq">edge</span>Say what cloth the loom weaves from a chain of all-0 cards, and from all-1 cards, and why neither holds together.</div>
+  <div class="chq"><span class="chid">40·eng2.7.5</span><span class="tagq">open</span>A loom that could feel its own cloth and choose its next card could do more. Say what such a loom might weave that an ordinary one cannot.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r40eng.html">← 40·eng · how do you know the compiler is right?</a><a href="r40comp.html">40·comp · what did a missing check cost? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="80e60f">The card loom is the <b>Jacquard loom</b> and its chain the <b>card chain</b>; the calculating engine was Charles Babbage’s <b>Analytical Engine</b>; the census machines were Herman Hollerith’s <b>tabulators</b>. A test that picks the next step is a <b>conditional branch</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="490cea">Joseph Marie Jacquard demonstrated his card loom in the early 1800s; Babbage designed the Analytical Engine with cards in the 1830s, and Ada Lovelace wrote that it “weaves algebraic patterns just as the Jacquard loom weaves flowers and leaves”; Hollerith’s tabulators counted the 1890 United States census (not yet revisited for the dates).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>35·comp · How Does a Phone Pack Bits Into a Wave?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35stat.html">← 35·stat is the machine drifting?</a><a href="r35now.html">next: 35·now how many points are on a line? →</a></p>
+  <div class="tags"><span class="tag comp">35·comp · computing</span></div>
+  <h1>How Does a Phone Pack Bits Into a Wave?</h1>
+  <p data-pid="f49583">How does a phone pack bits into a wave? A radio wave is a steady swing millions of times a second. To carry a voice or a film, something about the swing must change: its size, its timing, or both, in ways the receiver can read back. This page rides a tone on a carrier by 21’s sum formulas, sees the sidebands it makes in the spectrum (32), places the swing’s size and timing as a point in the plane with 26’s turning arrows, finds how noise’s bell curve (30j) makes errors, and weighs more points against 30·comp’s capacity.</p>
+  <p class="gesture" data-pid="111676">A carrier swing cos(ωt) multiplied by a slower signal splits into two nearby frequencies, the sidebands. Any swing at ω is Re(s e^(iωt)) for a complex number s, so a symbol is a point in the plane. Noise blurs each point by a bell curve; an error is a blur past half the gap to a neighbour. More points carry more bits per symbol but sit closer, so they err more, up to the line’s capacity.</p>
+</header>
+
+<section class="class step" data-step="35comp1">
+  <h2 class="sthead"><span class="stno">35comp1</span>A Tone Riding a Carrier, by the Sum Formulas</h2>
+  <p data-pid="062aaa">Zoe designs radios. The simplest way to carry a tone of frequency ω_m on a carrier of frequency ω_c is to let the tone swell and shrink the carrier’s size.</p>
+  <pre class="lines" data-k="ember" data-label="this page: size changing with a tone">
+(1 + m\cos\omega_m t)\cos\omega_c t @@ m the depth, at most 1
+= \cos\omega_c t + \tfrac{m}{2}\cos(\omega_c + \omega_m)t + \tfrac{m}{2}\cos(\omega_c - \omega_m)t @@ the sum formulas (21d)
+\htmlClass{new}{\text{the carrier plus two new frequencies, just above and below it}} @@ 
+  </pre>
+  <p data-pid="c813d6">From here on, on this page, a <i>carrier</i> is the steady swing, and <i>riding</i> on it means changing its size or timing with the message.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·comp.1.1</span><span class="ph understand">understand</span>What does letting a tone change the carrier’s size produce, by the sum formulas?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35comp2">
+  <h2 class="sthead"><span class="stno">35comp2</span>Sidebands in the Spectrum</h2>
+  <p data-pid="264431">Breaking the result into frequencies (32e) shows the carrier and two sidebands. A voice holds many tones up to about 4,000 a second, so each sideband is a copy of the voice’s whole spectrum, one flipped.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the room a signal takes">
+\text{tones up to } f_m:\ \text{band from } f_c - f_m \text{ to } f_c + f_m @@ 
+\htmlClass{new}{\text{width } 2f_m:\ 8 \text{ kHz for a voice}} @@ stations must be spaced at least this far apart
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·comp.2.1</span><span class="ph understand">understand</span>Why does a signal take up a band of frequencies, and how wide is it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35comp3">
+  <h2 class="sthead"><span class="stno">35comp3</span>Points on a Circle: the Constellation</h2>
+  <p data-pid="dc2835">Any swing at the carrier frequency, whatever its size and timing, is the real part of s e^(iω_c t) for one complex number s (26·eng). Its size is |s| and its timing the turn of s. So each symbol sent, held for a short time, is a point s in the plane.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>pattern</th><th>points</th><th>bits a symbol</th></tr>
+    <tr><th>4 points on a circle</th><td>4</td><td>2</td></tr>
+    <tr><th>8 points on a circle</th><td>8</td><td>3</td></tr>
+    <tr><th>16 points in a 4 by 4 square</th><td>16</td><td>4</td></tr>
+    <tr><th>64 points in an 8 by 8 square</th><td>64</td><td>6</td></tr>
+  </table></div>
+  <p data-pid="e941d2">Constellation technique: <b>send each group of bits as one point s in the plane, by setting the carrier’s size and timing; M points carry log₂ M bits a symbol.</b> The receiver measures s and picks the nearest point.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·comp.3.1</span><span class="ph understand">understand</span>How does a complex number describe a symbol, and how many bits does a pattern of M points carry?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35comp4">
+  <h2 class="sthead"><span class="stno">35comp4</span>Noise and the Bell Curve’s Tail Give the Bit Error Rate</h2>
+  <p data-pid="c51d1a">Noise adds a small random arrow to each received point, with each part spread as a bell curve of spread σ (30j). An error happens when noise carries the point past halfway to a neighbour.</p>
+  <pre class="lines" data-k="ember" data-label="this page: 4 points on a circle of size 1, σ = 0.2">
+\text{neighbours } \sqrt 2 \text{ apart; halfway } = 0.71 @@ 
+\text{chance noise passes it, one way: tail beyond } 0.71/0.2 = 3.5 \text{ spreads} \approx 2 \times 10^{-4} @@ the bell curve’s tail (30j)
+\htmlClass{new}{16 \text{ points, same power: halfway} \approx 0.32,\ \text{tail beyond } 1.6 \text{ spreads} \approx 0.06} @@ hundreds of times worse
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·comp.4.1</span><span class="ph understand">understand</span>How does noise cause errors, and how much worse are 16 points than 4 at the same power?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35comp5">
+  <h2 class="sthead"><span class="stno">35comp5</span>More Points Carry More Bits and More Errors</h2>
+  <p data-pid="abd9b4">More points carry more bits but crowd closer. 30·comp’s capacity says the most any pattern can carry without error, with enough clever coding.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the limit at this noise">
+\text{signal to noise} = \dfrac{1}{2\sigma^2} = 12.5 @@ power 1, noise 2σ² in the two parts
+\log_2(1 + 12.5) \approx 3.75 \text{ bits a symbol} @@ capacity (30·comp)
+\htmlClass{new}{4 \text{ points } (2 \text{ bits}) \text{ is safe here; } 16 (4 \text{ bits}) \text{ asks for more than the line allows}} @@ 
+  </pre>
+  <p data-pid="7f191b"><b>Each doubling of the points adds one bit a symbol but pushes the points closer, so the pattern must be matched to the noise; the capacity is the ceiling no pattern can pass.</b> A phone measures its signal’s noise many times a second and switches between 4, 16, 64 and more points to stay just under the ceiling: close to a mast it uses many points, at the edge of coverage few. A test set that adds measured noise shows the error rate rising exactly along the bell curve’s tail as the noise grows.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·comp.5.1</span><span class="ph understand">understand</span>Why does adding points add bits and errors together, and how does a phone choose its pattern?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35comp6">
+  <h2 class="sthead"><span class="stno">35comp6</span>Moves to Watch Out For</h2>
+  <p data-pid="1ce473">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{a tone on a carrier adds only the tone’s frequency}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it adds two sidebands, ω_c ± ω_m (35comp1)
+\text{more points, more bits, for free}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; they crowd closer and err more (35comp4)
+\text{16 points carry 16 bits}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; log₂ 16 = 4 bits a symbol (35comp3)
+\text{clever enough patterns pass any noise}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; capacity caps the bits a symbol (35comp5)
+\text{the receiver must know the exact point sent}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it picks the nearest point; errors come only past halfway (35comp4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·comp.6.1</span><span class="ph understand">understand</span>Which move above makes more points free, and what do they cost?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">35·comp.7.1</span><span class="tagq">do</span>With σ = 0.1 and power 1, find the capacity in bits a symbol, and decide whether 64 points fit under it.</div>
+  <div class="chq"><span class="chid">35·comp.7.2</span><span class="tagq">make</span>Make up a noise level for which exactly 16 points sit at the capacity.</div>
+  <div class="chq"><span class="chid">35·comp.7.3</span><span class="tagq">converse</span>Points closer together err more. Decide whether a pattern with the same least distance but more points must err more often.</div>
+  <div class="chq"><span class="chid">35·comp.7.4</span><span class="tagq">edge</span>Say what happens to the sidebands when the tone’s frequency is 0, and what the signal then is.</div>
+  <div class="chq"><span class="chid">35·comp.7.5</span><span class="tagq">open</span>Phones send many carriers side by side at once. Say why splitting one wide band into many narrow ones might help with echoes off buildings.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r35stat.html">← 35·stat · is the machine drifting?</a><a href="r35now.html">35·now · how many points are on a line? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="b97054">Changing the size is <b>amplitude modulation</b>, AM; points in the plane are a <b>constellation diagram</b>; 4 points on a circle are <b>QPSK</b>, and square patterns <b>QAM</b>. The error chance is the <b>bit error rate</b>; switching patterns is <b>adaptive modulation</b>; capacity is the <b>Shannon-Hartley</b> limit; many narrow carriers are <b>OFDM</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="bf1da8">Claude Shannon set out the capacity of a noisy line in 1948.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

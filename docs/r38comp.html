@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>38·comp · Why Do a Few Words Do Most of the Work?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38stat.html">← 38·stat how do you measure an ability you cannot see?</a><a href="r38now.html">next: 38·now can a machine check a proof? →</a></p>
+  <div class="tags"><span class="tag comp">38·comp · computing</span></div>
+  <h1>Why Do a Few Words Do Most of the Work?</h1>
+  <p data-pid="ebd46a">Why do a few words do most of the work? Count the words in any long book. A handful, the, of, and, to, a, make up a big share of everything written, while most of the book’s different words turn up only once or twice. The pattern is the same in English, in Japanese, in the texts of the web, and in computer code. This page counts words by rank, finds that count times rank stays about the same, draws the line on log paper with 17 and 31, finds that new words keep coming as the text grows, and asks what such a power law does and does not explain.</p>
+  <p class="gesture" data-pid="26388e">Rank a text’s words from commonest down. The count of the word at rank r is about C/r: the second commonest appears half as often as the first, the third a third as often. On log paper, a line of slope −1. Adding up 1/r grows only as a log, so the top hundred words cover about half of any text, and new words keep turning up roughly as the square root of its length.</p>
+</header>
+
+<section class="class step" data-step="38comp1">
+  <h2 class="sthead"><span class="stno">38comp1</span>Counting the Words in a Text by Rank</h2>
+  <p data-pid="129ddb">Terry builds search engines. He counts every word in a large collection of English writing, a million words in all, and lists the words from commonest down.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>rank</th><th>word</th><th>share of all words</th></tr>
+    <tr><th>1</th><td>the</td><td>about 7%</td></tr>
+    <tr><th>2</th><td>of</td><td>about 3.5%</td></tr>
+    <tr><th>3</th><td>and</td><td>about 2.9%</td></tr>
+    <tr><th>10</th><td>it</td><td>about 0.9%</td></tr>
+    <tr><th>100</th><td>…</td><td>about 0.07%</td></tr>
+  </table></div>
+  <p data-pid="dd8f33">From here on, on this page, a word’s <i>rank</i> r is its place on the list, and its <i>count</i> the number of times it appears.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·comp.1.1</span><span class="ph understand">understand</span>How are a text’s words ranked, and what do the top shares look like?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38comp2">
+  <h2 class="sthead"><span class="stno">38comp2</span>Count Times Rank Stays About the Same</h2>
+  <pre class="lines" data-k="ember" data-label="this page: count times rank">
+1 \times 7\% = 7\%,\ \ 2 \times 3.5\% = 7\%,\ \ 3 \times 2.9\% \approx 8.7\% @@ 
+10 \times 0.9\% = 9\%,\ \ 100 \times 0.07\% = 7\% @@ 
+\htmlClass{new}{\text{count} \approx \dfrac{C}{r}} @@ about 7% of the text over the rank
+  </pre>
+  <p data-pid="32883a">Rank-count technique: <b>in a long text, a word’s count is close to a fixed number over its rank; so the share of the text covered by the top R words grows only as the log of R.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·comp.2.1</span><span class="ph understand">understand</span>What stays about the same as rank grows, and what does that say about the top words’ share?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38comp3">
+  <h2 class="sthead"><span class="stno">38comp3</span>A Line on Log Paper</h2>
+  <pre class="lines" data-k="ember" data-label="this page: the line and its sum">
+\log(\text{count}) = \log C - \log r @@ a straight line of slope −1 (17), fitted by least squares (31n)
+\text{share of the top } R = \dfrac{1 + \tfrac12 + \cdots + \tfrac1R}{1 + \tfrac12 + \cdots + \tfrac1V} \approx \dfrac{\ln R + 0.58}{\ln V + 0.58} @@ sums against areas (22f)
+\htmlClass{new}{V = 30\,000,\ R = 100:\ \dfrac{5.2}{10.9} \approx 0.47} @@ the top hundred words: about half the text
+  </pre>
+  <p data-pid="3dc809">Terry plots his counts against rank on log paper: the points lie close to a straight line of slope −1 from rank 1 to several thousand, then droop where words appear only once or twice. That is why a search engine can ignore the commonest hundred words and save half its index.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·comp.3.1</span><span class="ph understand">understand</span>What line do counts and ranks make on log paper, and why do a hundred words cover about half a text?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38comp4">
+  <h2 class="sthead"><span class="stno">38comp4</span>New Words Keep Coming as the Text Grows</h2>
+  <p data-pid="5a6c67">Read on through the collection and count how many different words have appeared. The number never stops growing; it just slows.</p>
+  <pre class="lines" data-k="ember" data-label="this page: different words against words read">
+V(n) \approx K\,n^{\beta},\ \ \beta \approx 0.5 @@ a power law (17)
+K = 30:\ n = 10^6 \Rightarrow V \approx 30\,000;\ \ n = 4 \times 10^6 \Rightarrow V \approx 60\,000 @@ 
+\htmlClass{new}{\text{four times the text, twice the different words}} @@ names, rare words, new coinages
+  </pre>
+  <p data-pid="e3b668"><b>Any text, however long, still holds words not yet seen, so a program reading language must always be ready for a word it does not know.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·comp.4.1</span><span class="ph understand">understand</span>Why do new words keep appearing as a text grows, and what does that mean for a program reading language?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38comp5">
+  <h2 class="sthead"><span class="stno">38comp5</span>What a Power Law Does Not Explain</h2>
+  <p data-pid="573ab9">Count-times-rank is so common that it is tempting to think it reveals something deep about language. But a monkey typing letters and spaces at random also produces “words” whose counts fall as roughly a power of their rank, because short strings come up far more often than long ones.</p>
+  <pre class="lines" data-k="ember" data-label="this page: random typing">
+\text{27 keys, space with chance } \tfrac{1}{27}:\ \text{each extra letter makes a word about 26 times rarer} @@ 
+\text{and there are 26 times as many words of that length} @@ so rank and count trade off as a power
+\htmlClass{new}{\text{a power law fits; nothing about meaning is involved}} @@ 
+  </pre>
+  <p data-pid="6f51d6"><b>A straight line on log paper fits many processes that share little, so the line alone does not show why words are used as they are.</b> It is still useful: it tells a programmer how big a word list must be to cover most of a text, and how much rarer the next words will be.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·comp.5.1</span><span class="ph understand">understand</span>Why does random typing also give a power law, and what does that say about what the law explains?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38comp6">
+  <h2 class="sthead"><span class="stno">38comp6</span>Moves to Watch Out For</h2>
+  <p data-pid="f1ff20">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the commonest word is twice as common as the tenth}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; ten times: count goes as 1/r (38comp2)
+\text{a big enough dictionary covers every text}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; new words keep coming as √n (38comp4)
+\text{the law proves language is designed for efficiency}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; random typing gives a power law too (38comp5)
+\text{the top hundred words are a tiny share}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; they cover about half a text: the sum of 1/r is a log (38comp3)
+\text{fit the line to ranks 1 to 10 only}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it works roughly, but thousands of ranks pin the slope (38comp3)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·comp.6.1</span><span class="ph understand">understand</span>Which move above makes the commonest word only twice as common as the tenth, and how much commoner is it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">38·comp.7.1</span><span class="tagq">do</span>In a text of 50,000 different words, find the share covered by the top 1,000.</div>
+  <div class="chq"><span class="chid">38·comp.7.2</span><span class="tagq">make</span>Make up a text length for which, with K = 30 and β = 0.5, exactly 100,000 different words have appeared.</div>
+  <div class="chq"><span class="chid">38·comp.7.3</span><span class="tagq">converse</span>Count as C/r gave a straight line on log paper. Decide whether a straight line on log paper must have slope −1.</div>
+  <div class="chq"><span class="chid">38·comp.7.4</span><span class="tagq">edge</span>Say what the share of the top R words becomes as the number of different words V grows without end.</div>
+  <div class="chq"><span class="chid">38·comp.7.5</span><span class="tagq">open</span>City sizes and website visits also fall as a power of rank. Say what a simple process might give such a pattern, as random typing did for words.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r38stat.html">← 38·stat · how do you measure an ability you cannot see?</a><a href="r38now.html">38·now · can a machine check a proof? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="db39bd">Count as C/r is <b>Zipf’s law</b>; the growth of new words is <b>Heaps’ law</b>. A word list for a search engine to ignore is a <b>stop list</b>; the sum 1 + ½ + … + 1/V is a <b>harmonic number</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="38ad0b">George Kingsley Zipf published the rank law in 1935 and 1949; Harold Heaps the growth of new words in 1978; George Miller showed in 1957 that random typing gives a similar law (not yet revisited for the dates).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

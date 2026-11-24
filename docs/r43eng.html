@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>43·eng · How Small Can a Reactor Be?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r43phys.html">← 43·phys why do metals conduct?</a><a href="r43crypt.html">next: 43·crypt can a secret be split so any three of five can open it? →</a></p>
+  <div class="tags"><span class="tag eng">43·eng · engineering</span></div>
+  <h1>How Small Can a Reactor Be?</h1>
+  <p data-pid="aa3bd9">How small can a reactor be? A nuclear reactor keeps going because each split atom frees neutrons that go on to split more. But neutrons wander, and some wander out through the surface and are lost. A small core loses too many and the chain dies; a big enough one keeps it alive. Between them is a critical size. This page lets neutrons wander as 33a’s heat equation, balances making against losing, finds the slowest shape on a ball with 33h, gets the critical radius, and finds why a reflector around the core shrinks it.</p>
+  <p class="gesture" data-pid="46534b">Neutrons spread like heat, and the core makes new ones in step with how many there are. A steady chain needs the spreading to balance the making: ∇²φ + B²φ = 0, with B² = (k − 1)/L². On a ball, the slowest shape is sin(πr/R)/r, which fits only if B = π/R. So R = πL/√(k − 1): a richer mix or slower leaking gives a smaller core, and a reflector sends escaping neutrons back.</p>
+</header>
+
+<section class="class step" data-step="43eng1">
+  <h2 class="sthead"><span class="stno">43eng1</span>Neutrons Wander Out Through the Surface</h2>
+  <p data-pid="20ce08">Terry designs research reactors. Inside the core, neutrons bounce off nuclei thousands of times, each bounce in a random direction, before they are absorbed. Like heat, they spread from where they are crowded to where they are not (33a).</p>
+  <p data-pid="4ab7fe">From here on, on this page, φ is the crowding of neutrons at each point, L the <i>wander length</i>, roughly how far a neutron spreads before it is absorbed, and k how many new neutrons each absorbed one makes, in a core so large none escape.</p>
+  <pre class="lines" data-k="ember" data-label="this page: spreading and absorbing">
+\text{spreading: } D\,\nabla^2\phi @@ the heat equation’s term (33a)
+\htmlClass{new}{L^2 = \dfrac{D}{\text{absorption rate}}} @@ a longer wander loses more through the surface
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·eng.1.1</span><span class="ph understand">understand</span>How do neutrons move inside a core, and what do L and k measure?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43eng2">
+  <h2 class="sthead"><span class="stno">43eng2</span>Making Against Losing</h2>
+  <p data-pid="128fb6">Each absorbed neutron is lost but makes k new ones. In a steady chain, what spreads into each bit of the core, plus what is made there, equals what is absorbed there.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the steady balance">
+D\nabla^2\phi + (k - 1)\,(\text{absorption})\,\phi = 0 @@ spread in + made − absorbed = 0
+\htmlClass{new}{\nabla^2\phi + B^2\phi = 0,\ \ B^2 = \dfrac{k - 1}{L^2}} @@ k must exceed 1 for any steady chain
+  </pre>
+  <p data-pid="f0998c">φ must be 0 at the surface, since neutrons that reach it leave and do not come back. So the question is: for what size does this statement have a positive solution vanishing at the surface?</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·eng.2.1</span><span class="ph understand">understand</span>What balance must hold in a steady chain, and why must φ vanish at the surface?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43eng3">
+  <h2 class="sthead"><span class="stno">43eng3</span>The Slowest Shape on a Ball</h2>
+  <p data-pid="0a87d4">Each shape of a boundary value problem has its own number (33h): only the shape with the smallest number stays positive everywhere, the slowest shape. For a ball of radius R it is:</p>
+  <pre class="lines" data-k="ember" data-label="this page: the slowest shape on a ball">
+\phi(r) = \dfrac{\sin(\pi r/R)}{r} @@ positive inside, 0 at r = R
+\nabla^2\phi = -\left(\dfrac{\pi}{R}\right)^2\phi @@ its number (33h)
+\htmlClass{new}{\text{a steady chain needs } B = \dfrac{\pi}{R}} @@ 
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·eng.3.1</span><span class="ph understand">understand</span>What is the slowest shape on a ball, and what does it require of B?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43eng4">
+  <h2 class="sthead"><span class="stno">43eng4</span>The Critical Radius</h2>
+  <pre class="lines" data-k="ember" data-label="this page: a core mix with k = 1.1 and L = 10 cm">
+R_c = \dfrac{\pi}{B} = \dfrac{\pi L}{\sqrt{k - 1}} @@ 
+R_c = \dfrac{\pi \times 10}{\sqrt{0.1}} \approx 99 \text{ cm} @@ a ball about 2 m across
+\text{a cube instead: side } \sqrt 3\,\pi L/\sqrt{k - 1} \approx 172 \text{ cm},\ \text{volume } 5.1 \text{ m}^3 \text{ against } 4.1 @@ the ball is the smallest
+\htmlClass{new}{\text{smaller than } R_c \text{ the chain dies; larger, it grows}} @@ 
+  </pre>
+  <p data-pid="bca943">Critical-size technique: <b>a core of wander length L and multiplying number k sustains a chain only at radius πL/√(k − 1); smaller loses too many neutrons through its surface, and a ball needs the least material of any shape.</b> Reactor crews approach the critical size step by step, adding fuel and counting neutrons each time: the inverse of the count falls in a straight line toward 0, and where it would reach 0 is the critical load, before it is ever reached.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·eng.4.1</span><span class="ph understand">understand</span>What is the critical radius, and how do reactor crews find it safely?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43eng5">
+  <h2 class="sthead"><span class="stno">43eng5</span>Why a Reflector Shrinks It</h2>
+  <p data-pid="d9537e">Surround the core with a material that absorbs few neutrons but bounces them well, such as water, graphite or beryllium. Neutrons that wander out are bounced back in, and the surface leaks less.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a reflected core">
+\phi \text{ no longer 0 at the core’s edge: it falls to 0 further out} @@ 
+R_c \approx \dfrac{\pi L}{\sqrt{k - 1}} - \delta @@ δ the reflector’s saving, a good part of L
+\htmlClass{new}{\text{less fuel for the same chain}} @@ 
+  </pre>
+  <p data-pid="7d56bb"><b>A reflector sends escaping neutrons back into the core, so a reflected core goes critical smaller, with less fuel.</b> Every reactor has one; and control rods work the other way, absorbing neutrons to push the core below critical whenever the crew needs to slow or stop the chain.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·eng.5.1</span><span class="ph understand">understand</span>How does a reflector shrink the critical size, and how do control rods work the opposite way?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="43eng6">
+  <h2 class="sthead"><span class="stno">43eng6</span>Moves to Watch Out For</h2>
+  <p data-pid="a67945">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{enough fuel of any shape goes critical at the same mass}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; shape matters: a ball needs the least (43eng4)
+k > 1 \text{ means any core sustains a chain}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a small core leaks too many: only at R ≥ πL/√(k − 1) (43eng4)
+\text{neutrons fly straight out}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; they wander like heat, bouncing thousands of times (43eng1)
+\text{a reflector makes neutrons}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it returns escaping ones; it makes none (43eng5)
+\text{find the critical load by reaching it}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the inverse count falls in a line toward it; stop before (43eng4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">43·eng.6.1</span><span class="ph understand">understand</span>Which move above says k above 1 lets any core sustain a chain, and what more is needed?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">43·eng.7.1</span><span class="tagq">do</span>A core mix has k = 1.05 and L = 8 cm. Find its critical radius as a bare ball.</div>
+  <div class="chq"><span class="chid">43·eng.7.2</span><span class="tagq">make</span>Make up k and L for which the critical radius is exactly 50 cm.</div>
+  <div class="chq"><span class="chid">43·eng.7.3</span><span class="tagq">converse</span>A ball needs the least material. Decide whether a ball also has the least surface for its volume, and why that is the reason.</div>
+  <div class="chq"><span class="chid">43·eng.7.4</span><span class="tagq">edge</span>Say what the critical radius does as k falls toward 1.</div>
+  <div class="chq"><span class="chid">43·eng.7.5</span><span class="tagq">open</span>A long thin cylinder of fuel can be safe at any length. Say why, using the slowest shape across the cylinder.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r43phys.html">← 43·phys · why do metals conduct?</a><a href="r43crypt.html">43·crypt · can a secret be split so any three of five can open it? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="5e6650">Treating neutrons as spreading like heat is <b>diffusion theory</b>; B² is the <b>buckling</b>, L the <b>diffusion length</b>, k the <b>infinite multiplication factor</b> k∞; δ is the <b>reflector savings</b>; stepping toward critical is an <b>approach to criticality</b>, read on an inverse multiplication or <b>1/M plot</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="01a801">The first reactor reached a steady chain in Chicago in December 1942, approached step by step with an inverse-count plot (not yet revisited for the date). The k and L here are round teaching values for a research core.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

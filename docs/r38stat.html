@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>38·stat · How Do You Measure an Ability You Cannot See?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r38chem2.html">← 38·chem2 why does rubber snap back?</a><a href="r38comp.html">next: 38·comp why do a few words do most of the work? →</a></p>
+  <div class="tags"><span class="tag stat">38·stat · statistics</span></div>
+  <h1>How Do You Measure an Ability You Cannot See?</h1>
+  <p data-pid="a72406">How do you measure an ability you cannot see? No one can look inside a head and read off how well someone reads, or reasons, or climbs a ladder of mathematics. A test gives only answers, right or wrong, and each answer depends on luck as well as ability. This page writes a score as ability plus noise, measures how much a test agrees with itself using 31n’s correlation, draws the chance of a right answer as a logistic curve in ability (17), finds ability as its most likely value with 30r, and finds a few abilities behind many tests with 31q.</p>
+  <p class="gesture" data-pid="dd5797">A score is a true ability plus noise. If the two halves of a test agree, the noise is small. Better: give each question a difficulty b, and let the chance of a right answer be 1/(1 + e^(−(θ − b))) for ability θ. Given someone’s answers, their ability is the θ that makes those answers most likely. Across many tests, a few hidden abilities explain most of the agreement.</p>
+</header>
+
+<section class="class step" data-step="38stat1">
+  <h2 class="sthead"><span class="stno">38stat1</span>A Score Is Ability Plus Noise</h2>
+  <p data-pid="d793f9">Evita writes tests. A person’s score on a test is their true ability, the score they would average over endless fair retakes, plus noise: the luck of which questions came up, a lapse, a guess.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a score">
+X = T + E @@ score, true ability, noise
+\text{spread}^2(X) = \text{spread}^2(T) + \text{spread}^2(E) @@ independent: squares add (30h)
+\htmlClass{new}{\text{a test is good when most of its spread is ability}} @@ 
+  </pre>
+  <p data-pid="0b5fb5">From here on, on this page, θ is a person’s hidden ability, on a scale with average 0.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.1.1</span><span class="ph understand">understand</span>How is a score split into ability and noise, and when is a test good?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat2">
+  <h2 class="sthead"><span class="stno">38stat2</span>Two Halves Agree: Reliability</h2>
+  <p data-pid="9dd246">Split the test into odd and even questions and score each half. If both halves measure the same ability with independent noise, how closely they agree across people shows how much of each half is ability.</p>
+  <pre class="lines" data-k="ember" data-label="this page: halves that correlate 0.7">
+r_{\text{halves}} = 0.7 @@ correlation (31n)
+\text{whole test} = \dfrac{2r}{1 + r} = \dfrac{1.4}{1.7} \approx 0.82 @@ twice as long, noise halved
+\htmlClass{new}{\text{82\% of the score’s spread is ability}} @@ 
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.2.1</span><span class="ph understand">understand</span>How does agreement between the two halves measure a test’s reliability?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat3">
+  <h2 class="sthead"><span class="stno">38stat3</span>The Item Curve: the Chance of a Right Answer as a Logistic in Ability</h2>
+  <p data-pid="82adcd">Look at one question at a time. Its chance of being answered right rises with ability, slowly at first, then steeply, then levelling off near certain.</p>
+  <pre class="lines" data-k="ember" data-label="this page: one question of difficulty b">
+P(\text{right} \mid \theta) = \dfrac{1}{1 + e^{-(\theta - b)}} @@ a logistic curve (17)
+\theta = b:\ \ P = \tfrac12 @@ difficulty is the ability at which it is a coin toss
+\htmlClass{new}{\theta = b + 2:\ \ P \approx 0.88;\ \ \theta = b - 2:\ \ P \approx 0.12} @@ 
+  </pre>
+  <p data-pid="722703">Item-curve technique: <b>give each question a difficulty b and let the chance of a right answer be the logistic in θ − b; then people and questions sit on one scale, and a person’s ability can be read from any set of questions whose difficulties are known.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.3.1</span><span class="ph understand">understand</span>What does the item curve say, and what does a question’s difficulty mean on it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat4">
+  <h2 class="sthead"><span class="stno">38stat4</span>Ability as the Most Likely Value</h2>
+  <p data-pid="174ccc">A climber answers three questions of difficulty −1, 0 and 1: right, right, wrong. Which θ makes that most likely? Take the log of the chance and set its slope to 0 (30r).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the most likely ability">
+\dfrac{d}{d\theta}\ln L = \sum (\text{answer} - P_i) = 0 @@ answer 1 if right, 0 if wrong
+P_{-1} + P_0 + P_1 = 2 @@ two right answers
+\theta = 0.8:\ 0.86 + 0.69 + 0.45 = 2.00 @@ 
+\htmlClass{new}{\theta \approx 0.8} @@ between the questions passed and the one missed
+  </pre>
+  <p data-pid="a71997"><b>A person’s ability is the value at which their actual answers are most likely; the more questions, and the closer their difficulties to the person, the sharper it is.</b> The Ladder’s own tests can measure a climber this way: each card dealt has a difficulty fitted from many climbers’ answers, and each answer nudges the climber’s estimate up or down.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.4.1</span><span class="ph understand">understand</span>How is ability found from a few answers, and how could the Ladder’s own tests use this?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat5">
+  <h2 class="sthead"><span class="stno">38stat5</span>Many Tests, Few Abilities</h2>
+  <p data-pid="c41a44">Give many people six tests: three of words, three of numbers. Their scores correlate: all positively, and words with words most of all. Find the principal directions of the grid of correlations (31q).</p>
+  <pre class="lines" data-k="ember" data-label="this page: six tests">
+\text{first direction: all six together} @@ a general ability, about half the spread
+\text{second direction: words against numbers} @@ about a fifth
+\htmlClass{new}{\text{two hidden abilities explain most of six tests}} @@ the rest is each test’s own
+  </pre>
+  <p data-pid="da4531"><b>When many tests correlate, a few hidden abilities often explain most of the agreement, read from the first principal directions of the correlations.</b> Evita uses this to keep a test short: questions that line up with the ability she wants measured are kept, and those that mostly measure something else are cut. A pilot study with a few hundred students shows the fitted difficulties holding steady on a second group, as the model requires.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.5.1</span><span class="ph understand">understand</span>How do principal directions reveal a few abilities behind many tests, and how does a test writer use them?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="38stat6">
+  <h2 class="sthead"><span class="stno">38stat6</span>Moves to Watch Out For</h2>
+  <p data-pid="d4c147">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the score is the ability}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the score is ability plus noise (38stat1)
+\text{reliability} = r_{\text{halves}}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the whole test is longer: 2r/(1 + r) (38stat2)
+\text{ability} = \text{share of questions right}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it depends on which questions; fit θ to their difficulties (38stat4)
+\text{a question of difficulty } b \text{ is always missed below } b\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the chance falls smoothly: one half at b (38stat3)
+\text{every test measures its own separate ability}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a few hidden abilities explain most of their agreement (38stat5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">38·stat.6.1</span><span class="ph understand">understand</span>Which move above takes the share of questions right as the ability, and what does the item curve use instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">38·stat.7.1</span><span class="tagq">do</span>A person answers questions of difficulty −1, 0, 1 and 2 as right, right, right, wrong. Find their most likely ability.</div>
+  <div class="chq"><span class="chid">38·stat.7.2</span><span class="tagq">make</span>Make up three questions’ difficulties for which a person with θ = 0 is expected to get exactly 1.5 right.</div>
+  <div class="chq"><span class="chid">38·stat.7.3</span><span class="tagq">converse</span>Agreeing halves showed a reliable test. Decide whether a reliable test must measure the ability it claims to.</div>
+  <div class="chq"><span class="chid">38·stat.7.4</span><span class="tagq">edge</span>Say what the most likely ability is for someone who gets every question right, and why that is a problem.</div>
+  <div class="chq"><span class="chid">38·stat.7.5</span><span class="tagq">open</span>A computer test can choose each next question from the answers so far. Say how it should choose, using the item curve.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r38chem2.html">← 38·chem2 · why does rubber snap back?</a><a href="r38comp.html">38·comp · why do a few words do most of the work? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="23274a">Score as ability plus noise is <b>classical test theory</b>; agreement of halves is <b>split-half reliability</b>, and 2r/(1 + r) the <b>Spearman-Brown formula</b>. The item curve is <b>item response theory</b>, and the logistic form the <b>Rasch model</b>. Hidden abilities behind many tests are found by <b>factor analysis</b>; choosing questions as you go is <b>computerized adaptive testing</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="ae5af7">Charles Spearman found a general factor behind many tests in 1904; Georg Rasch set out his model in 1960 (not yet revisited for the dates).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>37·stat · Did You Hear It, or Just Say Yes?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r37bio.html">← 37·bio how does the ear tell one pitch from another?</a><a href="r37crypt.html">next: 37·crypt can a voice be hidden? →</a></p>
+  <div class="tags"><span class="tag stat">37·stat · statistics</span></div>
+  <h1>Did You Hear It, or Just Say Yes?</h1>
+  <p data-pid="51d840">Did you hear it, or just say yes? In a hearing test, faint beeps come through headphones and you press a button when you hear one. Someone eager presses at every faint hiss and catches every beep; someone cautious waits to be sure and misses some. Who hears better? Counting the beeps caught cannot say. This page counts hits and false alarms, puts two bell curves and one line for saying yes on 30j’s bell curve, measures how far apart the curves sit, moves the line to trade hits for false alarms, and measures hearing by the area under the trade-off curve, with 15.</p>
+  <p class="gesture" data-pid="723c07">Each trial gives the listener an inner reading: noise alone spreads as one bell curve, a beep in noise as the same curve shifted. The listener says yes past some line. How far apart the curves sit, d′, is the hearing; where the line sits is the caution. d′ = z(hits) − z(false alarms). Moving the line traces a curve of hits against false alarms, and the area under it is the chance of telling a beep trial from a silent one.</p>
+</header>
+
+<section class="class step" data-step="37stat1">
+  <h2 class="sthead"><span class="stno">37stat1</span>Hits and False Alarms</h2>
+  <p data-pid="c5e4a0">Mike is an audiologist. In each trial of his test, a faint beep is played or not, at random, in a hiss of noise, and the listener says yes or no.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th></th><th>says yes</th><th>says no</th></tr>
+    <tr><th>beep played</th><td>hit</td><td>miss</td></tr>
+    <tr><th>no beep</th><td>false alarm</td><td>correct no</td></tr>
+  </table></div>
+  <p data-pid="a9dd0d">From here on, on this page, the <i>hit share</i> is the share of beep trials answered yes, and the <i>false alarm share</i> the share of silent trials answered yes. An eager listener raises both; a cautious one lowers both. Hits alone cannot tell hearing from eagerness.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.1.1</span><span class="ph understand">understand</span>What are hits and false alarms, and why can hits alone not measure hearing?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat2">
+  <h2 class="sthead"><span class="stno">37stat2</span>Two Bell Curves and One Line for Saying Yes</h2>
+  <p data-pid="18a648">Model each trial as an inner reading. With noise alone, it spreads as a bell curve with mean 0 and spread 1 (30j); with a beep, the same curve shifted up by d′. The listener says yes when the reading passes a line c.</p>
+  <pre class="lines" data-k="ember" data-label="this page: shares from the curves">
+\text{false alarm share} = P(Z > c) @@ Z a standard bell curve (30j)
+\text{hit share} = P(Z > c - d\prime) @@ 
+\htmlClass{new}{d\prime \text{ is the hearing; } c \text{ is the caution}} @@ two separate things
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.2.1</span><span class="ph understand">understand</span>How do two bell curves and a line model the test, and what do d′ and c stand for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat3">
+  <h2 class="sthead"><span class="stno">37stat3</span>How Far Apart the Curves Sit</h2>
+  <p data-pid="cb52f0">Turn each share back into a position on the bell curve, z, the point with that share above it, and subtract.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a listener with hits 84% and false alarms 16%">
+d\prime = z(\text{hits}) - z(\text{false alarms}) @@ 
+z(0.84) \approx 1,\ \ z(0.16) \approx -1 @@ the bell curve’s table
+\htmlClass{new}{d\prime = 1 - (-1) = 2} @@ the curves sit two spreads apart
+  </pre>
+  <p data-pid="48a907">Separation technique: <b>measure how well a signal can be told from noise by how many spreads apart the two bell curves sit, d′ = z(hits) − z(false alarms), which does not change with the listener’s caution.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.3.1</span><span class="ph understand">understand</span>How is d′ found from the two shares, and why does caution not change it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat4">
+  <h2 class="sthead"><span class="stno">37stat4</span>Moving the Line Trades Hits for False Alarms</h2>
+  <p data-pid="773f99">Ask the same listener to be more willing to say yes. Their d′ stays 2, but the line moves down.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>line c</th><th>hits</th><th>false alarms</th></tr>
+    <tr><th>1.5 (cautious)</th><td>69%</td><td>7%</td></tr>
+    <tr><th>1 (middle)</th><td>84%</td><td>16%</td></tr>
+    <tr><th>0</th><td>98%</td><td>50%</td></tr>
+    <tr><th>−0.5 (eager)</th><td>99%</td><td>69%</td></tr>
+  </table></div>
+  <p data-pid="9183a3"><b>For a fixed hearing, every gain in hits costs false alarms; the line can only choose where on the trade-off to sit.</b> Mike tells two listeners apart this way: one with many hits and many false alarms, one with fewer of both, can turn out to have exactly the same d′, and so the same hearing.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.4.1</span><span class="ph understand">understand</span>What does moving the line do to hits and false alarms, and what stays fixed?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat5">
+  <h2 class="sthead"><span class="stno">37stat5</span>The Area Under the Trade-Off Curve</h2>
+  <p data-pid="f28aa2">Plot hits against false alarms as the line sweeps from very cautious to very eager. The curve runs from (0, 0) to (1, 1), bowing up more the bigger d′ is. Its area (15) is a single measure of hearing that uses every line at once.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the area for d′ = 2">
+\text{area} = P(\text{beep reading} > \text{silent reading}) = P\!\left(Z < \dfrac{d\prime}{\sqrt 2}\right) @@ the difference of two readings has spread √2
+\htmlClass{new}{d\prime = 2:\ P(Z < 1.41) \approx 0.92} @@ 0.5 for no hearing at all, 1 for perfect
+  </pre>
+  <p data-pid="9af631"><b>The area under the trade-off curve is the chance that a beep trial reads higher than a silent one, a measure of telling signal from noise that ignores caution.</b> The same area grades medical tests, radar screens, and machine sorters. Mike’s hearing booth, run with many listeners at several cautions, gives points that lie on the curve for each listener’s d′, as the two-curve model says.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.5.1</span><span class="ph understand">understand</span>What does the area under the trade-off curve measure, and how big is it for d′ = 2?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="37stat6">
+  <h2 class="sthead"><span class="stno">37stat6</span>Moves to Watch Out For</h2>
+  <p data-pid="59721d">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{more hits means better hearing}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; eagerness raises hits too; use d′ (37stat3)
+d\prime = \text{hits} - \text{false alarms}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; subtract their z positions, not the shares (37stat3)
+\text{an eager listener hears better}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; caution moves the line, not the curves (37stat4)
+\text{an area of 0 means no hearing}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; no hearing gives 0.5, the diagonal (37stat5)
+\text{test at one line only}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it gives d′, but the whole curve checks the model (37stat5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">37·stat.6.1</span><span class="ph understand">understand</span>Which move above subtracts the shares directly, and what must be subtracted instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">37·stat.7.1</span><span class="tagq">do</span>A listener has hits 93% and false alarms 31%. Find d′ and the area under the curve.</div>
+  <div class="chq"><span class="chid">37·stat.7.2</span><span class="tagq">make</span>Make up a hit share and false alarm share that give d′ = 1 with the line in the middle.</div>
+  <div class="chq"><span class="chid">37·stat.7.3</span><span class="tagq">converse</span>Equal d′ means equal hearing in the model. Decide whether two listeners with the same area under the curve must have the same d′.</div>
+  <div class="chq"><span class="chid">37·stat.7.4</span><span class="tagq">edge</span>Say what d′ is when the hit share equals the false alarm share, and what the curve looks like then.</div>
+  <div class="chq"><span class="chid">37·stat.7.5</span><span class="tagq">open</span>A smoke alarm can be set cautious or eager. Say how you would choose its line, weighing false alarms against missed fires.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r37bio.html">← 37·bio · how does the ear tell one pitch from another?</a><a href="r37crypt.html">37·crypt · can a voice be hidden? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="641877">This is <b>signal detection theory</b>; d′ is read “d prime”, c the <b>criterion</b>; the trade-off curve is the <b>receiver operating characteristic</b>, ROC, and its area the <b>AUC</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="8816fb">Wilson Tanner and John Swets set out signal detection for human seeing and hearing in 1954, carried over from the study of radar operators in the Second World War (not yet revisited for the date).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

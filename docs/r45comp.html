@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>45·comp · Can a Qubit Be Protected Without Being Looked At?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r45k.html">← 45k where a curve crosses itself</a><a href="r45concl.html">next: 45·∎ shapes are read in their rings →</a></p>
+  <div class="tags"><span class="tag comp">45·comp · computing</span></div>
+  <h1>Can a Qubit Be Protected Without Being Looked At?</h1>
+  <p data-pid="256707">Can a qubit be protected without being looked at? An ordinary computer guards its bits by keeping copies and taking a vote. A quantum computer cannot: a qubit cannot be copied, and looking at it to check destroys the very state it holds. Yet quantum computers do correct their errors. This page recalls why a qubit cannot be copied (41·phys), spreads one qubit over three as 44·comp spread a bit, asks only whether neighbours agree, fixes a flip without ever reading the qubit, and adds a second layer for the other kind of error.</p>
+  <p class="gesture" data-pid="3493ef">Spread a|0⟩ + b|1⟩ into a|000⟩ + b|111⟩: not three copies, one state shared by three qubits. Then ask only whether qubits 1 and 2 agree, and whether 2 and 3 agree. Those two answers name which qubit flipped, while saying nothing about a and b. Flip it back. A second kind of error, a sign flip, needs the same trick turned sideways, nine qubits in all.</p>
+</header>
+
+<section class="class step" data-step="45comp1">
+  <h2 class="sthead"><span class="stno">45comp1</span>A Qubit Can’t Be Copied</h2>
+  <p data-pid="6c71e5">Evita builds quantum computers. A qubit is an arrow of size one, a|0⟩ + b|1⟩, and reading it gives 0 with chance |a|² and 1 with chance |b|², after which the arrow is gone (41·phys). A copier that worked on every arrow would have to be linear and also square each input, which no linear map does.</p>
+  <pre class="lines" data-k="ember" data-label="this page: why no copier">
+\text{copy}(a|0\rangle + b|1\rangle) \text{ would be } (a|0\rangle + b|1\rangle)(a|0\rangle + b|1\rangle) @@ squares in a and b
+\text{but a linear copier gives } a|00\rangle + b|11\rangle @@ from copying |0⟩ and |1⟩
+\htmlClass{new}{\text{they differ unless } ab = 0:\ \text{no copier works on every qubit}} @@ 
+  </pre>
+  <p data-pid="9a8ff0">From here on, on this page, a <i>flip</i> is the error that swaps |0⟩ and |1⟩ in one qubit, and a <i>sign flip</i> the error that changes b to −b.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.1.1</span><span class="ph understand">understand</span>Why can no machine copy every qubit, and what are flips and sign flips?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp2">
+  <h2 class="sthead"><span class="stno">45comp2</span>Three Qubits for One</h2>
+  <p data-pid="5e5b6c">Take the repetition code of 44·comp, which sends a bit three times, but apply it to the qubit as a whole, with two fresh qubits set to |0⟩.</p>
+  <pre class="lines" data-k="ember" data-label="this page: spreading one qubit">
+a|0\rangle + b|1\rangle \;\to\; a|000\rangle + b|111\rangle @@ 
+\htmlClass{new}{\text{not three copies: one shared state, with the same } a \text{ and } b} @@ the linear copier of step 1, allowed
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.2.1</span><span class="ph understand">understand</span>How is one qubit spread over three, and why is that not copying?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp3">
+  <h2 class="sthead"><span class="stno">45comp3</span>Asking About Parity, Not Value</h2>
+  <p data-pid="a3aa8c">Reading any qubit would choose 0 or 1 and destroy a and b. Instead, measure only whether qubits 1 and 2 agree, and whether 2 and 3 agree. In both |000⟩ and |111⟩ every pair agrees, so the answer is the same for both parts, and the state is untouched.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the two questions">
+\text{do 1 and 2 agree? do 2 and 3 agree?} @@ parities
+\text{no error: yes, yes, for both } |000\rangle \text{ and } |111\rangle @@ 
+\htmlClass{new}{\text{the answers carry no word about } a \text{ or } b} @@ so the state survives the asking
+  </pre>
+  <p data-pid="76387b">Parity-check technique: <b>spread a qubit over several, and measure only whether neighbours agree; each pattern of answers names an error, and the same pattern comes from every part of the state, so the qubit itself is never read.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.3.1</span><span class="ph understand">understand</span>Why does asking whether neighbours agree leave the qubit unread?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp4">
+  <h2 class="sthead"><span class="stno">45comp4</span>Fixing a Flip Without Reading the Bit</h2>
+  <p data-pid="556bbb">Suppose qubit 1 flips: a|100⟩ + b|011⟩. Now 1 and 2 disagree, 2 and 3 agree, in both parts alike.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>1 and 2 agree?</th><th>2 and 3 agree?</th><th>flipped qubit</th><th>fix</th></tr>
+    <tr><th>yes</th><td>yes</td><td>none</td><td>nothing</td></tr>
+    <tr><th>no</th><td>yes</td><td>1</td><td>flip qubit 1</td></tr>
+    <tr><th>no</th><td>no</td><td>2</td><td>flip qubit 2</td></tr>
+    <tr><th>yes</th><td>no</td><td>3</td><td>flip qubit 3</td></tr>
+  </table></div>
+  <pre class="lines" data-k="ember" data-label="this page: how often it fails, each qubit flipping with chance p">
+\text{fails only if two or three flip: } 3p^2(1 - p) + p^3 = 3p^2 - 2p^3 @@ 
+\htmlClass{new}{p = 0.01:\ \text{about } 0.0003} @@ thirty times safer than one bare qubit
+  </pre>
+  <p data-pid="3c99cb"><b>The pattern of agreements names the flipped qubit, which is flipped back, and the qubit is restored without ever being read.</b> On small quantum machines, an error deliberately applied to one of three qubits is named by the parity answers and undone, and the final qubit matches the start, as the table says.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.4.1</span><span class="ph understand">understand</span>How do the parity answers name a flip, and how much safer does the code make the qubit?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp5">
+  <h2 class="sthead"><span class="stno">45comp5</span>Phase Flips Need a Second Layer</h2>
+  <p data-pid="6eaee8">Qubits suffer a second error with no ordinary counterpart: a sign flip, b → −b. Every pair still agrees, so the three-qubit code cannot see it. But turned sideways, in the basis (|0⟩ ± |1⟩)/√2, a sign flip looks just like a flip.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two layers">
+\text{inner layer: each qubit spread over three against flips} @@ 
+\text{outer layer: three such blocks, spread against sign flips in the sideways basis} @@ 
+\htmlClass{new}{3 \times 3 = 9 \text{ qubits guard one against any single error}} @@ 
+  </pre>
+  <p data-pid="a22547"><b>Guarding against both flips and sign flips needs two layers of parity checks, nine qubits for one; any error on one of them, of any kind, is named and fixed.</b> Today’s machines use larger codes laid out on a grid, where each check involves only near neighbours, and keep a qubit alive longer than any of the qubits that hold it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.5.1</span><span class="ph understand">understand</span>Why can three qubits not catch a sign flip, and how do two layers catch every single error?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="45comp6">
+  <h2 class="sthead"><span class="stno">45comp6</span>Moves to Watch Out For</h2>
+  <p data-pid="c94e90">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{keep three copies and vote}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a qubit cannot be copied; spread it as one shared state (45comp1, 45comp2)
+\text{check each qubit to find the error}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; reading destroys it; ask only about parity (45comp3)
+a|000\rangle + b|111\rangle \text{ is three copies}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; three copies would be (a|0⟩ + b|1⟩)³ (45comp2)
+\text{the three-qubit code fixes every error}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; not sign flips; a second layer is needed (45comp5)
+\text{the code fails if any qubit flips}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; only if two or more flip: 3p² − 2p³ (45comp4)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">45·comp.6.1</span><span class="ph understand">understand</span>Which move above checks each qubit to find the error, and what is asked instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">45·comp.7.1</span><span class="tagq">do</span>With p = 0.05, find the failure chance of the three-qubit code, and compare it with one bare qubit.</div>
+  <div class="chq"><span class="chid">45·comp.7.2</span><span class="tagq">make</span>Make up a flip chance p for which the three-qubit code is exactly ten times safer than a bare qubit.</div>
+  <div class="chq"><span class="chid">45·comp.7.3</span><span class="tagq">converse</span>The code helps when p is small. Decide whether it helps for every p, and find where it stops helping.</div>
+  <div class="chq"><span class="chid">45·comp.7.4</span><span class="tagq">edge</span>Say what the parity answers are if all three qubits flip, and what the fix then does.</div>
+  <div class="chq"><span class="chid">45·comp.7.5</span><span class="tagq">open</span>The parity checks are themselves done by imperfect machinery. Say why the checks can add errors, and what that suggests about how small p must be.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r45k.html">← 45k · where a curve crosses itself</a><a href="r45concl.html">45·∎ · shapes are read in their rings →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="f79e46">That no machine copies every qubit is the <b>no-cloning theorem</b>; the three-qubit code is the <b>bit-flip code</b>, the parity answers the <b>syndrome</b>, and the checks <b>stabilizers</b>. The nine-qubit code is the <b>Shor code</b>; grid codes are <b>surface codes</b>; the p below which codes help is the <b>threshold</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="76e058">The no-cloning theorem was shown by William Wootters and Wojciech Zurek, and by Dennis Dieks, in 1982; Peter Shor gave the nine-qubit code in 1995 (not yet revisited for the dates).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

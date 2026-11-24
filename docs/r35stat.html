@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>35·stat · Is the Machine Drifting?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r35chem.html">← 35·chem how do molecules turn and shake?</a><a href="r35comp.html">next: 35·comp how does a phone pack bits into a wave? →</a></p>
+  <div class="tags"><span class="tag stat">35·stat · statistics</span></div>
+  <h1>Is the Machine Drifting?</h1>
+  <p data-pid="f7fbe7">Is the machine drifting? A lathe turns out shafts all day, each meant to be 25.00 mm across. No two come out exactly alike. When one measures 25.05, is the machine drifting, or is that just the day’s normal spread? Stopping a line costs money; not stopping it can cost more. This page finds that spreads add as squares (30), so a stack of parts is far tighter than the worst case 8·eng allowed for; draws a control chart three spreads wide with 30j; finds the chance that a point outside, or a run on one side, is luck; and ends with the cutting tool’s life as a line on log paper (17).</p>
+  <p class="gesture" data-pid="b03d3b">Independent errors add their squares, not their sizes, so n parts each of spread σ stack to σ√n, not nσ. A machine in control scatters around its mean with a steady spread; a point beyond three spreads, or seven in a row on one side, is too unlikely to be luck. The tool wears out faster as it cuts faster, as V·T^n = C, a straight line on log paper.</p>
+</header>
+
+<section class="class step" data-step="35stat1">
+  <h2 class="sthead"><span class="stno">35stat1</span>Spreads Add as Squares, Not as Sizes</h2>
+  <p data-pid="70d10e">Mike runs a machine shop. Each part he makes is a little off its drawing size, by an error that averages 0 and has a spread σ. When parts are stacked end to end, their errors add.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the spread of a sum">
+\text{spread}^2(e_1 + e_2) = \sigma_1^2 + \sigma_2^2 @@ independent errors (30h)
+\htmlClass{new}{\text{spread of } n \text{ equal parts} = \sigma\sqrt{n}} @@ not nσ
+  </pre>
+  <p data-pid="8825bf">From here on, on this page, a part’s <i>spread</i> is its σ, and a machine is <i>in control</i> when its errors are independent with a steady mean and spread.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·stat.1.1</span><span class="ph understand">understand</span>Why do spreads add as squares, and what is the spread of n equal parts stacked?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35stat2">
+  <h2 class="sthead"><span class="stno">35stat2</span>The Likely Stack Is Far Tighter Than the Worst Case</h2>
+  <p data-pid="c453a6">8·eng allowed for every part being at its worst at once. Nine parts each allowed ±0.1 mm can stack to ±0.9 mm in the worst case. But if ±0.1 mm is three spreads, each σ is 0.033 mm.</p>
+  <pre class="lines" data-k="ember" data-label="this page: nine parts in a stack">
+\text{worst case: } 9 \times 0.1 = 0.9 \text{ mm} @@ 8·eng
+\text{spread of the stack: } 0.033 \times \sqrt 9 = 0.1 \text{ mm} @@ 
+\htmlClass{new}{\text{three spreads: } \pm 0.3 \text{ mm, a third of the worst case}} @@ √n against n
+  </pre>
+  <p data-pid="6a2d9a">Spread-stack technique: <b>independent errors in a stack of n parts add to √n times one part’s spread, not n times; the worst case is so unlikely that designing for it wastes precision.</b> Mike can give each part a looser, cheaper allowance and still have 997 stacks in 1,000 fit.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·stat.2.1</span><span class="ph understand">understand</span>How much tighter is the likely stack than the worst case, and what does that let a designer do?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35stat3">
+  <h2 class="sthead"><span class="stno">35stat3</span>A Control Chart: Limits Three Spreads From the Mean</h2>
+  <p data-pid="f75859">Every hour Mike measures a shaft and plots it on a chart with a centre line at the mean, 25.00 mm, and limits three spreads either side. His lathe’s spread, measured over a week in control, is 0.02 mm.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the chart’s lines">
+\text{centre: } 25.00 \text{ mm} @@ 
+\text{limits: } 25.00 \pm 3 \times 0.02 = 24.94 \text{ and } 25.06 \text{ mm} @@ 
+\htmlClass{new}{\text{a machine in control stays inside } 997 \text{ times in } 1\,000} @@ the bell curve (30j)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·stat.3.1</span><span class="ph understand">understand</span>How is a control chart drawn, and how often does a machine in control stay inside its limits?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35stat4">
+  <h2 class="sthead"><span class="stno">35stat4</span>A Point Outside, or a Run on One Side: the Chance of It by Luck</h2>
+  <pre class="lines" data-k="ember" data-label="this page: two signals">
+\text{one point outside the limits: chance } 0.003 \text{ by luck} @@ 
+\text{seven in a row above the centre: } (1/2)^7 = 1/128 \approx 0.008 @@ each side equally likely
+\htmlClass{new}{\text{either is rare enough to stop and look}} @@ 
+  </pre>
+  <p data-pid="8caff0"><b>A point beyond three spreads, or a long run on one side of the centre, is too rare to be luck in a machine in control, so it signals a cause: a worn tool, a warm spindle, a new batch of metal.</b> On Tuesday Mike’s shafts read 25.01, 25.02, 25.01, 25.03, 25.02, 25.02, 25.03: all inside the limits, but seven above the centre. He checks, finds the tool worn, and replaces it, and the next readings scatter back about 25.00.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·stat.4.1</span><span class="ph understand">understand</span>What two signals show a machine is drifting, and how rare is each by luck?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35stat5">
+  <h2 class="sthead"><span class="stno">35stat5</span>Tool Life Against Cutting Speed Is a Line on Log Paper</h2>
+  <p data-pid="9e42b9">A cutting tool wears faster the faster it cuts. Over a wide range of speeds, its life T and the speed V fit one rule.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a carbide tool, n = 0.25, C = 400">
+V\,T^{\,n} = C @@ V in metres a minute, T in minutes
+\log V + n\log T = \log C @@ a straight line on log paper (17)
+V = 200:\ T = (400/200)^4 = 16 \text{ min};\ \ V = 160:\ T = 2.5^4 \approx 39 \text{ min} @@ 
+\htmlClass{new}{\text{a fifth slower, nearly two and a half times the life}} @@ 
+  </pre>
+  <p data-pid="5a92d2"><b>Tool life falls steeply with cutting speed, as a power, so a shop weighs faster cutting against more tool changes.</b> Mike times tools to wear-out at three speeds; the points fall on a straight line on log paper, and he reads the best speed for each job from it.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·stat.5.1</span><span class="ph understand">understand</span>How does tool life depend on cutting speed, and how does a shop use the line?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="35stat6">
+  <h2 class="sthead"><span class="stno">35stat6</span>Moves to Watch Out For</h2>
+  <p data-pid="6a60a0">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{nine parts stack to nine times the error}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; spreads add as squares: three times (35stat2)
+\text{design every stack for the worst case}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; safe, but it wastes precision; the likely stack is a third of it (35stat2)
+\text{every point off centre means drift}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; a machine in control scatters; look for points outside or long runs (35stat4)
+\text{inside the limits means all is well}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; seven in a row on one side signals a cause too (35stat4)
+\text{a fifth slower gives a fifth more tool life}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; life goes as a power: about 2.4 times (35stat5)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">35·stat.6.1</span><span class="ph understand">understand</span>Which move above says points inside the limits mean all is well, and what else signals a cause?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">35·stat.7.1</span><span class="tagq">do</span>Sixteen parts each have spread 0.01 mm. Find the stack’s spread and its three-spread limits, against the worst case for ±0.03 mm each.</div>
+  <div class="chq"><span class="chid">35·stat.7.2</span><span class="tagq">make</span>Make up a tool rule V·T^n = C for which halving the speed gives exactly 16 times the life.</div>
+  <div class="chq"><span class="chid">35·stat.7.3</span><span class="tagq">converse</span>A machine in control stays inside 997 times in 1,000. Decide whether a machine that stays inside 997 times in 1,000 must be in control.</div>
+  <div class="chq"><span class="chid">35·stat.7.4</span><span class="tagq">edge</span>Say what the stack rule gives when the parts’ errors all move together, and how that compares with the worst case.</div>
+  <div class="chq"><span class="chid">35·stat.7.5</span><span class="tagq">open</span>Checking every hour misses a drift that starts and stops within an hour. Say how you would choose how often to measure.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r35chem.html">← 35·chem · how do molecules turn and shake?</a><a href="r35comp.html">35·comp · how does a phone pack bits into a wave? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="5b4bb0">Adding spreads as squares is <b>root-sum-square tolerancing</b>; the chart is a <b>Shewhart control chart</b> and the practice <b>statistical process control</b>; the run rules are the <b>Western Electric rules</b>. The tool rule is <b>Taylor’s tool life equation</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="1dffed">Walter Shewhart drew the first control chart in 1924; Frederick Winslow Taylor published the tool life rule in 1907 (not yet revisited for the dates).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
