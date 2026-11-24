@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>20·eng · Which Weaves Look the Same Turned Over?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20chem.html">← 20·chem can a molecule be left-handed?</a><a href="r20nav.html">next: 20·nav which way is the ship facing after its turns? →</a></p>
+  <div class="tags"><span class="tag eng">20·eng · engineering</span></div>
+  <h1>Which Weaves Look the Same Turned Over?</h1>
+  <p data-pid="6ef81d">Which weaves look the same turned over? Woven cloth is two sets of threads at right angles: the warp, held tight on the loom, and the weft, passed over and under it. Where each weft thread goes over or under each warp thread decides everything: how the cloth looks, how it hangs, and whether its back matches its front. This page writes a weave as a grid of overs and unders, finds the block each weave repeats, asks which of 20c’s slides, flips and turns keep a weave the same, sees what turning the cloth over does, and sorts weaves by their moves, as 20h sorted geometries.</p>
+  <p class="gesture" data-pid="a4d1f8">Mark each crossing 1 if the warp is on top and 0 if the weft is. A weave is a grid of 1s and 0s that repeats. A move keeps the weave if the grid lands on itself. Turning the cloth over swaps every 1 and 0 and mirrors the picture; the weave looks the same from behind only if some move undoes that.</p>
+</header>
+
+<section class="class step" data-step="20eng1">
+  <h2 class="sthead"><span class="stno">20eng1</span>A Weave as a Grid of Over and Under</h2>
+  <p data-pid="51271d">Zoe is designing cloth for a weaving mill. Each crossing of a warp thread (running up the cloth) and a weft thread (running across) is one square of a grid. Mark it 1 where the warp is on top, 0 where the weft is.</p>
+  <p data-pid="cf77ee">From here on, on this page, a <i>weave</i> is such a grid of 1s and 0s, filling the plane, with row r and column c. Every warp thread must pass under some weft and over some, or it would lie loose on one face; the same for every weft.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th></th><th>c = 0</th><th>1</th><th>2</th><th>3</th></tr>
+    <tr><th>r = 0</th><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+    <tr><th>1</th><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+    <tr><th>2</th><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+    <tr><th>3</th><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+  </table></div>
+  <p data-pid="f28add">This one is plain weave: each thread goes over one, under one, and the next thread does the opposite. It is the checkerboard.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·eng.1.1</span><span class="ph understand">understand</span>How is a weave written as a grid, and why must every thread pass both over and under?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20eng2">
+  <h2 class="sthead"><span class="stno">20eng2</span>Plain, Twill and Satin: the Repeat</h2>
+  <p data-pid="4bd13e">A weave’s <i>repeat</i> is the smallest block of the grid that fills the whole cloth by slides alone. Three families cover most cloth.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>weave</th><th>rule for a 1 at row r, column c</th><th>repeat</th><th>what you see</th></tr>
+    <tr><th>plain</th><td>r + c is even</td><td>2 by 2</td><td>a fine checker</td></tr>
+    <tr><th>2/2 twill</th><td>c − r leaves 0 or 1 on division by 4</td><td>4 by 4</td><td>diagonal ribs, as on jeans</td></tr>
+    <tr><th>5-end satin</th><td>every square except where c − 2r leaves 0 on division by 5</td><td>5 by 5</td><td>long runs of warp, broken by scattered single weft crossings: a smooth sheen</td></tr>
+  </table></div>
+  <p data-pid="8a69bd">In the twill each row is the row above slid one place to the right, so the overs line up along diagonals. In the satin each row slides two places, so no two of the scattered weft crossings touch and no lines show; the long runs of warp on top give the smooth shine of satin cloth.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·eng.2.1</span><span class="ph understand">understand</span>What is a weave’s repeat, and how do the plain, twill and satin rules differ in what you see?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20eng3">
+  <h2 class="sthead"><span class="stno">20eng3</span>Moves That Keep a Weave</h2>
+  <p data-pid="db4c9c">A move of the plane (20c: slide, flip, turn) keeps a weave when every 1 lands on a 1 and every 0 on a 0. Slides by the repeat always keep it. Which other moves do?</p>
+  <pre class="lines" data-k="ember" data-label="this page: testing moves on the 2/2 twill">
+\text{slide one row down, one column right: } c - r \text{ unchanged} @@ kept: the diagonal slide
+\text{half turn: } (r, c) \to (a - r, b - c) @@ 
+c - r \to -(c - r) + (b - a):\ \{0, 1\} \to \{0, 1\} \text{ when } b - a = 1 @@ kept, about the right centre
+\text{flip across an upright line: } c \to b - c @@ 
+\htmlClass{new}{c - r \to b - (c + r):\ \text{the ribs now run the other way}} @@ not kept: a mirror twill
+  </pre>
+  <p data-pid="45ad4a">Weave-move technique: <b>a weave is kept by a move when the move sends its rule to itself; find the moves by applying each to the rule, not by redrawing the cloth.</b> The 2/2 twill is kept by slides along its diagonal and by half turns, but an upright flip turns it into the mirror twill, ribs running the other way. Weavers call the two directions Z and S.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·eng.3.1</span><span class="ph understand">understand</span>Which moves keep the 2/2 twill, and what does an upright flip turn it into?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20eng4">
+  <h2 class="sthead"><span class="stno">20eng4</span>Turning the Cloth Over Swaps Over and Under</h2>
+  <p data-pid="81d54c">Seen from the back, every crossing that showed warp on top now shows weft: 1s and 0s swap. The picture is also mirrored, left to right, because you are looking from the other side.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the back of each weave">
+\text{plain: swap} = \text{slide one column};\ \text{mirror keeps it} @@ the back matches the front
+\text{2/2 twill: swap: } \{0, 1\} \to \{2, 3\} = \text{slide two columns} @@ the swap is a slide
+\text{2/2 twill: mirror: ribs run the other way} @@ the back is the mirror twill
+\htmlClass{new}{\text{5-end satin: swap leaves one 1 per row in five}} @@ weft on top: the dull face
+  </pre>
+  <p data-pid="f5e7ca"><b>A weave looks the same from behind exactly when swapping over and under, followed by the mirror, can be undone by a move that keeps the weave.</b> Plain weave passes; a 2/2 twill’s back is the mirror twill; a satin’s back is a different-looking cloth, mostly weft, which is why satin has a shiny face and a dull back. A cloth inspector checks the back of each bolt against what the design predicts.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·eng.4.1</span><span class="ph understand">understand</span>What does turning the cloth over do to the grid, and which of the three weaves look the same from behind?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20eng5">
+  <h2 class="sthead"><span class="stno">20eng5</span>Sorting Weaves by Their Moves</h2>
+  <p data-pid="a2d639">Rung 20 sorted geometries by the moves they keep (20h). Weaves can be sorted the same way: list the moves that keep each, and weaves with the same list belong together, whatever their size.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>weave</th><th>diagonal slide</th><th>half turn</th><th>upright flip</th><th>same from behind</th></tr>
+    <tr><th>plain</th><td>kept</td><td>kept</td><td>kept</td><td>yes</td></tr>
+    <tr><th>2/2 twill</th><td>kept</td><td>kept</td><td>no</td><td>mirror twill</td></tr>
+    <tr><th>3/1 twill</th><td>kept</td><td>kept</td><td>no</td><td>no: the back is weft-faced</td></tr>
+    <tr><th>5-end satin</th><td>no slide of one step</td><td>kept</td><td>no</td><td>no</td></tr>
+  </table></div>
+  <p data-pid="b4c8fe"><b>Weaves that keep the same moves share their look and their back-to-front behaviour, so the list of moves sorts them more usefully than their sizes.</b> A textile engineer choosing a cloth for a reversible garment looks for weaves whose back is kept, and for a sheen looks for a satin, which no short slide keeps.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·eng.5.1</span><span class="ph understand">understand</span>How does listing the moves that keep a weave sort weaves, and how does an engineer use the sort?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20eng6">
+  <h2 class="sthead"><span class="stno">20eng6</span>Moves to Watch Out For</h2>
+  <p data-pid="078be5">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the back of a twill is the same twill}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; turning over mirrors the picture: the back is the mirror twill (20eng4)
+\text{an upright flip keeps the twill}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it sends c − r to b − (c + r): the ribs run the other way (20eng3)
+\text{satin has diagonal ribs}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; each row slides two places, so its weft crossings never line up (20eng2)
+\text{turning over just swaps 1 and 0}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it also mirrors the picture (20eng4)
+\text{test moves by redrawing the cloth}\,? @@ &lt;span class="vd vd-l"&gt;legal, with a cost&lt;/span&gt; it works, but sending the rule through the move is quicker and sure (20eng3)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·eng.6.1</span><span class="ph understand">understand</span>Which move above takes the back of a twill to be the same twill, and what does turning the cloth over really give?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">20·eng.7.1</span><span class="tagq">do</span>Write the rule for a 3/1 twill (warp over three, under one), and find what turning it over gives.</div>
+  <div class="chq"><span class="chid">20·eng.7.2</span><span class="tagq">make</span>Make up a weave with a repeat of 6 by 6 that is kept by an upright flip.</div>
+  <div class="chq"><span class="chid">20·eng.7.3</span><span class="tagq">converse</span>Plain weave looks the same from behind and is kept by an upright flip. Decide whether every weave the same from behind must be kept by an upright flip.</div>
+  <div class="chq"><span class="chid">20·eng.7.4</span><span class="tagq">edge</span>Try a satin of 4 ends, sliding each row two places. Say what goes wrong with the rule that every thread passes over and under.</div>
+  <div class="chq"><span class="chid">20·eng.7.5</span><span class="tagq">open</span>Real cloth uses different colours for warp and weft. Say how colours change which moves keep the look of a cloth.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r20chem.html">← 20·chem · can a molecule be left-handed?</a><a href="r20nav.html">20·nav · which way is the ship facing after its turns? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="857702">The grid of overs and unders is a <b>weave draft</b> or <b>point paper</b> design; a weave where every thread does the same thing in turn is <b>isonemal</b>. 2/2 twill is a <b>balanced twill</b>; 3/1 a <b>warp-faced twill</b>, and its back a <b>weft-faced</b> one. Z and S twill name the rib direction. The step of a satin is its <b>move number</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="6d063b">Branko Grünbaum and Geoffrey Shephard set out the geometry of weaves by their symmetries in 1980, in “Satins and twills: an introduction to the geometry of fabrics”.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>21·phys2 · How Can a Boat Sail Toward the Wind?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r21phys.html">← 21·phys can forces be added like arrows?</a><a href="r21nav.html">next: 21·nav how far north am I? →</a></p>
+  <div class="tags"><span class="tag phys">21·phys2 · physics</span></div>
+  <h1>How Can a Boat Sail Toward the Wind?</h1>
+  <p data-pid="841dd0">How can a boat sail toward the wind? A sail is pushed by the wind, so it seems a boat could only go where the wind blows. Yet sailing boats make their way upwind, zigzagging at an angle to it. The sail is a wing standing on end, and its push is not along the wind but mostly across it. This page adds the boat’s motion to the wind as 21·phys’s arrows, splits the sail’s force into lift and drag, lets the keel take the sideways part, measures progress toward the wind with a cosine, and finds the best angle to sail with 14h.</p>
+  <p class="gesture" data-pid="6eaf15">The wind the boat feels is the true wind minus the boat’s own motion, as arrows. The sail’s force is lift, across that wind, plus drag, along it. Split it along the boat’s heading and across: the keel resists the across part, and the along part drives the boat. Progress toward the wind is boat speed times the cosine of the angle off the wind.</p>
+</header>
+
+<section class="class step" data-step="21phys21">
+  <h2 class="sthead"><span class="stno">21phys21</span>The Wind the Boat Feels</h2>
+  <p data-pid="861132">Sarah sails a small keelboat. The true wind blows at 6 m/s from the north. She heads northeast, 45° off the wind, at 3 m/s. The wind she feels on board is the true wind with her own motion taken away, as arrows add (21·phys).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the felt wind (east, north)">
+\text{true wind (blowing toward): } (0, -6) @@ from the north
+\text{boat: } 3(\cos 45°, \sin 45°) \approx (2.12, 2.12) @@ heading northeast (21b)
+\text{felt wind} = (0, -6) - (2.12, 2.12) = (-2.12, -8.12) @@ arrows subtract
+\text{size} = \sqrt{2.12^2 + 8.12^2} \approx 8.4 \text{ m/s} @@ 
+\htmlClass{new}{\text{it comes from about } 30° \text{ off her heading, not } 45°} @@ stronger, and further ahead
+  </pre>
+  <p data-pid="4fea7c">From here on, on this page, the <i>felt wind</i> is this difference. Sailing toward the wind makes the felt wind stronger and swings it toward the bow.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·phys2.1.1</span><span class="ph understand">understand</span>How is the wind the boat feels found from the true wind and the boat’s motion, and how does it differ from the true wind?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21phys22">
+  <h2 class="sthead"><span class="stno">21phys22</span>Lift and Drag on a Sail</h2>
+  <p data-pid="86bcfc">A sail set at a slight angle to the felt wind bends the air around it, like a wing. The air pushes back on the sail with a force that is split two ways: <i>lift</i>, at right angles to the felt wind, and <i>drag</i>, along it. A good sail, well trimmed, makes about four times as much lift as drag.</p>
+<div class="eqline c6" data-tex="\text{sail force} = \text{lift (across the felt wind)} + \text{drag (along it)},\quad L/D \approx 4"></div>
+  <p data-pid="af400b">The lift is what lets a boat go against the wind: it points across the felt wind, and so partly forward along the boat’s heading.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·phys2.2.1</span><span class="ph understand">understand</span>What are lift and drag on a sail, and which one lets a boat make way against the wind?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21phys23">
+  <h2 class="sthead"><span class="stno">21phys23</span>The Keel Takes the Sideways Part</h2>
+  <p data-pid="8b74d5">Split the sail’s force along the boat’s heading and across it. Let β be the angle between the heading and where the felt wind comes from: about 30° here.</p>
+  <pre class="lines" data-k="ember" data-label="this page: forward and sideways, L = 4, D = 1">
+\text{forward} = L\sin\beta - D\cos\beta @@ lift leans forward, drag pulls back
+= 4\sin 30.3° - \cos 30.3° \approx 2.02 - 0.86 = 1.16 @@ 
+\text{sideways} = L\cos\beta + D\sin\beta \approx 3.45 + 0.50 = 3.96 @@ 
+\htmlClass{new}{\text{forward} > 0 \text{ only if } L/D > \dfrac{\cos\beta}{\sin\beta}} @@ about 1.7 at 30°
+  </pre>
+  <p data-pid="50f38b">The sideways push is more than three times the forward push. The keel, a deep fin under the boat, is a second wing working in water: as the boat slips slightly sideways, the keel makes lift that balances the sail’s sideways push, so the boat moves forward. Without a keel, the boat would be blown sideways.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·phys2.3.1</span><span class="ph understand">understand</span>How does the sail’s force split into forward and sideways parts, and what job does the keel do?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21phys24">
+  <h2 class="sthead"><span class="stno">21phys24</span>Speed Made Good Toward the Wind</h2>
+  <p data-pid="37bb0b">Heading 45° off the wind, Sarah goes 3 m/s, but not all of it toward the wind. What counts for reaching a point upwind is the part of her speed along the wind’s direction.</p>
+  <pre class="lines" data-k="ember" data-label="this page: progress toward the wind">
+\text{made good} = V\cos\theta,\ \ \theta \text{ the angle off the wind} @@ the part along the wind (21b)
+3 \cos 45° \approx 2.1 \text{ m/s} @@ 
+\htmlClass{new}{\text{to a point upwind: zigzag, each leg at } \theta \text{ off the wind}} @@ tacking from one side to the other
+  </pre>
+  <p data-pid="d49dc7">Made-good technique: <b>a boat’s progress toward the wind is its speed times the cosine of its angle off the wind; it reaches a point upwind by zigzagging, each leg at the angle that makes this greatest.</b> Sailing straight at the wind gives no speed at all; sailing across it gives speed but no progress.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·phys2.4.1</span><span class="ph understand">understand</span>How is progress toward the wind measured, and why must a boat zigzag to reach a point upwind?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21phys25">
+  <h2 class="sthead"><span class="stno">21phys25</span>The Best Angle to Tack</h2>
+  <p data-pid="7b9d31">A boat’s speed depends on its angle off the wind: 0 straight into it, and faster as it bears away. For Sarah’s boat a simple fit is V(θ) = V₀(1 − cos θ) for angles up to a right angle. Find the angle where the made good speed is greatest (14h).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the best angle">
+M(\theta) = V_0 (1 - \cos\theta)\cos\theta @@ speed made good
+M\prime(\theta) = V_0 \sin\theta\,(2\cos\theta - 1) = 0 @@ slopes of sin and cos (21g)
+\cos\theta = \tfrac{1}{2}:\ \theta = 60° @@ sin θ = 0 gives no speed
+\htmlClass{new}{M = V_0 \cdot \tfrac{1}{2} \cdot \tfrac{1}{2} = \tfrac{V_0}{4}} @@ the best for this boat
+  </pre>
+  <p data-pid="0299ae"><b>Pointing closer to the wind trades speed for direction; the best angle is where the gain in direction just pays for the loss in speed.</b> Better sails and keels raise L/D and let a boat point closer: racing boats tack at about 40° to 45° off the wind. A racing crew reads speed made good straight off an instrument and steers to keep it greatest.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·phys2.5.1</span><span class="ph understand">understand</span>How does optimising speed made good give the best angle to tack, and why do racing boats point closer than this simple boat?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="21phys26">
+  <h2 class="sthead"><span class="stno">21phys26</span>Moves to Watch Out For</h2>
+  <p data-pid="b87f74">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{the sail is pushed along the wind}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; its lift points across the felt wind, partly forward (21phys22)
+\text{felt wind} = \text{true wind} + \text{boat}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the boat’s motion is taken away: true wind minus boat (21phys21)
+\text{sail straight at the wind, fastest progress}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; speed there is 0; zigzag at the best angle (21phys24)
+\text{the keel is for balance only}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the keel makes lift in the water to resist the sideways push (21phys23)
+\text{best angle} = 45° \text{ for every boat}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it depends on the boat’s speed curve: 60° for this simple fit (21phys25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">21·phys2.6.1</span><span class="ph understand">understand</span>Which move above adds the boat’s motion to the true wind, and what does the felt wind really equal?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">21·phys2.7.1</span><span class="tagq">do</span>The true wind is 8 m/s from the north and a boat heads 50° off it at 3.5 m/s. Find the felt wind’s size and its angle off the heading.</div>
+  <div class="chq"><span class="chid">21·phys2.7.2</span><span class="tagq">make</span>Make up a speed curve V(θ) for which the best angle to tack is 45°.</div>
+  <div class="chq"><span class="chid">21·phys2.7.3</span><span class="tagq">converse</span>Forward drive needs L/D above cos β / sin β. Decide whether a sail with L/D above that must drive the boat forward at every angle, and say what else must hold.</div>
+  <div class="chq"><span class="chid">21·phys2.7.4</span><span class="tagq">edge</span>Say what happens to the felt wind when a boat sails straight downwind at the wind’s own speed.</div>
+  <div class="chq"><span class="chid">21·phys2.7.5</span><span class="tagq">open</span>Some racing boats sail faster than the wind, even downwind on a zigzag. Say, with felt winds, how that can be.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r21phys.html">← 21·phys · can forces be added like arrows?</a><a href="r21nav.html">21·nav · how far north am I? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="17adf2">The felt wind is the <b>apparent wind</b>; speed made good toward the wind is <b>velocity made good</b>, VMG. Zigzagging upwind is <b>beating</b> or <b>tacking</b>, and sailing as close as the boat can is <b>close-hauled</b>. The chart of boat speed against angle is a <b>polar diagram</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="5ba390">Sailors have tacked upwind for thousands of years. The explanation of sails as wings making lift came with the aerodynamics of the early twentieth century; modern racing yachts are designed with these forces worked out by computer.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

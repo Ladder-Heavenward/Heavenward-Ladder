@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>20·nav2 · How Far Can a Plane Fly on a Tank?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r20nav.html">← 20·nav which way is the ship facing after its turns?</a><a href="r20eng2.html">next: 20·eng2 why does a river suddenly jump? →</a></p>
+  <div class="tags"><span class="tag nav">20·nav2 · navigation</span></div>
+  <h1>How Far Can a Plane Fly on a Tank?</h1>
+  <p data-pid="cd9ef8">How far can a plane fly on a tank? An airliner starts a long flight with a third of its weight in fuel. As the fuel burns the plane gets lighter, needs less lift, makes less drag, and burns fuel more slowly. So the last hour costs less fuel than the first. This page finds that each kilometre burns a fixed share of the weight, like 17·phys2’s rocket; finds the range as a log of the weight ratio with 17’s logs; finds the speed of least drag with 14h; and weighs fuel against passengers and cargo.</p>
+  <p class="gesture" data-pid="42b936">In level flight lift equals weight and thrust equals drag, so thrust is weight over the lift-to-drag ratio L/D. Fuel burns in proportion to thrust, so each kilometre burns the same share of the current weight. Adding up gives range = (V·(L/D)/(g·c))·ln(W₀/W₁): a log of start weight over end weight.</p>
+</header>
+
+<section class="class step" data-step="20nav21">
+  <h2 class="sthead"><span class="stno">20nav21</span>The Plane Gets Lighter as Fuel Burns</h2>
+  <p data-pid="3f24f2">Terry flies a long-range jet. In steady level flight four forces balance: lift up equals weight down, and engine thrust forward equals drag back. A wing makes lift with some drag; the ratio L/D, lift over drag, is about 18 for a modern airliner.</p>
+  <p data-pid="76029e">From here on, on this page, W is the plane’s weight at any moment, V its speed, L/D its lift-to-drag ratio, and c the fuel its engines burn per second for each newton of thrust (its thirst).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the thrust needed">
+\text{lift} = W,\ \ \text{thrust} = \text{drag} @@ steady level flight
+\text{drag} = \dfrac{\text{lift}}{L/D} = \dfrac{W}{L/D} @@ 
+\htmlClass{new}{\text{thrust} = \dfrac{W}{L/D}} @@ a lighter plane needs less thrust
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·nav2.1.1</span><span class="ph understand">understand</span>Why does the thrust needed fall as the plane burns fuel?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20nav22">
+  <h2 class="sthead"><span class="stno">20nav22</span>Each Kilometre Burns a Fixed Share of the Weight</h2>
+  <p data-pid="98dbe5">Fuel burned per second is c times thrust, as a mass; its weight is g times that. In one second the plane travels V metres. So over a short distance dx, the weight falls by:</p>
+  <pre class="lines" data-k="ember" data-label="this page: the burn per distance">
+dW = -\,g\,c \cdot \dfrac{W}{L/D} \cdot \dfrac{dx}{V} @@ fuel weight burned over dx
+\dfrac{dW}{W} = -\dfrac{g\,c}{V\,(L/D)}\,dx @@ a fixed share of W per metre
+\htmlClass{new}{\text{the share per kilometre is the same all flight}} @@ as for 17·phys2’s rocket, per unit of speed
+  </pre>
+  <p data-pid="1c56e9">Heavy at the start, the plane burns many kilograms a kilometre; light near the end, few. The share of the current weight is what stays fixed.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·nav2.2.1</span><span class="ph understand">understand</span>What stays fixed per kilometre as the plane burns fuel, and how is this like the rocket?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20nav23">
+  <h2 class="sthead"><span class="stno">20nav23</span>The Range: a Log of the Weight Ratio</h2>
+  <p data-pid="a9d3a0">Add up the shares from the start weight W₀ to the end weight W₁. The sum of dW/W is ln W₁ − ln W₀ (17b: the slope of ln is 1/x).</p>
+  <pre class="lines" data-k="ember" data-label="this page: the range">
+\int_{W_0}^{W_1} \dfrac{dW}{W} = -\dfrac{g\,c}{V\,(L/D)} \cdot R @@ over the whole range R
+\htmlClass{new}{R = \dfrac{V\,(L/D)}{g\,c}\,\ln\dfrac{W_0}{W_1}} @@ the range-log technique
+V = 250 \text{ m/s},\ L/D = 18,\ c = 1.6 \times 10^{-5} \text{ kg/(N·s)}:\ \dfrac{V(L/D)}{g c} \approx 28\,700 \text{ km} @@ a modern airliner, roughly
+W_0 / W_1 = 1.4:\ R \approx 28\,700 \cdot \ln 1.4 \approx 9\,700 \text{ km} @@ about the length of a long-haul flight
+  </pre>
+  <p data-pid="1a2a55">Range-log technique: <b>a plane’s range is its speed times its lift-to-drag ratio over g times its engines’ thirst, times the log of its start weight over its end weight.</b> The three factors are three trades: aerodynamics (L/D), engines (c), and structure and fuel (the weight ratio). An airline planner sets each flight’s fuel by this count, with reserves added.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·nav2.3.1</span><span class="ph understand">understand</span>How does adding up the fixed shares give the range, and what three trades do its factors stand for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20nav24">
+  <h2 class="sthead"><span class="stno">20nav24</span>Best Glide at the Speed of Least Drag</h2>
+  <p data-pid="9c0900">L/D is not fixed: it depends on speed. Drag has two parts. Friction drag grows as the square of the speed. The drag of making lift falls as speed grows, because a fast wing needs less tilt for the same lift, about as 1/V².</p>
+  <pre class="lines" data-k="ember" data-label="this page: the speed of least drag">
+D(V) = a\,V^2 + \dfrac{b}{V^2} @@ friction plus the cost of lift
+D\prime(V) = 2aV - \dfrac{2b}{V^3} = 0 @@ 14h
+V^4 = \dfrac{b}{a}:\ \ a V^2 = \dfrac{b}{V^2} @@ the two parts equal
+\htmlClass{new}{\text{least drag, so best } L/D, \text{ where friction equals the cost of lift}} @@ 
+  </pre>
+  <p data-pid="964a0e"><b>A plane glides furthest at the speed where its friction drag equals the drag of making lift.</b> A glider pilot whose engine is a thermal flies that speed to stretch a glide. A jet’s range has V in front as well, so its best cruise is somewhat faster; and as the plane lightens, the best speed falls, which is why long flights climb as they burn fuel, keeping the wing near its best L/D in thinner air.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·nav2.4.1</span><span class="ph understand">understand</span>At what speed is drag least, and why do long-haul jets climb as they burn fuel?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20nav25">
+  <h2 class="sthead"><span class="stno">20nav25</span>The Trade Between Fuel and Payload</h2>
+  <p data-pid="d1fddc">A plane has a heaviest weight it may take off at. Fuel and payload (passengers and cargo) share what the empty plane leaves. More fuel means less payload, and the log makes extra fuel buy less and less range.</p>
+  <div class="tablewrap"><table class="tt">
+    <tr><th>start weight</th><th>fuel</th><th>end weight</th><th>ln(W₀/W₁)</th><th>range (km)</th></tr>
+    <tr><th>250 t</th><td>50 t</td><td>200 t</td><td>0.223</td><td>about 6,400</td></tr>
+    <tr><th>250 t</th><td>75 t</td><td>175 t</td><td>0.357</td><td>about 10,200</td></tr>
+    <tr><th>250 t</th><td>100 t</td><td>150 t</td><td>0.511</td><td>about 14,700</td></tr>
+  </table></div>
+  <p data-pid="59f212"><b>Each extra 25 tonnes of fuel adds less range than the last, because it must also be carried.</b> Each also takes 25 tonnes of payload. An airline planning a route reads this table to find how far it can fly a full plane, and how many seats it must leave empty to fly further. That is why the longest flights carry fewer passengers.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·nav2.5.1</span><span class="ph understand">understand</span>Why does each extra tonne of fuel add less range than the last, and what does it cost in payload?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="20nav26">
+  <h2 class="sthead"><span class="stno">20nav26</span>Moves to Watch Out For</h2>
+  <p data-pid="2c4246">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+R \propto W_0 - W_1\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; each kilometre burns a share of the current weight, so the range goes as a log (20nav23)
+\text{the plane burns fuel at a steady rate all flight}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; it burns less as it lightens; the share is what is steady (20nav22)
+\text{fly as slowly as possible for least drag}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; slow flight needs more tilt: the cost of lift grows as 1/V² (20nav24)
+\text{twice the fuel, twice the range}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the log makes extra fuel buy less and less (20nav25)
+\text{thrust} = W\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; thrust balances drag, W/(L/D), not weight (20nav21)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">20·nav2.6.1</span><span class="ph understand">understand</span>Which move above makes range grow with the fuel’s weight directly, and why does it grow as a log instead?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">20·nav2.7.1</span><span class="tagq">do</span>A business jet has V = 230 m/s, L/D = 15, c = 1.8 × 10⁻⁵ kg/(N·s), start weight 40 t and 12 t of fuel. Find its range.</div>
+  <div class="chq"><span class="chid">20·nav2.7.2</span><span class="tagq">make</span>Make up a plane and weights whose range is exactly 5,000 km.</div>
+  <div class="chq"><span class="chid">20·nav2.7.3</span><span class="tagq">converse</span>A fixed share per kilometre gave a log. Decide whether a range that grows as a log of the weight ratio means the share per kilometre is fixed, and say why.</div>
+  <div class="chq"><span class="chid">20·nav2.7.4</span><span class="tagq">edge</span>Say what the range formula gives as the end weight nears the start weight, and as fuel nears the whole weight.</div>
+  <div class="chq"><span class="chid">20·nav2.7.5</span><span class="tagq">open</span>An electric plane does not get lighter as its batteries empty. Say what the range becomes, and what that means for electric long-haul flight.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r20nav.html">← 20·nav · which way is the ship facing after its turns?</a><a href="r20eng2.html">20·eng2 · why does a river suddenly jump? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="4920cc">The range-log technique is the <b>Breguet range equation</b>; c is the <b>thrust specific fuel consumption</b>, TSFC, and V(L/D)/(gc) is the <b>range factor</b>. The heaviest take-off weight is the <b>maximum takeoff weight</b>, MTOW, and a chart of payload against range is a <b>payload-range diagram</b>.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="3a5dfa">The equation is named after Louis Charles Breguet, the French aircraft builder, who used it in the early twentieth century; it is taught in every first course on aircraft performance.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>

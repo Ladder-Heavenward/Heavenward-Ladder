@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>19·eng2 · How Long Must a Heat Exchanger Be?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r19eng.html">← 19·eng what limits an engine’s work per turn?</a><a href="r19crypt.html">next: 19·crypt can a letter ever stand for itself? →</a></p>
+  <div class="tags"><span class="tag eng">19·eng2 · engineering</span></div>
+  <h1>How Long Must a Heat Exchanger Be?</h1>
+  <p data-pid="3a9bb9">How long must a heat exchanger be? In a factory, hot oil leaving a machine must be cooled, and cold water coming in needs warming. Run the two in neighbouring pipes and heat passes through the wall from one to the other, which saves both a cooler and a heater. The heat flows faster where the gap in temperature is big, and the gap shrinks as the streams travel. This page finds that the gap shrinks by the same fraction each metre, a 17j decay; finds the average gap that sets the length, a log of a ratio; shows why running the streams in opposite directions beats running them side by side; and measures how well an exchanger does against the best it could.</p>
+  <p class="gesture" data-pid="16c843">Heat passes at a rate proportional to the local gap Δ between the streams. The gap shrinks at a rate proportional to itself, so it decays: Δ(x) = Δ₀e^(−kx). The total heat is U·A times the log-mean gap (Δ₁ − Δ₂)/ln(Δ₁/Δ₂). Opposite flows keep the gap bigger along the whole length.</p>
+</header>
+
+<section class="class step" data-step="19eng21">
+  <h2 class="sthead"><span class="stno">19eng21</span>Two Streams, Heat Flowing by the Gap</h2>
+  <p data-pid="a61895">Evita’s plant has hot oil entering at 120 °C that must leave at 60 °C, and cold water entering at 20 °C. Oil flows through an inner pipe and water through a jacket around it. Each metre of pipe passes heat at a rate U·P·Δ, where Δ is the local gap in temperature, P the pipe’s wetted width around, and U a number for how easily the wall and fluids pass heat.</p>
+  <p data-pid="fab71a">From here on, on this page, C is a stream’s <i>heat flow capacity</i>: the heat it carries per degree each second (mass per second times heat per kg per degree). Losing heat Q drops a stream’s temperature by Q/C. The oil’s C is half the water’s, so the water warms half as much as the oil cools.</p>
+  <pre class="lines" data-k="ember" data-label="this page: what each stream does overall">
+\text{oil: } 120 \to 60,\ \text{a drop of } 60 @@ 
+C_w = 2\,C_o \;\Rightarrow\; \text{water rises by } 30:\ 20 \to 50 @@ the same heat Q
+\htmlClass{new}{Q = C_o \cdot 60} @@ per second
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng2.1.1</span><span class="ph understand">understand</span>What sets how fast heat passes through each metre of pipe, and how far does the water warm?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19eng22">
+  <h2 class="sthead"><span class="stno">19eng22</span>The Gap Shrinks by the Same Fraction per Metre</h2>
+  <p data-pid="41a9ab">Run both streams the same way (side by side). Over a short length dx, heat U·P·Δ·dx passes: the oil cools by that over C_o and the water warms by that over C_w. Both changes close the gap.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the gap along the pipe">
+d\Delta = -\,U P\,\Delta\,dx\left(\tfrac{1}{C_o} + \tfrac{1}{C_w}\right) @@ oil down, water up
+\dfrac{d\Delta}{dx} = -k\,\Delta,\quad k = U P\left(\tfrac{1}{C_o} + \tfrac{1}{C_w}\right) @@ a rate proportional to itself
+\htmlClass{new}{\Delta(x) = \Delta_0\, e^{-kx}} @@ growth and decay (17j)
+  </pre>
+  <p data-pid="3dbea2">The gap falls by the same fraction each metre. At the start it is 100 °C (120 against 20); every metre takes away the same share of what is left. Like any decay, it never quite reaches 0.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng2.2.1</span><span class="ph understand">understand</span>Why does the gap between the streams shrink by the same fraction each metre?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19eng23">
+  <h2 class="sthead"><span class="stno">19eng23</span>The Log-Mean Gap</h2>
+  <p data-pid="1e0d39">The heat over the whole pipe is the sum of U·P·Δ·dx: U times the pipe’s area A times the average gap. The decay makes that average a log.</p>
+  <pre class="lines" data-k="ember" data-label="this page: the average gap">
+\Delta_1 - \Delta_2 = Q\left(\tfrac{1}{C_o} + \tfrac{1}{C_w}\right) @@ the gap closes by the total heat over both capacities
+\ln \tfrac{\Delta_1}{\Delta_2} = k L = U A\left(\tfrac{1}{C_o} + \tfrac{1}{C_w}\right) @@ the decay over length L, with A = PL
+\htmlClass{new}{Q = U A\,\dfrac{\Delta_1 - \Delta_2}{\ln(\Delta_1 / \Delta_2)}} @@ divide the first by the second
+  </pre>
+  <p data-pid="33866c">Log-mean technique: <b>the heat an exchanger passes is U times its area times the log-mean gap, the difference of the end gaps over the log of their ratio.</b> To size an exchanger, a designer works out Q from what each stream must do, the end gaps from the temperatures, and then the area: A = Q ÷ (U × log-mean gap).</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng2.3.1</span><span class="ph understand">understand</span>How do the decay and the total heat give the log-mean gap, and how does a designer use it to find the area?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19eng24">
+  <h2 class="sthead"><span class="stno">19eng24</span>Counterflow Beats Parallel Flow</h2>
+  <p data-pid="f7d62d">Now run the water the other way, entering where the oil leaves. Same temperatures in and out; different end gaps.</p>
+  <pre class="lines" data-k="ember" data-label="this page: two ways to run the streams">
+\text{side by side: ends } 120 - 20 = 100,\ \ 60 - 50 = 10 @@ 
+\text{log-mean} = \dfrac{100 - 10}{\ln 10} \approx 39.1 @@ 
+\text{opposite: ends } 120 - 50 = 70,\ \ 60 - 20 = 40 @@ hot in meets warm out
+\text{log-mean} = \dfrac{70 - 40}{\ln 1.75} \approx 53.6 @@ the same formula holds
+\htmlClass{new}{\text{opposite flow needs } \tfrac{39.1}{53.6} \approx 73\% \text{ of the area}} @@ for the same job
+  </pre>
+  <p data-pid="21d962"><b>Running the streams in opposite directions keeps the gap more even along the pipe, so the same job needs less area.</b> Side by side, the water can never leave hotter than the oil leaves; opposite, it can leave hotter than the oil’s outlet, because it last meets the hottest oil. Almost every industrial exchanger runs its streams opposite for this reason.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng2.4.1</span><span class="ph understand">understand</span>Why does running the streams in opposite directions need less area, and what can the water do in that layout that it cannot side by side?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19eng25">
+  <h2 class="sthead"><span class="stno">19eng25</span>Effectiveness: the Share of the Most That Could Pass</h2>
+  <p data-pid="e7fdbc">What is the most heat any exchanger, however long, could pass between these streams? The stream with the smaller C changes temperature most per unit of heat; at best it could swing all the way from its inlet to the other stream’s inlet.</p>
+  <pre class="lines" data-k="ember" data-label="this page: effectiveness">
+Q_{\max} = C_{\min}\,(T_{\text{hot in}} - T_{\text{cold in}}) = C_o \cdot 100 @@ oil cooled all the way to 20
+Q = C_o \cdot 60 @@ 
+\htmlClass{new}{\varepsilon = \tfrac{Q}{Q_{\max}} = 0.6} @@ the exchanger does 60% of the most it could
+  </pre>
+  <p data-pid="bd6b94"><b>An exchanger’s effectiveness is the heat it passes over the most any exchanger could pass between the same two inlets; longer and opposite-flow exchangers push it toward 1, with less and less gain per metre.</b> A plant engineer reading the four temperatures on a running exchanger works out its effectiveness each month; when it falls, the pipe walls are fouling and need cleaning.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng2.5.1</span><span class="ph understand">understand</span>What is an exchanger’s effectiveness, and how does a plant engineer use it to spot fouling?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="19eng26">
+  <h2 class="sthead"><span class="stno">19eng26</span>Moves to Watch Out For</h2>
+  <p data-pid="c35baf">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{average gap} = \tfrac{\Delta_1 + \Delta_2}{2}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the gap decays, so its average is the log-mean, smaller than the plain mean (19eng23)
+\text{the gap falls by the same amount each metre}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; it falls by the same fraction each metre (19eng22)
+\text{side by side, the water can leave at } 70\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; side by side, the water can never pass the oil’s outlet temperature (19eng24)
+Q_{\max} = C_{\max}(T_{\text{hot in}} - T_{\text{cold in}})\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; the smaller capacity limits the heat: C_min (19eng25)
+\text{twice as long, twice the heat}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; the gap decays: each extra metre passes less (19eng25)
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">19·eng2.6.1</span><span class="ph understand">understand</span>Which move above averages the end gaps plainly, and why is the log-mean smaller?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">19·eng2.7.1</span><span class="tagq">do</span>Hot water enters at 90 °C and leaves at 50 °C; cold water enters at 10 °C and leaves at 40 °C, opposite flow, U = 500 W/(m²·K), Q = 50 kW. Find the log-mean gap and the area.</div>
+  <div class="chq"><span class="chid">19·eng2.7.2</span><span class="tagq">make</span>Make up an opposite-flow exchanger whose two end gaps are equal, and say what the log-mean gap is then.</div>
+  <div class="chq"><span class="chid">19·eng2.7.3</span><span class="tagq">converse</span>Opposite flow needed less area here. Decide whether opposite flow always needs no more area than side-by-side flow for the same four temperatures, when both are possible.</div>
+  <div class="chq"><span class="chid">19·eng2.7.4</span><span class="tagq">edge</span>Say what the log-mean formula gives as the two end gaps come equal, and how to read it.</div>
+  <div class="chq"><span class="chid">19·eng2.7.5</span><span class="tagq">open</span>Real streams’ capacities change with temperature. Say which step of this page that breaks, and how a designer might cope.</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r19eng.html">← 19·eng · what limits an engine’s work per turn?</a><a href="r19crypt.html">19·crypt · can a letter ever stand for itself? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="cfea2a">The log-mean gap is the <b>log mean temperature difference</b>, LMTD; U is the <b>overall heat transfer coefficient</b>; C is the <b>heat capacity rate</b>. Opposite flow is <b>counterflow</b>, side by side <b>parallel flow</b>. ε is the <b>effectiveness</b>, and UA/C_min is the <b>number of transfer units</b>, NTU.</p>
+  <h3>Who said it first</h3>
+  <p data-pid="ed938c">The log mean temperature difference was in engineering use by the early twentieth century; the effectiveness and NTU method was set out by Kays and London in 1955 (not yet revisited).</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
