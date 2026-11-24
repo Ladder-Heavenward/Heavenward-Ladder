@@ -67,7 +67,7 @@ function index(){ closeDesk(); const body=frame('under pressure','Index'); if(!N
       h+='<li class="'+(on?'nk-on':'nk-shut')+'">'+(on?'<a href="'+go(s,stepId(st.id))+'">':'<span>')+'<b class="nk-id">'+esc(st.id)+'</b> '+fk(st.title)+(on?'</a>':'</span>')+'</li>'; });
     if(s.id==='DT') h+='<li class="'+(opened(s)>=s.footings?'nk-on':'nk-shut')+'">'+(opened(s)>=s.footings?'<a href="dbtdt.html#dbtconcl">':'<span>')+'<b class="nk-id">∴</b> conclusion'+(opened(s)>=s.footings?'</a>':'</span>')+'</li>';
     h+='</ul></details>'; });
-  h+='<p class="nk-resume"><a href="dbt.html">What Under pressure is: the first page →</a></p><p class="nk-out"><a href="index.html">Leave Under pressure for the ladder →</a></p>';
+  h+='<p class="nk-resume"><a href="dbtg.html">What Under pressure is: the summary →</a></p><p class="nk-out"><a href="index.html">Leave Under pressure for the ladder →</a></p>';
   body.innerHTML=h; body.querySelectorAll('a[href*="#"]').forEach(a=>a.addEventListener('click',()=>{ if(a.getAttribute('href').startsWith(page+'.html')) shut(); })); }
 
 /* a mark's card: the mark, what it means here or the ladder step that teaches it, and where the rung first uses it */
