@@ -881,3 +881,8 @@
 (window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["47·phys"]=window.LADDER_CARDS["47·phys"]||[]).push(
  {"u": "47·phys.9.1", "q": "How does a track’s curve in a magnet give a particle’s momentum and the sign of its charge?", "a": "pushed at right angles to its motion it runs on a circle whose radius gives p = qBr, about 0.3Br in GeV/c; which way it curves gives the sign of its charge", "w": ["it slows in the magnet; the curve gives its mass and colour", "it speeds up in a straight line; the length gives momentum", "it spirals inward; the number of turns gives its charge"], "why": "r = 2 m, B = 1.5 T: about 0.9 GeV/c."});
 /*end gapcards2 47·phys*/
+/*si 8·phys*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["8·phys"]=window.LADDER_CARDS["8·phys"]||[]).push(
+ {"u": "8·phys.9.1", "q": "Why is a square centimetre not a hundredth of a square metre, and why is a millionth of a kilogram written as a milligram?", "a": "the front part is squared with the unit, so it is 10⁻⁴ m²; only one front part goes on a unit, and the kilogram already has one", "w": ["it is a hundredth, since centi means a hundredth; micro cannot be used on mass", "it is a thousandth, since area adds a power; a microkilogram is too small to weigh", "it is ten thousand square metres; milligram is only a shorter name for the same thing"], "why": "1 cm² = (10⁻² m)² = 10⁻⁴ m²; one front part only (8phys9)."},
+ {"q": "A heater gives 4.7 MJ in an evening. How many kilojoules is that?", "a": "4700 kJ", "w": ["4.7 kJ", "47 kJ", "4 700 000 kJ"], "why": "Mega to kilo: multiply by 10^(6 − 3) = 1000."});
+/*end si 8·phys*/

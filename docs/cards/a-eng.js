@@ -724,3 +724,18 @@
 (window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["46·eng"]=window.LADDER_CARDS["46·eng"]||[]).push(
  {"u": "46·eng.5.1", "q": "How much data must be in flight to fill a long link, and why does waiting at a switch grow so fast as it gets busy?", "a": "the link’s speed times its round-trip time, 10 MB for a gigabit over 80 ms, or it idles waiting for word back; waiting at a switch grows as t₀/(1 − ρ), ten times at 90% busy and a hundred at 99%", "w": ["one message at a time; waiting grows in step with the busy share", "the whole file; waiting stays fixed until the switch is full", "a single packet; waiting falls as the switch gets busy"], "why": "Arrivals at random (30o)."});
 /*end gapcards2 46·eng*/
+/*complic 12·eng*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["12·eng"]=window.LADDER_CARDS["12·eng"]||[]).push(
+ {"u": "12·eng.12.1", "q": "Why does the gap depend on the temperature on the day the bar is fitted, and why can steel sit inside concrete?", "a": "only the warming still to come closes the gap; the two grow by nearly the same share", "w": ["the gap must hold the whole yearly range; concrete is soft and gives way to the steel", "a bar fitted warm needs the biggest gap; steel shrinks as concrete grows, so they cancel", "the fitting day does not matter; steel inside concrete is kept at one temperature"], "why": "Gap ≥ αL(T_max − T_fit) (12eng12)."},
+ {"q": "A 20 m steel rail (α = 12 × 10⁻⁶ per °C) is fitted at 10 °C and may reach 45 °C. What gap does it need?", "a": "about 8.4 mm", "w": ["about 12 mm", "about 0.84 mm", "about 24 mm"], "why": "12 × 10⁻⁶ × 20,000 mm × 35 = 8.4 mm; only the warming still to come counts."});
+/*end complic 12·eng*/
+/*complic 36·eng*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["36·eng"]=window.LADDER_CARDS["36·eng"]||[]).push(
+ {"u": "36·eng.7.1", "q": "Why does a panel in hot sun give less than its rating, and when can it give more?", "a": "warm cells lose voltage for each degree above 25 °C; cells colder than 25 °C give more", "w": ["hot sun is too bright for the cells; it gives more only at dawn, in weak light", "heat wears the glass a little each day; it gives more only when it is brand new", "the rating is taken at noon in summer; it can never give more than the rating"], "why": "P = P₂₅(1 − c(T − 25)) (36eng7)."},
+ {"q": "A 400 W panel loses 0.3% for each degree above 25 °C. What does it give with its cells at 65 °C?", "a": "352 W", "w": ["280 W", "388 W", "448 W"], "why": "400 × (1 − 0.003 × 40) = 352 W."});
+/*end complic 36·eng*/
+/*complic 29·eng*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["29·eng"]=window.LADDER_CARDS["29·eng"]||[]).push(
+ {"u": "29·eng.7.1", "q": "Why does a plane need more runway on a hot day at a high airport, and what does it give up when the runway is too short?", "a": "thin air lifts less, so it must reach a higher speed; it carries less load", "w": ["hot air pushes the wheels back, so it rolls slower; it waits for a headwind", "the engine overheats and must be eased off; it takes off with less fuel only", "the runway is softer when hot, so it rolls slower; it must take off downhill"], "why": "Run ∝ 1/ρ, more with a weaker engine (29eng7)."},
+ {"q": "With the same push, the air is 0.8 as dense as usual. How much longer is the take-off run?", "a": "1.25 times", "w": ["1.12 times", "1.56 times", "0.8 times"], "why": "Run ∝ 1/ρ: 1/0.8 = 1.25 (1.56 if the engine weakens too)."});
+/*end complic 29·eng*/

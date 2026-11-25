@@ -283,3 +283,8 @@
 (window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["42·logi2"]=window.LADDER_CARDS["42·logi2"]||[]).push(
  {"u": "42·logi2.7.1", "q": "How are time windows checked along a route, and when must a saving join be refused?", "a": "run the clock along the route, arrival the last departure plus the drive, waiting if early; a saving join is refused if any stop on the joined route would then be reached after its window closes", "w": ["add the windows’ lengths; a join is refused only if it is longer", "check only the first stop’s window; joins are never refused", "average the windows; a join is refused if it saves less than ten minutes"], "why": "Stop 2 at 10:10 is too late."});
 /*end gapcards2 42·logi2*/
+/*complic 10·logi*/
+(window.LADDER_CARDS=window.LADDER_CARDS||{});(window.LADDER_CARDS["10·logi"]=window.LADDER_CARDS["10·logi"]||[]).push(
+ {"u": "10·logi.7.1", "q": "Why does a frost law add trucks yet spare the road, and why is the fourth power only a rule of thumb?", "a": "lighter loads need more trips but each does far less harm; it was fitted to one road test", "w": ["lighter loads drive faster, so fewer trucks; it is exact for every road ever built", "the harm grows with the trips, so it is not spared; it comes from a theory of asphalt", "trucks wait out the thaw, so none are added; it holds only for cars"], "why": "Harm ∝ load⁴, a fit to the AASHO Road Test (10logi7)."},
+ {"q": "An axle of 9 tonnes runs on a road built for 5. By the fourth-power rule, how many passes of a 5 tonne axle does it equal?", "a": "about 10.5", "w": ["about 1.8", "about 3.2", "about 5.8"], "why": "(9/5)⁴ ≈ 10.5."});
+/*end complic 10·logi*/
