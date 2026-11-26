@@ -3372,15 +3372,18 @@ const page=()=>window.ladderPage?ladderPage():(location.pathname.split('/').pop(
    other way past it. So the highest rung reached is the most any record shows: open:rNN, any page passed or measured (cert:)
    on rung NN, tested in (cert:in:rNN), a floor measured (cert:floorNconcl: all its rungs), footings read (steps:), and the
    furthest footing (inside rung NN = NN; on rung NN's own page = NN-1, as openRungButton marks it). */
-function high(){ const P=get('pages:done',{}); let h=-1; const up=n=>{ if(n>h) h=n; }, rn=s=>{ const m=String(s||'').match(/^r(\d\d)/); return m?+m[1]:null; };
+/* annexreach (Andrew 2026-11-26 20:30Z: "unlocked only to rung 3 but i have all of floor 1's annexes unlocked"): an annex's own record
+   (opened, footings read, passed or measured) and footings read anywhere no longer move the reach, as reachfix (2026-11-15) already ruled
+   for the climb; the reach is the furthest footing, a rung opened, a climb page passed or measured, a test-in and a floor measured */
+const ANXS=/^r\d\d(phys|chem|bio|comp|eng|econ|logi|crypt|nav)\d*$/;
+function high(){ const P=get('pages:done',{}); let h=-1; const up=n=>{ if(n>h) h=n; }, rn=s=>{ const m=String(s||'').match(/^r(\d\d)/); return m&&!ANXS.test(String(s))?+m[1]:null; };
   for(const k in P){ if(!(P[k]&&P[k].v)) continue; const m=k.match(/^open:r(\d+)$/); if(m){ up(+m[1]); continue; } const n=rn(k); if(n!=null) up(n); }
   const fl={}; (window.LADMAP||[]).forEach(([f,rungs])=>{ fl[f]=Math.max(-1,...rungs.map(x=>+x[0])); });
   try{ for(let i=0;i<LS.length;i++){ const k=LS.key(i)||''; let m;
     if((m=k.match(/^cert:in:r(\d\d)/))){ if(get(k,null)) up(+m[1]); }
     else if((m=k.match(/^cert:floor(\d+)concl$/))){ if(get(k,null)&&fl[m[1]]!=null) up(fl[m[1]]); }
-    else if((m=k.match(/^cert:(.+)$/))){ const n=rn(m[1]); if(n!=null&&get(k,null)) up(n); }
-    else if((m=k.match(/^steps:(.+)$/))){ const n=rn(m[1]); if(n!=null) up(n); } } }catch(e){}
-  try{ const f=JSON.parse(LS.getItem('ladder:furthest')||'null'), m=f&&f.page&&String(f.page).match(/^r(\d\d)(.*)$/); if(m) up(m[2]?+m[1]:+m[1]-1); }catch(e){}
+    else if((m=k.match(/^cert:(.+)$/))){ const n=rn(m[1]); if(n!=null&&get(k,null)) up(n); } } }catch(e){}
+  try{ const f=JSON.parse(LS.getItem('ladder:furthest')||'null'), m=f&&f.page&&!ANXS.test(String(f.page))&&String(f.page).match(/^r(\d\d)(.*)$/); if(m) up(m[2]?+m[1]:+m[1]-1); }catch(e){}
   return h; }
 /* how far ahead a page may number (Andrew 2026-10-29): r + floor(0.2·(12 + r/6)·6) */
 const limit=r=>{ r=Math.max(0,r); return r+Math.floor(0.2*(12+r/6)*6); };
@@ -3479,7 +3482,7 @@ function lock(){
   const idx={}; rows.forEach((r,i)=>{ if(r.stem&&!(r.stem in idx)) idx[r.stem]=i; });
   let reach=-1; let furStem=fur&&fur.page?String(fur.page).replace(/\.html$/,''):null;
   if(furStem&&furStem in idx) reach=Math.max(reach,idx[furStem]);
-  for(const s in P){ if(P[s]&&P[s].v&&s in idx) reach=Math.max(reach,idx[s]); }
+  for(const s in P){ if(P[s]&&P[s].v&&s in idx&&!/^r\d\d(phys|chem|bio|comp|eng|econ|logi|crypt|nav)\d*$/.test(s)) reach=Math.max(reach,idx[s]); } /* annexreach: a passed annex shows its own row only */
   let fu=fur; if(reach<0){ reach=rows.findIndex(r=>r.stem&&/^r\d\d[a-z]/.test(r.stem)); /* a new learner stands on the first step, on its first footing */
     const r0=rows[reach], a0=r0&&r0.li.querySelector(':scope>details.flist ol>li a'), h0=a0&&(a0.getAttribute('href')||'').split('#')[1]; if(r0&&h0) fu={page:r0.stem,id:h0}; }
   if(fu!==fur){ furStem=fu.page; }
