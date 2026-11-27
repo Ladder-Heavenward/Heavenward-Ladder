@@ -177,7 +177,7 @@ window.LADDER_GRAPHS=[
   what:'Either one but not both: the table a gate can wire.',
   from:'P ⊕ Q, written with and, or and not.',
   shape:'Each true row is one and-term; joining the terms with or rebuilds the table (39p).'},
- {name:'Gather and merge', at:'2f · Gather and Merge', line:"A ∩ B'",
+ {name:'Gather and merge', at:'2g · Gather and Merge', line:"A ∩ B'",
   what:'Sets as overlapping circles, with the members the statement keeps shaded.',
   from:'A ∩ B, A ∪ B, A \\ B, A′; with three sets, C as well.',
   shape:'∩ keeps the overlap, ∪ the whole of both, \\ cuts one away, ′ swaps inside and outside.'},

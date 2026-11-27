@@ -30,7 +30,7 @@
  {"q": "Two triangles of the same area. Are they congruent?", "a": "not always", "w": ["yes, always", "never", "only if one is a slide of the other"], "why": "Equal area does not give an isometry."},
  {"q": "Two circles of the same radius. Are they congruent?", "a": "yes: a slide carries one onto the other", "w": ["only if they share a centre", "no: circles are only similar", "only if a turn does"], "why": "Slide centre to centre."}];
 (window.LADDER_CARDS=window.LADDER_CARDS||{})["20e"]=[{"q": "Two flips across lines that cross at C. What do they make?", "a": "a turn about C", "w": ["a slide", "a flip across C", "a dilation about C"], "why": "The crossing-flips technique."},
- {"q": "Two flips across parallel lines a gap d apart. What do they make?", "a": "a slide by 2e, at right angles to the lines", "w": ["a slide by d along the lines", "a turn", "a flip across the middle line"], "why": "The parallel-flips technique."},
+ {"q": "Two flips across parallel lines a gap d apart. What do they make?", "a": "a slide by 2f, at right angles to the lines", "w": ["a slide by d along the lines", "a turn", "a flip across the middle line"], "why": "The parallel-flips technique."},
  {"q": "Lines crossing at angle θ. The two flips make a turn by how much?", "a": "twice θ", "w": ["θ", "half θ", "a quarter turn always"], "why": "Each flip doubles the gap from its line."},
  {"q": "Every turn and every slide is how many flips?", "a": "two", "w": ["one", "three", "four"], "why": "The two-flips technique."},
  {"q": "The same flip done twice. What is it?", "a": "doing nothing", "w": ["the half turn", "a slide", "a flip across a new line"], "why": "A flip undoes itself."},
