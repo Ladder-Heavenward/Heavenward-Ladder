@@ -330,8 +330,8 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <pre class="lines" data-k="ember" data-label="4e: a direct proof, a parent of a parent is a grandparent">
 \text{let } n, b, c \text{ be anything} @@ the everys give the opening line
 \qquad \text{assume } n \text{ is a parent of } b \land b \text{ is a parent of } c @@ the if gives the next: its hypothesis assumed
-\qquad b \text{ is a child of } n @@ keep left, and what “parent of” means, turned about: b is a's child
-\qquad \htmlClass{new}{b \text{ is a child of } n \land b \text{ is a parent of } c} @@ join, with keep right
+\qquad b \text{ is a child of } n @@ keep first, and what “parent of” means, turned about: b is a's child
+\qquad \htmlClass{new}{b \text{ is a child of } n \land b \text{ is a parent of } c} @@ join, with keep second
 \qquad \exists y\,(y \text{ is a child of } n \land y \text{ is a parent of } c) @@ show an example: b
 \qquad n \text{ is a grandparent of } c @@ ︿ “grandparent of”: that is what the word means
 (n \text{ is a parent of } b \land b \text{ is a parent of } c) \Rightarrow n \text{ is a grandparent of } c @@ prove an if
@@ -392,9 +392,9 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
 \forall x\,(x \text{ is a cat} \Rightarrow \neg(x \text{ is a dog})) @@ given: no cat is a dog
 \qquad \text{assume } \exists x\,(x \text{ is a cat} \land x \text{ is a dog}) @@ suppose the thing to be refuted
 \qquad\quad \text{call it } b\text{: assume } b \text{ is a cat} \land b \text{ is a dog} @@ use a some: a fresh name
-\qquad\quad b \text{ is a cat} @@ keep left
+\qquad\quad b \text{ is a cat} @@ keep first
 \qquad\quad \htmlClass{new}{\neg(b \text{ is a dog})} @@ use an every, carry through
-\qquad\quad b \text{ is a dog} @@ keep right
+\qquad\quad b \text{ is a dog} @@ keep second
 \qquad\quad \bot @@ clash
 \qquad \bot @@ the some closes: ⊥ does not mention b
 \htmlClass{new}{\neg\,\exists x\,(x \text{ is a cat} \land x \text{ is a dog})} \quad \blacksquare @@ refute
@@ -451,7 +451,7 @@ const BOOK={
   cp:S('No if at the top to turn about.'),
   cases:S('Splitting “n is a cat or not” for each n still needs a refutation inside the cat case, and the split is either-way besides. Cases add a layer and no help.'),
   cx:S('A counterexample would be a thing that is both a cat and a dog. You cannot look at every thing; you need an argument, and it is the refutation.'),
-  ref:P([[R`\text{suppose } \exists x\,(x \text{ is a cat} \land x \text{ is a dog})`,'suppose the thing after the ¬'],[R`\text{call it } b:\;\; b \text{ is a cat} \land b \text{ is a dog}`,'use a some'],[R`\neg(b \text{ is a dog})`,'keep left; use an every (no cat is a dog); carry through'],[R`\bot`,'keep right; clash'],[R`\neg\,\exists x\,(\dots)`,'the some closes on ⊥; refute']],'Flows: it is a not, and refutation is exactly how a not is proved.')}
+  ref:P([[R`\text{suppose } \exists x\,(x \text{ is a cat} \land x \text{ is a dog})`,'suppose the thing after the ¬'],[R`\text{call it } b:\;\; b \text{ is a cat} \land b \text{ is a dog}`,'use a some'],[R`\neg(b \text{ is a dog})`,'keep first; use an every (no cat is a dog); carry through'],[R`\bot`,'keep second; clash'],[R`\neg\,\exists x\,(\dots)`,'the some closes on ⊥; refute']],'Flows: it is a not, and refutation is exactly how a not is proved.')}
 };
 let G='g1', RT='direct';
 function mkChips(host,list,cur,on){ list.forEach(([k,label])=>{ const b=document.createElement('button'); b.dataset.k=k; b.textContent=label; if(k===cur) b.className='on'; b.onclick=()=>{ [...host.querySelectorAll('button')].forEach(x=>x.classList.toggle('on',x===b)); on(k); }; host.appendChild(b); }); }
@@ -501,7 +501,7 @@ stepper('#sl4',[
 stepper('#sl8',[
   {k:'ember',kl:'a split inside a split',t:R`\text{Gomez is indoors} \lor (\text{Gomez is in the garden} \land (\text{Gomez is wet} \lor \text{Gomez is warm}))`,n:`Given, with “indoors ⇒ warm”. Claim: Gomez is wet or warm. The outer or supplies the cases.`},
   {k:'ember',kl:'a split inside a split',t:R`\begin{aligned}&\text{Suppose Gomez is indoors. Then he is warm,}\\ &\text{so } ${N}{\text{he is wet or warm.}}\end{aligned}`,n:`The first case. Carry “indoors ⇒ warm” through, then add an option. The common conclusion is reached.`},
-  {k:'ember',kl:'a split inside a split',t:R`\begin{aligned}&\text{Suppose instead he is in the garden,}\\ &\text{and wet or warm. So he is wet or warm.}\end{aligned}`,n:`The second case. Keep right on the and. The inner or is already the common conclusion; nothing to split further here, as it happens. Had the inner or been “wet or cold”, you would split on it while supposing this case.`},
+  {k:'ember',kl:'a split inside a split',t:R`\begin{aligned}&\text{Suppose instead he is in the garden,}\\ &\text{and wet or warm. So he is wet or warm.}\end{aligned}`,n:`The second case. Keep second on the and. The inner or is already the common conclusion; nothing to split further here, as it happens. Had the inner or been “wet or cold”, you would split on it while supposing this case.`},
   {k:'ember',kl:'a split inside a split',t:R`\text{Either way, Gomez is wet or warm.}`,n:`By cases: every case reached the same conclusion. No list of examples could have done this; each case covers every way its option comes about.`}
 ],{title:'The slides · a split inside a split · ← → keys work'});
 stepper('#sl9',[

@@ -416,10 +416,10 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   </ul>
   <pre class="lines" data-k="ember" data-label="the basement: regroup for and, forward">
 (P \land Q) \land R @@ given
-P \land Q @@ keep left
-P @@ keep left, on the line above
-Q @@ keep right, on the line above that
-R @@ keep right, on the given line
+P \land Q @@ keep first
+P @@ keep first, on the line above
+Q @@ keep second, on the line above that
+R @@ keep second, on the given line
 Q \land R @@ join
 \htmlClass{new}{P \land (Q \land R)} @@ join. Backward runs the same techs from the other end
   </pre>
@@ -439,8 +439,8 @@ Q \land R @@ join
   </pre>
   <pre class="lines" data-k="ember" data-label="the basement: spread and over or, forward">
 P \land (Q \lor R) @@ given
-P @@ keep left
-Q \lor R @@ keep right
+P @@ keep first
+Q \lor R @@ keep second
 \qquad \text{case } Q @@ assumed
 \qquad P \land Q @@ join
 \qquad (P \land Q) \lor (P \land R) @@ add an option
@@ -452,13 +452,13 @@ Q \lor R @@ keep right
   <pre class="lines" data-k="ember" data-label="the basement: spread and over or, backward">
 (P \land Q) \lor (P \land R) @@ given
 \qquad \text{case } P \land Q @@ assumed
-\qquad P @@ keep left
-\qquad Q @@ keep right
+\qquad P @@ keep first
+\qquad Q @@ keep second
 \qquad Q \lor R @@ add an option
 \qquad P \land (Q \lor R) @@ join
 \qquad \text{case } P \land R @@ assumed
-\qquad P @@ keep left
-\qquad R @@ keep right
+\qquad P @@ keep first
+\qquad R @@ keep second
 \qquad Q \lor R @@ add an option
 \qquad P \land (Q \lor R) @@ join
 \htmlClass{new}{P \land (Q \lor R)} @@ reason by cases
@@ -470,15 +470,15 @@ P \lor (Q \land R) @@ given
 \qquad P \lor R @@ add an option
 \qquad (P \lor Q) \land (P \lor R) @@ join
 \qquad \text{case } Q \land R @@ assumed
-\qquad P \lor Q @@ keep left; add an option
-\qquad P \lor R @@ keep right; add an option
+\qquad P \lor Q @@ keep first; add an option
+\qquad P \lor R @@ keep second; add an option
 \qquad (P \lor Q) \land (P \lor R) @@ join
 \htmlClass{new}{(P \lor Q) \land (P \lor R)} @@ reason by cases
   </pre>
   <pre class="lines" data-k="ember" data-label="the basement: spread or over and, backward">
 (P \lor Q) \land (P \lor R) @@ given
-P \lor Q @@ keep left
-P \lor R @@ keep right
+P \lor Q @@ keep first
+P \lor R @@ keep second
 \qquad \text{case } P @@ assumed
 \qquad P \lor (Q \land R) @@ add an option
 \qquad \text{case } Q @@ assumed; now take cases on P ∨ R
@@ -491,20 +491,20 @@ P \lor R @@ keep right
 \htmlClass{new}{P \lor (Q \land R)} @@ reason by cases
   </pre>
   <pre class="lines" data-k="ember" data-label="the basement: say-it-again and absorb, both ways">
-P \land P \;\text{ to }\; P @@ keep left
+P \land P \;\text{ to }\; P @@ keep first
 P \;\text{ to }\; P \land P @@ join, P with itself
 P \lor P \;\text{ to }\; P @@ reason by cases: each case is P itself
 P \;\text{ to }\; P \lor P @@ add an option
-P \land (P \lor Q) \;\text{ to }\; P @@ keep left
+P \land (P \lor Q) \;\text{ to }\; P @@ keep first
 P \;\text{ to }\; P \land (P \lor Q) @@ add an option, then join
-P \lor (P \land Q) \;\text{ to }\; P @@ reason by cases: case P, P itself; case P ∧ Q, keep left
+P \lor (P \land Q) \;\text{ to }\; P @@ reason by cases: case P, P itself; case P ∧ Q, keep first
 \htmlClass{new}{P \;\text{ to }\; P \lor (P \land Q)} @@ add an option
   </pre>
   <pre class="lines" data-k="ember" data-label="the basement: not-through for and, backward">
 \neg P \lor \neg Q @@ given
 \qquad \text{assume } P \land Q @@ assumed: aiming to refute it
-\qquad P @@ keep left
-\qquad Q @@ keep right
+\qquad P @@ keep first
+\qquad Q @@ keep second
 \qquad\quad \text{case } \neg P @@ assumed
 \qquad\quad \bot @@ clash, with “P”
 \qquad\quad \text{case } \neg Q @@ assumed
@@ -522,8 +522,8 @@ P \lor (P \land Q) \;\text{ to }\; P @@ reason by cases: case P, P itself; case 
   </pre>
   <pre class="lines" data-k="ember" data-label="the basement: negated-if, backward">
 P \land \neg Q @@ given
-P @@ keep left
-\neg Q @@ keep right
+P @@ keep first
+\neg Q @@ keep second
 \qquad \text{assume } P \Rightarrow Q @@ assumed: aiming to refute it
 \qquad Q @@ carry an if through
 \qquad \bot @@ clash, with “¬Q”
@@ -531,8 +531,8 @@ P @@ keep left
   </pre>
   <pre class="lines" data-k="ember" data-label="the basement: cases, forward">
 (P \Rightarrow R) \land (Q \Rightarrow R) @@ given
-P \Rightarrow R @@ keep left
-Q \Rightarrow R @@ keep right
+P \Rightarrow R @@ keep first
+Q \Rightarrow R @@ keep second
 \qquad \text{assume } P \lor Q @@ assumed: the hypothesis of the if we want
 \qquad\quad \text{case } P @@ assumed
 \qquad\quad R @@ carry an if through
@@ -565,9 +565,9 @@ Q \Rightarrow R @@ prove an if
   <pre class="lines" data-k="ember" data-label="the basement: hypotheses-in-turn, backward">
 P \Rightarrow (Q \Rightarrow R) @@ given
 \qquad \text{assume } P \land Q @@ assumed
-\qquad P @@ keep left
+\qquad P @@ keep first
 \qquad Q \Rightarrow R @@ carry an if through
-\qquad Q @@ keep right
+\qquad Q @@ keep second
 \qquad R @@ carry an if through
 \htmlClass{new}{(P \land Q) \Rightarrow R} @@ prove an if
   </pre>
@@ -578,13 +578,13 @@ P \Rightarrow (Q \Rightarrow R) @@ given
 \htmlClass{new}{\top} @@ ︿ ⊤: what the mark means
   </pre>
   <pre class="lines" data-k="ember" data-label="the basement: clash and units, both ways">
-P \land \neg P \;\text{ to }\; \bot @@ keep left; keep right; clash
+P \land \neg P \;\text{ to }\; \bot @@ keep first; keep second; clash
 \bot \;\text{ to }\; P \land \neg P @@ everything permitted
-P \land \top \;\text{ to }\; P @@ keep left
+P \land \top \;\text{ to }\; P @@ keep first
 P \;\text{ to }\; P \land \top @@ join, with ⊤ from nothing
 P \lor \bot \;\text{ to }\; P @@ reason by cases: case P, P itself; case ⊥, everything permitted
 P \;\text{ to }\; P \lor \bot @@ add an option
-P \land \bot \;\text{ to }\; \bot @@ keep right
+P \land \bot \;\text{ to }\; \bot @@ keep second
 \bot \;\text{ to }\; P \land \bot @@ everything permitted
 P \lor \top \;\text{ to }\; \top @@ ⊤ from nothing
 \htmlClass{new}{\top \;\text{ to }\; P \lor \top} @@ add an option

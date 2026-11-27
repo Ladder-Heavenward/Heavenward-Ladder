@@ -160,7 +160,7 @@ setTimeout(function(){loaded=true;grown=true;back();},4000);
   <p data-pid="f540b9">Here is the earliest thing that follows from the axiom.</p>
   <p data-pid="130863">Named-sets-are-inductive technique: <b>every entry of the run you can name is in every inductive set.</b> The proof is carry-through, over and over.</p>
   <p data-pid="1ffd8b">Let I be inductive. Unpack the word: 0 is in I, and for every x, if x is in I then S(x) is in I. Keep the left part: 0 is in I. Use the every with 0: if 0 is in I, then S(0) is in I. Carry the if through, and S(0) is in I. That is 1, so 1 is in I. Use the every with 1 and carry through, and 2 is in I. With 2, and then with 3, the same two moves give 3 and then 4.</p>
-<div class="eqline c6" data-tex="\begin{aligned}&amp;0 \in I \land \forall x\,(x \in I \Rightarrow S(x) \in I)\\ &amp;0 \in I \quad\text{keep left}\\ &amp;0 \in I \Rightarrow S(0) \in I;\ 1 \in I\\ &amp;1 \in I \Rightarrow 2 \in I;\ 2 \in I;\ \ldots;\ 4 \in I\end{aligned}"></div>
+<div class="eqline c6" data-tex="\begin{aligned}&amp;0 \in I \land \forall x\,(x \in I \Rightarrow S(x) \in I)\\ &amp;0 \in I \quad\text{keep first}\\ &amp;0 \in I \Rightarrow S(0) \in I;\ 1 \in I\\ &amp;1 \in I \Rightarrow 2 \in I;\ 2 \in I;\ \ldots;\ 4 \in I\end{aligned}"></div>
   <p data-pid="23db05">And the lines do not stop at 4. Use the every with 4 and carry through, and S(4) ∈ I; again, and S(S(4)) ∈ I. Whatever entry of the run you reach by writing S enough times, the argument reaches it too, with a use-an-every and a carry-through at each step. That is the sense in which an inductive set holds the whole run. The holding is not by a line that says “every entry”, since the ladder has no name yet for the run as a whole. It is by an argument that can be stretched to any entry you name. Rung 4 gives the run a name and turns this argument into a line that says it outright.</p>
 <div class="eqline c6" data-tex="\begin{aligned}&amp;4 \in I \Rightarrow S(4) \in I;\ S(4) \in I\\ &amp;S(S(4)) \in I;\ \ldots \quad\text{as far as you name}\end{aligned}"></div>
   <section class="slides" id="sl7"><div class="eyebrow">The slides · the named-sets-are-inductive technique · ← → keys work</div></section>
@@ -321,7 +321,7 @@ function drawF(){
   const lo=Math.max(0,k-6);
   if(lo>0){ const m=document.createElement('span'); m.className='more'; m.textContent='⋯'; pile.appendChild(m); }
   for(let j=lo;j<=k;j++){ const s=document.createElement('span'); s.textContent=nm(j)+' ∈ I'; if(j===k&&k>0) s.className='new'; pile.appendChild(s); }
-  let t= k===0? `0 \\in I\\quad\\text{(the base part: keep left)}` : `${nm(k-1)} \\in I \\Rightarrow S(${nm(k-1)}) \\in I\\quad\\text{(use the every)}\\\\ \\htmlClass{new}{${nm(k)} \\in I}\\quad\\text{(carry through)}`;
+  let t= k===0? `0 \\in I\\quad\\text{(the base part: keep first)}` : `${nm(k-1)} \\in I \\Rightarrow S(${nm(k-1)}) \\in I\\quad\\text{(use the every)}\\\\ \\htmlClass{new}{${nm(k)} \\in I}\\quad\\text{(carry through)}`;
   tex(document.getElementById('eqF'),`\\begin{gathered}${t}\\end{gathered}`,true);
 }
 document.getElementById('carry').onclick=()=>{ k++; drawF(); };
