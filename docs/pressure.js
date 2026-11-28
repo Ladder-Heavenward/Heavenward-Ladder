@@ -200,7 +200,7 @@ function wireDeeper(pane,lead,st,pick){ const box=pane.querySelector('.nk-deep')
 function third(box,st,pick){ const E=st.tree.e&&st.tree.e[pick]; if(!E||box.parentNode.querySelector('.nk-third')) return;
   const T=get('nook:sq3',{}), seen=(T[K(st)]||{})[pick]||[];
   const d=document.createElement('div'); d.className='nk-third';
-  d.innerHTML='<p class="kd">then</p><p class="nk-start">'+fk(E[0])+'</p><p class="nk-ask">What does '+esc((st.tree.t.match(/Zoe|Evita|Sarah|Claire|Randy|Jean|Terry|Mike/)||['the student'])[0])+' do to keep going?</p><ol class="nk-ways">'
+  d.innerHTML='<p class="kd">then</p><p class="nk-start">'+fk(E[0])+'</p><p class="nk-ask">What does '+esc((st.tree.t.match(/Joy|Evita|Sarah|Claire|Randy|Jean|Terry|Mike/)||['the student'])[0])+' do to keep going?</p><ol class="nk-ways">'
     +E[1].map((r,i)=>'<li><button type="button" class="nk-on3'+(seen.includes(i)?' tried':'')+'" data-i="'+i+'">'+fk(r[0])+'</button></li>').join('')+'</ol><div class="nk-f3"></div>';
   box.after(d);
   d.querySelectorAll('.nk-on3').forEach(b=>b.onclick=()=>{ const i=+b.dataset.i, r=E[1][i], T=get('nook:sq3',{}), m=(T[K(st)]=T[K(st)]||{}), s=(m[pick]=m[pick]||[]); if(!s.includes(i)) s.push(i); put('nook:sq3',T);

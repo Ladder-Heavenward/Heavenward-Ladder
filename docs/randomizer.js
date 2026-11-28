@@ -1941,12 +1941,12 @@ K({id:'payoff',step:'7·econ',title:'the stuck pair in a payoff table',make(){ f
       const up=(X,Y,k)=>{ if(X[k]<Y[k]){ const t=X[k]; X[k]=Y[k]; Y[k]=t; } if(X[k]===Y[k]){ if(X[k]<9) X[k]+=ri(1,Math.min(3,9-X[k])); else Y[k]-=ri(1,3); } }; up(N,U,0); up(N,V,1);
       if(D[0]>V[0]&&D[1]>U[1]){ if(R()<0.5){ const t=D[0]; D[0]=V[0]; V[0]=t; } else { const t=D[1]; D[1]=U[1]; U[1]=t; } } }
     const nash=[]; for(let r=0;r<2;r++) for(let c=0;c<2;c++){ const a=P[2*r+c][0], b=P[2*r+c][1]; if(a>=P[2*(1-r)+c][0]&&b>=P[2*r+1-c][1]&&a!==P[2*(1-r)+c][0]&&b!==P[2*r+1-c][1]) nash.push([r,c]); }
-    if(nash.length!==1) continue; const mv=['keep quiet','tell'], name=([r,c])=>'Zoe '+(r?'tells':'keeps quiet')+', Mike '+(c?'tells':'keeps quiet');
-    let bd=Re(90,30,220,100,'rg-uni')+Ln(200,30,200,130,'rg-grid')+Ln(90,80,310,80,'rg-grid')+T(145,22,'Mike: '+mv[0],'rg-lab','middle')+T(255,22,'Mike: '+mv[1],'rg-lab','middle')+T(84,60,'Zoe: '+mv[0],'rg-lab','end')+T(84,110,'Zoe: '+mv[1],'rg-lab','end');
+    if(nash.length!==1) continue; const mv=['keep quiet','tell'], name=([r,c])=>'Joy '+(r?'tells':'keeps quiet')+', Mike '+(c?'tells':'keeps quiet');
+    let bd=Re(90,30,220,100,'rg-uni')+Ln(200,30,200,130,'rg-grid')+Ln(90,80,310,80,'rg-grid')+T(145,22,'Mike: '+mv[0],'rg-lab','middle')+T(255,22,'Mike: '+mv[1],'rg-lab','middle')+T(84,60,'Joy: '+mv[0],'rg-lab','end')+T(84,110,'Joy: '+mv[1],'rg-lab','end');
     for(let r=0;r<2;r++) for(let c=0;c<2;c++) bd+=T(145+c*110,60+r*50,P[2*r+c][0]+' , '+P[2*r+c][1],'rg-tag','middle');
     const right=name(nash[0]), all=[[0,0],[0,1],[1,0],[1,1]].map(name), o=four(right,all); if(!o) return null;
-    return card(this,{ix:P.map(p=>p.join('')).join('.'),links:['7·econ.stuck-pair'], fig:box(320,140,bd,'a two by two payoff table'), ask:'Each cell gives (Zoe’s gain, Mike’s gain). Which pair of choices is stuck: neither does better by changing alone?', right, opts:o,
-      why:'In '+right.toLowerCase()+', Zoe changing alone drops her from '+P[2*nash[0][0]+nash[0][1]][0]+' to '+P[2*(1-nash[0][0])+nash[0][1]][0]+', and Mike changing alone drops him from '+P[2*nash[0][0]+nash[0][1]][1]+' to '+P[2*nash[0][0]+1-nash[0][1]][1]+'. In each other cell one of them gains by switching.'}); }
+    return card(this,{ix:P.map(p=>p.join('')).join('.'),links:['7·econ.stuck-pair'], fig:box(320,140,bd,'a two by two payoff table'), ask:'Each cell gives (Joy’s gain, Mike’s gain). Which pair of choices is stuck: neither does better by changing alone?', right, opts:o,
+      why:'In '+right.toLowerCase()+', Joy changing alone drops her from '+P[2*nash[0][0]+nash[0][1]][0]+' to '+P[2*(1-nash[0][0])+nash[0][1]][0]+', and Mike changing alone drops him from '+P[2*nash[0][0]+nash[0][1]][1]+' to '+P[2*nash[0][0]+1-nash[0][1]][1]+'. In each other cell one of them gains by switching.'}); }
   return null; }});
 
 /* ================= Floor 2 ================= */
@@ -14871,7 +14871,7 @@ L.slice(L0).forEach(l=>{ const a=l.act, s=l.slips, ln=l.line;
   l.slips=(c,p)=>{ try{ return (s(c,p)||[]).filter(w=>w&&(w.t||w.v||w.s||w.re)); }catch(e){ return []; } };
   l.line=(o,p,nm,nx,c)=>{ try{ return ln(o,p,nm,nx,c); }catch(e){ return nx+' = '+KIND[o.k].show(o); } }; });
 /* ================= Word Problems: annex laws, their stories and units ================= */
-const WHO=['Zoe','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'];
+const WHO=['Joy','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'];
 const LW=o=>LAWS.push(o);
 const poly=c=>fromPoly(c.map(x=>typeof x==='number'?Q(x):x));
 const sp=(c,v)=>show(poly(c)).replace(/x/g,v||'x');
@@ -14923,7 +14923,7 @@ LW({id:'16·then.inflow',step:'16·then',label:'a river filling a lake',make(){ 
 LW({id:'16·eng.beam',step:'16·eng',label:'the shear along a beam',make(){ const k=ri(2,6), L=pick([4,6,8]); return {c:[k*L/2,-k],ix:k+','+L,
   story:'A beam '+L+' metres long carries '+k+' kilonewtons on each metre. x metres from one end, the shear is V(x) = '+sp([k*L/2,-k],'x')+' kilonewtons.',f:'V',x:'x',xu:'metres',yu:'kilonewtons',rate:'kilonewtons per metre',area:'kilonewton metres',pts:[1,2],ends:[[0,1],[0,2],[1,2]]}; }});
 LW({id:'16·bio.dose',step:'16·bio',label:'a drug in the blood',make(){ const a=pick([6,8,10]); return {c:[0,a,-1],ix:String(a),
-  story:'t hours after a dose, the drug in Zoe’s blood stands at C(t) = '+sp([0,a,-1],'t')+' milligrams a litre, for t up to '+a+'.',f:'C',x:'t',xu:'hours',yu:'milligrams a litre',rate:'milligrams a litre per hour',area:'milligram hours a litre',pts:[1,2,3,4],ends:[[0,2],[0,3],[1,4],[2,4]]}; }});
+  story:'t hours after a dose, the drug in Joy’s blood stands at C(t) = '+sp([0,a,-1],'t')+' milligrams a litre, for t up to '+a+'.',f:'C',x:'t',xu:'hours',yu:'milligrams a litre',rate:'milligrams a litre per hour',area:'milligram hours a litre',pts:[1,2,3,4],ends:[[0,2],[0,3],[1,4],[2,4]]}; }});
 LW({id:'17·then.yeast',step:'17·then',label:'a count whose log rises in a line',make(){ const a=ri(2,4); return {c:[a,1],ix:String(a),semilog:true,
   story:'Claire counts yeast in a jar of dough in Petaluma. The log base 2 of the count, in thousands, t hours in is L(t) = '+sp([a,1],'t')+'.',f:'L',x:'t',xu:'hours',yu:'doublings',rate:'doublings an hour',area:null,pts:[1,2,3]}; }});
 LW({id:'17·chem.halflife',step:'17·chem',label:'half-lives gone by',make(){ const N0=pick([320,640,960,1280]); return {c:[0,2],ix:String(N0),halve:N0,
@@ -15048,7 +15048,7 @@ function gl(id,from,to,o){ L.push({id,from,to,f3:1,pt:o.pt,poly:o.poly,steps:()=
   line:(out,p,nm,nx,cur)=>o.ln(raw(cur),p,vshow(out),nm,nx,out)}); }
 const nl=(id,o)=>gl(id,'num',o.to||'num',o);
 /* stories: the ladder's people, pets, creatures and places */
-const WHO=['Zoe','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'];
+const WHO=['Joy','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'];
 const ANIMALS=('Orca Otter Salmon Heron Osprey Marmot Elk Cougar Raven Puffin Murre Sculpin Lingcod Halibut Geoduck Limpet Chiton Urchin Anemone Nudibranch '
   +'Octopus Porpoise Seal Humpback Minke Beaver Marten Fisher Pika Wolverine Lynx Bobcat Coyote Wolf Bear Deer Newt Salamander Treefrog Kingfisher '
   +'Dipper Eagle Murrelet Auklet Oystercatcher Loon Grebe Scoter Goldeneye Bufflehead Harlequin Steelhead Sturgeon Lamprey Smelt Herring Rockfish Greenling '
@@ -16515,7 +16515,7 @@ LAWS.push(
   {id:'46·comp.addresses',step:'46·comp',label:'addresses handed out',make(){ const a=ri(2,6), b=ri(1,4); return {c:[a,b,1],ix:a+','+b,story:'A network at '+pick(['Badger Ridge','Swan Lake','Pine Hollow'])+' hands out U(t) = '+a+' + '+b+'t + t² thousand addresses by year t.',f:'U',x:'t',xu:'years',yu:'thousand addresses',rate:'thousand addresses a year',area:null,pts:[1,2,3,5]}; }},
   {id:'46·eng.flood',step:'46·eng',label:'messages a switch floods',make(){ const p=ri(3,8), N=ri(20,40); return {c:[(p-1)*N,-(p-1)],ix:p+','+N,tag:'flood',ports:p,story:'A switch with '+p+' ports has '+N+' senders to learn; while it knows n of them, a round of one message from each floods F(n) = '+(p-1)+'('+N+' − n) extra copies.',f:'F',x:'n',xu:'senders learnt',yu:'copies',rate:'copies per sender learnt',area:null,pts:[2,5,10]}; }},
   {id:'48·eng.loading',step:'48·eng',label:'a voltage through a chain of parts',make(){ const a=ri(2,6); return {c:[0,Q(1,a)],ix:String(a),tag:'chain',a,story:'A chain of parts at '+pick(['Gull Point','Ash Mill','the Weir'])+' passes 1/'+a+' of its input: V(x) = x/'+a+' volts out for x volts in.',f:'V',x:'x',xu:'volts in',yu:'volts out',rate:'volts out per volt in',area:null,pts:[a,2*a,3*a]}; }},
-  {id:'48·phys.axes',step:'48·phys',label:'a reading that keeps its form under new axes',make(){ const k=ri(2,6); return {c:[0,0,k],ix:String(k),story:'Evita reads an arrow x metres long on her axes as q(x) = '+k+'x² square metres; Zoe, on turned axes, gets the same.',f:'q',x:'x',xu:'metres',yu:'square metres',rate:'square metres per metre',area:null,pts:[1,2,3]}; }}
+  {id:'48·phys.axes',step:'48·phys',label:'a reading that keeps its form under new axes',make(){ const k=ri(2,6); return {c:[0,0,k],ix:String(k),story:'Evita reads an arrow x metres long on her axes as q(x) = '+k+'x² square metres; Joy, on turned axes, gets the same.',f:'q',x:'x',xu:'metres',yu:'square metres',rate:'square metres per metre',area:null,pts:[1,2,3]}; }}
 );
 
 /* word links of these annexes: each carries a reading of the law on, in the story's own terms and units */
@@ -20657,7 +20657,7 @@ const LAWS=CH.LAWS, WL=CH.WL;
 const qq=x=>typeof x==='number'?Q(x):x;
 const poly=c=>fromPoly(c.map(qq));
 const sp=(c,v)=>show(poly(c)).replace(/x/g,v);
-const WHO=['Zoe','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'], HE=w=>['Randy','Jean','Terry','Mike'].includes(w);
+const WHO=['Joy','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'], HE=w=>['Randy','Jean','Terry','Mike'].includes(w);
 const PLACES=['Salinas','Monterey','Astoria','Tillamook','Wenatchee','Modesto','Merced','Truckee','Auburn','Placerville','Bend','Yakima','Ellensburg','Tofino','Anacortes',
   'Bellingham','Olympia','Tacoma','Eugene','Ashland','Eureka','Arcata','Mendocino','Sonora','Mariposa','Newport','Coos Bay','Port Townsend','Sequim','Nanaimo','Victoria','Squamish',
   'Hood River','The Dalles','Leavenworth','Winthrop','Sisters','Redding','Chico','Petaluma','Santa Cruz'];
@@ -20821,7 +20821,7 @@ const CLOSE={
   G(X({u:'area',k:'above',ask:(S,p)=>'the beam cracks at a bending of '+p.K+' kilonewton metres: how much margin is left?',ln:()=>'margin in bending'},own('16·eng','the moment-from-shear technique'))),
   G(X({u:'yu',k:'above',ask:(S,p)=>'the bolts there hold '+p.K+' kilonewtons of shear: how many kilonewtons to spare?',ln:()=>'shear to spare'},LESS))],
 '16·bio.dose':[
-  Tm(X({u:'area',out:'milligrams',k:()=>pick([2,3,5]),ask:(S,p)=>'Zoe’s body clears '+p.K+' litres an hour: how many milligrams did it take up?',ln:()=>'milligrams taken up'},own('16·bio','the dose-area technique'))),
+  Tm(X({u:'area',out:'milligrams',k:()=>pick([2,3,5]),ask:(S,p)=>'Joy’s body clears '+p.K+' litres an hour: how many milligrams did it take up?',ln:()=>'milligrams taken up'},own('16·bio','the dose-area technique'))),
   G(X({u:'yu',k:'above',ask:(S,p)=>'the safe ceiling is '+p.K+' milligrams a litre: how far below it is the level?',ln:()=>'below the ceiling'},LESS))],
 '17·then.yeast':[
   G(X({u:'thousand cells',k:'above',ask:(S,p)=>'the dough is ready at '+p.K+' thousand cells: how many thousand more are needed?',ln:()=>'thousand cells still to grow'},LESS))],
@@ -21231,7 +21231,7 @@ law('2·comp.cond','tests before the then part',()=>{ const a=ri(2,4), b=ri(1,3)
   f:'T',x:'n',xu:'comparisons',yu:'steps',rate:'steps per comparison',area:null,pts:[2,3,4,5,6]}; },
   [Tm(X({u:'yu',out:'nanoseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each step takes '+p.K+' nanoseconds: how long does the check take?',ln:()=>'time for the check'},MQ))]);
 law('7·then.power','a power of 3 past so many digits',()=>({c:[0,3],early:1,story:'By the digits-of-a-power technique, 3 to the power m(k) = 3k has more than k digits.',f:'m',x:'k',xu:'digits',yu:'multiplications',rate:'multiplications per digit',area:null,pts:[10,20,40,60,100]}),
-  [Pr(X({u:'yu',out:'minutes',k:()=>pick([2,3,5]),ask:(S,p)=>'Zoe does '+p.K+' multiplications by 3 a minute, from 1: how many minutes to reach that power?',ln:()=>'minutes of work'},MQ))]);
+  [Pr(X({u:'yu',out:'minutes',k:()=>pick([2,3,5]),ask:(S,p)=>'Joy does '+p.K+' multiplications by 3 a minute, from 1: how many minutes to reach that power?',ln:()=>'minutes of work'},MQ))]);
 law('30·econ.drift','a drift against a wobble',()=>{ const k=pick([2,3,4]); return {c:[0,Q(1,k)],story:'A fund at '+at()+' drifts up D(t) = t/'+k+' dollars over t days, while its wobble over t days is √t dollars.',f:'D',x:'t',xu:'days',yu:'dollars',rate:'dollars a day',area:null,pts:[16,36,64,100,144]}; },
   [O(X({u:'yu',k:(S,q,c)=>{ const r=qsqrt(Q(c.x)); return r; },when:hasX,ask:(S,p)=>'by how many dollars does the drift stand above the wobble over those days?',ln:()=>'drift above the wobble',w:[null,'the wobble is added to the drift'],
     xs:(S,p,q)=>[{why:'the wobble is taken to grow like t, not √t',v:qa(q.v,qn(Q(p.ctx.x)))}]},own('30·econ','the drift-and-width technique')))]);
@@ -21260,7 +21260,7 @@ law('14·bio.cell','oxygen spreading to a cell’s centre',()=>{ const a=pick([2
   f:'r',x:'d',xu:'days',yu:'micrometres',rate:'micrometres a day',area:null,pts:[1,2,3,4,5]}; },
   [Cu(X({u:'yu',out:'milliseconds',k:1,f:(S,p,q)=>qm(qm(q.v,q.v),Q(1,4)),ex:(S,p,q)=>par(q.v)+'²/(2 · 2)',ask:()=>'oxygen spreads in the cell with D = 2 square micrometres a millisecond: about how long to reach the centre?',ln:()=>'time to spread there, x²/(2D)',
     xs:(S,p,q)=>[{why:'the distance is not squared',v:qm(q.v,Q(1,4))},{why:'the 2 of x² = 2Dt is left out',v:qm(qm(q.v,q.v),Q(1,2))},{why:'the distance is squared and multiplied by 2D',v:qm(qm(q.v,q.v),Q(4))}]},own('14·bio','the spreading law')))]);
-law('14·bio.scent','a scent spreading through still air',()=>{ const a=pick([2,4,6]); return {c:[0,a],story:'Zoe opens a jar of scent on a counter at '+at()+'; the k-th tile along the counter ends L(k) = '+a+'k centimetres from it.',
+law('14·bio.scent','a scent spreading through still air',()=>{ const a=pick([2,4,6]); return {c:[0,a],story:'Joy opens a jar of scent on a counter at '+at()+'; the k-th tile along the counter ends L(k) = '+a+'k centimetres from it.',
   f:'L',x:'k',xu:'tiles',yu:'centimetres',rate:'centimetres a tile',area:null,pts:[1,2,3,4,5]}; },
   [Cu(X({u:'yu',out:'seconds',k:1,f:(S,p,q)=>qm(qm(q.v,q.v),Q(5,2)),ex:(S,p,q)=>par(q.v)+'²/(2 · 1/5)',ask:()=>'in still air the scent spreads with D = 1/5 square centimetre a second: about how long to get that far?',ln:()=>'time to spread there, x²/(2D)',
     xs:(S,p,q)=>[{why:'the distance is not squared',v:qm(q.v,Q(5,2))},{why:'the 2 of x² = 2Dt is left out',v:qm(qm(q.v,q.v),Q(5))},{why:'the distance squared is multiplied by 2D instead of divided',v:qm(qm(q.v,q.v),Q(2,5))}]},own('14·bio','the spreading law')))]);
@@ -21337,7 +21337,7 @@ law('36·chem.redder','a dye giving light back redder',()=>{ const a=pick([10,20
   [Fr(X({u:'yu',k:S=>qm(RED[S.ch][0],Q(400,RED[S.ch][1])),ask:(S)=>'it gives light back at '+RED[S.ch][1]+' nanometres for a share φ = '+qs(RED[S.ch][0])+' of the photons: how much energy comes back?',
     ln:(S)=>'energy back, φ · 400/'+RED[S.ch][1],w:['the energy not given back is given','the energy is divided by the share'],xs:(S,p,q)=>[{why:'the redder wavelength is left out, φ alone',v:qm(q.v,RED[S.ch][0])},{why:'the wavelengths are turned over',v:qm(q.v,qm(RED[S.ch][0],Q(RED[S.ch][1],400)))}]},own('36·chem','the redder-return technique')))]);
 /* electricity */
-law('7·phys.side','lamps side by side on a battery',()=>{ const a=pick([1,2,3]), V=pick([6,12]); return {c:[0,a],early:1,V,story:'Zoe wires n lamps side by side across a '+V+' volt battery; each draws '+a+' amps, so the battery gives I(n) = '+a+'n amps.',
+law('7·phys.side','lamps side by side on a battery',()=>{ const a=pick([1,2,3]), V=pick([6,12]); return {c:[0,a],early:1,V,story:'Joy wires n lamps side by side across a '+V+' volt battery; each draws '+a+' amps, so the battery gives I(n) = '+a+'n amps.',
   f:'I',x:'n',xu:'lamps',yu:'amps',rate:'amps per lamp',area:null,pts:[2,3,4,6]}; },
   [In(X({u:'yu',out:'ohms',k:S=>S.V,ask:(S)=>'what single resistance across the '+S.V+' volt battery would draw that same current?',ln:()=>'resistance of the lamps together',
     xs:(S,p,q)=>[{why:'the lamps are taken in series, their resistances added',v:qm(q.v,Q(S.V,S.c[1]*S.c[1]))},{why:'one lamp’s resistance is given',v:Q(S.V,S.c[1])}]},own('7·phys','in parallel, reciprocals add')))]);
@@ -22198,7 +22198,7 @@ addC(L,G(X({u:'loose strokes',out:'strokes',k:'above',ask:(S,p)=>'the margin has
   G(X({u:'full lines',out:'lines',k:'above',ask:(S,p)=>'the page has '+p.K+' lines: how many are still free?',ln:()=>'lines still free'},LESS)));
 }
 
-/* ---------- 4·comp.ripple: Zoe's ripple adder ---------- */
+/* ---------- 4·comp.ripple: Joy's ripple adder ---------- */
 { const D=mk('ripple'), L='4·comp.ripple', TQ='the ripple technique';
 midsOf(L,[
  D('sums',['read'],'gate delays','gate delays',['4·comp'],TQ,(S,p)=>p.k+' such sums are done one after another: how many gate delays in all?',
@@ -22775,9 +22775,9 @@ midsOf(L,[
    (S,p,q)=>{ const r=Dv(q.v,2); return whole(r)?r:null; },(S,p,q)=>P(q.v)+'/2','multiplications by 9',[['the count is doubled instead of halved','double the count for multiplications by 9',(S,p,q)=>M(q.v,2)],['9 is divided into it','divide the count by 9',(S,p,q)=>Dv(q.v,9)]]),
  D('by81',['by9'],'multiplications by 9','multiplications by 81','7·then',TQ,'81 is 9 · 9: how many multiplications by 81 reach the same power?',
    (S,p,q)=>{ const r=Dv(q.v,2); return whole(r)?r:null; },(S,p,q)=>P(q.v)+'/2','multiplications by 81',[['the count is doubled instead of halved','double the count',(S,p,q)=>M(q.v,2)],['9 is divided into it again','divide the count by 9',(S,p,q)=>Dv(q.v,9)]]),
- D('mins',['by81'],'multiplications by 81','minutes','5j','multiplying and dividing quantities',(S,p)=>'Zoe does '+p.k+' of those multiplications a minute: how many minutes of work?',
+ D('mins',['by81'],'multiplications by 81','minutes','5j','multiplying and dividing quantities',(S,p)=>'Joy does '+p.k+' of those multiplications a minute: how many minutes of work?',
    (S,p,q)=>Dv(q.v,p.k),(S,p,q)=>P(q.v)+'/'+p.k,'minutes of work',divW((S,p)=>'the '+p.k+' a minute',(S,p)=>p.k),()=>({k:pick([2,3,5])}))]);
-addC(L,Pr(X({u:'multiplications by 9',out:'minutes',k:()=>pick([2,3,5]),ask:(S,p)=>'Zoe does '+p.K+' multiplications by 9 a minute: how many minutes of work?',ln:()=>'minutes of work'},MQ)),
+addC(L,Pr(X({u:'multiplications by 9',out:'minutes',k:()=>pick([2,3,5]),ask:(S,p)=>'Joy does '+p.K+' multiplications by 9 a minute: how many minutes of work?',ln:()=>'minutes of work'},MQ)),
   G(X({u:'minutes',k:'above',ask:(S,p)=>'she has '+p.K+' minutes before class: how many are spare?',ln:()=>'minutes spare'},LESS)));
 }
 
@@ -22802,7 +22802,7 @@ midsOf(L,[
    (S,p,q)=>M(q.v,Q(5,2)),(S,p,q)=>P(q.v)+'/(2 · 1/5)','time to get there',[['the 2 of 2Dt is left out','divide by D alone',(S,p,q)=>M(q.v,5)],['x² is multiplied by 2D','multiply by 2D',(S,p,q)=>M(q.v,Q(2,5))]]),
  D('mins',['t'],'seconds','minutes','5j','changing units is multiplying by one','how many minutes is that?',
    (S,p,q)=>Dv(q.v,60),(S,p,q)=>P(q.v)+'/60','in minutes',divW('the 60 seconds',60))]);
-addC(L,G(X({u:'minutes',k:'above',ask:(S,p)=>'Zoe leaves the room after '+p.K+' minutes: how many minutes before that does it arrive?',ln:()=>'minutes before she leaves'},LESS)),
+addC(L,G(X({u:'minutes',k:'above',ask:(S,p)=>'Joy leaves the room after '+p.K+' minutes: how many minutes before that does it arrive?',ln:()=>'minutes before she leaves'},LESS)),
   G(X({u:'seconds',k:'above',ask:(S,p)=>'a timer rings after '+p.K+' seconds: how many seconds before that does it arrive?',ln:()=>'seconds before the timer'},LESS)));
 }
 
@@ -22821,7 +22821,7 @@ addC(L,Tm(X({u:'dollars a day',out:'dollars',k:30,ask:()=>'what does it cost ove
   Tm(X({u:'kilowatt hours a day',out:'dollars a day',k:Q(1,5),ask:()=>'power costs 1/5 dollar a kilowatt hour: what does the leak cost a day?',ln:()=>'cost a day'},MQ)));
 }
 
-/* ---------- 7·phys.side: Zoe's lamps side by side ---------- */
+/* ---------- 7·phys.side: Joy's lamps side by side ---------- */
 { const D=mk('side'), L='7·phys.side', TQ='energy is kept';
 midsOf(L,[
  D('out',['read'],'amps','amps','4h','the less-is-adding technique',(S)=>'one lamp burns out, and its '+S.c[1]+' amps stop: what does the battery give now?',
@@ -22936,7 +22936,7 @@ midsOf(L,[D('fan',['m1'],'turns a minute of the middle shaft','turns a minute of
 addC(L,Pr(X({u:'turns a minute of the fan',out:'turns a second',k:60,ask:()=>'how many turns a second does the fan make?',ln:()=>'turns a second'},CU))); }
 { const D=mk('drag'), L='13·eng.drag'; const rider=S=>{ const m=S.story.match(/^(\w+) rides/); return m?m[1]:'the rider'; };
 midsOf(L,[D('tail',['power'],'watts','watts','5c','the scaling technique',(S)=>'riding close behind a friend cuts that power by 1/3: what power does '+rider(S)+' give then?',
-   (S,p,q)=>M(q.v,Q(2,3)),(S,p,q)=>P(q.v)+' · 2/3','power behind Zoe',[['only the cut is given','give the 1/3 that is saved',(S,p,q)=>M(q.v,Q(1,3))],['the power is cut to 1/3','take 1/3 of the power',(S,p,q)=>M(q.v,Q(1,3))]])]);
+   (S,p,q)=>M(q.v,Q(2,3)),(S,p,q)=>P(q.v)+' · 2/3','power behind Joy',[['only the cut is given','give the 1/3 that is saved',(S,p,q)=>M(q.v,Q(1,3))],['the power is cut to 1/3','take 1/3 of the power',(S,p,q)=>M(q.v,Q(1,3))]])]);
 { const W=LAWS.find(l=>l.id===L).mids.find(m=>m.id==='m:drag.hour'); if(W) W.after=W.after.concat(['m:drag.tail']); } }
 { const D=mk('reord'), L='14·logi.reorder';
 midsOf(L,[D('week',['read'],'bags a day','bags a week','5j','multiplying and dividing quantities','the store opens 7 days a week: how many bags does it sell in a week?',
@@ -23258,10 +23258,10 @@ addClose('16·eng.beam',[O(X({u:'times the stress',k:2,ask:()=>'the code asks fo
 /* ---------- 16·bio.dose: a drug in the blood ---------- */
 map('16·bio.dose',[
  ['weak',Y({af:['read','14a.best'],u:'milligrams a litre',out:'milligrams a litre',kd:'x',k:Q(3,2),
-   ask:()=>'Zoe’s kidneys are slow, so her level runs half as high again: what is her level?',lab:()=>'level with slow kidneys',
+   ask:()=>'Joy’s kidneys are slow, so her level runs half as high again: what is her level?',lab:()=>'level with slow kidneys',
    w:[['the level is divided by 3/2','her level runs half as high again: divide by 3/2'],null],xs:(S,p,q)=>[['the level is halved',qm(q.v,Q(1,2)),'her level runs half as high again: halve it'],['half a milligram is added',qa(q.v,Q(1,2)),'her level runs half as high again: add 1/2']]},SCL)],
  ['blood',Y({af:['read','14a.best','m:dose.weak'],u:'milligrams a litre',out:'milligrams in the blood',kd:'x',k:()=>pick([4,5,6]),
-   ask:(S,p)=>'Zoe has '+p.K+' litres of blood: how many milligrams of the drug are in it?',lab:()=>'drug in the blood',
+   ask:(S,p)=>'Joy has '+p.K+' litres of blood: how many milligrams of the drug are in it?',lab:()=>'drug in the blood',
    w:[['the level is divided by the litres',(S,p)=>'she has '+p.K+' litres of blood: divide by '+p.K],['the litres are added to the level',(S,p)=>'she has '+p.K+' litres of blood: add '+p.K]]},QTY)],
  ['free',Y({af:['m:dose.blood'],u:'milligrams in the blood',out:'milligrams free',kd:'x',k:Q(1,4),
    ask:()=>'3/4 of it is held by the blood’s proteins and idle: how many milligrams are free to work?',lab:()=>'free drug',
@@ -23723,7 +23723,7 @@ map('27·nav.delay',[
  ['km',Y({af:['read','m:delay.wire'],u:'metres',out:'kilometres',kd:'d',k:1000,
    ask:()=>'how many kilometres is that?',lab:()=>'kilometres',w:[['the metres are multiplied by 1000','multiply the metres by 1000'],null],xs:(S,p,q)=>[['a kilometre is taken as 100 metres',qm(q.v,Q(1,100)),'divide the metres by 100']]},UNIT)],
  ['walk',Y({af:['m:delay.km'],u:'kilometres',out:'minutes on foot',kd:'x',k:12,
-   ask:()=>'Zoe walks at 5 km an hour, 12 minutes a kilometre: how many minutes to walk it?',lab:()=>'minutes on foot',
+   ask:()=>'Joy walks at 5 km an hour, 12 minutes a kilometre: how many minutes to walk it?',lab:()=>'minutes on foot',
    w:[['the kilometres are divided by 12','12 minutes a kilometre: divide by 12'],null],xs:(S,p,q)=>[['the 5 km an hour is used as minutes a kilometre',qm(q.v,Q(5)),'5 km an hour: multiply the kilometres by 5']]},QTY)]]);
 addClose('27·nav.delay',[G(X({u:'minutes on foot',k:'above',ask:(S,p)=>'the ferry leaves in '+p.K+' minutes: how many minutes to spare?',ln:()=>'minutes to spare'},LESS))]);
 
@@ -24783,7 +24783,7 @@ map(L,[
       ['the resistance multiplies',(S,p)=>'square the volts and multiply by '+p.r,(v,S,p)=>mul(qm(v,v),p.r)]]}]]);
 Z(L,G(X({u:'milliwatts',k:'above',ask:(S,p)=>'the load is rated for '+p.K+' milliwatts: how many are to spare?',ln:()=>'milliwatts to spare'},LESS)));
 }
-/* ---------- 48·phys.axes: a reading that keeps its form; a longer arrow, the part on Zoe's first axis, her second, the limit ---------- */
+/* ---------- 48·phys.axes: a reading that keeps its form; a longer arrow, the part on Joy's first axis, her second, the limit ---------- */
 { const L='48·phys.axes', NA='the new-axes technique';
 map(L,[
  ['longer',{u:'square metres',out:'square metres',st:'48·phys',cite:'the same-on-every-axes technique',mk:(S,ch)=>{ const x=x0(ch); return x===undefined?null:{x,d:pick([1,2])}; },
@@ -24791,22 +24791,22 @@ map(L,[
    f:(v,S,p)=>qm(cq(S.c[2]),R((p.x+p.d)*(p.x+p.d))),ex:(V,S,p)=>qs(cq(S.c[2]))+' · '+(p.x+p.d)+'²',ln:'reading of the longer arrow',
    w:[['only the added piece is squared',(S,p)=>'add '+qs(cq(S.c[2]))+' · '+p.d+'² to the reading',(v,S,p)=>qa(v,qm(cq(S.c[2]),R(p.d*p.d)))],
       ['the metres are added as square metres',(S,p)=>'add the '+p.d+' metres to the reading',(v,S,p)=>add(v,p.d)]]}],
- ['first',{after:['read','longer'],u:'square metres',out:'square metres on Zoe’s first axis',st:'48·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
-   ask:(S,p)=>'on Zoe’s axes the arrow runs '+p.a+'/5 along her first axis: what part of the reading is that?',
+ ['first',{after:['read','longer'],u:'square metres',out:'square metres on Joy’s first axis',st:'48·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
+   ask:(S,p)=>'on Joy’s axes the arrow runs '+p.a+'/5 along her first axis: what part of the reading is that?',
    f:(v,S,p)=>mul(v,p.a*p.a,25),ex:(V,S,p)=>V+' · ('+p.a+'/5)²',ln:'part on the first axis',
    w:[['the share is not squared',(S,p)=>'take '+p.a+'/5 of the reading',(v,S,p)=>mul(v,p.a,5)],
       ['the other axis’s share is taken',(S,p)=>'take ('+p.b+'/5)² of the reading',(v,S,p)=>mul(v,p.b*p.b,25)]]}],
- ['second',{after:['first'],u:'square metres on Zoe’s first axis',out:'square metres on Zoe’s second axis',st:'48·phys',cite:'the same-on-every-axes technique',mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{t:c.in.v}:null; },
+ ['second',{after:['first'],u:'square metres on Joy’s first axis',out:'square metres on Joy’s second axis',st:'48·phys',cite:'the same-on-every-axes technique',mk:(S,ch)=>{ const c=ch[ch.length-1]; return c&&c.in?{t:c.in.v}:null; },
    ask:(S,p)=>'the whole reading, '+qs(p.t)+', is the same on her axes: what part is on her second axis?',
    f:(v,S,p)=>qa(p.t,qn(v)),ex:(V,S,p)=>qs(p.t)+' − '+V,ln:'part on the second axis',
    w:[['the parts are added','add the first part to the whole reading',(v,S,p)=>qa(p.t,v)],
       ['the second part is taken equal to the first','take the second part equal to the first',v=>v]]}],
- ['secondone',{after:['read','longer'],u:'square metres',out:'square metres on Zoe’s second axis',st:'48·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
-   ask:(S,p)=>'the arrow runs '+p.a+'/5 along Zoe’s first axis: what part of the reading is on her second?',
+ ['secondone',{after:['read','longer'],u:'square metres',out:'square metres on Joy’s second axis',st:'48·phys',cite:NA,mk:()=>pick([{a:3,b:4},{a:4,b:3}]),
+   ask:(S,p)=>'the arrow runs '+p.a+'/5 along Joy’s first axis: what part of the reading is on her second?',
    f:(v,S,p)=>mul(v,p.b*p.b,25),ex:(V,S,p)=>V+' · (1 − ('+p.a+'/5)²)',ln:'part on the second axis',
    w:[['the first axis’s part is given',(S,p)=>'take ('+p.a+'/5)² of the reading',(v,S,p)=>mul(v,p.a*p.a,25)],
       ['the shares are not squared',(S,p)=>'take 1 − '+p.a+'/5 of the reading',(v,S,p)=>mul(v,5-p.a,5)]]}]]);
-Z(L,G(X({u:'square metres on Zoe’s second axis',k:'above',ask:(S,p)=>'that part must stay under '+p.K+' square metres: how much room is left?',ln:()=>'room left'},LESS)));
+Z(L,G(X({u:'square metres on Joy’s second axis',k:'above',ask:(S,p)=>'that part must stay under '+p.K+' square metres: how much room is left?',ln:()=>'room left'},LESS)));
 }
 /* ---------- 28·now.mistakes: a learner's mistake bound; longer examples, weight changes, microseconds, the budget ---------- */
 { const L='28·now.mistakes', MB='the mistake-bound technique';
@@ -24939,7 +24939,7 @@ Z(L,Tm(X({u:'packets',out:'milliseconds',k:()=>pick([2,3,5]),ask:(S,p)=>'each pa
 { const L='30·nav.fix', WT='the weigh-by-trust technique';
 map(L,[
  ['drift',{u:'square metres',out:'square metres',st:'30·nav',cite:'the predict-and-correct technique',mk:()=>({d:pick([2,3,5])}),
-   ask:(S,p)=>'Zoe sails on '+p.d+' minutes without a fix: what is the spread of her place then?',
+   ask:(S,p)=>'Joy sails on '+p.d+' minutes without a fix: what is the spread of her place then?',
    f:(v,S,p)=>qa(v,qm(cq(S.c[1]),R(p.d))),ex:(V,S,p)=>V+' + '+qs(cq(S.c[1]))+' · '+p.d,ln:'spread after more drift',
    w:[['the minutes are added as square metres',(S,p)=>'add the '+p.d+' minutes to the spread',(v,S,p)=>add(v,p.d)],
       ['the spread at the fix is counted again',(S,p)=>'add S('+p.d+') to the spread',(v,S,p)=>qa(v,qa(cq(S.c[0]),qm(cq(S.c[1]),R(p.d))))]]}],
@@ -26346,7 +26346,7 @@ addAfter('32·bio.relief','m:relief.ord',['m:bio.relief.school']);
    Word Problems, about a quarter of the word draws once a statistics step is open; the round-2 dealer stays as the fallback. Index cws:<template>[<params>]. ===== */
 (function(){
 const {Q,qa,qm,qn,qi,qs,qe,gcd,isq,ri,openStep}=CH;
-const WHO=['Zoe','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'], GIRL=['Zoe','Evita','Sarah','Claire'];
+const WHO=['Joy','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'], GIRL=['Joy','Evita','Sarah','Claire'];
 const she=w=>GIRL.includes(w)?'she':'he', her=w=>GIRL.includes(w)?'her':'his';
 const PL=['Fernmoor','Quillby Cove','Thistlewick','Owlbridge','Kettlewater','Duskmere','Bramblecote','Gullhaven','Lanternholm','Mossbury Flats','Pebblecombe','Wickerlee','Saltreach','Cinderwold','Marrowdale','Hollin Rise','Tansy Ford','Brackenhythe'];
 let COS=[]; /* the story's names and places, kept in the index so a card can be found again */
@@ -27164,7 +27164,7 @@ CH.tooBig=tooBig; CH.round5=round5;
 (function(){
 const {Q,qa,qm,qn,qi,qz,qe,qs,big,ri,openStep}=CH, W2=CH.W2||{};
 const pk=a=>a[rnd(a.length)], qd=(a,b)=>qm(a,qi(b)), qf=a=>a.p/a.q, isInt=a=>a.q===1;
-const WHO=W2.WHO||['Zoe','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'], AT=()=>W2.at?W2.at():'Astoria';
+const WHO=W2.WHO||['Joy','Evita','Sarah','Claire','Randy','Jean','Terry','Mike'], AT=()=>W2.at?W2.at():'Astoria';
 const SING={'moles of oxygen':'mole of oxygen','moles of hydrogen':'mole of hydrogen','grams of propane':'gram of propane','kilojoules of heat':'kilojoule of heat','kilojoules of work':'kilojoule of work',kilowatts:'kilowatt',watts:'watt',horsepower:'horsepower',
   'turns a minute':'turn a minute','radians a second':'radian a second',volts:'volt',amps:'amp','litres a minute':'litre a minute',litres:'litre',minutes:'minute',seconds:'second',hours:'hour',newtons:'newton',kilopascals:'kilopascal',joules:'joule',
   'metres a second':'metre a second','kilometres an hour':'kilometre an hour','grams of ice':'gram of ice','grams of water':'gram of water','grams of glucose':'gram of glucose','grams of glucose built':'gram of glucose built','watts drawn':'watt drawn','kilojoules of waste heat':'kilojoule of waste heat','kilograms of water':'kilogram of water','moles of oxygen an hour':'mole of oxygen an hour','kilowatt-hours':'kilowatt-hour',cents:'cent','grams of hydrogen':'gram of hydrogen','grams of oxygen':'gram of oxygen','moles of water':'mole of water',ohms:'ohm','centimetres of string':'centimetre of string','pea pods':'pea pod','pea seeds':'pea seed','short plants expected':'short plant expected','tall plants expected':'tall plant expected','hours of light':'hour of light','hours of running':'hour of running','minutes of running':'minute of running',ohms:'ohm',metres:'metre'};
