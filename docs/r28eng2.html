@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>28·eng2 · Why Do Two Grounds Make a Hum?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<link rel="stylesheet" href="rung.css">
+<style>
+table.tt td.l{text-align:left}
+table.tt{margin:10px 0;border-collapse:collapse;font-size:.92rem}
+.tblwrap{overflow-x:auto}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#132a46"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ladder"><script>(function(){try{
+/* 0.3.6 (Andrew 22:25): when the app opens, its icon's navy grows to the edges of the screen, the ladder loads behind it,
+   then the navy draws back into the icon and the icon goes, showing the app. Once a session; never with reduced motion. */
+if(sessionStorage.getItem('splash'))return;sessionStorage.setItem('splash','1');
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var N='#132a46',S=112,d=document.createElement('div');d.id='splash';d.setAttribute('aria-hidden','true');
+d.style.cssText='position:fixed;inset:0;z-index:2147483000;pointer-events:none;display:grid;place-items:center;background:transparent';
+var f=document.createElement('div');f.style.cssText='position:absolute;left:50%;top:50%;width:'+S+'px;height:'+S+'px;margin:-'+S/2+'px 0 0 -'+S/2+'px;border-radius:22%;background:'+N+';will-change:transform';
+var i=document.createElement('img');i.src='icons/icon-192.png';i.alt='';i.style.cssText='position:relative;width:'+S+'px;height:'+S+'px;border-radius:22%;display:block';
+i.onerror=function(){i.style.visibility='hidden';};
+d.appendChild(f);d.appendChild(i);document.documentElement.appendChild(d);
+var cover=function(){var w=innerWidth,h=innerHeight;return Math.ceil(Math.sqrt(w*w+h*h)/S*1.08);};
+var t0=Date.now(),grown=false,loaded=false,done=false;
+var grow=f.animate([{transform:'scale(1)',borderRadius:'22%'},{transform:'scale('+cover()+')',borderRadius:'50%'}],{duration:520,delay:260,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+i.animate([{opacity:1},{opacity:1,offset:.45},{opacity:0}],{duration:780,fill:'forwards'});
+var back=function(){if(done||!grown||!loaded)return;done=true;
+  i.animate([{opacity:0},{opacity:1}],{duration:380,delay:300,fill:'forwards'});
+  f.animate([{transform:'scale('+cover()+')',borderRadius:'50%'},{transform:'scale(1)',borderRadius:'22%'}],{duration:560,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'})
+   .onfinish=function(){d.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.6)'}],{duration:260,delay:120,fill:'forwards'}).onfinish=function(){d.remove();};};};
+grow.onfinish=function(){grown=true;back();};
+var ld=function(){setTimeout(function(){loaded=true;back();},Math.max(0,700-(Date.now()-t0)));};
+if(document.readyState==='complete')ld();else addEventListener('load',ld);
+setTimeout(function(){loaded=true;grown=true;back();},4000);
+}catch(e){}})();</script></head><body>
+<div class="wrap">
+
+<header class="top">
+  <p class="home"><a href="index.html">← the ladder</a><a href="r28eng.html">← 28·eng how does a robot arm know how to reach?</a><a href="r28nav.html">next: 28·nav which way is “up” for a plane over Paris? →</a></p>
+  <div class="tags"><span class="tag eng">28·eng2 · engineering</span></div>
+  <h1>Why Do Two Grounds Make a Hum?</h1>
+  <p data-pid="f4963d">Why do two grounds make a hum? Randy plugs a guitar amplifier into one wall socket and a mixing desk into another, and joins them with a cable. A low steady hum comes out of the speakers with nothing playing. He unplugs the cable and it stops. Each box is properly grounded. The fault is in there being two grounds.</p>
+  <p class="gesture" data-pid="4ea312">A ground wire is a real wire, with resistance and with area between it and its neighbours. Current in it makes its two ends differ, and a closed loop of it catches the changing field of the mains. Good grounding gives every signal one road to zero and no loops.</p>
+</header>
+
+<section class="class step" data-step="28eng21">
+  <h2 class="sthead"><span class="stno">28eng21</span>A Wire Is Not Quite Zero</h2>
+  <p data-pid="701c62">7eng21 called one point zero. A drawing shows every ground symbol as that same point. On the bench they are joined by copper, and copper has resistance.</p>
+  <p data-pid="f44010">A motor and a microphone amplifier share one return wire to the supply.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a wire is not quite zero">
+\text{0.05 ohm} @@ return wire
+\text{10 amperes} @@ motor current in it
+\htmlClass{new}{10 \times 0.05 = 0.5\text{ volt}} @@ push between its ends
+  </pre>
+  <p data-pid="02f02a">The amplifier’s “zero” is half a volt away from the supply’s zero, and moves whenever the motor’s current does. The microphone’s signal is a thousandth of a volt.</p>
+  <p data-pid="2ddc73">The cure is in the wiring and costs nothing: give each its own return wire, meeting at one point only. No current of the motor then flows in any wire the amplifier measures from.</p>
+  <p data-pid="1dcd70">One-point technique: <b>bring every return wire separately to a single point. Two circuits that share a length of ground wire each see the other’s current as a change in their zero.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng2.1.1</span><span class="ph understand">understand</span>Why does a current in a shared ground wire appear as a signal in a circuit that did not make it?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng22">
+  <h2 class="sthead"><span class="stno">28eng22</span>Two Roads Make a Ring</h2>
+  <p data-pid="1fd51c">Randy’s amplifier is tied to ground through the third pin of its plug (7·eng2). So is the desk, at another socket. The cable between them has a metal sheath joined to the case at both ends.</p>
+  <p data-pid="d92734">Follow the metal: amplifier case, sheath, desk case, desk’s earth wire, the wiring in the wall, amplifier’s earth wire, amplifier case. It closes. There is a ring of conductor several metres across, and no one drew it on any diagram.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng2.2.1</span><span class="ph understand">understand</span>What three connections, each correct alone, together make a closed ring of conductor?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng23">
+  <h2 class="sthead"><span class="stno">28eng23</span>A Ring Catches a Changing Field</h2>
+  <p data-pid="c909ed">28·phys2: a current makes a magnetic field round its wire. The other half of that fact: a field that changes, passing through a ring of conductor, drives a push round the ring equal to the rate of change of field times area.</p>
+  <p data-pid="a7267a">Every wall of the room holds mains wiring, and its current runs as 26·eng’s sine at 50 turns a second.</p>
+<div class="eqline c6" data-tex="B(t) = B_0 \sin(2\pi f t), \qquad \text{push} = A\,\frac{dB}{dt} = A\,B_0\,2\pi f \cos(2\pi f t)"></div>
+  <p data-pid="da8f26">B₀ = 1 millionth of a tesla, A = 1 square metre, f = 50.</p>
+  <pre class="lines" data-k="ember" data-label="this page: a ring catches a changing field">
+2\pi f = 314 @@ f = 50
+\htmlClass{new}{1 \times 0.000001 \times 314 = 0.0003\text{ volt}} @@ greatest push
+  </pre>
+  <p data-pid="dddc47">Three tenths of a thousandth of a volt, at 50 a second, added round the ring. Part of the ring is the sheath that the signal uses as its zero, and the signal is a thousandth of a volt. That is the hum.</p>
+  <p data-pid="b4bfee">The circuit rules of 7·phys assumed that no changing field passes through the loops of the circuit. The loop rule, pushes round a loop summing to zero, is true only then. A ground loop is where that assumption fails.</p>
+  <p data-pid="fc94ba">Ring technique: <b>a closed ring of conductor has a push driven round it equal to its area times the rate of change of the field through it. Double the area or the frequency and the push doubles.</b></p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng2.3.1</span><span class="ph understand">understand</span>Why does the push driven round a ground loop grow with the area the loop encloses?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng24">
+  <h2 class="sthead"><span class="stno">28eng24</span>Opening the Ring and Keeping the Earth</h2>
+  <p data-pid="a2a6e9">The quick cure is to snap the third pin off one plug. The ring opens and the hum stops. 7eng23 says what has been given up.</p>
+  <p data-pid="e79a7e">The proper cures open the ring somewhere else.</p>
+  <p data-pid="06175b"><b>Join the sheath at one end only.</b> It still screens the wire inside and no longer closes a ring.</p>
+  <p data-pid="50eed3"><b>One point.</b> Plug both boxes into the same socket strip. The ring is still there with almost no area.</p>
+  <p data-pid="3ae5e1"><b>Twist the pair.</b> Two signal wires twisted together make a chain of small loops, each facing the opposite way to the last. Their pushes are +, −, +, − and sum to nearly zero.</p>
+  <p data-pid="79281c"><b>Take a difference.</b> Send the signal as the difference between two wires and subtract at the far end. Whatever is added to both alike is removed by the subtraction, as in 7eng21.</p>
+  <p data-pid="7dc0da"><b>Pass the signal without metal.</b> A pair of coils, or a lamp facing a light-sensitive switch, carries the signal across a gap. No conductor crosses, so no ring can close.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng2.4.1</span><span class="ph understand">understand</span>How does twisting two signal wires together reduce what a changing field adds to the signal?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng25">
+  <h2 class="sthead"><span class="stno">28eng25</span>The Measuring Lead Is a Loop Too</h2>
+  <p data-pid="e16a87">Sarah clips an oscilloscope probe onto a working circuit and the circuit starts to misbehave. The probe’s ground lead is a hand’s length of wire ending in a clip, and the instrument’s case is tied to the third pin. The lead and the circuit make a loop. Evita’s bench notes say it bluntly: the ground lead can do a lot of nasty things to a circuit, and the shorter the better. She replaces it with a bent paper clip a centimetre long.</p>
+  <p data-pid="d3f516">The same notes give two more habits. Lay a whole sheet of copper under a circuit as its ground, so that every return path is short and wide. And put a small capacitor from each supply wire to ground at the point where the wire arrives, so that sudden gulps of current are met from the capacitor and do not travel along the shared wires.</p>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng2.5.1</span><span class="ph understand">understand</span>Why does shortening a measuring instrument’s ground lead reduce the disturbance it causes?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="class step" data-step="28eng26">
+  <h2 class="sthead"><span class="stno">28eng26</span>Moves to Watch Out For</h2>
+  <p data-pid="6ecfc3">Each line below is a move that looks right and is not. The tag says what kind of mistake it is; the words say which footing catches it.</p>
+  <pre class="lines" data-k="check" data-label="this page: moves to watch out for">
+\text{All ground symbols are the same point}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; On paper; in copper they are joined by resistance (28eng21).
+\text{More grounding is better grounding}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; A second road to ground closes a ring (28eng22).
+\text{Lift the earth pin to stop the hum}\,? @@ &lt;span class="vd vd-p"&gt;outside the plan&lt;/span&gt; That removes the protection of 7·eng2; open the ring elsewhere (28eng24).
+\text{A screened cable cannot pick up hum}\,? @@ &lt;span class="vd vd-c"&gt;outside the collect&lt;/span&gt; Its sheath can be part of the ring (28eng23).
+  </pre>
+  <section class="sayback">
+    <h3>Question</h3>
+    <ol class="stql">
+      <li><span class="qid">28·eng2.6.1</span><span class="ph understand">understand</span>Why is “All ground symbols are the same point” a move to watch out for?</li>
+    </ol>
+  </section>
+</section>
+
+<section class="challenge themeend">
+  <div class="eyebrow">Standing questions · there if you want them</div>
+  <h2>Standing questions</h2>
+  <p class="chnote">Harder questions that rely on your own making. The step is complete without them; the rung’s angel wings need them.</p>
+  <div class="chq"><span class="chid">28·eng2.7.1</span><span class="tagq">build</span>A ring of 0.5 m² sits in a field of 2 millionths of a tesla at 60 a second. Find the greatest push round it.</div>
+  <div class="chq"><span class="chid">28·eng2.7.2</span><span class="tagq">build</span>A shared return of 0.02 ohm carries 5 amperes. How far apart are its ends in push, and how many times a signal of 0.001 volt is that?</div>
+  <div class="chq"><span class="chid">28·eng2.7.3</span><span class="tagq">edge</span>A ring of conductor lies flat with the field running along its plane and none passing through. What push is driven round it?</div>
+  <div class="chq"><span class="chid">28·eng2.7.4</span><span class="tagq">converse</span>Every ground loop needs a closed ring. Does every closed ring of conductor in a system cause hum? Say what else is needed.</div>
+  <div class="chq"><span class="chid">28·eng2.7.5</span><span class="tagq">seam</span>34·eng2 asks why a signal bounces back down a cable. Both pages blame the cable. Which blames its sheath and which its ends?</div>
+</section>
+<div class="themecert themeend"></div>
+<nav class="nextrung"><a href="r28eng.html">← 28·eng · how does a robot arm know how to reach?</a><a href="r28nav.html">28·nav · which way is “up” for a plane over Paris? →</a></nav>
+
+<section class="extra basement">
+  <div class="eyebrow">The cellar · there if you want it</div>
+  <h3>Accepted names</h3>
+  <p data-pid="55449f">The push in a shared wire is <b>common-impedance coupling</b>. The ring is a <b>ground loop</b>. Push driven by a changing field is <b>induction</b>, by <b>Faraday’s law</b>; field times area is <b>flux</b>. One-point wiring is <b>star grounding</b> or <b>single-point ground</b>. The sheath is a <b>shield</b>. Two wires twisted are a <b>twisted pair</b>; sending a difference is <b>differential</b> or <b>balanced signalling</b>, and what is added to both alike is <b>common-mode</b>. Crossing without metal is <b>isolation</b>, by a <b>transformer</b> or an <b>opto-isolator</b>. The copper sheet is a <b>ground plane</b>; the small capacitor is a <b>bypass</b> or <b>decoupling capacitor</b>. The assumption of no changing field through the loops is part of the <b>lumped-circuit assumption</b>.</p>
+  <h3>Not yet revisited</h3>
+  <p data-pid="0ae7a2">No source read gives any figure on this page. The motor, 0.05 ohm, one millionth of a tesla and one square metre are mine, chosen as plausible. MIT 6.101 gives the names and rules only: “dual ground busses may cause ground loops”, join “at ONE point”, shielded leads, the probe’s ground lead and “the shorter the better”, the ground plane, 0.1 microfarad bypass capacitors. MIT 6.002 gives the assumption about changing flux.</p>
+</section>
+
+</div>
+<script src="rung.js"></script>
+<script src="tray.js"></script>
+<script src="app.js"></script></body></html>
